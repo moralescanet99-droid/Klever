@@ -18,6 +18,8 @@
 | `ronda4/LEEME.md` | Informe de la ronda 4: regla de guardar/publicar, lo probado y lo pendiente |
 | `revision-chatgpt/INSTRUCCIONES_PARA_CHATGPT.md`, `…/ronda-3/…`, `…/ronda-4/…`, `…/ronda-5/…` | Textos para ChatGPT de cada ronda |
 | `ronda5/LEEME.md`, `ronda5/pruebas-manuales.md` | Informe de la ronda 5 con tabla de evidencias y pruebas manuales pendientes |
+| `ronda11/LEEME.md`, `ronda11/SISTEMA-VISUAL.md`, `ronda11/CAPTURAS.md`, `ronda11/pruebas-manuales.md`, `ronda11/mutacion-h1c.txt` | Informe de la ronda 11, sistema visual, comparativa antes/después y mutación que valida H1c |
+| `scripts/entrega/*.sh`, `tests/ronda11/test-zip.sh` | Crear y verificar entregas ZIP (qué se verifica y qué exige repositorio) |
 | `ronda10/LEEME.md`, `ronda10/BLOQUEOS.md`, `ronda10/GUION-VALIDACION-REMOTA.md`, `ronda10/CAPTURAS.md`, `ronda10/pruebas-manuales.md` | Informe de la ronda 10, requisitos para la validación real, guion remoto actualizado y comparativa visual antes/después |
 | `ronda9/LEEME.md`, `ronda9/GUION-BETA-Y-D1-REMOTO.md`, `ronda9/pruebas-manuales.md`, `ronda9/antes-*.txt` | Informe de la ronda 9, guion de beta y D1 remoto (sin ejecutar) y evidencias «falla antes» |
 | `ronda8/LEEME.md`, `ronda8/EVIDENCIAS.md`, `ronda8/pruebas-manuales.md`, `ronda8/antes-*.txt` | Informe de la ronda 8 (falla antes / pasa después, local / D1 remoto / pendiente) |

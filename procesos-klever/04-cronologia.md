@@ -37,6 +37,9 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 ## Ronda 6 · Cerrar los puntos de ChatGPT sobre la ronda 5 y preparar pruebas de uso (encargo del usuario)
 - El usuario pasó el feedback de ChatGPT sobre la ronda 5 («no hagas otro rediseño general»): aviso persistente en lugar del toast largo, textos de cambios locales y conflicto, datos ausentes en las comprobaciones, publicación, reintento, unidades, título de dos líneas y una versión para pruebas de uso. Literal en `06-` (C3). Implementado y probado en local; ver `ronda6/LEEME.md`. Todavía no se ha preparado paquete para ChatGPT.
 
+## Ronda 11 · Incidencias visuales y primera pantalla con identidad propia (encargo del usuario)
+- Tras la revisión de la ronda 10 (25 pruebas técnicas y A1–A7 superadas; A8 interrumpida por el ZIP sin `.git`): cerrar H1 y el comportamiento de los avisos, el espacio útil a 320 px con texto ampliado y la legibilidad durante la animación; empezar la dirección visual por el editor; documentar la verificación de entregas ZIP. Literal en `06-` (C8). Informe: `ronda11/LEEME.md`.
+
 ## Ronda 10 · Pulido visual y camino a la beta real (encargo del usuario)
 - Tras el feedback técnico de la ronda 9 (25 comprobaciones locales superadas, sin acreditar navegador completo, D1 remoto, correo real ni dispositivos físicos): avisos, resumen de ROIC y móvil; comprobación de accesos reales (bloqueada); entrega técnica reproducible. Literal en `06-` (C7). Informe: `ronda10/LEEME.md`.
 

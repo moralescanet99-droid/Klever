@@ -87,4 +87,13 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Un «teclado emulado» con la ventana reducida no oculta la barra** (`visualViewport` y `innerHeight` bajan a la vez): `body.teclado` no se ejercita así; no se afirma probado.
 - **`git stash push -- public` sirve para medir el «antes» con el mismo servidor** (sirve ficheros vivos); recuperar con `git stash pop`.
 - **Sin acceso remoto no se inventa:** `wrangler whoami` y las variables de entorno dicen qué existe; si falta, se entrega un único bloque de requisitos y los scripts listos.
+- **Una zona fija arriba tapa lo enfocado:** `scroll-padding-top` con la altura REAL de la zona (medida), no un valor fijo; y centrar manualmente entre la zona fija y la barra.
+- **Un elemento que anima su altura se mide recortado por su contenedor:** su `getBoundingClientRect()` es la caja completa (desbordada); para solapes usar la intersección con el contenedor (`#avisos`).
+- **Una comprobación sin muestras pasa en vacío:** toda prueba de muestreo debe exigir un mínimo de muestras elegibles y probarse con una mutación que la haga fallar.
+- **Contraste con opacidad:** mezclar el color con su opacidad efectiva (la del elemento y la de todos sus ancestros) sobre el fondo antes de medir; calcular con los colores CSS a secas no acredita la legibilidad durante una animación. Más simple: no animar la opacidad.
+- **`@container` mide el área de contenido del contenedor:** un contenedor de 320 px con 16 px de relleno por lado mide 288 px (= 18 rem): elegir el umbral con eso en cuenta; el `rem` de una consulta de contenedor sigue al `font-size` del `html` (el de `@media` no).
+- **Un `// comentario` añadido al final de una línea de prueba se traga el cierre `}));`:** poner el comentario después del cierre (ya ocurrió dos veces).
+- **`git archive` no incluye `.git`:** toda prueba que use `git` debe degradar a «modo ZIP» (solo contenido) y decir que el historial NO está verificado; un repositorio nuevo (vacío o de un commit) tampoco lo acredita.
+- **Mutación por `sed` sobre `public/style.css`:** guardar una copia antes (`cp … /tmp`) y restaurarla; comprobar con `git diff --stat` que solo quedan los cambios previstos.
+- **Elementos ocultos en la prueba:** el título «Posiciones» (`display:none` en móvil) o `.ver-ficha` de la tabla de escritorio no se pueden medir; usar un elemento visible (`offsetParent !== null`).
 

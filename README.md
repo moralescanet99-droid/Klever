@@ -20,6 +20,7 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql
+- [x] Ronda 11: avisos sin solapes, editor con identidad propia (composición con datos reales, ROIC secundario), verificación de entregas ZIP. Ver `ronda11/LEEME.md` y `ronda11/SISTEMA-VISUAL.md`
 - [x] Ronda 10: avisos en zona reservada, resumen de ROIC plegable, móvil más compacto, pruebas de acceso; validación remota bloqueada (guion y requisitos listos). Ver `ronda10/LEEME.md`
 - [x] Ronda 9: `GET /api/public/:id` en una instantánea, ejecutor que comprueba la demo, guion de beta y D1 remoto (sin ejecutar). Ver `ronda9/LEEME.md`
 - [x] Ronda 8: respuesta de guardado con la revisión de su propia escritura, lecturas coherentes, ejecutor de pruebas fiable, Node ≥ 22.13 y migración 0007 verificada sobre una base antigua. Ver `ronda8/LEEME.md`

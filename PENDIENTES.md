@@ -33,5 +33,6 @@
 ## 5. Pruebas manuales que no se pueden ejecutar desde el entorno de trabajo
 - [ ] **Validación real (bloqueada hasta que existan accesos): `ronda10/BLOQUEOS.md` (qué hace falta) y `ronda10/GUION-VALIDACION-REMOTA.md` (qué ejecutar; sustituye al de la ronda 9)**; ninguno de sus pasos se ha ejecutado.
 - [ ] (histórico) `ronda9/GUION-BETA-Y-D1-REMOTO.md` (proyecto y D1 de prueba, `verificar-api.mjs` y recorrido D1–D11); ninguno de sus pasos se ha ejecutado.
-- [ ] Ver `ronda10/pruebas-manuales.md` (M1–M28; sustituye a las anteriores). Incluye probar `batch`/`RETURNING` y la migración 0007 en **D1 remoto** (M21, M22) (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
+- [ ] Ver `ronda11/pruebas-manuales.md` (M1–M32; sustituye a las anteriores), en especial Safari/Firefox, tema oscuro, texto y zoom reales y la verificación del ZIP en macOS.
+- [ ] Extender la dirección visual (`ronda11/SISTEMA-VISUAL.md`) al resto de pantallas tras revisar la del editor. Incluye probar `batch`/`RETURNING` y la migración 0007 en **D1 remoto** (M21, M22) (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
 - [ ] Pruebas de uso con personas: seguir `PRUEBAS-DE-USO.md` (demo `demo/index.html`, o `bash scripts/local/arrancar.sh`) y anotar dónde dudan.

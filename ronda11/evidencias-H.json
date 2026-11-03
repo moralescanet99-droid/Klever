@@ -11,7 +11,7 @@
   "id": "H1b-320",
   "escenario": "Legibilidad del aviso durante toda la animación (320 px), con la opacidad real",
   "esperado": "Opacidad efectiva 1 en cada muestra (solo se anima la altura) y contraste ≥ 4,5:1 calculado con esa opacidad, en al menos 6 muestras",
-  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 14.7:1; alturas visibles 5→25→38→40 px",
+  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 14.7:1; alturas visibles 5→33→40 px",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -19,8 +19,8 @@
   "id": "H1c-320",
   "escenario": "Aviso fijo tras desplazarse (320 px, desplazado 496 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
-  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (262–306 dentro de 120–720) | en zona libre=false, sin tapar=false (0–0 dentro de 120–720) | en zona libre=true, sin tapar=true (346–390 dentro de 120–720)",
-  "resultado": "FALLA",
+  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (262–306 dentro de 120–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (346–390 dentro de 120–720)",
+  "resultado": "OK",
   "evidencia": "H1c-desplazado-320.png"
  },
  {
@@ -51,7 +51,7 @@
   "id": "H1b-390",
   "escenario": "Legibilidad del aviso durante toda la animación (390 px), con la opacidad real",
   "esperado": "Opacidad efectiva 1 en cada muestra (solo se anima la altura) y contraste ≥ 4,5:1 calculado con esa opacidad, en al menos 6 muestras",
-  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 14.7:1; alturas visibles 5→33→40 px",
+  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 14.7:1; alturas visibles 16→33→40 px",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -59,8 +59,8 @@
   "id": "H1c-390",
   "escenario": "Aviso fijo tras desplazarse (390 px, desplazado 398 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
-  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (263–307 dentro de 120–720) | en zona libre=false, sin tapar=false (0–0 dentro de 120–720) | en zona libre=true, sin tapar=true (315–359 dentro de 120–720)",
-  "resultado": "FALLA",
+  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (263–307 dentro de 120–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (315–359 dentro de 120–720)",
+  "resultado": "OK",
   "evidencia": "H1c-desplazado-390.png"
  },
  {
@@ -99,7 +99,7 @@
   "id": "H1c-1440",
   "escenario": "Aviso fijo tras desplazarse (1440 px, desplazado 172 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
-  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (60–104 dentro de 59–900) | en zona libre=true, sin tapar=true (236–280 dentro de 59–900) | en zona libre=true, sin tapar=true (70–94 dentro de 59–900)",
+  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (60–104 dentro de 59–900) | en zona libre=true, sin tapar=true (561–605 dentro de 59–900) | en zona libre=true, sin tapar=true (70–94 dentro de 59–900)",
   "resultado": "OK",
   "evidencia": "H1c-desplazado-1440.png"
  },
