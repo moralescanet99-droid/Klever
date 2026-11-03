@@ -89,5 +89,6 @@ ON CONFLICT(ticker) DO UPDATE SET criterios_cumplidos=excluded.criterios_cumplid
     console.error(`ok ${a.ticker} (${years.length} años)`);
   } catch (e) { console.error(`fallo ${a.ticker}: ${e.message}`); }
 }
+out.push("INSERT OR REPLACE INTO datos_meta(clave,valor) VALUES('origen','sec');", "INSERT OR REPLACE INTO datos_meta(clave,valor) VALUES('actualizado_en',date('now'));"); // solo este cargador puede declarar origen «sec»
 out.push('COMMIT;');
 console.log(out.join('\n'));

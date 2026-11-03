@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env }) {
   try {
     [rl, rp] = await env.DB.batch([
       env.DB.prepare(
-        `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en,
+        `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en, p.revision, p.limite_peso,
                 COUNT(po.ticker) AS n_posiciones, COALESCE(SUM(po.peso), 0) AS total
          FROM portafolios p LEFT JOIN posiciones po ON po.portafolio_id = p.id
          WHERE p.usuario_id = ? GROUP BY p.id

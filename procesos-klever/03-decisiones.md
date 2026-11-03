@@ -131,5 +131,18 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Las explicaciones largas de Explorar van debajo de los resultados.** Motivo: no desplazar los resultados.
 - **Ficha: «Datos principales» del último ejercicio** (ventas, beneficio, EBITDA, caja libre, ROIC) con periodo y unidad; dato ausente = «No disponible».
 
+## Ronda 13 (valor: «entiende lo que tienes, descubre alternativas y compara tus opciones antes de invertir»)
+- **Cuatro pilares conectados, sin cuatro páginas:** Mi cartera = radiografía dentro del editor; Mi radar = ficha + «Mi seguimiento»; Mi laboratorio = vista `#laboratorio`; Mi seguimiento = vista `#seguimiento` (radar + escenarios + notas). Motivo: una sola entrada nueva de menú; todo se alcanza desde el recorrido.
+- **Cálculos en un módulo puro compartido** (`public/js/calculos.js`) usado por cliente, servidor y pruebas, en **décimas enteras** con reparto por mayor resto. Motivo: redondeo determinista, totales que cuadran y que el servidor pueda **recalcular y rechazar** una propuesta distinta (no hay que fiarse del cliente).
+- **El laboratorio parte de la versión guardada**, no de cambios locales. Motivo: el escenario guarda la revisión de origen; mezclar cambios sin guardar haría ambigua la base. La radiografía sí distingue guardada / cambios locales.
+- **«Proporcional» con `delta ≤ 0` deja lo liberado sin asignar** (no se reparte al alza) y una base incompleta **no se normaliza**. Motivo: no ocultar ajustes ni presentar una cartera incompleta como completa.
+- **Escenario = copia fechada, nunca se recalcula.** Guarda base, propuesta, método, revisión de origen; si la cartera cambia, avisa de la versión posterior. Edición (nombre, nota, estado) con revisión propia (409 en conflicto). Descartar = borrar; la cartera nunca se toca.
+- **Reintentos sin duplicados:** `clave` por intento de guardado con `UNIQUE (usuario_id, clave)`; el servidor devuelve el ya guardado.
+- **Límite personal por posición:** columna `portafolios.limite_peso`, endpoint propio **sin subir la revisión** (no es composición; no provoca conflictos ni toca lo público). Solo con cartera guardada; sin límite no hay umbral.
+- **Radar:** PK `(usuario_id, ticker)`; PUT idempotente; máx. 200; nota ≤ 500. **Visitante:** radar solo en este dispositivo (`localStorage`, rotulado) y migrado al iniciar sesión; **los escenarios requieren cuenta** (la simulación sin cuenta es temporal y rotulada). Motivo: no decir «guardado en tu cuenta» sin persistencia real.
+- **Origen de los datos declarado** (`datos_meta`): solo el cargador real puede decir `sec`; la interfaz y `legal.html` ya no atribuyen nada a la SEC ni prometen cargas nocturnas sin comprobar.
+- **Estructura:** `public/js/{calculos,almacen,lab}.js` + `public/style-r13.css` (archivo propio; no pisa reglas antiguas). La demo concatena los módulos en un script clásico (`build_demo.py` quita `import/export`).
+- **Editorial: solo diseño** (`ronda13/EDITORIAL.md`).
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

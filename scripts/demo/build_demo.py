@@ -9,7 +9,10 @@ El mock.js se formatea con %: dentro de él, un % literal se escribe %%.
 import re
 import pathlib
 HERE=pathlib.Path(__file__).resolve().parent; R=str(HERE.parent.parent)+'/'; SP=str(HERE)+'/'
-html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read(); js=open(R+'public/app.js').read()
+html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read()+'\n'+open(R+'public/style-r13.css').read()
+def quitar_modulos(txt):  # los módulos ES se concatenan en un solo script clásico: sin import/export (los nombres no chocan entre archivos)
+    txt=re.sub(r"^import [^\n]*from '[^']+';\n",'',txt,flags=re.M); return re.sub(r'^export (async function|function|const|let)',r'\1',txt,flags=re.M)
+js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','almacen.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
 uni=open(R+'data/universe.json').read().strip(); mock=open(SP+'mock.js').read() % uni
 body=re.search(r'<a class="saltar".*?(?=<script src="app.js")',html,re.S).group(0)
 body=re.sub(r'<a href="legal.html"[^>]*>(.*?)</a>',r'\1',body)

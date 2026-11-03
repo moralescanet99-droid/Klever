@@ -1,0 +1,66 @@
+[
+ {
+  "id": "M0",
+  "escenario": "La base de partida es de verdad la antigua",
+  "esperado": "portafolios sin las columnas revision y token_escritura",
+  "observado": "id,usuario_id,nombre,plantilla,publico,tesis,actualizado_en,creado_en",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1",
+  "escenario": "Aplicar 0007 sobre la base antigua con datos",
+  "esperado": "Mismas 2 carteras y 4 posiciones, campo a campo; revisión 0 y sin marca de escritura en todas",
+  "observado": "datos intactos=true; revisiones 0/null 0/null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1b",
+  "escenario": "Aplicar 0008 (ronda 13) tras la 0007 sobre la base antigua con datos",
+  "esperado": "Datos intactos; existen radar, escenarios y datos_meta; limite_peso vacío en todas las carteras",
+  "observado": "datos intactos=true; tablas datos_meta,escenarios,radar; límites [null,null]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M2",
+  "escenario": "La base migrada y la base nueva (schema.sql) tienen la misma tabla portafolios",
+  "esperado": "Mismas columnas, tipos, obligatoriedad y valores por defecto",
+  "observado": "iguales=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M3",
+  "escenario": "Leer una cartera pública antigua tras migrar",
+  "esperado": "HTTP 200, revisión 0, tesis y posiciones conservadas, sin exponer token_escritura",
+  "observado": "HTTP 200; revisión 0; tesis «Tesis antigua»; posiciones 2; token expuesto=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M4",
+  "escenario": "Guardar una cartera antigua migrada",
+  "esperado": "HTTP 200, revisión 1 y las posiciones nuevas; la otra cartera no se toca",
+  "observado": "HTTP 200; revisión 1; posiciones GDX:50,NEM:50; la otra intacta=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M5",
+  "escenario": "Aplicar 0007 sobre el esquema NUEVO (que ya tiene las columnas)",
+  "esperado": "Falla con «duplicate column»: por eso solo se aplica a bases anteriores",
+  "observado": "error: duplicate column name: revision",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M6",
+  "escenario": "Aplicar 0008 sobre el esquema NUEVO",
+  "esperado": "Falla con «duplicate column»: solo se aplica a bases anteriores",
+  "observado": "error: duplicate column name: limite_peso",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

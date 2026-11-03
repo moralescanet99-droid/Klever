@@ -25,6 +25,7 @@ for a in uni:
         flujo_caja=ok(L['fcf'] > 0, L['fcf']),
         crecimiento=ok(L['ing'] > P['ing'], L['ing']/P['ing'] - 1))
     out.append(f"INSERT INTO ideas VALUES({q(a['ticker'])},{q(json.dumps(crit))},datetime('now'));")
+out.append("INSERT OR REPLACE INTO datos_meta(clave,valor) VALUES('origen','prueba');")  # ronda 13: la interfaz identifica estos datos como ficticios
 cab = ['-- Klever · datos de PRUEBA (inventados). Solo para ejecutar la web en local con scripts/local/arrancar.sh.', '-- No son cifras reales de ninguna empresa. Se generan con tests/ronda5/seed.py (semilla fija: siempre salen los mismos).']
 open(RAIZ / 'data/seed-prueba.sql', 'w').write('\n'.join(cab + out))
 print(len(uni), 'activos sembrados')

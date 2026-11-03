@@ -37,11 +37,38 @@ window.fetch=async(url,opts={})=>{
   if(path==='/ideas')return J(Object.keys(DB.ideas).map(t=>{const c=DB.ideas[t],k=Object.keys(c).filter(x=>x!=='periodo');return{ticker:t,nombre:A(t).nombre,sector:A(t).sector,periodo:c.periodo,cumplidos:k.filter(x=>c[x].ok===true).length,evaluados:k.filter(x=>c[x].ok!==null).length,total:k.length,criterios:c}}).map(r=>({...r,no_superadas:r.evaluados-r.cumplidos,sin_datos:r.total-r.evaluados})).sort((a,b)=>b.cumplidos-a.cumplidos||a.no_superadas-b.no_superadas||a.ticker.localeCompare(b.ticker)));
   if(path==='/public')return J(DB.ports.filter(p=>p.publico).sort((a,b)=>(a.usuario_id===0?0:1)-(b.usuario_id===0?0:1)||b.id-a.id).map(p=>({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',n_posiciones:(DB.pos[p.id]||[]).length})));
   if((g=path.match(/^\/public\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.publico);if(!p)return J({error:'No encontrado'},404);const v=view(p);return J({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',posiciones:v.posiciones})}
+  if(path==='/datos')return J({origen:'demo',actualizado_en:null,ideas_calculadas_en:null});
   if(path==='/login')return J({ok:true,dev_link:'#'});
   if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
   if(path==='/logout'){delete DB.sessions[tk];return J({ok:true})}
   if(!uid)return J({error:'No autorizado'},401);
-  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0),posiciones:ps.slice().sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1)).map(x=>({ticker:x.ticker,peso:x.peso}))}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
+  // ---- ronda 13: origen de los datos, radar, límite personal y escenarios (todo en memoria; se pierde al recargar)
+  if(!uid)return J({error:'No autorizado'},401);
+  DB.radar=DB.radar||{};DB.esc=DB.esc||[];DB.nextEsc=DB.nextEsc||1;
+  const R=DB.radar[uid]=DB.radar[uid]||{};
+  if(path==='/radar'&&m==='GET')return J(Object.keys(R).map(t=>({ticker:t,nombre:A(t).nombre,sector:A(t).sector,tipo:A(t).tipo,nota:R[t].nota,creado_en:R[t].creado_en,actualizado_en:R[t].actualizado_en})));
+  if((g=path.match(/^\/radar\/([A-Za-z.]+)$/))){const t=g[1].toUpperCase();if(!A(t))return J({error:'Ese activo no está en el universo'},400);
+    if(m==='PUT'){const nuevo=!R[t];if(body.nota!==undefined&&String(body.nota).length>500)return J({error:'La nota admite hasta 500 caracteres'},400);R[t]={nota:body.nota!==undefined?String(body.nota).trim():(R[t]?.nota||''),creado_en:R[t]?.creado_en||ahora(),actualizado_en:ahora()};return J({ok:true,nuevo,ticker:t,...R[t]})}
+    if(m==='DELETE'){delete R[t];return J({ok:true})}}
+  if((g=path.match(/^\/portfolios\/(\d+)\/limite$/))&&m==='PUT'){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
+    let l=null;if(body.limite!==null&&body.limite!==undefined){l=Math.round(Number(body.limite)*10)/10;if(!(l>=0.1&&l<=100))return J({error:'El límite debe estar entre 0,1 y 100 %%.'},400)}p.limite_peso=l;return J({ok:true,limite_peso:l})}
+  const escV=e=>{const c=DB.ports.find(p=>p.id===e.cartera_id&&p.usuario_id===uid);return {...e,cartera_existe:!!c,revision_actual:c?c.revision:null,hay_version_posterior:!!c&&c.revision>e.base_revision}};
+  if(path==='/escenarios'&&m==='GET')return J(DB.esc.filter(e=>e.uid===uid).sort((a,b)=>b.id-a.id).map(escV));
+  if(path==='/escenarios'&&m==='POST'){const nombre=String(body.nombre??'').trim();if(!nombre||nombre.length>80)return J({error:'Escribe un nombre de hasta 80 caracteres para el escenario.'},400);
+    const ya=DB.esc.find(e=>e.uid===uid&&e.clave===body.clave);if(ya)return J({...escV(ya),duplicado:true});
+    const c=DB.ports.find(p=>p.id===Number(body.cartera_id)&&p.usuario_id===uid);if(!c)return J({error:'No encontrado'},404);
+    if(body.base_revision!==c.revision)return J({error:'La cartera cambió después de la versión que simulaste.',conflicto:true,revision:c.revision},409);
+    const base=(DB.pos[c.id]||[]).map(x=>({ticker:x.ticker,peso:x.peso})).sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1));
+    const sim=simular(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion);if(!sim.viable)return J({error:'La simulación no es viable: '+sim.motivo},400);
+    const ok=propuestaCoincide(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion,body.propuesta||[]);if(!ok.ok)return J({error:ok.motivo},400);
+    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),estado:'en_estudio',metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
+  if((g=path.match(/^\/escenarios\/(\d+)$/))){const e=DB.esc.find(x=>x.id==g[1]&&x.uid===uid);if(!e)return J({error:'No encontrado'},404);
+    if(m==='GET')return J(escV(e));
+    if(m==='DELETE'){DB.esc=DB.esc.filter(x=>x!==e);return J({ok:true})}
+    if(m==='PATCH'){if(body.revision!==e.revision)return J({error:'El escenario cambió en tu cuenta después de la versión que ves.',conflicto:true,revision:e.revision},409);
+      if(body.estado!==undefined&&!['en_estudio','descartado','archivado'].includes(body.estado))return J({error:'Estado no válido.'},400);
+      if(body.nombre!==undefined)e.nombre=String(body.nombre).trim();if(body.nota!==undefined)e.nota=String(body.nota).trim();if(body.estado!==undefined)e.estado=body.estado;e.revision++;e.actualizado_en=ahora();return J(escV(e))}}
+  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,revision:p.revision,limite_peso:p.limite_peso??null,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0),posiciones:ps.slice().sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1)).map(x=>({ticker:x.ticker,peso:x.peso}))}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
   if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);const ps=body.posiciones===undefined?[]:body.posiciones,v=valida(ps);if(v.e)return J({error:v.e},400);const id=addPort(uid,body.nombre.trim().slice(0,80),body.plantilla,0,body.tesis?String(body.tesis).trim().slice(0,600):null,ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)})));return J({id,revision:0,actualizado_en:null},201)}
   if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
     if(m==='GET')return J(view(p));

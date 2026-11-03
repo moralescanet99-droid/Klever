@@ -106,3 +106,13 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Lista de carteras:** `GET /api/portfolios` ya trae `posiciones`; si se cambia el orden en `[id].js`, hay que cambiarlo también en la lista y en `scripts/demo/mock.js` (colores coherentes entre tarjeta y editor).
 - **Un foreground `sleep` largo pasa a segundo plano** (límite de 120 s): esperar a la batería con un bucle `until grep …` en segundo plano.
 
+## Ronda 13
+- **Un clic se pierde si el campo en edición provoca un repintado al salir el foco** (mousedown → blur → `change` → `innerHTML`): el botón nuevo sustituye al que recibe el `mouseup`. Solución: no sustituir el DOM si el HTML es idéntico (`dataset.sig`), como en la radiografía.
+- **`sub()` de Python con espacios iniciales:** un patrón de 4 espacios casa dentro de una línea de 6 y duplica el enlace (pasó con «Mi seguimiento» en el menú). Comprobar con `grep -c`.
+- **`white-space: nowrap` heredado de `.tabla-h`** (tabla de la ficha) afecta a cualquier tabla dentro; la del laboratorio lo anula (`.tabla-lab th,td{white-space:normal}`).
+- **`fieldset` tiene `min-width: min-content`:** desborda a 320 px con texto ampliado si no se pone `min-inline-size:0`.
+- **`pkill -f` con parte del comando de la propia shell mata la shell (código 144):** parar servidores por PID.
+- **Demo = un script clásico:** los módulos de `public/js/` se concatenan sin `import/export`; los nombres de nivel superior no pueden repetirse entre archivos (`const` duplicado = error de sintaxis).
+- **El mock de la demo se formatea con `%`:** un `%` literal se escribe `%%` (también dentro de los mensajes nuevos).
+- **Rutas de Pages:** `functions/api/portfolios/[id].js` y `functions/api/portfolios/[id]/limite.js` conviven (comprobado en wrangler 3.114); un archivo `_comun.js` sin `onRequest*` no es ruta.
+

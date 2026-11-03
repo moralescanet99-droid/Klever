@@ -6,6 +6,7 @@
 <title>Klever · Crea y entiende tu cartera simulada</title>
 <meta name="description" content="Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real. Beta gratuita y educativa.">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style-r13.css">
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -17,6 +18,7 @@
       <a href="#empresas" data-nav="empresas">Explorar empresas</a>
       <a href="#publicas" data-nav="publicas">Carteras públicas</a>
       <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
+      <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -28,6 +30,7 @@
     <a href="#empresas" data-nav="empresas">Explorar empresas</a>
     <a href="#publicas" data-nav="publicas">Carteras públicas</a>
     <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
+    <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -50,7 +53,7 @@
         <p class="lead">Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.</p>
         <p><button id="probar" class="btn btn-primario btn-grande" type="button">Probar una cartera</button></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
-        <p class="fuentes">Datos de las empresas: informes públicos de la SEC (EDGAR).</p>
+        <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
     </div>
@@ -89,7 +92,7 @@
   <section id="vista-empresas" data-vista="empresas" hidden>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
-      <p class="mut">Cinco comprobaciones con cifras de la SEC. Superarlas no es una recomendación de compra.</p>
+      <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
     </div>
     <div class="busqueda">
       <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
@@ -98,6 +101,13 @@
       <span id="emp-cuenta" class="mut" aria-live="polite"></span>
       <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
     </div>
+    <div class="emp-filtros" role="group" aria-label="Filtros de la lista">
+      <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
+      <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
+      <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
+      <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+    </div>
+    <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
         <caption class="sr">Empresas ordenadas por comprobaciones superadas; a igualdad, menos no superadas; después, por símbolo</caption>
@@ -119,7 +129,7 @@
         </ul>
         <p><b>Datos ausentes:</b> si una empresa no tiene el dato de una comprobación, esta no suma ni resta y se indica como «sin datos». No se cuenta como no superada.</p>
         <p><b>Orden de la lista:</b> primero las que superan más comprobaciones; a igualdad, las que tienen menos comprobaciones no superadas; después, por símbolo. Las comprobaciones sin datos no suman ni restan, y una evaluación con datos ausentes se muestra siempre como parcial («3 superadas · 2 sin datos»).</p>
-        <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
+        <p>El origen y la fecha de los datos se indican arriba y en cada ficha. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
       </div>
     </details>
     <div class="bloque" id="filtros-precio" tabindex="-1">
@@ -161,6 +171,31 @@
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
     <ul id="mis-lista" class="lista-carteras"></ul>
+  </section>
+
+  <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
+  <section id="vista-seguimiento" data-vista="seguimiento" hidden>
+    <div class="pag-cab">
+      <h1>Mi seguimiento</h1>
+      <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+    </div>
+    <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
+    <div class="seg-cols">
+      <section class="seg-bloque" aria-labelledby="seg-radar-t">
+        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div id="seg-radar" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-esc-t">
+        <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
+          <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
+        <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===== LABORATORIO (simulación de porcentajes; escenario nuevo o guardado) ===== -->
+  <section id="vista-lab" data-vista="lab" hidden>
+    <div id="lab-cuerpo"></div>
   </section>
 
   <!-- ===== ESPACIO DE TRABAJO ===== -->
@@ -237,6 +272,10 @@
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
+          <section id="radio" class="radio" aria-labelledby="radio-t">
+            <h3 id="radio-t">Radiografía de concentración</h3>
+            <div id="radio-cuerpo"></div>
+          </section>
           <div class="asig">
             <span class="etq">Asignado</span>
             <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>
@@ -289,7 +328,7 @@
 
 <footer class="pie">
   <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas.</p>
-  <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p>Las cifras proceden de los registros públicos de la SEC (EDGAR), se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
+  <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p data-origen="pie">Consulta el origen de los datos en cada ficha.</p><p>Las cifras se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
   <p class="pie-enl"><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 

@@ -545,3 +545,4 @@ INSERT INTO activos(ticker,nombre,tipo,sector) VALUES('TLT','iShares 20+ Year Tr
 INSERT INTO activos(ticker,nombre,tipo,sector) VALUES('AGG','iShares Core US Aggregate Bond ETF','etf','ETF renta fija');
 INSERT INTO activos(ticker,nombre,tipo,sector) VALUES('VNQ','Vanguard Real Estate ETF','etf','ETF inmobiliario');
 INSERT INTO activos(ticker,nombre,tipo,sector) VALUES('XLE','Energy Select Sector SPDR Fund','etf','ETF sectorial');
+INSERT OR REPLACE INTO datos_meta(clave,valor) VALUES('origen','prueba');

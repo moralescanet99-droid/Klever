@@ -79,7 +79,7 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .menu-movil a,.menu-movil button{font:inherit;font-weight:600;color:var(--text);text-decoration:none;background:none;border:0;text-align:left;min-height:48px;display:flex;align-items:center;border-bottom:1px solid var(--border);cursor:pointer}
 .menu-movil a[aria-current="page"]{color:var(--accent)} .menu-movil button{color:var(--muted);border-bottom:0}
 @media (min-width:720px){
-  .menu-escritorio{display:flex;margin-left:var(--s3)} .solo-movil{display:none!important} .menu-movil{display:none!important}
+  .menu-escritorio{display:flex;flex-wrap:wrap;flex:1 1 0;min-width:0;column-gap:var(--s2);margin-left:var(--s3)} .solo-movil{display:none!important} .menu-movil{display:none!important}
   .solo-escritorio{display:inline-flex!important}
 }
 @media (min-width:900px){.solo-escritorio-ws{display:inline-flex!important}}

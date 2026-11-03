@@ -21,6 +21,13 @@ t('M0', 'La base de partida es de verdad la antigua', 'portafolios sin las colum
 db.exec(mig);
 const rev = db.prepare('SELECT id, revision, token_escritura FROM portafolios ORDER BY id').all();
 t('M1', 'Aplicar 0007 sobre la base antigua con datos', 'Mismas 2 carteras y 4 posiciones, campo a campo; revisión 0 y sin marca de escritura en todas', `datos intactos=${volcado() === antes}; revisiones ${rev.map(r => r.revision + '/' + r.token_escritura).join(' ')}`, volcado() === antes && rev.length === 2 && rev.every(r => r.revision === 0 && r.token_escritura === null));
+// Ronda 13: la migración 0008 (radar, escenarios, límite, origen de datos) encadenada sobre lo anterior: aditiva, sin tocar filas
+const mig8 = readFileSync(path.join(RAIZ, 'migrations/0008_radar_escenarios.sql'), 'utf8'), antes8 = volcado();
+db.exec(mig8);
+const tablas = db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all().map(x => x.name);
+t('M1b', 'Aplicar 0008 (ronda 13) tras la 0007 sobre la base antigua con datos', 'Datos intactos; existen radar, escenarios y datos_meta; limite_peso vacío en todas las carteras', `datos intactos=${volcado() === antes8}; tablas ${tablas.filter(x => ['radar', 'escenarios', 'datos_meta'].includes(x)).join(',')}; límites ${J(db.prepare('SELECT limite_peso FROM portafolios').all().map(x => x.limite_peso))}`,
+  volcado() === antes8 && ['radar', 'escenarios', 'datos_meta'].every(x => tablas.includes(x)) && db.prepare('SELECT limite_peso FROM portafolios').all().every(x => x.limite_peso === null));
+function J(x) { return JSON.stringify(x); }
 const nuevoCols = crearEnv().sql.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');
 const migCols = db.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');
 t('M2', 'La base migrada y la base nueva (schema.sql) tienen la misma tabla portafolios', 'Mismas columnas, tipos, obligatoriedad y valores por defecto', `iguales=${nuevoCols === migCols}`, nuevoCols === migCols);
@@ -31,4 +38,6 @@ const g2 = await llamar(P.onRequestGet, env, 'GET', undefined, 2);
 t('M4', 'Guardar una cartera antigua migrada', 'HTTP 200, revisión 1 y las posiciones nuevas; la otra cartera no se toca', `HTTP ${w.s}; revisión ${w.j.revision}; posiciones ${g2.j.posiciones.map(x => x.ticker + ':' + x.peso).sort().join(',')}; la otra intacta=${JSON.stringify(db.prepare('SELECT nombre,revision FROM portafolios WHERE id=1').get()) === '{"nombre":"Privada antigua","revision":0}'}`, w.s === 200 && w.j.revision === 1 && g2.j.posiciones.length === 2 && g2.j.posiciones.every(x => x.peso === 50) && db.prepare('SELECT revision FROM portafolios WHERE id=1').get().revision === 0);
 let err = ''; try { crearEnv().sql.exec(mig); } catch (e) { err = e.message; }
 t('M5', 'Aplicar 0007 sobre el esquema NUEVO (que ya tiene las columnas)', 'Falla con «duplicate column»: por eso solo se aplica a bases anteriores', `error: ${err}`, /duplicate column/i.test(err));
+let err8 = ''; try { crearEnv().sql.exec(mig8); } catch (e) { err8 = e.message; }
+t('M6', 'Aplicar 0008 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${err8}`, /duplicate column/i.test(err8));
 await fin();
