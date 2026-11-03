@@ -1,4 +1,4 @@
-import { json, auth, readJson } from '../../_lib.js';
+import { json, auth, readJson, validarComposicion } from '../../_lib.js';
 
 const PLANTILLAS = ['riesgo', 'oro', 'dividendos'];
 
@@ -23,7 +23,15 @@ export async function onRequestPost({ request, env }) {
   const b = await readJson(request);
   const nombre = String(b?.nombre || '').trim().slice(0, 80);
   if (!nombre || !PLANTILLAS.includes(b?.plantilla)) return json({ error: 'Nombre o plantilla no válidos' }, 400);
-  const r = await env.DB.prepare('INSERT INTO portafolios (usuario_id, nombre, plantilla, publico) VALUES (?,?,?,0)')
-    .bind(user.id, nombre, b.plantilla).run();
-  return json({ id: r.meta.last_row_id }, 201);
+  // Creación atómica: la cartera y sus posiciones (si vienen) se escriben en un solo lote; no queda una cartera vacía a medias.
+  const pos = b.posiciones === undefined ? [] : b.posiciones;
+  const v = validarComposicion(pos); if (!v.ok) return json({ error: v.error }, 400);
+  const tesis = b.tesis === undefined ? null : String(b.tesis).trim().slice(0, 600) || null;
+  const token = crypto.randomUUID();
+  const stmts = [env.DB.prepare('INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis, token_escritura) VALUES (?,?,?,0,?,?)').bind(user.id, nombre, b.plantilla, tesis, token)];
+  for (const x of pos)
+    stmts.push(env.DB.prepare('INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT id, ?, ? FROM portafolios WHERE token_escritura = ?').bind(x.ticker, Number(x.peso), token));
+  try { await env.DB.batch(stmts); } catch { return json({ error: 'Algún ticker no está en el universo' }, 400); }
+  const c = await env.DB.prepare('SELECT id, revision, actualizado_en FROM portafolios WHERE token_escritura = ?').bind(token).first();
+  return json({ id: c.id, revision: c.revision, actualizado_en: c.actualizado_en }, 201);
 }

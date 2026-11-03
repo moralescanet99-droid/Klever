@@ -313,13 +313,17 @@
 </dialog>
 
 <dialog id="dlg-conflicto" data-fijo aria-labelledby="cn-titulo">
-  <div class="dlg-cab"><h2 id="cn-titulo" tabindex="-1">Hay dos versiones de esta cartera</h2></div>
-  <p id="cn-intro"></p>
-  <div class="cn-cols"><section id="cn-local" class="cn-v" aria-label="Versión de este dispositivo"></section><section id="cn-cuenta" class="cn-v" aria-label="Versión de tu cuenta"></section></div>
-  <div id="cn-dif" class="cn-dif"></div>
-  <p class="mut peq">«Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» solo la guarda en tu cuenta cuando pulses Guardar.</p>
-  <div class="fila fila-fin cn-acc">
-    <button id="cn-despues" class="btn btn-ghost" type="button">Decidir después</button>
+  <div class="cn-cab">
+    <h2 id="cn-titulo" tabindex="-1">Hay dos versiones de esta cartera</h2>
+    <button id="cn-despues" class="btn btn-secundario" type="button">Decidir después</button>
+  </div>
+  <div class="cn-cuerpo">
+    <p id="cn-intro"></p>
+    <div class="cn-cols"><section id="cn-local" class="cn-v" aria-label="Versión de este dispositivo"></section><section id="cn-cuenta" class="cn-v" aria-label="Versión de tu cuenta"></section></div>
+    <div id="cn-dif" class="cn-dif"></div>
+    <p class="mut peq">«Decidir después» (o Escape) no cambia nada: ni elige una copia, ni descarta datos, ni escribe en tu cuenta. «Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» vuelve al editor sin guardar: revisa y pulsa Guardar.</p>
+  </div>
+  <div class="cn-pie">
     <button id="cn-cuenta-b" class="btn btn-secundario" type="button">Usar la versión de tu cuenta</button>
     <button id="cn-local-b" class="btn btn-primario" type="button">Conservar la de este dispositivo</button>
   </div>

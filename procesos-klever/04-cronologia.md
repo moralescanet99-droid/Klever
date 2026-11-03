@@ -37,5 +37,8 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 ## Ronda 6 · Cerrar los puntos de ChatGPT sobre la ronda 5 y preparar pruebas de uso (encargo del usuario)
 - El usuario pasó el feedback de ChatGPT sobre la ronda 5 («no hagas otro rediseño general»): aviso persistente en lugar del toast largo, textos de cambios locales y conflicto, datos ausentes en las comprobaciones, publicación, reintento, unidades, título de dos líneas y una versión para pruebas de uso. Literal en `06-` (C3). Implementado y probado en local; ver `ronda6/LEEME.md`. Todavía no se ha preparado paquete para ChatGPT.
 
+## Ronda 7 · Fiabilidad del guardado y entrega reproducible (encargo del usuario)
+- Tras la revisión visual «suficientemente cerrada» de la ronda 6, el usuario pidió priorizar fiabilidad y reproducibilidad: corregir la contradicción del conflicto, eliminar el guardado parcial (operación única con revisión atómica), corregir la prueba E16a, entregar un proyecto repetible y terminar el diálogo móvil. Literal resumido en `06-` (C4). Informe: `ronda7/LEEME.md`.
+
 ## Después de la ronda 4 (antes de la ronda 5)
 - Se pidió crear esta memoria del proyecto (`procesos-klever/` y `CLAUDE.md`). Ver `09-registro-de-cambios.md`.

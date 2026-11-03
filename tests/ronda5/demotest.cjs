@@ -1,5 +1,5 @@
 const { chromium } = require('playwright');
-const F='http://localhost:8790/';
+const F=process.env.DEMO_URL||'http://localhost:8790/';
 (async()=>{const b=await chromium.launch();let bad=0;const ok=(n,c,x='')=>{console.log((c?'OK   ':'FALLA')+' '+n+(c?'':' ['+x+']'));if(!c)bad++};
 for(const [w,h] of [[390,844],[1440,900]]){
  const c=await b.newContext({viewport:{width:w,height:h}});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
@@ -15,4 +15,16 @@ for(const [w,h] of [[390,844],[1440,900]]){
  await p.goto(F+'#publicas');await p.waitForSelector('#publicas-lista .tarjeta');ok(w+': publicada con etiqueta de usuario',(await p.locator('#publicas-lista .chip.origen').allTextContents()).includes('Publicada por un usuario'));
  await p.goto(F+'#empresas');await p.waitForSelector('[data-t]:visible');await p.locator('[data-t]:visible').nth(1).click();await p.waitForSelector('#dlg-ficha[open]');ok(w+': ficha con 5 comprobaciones',await p.locator('#fi-cuerpo .checks li').count()===5);
  ok(w+': sin desbordamiento y sin errores',(await p.evaluate(()=>document.documentElement.scrollWidth))<=w&&errs.length===0,errs.join('|'));await c.close();}
+{const c=await b.newContext({viewport:{width:1440,height:900}});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+ await p.goto(F);await p.waitForSelector('.plantilla');const bn=(await p.textContent('.demo-banner'))||'';
+ ok('banner: demostración sin persistencia de cuenta y no equivalente al servidor probado',bn.includes('sin persistencia de cuenta')&&bn.includes('al recargar se pierde todo')&&bn.includes('no es equivalente al servidor'));
+ await p.click('[data-plantilla=dividendos]');await p.waitForSelector('#vista-cartera:not([hidden])');await p.click('.js-guardar >> visible=true');await p.waitForSelector('#dlg-acceso[open]');await p.fill('#acc-email','a@b.co');await p.check('#acc-acepto');await p.click('#form-acceso button');await p.waitForSelector('#demo-enter');await p.click('#demo-enter');
+ await p.waitForFunction(()=>document.querySelector('#estado-live')?.textContent.includes('Guardada'));
+ await p.locator('.peso-in >> visible=true').first().fill('10');await p.waitForTimeout(150);
+ await p.check('#demo-fallo');await p.click('.js-guardar >> visible=true');await p.waitForTimeout(600);
+ ok('demo: la casilla «Simular fallo de red al guardar» provoca un fallo explícito',((await p.textContent('#estado'))||'').trim().startsWith('No se pudo guardar')&&((await p.locator('.js-guardar >> visible=true').textContent())||'').trim()==='Reintentar guardado');
+ await p.uncheck('#demo-fallo');await p.click('.js-guardar >> visible=true');await p.waitForFunction(()=>document.querySelector('#estado-live').textContent.startsWith('Guardada en tu cuenta'));ok('demo: al quitar la simulación, reintentar guarda',true);
+ await p.reload();await p.waitForSelector('.plantilla');await p.waitForTimeout(1200);
+ ok('demo: al recargar se pierde todo (sin sesión ni carteras)',(await p.locator('#dlg-acceso[open]').count())===1||(await p.locator('.cartera-item').count())===0);
+ ok('demo: sin errores de JavaScript',errs.length===0,errs.join('|'));await c.close();}
 await b.close();console.log(bad?'HAY FALLOS':'DEMO OK')})();

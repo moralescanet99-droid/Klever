@@ -1,9 +1,7 @@
 // Bloque E (ronda 6): los siete flujos de la prueba de uso, con evidencia observada (esperado · observado · resultado).
 // Salida: ronda6/evidencias-E.json y capturas en ronda6/evidencias/ (las capturas no se versionan).
-process.env.RONDA = 'ronda6';
-const { chromium, B, ev, T, nuevo, entrar, peso, fin } = require('./h.cjs');
-const EV = '/home/user/Klever/ronda6/evidencias/';
-require('fs').mkdirSync(EV, { recursive: true });
+const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('./h.cjs');
+const EV = EVDIR;
 (async () => {
   const b = await chromium.launch();
   const token = p => p.evaluate(() => localStorage.getItem('klever_token'));
@@ -16,7 +14,7 @@ require('fs').mkdirSync(EV, { recursive: true });
   const vals = async (p, n = 4) => { const r = []; for (let i = 0; i < n; i++) r.push(await peso(p, i).inputValue()); return r.sort((a, c) => parseFloat(c.replace(',', '.')) - parseFloat(a.replace(',', '.'))).join(' '); }; // por peso (el orden de filas tras reabrir lo decide el servidor)
   const externo = async (p, id, posiciones) => { // otro dispositivo cambia la cartera en la cuenta (se espera >1 s: el sello de versión tiene resolución de segundo)
     await p.waitForTimeout(1200); const c = (await api(p, 'GET', '/portfolios/' + id)).j;
-    return api(p, 'PUT', '/portfolios/' + id, { posiciones, version: c.actualizado_en || c.creado_en }); };
+    return api(p, 'PUT', '/portfolios/' + id, { posiciones, revision: c.revision }); };
 
   // ===== F1: crear · editar · guardar · cerrar · reabrir · recargar =====
   let p = await nuevo(b, 1440, 900); await entrar(p, 'oro', 'E1'); const id = (await hash(p)).replace('#cartera-', '');
@@ -48,26 +46,28 @@ require('fs').mkdirSync(EV, { recursive: true });
   await externo(p, id, [{ ticker: 'GLD', peso: 40 }, { ticker: 'IAU', peso: 30 }, { ticker: 'GDX', peso: 30 }]);
   await p.reload(); await p.waitForSelector('#dlg-conflicto[open]'); await p.waitForTimeout(200);
   const dlg = (await T(p, '#dlg-conflicto')).replace(/\s+/g, ' '); await p.screenshot({ path: EV + 'F5a-conflicto-1440.png' });
-  await p.keyboard.press('Escape'); await p.waitForTimeout(200); const sigueAbierto = await p.locator('#dlg-conflicto[open]').count();
+  await p.keyboard.press('Escape'); await p.waitForTimeout(200); const sigueAbierto = await p.locator('#dlg-conflicto[open]').count(), copiaEscape = await p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id);
+  await p.reload(); await p.waitForSelector('#dlg-conflicto[open]');
   await p.setViewportSize({ width: 390, height: 844 }); await p.waitForTimeout(200); await p.screenshot({ path: EV + 'F5a-conflicto-390.png' }); await p.setViewportSize({ width: 1440, height: 900 });
   await p.click('#cn-despues'); await p.waitForTimeout(300);
   const trasDespues = await vals(p, 3), copiaDespues = await p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id);
   await p.reload(); await p.waitForSelector('#dlg-conflicto[open]'); await p.click('#cn-cuenta-b'); await p.waitForTimeout(400);
   const trasCuenta = await vals(p, 3), copiaCuenta = await p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id), estC = await T(p, '#estado');
-  ev('F5a', 'Conflicto al abrir: versión local frente a versión de la cuenta', 'Diálogo con «Versión de este dispositivo» y «Versión de tu cuenta» con fecha y hora y qué cambia; Escape no decide; «Decidir después» no pierde nada; «Usar la versión de tu cuenta» descarta lo local',
-    `diálogo «${dlg}»; Escape: diálogo abierto=${sigueAbierto}; tras «Decidir después» se ve ${trasDespues} y la copia local sigue=${copiaDespues}; tras «Usar la versión de tu cuenta» ${trasCuenta}, copia local=${copiaCuenta}, «${estC}»`,
+  ev('F5a', 'Conflicto al abrir: versión local frente a versión de la cuenta', 'Diálogo con «Versión de este dispositivo» y «Versión de tu cuenta» con fecha y hora y qué cambia; Escape y «Decidir después» posponen sin perder nada; «Usar la versión de tu cuenta» descarta lo local',
+    `diálogo «${dlg}»; Escape: diálogo abierto=${sigueAbierto}, copia local=${copiaEscape}; tras «Decidir después» se ve ${trasDespues} y la copia local sigue=${copiaDespues}; tras «Usar la versión de tu cuenta» ${trasCuenta}, copia local=${copiaCuenta}, «${estC}»`,
     dlg.includes('Versión de este dispositivo') && dlg.includes('Versión de tu cuenta') && /Editada el .*\d:\d\d/.test(dlg) && /Modificada el .*\d:\d\d/.test(dlg) && dlg.includes('Solo en este dispositivo: NEM') && dlg.includes('GLD:') && !/otra sesión/i.test(dlg)
-    && sigueAbierto === 1 && trasDespues === '40,0 30,0 30,0' && copiaDespues && trasCuenta === '40,0 30,0 30,0' && !copiaCuenta && estC === 'Guardada en tu cuenta', 'F5a-conflicto-1440.png');
+    && sigueAbierto === 0 && copiaEscape && trasDespues === '40,0 30,0 30,0' && copiaDespues && trasCuenta === '40,0 30,0 30,0' && !copiaCuenta && estC === 'Guardada en tu cuenta', 'F5a-conflicto-1440.png');
 
   // ===== F5b/F5c: conflicto al guardar (409 del servidor) =====
   await peso(p).fill('35'); await p.waitForTimeout(150);
   await externo(p, id, [{ ticker: 'GLD', peso: 50 }, { ticker: 'IAU', peso: 25 }, { ticker: 'GDX', peso: 25 }]);
   await G(p).click(); await p.waitForSelector('#dlg-conflicto[open]'); const cuentaSinTocar = await cuenta(p, id); const dlg2 = (await T(p, '#dlg-conflicto')).replace(/\s+/g, ' ');
   await p.screenshot({ path: EV + 'F5b-conflicto-al-guardar.png' });
-  await p.click('#cn-local-b'); await guardado(p); const trasLocal = await cuenta(p, id);
-  ev('F5b', 'Conflicto al guardar y elección de la versión de este dispositivo', 'El servidor rechaza (409) sin guardar nada; el diálogo muestra ambas versiones; al elegir la local se guarda esa y no otra',
-    `cuenta justo tras el rechazo «${cuentaSinTocar}» (la del otro dispositivo, intacta); diálogo «${dlg2.slice(0, 220)}…»; tras elegir la de este dispositivo la cuenta tiene «${trasLocal}»`,
-    cuentaSinTocar === 'GDX:25,GLD:50,IAU:25' && dlg2.includes('Versión de este dispositivo') && dlg2.includes('Versión de tu cuenta') && trasLocal === 'GDX:30,GLD:35,IAU:30' && (await T(p, '#estado')) === 'Guardada en tu cuenta', 'F5b-conflicto-al-guardar.png');
+  await p.click('#cn-local-b'); await p.waitForTimeout(400); const trasElegir = await cuenta(p, id), pendiente = await T(p, '#estado'), etqG = await T(G(p), 'xpath=.');
+  await G(p).click(); await guardado(p); const trasLocal = await cuenta(p, id);
+  ev('F5b', 'Conflicto al guardar: elegir la versión de este dispositivo NO escribe; Guardar sí', 'El servidor rechaza (409) sin guardar nada; al elegir la local se vuelve al editor sin tocar la cuenta; al pulsar Guardar se guarda esa y no otra',
+    `cuenta justo tras el rechazo «${cuentaSinTocar}» (la del otro dispositivo, intacta); diálogo «${dlg2.slice(0, 200)}…»; tras elegir la local la cuenta sigue «${trasElegir}» y el estado es «${pendiente}» con botón «${etqG}»; tras pulsar Guardar la cuenta tiene «${trasLocal}»`,
+    cuentaSinTocar === 'GDX:25,GLD:50,IAU:25' && dlg2.includes('Versión de este dispositivo') && dlg2.includes('Versión de tu cuenta') && trasElegir === cuentaSinTocar && pendiente.startsWith('Cambios locales pendientes') && trasLocal === 'GDX:30,GLD:35,IAU:30' && (await T(p, '#estado')) === 'Guardada en tu cuenta', 'F5b-conflicto-al-guardar.png');
   await peso(p).fill('20'); await p.waitForTimeout(150);
   await externo(p, id, [{ ticker: 'GLD', peso: 60 }, { ticker: 'IAU', peso: 20 }, { ticker: 'GDX', peso: 20 }]);
   await G(p).click(); await p.waitForSelector('#dlg-conflicto[open]'); await p.click('#cn-despues'); await p.waitForTimeout(300);

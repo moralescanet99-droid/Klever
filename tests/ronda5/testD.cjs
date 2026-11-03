@@ -1,6 +1,6 @@
 // Bloque D (ronda 5): escenarios con evidencia. Cada ev() guarda escenario · esperado · observado · evidencia.
-const { chromium, B, ev, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs');
-const EV = '/home/user/Klever/ronda5/evidencias/';
+const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs');
+const EV = EVDIR;
 (async () => {
   const b = await chromium.launch();
   const token = p => p.evaluate(() => localStorage.getItem('klever_token'));
@@ -20,7 +20,7 @@ const EV = '/home/user/Klever/ronda5/evidencias/';
   // dos carteras por API: una solo creada (sin modificar) y otra con posiciones
   const A = await api(p, 'POST', '/portfolios', { nombre: 'Solo creada', plantilla: 'oro' });
   const Bc = await api(p, 'POST', '/portfolios', { nombre: 'Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñas', plantilla: 'dividendos' });
-  await api(p, 'PUT', `/portfolios/${Bc.j.id}`, { posiciones: [{ ticker: 'KO', peso: 40 }, { ticker: 'PG', peso: 48 }] });
+  await api(p, 'PUT', `/portfolios/${Bc.j.id}`, { posiciones: [{ ticker: 'KO', peso: 40 }, { ticker: 'PG', peso: 48 }], revision: 0 });
   await p.goto(B + '#carteras'); await p.reload(); await p.waitForSelector('.cartera-item'); await p.waitForTimeout(300);
   await p.screenshot({ path: EV + 'E1-mis-carteras-390.png', fullPage: true });
   ev('E1', 'Mis carteras con carteras', 'Las carteras guardadas primero; «Nueva cartera» como botón; formulario cerrado', `items=${await p.locator('.cartera-item').count()}; formulario oculto=${await p.locator('#form-nueva').isHidden()}; botón «Nueva cartera» visible=${await p.isVisible('#btn-nueva')}; la lista aparece por encima del formulario`,

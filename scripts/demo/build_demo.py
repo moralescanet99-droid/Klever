@@ -13,8 +13,8 @@ html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read(); 
 uni=open(R+'data/universe.json').read().strip(); mock=open(SP+'mock.js').read() % uni
 body=re.search(r'<a class="saltar".*?(?=<script src="app.js")',html,re.S).group(0)
 body=re.sub(r'<a href="legal.html"[^>]*>(.*?)</a>',r'\1',body)
-body=body.replace('<main id="contenido" tabindex="-1">','<main id="contenido" tabindex="-1">\n  <div class="demo-banner"><b>Demo interactiva.</b> Todos los datos son inventados para enseñar el funcionamiento. En la web real las cifras vienen de la SEC y los gráficos de TradingView. Nada de aquí es información financiera real.</div>',1)
-css+="\n.demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}\n"
+body=body.replace('<main id="contenido" tabindex="-1">','<main id="contenido" tabindex="-1">\n  <div class="demo-banner"><b>Demostración sin persistencia de cuenta.</b> Todo vive en la memoria de esta página: <b>al recargar se pierde todo</b> (cuentas, carteras y cambios), y no es equivalente al servidor real que se prueba con las baterías automáticas. Todos los datos son inventados; nada de aquí es información financiera real.<label class="demo-fallo"><input type="checkbox" id="demo-fallo" onchange="window.__demoFalloGuardado=this.checked"> <b>Simular fallo de red al guardar</b> (solo demo: las peticiones de esta página son simuladas y no fallan por activar el modo sin conexión del navegador)</label></div>',1)
+css+="\n.demo-fallo{display:block;margin-top:8px;font-size:.875rem}\n.demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}\n"
 def sub(old,new):
     global js
     assert old in js, old[:60]; js=js.replace(old,new,1)

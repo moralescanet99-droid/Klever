@@ -1,6 +1,7 @@
 # Datos de PRUEBA locales (inventados): universo completo, con huecos para probar "sin dato" y cobertura.
-import json, random, hashlib
-uni = json.load(open('/home/user/Klever/data/universe.json'))
+import json, random, hashlib, pathlib
+RAIZ = pathlib.Path(__file__).resolve().parents[2]
+uni = json.load(open(RAIZ / 'data/universe.json'))
 out = []
 def q(s): return "'" + str(s).replace("'", "''") + "'"
 for a in uni:
@@ -24,5 +25,6 @@ for a in uni:
         flujo_caja=ok(L['fcf'] > 0, L['fcf']),
         crecimiento=ok(L['ing'] > P['ing'], L['ing']/P['ing'] - 1))
     out.append(f"INSERT INTO ideas VALUES({q(a['ticker'])},{q(json.dumps(crit))},datetime('now'));")
-open('/tmp/wr/rd/seed.sql', 'w').write('\n'.join(out))
+cab = ['-- Klever · datos de PRUEBA (inventados). Solo para ejecutar la web en local con scripts/local/arrancar.sh.', '-- No son cifras reales de ninguna empresa. Se generan con tests/ronda5/seed.py (semilla fija: siempre salen los mismos).']
+open(RAIZ / 'data/seed-prueba.sql', 'w').write('\n'.join(cab + out))
 print(len(uni), 'activos sembrados')

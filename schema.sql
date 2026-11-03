@@ -44,6 +44,8 @@ CREATE TABLE IF NOT EXISTS portafolios (
   publico INTEGER NOT NULL DEFAULT 0,
   tesis TEXT,
   actualizado_en TEXT,          -- última modificación real (NULL hasta la primera)
+  revision INTEGER NOT NULL DEFAULT 0,   -- sube en cada escritura: control de versión atómico (la fecha, de un segundo, solo se muestra)
+  token_escritura TEXT,                  -- marca de la escritura en curso (interno)
   creado_en TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS posiciones (

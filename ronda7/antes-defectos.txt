@@ -1,0 +1,7 @@
+Servidor real local ANTES de la ronda 7 (commit aa21407)
+
+A) PUT correcto + PATCH fallido (cartera pública): cuenta: nombre «Mi cartera de oro», tesis «Tesis original», pesos GDX:40,GLD:10,IAU:25,NEM:25; PÚBLICO: nombre «Mi cartera de oro», tesis «Tesis original», pesos GDX:40,GLD:10,IAU:25,NEM:25; interfaz: «No se pudo guardar. Tus cambios siguen en este dispositivo» / motivo «Sin conexión con el servidor. Inténtalo de nuevo.»
+
+B) dos PUT simultáneos con la MISMA versión «2026-11-03 16:13:24»: códigos HTTP 200 y 409; cuenta final GLD:60,IAU:40
+
+C) dos PUT seguidos con la versión «2026-11-03 16:13:26» (resolución de segundo): 200 y 200 (el segundo debería ser 409 si la versión cambiara en cada escritura)

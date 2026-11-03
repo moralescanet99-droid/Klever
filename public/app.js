@@ -83,7 +83,7 @@ function guardarBorrador(conservarFecha = false) { // conservarFecha: se reescri
   const key = 'klever_edit_' + current.id; // cartera de la cuenta: copia de los cambios sin guardar
   if (rev !== savedRev) {
     const t = (conservarFecha && leerCopia(current.id)?.t) || new Date().toISOString();
-    store.setItem(key, JSON.stringify({ nombre: $('#nombre').value, tesis: $('#tesis').value, pos, base: current.version, t })); copiaLocal = store.ok;
+    store.setItem(key, JSON.stringify({ nombre: $('#nombre').value, tesis: $('#tesis').value, pos, base: current.revision, t })); copiaLocal = store.ok;
   }
   else { store.removeItem(key); copiaLocal = false; }
 }
@@ -300,14 +300,13 @@ $('#nueva-cancelar').addEventListener('click', () => { formNuevo(false); $('#btn
 $('#form-nueva').addEventListener('submit', async e => {
   e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
   try {
-    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla') } });
-    try { await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: repartoPlantilla(f.get('plantilla')) } }); } catch (err) { toast(err.message); }
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla'), posiciones: repartoPlantilla(f.get('plantilla')) } }); // una sola operación: sin carteras vacías a medias
     e.target.reset(); go('#cartera-' + id);
   } catch (err) { toast(err.message); } finally { btn.disabled = false; }
 });
 async function cargarCartera(id) {
   let c; try { c = await api('/portfolios/' + id); } catch (err) { toast(err.message); return false; }
-  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, version: c.actualizado_en || c.creado_en || '' };
+  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = '';
   await recuperarCambiosLocales(); return true;
@@ -327,7 +326,7 @@ function diferencias(loc, cta) { // lista breve y legible de qué cambia entre l
 function tarjetaVersion(titulo, fechaTxt, v) {
   return `<h3>${titulo}</h3><p class="mut peq">${fechaTxt}</p><p><b>${esc(v.nombre)}</b></p><p>${txtAsig(v.pos.length, totalPos(v.pos))}</p>`;
 }
-function dialogoConflicto(loc, cta, intro) { // decisión obligatoria: Escape y clic fuera no deciden nada; «Decidir después» no cambia nada
+function dialogoConflicto(loc, cta, intro) { // Escape, cerrar o «Decidir después» = posponer: no eligen copia, no descartan datos y no escriben en la cuenta; el clic fuera no cierra
   return new Promise(res => {
     const d = $('#dlg-conflicto');
     $('#cn-intro').textContent = intro;
@@ -340,7 +339,6 @@ function dialogoConflicto(loc, cta, intro) { // decisión obligatoria: Escape y 
     d.showModal(); $('#cn-titulo').focus();
   });
 }
-$('#dlg-conflicto').addEventListener('cancel', e => e.preventDefault());
 $('#cn-local-b').addEventListener('click', () => $('#dlg-conflicto').close('local'));
 $('#cn-cuenta-b').addEventListener('click', () => $('#dlg-conflicto').close('cuenta'));
 $('#cn-despues').addEventListener('click', () => $('#dlg-conflicto').close('despues'));
@@ -349,12 +347,12 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
   const key = 'klever_edit_' + current.id, raw = store.getItem(key); if (!raw) return;
   let e; try { e = JSON.parse(raw); } catch { store.removeItem(key); return; }
   if (!Array.isArray(e.pos) || (e.nombre === current.nombre && (e.tesis || '') === (current.tesis || '') && JSON.stringify(e.pos) === JSON.stringify(pos))) { store.removeItem(key); return; }
-  if (e.base !== current.version) { // la cartera cambió en la cuenta después de esa copia: nunca se elige en silencio
-    const r = await dialogoConflicto({ nombre: e.nombre, tesis: e.tesis, pos: e.pos, fecha: e.t }, { nombre: current.nombre, tesis: current.tesis, pos: pos, fecha: current.version },
-      'Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. Elige cuál conservar: no se sobrescribirá nada hasta que lo decidas.');
+  if (e.base !== current.revision) { // la cartera cambió en la cuenta después de esa copia: nunca se elige en silencio
+    const r = await dialogoConflicto({ nombre: e.nombre, tesis: e.tesis, pos: e.pos, fecha: e.t }, { nombre: current.nombre, tesis: current.tesis, pos: pos, fecha: current.fecha },
+      'Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas.');
     if (r === 'cuenta') { store.removeItem(key); return; }
     if (r === 'despues') return; // se queda como está: la copia local sigue guardada y se volverá a preguntar
-    store.setItem(key, JSON.stringify({ ...e, base: current.version })); // elegida la local: parte de la versión actual de la cuenta
+    store.setItem(key, JSON.stringify({ ...e, base: current.revision })); // elegida la local: parte de la revisión actual de la cuenta (la cuenta NO se modifica: hay que pulsar Guardar)
   }
   current.nombre = e.nombre; current.tesis = e.tesis || ''; pos = e.pos; rev = 1; savedRev = 0; copiaLocal = store.ok; recuperado = true;
 }
@@ -375,14 +373,11 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     toast('Tu borrador sigue en este dispositivo: corrige los pesos para guardarlo en tu cuenta.', 7000);
     location.hash = '#cartera'; return;
   }
-  let id = null;
   try {
-    ({ id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla } }));
-    await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: d.pos } });
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, posiciones: d.pos } }); // una sola operación: todo o nada
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
-    if (id) { try { await api('/portfolios/' + id, { method: 'DELETE' }); } catch {} } // no dejar una cartera vacía a medias
     toast('No se pudo guardar el borrador. Sigue en este dispositivo.', 7000);
   }
 }
@@ -521,10 +516,12 @@ async function guardar() {
   const r = rev; saving = true; saveErr = null; pintarEstado();
   let conflicto = false;
   try {
-    if (!current.id) { const { id } = await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla } }); current.id = id; }
-    await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos, version: current.version } });
-    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
-    current.nombre = nombre; current.version = u.actualizado_en || current.version; savedRev = r; // si se editó durante el guardado, rev > r y sigue «con cambios»
+    // UNA sola operación en el servidor (posiciones + nombre + tesis, con la revisión desde la que se edita): todo o nada
+    const u = current.id
+      ? await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: current.revision } })
+      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla, tesis: $('#tesis').value, posiciones: pos } });
+    if (!current.id) current.id = u.id;
+    current.nombre = nombre; current.tesis = $('#tesis').value.trim(); current.revision = u.revision; current.fecha = u.actualizado_en || current.fecha; savedRev = r; // si se editó durante el guardado, rev > r y sigue «con cambios»
     store.removeItem(DRAFT); guardarBorrador();                                                      // limpia la copia local si ya no hay cambios pendientes
     try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
     $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
@@ -536,13 +533,17 @@ async function guardar() {
 }
 async function resolverConflictoGuardado() { // el servidor dice que la cuenta cambió después de la versión desde la que se editaba
   let c; try { c = await api('/portfolios/' + current.id); } catch (err) { saveErr = err.message; pintarEstado(); return false; }
-  const cta = { nombre: c.nombre, tesis: c.tesis || '', pos: sinDup(c.posiciones), fecha: c.actualizado_en || c.creado_en || '', publico: c.publico };
+  const cta = { nombre: c.nombre, tesis: c.tesis || '', pos: sinDup(c.posiciones), fecha: c.actualizado_en || c.creado_en || '', publico: c.publico, revision: c.revision };
   const loc = { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, pos: sinDup(pos), fecha: leerCopia(current.id)?.t };
   const r = await dialogoConflicto(loc, cta, 'Tu cuenta tiene una versión más reciente de esta cartera que la desde la que estabas editando. No se ha guardado nada. Elige cuál conservar.');
-  if (r === 'local') { current.version = cta.fecha; current.publico = cta.publico; guardarBorrador(true); return guardar(); } // se guarda la local sobre la actual, por decisión expresa
+  const guardarBtn = [...$$('.js-guardar')].find(x => x.offsetParent); setTimeout(() => guardarBtn?.focus({ preventScroll: true }), 0); // el foco vuelve al botón Guardar (se había desactivado durante el guardado)
+  if (r === 'local') { // vuelve al editor SIN escribir en la cuenta: parte de la revisión actual y el usuario revisa y pulsa Guardar
+    current.revision = cta.revision; current.fecha = cta.fecha; current.publico = cta.publico; saveErr = null; guardarBorrador(true); pintarEstado();
+    toast('Has conservado la versión de este dispositivo. Revísala y pulsa Guardar.', 6000); return false;
+  }
   if (r === 'cuenta') {
     store.removeItem('klever_edit_' + current.id);
-    current = { ...current, nombre: cta.nombre, tesis: cta.tesis, publico: cta.publico, version: cta.fecha };
+    current = { ...current, nombre: cta.nombre, tesis: cta.tesis, publico: cta.publico, revision: cta.revision, fecha: cta.fecha };
     pos = cta.pos; rev = savedRev = 0; saveErr = null; copiaLocal = false; renderWorkspace(); toast('Has vuelto a la versión de tu cuenta'); return false;
   }
   saveErr = 'La cartera cambió en tu cuenta. Elige qué versión conservar para poder guardar.'; pintarEstado(); return false;
@@ -555,11 +556,16 @@ async function cambiarPublicacion(publico) {
     const r = razonPublicar(validar()); if (r) { err.textContent = r; return; }
     if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
   }
+  if (publico && current.publico) return; // ya es pública: «Actualizar tesis» = guardar (arriba), sin otra escritura
   try {
-    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
-    current.publico = publico ? 1 : 0; current.version = u.actualizado_en || current.version; guardarBorrador(true); pintarEstado(); loadPublicas();
+    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: { publico: !!publico, revision: current.revision } });
+    current.publico = publico ? 1 : 0; current.revision = u.revision; current.fecha = u.actualizado_en || current.fecha; guardarBorrador(true); pintarEstado(); loadPublicas();
     toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
-  } catch (e) { err.textContent = e.message; }
+  } catch (e) {
+    if (e.status === 409 && e.data?.conflicto) { // la cuenta cambió desde otro sitio: se recarga y, si hay cambios locales, se pregunta cuál conservar
+      await cargarCartera(current.id); renderWorkspace(); err.textContent = 'La cartera había cambiado en tu cuenta. No se ha modificado la publicación.';
+    } else err.textContent = e.message;
+  }
 }
 $('#publicar').addEventListener('click', () => cambiarPublicacion(!current.publico));
 $('#tesis-guardar').addEventListener('click', () => cambiarPublicacion(true));
