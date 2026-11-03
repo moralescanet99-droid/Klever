@@ -69,4 +69,12 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **D1 `batch()` es transaccional:** un fallo en cualquier sentencia revierte el lote. Para que una escritura condicionada sea atómica, las demás sentencias del lote se condicionan a la marca única de la escritura ganadora; comprobar `res[0].meta.changes`.
 - **La comprobación de seguridad del entorno puede bloquear comandos compuestos sin ningún borrado** (falso positivo); hacer los cambios con Edit/Write y lanzar el resto en comandos separados y simples.
 - **Reproducibilidad:** nada de rutas absolutas (`/home/user`, `/tmp/wr`) en pruebas ni scripts; la raíz sale de `__dirname`. `npm ci --ignore-scripts` basta (wrangler y playwright se instalan sin scripts; el navegador se instala con `npx playwright install chromium`).
+- **Leer «la versión actual» después de escribir devuelve la de otro:** la revisión de la respuesta debe salir de la propia escritura (`RETURNING` dentro de la transacción). Mismo principio para cualquier lectura que acompañe a una escritura.
+- **Dos lecturas seguidas pueden mezclar versiones:** para una instantánea coherente, un solo lote (`DB.batch([...])`) o una sola consulta.
+- **Tras un `await` el estado global puede ser otro:** guardar/publicar deben capturar la cartera (`const cur = current`) y no tocar el editor si `current !== cur`; el síntoma era «Guardando…» o un conflicto falso en la cartera abierta después.
+- **`path.join(RAIZ, rutaAbsoluta)` concatena:** con una ruta absoluta (p. ej. `RONDA=$(mktemp -d)`) escribía dentro del repositorio (`tmp/…`); usar `path.resolve`.
+- **`( cd x && cmd & echo $! > ../f )`** escribe el PID en la ruta equivocada (el `cd` ocurre dentro del trabajo en segundo plano): usar `--directory` y rutas desde la raíz.
+- **El ejecutor de pruebas debe poder fallar a propósito:** probarlo con baterías de mentira (fixtures) que fallan, se caen, se cuelgan o no tienen servidor; sin eso un «✅» del ejecutor no vale.
+- **`kill` solo del padre deja huérfanos:** wrangler lanza workerd; matar el árbol con `pgrep -P` recursivo (portable) y comprobar el puerto.
+- **Esquema antiguo como fixture:** `git show <commit>:schema.sql` fija la base «anterior» para probar migraciones sin depender del historial.
 

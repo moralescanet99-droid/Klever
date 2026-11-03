@@ -86,5 +86,16 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Demo:** banner «Demostración sin persistencia de cuenta… no es equivalente al servidor real»; el guion de desconexión se sustituye por una casilla «Simular fallo de red al guardar» (solo demo, explícita); el modo sin conexión real se prueba contra el servidor local (G5).
 - Sin funciones nuevas ni del plan de pago.
 
+## Ronda 8 (revisión técnica de ChatGPT sobre la ronda 7)
+- **La respuesta de un guardado trae la revisión de SU escritura**, obtenida dentro de la transacción: `UPDATE … RETURNING revision, actualizado_en` (PUT, dentro del lote; PATCH, sentencia única). Antes se leía «la versión vigente» después del lote y A podía recibir la revisión de B y pisarlo con un 200 en el guardado siguiente (defecto crítico reproducido por ChatGPT).
+- **`GET` = un solo lote de lecturas** (cartera + posiciones): una instantánea, sin mezclar versiones.
+- **Validación frente a error interno:** los tickers se comprueban antes del lote (400 «Algún ticker no está en el universo»); cualquier excepción del lote es un error interno: 500 «No se pudo guardar por un error del servidor. Inténtalo de nuevo.», el detalle va a `console.error` del servidor. Antes todo era un 400 de ticker desconocido.
+- **El cliente ata cada operación a la cartera que la inició** (`cur`, no `current`): una respuesta tardía de guardado o de publicación no toca el editor, la revisión, el estado ni la copia local de otra cartera abierta entretanto; `saving` se reinicia al cambiar de cartera; la copia local de la cartera guardada se libera si coincide con lo guardado (si hay ediciones posteriores se conserva y solo cambia su revisión base). Aviso corto («“X” guardada» / «…cambió en tu cuenta: ábrela para elegir»).
+- **Ejecutor fiable:** `tests/run-all.sh` sale con código ≠ 0 ante fallo de arranque, timeout, resultado ausente, código ≠ 0 o «N fallos»; `trap` de limpieza; no usa `timeout` ni `setsid` (no existen en macOS); se prueba a sí mismo (`tests/ronda8/test-ejecutor.sh`).
+- **Requisitos:** Node ≥ 22.13 (`node:sqlite` sin indicador; `engines`, `.nvmrc`, el ejecutor lo comprueba); etiqueta fija `ronda-8` para repetir la entrega (no una rama mutable).
+- **Migración 0007 verificada sobre una base antigua con datos** (fixture del esquema anterior): conserva carteras y posiciones, deja revisión 0, produce la misma tabla que `schema.sql`; aplicarla al esquema nuevo falla («duplicate column»), por eso solo va a bases anteriores. SQLite real, no D1 remoto.
+- **Afirmación honesta del informe:** transaccional y superando los escenarios locales comprobados; **D1 remoto, migración con datos reales y dispositivos físicos no probados**. La antigua E16a (−1979 px dada por válida) queda como antecedente sustituido (G6 y la E16a corregida).
+- **Método:** cada defecto se reprodujo con una prueba que **falla antes** (`ronda8/antes-*.txt`) y pasa después.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

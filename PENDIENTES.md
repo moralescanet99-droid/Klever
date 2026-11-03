@@ -31,5 +31,5 @@
 - [ ] Si ya cargaste `data/demo.sql`, vuelve a cargarlo (o actualiza las tesis) para que las descripciones sean las nuevas, completas
 
 ## 5. Pruebas manuales que no se pueden ejecutar desde el entorno de trabajo
-- [ ] Ver `ronda7/pruebas-manuales.md` (M1–M21; sustituye a `ronda6/pruebas-manuales.md`) (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
+- [ ] Ver `ronda8/pruebas-manuales.md` (M1–M23; sustituye a las anteriores). Incluye probar `batch`/`RETURNING` y la migración 0007 en **D1 remoto** (M21, M22) (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
 - [ ] Pruebas de uso con personas: seguir `PRUEBAS-DE-USO.md` (demo `demo/index.html`, o `bash scripts/local/arrancar.sh`) y anotar dónde dudan.

@@ -31,7 +31,7 @@ Esquema anterior a la ronda 7 (fixture del commit `aa21407`) con 2 carteras (una
 {{RESULTADO}}
 ```
 
-Se obtuvo en un clon nuevo del commit indicado (`git clone`, `npm ci`, `bash tests/run-all.sh`). El ejecutor termina con código 0 solo si todo pasa.
+Se obtuvo en un clon nuevo del commit indicado (`git clone`, `npm ci`, `bash tests/run-all.sh`). El ejecutor termina con código 0 solo si todo pasa. La prueba del propio ejecutor (fallos, caídas, timeouts y puerto ocupado deliberados) está en `ronda8/resultado-ejecutor.txt` (9/9, también desde un clon limpio). El ejecutor antiguo, con la misma batería defectuosa, salía con código 0: `ronda8/antes-ejecutor.txt`.
 
 ## 5. Evidencia por escenario
 

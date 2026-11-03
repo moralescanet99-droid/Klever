@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 7 (informe `ronda7/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 8 (informe `ronda8/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**196 comprobaciones** automáticas en la ejecución limpia de la ronda 7). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**211 comprobaciones** automáticas en la ejecución limpia de la ronda 8). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 7 (fiabilidad del guardado y entrega reproducible) está implementada y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`); hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) está implementada y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, etiqueta `ronda-8`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -24,7 +24,8 @@ data/              universe.json (125 activos) · demo.sql (3 carteras públicas
 demo/              index.html (demo autónoma) · LEEME.md
 tests/ronda5/      baterías A–E, demotest, generadores de informe y datos de prueba (tests/ronda4: histórico)
 tests/ronda7/      testF (guardado fiable, conflicto, E16a, diálogo móvil), unit-servidor (SQLite real), informe7
-tests/run-all.sh  ejecuta todo con servidor limpio entre baterías y deja ronda7/resultado-ejecucion.txt con el commit
+tests/ronda8/      unit-carreras, unit-migracion, testG (respuestas tardías), test-ejecutor.sh, fixtures, informe8 · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
+tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda8/resultado-ejecucion.txt con el commit
 ronda6/ ronda5/ ronda4/ rediseno/  informes LEEME.md de cada ronda · ronda6/pruebas-manuales.md (pendientes reales)
 PRUEBAS-DE-USO.md · scripts/local/arrancar.sh · data/seed-prueba.sql   versión para pruebas de uso
 revision-chatgpt/  instrucciones para cada ronda de crítica de ChatGPT
@@ -49,13 +50,15 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | Cartera pública con edición inválida: versión publicada intacta, sin despublicar | ✅ (interfaz y servidor) |
 | Copia local de cambios sin guardar de carteras de la cuenta (recuperación, descartar) | ✅ |
 | Conflicto entre la versión local y la de la cuenta: diálogo con las dos versiones, al abrir y al guardar (409); elegir la local NO escribe, hay que pulsar Guardar; Escape/«Decidir después» posponen | ✅ con una petición directa a la API como «otro dispositivo» · dos navegadores reales ⬜ pendiente |
-| Guardado en una sola operación transaccional con revisión atómica (sin guardados parciales, sin carreras entre dos guardados) | ✅ servidor real local + SQLite real + mutación · D1 real de Cloudflare ⛔ no probado |
+| Guardado en una sola operación transaccional con revisión atómica; la respuesta lleva la revisión de su propia escritura; lecturas coherentes; errores internos = 500 | ✅ servidor real local + SQLite real (carreras simuladas de forma determinista) · D1 real de Cloudflare ⛔ no probado |
+| Respuesta tardía de guardado/publicación con otra cartera abierta (no la toca) | ✅ (H1, H2) |
+| Migración 0007 sobre una base antigua con datos | ✅ SQLite real con fixture · D1 remoto con datos reales ⛔ |
 | Diálogo de conflicto en móvil (320×568, texto al 200 % simulado): «Decidir después» y decisiones siempre alcanzables | ✅ simulado · zoom real y teclado real ⬜ pendientes |
 | Aviso persistente en «Mis carteras» al abrir el enlace en otro navegador (sin toast largo) | ✅ |
 | Comprobaciones con datos ausentes: «N superadas · M sin datos», ficha por grupos, orden documentado | ✅ |
 | Cartera pública: «Guardar y actualizar publicación», «Tus cambios aún no son públicos», «Reintentar guardado» | ✅ |
 | Versión para pruebas de uso: servidor local completo (`arrancar.sh`), demo sin persistencia (también `file://`), artefacto | ✅ comprobado aquí · con personas ⬜ |
-| Entrega reproducible: `npm ci` + `bash tests/run-all.sh` desde un clon limpio | ✅ ejecutado así (resultado en `ronda7/resultado-ejecucion.txt`) |
+| Entrega reproducible: `npm ci` + `bash tests/run-all.sh` desde un clon limpio; el ejecutor falla (≠ 0) ante cualquier problema y está probado | ✅ ejecutado así (resultado en `ronda8/resultado-ejecucion.txt`) |
 | Estado en tres planos con texto explícito de persistencia | ✅ |
 | Probar sin registro, borrador local, migración a la cuenta | ✅ |
 | Editor: nombre y pesos editables, buscador accesible, resumen, menú de acciones con confirmación | ✅ |
@@ -72,7 +75,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | Safari, Firefox, móviles reales | ⛔ |
 
 ## Pruebas
-- **Ejecución limpia de la ronda 7** (clon nuevo del commit `3c3c861`, `npm ci`, `bash tests/run-all.sh`): A 31 · B 51 · C 50 · D 29 · E 15 · **F 9** (guardado fiable, conflicto, E16a, diálogo móvil, desconexión real) · **U 11** (servidor real sobre SQLite: atomicidad y revisión) = 196, y la demo con sus comprobaciones. Tablas esperado/observado en `ronda7/LEEME.md`; capturas presentes y ausentes en `ronda7/EVIDENCIAS.md`. Antes de corregir, `ronda7/antes-defectos.txt` documenta los defectos del servidor real. Cómo ejecutarlas: `08-entorno-y-trampas.md`.
+- **Ejecución limpia de la ronda 8**: ver `ronda8/LEEME.md` y `ronda8/resultado-ejecucion.txt` (commit exacto dentro). Antecedente, ronda 7 (clon nuevo del commit `3c3c861`, `npm ci`, `bash tests/run-all.sh`): A 31 · B 51 · C 50 · D 29 · E 15 · **F 9** (guardado fiable, conflicto, E16a, diálogo móvil, desconexión real) · **U 11** (servidor real sobre SQLite: atomicidad y revisión) = 196, y la demo con sus comprobaciones. Tablas esperado/observado en `ronda7/LEEME.md`; capturas presentes y ausentes en `ronda7/EVIDENCIAS.md`. Antes de corregir, `ronda7/antes-defectos.txt` documenta los defectos del servidor real. Cómo ejecutarlas: `08-entorno-y-trampas.md`.
 - Mediciones (390 px): cabecera global 61 px (antes 105); barra inferior 72 px; tres plantillas 357 px (antes 649).
 
 ## Pendiente del usuario (ver `PENDIENTES.md`)
@@ -90,7 +93,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 - Los cambios locales pendientes de una cartera de la cuenta **sí sobreviven a recargar** (copia local); si la cartera cambió desde otro dispositivo se muestra el diálogo con las dos versiones (al abrir y al guardar, con 409 del servidor). Probado con una petición directa a la API como segundo dispositivo; con dos dispositivos reales está en las pruebas manuales. El aviso del navegador al salir está implementado y no probado.
 - **Título largo:** con 80 caracteres en móvil necesita tres líneas y se desplaza dentro del campo (límite asumido).
 - **Clientes antiguos:** desde la ronda 7 el servidor exige `revision` (400 si falta); las copias locales de versiones anteriores del cliente se tratarán como conflicto al abrir.
-- **La atomicidad no se ha probado en Cloudflare D1 real** (solo D1 local simulada y SQLite real); M20/M21 en `ronda7/pruebas-manuales.md`.
+- **La atomicidad no se ha probado en Cloudflare D1 real** (solo D1 local simulada y SQLite real); M20–M22 en `ronda8/pruebas-manuales.md`. La carrera «escritura ajena tras el commit» se modela con un adaptador que aplaza la escritura intercalada hasta después del commit (comportamiento documentado de `batch()`), no con dos procesos reales.
 - **«Decidir después»** en el diálogo de conflicto es una decisión de producto añadida (no pedida) para no atrapar al usuario; conviene validarla con ChatGPT/personas.
 - ChatGPT quizá no pueda **interactuar** con la demo aunque sea pública; las capturas siguen siendo la vía segura.
 
@@ -100,4 +103,4 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 3. Crear la cuenta de Brevo y desplegar la web real; probar el acceso por email real (spam en Gmail, otro proveedor).
 4. Ejecutar la carga nocturna con la SEC real y revisar qué empresas no devuelven datos.
 5. Leer términos de TradingView y revisar el texto legal con un abogado.
-6. Ejecutar las pruebas manuales pendientes de `ronda7/pruebas-manuales.md` (M1–M21; ninguna ejecutada) (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).
+6. Ejecutar las pruebas manuales pendientes de `ronda8/pruebas-manuales.md` (M1–M23; ninguna ejecutada) (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).
