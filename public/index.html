@@ -32,6 +32,14 @@
   </nav>
 </header>
 
+<!-- Zona reservada para avisos: debajo de la cabecera, en el flujo (no flota sobre nada) y pegada arriba al desplazarse -->
+<div id="avisos" class="avisos">
+  <div class="avisos-in">
+    <div id="toast" role="status" aria-live="polite"></div>
+    <button id="toast-x" class="btn btn-secundario av-x" type="button" aria-label="Cerrar aviso" hidden>Cerrar</button>
+  </div>
+</div>
+
 <main id="contenido" tabindex="-1">
 
   <!-- ===== PORTADA ===== -->
@@ -228,24 +236,27 @@
             <div class="barra" role="progressbar" aria-label="Porcentaje asignado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="r-barra"></i></div>
             <p id="r-falta" class="asig-estado"></p>
           </div>
-          <dl class="datos">
+          <dl class="datos datos-roic">
+            <div class="dato-roic"><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
             <div><dt>Posiciones</dt><dd id="r-n" class="num">0</dd></div>
-            <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
           </dl>
           <p class="nota-roic">No representa la rentabilidad de tu cartera.</p>
-          <div id="r-cobertura" class="mut peq cobertura"></div>
+          <div id="r-cobertura" class="cobertura">
+          <p id="r-cob-corta" class="cob-corta"></p>
           <details class="mini">
-            <summary>Cómo se calcula el ROIC medio</summary>
+            <summary>Cómo se calcula y qué se excluye</summary>
+            <div id="r-cob-larga" class="cob-larga"></div>
             <p>El ROIC mide cuánto gana una empresa por cada dólar invertido en su negocio. Es una característica de la empresa; no es lo que ganaría tu cartera.</p>
             <p><b>Fórmula:</b> ROIC medio = suma de (ROIC de cada posición × su peso) ÷ suma de los pesos de las posiciones que tienen dato. Es una media ponderada, no simple.</p>
             <p><b>Datos ausentes:</b> una empresa sin dato («no disponible») queda fuera del cálculo, ni como cero ni en el denominador. <b>No aplicable:</b> los fondos (ETF) no tienen ROIC y también quedan fuera.</p>
             <p><b>Cobertura:</b> número de posiciones con dato sobre el total de posiciones, y su peso sobre el peso asignado.</p>
           </details>
+          </div>
           <h3>Distribución por categorías</h3>
           <div id="r-sectores"></div>
-          <p class="mut peq">Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
           <details class="mini">
             <summary>Más sobre las categorías</summary>
+            <p>Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
             <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
           </details>
         </section>
@@ -268,8 +279,9 @@
 </main>
 
 <footer class="pie">
-  <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas. Las cifras proceden de los registros públicos de la SEC (EDGAR), se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p>
-  <p><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+  <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas.</p>
+  <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p>Las cifras proceden de los registros públicos de la SEC (EDGAR), se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
+  <p class="pie-enl"><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 
 <div id="barra-guardar" class="barra-guardar" hidden>
@@ -346,7 +358,6 @@
   <div id="fi-cuerpo"></div>
 </dialog>
 
-<div id="toast" role="status" aria-live="polite"></div>
 <script src="app.js" type="module"></script>
 </body>
 </html>

@@ -314,8 +314,6 @@ dialog{--dlg-pad:var(--s3)}
 /* ---------- pie, aviso, legal ---------- */
 .pie{width:calc(100% - 2*var(--gutter));max-width:calc(var(--ancho) - 2*var(--gutter));margin:0 auto;padding:var(--s3) 0 var(--s4);color:var(--muted);font-size:.875rem;border-top:1px solid var(--border)}
 .pie p{max-width:80ch}
-#toast{position:fixed;left:50%;top:calc(var(--s1) + env(safe-area-inset-top));transform:translateX(-50%);max-width:min(92vw,440px);background:var(--text);color:var(--bg);padding:12px var(--s2);border-radius:var(--r);font-size:.9375rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:var(--shadow-lg)}
-#toast.on{opacity:1}
 .doc{max-width:760px;margin:0 auto;padding:var(--s3) var(--gutter) var(--s4)} .doc h1{margin:var(--s3) 0 var(--s1)} .doc ul{padding-left:20px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
@@ -337,7 +335,7 @@ dialog{--dlg-pad:var(--s3)}
 .ck-val{white-space:normal;text-align:right;max-width:9.5rem;margin-left:auto}
 body.teclado .barra-guardar{display:none}
 html{scroll-padding-bottom:calc(var(--barra-alto,0px) + 16px)}
-@media (max-width:899px){body.en-cartera main{padding-bottom:calc(var(--barra-alto,88px) + 24px)}}
+@media (max-width:899px){body.en-cartera main{padding-bottom:var(--s2)} body.en-cartera .pie{padding-bottom:calc(var(--barra-alto,88px) + 16px)}} /* la barra inferior fija nunca tapa el pie ni sus enlaces */
 .prev-mas{color:var(--muted);font-size:.875rem;padding:10px 0;border-bottom:1px solid var(--border)}
 #b-falta.ok,#rb-estado.ok{color:var(--ok)} #b-falta.aviso,#rb-estado.aviso{color:var(--warn)} #b-falta.error,#rb-estado.error{color:var(--bad)}
 .res-breve #rb-estado{font-weight:600}
@@ -416,3 +414,38 @@ h3.grp{font-size:1rem;margin:var(--s2) 0 0}
 .cn-dif h3{font-size:1rem;margin:0 0 4px} .cn-dif ul{margin:0;padding-left:1.2em}
 @media (max-width:719px){.cn-cols{grid-template-columns:1fr}.cn-pie .btn{flex:1 1 100%}.cn-cab,.cn-cuerpo,.cn-pie{padding-left:var(--s2);padding-right:var(--s2)}.cn-cab,.cn-pie{padding-top:var(--s1);padding-bottom:var(--s1)}.cn-cab h2{font-size:1.0625rem}.cn-pie .btn,.cn-cab .btn{min-height:44px;padding-top:0;padding-bottom:0}.cn-cab .btn{flex:1 1 100%}}
 @media (max-width:719px){.nombre{font-size:1.25rem}}
+
+/* ---- ronda 10: pulido visual ---- */
+/* Avisos: zona reservada bajo la cabecera, en el flujo; pegada arriba al desplazarse; los errores permanecen hasta cerrarlos */
+.avisos{position:sticky;top:0;z-index:55;display:grid;grid-template-rows:0fr;transition:grid-template-rows .2s ease}
+.avisos.on{grid-template-rows:1fr;background:var(--bg);border-bottom:1px solid var(--border)}
+.avisos-in{width:100%;min-height:0;overflow:hidden;display:flex;align-items:flex-start;justify-content:flex-start;gap:var(--s1);max-width:var(--ancho);margin:0 auto;padding:0 var(--gutter)}
+#toast{flex:0 1 auto;min-width:0;margin:8px 0;padding:10px var(--s2);border-radius:var(--r);font-size:.9375rem;background:var(--text);color:var(--bg);opacity:0;transition:opacity .2s;overflow-wrap:anywhere}
+#toast.on{opacity:1}
+#toast.error{flex:1 1 auto;background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad);font-weight:600}
+.av-x{flex:none;min-height:40px;padding:0 var(--s2)}
+@media (max-width:480px){.av-x{margin:8px 0;padding:0 var(--s1);min-height:44px}}
+@media (prefers-reduced-motion:reduce){.avisos,#toast{transition:none}}
+/* Resumen de ROIC: el indicador primero y grande; cobertura y advertencia breves; el detalle, plegado */
+.datos-roic{grid-template-columns:1fr auto;align-items:end;margin-bottom:6px}
+.datos-roic .dato-roic dd{font-size:2rem;letter-spacing:-.02em;line-height:1.1;color:var(--accent-on-soft,var(--text))}
+.datos-roic div:last-child{text-align:right} .datos-roic div:last-child dd{font-size:1.125rem}
+.nota-roic{margin:0 0 6px;font-size:.875rem}
+.cob-corta{margin:0 0 2px;font-size:.875rem;color:var(--muted)} .cob-corta .linea{display:block}
+.cobertura .mini{margin:4px 0 var(--s1)} .cob-larga{margin:0 0 4px;font-size:.875rem;color:var(--muted)} .cob-larga:empty{display:none}
+.panel-res h3{margin-top:var(--s2)}
+/* Pie compacto: lo imprescindible a la vista, las fuentes plegadas */
+.pie{padding:var(--s2) 0 var(--s3)}
+.pie p{margin:0 0 4px} .pie-det{margin:0 0 4px} .pie-det summary{cursor:pointer;color:var(--accent);font-weight:600;min-height:32px;display:flex;align-items:center}
+.pie-det p{margin:0 0 6px}
+.pie-enl{font-size:.875rem}
+@media (max-width:719px){
+  .pie{font-size:.8125rem;padding:var(--s1) 0 var(--s2)}
+  /* barra inferior: el estado conserva sitio; el botón puede ocupar dos líneas */
+  .barra-guardar{flex-wrap:wrap;row-gap:4px;max-height:40vh;overflow-y:auto;overscroll-behavior:contain;container-type:inline-size}
+  /* texto muy ampliado: el botón (acción principal) pasa arriba y a todo el ancho; el estado queda debajo */
+  @container (max-width:18rem){.barra-guardar .js-guardar{order:-1;flex:1 1 100%;margin-left:0}.barra-guardar .bg-info{flex:1 1 100%}}   /* si no cabe (texto muy ampliado), el botón baja a su propia fila en vez de recortarse */
+  .barra-guardar .js-guardar{flex:0 1 auto;min-width:8.5rem;max-width:100%;margin-left:auto;white-space:normal;line-height:1.15;padding:6px 12px}
+  .barra-guardar .bg-info{flex:1 1 6rem;min-width:0}
+  .res-breve{padding:10px var(--s2)}
+}

@@ -26,9 +26,20 @@ const parsePeso = s => { const n = parseFloat(String(s).trim().replace(/\s/g, ''
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 const reducido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Avisos: zona reservada bajo la cabecera (no flotan sobre nada). Los de éxito se cierran solos; los ERRORES que requieren actuar
+// permanecen hasta que se cierran («Cerrar aviso») y se anuncian como alerta.
 let toastTimer;
-function toast(msg, ms = 4000) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); }
-function hideToast() { clearTimeout(toastTimer); $('#toast').classList.remove('on'); }
+function mostrarAviso(msg, error, ms) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on'); t.classList.toggle('error', error);
+  t.setAttribute('role', error ? 'alert' : 'status'); t.setAttribute('aria-live', error ? 'assertive' : 'polite');
+  $('#toast-x').hidden = !error; $('#avisos').classList.add('on'); clearTimeout(toastTimer);
+  if (!error) toastTimer = setTimeout(cerrarAviso, ms);
+}
+const toast = (msg, ms = 4000) => mostrarAviso(msg, false, ms);
+const toastError = msg => mostrarAviso(msg, true);
+function cerrarAviso() { clearTimeout(toastTimer); $('#toast').classList.remove('on', 'error'); $('#avisos').classList.remove('on'); $('#toast-x').hidden = true; }
+function hideToast() { if (!$('#toast').classList.contains('error')) cerrarAviso(); } // al editar se retiran los avisos de éxito, nunca un error pendiente
+$('#toast-x').addEventListener('click', cerrarAviso);
 
 const API = '/api';
 const tok = () => store.getItem('klever_token');
@@ -91,7 +102,7 @@ const enCuenta = () => logged() && !!current?.id;
 
 async function loadAssets() {
   try { assets = await getJson('/assets'); by = Object.fromEntries(assets.map(a => [a.ticker, a])); }
-  catch { toast('No se pudieron cargar los activos. Recarga la página.'); }
+  catch { toastError('No se pudieron cargar los activos. Recarga la página.'); }
 }
 
 // ---------- reglas de composición: UNA sola fuente para guardar, publicar y la interfaz ----------
@@ -194,7 +205,7 @@ async function redeem() { // canje del enlace mágico (?login=TOKEN)
     store.setItem('klever_token', r.token);
     // El enlace se pidió con un borrador local. Si se abre en otro dispositivo/navegador, el borrador no está aquí.
     if (r.con_borrador && !hayBorrador()) store.setItem(AVISO, '1'); else store.removeItem(AVISO);
-  } catch (err) { toast(err.message); }
+  } catch (err) { toastError(err.message); }
 }
 function sesionCaducada() {
   store.removeItem('klever_token'); current = null; actualizarCabecera(); route(); abrirAcceso('caducada');
@@ -302,10 +313,10 @@ $('#form-nueva').addEventListener('submit', async e => {
   try {
     const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla'), posiciones: repartoPlantilla(f.get('plantilla')) } }); // una sola operación: sin carteras vacías a medias
     e.target.reset(); go('#cartera-' + id);
-  } catch (err) { toast(err.message); } finally { btn.disabled = false; }
+  } catch (err) { toastError(err.message); } finally { btn.disabled = false; }
 });
 async function cargarCartera(id) {
-  let c; try { c = await api('/portfolios/' + id); } catch (err) { toast(err.message); return false; }
+  let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
   current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = '';
@@ -370,7 +381,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
   if (!d.pos?.length) { store.removeItem(DRAFT); return; }
   const v = validar(d.pos);
   if (v.exceso || v.invalidos.length) {
-    toast('Tu borrador sigue en este dispositivo: corrige los pesos para guardarlo en tu cuenta.', 7000);
+    toastError('Tu borrador sigue en este dispositivo: corrige los pesos para guardarlo en tu cuenta.');
     location.hash = '#cartera'; return;
   }
   try {
@@ -378,7 +389,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
-    toast('No se pudo guardar el borrador. Sigue en este dispositivo.', 7000);
+    toastError('No se pudo guardar el borrador. Sigue en este dispositivo.');
   }
 }
 
@@ -400,10 +411,18 @@ function calcResumen(ps) {
   };
 }
 const roicTxt = a => !a ? '<span class="nd">No disponible</span>' : a.tipo === 'etf' ? '<span class="nd" title="Los fondos no tienen ROIC: no aplicable">No aplicable</span>' : a.roic == null ? '<span class="nd" title="Dato ausente en los informes">No disponible</span>' : pct(a.roic);
-function lineasCobertura(r) {
+function coberturaCorta(r) { // visible: cobertura y, si hay exclusiones, una línea breve (ausente ≠ cero)
   if (!r.n) return '';
   const pl = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
   const l = [r.roic == null ? 'Ninguna posición tiene ROIC.' : `Con dato: ${r.nCon} de ${r.n} posiciones (${nf(r.cobPeso * 100, 0)}${NB}% del peso asignado).`];
+  const fuera = [r.noDisp ? `${pl(r.noDisp, 'empresa sin dato (no cuenta como 0)', 'empresas sin dato (no cuentan como 0)')}` : '', r.noAplic ? `${pl(r.noAplic, 'fondo', 'fondos')} (no aplicable)` : ''].filter(Boolean);
+  if (fuera.length) l.push('Fuera del cálculo: ' + fuera.join(' · ') + '.');
+  return l.map(t => `<span class="linea">${t}</span>`).join('');
+}
+function lineasCobertura(r) { // desplegable: las exclusiones con su nombre completo
+  if (!r.n) return '';
+  const pl = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+  const l = [];
   if (r.noDisp) l.push(`Dato ausente (no disponible): ${pl(r.noDisp, 'empresa', 'empresas')}.`);
   if (r.noAplic) l.push(`No aplicable: ${pl(r.noAplic, 'fondo', 'fondos')}; los ETF no tienen ROIC.`);
   return l.map(t => `<span class="linea">${t}</span>`).join('');
@@ -453,7 +472,7 @@ function renderResumen() {
   barra.classList.toggle('error', !!r.exceso); $('#r-barra').style.width = Math.min(100, r.total) + '%';
   $('#r-n').textContent = r.n;
   $('#r-roic').textContent = r.roic != null ? pct(r.roic) : '—';
-  $('#r-cobertura').innerHTML = lineasCobertura(r);
+  $('#r-cob-corta').innerHTML = coberturaCorta(r); $('#r-cob-larga').innerHTML = lineasCobertura(r);
   $('#r-sectores').innerHTML = r.sectores.length ? r.sectores.map(([s, v]) =>
     `<div class="sector"><span>${esc(s)}</span><span class="num">${pesoTxt(v)}</span><div class="barra"><i style="width:${Math.min(100, v)}%"></i></div></div>`).join('')
     : '<p class="mut peq">Añade posiciones para ver el reparto.</p>';
@@ -542,7 +561,7 @@ async function guardar() {
     } else if (!eraNueva) liberarCopia(cur.id, snap, u.revision);                                     // otra cartera abierta: ni su editor ni su copia local se tocan
     toast(vigente ? (cur.publico ? 'Cartera guardada y publicación actualizada' : 'Cartera guardada') : `«${nombre}» guardada`);
   } else if (!vigente) {
-    toast(conflicto ? `«${nombre}» cambió en tu cuenta: ábrela para elegir qué versión conservar.` : `No se pudo guardar «${nombre}». Sus cambios siguen en este dispositivo.`, 6000);
+    toastError(conflicto ? `«${nombre}» cambió en tu cuenta: ábrela para elegir qué versión conservar.` : `No se pudo guardar «${nombre}». Sus cambios siguen en este dispositivo.`);
     return false;
   }
   if (fallo) saveErr = fallo;
@@ -587,7 +606,7 @@ async function cambiarPublicacion(publico) {
     loadPublicas();
     toast(current === cur ? (publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada') : (publico ? `«${cur.nombre}» publicada` : `«${cur.nombre}» vuelve a ser privada`));
   } catch (e) {
-    if (current !== cur) { toast(`No se pudo cambiar la publicación de «${cur.nombre}».`, 6000); return; }
+    if (current !== cur) { toastError(`No se pudo cambiar la publicación de «${cur.nombre}».`); return; }
     if (e.status === 409 && e.data?.conflicto) { // la cuenta cambió desde otro sitio: se recarga y, si hay cambios locales, se pregunta cuál conservar
       await cargarCartera(cur.id); renderWorkspace(); err.textContent = 'La cartera había cambiado en tu cuenta. No se ha modificado la publicación.';
     } else err.textContent = e.message;
@@ -627,9 +646,13 @@ if ('ResizeObserver' in window) new ResizeObserver(medirBarra).observe(barra);
 if (window.visualViewport) window.visualViewport.addEventListener('resize', () => { // teclado abierto: la barra se oculta para no tapar el campo
   document.body.classList.toggle('teclado', window.visualViewport.height < window.innerHeight * 0.75); medirBarra();
 });
-document.addEventListener('focusin', e => { // el campo activo queda a la vista, nunca bajo la barra
+document.addEventListener('focusin', e => { // el campo activo queda a la vista: centrado entre la zona de avisos (arriba) y la barra inferior (abajo), nunca tapado
   if (!e.target.classList?.contains('peso-in')) return;
-  const el = e.target; setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'auto' }), 300);
+  const el = e.target; setTimeout(() => {
+    const r = el.getBoundingClientRect(), a = $('#avisos').getBoundingClientRect(), bar = $('#barra-guardar'), visibleBarra = !bar.hidden && getComputedStyle(bar).display !== 'none';
+    const arriba = Math.max(a.bottom, 0), abajo = visibleBarra ? bar.getBoundingClientRect().top : innerHeight;
+    window.scrollBy({ top: r.top + r.height / 2 - (arriba + abajo) / 2, behavior: 'auto' });
+  }, 300);
 });
 
 // ---------- pesos editables ----------
@@ -728,7 +751,7 @@ $('#mi-descartar').addEventListener('click', async () => {
 $('#mi-eliminar').addEventListener('click', async () => {
   masAbrir(false); masBtn.focus();
   if (!(await confirmar({ titulo: 'Eliminar cartera', texto: `Se eliminará «${current.nombre}» de tu cuenta, con todas sus posiciones. No se puede deshacer.`, ok: 'Eliminar cartera', peligro: true }))) return;
-  try { await api('/portfolios/' + current.id, { method: 'DELETE' }); } catch (err) { return toast(err.message); }
+  try { await api('/portfolios/' + current.id, { method: 'DELETE' }); } catch (err) { return toastError(err.message); }
   store.removeItem('klever_edit_' + current.id); current = null; pos = []; chartEls.clear(); window.onbeforeunload = null; toast('Cartera eliminada'); loadPublicas(); go('#carteras');
 });
 
@@ -812,7 +835,7 @@ for (const lista of [$('#empresas-lista'), $('#empresas-cards')]) lista.addEvent
 $('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio'); s.scrollIntoView({ behavior: 'auto' }); s.focus({ preventScroll: true }); }); // salto largo: sin animación
 
 async function verFicha(t) {
-  let a; try { a = await getJson('/assets/' + t); } catch { return toast('No se pudo cargar la ficha'); }
+  let a; try { a = await getJson('/assets/' + t); } catch { return toastError('No se pudo cargar la ficha'); }
   const c = a.criterios, periodo = c?.periodo || a.fundamentales[0]?.periodo || '';
   const fila = ([label, regla, f], x, res) => `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span>${x?.valor != null ? (([c, u]) => `<span class="ck-val"><b class="v">${c}</b>${u ? `<span class="u">${u}</span>` : ''}</span>`)(f(x.valor)) : '<span class="ck-val"><span class="u">Dato no disponible</span></span>'}</div></li>`;
   const grupos = { ok: [], no: [], nd: [] };
@@ -862,7 +885,7 @@ async function loadPublicas() {
 }
 async function verPublica(id) {
   if (vistaActual() !== 'publicas') { pendientePublica = id; return go('#publicas'); }
-  let p; try { p = await getJson('/public/' + id); } catch { return toast('No se pudo cargar la cartera'); }
+  let p; try { p = await getJson('/public/' + id); } catch { return toastError('No se pudo cargar la cartera'); }
   const r = calcResumen(p.posiciones.map(x => ({ ticker: x.ticker, peso: x.peso })));
   const d = $('#publica-detalle'); d.hidden = false;
   d.innerHTML = `<h2>${esc(p.nombre)}</h2><p>${etiquetaOrigen(p.origen)} <span class="mut">Plantilla ${esc(nombrePlantilla(p.plantilla))}</span></p>${p.tesis ? `<p><b>Tesis:</b> ${esc(p.tesis)}</p>` : ''}

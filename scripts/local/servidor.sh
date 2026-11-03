@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Servidor local de PRUEBAS en segundo plano (D1 simulada + datos ficticios). Lo usan las pruebas automáticas.
 # Uso: bash scripts/local/servidor.sh start|stop|reset      (PORT=8788 por defecto)
+# SIN_ENLACE_DEV=1 arranca SIN el enlace de acceso en pantalla (configuración como la de la beta pública: el acceso exige correo real).
 # No toca wrangler.toml ni crea .dev.vars. Todo el estado vive en .wrangler/ (ignorado por git).
 # Dependencias del sistema: bash, curl, pgrep (Linux y macOS). No usa timeout ni setsid.
 set -euo pipefail
@@ -26,7 +27,8 @@ case "${1:-}" in
   reset) parar; sembrar; echo "Base de datos de prueba recreada." ;;
   start)
     parar; mkdir -p .wrangler; sembrar
-    nohup "$WR" pages dev public --port "$PORT" --persist-to "$ESTADO" --binding DEV_RETURN_LINK=1 >"$LOG" 2>&1 &
+    EXTRA=(--binding DEV_RETURN_LINK=1); [ "${SIN_ENLACE_DEV:-0}" = 1 ] && EXTRA=()
+    nohup "$WR" pages dev public --port "$PORT" --persist-to "$ESTADO" ${EXTRA[@]+"${EXTRA[@]}"} >"$LOG" 2>&1 &
     echo $! >"$PID"
     for _ in $(seq 1 90); do [ "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:$PORT/api/ideas" || true)" = 200 ] && { echo "Servidor listo en http://localhost:$PORT"; exit 0; }; sleep 1; done
     echo "El servidor no arrancó; mira $LOG" >&2; matar_arbol "$(cat "$PID")"; rm -f "$PID"; exit 1 ;;

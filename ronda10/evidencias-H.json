@@ -1,0 +1,130 @@
+[
+ {
+  "id": "H1-320",
+  "escenario": "Aviso de guardado en el editor (320 px): zona reservada bajo la cabecera, sin superponerse, legible en toda la animación",
+  "esperado": "En 14 muestras durante la animación: el aviso queda siempre bajo la cabecera, no solapa ningún control y su contraste es ≥ 4,5:1",
+  "observado": "14 muestras con aviso visible; solapes con controles (aviso en su sitio): 0; muestras con el aviso pegado arriba al desplazarse: 14; controles solapados: [estado]; bajo la cabecera siempre=true; contraste mínimo 15.2:1; texto «Cartera guardada»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H2-320",
+  "escenario": "Aviso sobre «Mis carteras» y al desplazarse (320 px)",
+  "esperado": "El aviso queda debajo de la cabecera y no tapa el título ni «Nueva cartera»; con la página desplazada el aviso de error sigue entero arriba de la ventana y la página no desborda",
+  "observado": "solapes con controles en «Mis carteras»: 0 (); sobre el título=false, sobre «Nueva cartera»=false; desplazado 556 px: aviso a 0 px (cabecera termina en -495; arriba del todo si la cabecera ya salió), entero y con «Cerrar aviso» dentro de la ventana=true; ancho de página 320/320",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3-320",
+  "escenario": "Errores accesibles y avisos de éxito fugaces (320 px, título largo)",
+  "esperado": "Tras 6 s el guardado fallido sigue visible en el estado (y «Reintentar guardado»); el aviso de error de la ficha sigue ahí (rol alert, «Cerrar aviso») hasta cerrarlo; el de éxito se cierra solo",
+  "observado": "guardado fallido a los 6 s: estado «No se pudo guardar. Tus cambios siguen en este dispositivo», botón «Reintentar guardado», barra «No se pudo guardar»; aviso de error a los 6 s: visible=true, rol «alert», «Cerrar aviso» visible=true, «No se pudo cargar la ficha»; tras cerrar oculto=true; aviso de éxito a los 4,7 s sigue visible=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H1-390",
+  "escenario": "Aviso de guardado en el editor (390 px): zona reservada bajo la cabecera, sin superponerse, legible en toda la animación",
+  "esperado": "En 14 muestras durante la animación: el aviso queda siempre bajo la cabecera, no solapa ningún control y su contraste es ≥ 4,5:1",
+  "observado": "14 muestras con aviso visible; solapes con controles (aviso en su sitio): 0; muestras con el aviso pegado arriba al desplazarse: 14; controles solapados: [estado]; bajo la cabecera siempre=true; contraste mínimo 15.2:1; texto «Cartera guardada»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H2-390",
+  "escenario": "Aviso sobre «Mis carteras» y al desplazarse (390 px)",
+  "esperado": "El aviso queda debajo de la cabecera y no tapa el título ni «Nueva cartera»; con la página desplazada el aviso de error sigue entero arriba de la ventana y la página no desborda",
+  "observado": "solapes con controles en «Mis carteras»: 0 (); sobre el título=false, sobre «Nueva cartera»=false; desplazado 150 px: aviso a 0 px (cabecera termina en -89; arriba del todo si la cabecera ya salió), entero y con «Cerrar aviso» dentro de la ventana=true; ancho de página 390/390",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3-390",
+  "escenario": "Errores accesibles y avisos de éxito fugaces (390 px, título largo)",
+  "esperado": "Tras 6 s el guardado fallido sigue visible en el estado (y «Reintentar guardado»); el aviso de error de la ficha sigue ahí (rol alert, «Cerrar aviso») hasta cerrarlo; el de éxito se cierra solo",
+  "observado": "guardado fallido a los 6 s: estado «No se pudo guardar. Tus cambios siguen en este dispositivo», botón «Reintentar guardado», barra «No se pudo guardar»; aviso de error a los 6 s: visible=true, rol «alert», «Cerrar aviso» visible=true, «No se pudo cargar la ficha»; tras cerrar oculto=true; aviso de éxito a los 4,7 s sigue visible=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H1-1440",
+  "escenario": "Aviso de guardado en el editor (1440 px): zona reservada bajo la cabecera, sin superponerse, legible en toda la animación",
+  "esperado": "En 14 muestras durante la animación: el aviso queda siempre bajo la cabecera, no solapa ningún control y su contraste es ≥ 4,5:1",
+  "observado": "14 muestras con aviso visible; solapes con controles (aviso en su sitio): 0; muestras con el aviso pegado arriba al desplazarse: 0; controles solapados: []; bajo la cabecera siempre=true; contraste mínimo 15.2:1; texto «Cartera guardada»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H2-1440",
+  "escenario": "Aviso sobre «Mis carteras» y al desplazarse (1440 px)",
+  "esperado": "El aviso queda debajo de la cabecera y no tapa el título ni «Nueva cartera»; con la página desplazada el aviso de error sigue entero arriba de la ventana y la página no desborda",
+  "observado": "solapes con controles en «Mis carteras»: 0 (); sobre el título=false, sobre «Nueva cartera»=false; desplazado 0 px: aviso a 61 px (cabecera termina en 61; arriba del todo si la cabecera ya salió), entero y con «Cerrar aviso» dentro de la ventana=true; ancho de página 1440/1440",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3-1440",
+  "escenario": "Errores accesibles y avisos de éxito fugaces (1440 px, título largo)",
+  "esperado": "Tras 6 s el guardado fallido sigue visible en el estado (y «Reintentar guardado»); el aviso de error de la ficha sigue ahí (rol alert, «Cerrar aviso») hasta cerrarlo; el de éxito se cierra solo",
+  "observado": "guardado fallido a los 6 s: estado «No se pudo guardar. Tus cambios siguen en este dispositivo», botón «Reintentar guardado», motivo «Sin conexión con el servidor. Inténtalo de nuevo.»; aviso de error a los 6 s: visible=true, rol «alert», «Cerrar aviso» visible=true, «No se pudo cargar la ficha»; tras cerrar oculto=true; aviso de éxito a los 4,7 s sigue visible=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H4-320",
+  "escenario": "Resumen de ROIC (320 px): indicador, cobertura y advertencia visibles; explicación en desplegable",
+  "esperado": "Visibles: ROIC medio, «Con dato: N de M…», «No representa la rentabilidad de tu cartera.»; la fórmula y los datos ausentes, en un solo desplegable cerrado que se abre con teclado; una empresa sin dato queda fuera del cálculo y se dice que no cuenta como 0; sin tarjeta explicativa extra",
+  "observado": "ROIC «15,6 %» visible=true; cobertura «Con dato: 4 de 6 posiciones (66 % del peso asignado).Fuera del cálculo: 2 fondos (no aplicable).»; advertencia «No representa la rentabilidad de tu cartera.» visible=true; desplegable «Cómo se calcula y qué se excluye» cerrado=true, fórmula oculta=true; con Enter se abre=true, fórmula visible=true; desplegables en el resumen 2 (≤ 2), paneles anidados 0, h2 1; con JPMorgan: «Con dato: 4 de 7 posiciones (63 % del peso asignado).Fuera del cálculo: 1 empresa sin dato (no cuenta como 0) · 2 fondos (no aplicable).» · detalle «Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.» · ROIC 15,6 %; ancho 320/320",
+  "resultado": "OK",
+  "evidencia": "H4-roic-desplegado-320.png"
+ },
+ {
+  "id": "H4-390",
+  "escenario": "Resumen de ROIC (390 px): indicador, cobertura y advertencia visibles; explicación en desplegable",
+  "esperado": "Visibles: ROIC medio, «Con dato: N de M…», «No representa la rentabilidad de tu cartera.»; la fórmula y los datos ausentes, en un solo desplegable cerrado que se abre con teclado; una empresa sin dato queda fuera del cálculo y se dice que no cuenta como 0; sin tarjeta explicativa extra",
+  "observado": "ROIC «15,6 %» visible=true; cobertura «Con dato: 4 de 6 posiciones (66 % del peso asignado).Fuera del cálculo: 2 fondos (no aplicable).»; advertencia «No representa la rentabilidad de tu cartera.» visible=true; desplegable «Cómo se calcula y qué se excluye» cerrado=true, fórmula oculta=true; con Enter se abre=true, fórmula visible=true; desplegables en el resumen 2 (≤ 2), paneles anidados 0, h2 1; con JPMorgan: «Con dato: 4 de 7 posiciones (63 % del peso asignado).Fuera del cálculo: 1 empresa sin dato (no cuenta como 0) · 2 fondos (no aplicable).» · detalle «Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.» · ROIC 15,6 %; ancho 390/390",
+  "resultado": "OK",
+  "evidencia": "H4-roic-desplegado-390.png"
+ },
+ {
+  "id": "H4-1440",
+  "escenario": "Resumen de ROIC (1440 px): indicador, cobertura y advertencia visibles; explicación en desplegable",
+  "esperado": "Visibles: ROIC medio, «Con dato: N de M…», «No representa la rentabilidad de tu cartera.»; la fórmula y los datos ausentes, en un solo desplegable cerrado que se abre con teclado; una empresa sin dato queda fuera del cálculo y se dice que no cuenta como 0; sin tarjeta explicativa extra",
+  "observado": "ROIC «15,6 %» visible=true; cobertura «Con dato: 4 de 6 posiciones (66 % del peso asignado).Fuera del cálculo: 2 fondos (no aplicable).»; advertencia «No representa la rentabilidad de tu cartera.» visible=true; desplegable «Cómo se calcula y qué se excluye» cerrado=true, fórmula oculta=true; con Enter se abre=true, fórmula visible=true; desplegables en el resumen 2 (≤ 2), paneles anidados 0, h2 1; con JPMorgan: «Con dato: 4 de 7 posiciones (63 % del peso asignado).Fuera del cálculo: 1 empresa sin dato (no cuenta como 0) · 2 fondos (no aplicable).» · detalle «Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.» · ROIC 15,6 %; ancho 1440/1440",
+  "resultado": "OK",
+  "evidencia": "H4-roic-desplegado-1440.png"
+ },
+ {
+  "id": "H5-320",
+  "escenario": "Móvil 320×568: estado claro y acciones alcanzables (texto ampliado SIMULADO, aviso de error, título largo, teclado SIMULADO)",
+  "esperado": "El estado distingue «solo en este dispositivo», «guardada en tu cuenta», «cambios locales pendientes» y «pública + tus cambios aún no son públicos»; Guardar, el título, «Cerrar aviso», la última posición y el pie quedan visibles y no tapados",
+  "observado": "solo dispositivo «Solo en este dispositivo | Solo en este dispositivo»; cuenta «Guardada en tu cuenta | ✓ Guardada»; pendiente «Cambios locales pendientes de guardar en tu cuenta | Cambios locales pendientes»; pública «Pública | Cambios locales pendientes de guardar en tu cuenta | Tus cambios aún no son públicos»; alcanzables: cerrar aviso {\"libre\":true,\"dentro\":true}, título {\"libre\":true,\"dentro\":true}, Guardar {\"libre\":true,\"dentro\":true}, barra inferior con texto ampliado {\"botonDentro\":true,\"textoSinRecorte\":true,\"infoDentro\":true,\"alto\":227}, última posición {\"dentro\":true,\"esPeso\":true}, pie {\"libre\":true,\"dentro\":true}; teclado simulado (ventana 320×256): campo 103–147 px, aviso termina en 84, barra desde 165, campo entre aviso y barra=true",
+  "resultado": "OK",
+  "evidencia": "H5-acciones-200-error-320.png"
+ },
+ {
+  "id": "H6-320",
+  "escenario": "Sin errores de JavaScript (320 px)",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H5-390",
+  "escenario": "Móvil 390×844: estado claro y acciones alcanzables (texto ampliado SIMULADO, aviso de error, título largo, teclado SIMULADO)",
+  "esperado": "El estado distingue «solo en este dispositivo», «guardada en tu cuenta», «cambios locales pendientes» y «pública + tus cambios aún no son públicos»; Guardar, el título, «Cerrar aviso», la última posición y el pie quedan visibles y no tapados",
+  "observado": "solo dispositivo «Solo en este dispositivo | Solo en este dispositivo»; cuenta «Guardada en tu cuenta | ✓ Guardada»; pendiente «Cambios locales pendientes de guardar en tu cuenta | Cambios locales pendientes»; pública «Pública | Cambios locales pendientes de guardar en tu cuenta | Tus cambios aún no son públicos»; alcanzables: cerrar aviso {\"libre\":true,\"dentro\":true}, título {\"libre\":true,\"dentro\":true}, Guardar {\"libre\":true,\"dentro\":true}, barra inferior con texto ampliado {\"botonDentro\":true,\"textoSinRecorte\":true,\"infoDentro\":true,\"alto\":267}, última posición {\"dentro\":true,\"esPeso\":true}, pie {\"libre\":true,\"dentro\":true}; teclado simulado (ventana 390×380): campo 162–206 px, aviso termina en 62, barra desde 308, campo entre aviso y barra=true",
+  "resultado": "OK",
+  "evidencia": "H5-acciones-200-error-390.png"
+ },
+ {
+  "id": "H6-390",
+  "escenario": "Sin errores de JavaScript (390 px)",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

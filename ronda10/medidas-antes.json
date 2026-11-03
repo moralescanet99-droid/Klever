@@ -1,0 +1,44 @@
+{
+ "320": {
+  "paginaEditor": 2232,
+  "resumenAlto": 770,
+  "resumenTextoVisible": 436,
+  "pieAlto": 307,
+  "pieTextoVisible": 362,
+  "barraAlto": 72,
+  "barraAlto200": 139,
+  "vh": 720,
+  "avisoTop": 8,
+  "avisoPosicion": "fixed",
+  "avisoTapaControles": 2,
+  "avisoTapa": "cab,H1"
+ },
+ "390": {
+  "paginaEditor": 2046,
+  "resumenAlto": 708,
+  "resumenTextoVisible": 436,
+  "pieAlto": 244,
+  "pieTextoVisible": 362,
+  "barraAlto": 72,
+  "barraAlto200": 139,
+  "vh": 720,
+  "avisoTop": 8,
+  "avisoPosicion": "fixed",
+  "avisoTapaControles": 3,
+  "avisoTapa": "cab,H1,btn-nueva"
+ },
+ "1440": {
+  "paginaEditor": 1190,
+  "resumenAlto": 724,
+  "resumenTextoVisible": 436,
+  "pieAlto": 160,
+  "pieTextoVisible": 362,
+  "barraAlto": 0,
+  "barraAlto200": 0,
+  "vh": 900,
+  "avisoTop": 8,
+  "avisoPosicion": "fixed",
+  "avisoTapaControles": 3,
+  "avisoTapa": "cab,A,nav-mis"
+ }
+}

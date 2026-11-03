@@ -2,13 +2,14 @@
 # Ejecuta TODAS las pruebas con un servidor LIMPIO entre baterías. SALE CON CÓDIGO ≠ 0 si ALGO falla:
 # fallo de arranque, límite de tiempo, batería sin resultado, código de salida ≠ 0 o «N fallos» > 0. Limpia procesos con trap.
 # Requisitos: Node >= 22.13, «npm ci», «npx playwright install chromium»; sistema: bash, curl, git, python3, pgrep (Linux o macOS).
-# Variables: RONDA (carpeta de resultados, ronda9), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
+# Variables: RONDA (carpeta de resultados, ronda10), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
 #            BATERIAS / UNIDAD / DEMO_TEST / DEMO_DIR / DEMO_PORT / DEMO_SERVIDOR (para probar el propio ejecutor), OMITIR_DEMO=1.
 set -uo pipefail
 cd "$(dirname "$0")/.."
-export RONDA="${RONDA:-ronda9}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs}"
-UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs}"
+export RONDA="${RONDA:-ronda10}"; LIMITE="${LIMITE_BATERIA:-900}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs}"
+UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs}"
+SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
 reg() { echo "$@" | tee -a "$SALIDA"; }
 fallo() { FALLOS=$((FALLOS + 1)); reg "FALLA (ejecutor): $*"; }
@@ -52,6 +53,12 @@ for t in $BATERIAS; do
   con_limite "$LIMITE" node "$t"; evaluar "$n"
 done
 bash scripts/local/servidor.sh stop >/dev/null 2>&1 || fallo "no se pudo parar el servidor"
+for t in $SEGURIDAD; do
+  n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n (servidor sin enlace de acceso en pantalla) ==="
+  if ! SIN_ENLACE_DEV=1 bash scripts/local/servidor.sh start >.wrangler/arranque.log 2>&1; then fallo "el servidor sin enlace de desarrollo no arrancó para $n: $(tail -1 .wrangler/arranque.log)"; continue; fi
+  con_limite "$LIMITE" node "$t"; evaluar "$n"
+  bash scripts/local/servidor.sh stop >/dev/null 2>&1 || fallo "no se pudo parar el servidor"
+done
 if [ "${OMITIR_DEMO:-0}" != 1 ]; then
   reg "=== demo (demotest) ==="
   DPORT="${DEMO_PORT:-8790}"; DDIR="${DEMO_DIR:-demo}"; DTEST="${DEMO_TEST:-tests/ronda5/demotest.cjs}"
