@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klever · Portafolios (beta)</title>
+<meta name="description" content="Organiza varios portafolios y descubre ideas de empresas con fundamentales sólidos. Beta gratuita, contenido educativo.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <strong>Klever</strong><span class="tag">beta gratuita</span>
+  <nav><a href="#portafolios">Portafolios</a> <a href="#legal">Aviso legal</a></nav>
+</header>
+
+<main>
+  <section id="registro" class="card" hidden>
+    <h1>Organiza tus portafolios</h1>
+    <p>Crea carteras simuladas de riesgo, oro o dividendos y mira su composición, sectores y calidad media. Sin dinero real.</p>
+    <form id="form-registro">
+      <label>Tu email <input type="email" name="email" required autocomplete="email"></label>
+      <button>Empezar</button>
+      <p class="err" id="err-registro"></p>
+    </form>
+  </section>
+
+  <section id="app" hidden>
+    <div class="card" id="portafolios">
+      <h2>Mis portafolios</h2>
+      <form id="form-nuevo" class="row">
+        <input name="nombre" placeholder="Nombre del portafolio" maxlength="80" required>
+        <select name="plantilla">
+          <option value="riesgo">Riesgo (crecimiento)</option>
+          <option value="oro">Oro</option>
+          <option value="dividendos">Dividendos</option>
+        </select>
+        <button>Crear</button>
+      </form>
+      <ul id="lista" class="lista"></ul>
+    </div>
+
+    <div class="card" id="editor" hidden>
+      <div class="row between"><h2 id="ed-titulo"></h2><button id="ed-borrar" class="sec">Eliminar</button></div>
+      <div class="row">
+        <select id="ed-ticker"></select>
+        <input id="ed-peso" type="number" min="0.1" max="100" step="0.1" placeholder="Peso %">
+        <button id="ed-add">Añadir</button>
+        <button id="ed-sugerir" class="sec">Rellenar con plantilla</button>
+      </div>
+      <p class="err" id="err-editor"></p>
+      <table id="ed-tabla">
+        <thead><tr><th>Activo</th><th>Sector</th><th>Peso</th><th>ROIC aprox.</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="resumen">
+        <div><span>Total asignado</span><b id="r-total">0%</b></div>
+        <div><span>Calidad media (ROIC)</span><b id="r-roic">—</b></div>
+      </div>
+      <h3>Peso por sector</h3>
+      <div id="r-sectores"></div>
+      <button id="ed-guardar">Guardar portafolio</button>
+      <h3>Gráficos</h3>
+      <div id="graficos" class="grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="legal">
+  <p><b>Aviso legal.</b> Contenido educativo; no constituye asesoramiento financiero ni recomendación personalizada. Los portafolios son simulados. Los fundamentales proceden de los registros públicos de la SEC (EDGAR) y se calculan de forma aproximada; pueden contener errores. Los precios y gráficos los muestra TradingView mediante sus widgets y no se almacenan aquí.</p>
+</footer>
+<script src="app.js" type="module"></script>
+</body>
+</html>
