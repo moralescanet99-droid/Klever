@@ -37,6 +37,9 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 ## Ronda 6 · Cerrar los puntos de ChatGPT sobre la ronda 5 y preparar pruebas de uso (encargo del usuario)
 - El usuario pasó el feedback de ChatGPT sobre la ronda 5 («no hagas otro rediseño general»): aviso persistente en lugar del toast largo, textos de cambios locales y conflicto, datos ausentes en las comprobaciones, publicación, reintento, unidades, título de dos líneas y una versión para pruebas de uso. Literal en `06-` (C3). Implementado y probado en local; ver `ronda6/LEEME.md`. Todavía no se ha preparado paquete para ChatGPT.
 
+## Ronda 9 · Cierre técnico (encargo del usuario)
+- Encargo breve: `GET /api/public/:id` coherente, comprobación completa de la demo en el ejecutor y descripciones G2/U4; después, guion de beta y D1 remoto. Literal en `06-` (C6). Informe: `ronda9/LEEME.md`.
+
 ## Ronda 8 · Revisión técnica de ChatGPT sobre la ronda 7 (encargo del usuario)
 - ChatGPT reprodujo dos carreras no cubiertas (revisión devuelta leída después del lote; `GET` que mezclaba versiones) y señaló el ejecutor de pruebas, los requisitos y los errores internos. Literal resumido en `06-` (C5). Informe: `ronda8/LEEME.md`.
 

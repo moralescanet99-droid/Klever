@@ -1,0 +1,20 @@
+test-ejecutor.sh desde un clon limpio del commit a4f871b (2026-11-03 18:51 UTC):
+OK    [E1] Control: una batería correcta termina con código 0
+OK    [E1b] Tras terminar, el servidor de pruebas está parado
+OK    [E2] Una batería con «1 fallos» hace fallar el ejecutor (código 1)
+OK    [E3] Una batería que se cae sin resultado hace fallar el ejecutor (código 1)
+OK    [E4] Un timeout hace fallar el ejecutor (código 1, 10s en total)
+OK    [E4b] El proceso colgado se mató (PID 6533 ya no existe)
+OK    [E4c] Tras el timeout, el servidor de pruebas está parado
+OK    [E5] Si el servidor no arranca (puerto ocupado), el ejecutor falla y no sigue en silencio (código 1)
+OK    [E5b] El ejecutor no mata un servidor ajeno que ocupa el puerto
+OK    [D1] Control: demo con «DEMO OK» y código 0 → ejecutor correcto
+OK    [D2] La demo imprime «DEMO OK» pero termina con código 1 → el ejecutor falla (código 1)
+OK    [D3] La demo sin «DEMO OK» → el ejecutor falla
+OK    [D4] La demo con «HAY FALLOS» → el ejecutor falla
+OK    [D5] La demo que se cuelga (timeout) → el ejecutor falla (código 1, 5s)
+OK    [D6] Sin demo que servir → el ejecutor falla
+OK    [D7] El servidor de la demo no arranca → el ejecutor falla
+OK    [D8] Puerto de la demo ocupado → falla y NO ejecuta la prueba contra el servidor ajeno
+OK    [D8b] El servidor ajeno sigue vivo (no se mata lo que no es nuestro)
+RESULTADO: 18 correctas, 0 fallos

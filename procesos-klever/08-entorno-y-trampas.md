@@ -77,4 +77,7 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **El ejecutor de pruebas debe poder fallar a propósito:** probarlo con baterías de mentira (fixtures) que fallan, se caen, se cuelgan o no tienen servidor; sin eso un «✅» del ejecutor no vale.
 - **`kill` solo del padre deja huérfanos:** wrangler lanza workerd; matar el árbol con `pgrep -P` recursivo (portable) y comprobar el puerto.
 - **Esquema antiguo como fixture:** `git show <commit>:schema.sql` fija la base «anterior» para probar migraciones sin depender del historial.
+- **Toda lectura pública que combine «¿es pública?» con otros datos debe ir en la misma instantánea**; si no, se filtran posiciones o tesis de una versión que nunca fue pública. Condicionar también la segunda consulta a la visibilidad.
+- **Una comprobación que solo mira «DEMO OK» no basta:** también el código de salida, el timeout, el arranque del servidor y que el puerto no sea de otro (si lo es, se probaría un servidor ajeno).
+- **`python3 -m http.server --directory /no/existe` arranca igualmente** (responde 404): comprobar antes que existe `index.html`.
 

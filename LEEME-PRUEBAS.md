@@ -12,7 +12,7 @@ Todo lo necesario está en este repositorio: código, dependencias fijadas (`pac
 ```bash
 git clone https://github.com/moralescanet99-droid/Klever.git
 cd Klever
-git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primera líneas de ronda9/resultado-ejecucion.txt y en ronda9/LEEME.md (los commits posteriores solo añaden resultados e informes)
+git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primeras líneas de ronda9/resultado-ejecucion.txt y en ronda9/LEEME.md (los commits posteriores solo añaden resultados e informes)
 npm ci                                   # instala wrangler 3.114.17 y playwright 1.63.0 EXACTOS (package-lock.json)
 npx playwright install chromium          # navegador para las pruebas (una sola vez)
 ```

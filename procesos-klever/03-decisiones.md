@@ -97,5 +97,11 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Afirmación honesta del informe:** transaccional y superando los escenarios locales comprobados; **D1 remoto, migración con datos reales y dispositivos físicos no probados**. La antigua E16a (−1979 px dada por válida) queda como antecedente sustituido (G6 y la E16a corregida).
 - **Método:** cada defecto se reprodujo con una prueba que **falla antes** (`ronda8/antes-*.txt`) y pasa después.
 
+## Ronda 9 (cierre técnico)
+- **`GET /api/public/:id` en una instantánea:** un lote de lecturas (cartera + posiciones) y las posiciones solo si, en esa misma instantánea, la cartera sigue siendo pública (`EXISTS … publico = 1`). Respuesta: la versión pública anterior completa o 404; nunca mezcla. Antes devolvía posiciones privadas con metadatos de la versión pública.
+- **La demo en el ejecutor se comprueba como cualquier batería:** código 0, «DEMO OK», sin «HAY FALLOS» ni timeout, existencia de `demo/index.html`, puerto libre antes de arrancar (si está ocupado no se ejecuta nada y no se mata al ajeno) y servidor arrancado (si muere, falla). Variables de prueba: `DEMO_TEST`, `DEMO_DIR`, `DEMO_PORT`, `DEMO_SERVIDOR`.
+- **Descripciones:** G2 y U4 = validación previa del ticker (antes del lote); la evidencia de rollback ante error interno es R4a (y R5 para crear). Los informes de las rondas 7 y 8 conservan la descripción antigua como antecedente.
+- **Verificación repetible en remoto:** `tests/ronda9/verificar-api.mjs` (por HTTP, `BASE_URL`) y `ronda9/GUION-BETA-Y-D1-REMOTO.md` para un proyecto y una D1 de PRUEBA. Sin ejecutar contra Cloudflare real. Las pruebas V5–V7 son estrés empírico, no demuestran ausencia de carreras.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

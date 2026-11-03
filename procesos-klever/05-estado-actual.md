@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 8 (informe `ronda8/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 9 (informe `ronda9/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**211 comprobaciones** automáticas en la ejecución limpia de la ronda 8). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**221 comprobaciones** automáticas en la ejecución limpia de la ronda 9). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) está implementada y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto 1562350, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 9 (cierre técnico: API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda9/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -24,8 +24,9 @@ data/              universe.json (125 activos) · demo.sql (3 carteras públicas
 demo/              index.html (demo autónoma) · LEEME.md
 tests/ronda5/      baterías A–E, demotest, generadores de informe y datos de prueba (tests/ronda4: histórico)
 tests/ronda7/      testF (guardado fiable, conflicto, E16a, diálogo móvil), unit-servidor (SQLite real), informe7
-tests/ronda8/      unit-carreras, unit-migracion, testG (respuestas tardías), test-ejecutor.sh, fixtures, informe8 · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
-tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda8/resultado-ejecucion.txt con el commit
+tests/ronda8/      unit-carreras (R1–R6), unit-migracion, testG (respuestas tardías), test-ejecutor.sh (18 casos), fixtures, informe8
+tests/ronda9/      verificar-api.mjs (API por HTTP, repetible en remoto), informe9 · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
+tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda9/resultado-ejecucion.txt con el commit
 ronda6/ ronda5/ ronda4/ rediseno/  informes LEEME.md de cada ronda · ronda6/pruebas-manuales.md (pendientes reales)
 PRUEBAS-DE-USO.md · scripts/local/arrancar.sh · data/seed-prueba.sql   versión para pruebas de uso
 revision-chatgpt/  instrucciones para cada ronda de crítica de ChatGPT
@@ -52,6 +53,8 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | Conflicto entre la versión local y la de la cuenta: diálogo con las dos versiones, al abrir y al guardar (409); elegir la local NO escribe, hay que pulsar Guardar; Escape/«Decidir después» posponen | ✅ con una petición directa a la API como «otro dispositivo» · dos navegadores reales ⬜ pendiente |
 | Guardado en una sola operación transaccional con revisión atómica; la respuesta lleva la revisión de su propia escritura; lecturas coherentes; errores internos = 500 | ✅ servidor real local + SQLite real (carreras simuladas de forma determinista) · D1 real de Cloudflare ⛔ no probado |
 | Respuesta tardía de guardado/publicación con otra cartera abierta (no la toca) | ✅ (H1, H2) |
+| `GET /api/public/:id` en una sola instantánea (nunca devuelve una versión que no fue pública) | ✅ R6a/R6b + estrés V7 local · D1 remoto ⛔ |
+| Guion de beta y D1 remoto (`ronda9/GUION-BETA-Y-D1-REMOTO.md`) y `verificar-api.mjs` | ✅ el script pasa en local · el guion **no se ha ejecutado** en Cloudflare ⛔ |
 | Migración 0007 sobre una base antigua con datos | ✅ SQLite real con fixture · D1 remoto con datos reales ⛔ |
 | Diálogo de conflicto en móvil (320×568, texto al 200 % simulado): «Decidir después» y decisiones siempre alcanzables | ✅ simulado · zoom real y teclado real ⬜ pendientes |
 | Aviso persistente en «Mis carteras» al abrir el enlace en otro navegador (sin toast largo) | ✅ |

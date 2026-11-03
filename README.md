@@ -20,6 +20,7 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql
+- [x] Ronda 9: `GET /api/public/:id` en una instantánea, ejecutor que comprueba la demo, guion de beta y D1 remoto (sin ejecutar). Ver `ronda9/LEEME.md`
 - [x] Ronda 8: respuesta de guardado con la revisión de su propia escritura, lecturas coherentes, ejecutor de pruebas fiable, Node ≥ 22.13 y migración 0007 verificada sobre una base antigua. Ver `ronda8/LEEME.md`
 - [x] Ronda 7: conflicto coherente (elegir la local no escribe), guardado en una sola operación transaccional con revisión atómica (migración 0007), E16a corregida, diálogo móvil y proyecto repetible desde cero. Ver `ronda7/LEEME.md` y `LEEME-PRUEBAS.md`
 - [x] Ronda 6: aviso persistente al abrir el enlace en otro navegador, «Cambios locales pendientes de guardar en tu cuenta», conflicto con las dos versiones (409 en el servidor), «N superadas · M sin datos», «Guardar y actualizar publicación», versión para pruebas de uso. Ver `ronda6/LEEME.md` y `PRUEBAS-DE-USO.md`
