@@ -7,7 +7,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
 2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**161 comprobaciones** en la ejecución final de la ronda 5). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 5 (cerrar los problemas de la ronda 4) está implementada y probada en local; **falta entregar su paquete a ChatGPT y recibir su feedback**.
+4. La ronda 5 (cerrar los problemas de la ronda 4) está implementada y probada en local; el **paquete para ChatGPT está preparado** (`revision-chatgpt/ronda-5/`); **falta que el usuario se lo entregue y traiga su feedback**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -80,7 +80,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 - ChatGPT quizá no pueda **interactuar** con la demo aunque sea pública; las capturas siguen siendo la vía segura.
 
 ## Siguientes pasos sugeridos
-1. Preparar el paquete de la ronda 5 para ChatGPT, pegar su feedback y revisarlo contra el código antes de tocar nada.
+1. Entregar a ChatGPT el paquete de la ronda 5, pegar su feedback y revisarlo contra el código antes de tocar nada.
 2. Publicar la demo en Cloudflare Pages y comprobar que carga.
 3. Crear la cuenta de Brevo y desplegar la web real; probar el acceso por email real (spam en Gmail, otro proveedor).
 4. Ejecutar la carga nocturna con la SEC real y revisar qué empresas no devuelven datos.

@@ -16,7 +16,8 @@
 | `README.md`, `PENDIENTES.md` | Puesta en marcha y tareas del usuario |
 | `rediseno/LEEME.md` | Informe de la ronda 3 (rediseño) |
 | `ronda4/LEEME.md` | Informe de la ronda 4: regla de guardar/publicar, lo probado y lo pendiente |
-| `revision-chatgpt/INSTRUCCIONES_PARA_CHATGPT.md`, `…/ronda-3/…`, `…/ronda-4/…` | Textos para ChatGPT de cada ronda |
+| `revision-chatgpt/INSTRUCCIONES_PARA_CHATGPT.md`, `…/ronda-3/…`, `…/ronda-4/…`, `…/ronda-5/…` | Textos para ChatGPT de cada ronda |
+| `ronda5/LEEME.md`, `ronda5/pruebas-manuales.md` | Informe de la ronda 5 con tabla de evidencias y pruebas manuales pendientes |
 | `demo/LEEME.md` | Cómo publicar la demo |
 | `tests/ronda4/README.md` | Cómo reproducir las 130 comprobaciones y las capturas |
 

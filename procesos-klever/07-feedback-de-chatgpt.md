@@ -47,7 +47,8 @@ Valoración del usuario: «La ronda 4 mejora claramente Klever». Se conserva es
 | Ficha: unidad larga compitiendo con el criterio; desplazamiento de la tabla sin verificar | Cifra y unidad separadas; desplazamiento real verificado con teclado y columna del año fija |
 | Entregar evidencias, no solo un total de comprobaciones | Tabla de escenarios con esperado, observado y evidencia, y pruebas manuales pendientes |
 
-## Revisión 4 · sobre el paquete de la ronda 5 — **PENDIENTE**
+## Revisión 4 · sobre el paquete de la ronda 5 — **PENDIENTE** (paquete preparado en `revision-chatgpt/ronda-5/`)
+Se le pidió que cuestione expresamente: que la versión pública se actualice al guardar un reparto válido sin pedir confirmación; la copia local de cambios sin guardar y su aviso de conflicto; la persistencia en cabecera y barra (y que en la barra el motivo del bloqueo sustituya a la persistencia); que en móvil «La versión publicada no cambia» no se vea en la barra; «Dato ausente» frente a «No aplicable»; «Asignado: 100 %» repetido en tres sitios; el formato de fecha de «Mis carteras»; y el aviso «Cartera guardada» arriba.
 Cuando el usuario entregue el paquete a ChatGPT y vuelva con su respuesta: pegarla aquí, revisarla contra el código, descartar lo que no aplique y registrar qué se hace con cada punto.
 
 ## Cómo se prepara un paquete para ChatGPT

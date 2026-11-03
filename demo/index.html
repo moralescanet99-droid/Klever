@@ -997,8 +997,9 @@ function validar(ps = pos) {
 }
 const listaTickers = inv => inv.map(p => p.ticker).join(', ');
 function razonGuardar(v) {
-  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
-  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.`;
+  const nota = current?.publico ? ' La versión publicada no cambia.' : ''; // en una cartera pública, aclarar que lo publicado sigue intacto
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.${nota}`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.${nota}`;
   if (current?.publico && !v.completa) return `Cartera pública: la versión publicada no cambia hasta que el reparto vuelva a sumar el 100 % (pendiente de asignar: ${pesoCorto(v.falta)}). ${copiaLocal ? 'Tus cambios siguen en este dispositivo. ' : ''}Si prefieres guardar un reparto incompleto, deja de publicarla.`;
   return null;
 }
