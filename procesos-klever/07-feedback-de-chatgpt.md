@@ -60,7 +60,7 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | Fallo de guardado, exceso, tabla histórica, título móvil | «Reintentar guardado» con la explicación de dónde están los cambios; «Reduce los pesos hasta sumar 100 %»; «Importes en miles de millones de USD; ROIC en %»; título de hasta dos líneas |
 | Entrega para probar | Versión ejecutable en local (`PRUEBAS-DE-USO.md`) + demo autónoma; evidencias de los siete recorridos; pruebas manuales pendientes aparte |
 
-## Revisión 5 · sobre el paquete de la ronda 6 — **PENDIENTE** (todavía no se ha preparado paquete para ChatGPT)
+## Revisión 5 · sobre el paquete de las rondas 6 y 7 — **PENDIENTE** (paquete preparado en `revision-chatgpt/ronda-7/`, 17 capturas + instrucciones; falta que el usuario se lo entregue y traiga su feedback)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).

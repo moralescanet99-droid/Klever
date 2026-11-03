@@ -7,7 +7,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
 2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**196 comprobaciones** automáticas en la ejecución limpia de la ronda 7). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 7 (fiabilidad del guardado y entrega reproducible) está implementada y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`); hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). **No se ha preparado paquete para ChatGPT** (no se pidió); **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 7 (fiabilidad del guardado y entrega reproducible) está implementada y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`); hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -83,7 +83,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 4. Con usuarios: ejecutar `scripts/metrics.sql`; aplicar migraciones 0002–0007 en bases antiguas; recargar `data/demo.sql` si ya estaba cargado.
 
 ## Decisiones abiertas / dudas
-- **Feedback de ChatGPT sobre la ronda 6:** todavía no hay paquete preparado; se ofrece al usuario. Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
+- **Feedback de ChatGPT sobre las rondas 6 y 7:** paquete preparado (`revision-chatgpt/ronda-7/`), pendiente de entrega. Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
 - Los **umbrales de las 5 comprobaciones** son una propuesta inicial.
 - Al reabrir una cartera el servidor devuelve las posiciones **ordenadas por peso**; mientras se edita mantienen el orden de inserción.
 - La lista de 105 empresas es una página larga (sin paginación, a petición expresa).
