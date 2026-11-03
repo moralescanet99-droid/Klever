@@ -26,7 +26,8 @@ node tests/ronda7/unit-servidor.mjs 2>&1 | grep -E "^FALLA|RESULTADO|^- " | tee 
 # Demostración HTML (NO equivale al servidor real: datos en memoria, sin persistencia)
 echo "=== demo (demotest) ===" | tee -a "$SALIDA"
 mkdir -p .wrangler
-( cd demo && python3 -m http.server 8790 >/dev/null 2>&1 & echo $! > ../.wrangler/demo.pid )
+python3 -m http.server 8790 --directory demo >/dev/null 2>&1 &
+echo $! > .wrangler/demo.pid
 sleep 1
 DEMO_URL="http://localhost:8790/" timeout 300 node tests/ronda5/demotest.cjs 2>&1 | grep -E "^FALLA|DEMO OK|HAY FALLOS|Timeout" | tee -a "$SALIDA"
 kill "$(cat .wrangler/demo.pid)" 2>/dev/null || true
