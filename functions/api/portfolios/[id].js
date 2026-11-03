@@ -66,12 +66,14 @@ export async function onRequestPatch({ request, env, params }) {
   const p = await owned(env, user, params.id);
   if (!p) return json({ error: 'No encontrado' }, 404);
   const b = await readJson(request) || {};
+  const nombre = b.nombre !== undefined ? String(b.nombre).trim().slice(0, 80) : p.nombre;
+  if (!nombre) return json({ error: 'El nombre no puede estar vacío' }, 400);
   const tesis = b.tesis !== undefined ? String(b.tesis).trim().slice(0, 600) : p.tesis;
   const publico = b.publico !== undefined ? (b.publico ? 1 : 0) : p.publico;
   if (publico) {
     const n = await env.DB.prepare('SELECT COUNT(*) c FROM posiciones WHERE portafolio_id = ?').bind(p.id).first();
     if (!tesis || !n.c) return json({ error: 'Para hacerlo público añade posiciones y una tesis' }, 400);
   }
-  await env.DB.prepare('UPDATE portafolios SET tesis = ?, publico = ? WHERE id = ?').bind(tesis || null, publico, p.id).run();
+  await env.DB.prepare('UPDATE portafolios SET nombre = ?, tesis = ?, publico = ? WHERE id = ?').bind(nombre, tesis || null, publico, p.id).run();
   return json({ ok: true });
 }
