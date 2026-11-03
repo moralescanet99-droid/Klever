@@ -25,15 +25,17 @@
     <h1>Organiza tus portafolios</h1>
     <p>Crea carteras simuladas de riesgo, oro o dividendos y mira su composición, sectores y calidad media. Sin dinero real.</p>
     <form id="form-registro">
+      <p class="mut">Sin contraseña: te enviamos un enlace de acceso al email. Sirve igual para registrarte o volver a entrar.</p>
       <label>Tu email <input type="email" name="email" required autocomplete="email"></label>
-      <button>Empezar</button>
+      <button>Enviarme el enlace</button>
       <p class="err" id="err-registro"></p>
+      <p id="ok-registro"></p>
     </form>
   </section>
 
   <section id="app" hidden>
     <div class="card" id="portafolios">
-      <h2>Mis portafolios</h2>
+      <div class="row between"><h2>Mis portafolios</h2><button id="salir" class="sec">Salir</button></div>
       <form id="form-nuevo" class="row">
         <input name="nombre" placeholder="Nombre del portafolio" maxlength="80" required>
         <select name="plantilla">

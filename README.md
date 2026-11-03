@@ -24,3 +24,9 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [ ] Bases existentes: `wrangler d1 execute klever --remote --file=migrations/0002_tesis.sql`
 
 Pendiente antes de lanzar: revisar secciones 3 y 4 de los términos de TradingView; ROIC es una aproximación.
+
+## Acceso por enlace mágico (Brevo)
+1. Cuenta gratuita en Brevo → verifica un correo remitente → crea una clave API.
+2. `wrangler pages secret put BREVO_API_KEY` y `wrangler pages secret put MAIL_FROM` (el remitente verificado).
+3. Bases existentes: `wrangler d1 execute klever --remote --file=migrations/0003_magic_link.sql`.
+4. Local: en `.dev.vars` pon `DEV_RETURN_LINK=1` para que el enlace se muestre en pantalla en vez de enviarse. **No lo uses en producción.**

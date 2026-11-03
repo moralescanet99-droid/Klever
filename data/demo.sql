@@ -1,6 +1,6 @@
 -- Portafolios públicos simulados de ejemplo (composición y tesis; sin rentabilidad).
 -- Ejecutar DESPUÉS de cargar activos: wrangler d1 execute klever --remote --file=data/demo.sql
-INSERT OR IGNORE INTO usuarios (email, token) VALUES ('demo@klever.invalid', lower(hex(randomblob(32))));
+INSERT OR IGNORE INTO usuarios (email) VALUES ('demo@klever.invalid');
 INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis)
 SELECT id, 'Dividendos defensivos', 'dividendos', 1, 'Empresas y ETFs de dividendo con negocios estables. Simulación educativa, no recomendación.' FROM usuarios WHERE email='demo@klever.invalid';
 INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis)

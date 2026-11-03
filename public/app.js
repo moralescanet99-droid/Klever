@@ -38,13 +38,28 @@ async function start() {
 
 $('#form-registro').addEventListener('submit', async e => {
   e.preventDefault();
-  $('#err-registro').textContent = '';
+  $('#err-registro').textContent = ''; $('#ok-registro').textContent = '';
   try {
-    const { token } = await api('/register', { method: 'POST', body: { email: new FormData(e.target).get('email') } });
-    localStorage.setItem('klever_token', token);
-    start();
+    const r = await api('/login', { method: 'POST', body: { email: new FormData(e.target).get('email') } });
+    $('#ok-registro').innerHTML = r.dev_link ? `Modo desarrollo: <a href="${esc(r.dev_link)}">entrar</a>` : 'Revisa tu email: te hemos enviado el enlace (caduca en 15 minutos).';
   } catch (err) { $('#err-registro').textContent = err.message; }
 });
+
+$('#salir').addEventListener('click', async () => {
+  try { await api('/logout', { method: 'POST' }); } catch {}
+  localStorage.removeItem('klever_token'); $('#editor').hidden = true; start();
+});
+
+// Canje del enlace mágico (?login=TOKEN) antes de arrancar.
+async function redeem() {
+  const t = new URLSearchParams(location.search).get('login');
+  if (!t) return;
+  history.replaceState(null, '', location.pathname);
+  try {
+    const { token } = await api('/verify', { method: 'POST', body: { token: t } });
+    localStorage.setItem('klever_token', token);
+  } catch (err) { alert(err.message); }
+}
 
 async function loadList() {
   const list = await api('/portfolios');
@@ -143,7 +158,7 @@ $('#ed-borrar').addEventListener('click', async () => {
   $('#editor').hidden = true; current = null; loadList();
 });
 
-start();
+redeem().then(start);
 
 // ---- Ideas (semana 3) ----
 const CRIT = {
