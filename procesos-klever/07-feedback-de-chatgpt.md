@@ -73,7 +73,7 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | Migración 0007 sobre base antigua con datos | Prueba nueva con el esquema anterior y datos |
 | Informe | Local / D1 remoto / pendiente separados; E16a antigua sustituida |
 
-## Revisión 8 · paquete TÉCNICO de la ronda 10 — **PENDIENTE** (se entrega `klever-ronda10-tecnico.zip`; falta que el usuario se lo pase a ChatGPT y traiga su feedback)
+## Revisión 8 · paquete TÉCNICO de la ronda 10 — **PENDIENTE** (preparado en `revision-chatgpt/ronda-10/`: texto + 16 imágenes antes/después + zip del proyecto `klever-ronda10-chatgpt.zip`; falta que el usuario se lo pase a ChatGPT y traiga su feedback)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).
