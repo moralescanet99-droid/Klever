@@ -1,0 +1,1586 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klever · Demo con datos inventados</title>
+<meta name="description" content="Demo interactiva de Klever: crea una cartera simulada y explora empresas. Todos los datos son inventados.">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<style>
+/* =========================================================
+   Klever · sistema visual
+   Sobrio y legible. Escala de espacios 8/16/24/32, radio 12,
+   cuerpo 16 px, ancho máximo 1200 px. Sin fuentes externas.
+   Contraste verificado: texto >= 4,5:1, controles y foco >= 3:1.
+   ========================================================= */
+:root{
+  --bg:#F6F8FB; --surface:#FFFFFF; --surface-2:#EDF1F6;
+  --text:#17212F; --muted:#4A586D;
+  --border:#DCE3EC; --border-strong:#7B8BA1;
+  --accent:#0F766E; --on-accent:#FFFFFF; --accent-soft:#DDF1EE; --accent-on-soft:#0B5E57;
+  --ok:#166534; --ok-bg:#E3F4EA; --warn:#8A3B0B; --warn-bg:#FDF0D5; --bad:#B42318; --bad-bg:#FCE8E6;
+  --focus:#0F766E; --scrim:rgba(11,18,25,.55);
+  --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
+  --shadow-lg:0 4px 8px rgba(16,24,40,.06),0 12px 28px rgba(16,24,40,.10);
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --r:12px;
+  --ancho:1200px; --gutter:16px;
+  --fuente:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1219; --surface:#121B26; --surface-2:#182433;
+    --text:#E6EDF5; --muted:#A6B4C6;
+    --border:#26364A; --border-strong:#6B7F99;
+    --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#10373A; --accent-on-soft:#7FE8D8;
+    --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
+    --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
+    --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1219; --surface:#121B26; --surface-2:#182433;
+  --text:#E6EDF5; --muted:#A6B4C6;
+  --border:#26364A; --border-strong:#6B7F99;
+  --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#10373A; --accent-on-soft:#7FE8D8;
+  --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
+  --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+@media (min-width:720px){:root{--gutter:24px}}
+@media (min-width:1100px){:root{--gutter:32px}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.5 var(--fuente);overflow-wrap:break-word}
+[hidden]{display:none!important}
+h1,h2,h3{margin:0;line-height:1.2;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:1.375rem} h3{font-size:1rem;margin:var(--s3) 0 var(--s1)}
+p{margin:0 0 var(--s1)} a{color:var(--accent)} a:hover{text-decoration-thickness:2px}
+abbr[title]{text-decoration:underline dotted;cursor:help}
+.mut{color:var(--muted)} .peq{font-size:.875rem}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.saltar{position:absolute;left:var(--s1);top:-64px;background:var(--surface);color:var(--text);padding:var(--s1) var(--s2);border-radius:var(--r);border:2px solid var(--focus);z-index:50}
+.saltar:focus{top:var(--s1)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+#contenido:focus{outline:none}
+
+/* ---------- cabecera ---------- */
+.cab{background:var(--surface);border-bottom:1px solid var(--border)}
+.cab-in{max-width:var(--ancho);margin:0 auto;padding:6px var(--gutter);min-height:60px;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px}
+.marca{font-weight:700;font-size:1.25rem;color:var(--text);text-decoration:none;letter-spacing:-.02em;min-height:44px;display:inline-flex;align-items:center}
+.tag{font-size:.75rem;font-weight:600;color:var(--accent-on-soft);background:var(--accent-soft);border-radius:99px;padding:2px 10px}
+.cab-acc{margin-left:auto;display:flex;gap:var(--s1)}
+.menu{display:flex;gap:0 var(--s3)}
+.menu-escritorio{display:none}
+.menu a{color:var(--muted);text-decoration:none;font-weight:600;min-height:44px;display:inline-flex;align-items:center;white-space:nowrap;border-bottom:3px solid transparent}
+.menu a:hover{color:var(--text)} .menu a[aria-current="page"]{color:var(--text);border-bottom-color:var(--accent)}
+.solo-escritorio,.solo-escritorio-ws{display:none!important} .solo-movil{display:inline-flex!important}
+.menu-movil{border-top:1px solid var(--border);padding:var(--s1) var(--gutter) var(--s2);display:grid;max-width:var(--ancho);margin:0 auto}
+.menu-movil a,.menu-movil button{font:inherit;font-weight:600;color:var(--text);text-decoration:none;background:none;border:0;text-align:left;min-height:48px;display:flex;align-items:center;border-bottom:1px solid var(--border);cursor:pointer}
+.menu-movil a[aria-current="page"]{color:var(--accent)} .menu-movil button{color:var(--muted);border-bottom:0}
+@media (min-width:720px){
+  .menu-escritorio{display:flex;margin-left:var(--s3)} .solo-movil{display:none!important} .menu-movil{display:none!important}
+  .solo-escritorio{display:inline-flex!important}
+}
+@media (min-width:900px){.solo-escritorio-ws{display:inline-flex!important}}
+
+/* ---------- botones y campos ---------- */
+.btn{font:inherit;font-weight:600;min-height:44px;padding:0 var(--s2);border-radius:var(--r);border:1px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:var(--s1);text-decoration:none;line-height:1.2}
+.btn-primario{background:var(--accent);color:var(--on-accent)}
+.btn-primario:hover{filter:brightness(1.08)}
+.btn-primario:disabled{background:var(--surface-2);color:var(--muted);cursor:not-allowed;filter:none}
+.btn-secundario{background:var(--surface);color:var(--text);border-color:var(--border-strong)}
+.btn-secundario:hover{background:var(--surface-2)}
+.btn-ghost{background:transparent;color:var(--accent)}
+.btn-ghost:hover{background:var(--accent-soft)}
+.btn-icono{min-width:44px;padding:0 var(--s1)}
+.btn-grande{min-height:52px;padding:0 var(--s3);font-size:1.0625rem}
+.btn-bloque{width:100%}
+.btn.peligro,.peligro{color:var(--bad)}
+.btn-peligro{background:var(--bad);color:var(--surface)}
+button.enlace{background:none;border:0;padding:0;font:inherit;color:var(--accent);text-decoration:underline;cursor:pointer;min-height:24px}
+input,select,textarea{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);min-height:44px;padding:var(--s1) 12px;max-width:100%}
+textarea{width:100%;min-height:96px;resize:vertical}
+input[type=checkbox]{min-height:0;width:20px;height:20px;accent-color:var(--accent);flex:none}
+input::placeholder{color:var(--muted);opacity:1}
+label{font-weight:600;font-size:.9375rem;display:block;margin-bottom:6px}
+label.chk{display:flex;gap:12px;align-items:flex-start;font-weight:400;margin:var(--s2) 0}
+.campo{margin-bottom:var(--s2)} .campo input,.campo select{width:100%}
+.fila{display:flex;flex-wrap:wrap;gap:var(--s1);align-items:center;margin-top:var(--s2)} .fila-fin{justify-content:flex-end}
+.msg-error{color:var(--bad);margin:0 0 var(--s2);min-height:0}
+.msg-error:empty{display:none}
+.msg-info{background:var(--accent-soft);color:var(--accent-on-soft);border-radius:var(--r);padding:12px var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;font-weight:600;border-radius:99px;padding:2px 10px;background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+.chip.pub{background:var(--accent-soft);color:var(--accent-on-soft);border-color:transparent}
+
+/* ---------- estructura ---------- */
+main{max-width:var(--ancho);margin:0 auto;padding:var(--s3) var(--gutter) var(--s4)}
+@media (max-width:719px){main{padding-top:var(--s2)}}
+.pag-cab{margin-bottom:var(--s3)} .pag-cab h1{font-size:clamp(1.75rem,1.4rem + 1.6vw,2.25rem)} .pag-cab p{margin-top:var(--s1);max-width:70ch}
+.bloque{margin-top:var(--s4)} .bloque-cab{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s2);margin-bottom:var(--s2)}
+.bloque>h2{margin-bottom:var(--s2)}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s3)}
+.panel>h2{margin-bottom:var(--s2)}
+@media (max-width:719px){.panel{padding:var(--s2)}}
+
+/* ---------- portada ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s4);padding:var(--s2) 0 0;align-items:center}
+.hero h1{font-size:clamp(1.75rem,1.2rem + 2.4vw,3rem);line-height:1.1;letter-spacing:-.025em;margin-bottom:var(--s2)}
+.lead{font-size:1.125rem;color:var(--muted);max-width:56ch;margin-bottom:var(--s3)}
+.confianza{list-style:none;padding:0;margin:var(--s2) 0 0;display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);color:var(--muted);font-size:.9375rem}
+.confianza li::before{content:"✓";color:var(--accent);font-weight:700;margin-right:6px}
+.hero-prev{display:none}
+@media (min-width:960px){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;padding-top:var(--s3)}
+  .hero-prev{display:block}
+}
+.prev{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:var(--s2) var(--s3)}
+.prev-cab{display:flex;justify-content:space-between;align-items:center;gap:var(--s1);padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:var(--s1)}
+.prev-cab b{font-size:1.0625rem} .prev-fila{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:var(--s2);padding:10px 0;border-bottom:1px solid var(--border);align-items:center}
+.prev-fila small{display:block;color:var(--muted)} .prev-pie{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);padding-top:var(--s2)}
+.prev-pie span{display:block;color:var(--muted);font-size:.8125rem} .prev-pie b{font-size:1.375rem}
+.prev .barra{margin-top:12px}
+
+.fuentes{color:var(--muted);font-size:.875rem;margin-top:var(--s1)}
+.plantillas{display:grid;gap:var(--s2);grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.plantilla{font:inherit;color:var(--text);text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s3);cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:var(--s1);min-height:44px}
+.plantilla:hover{border-color:var(--accent)} .pl-cuerpo{display:flex;flex-direction:column;gap:6px;min-width:0}
+.pl-tit{font-size:1.25rem;font-weight:700} .pl-desc{color:var(--muted)}
+.pl-tick{font-size:.8125rem;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:var(--s1)}
+.pl-acc{color:var(--accent);font-weight:600;margin-top:var(--s1)} .pl-acc::after{content:" →"}
+@media (max-width:719px){
+  .plantillas{gap:var(--s1)}
+  .plantilla{flex-direction:row;align-items:center;padding:10px 14px;gap:var(--s1)}
+  .pl-tit{font-size:1.125rem} .pl-tick{padding-top:0;font-size:.75rem} .pl-desc{font-size:.9375rem;line-height:1.35} .pl-cuerpo{gap:3px}
+  .pl-acc{margin:0;flex:none} .pl-acc::after{content:"→";font-size:1.5rem}
+  .pl-acc-txt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+.tarjetas{display:grid;gap:var(--s2);grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tarjeta{font:inherit;color:var(--text);text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--s2) var(--s3);cursor:pointer;display:flex;flex-direction:column;gap:6px;width:100%;min-height:44px}
+.tarjeta:hover{border-color:var(--accent)} .tarjeta b{font-size:1.0625rem} .tarjeta .t-meta{color:var(--muted);font-size:.875rem}
+.tarjeta .t-tesis{color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.chip.origen{align-self:flex-start;background:var(--surface-2)} .chip.origen.usr{background:var(--accent-soft);color:var(--accent-on-soft);border-color:transparent}
+.estado-lista{color:var(--muted);padding:var(--s2) 0}
+
+/* ---------- explorar empresas ---------- */
+.plegable{margin-bottom:var(--s2)} .plegable summary,.mini summary{cursor:pointer;color:var(--accent);font-weight:600;min-height:44px;display:flex;align-items:center}
+.plegable-cuerpo{color:var(--muted);max-width:70ch}
+.busqueda{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s1) var(--s2);margin:var(--s2) 0}
+.busqueda input{flex:1 1 200px;min-width:0;max-width:420px}
+/* tabla de empresas */
+.tabla-emp-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);overflow-x:auto}
+.tabla-emp{width:100%;border-collapse:collapse}
+.tabla-emp th{font-size:.8125rem;font-weight:600;color:var(--muted);text-align:left;padding:12px var(--s2);border-bottom:1px solid var(--border-strong);white-space:nowrap}
+.tabla-emp td{padding:10px var(--s2);border-bottom:1px solid var(--border);height:60px;vertical-align:middle}
+.tabla-emp tbody tr:last-child td{border-bottom:0} .tabla-emp tbody tr:hover{background:var(--surface-2)}
+.tabla-emp .num{text-align:right} .tabla-emp td.num small{display:block;color:var(--muted);font-weight:400}
+.tabla-emp .nombre-emp{font-weight:600;font-size:1.0625rem} .tabla-emp .simbolo{color:var(--muted);font-variant-numeric:tabular-nums;margin-left:6px;font-size:.875rem}
+.tabla-emp .sector-m{display:none;color:var(--muted);font-size:.875rem}
+.tabla-emp td:last-child{text-align:right;white-space:nowrap} .tabla-emp td.estado-lista{text-align:left;height:auto}
+.ver-ficha{font:inherit;font-weight:600;color:var(--accent);background:none;border:0;text-decoration:underline;cursor:pointer;min-height:44px;padding:0 var(--s1)}
+.marca-n{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:719px){
+  .tabla-emp .col-sector,.tabla-emp td:nth-child(2){display:none} .tabla-emp .sector-m{display:block}
+  .tabla-emp th,.tabla-emp td{padding-left:8px;padding-right:8px}
+  .tabla-emp th:first-child,.tabla-emp td:first-child{padding-left:12px} .tabla-emp td:last-child,.tabla-emp th:last-child{padding-right:4px}
+  .tabla-emp th{font-size:.75rem} .tabla-emp th:nth-child(3){white-space:normal;width:5.9rem;max-width:5.9rem;padding-left:4px;padding-right:4px}
+  .tabla-emp td:nth-child(3){padding-left:4px;padding-right:4px} .tabla-emp td:first-child{overflow-wrap:anywhere}
+  .tabla-emp .nombre-emp{font-size:1rem}
+  .ver-ficha{padding:0 6px;white-space:nowrap}
+  .tabla-emp td{height:56px}
+}
+.busqueda .enlace{margin-left:auto;text-align:left} @media (max-width:719px){.busqueda .enlace{margin-left:0;min-height:44px}}
+
+/* ---------- mis carteras ---------- */
+.nueva-campos{display:grid;gap:var(--s2);align-items:end;grid-template-columns:1fr}
+.nueva .campo{margin:0}
+@media (min-width:720px){.nueva-campos{grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}}
+.lista-carteras{list-style:none;padding:0;margin:var(--s3) 0 0;display:grid;gap:var(--s1)}
+.lista-carteras .tarjeta{flex-direction:row;justify-content:space-between;align-items:center;gap:var(--s2)}
+
+/* ---------- espacio de trabajo ---------- */
+/* ---------- espacio de trabajo ---------- */
+.ws-cab{display:flex;gap:var(--s1) var(--s2);justify-content:space-between;align-items:flex-start;margin-bottom:var(--s2)}
+.ws-titulo{flex:1 1 auto;min-width:0}
+.nombre{font-size:clamp(1.375rem,1.1rem + 1.2vw,1.75rem);font-weight:700;letter-spacing:-.015em;width:100%;border-color:transparent;background:transparent;padding:4px 8px;margin-left:-8px;max-width:calc(100% + 8px);text-overflow:ellipsis}
+.nombre:hover{border-color:var(--border)} .nombre:focus{background:var(--surface);border-color:var(--border-strong)}
+.ws-meta{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:4px}
+.estado-btn{font:inherit;font-size:.875rem;color:var(--muted);background:none;border:0;padding:0;text-align:left;cursor:pointer;min-height:28px}
+.estado-btn::after{content:" ⓘ";color:var(--muted)}
+.estado-btn.ok{color:var(--ok)} .estado-btn.aviso{color:var(--warn)} .estado-btn.error{color:var(--bad)}
+.ws-meta .estado-btn{display:none}
+.ws-acc{display:flex;gap:var(--s1);align-items:center;flex:none}
+.menu-mas{position:relative}
+.mas-lista{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:260px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:6px}
+.mas-lista button{font:inherit;color:var(--text);background:none;border:0;width:100%;text-align:left;padding:0 12px;min-height:44px;border-radius:8px;cursor:pointer}
+.mas-lista button:hover,.mas-lista button:focus-visible{background:var(--surface-2)} .mas-lista .peligro{color:var(--bad)}
+.ws-grid{display:flex;flex-direction:column;gap:var(--s2)}
+.ws-grid>*,.ws-main>*,.ws-resumen>*{min-width:0}
+.ws-main,.ws-resumen{display:contents}
+.res-breve{order:1;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px var(--s2);padding:12px var(--s2);background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
+.res-breve b{font-size:1.125rem} .res-breve .enlace{margin-left:auto;min-height:44px;margin-block:-8px}
+.panel-pos{order:2} .panel-res{order:3} .panel-graf{order:4} .panel-pub{order:5}
+@media (min-width:900px){
+  .ws-cab{margin-bottom:var(--s3)} .ws-meta{margin-top:6px} .ws-meta .estado-btn{display:inline-block}
+  .ws-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--s3);align-items:start}
+  .ws-main{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s3);min-width:0}
+  .ws-resumen{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s2);min-width:0;position:sticky;top:var(--s2)}
+  .res-breve{display:none}
+}
+
+.combo{position:relative;margin-bottom:var(--s2)} .combo input{width:100%}
+.combo-lista{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:20;list-style:none;margin:0;padding:6px;background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);box-shadow:var(--shadow-lg);max-height:min(340px,50vh);overflow:auto}
+.combo-lista li{display:flex;justify-content:space-between;gap:var(--s2);align-items:baseline;padding:10px 12px;border-radius:8px;cursor:pointer;min-height:44px;align-items:center}
+.combo-lista li small{color:var(--muted)} .combo-lista li[aria-selected="true"],.combo-lista li:hover{background:var(--accent-soft);color:var(--accent-on-soft)}
+.combo-lista li[aria-selected="true"] small,.combo-lista li:hover small{color:inherit}
+.combo-lista li[aria-disabled="true"]{opacity:.75}
+.combo-lista .sin{cursor:default;color:var(--muted)} .combo-lista .sin:hover{background:none;color:var(--muted)}
+
+.tabla-scroll{overflow-x:auto}
+.tabla-pos{width:100%;border-collapse:collapse}
+.tabla-pos th{font-size:.8125rem;font-weight:600;color:var(--muted);text-align:left;padding:8px var(--s1);border-bottom:1px solid var(--border-strong);white-space:nowrap}
+.tabla-pos td{padding:10px var(--s1);border-bottom:1px solid var(--border);vertical-align:middle}
+.tabla-pos .num{text-align:right} .tabla-pos td small{display:block;color:var(--muted)}
+.tabla-pos td:last-child{width:52px;text-align:right}
+.peso{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.peso input{width:88px;text-align:right;font-variant-numeric:tabular-nums}
+@media (max-width:719px){.peso input{width:76px;padding-inline:8px}}
+.peso input[aria-invalid="true"]{border-color:var(--bad);border-width:2px}
+.quitar{min-width:44px;padding:0}
+.pos-cards{list-style:none;margin:0;padding:0;display:none;grid-template-columns:minmax(0,1fr);gap:var(--s1)}
+.pos-card{border-bottom:1px solid var(--border);padding:8px 0}
+.pc-fila{display:grid;grid-template-columns:minmax(0,1fr) auto 44px;gap:var(--s1);align-items:center}
+.pc-id{min-width:0} .pc-id b{display:block} .pc-id span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:.875rem;line-height:1.3}
+.pc-toggle{min-width:44px;padding:0;font-size:1.25rem} .pc-toggle[aria-expanded="true"] span{display:inline-block;transform:rotate(180deg)}
+.pc-det{display:flex;justify-content:space-between;align-items:center;gap:var(--s2);margin-top:var(--s1);padding-top:var(--s1);border-top:1px solid var(--border);color:var(--muted);font-size:.9375rem}
+.pc-det dl{margin:0;display:grid;gap:4px} .pc-det dl div{display:flex;gap:6px} .pc-det dd{margin:0;color:var(--text)} .pc-det dt{white-space:nowrap}
+.vacio{text-align:center;padding:var(--s4) var(--s2);border:1px dashed var(--border-strong);border-radius:var(--r)}
+@media (max-width:719px){.tabla-scroll{display:none}.pos-cards{display:grid}.panel-pos{background:transparent;border:0;box-shadow:none;padding:0}.panel-pos>h2{margin-bottom:var(--s1)}}
+
+.etq{display:block;color:var(--muted);font-size:.8125rem} .asig-fila{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s1);flex-wrap:wrap}
+.num-grande{font-size:2rem;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.asig-estado{font-size:.9375rem;font-weight:600;margin:8px 0 0}
+.asig-estado.ok{color:var(--ok)} .asig-estado.aviso{color:var(--warn)} .asig-estado.error{color:var(--bad)}
+.barra{height:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:99px;overflow:hidden;margin-top:12px}
+.barra i{display:block;height:100%;background:var(--accent);border-radius:99px;width:0}
+.barra.error i{background:var(--bad)}
+.datos{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s2) 0 var(--s1)}
+.datos div{min-width:0} .datos dt{color:var(--muted);font-size:.8125rem} .datos dd{margin:0;font-size:1.375rem;font-weight:700}
+.mini{margin-bottom:var(--s1)} .mini p{color:var(--muted);font-size:.9375rem}
+.sector{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px var(--s1);margin:10px 0}
+.sector .barra{grid-column:1/-1;height:6px;margin:0}
+.sector span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.plegable-panel{padding:0}
+.plegable-panel>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:var(--s1);padding:var(--s2) var(--s3);min-height:56px}
+.plegable-panel>summary::-webkit-details-marker{display:none}
+.plegable-panel>summary h2{font-size:1.125rem;margin:0}
+.plegable-panel>summary::after{content:"+";font-size:1.5rem;color:var(--muted);margin-left:auto;padding-left:var(--s1)}
+.plegable-panel[open]>summary::after{content:"−"}
+.plegable-panel>summary .chip{margin-left:var(--s1)}
+.plegable-panel>:not(summary){margin-left:var(--s3);margin-right:var(--s3)}
+.plegable-panel>*:last-child{margin-bottom:var(--s3)}
+@media (max-width:719px){.plegable-panel>summary{padding:var(--s1) var(--s2)}.plegable-panel>:not(summary){margin-left:var(--s2);margin-right:var(--s2)}.plegable-panel>*:last-child{margin-bottom:var(--s2)}}
+.grid-graf{display:grid;gap:var(--s2);grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.chart-slot{min-height:220px}
+.ph{display:flex;flex-direction:column;gap:var(--s1);align-items:center;justify-content:center;text-align:center;border:1px dashed var(--border-strong);border-radius:var(--r);color:var(--muted);padding:var(--s2);min-height:140px}
+
+/* ---------- barra inferior (móvil/tableta) ---------- */
+.barra-guardar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-top:1px solid var(--border-strong);box-shadow:0 -4px 16px rgba(16,24,40,.10);padding:8px max(var(--gutter),env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(var(--gutter),env(safe-area-inset-left));display:flex;gap:var(--s2);align-items:center;justify-content:space-between;min-height:72px}
+.bg-info{min-width:0;display:flex;flex-direction:column;align-items:flex-start;font-size:.9375rem} .bg-total{display:flex;column-gap:8px;align-items:baseline;white-space:nowrap} .bg-total b{font-size:1.125rem}
+.bg-estado{margin-block:-8px;min-height:44px;display:flex;align-items:center}
+.barra-guardar .btn{flex:none}
+@media (min-width:900px){.barra-guardar{display:none!important}}
+
+/* ---------- diálogos ---------- */
+dialog{color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-lg);padding:var(--s3);width:min(640px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
+dialog::backdrop{background:var(--scrim)}
+.dlg-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--s2);margin-bottom:var(--s2)} .dlg-cab h2{font-size:1.375rem}
+dialog{--dlg-pad:var(--s3)}
+.dlg-cab-fijo{position:sticky;top:calc(-1*var(--dlg-pad));margin:calc(-1*var(--dlg-pad)) calc(-1*var(--dlg-pad)) var(--s2);padding:var(--dlg-pad) var(--dlg-pad) var(--s1);background:var(--surface);border-bottom:1px solid var(--border);z-index:3}
+@media (max-width:599px){dialog{--dlg-pad:var(--s2);width:100%;max-width:100%;margin:auto 0 0;border-radius:var(--r) var(--r) 0 0;padding:var(--s2) var(--s2) calc(var(--s2) + env(safe-area-inset-bottom));max-height:92dvh}}
+
+.checks{list-style:none;padding:0;margin:var(--s2) 0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.checks li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px var(--s2);padding:12px var(--s2);align-items:start}
+.checks li+li{border-top:1px solid var(--border)}
+.ck-crit b{display:block} .ck-crit small{color:var(--muted)}
+.ck-res{text-align:right;white-space:nowrap} .ck-val{display:block;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.875rem}
+.res{display:inline-flex;gap:6px;align-items:center;font-weight:700;border-radius:99px;padding:2px 10px;font-size:.875rem}
+.res.ok{color:var(--ok);background:var(--ok-bg)} .res.no{color:var(--bad);background:var(--bad-bg)} .res.nd{color:var(--muted);background:var(--surface-2)}
+.resumen-ficha{font-weight:600}
+.tabla-h{overflow-x:auto;margin:var(--s1) 0}
+.tabla-h table{width:100%;border-collapse:collapse;font-size:.9375rem}
+.tabla-h th,.tabla-h td{padding:8px var(--s1);border-bottom:1px solid var(--border);text-align:right;white-space:nowrap} .tabla-h th:first-child,.tabla-h td:first-child{text-align:left}
+.tabla-h th{color:var(--muted);font-weight:600;font-size:.8125rem}
+.ficha-det summary{cursor:pointer;color:var(--accent);font-weight:600;min-height:44px;display:flex;align-items:center}
+.ficha-det div{color:var(--muted);font-size:.9375rem}
+
+/* ---------- pie, aviso, legal ---------- */
+.pie{width:calc(100% - 2*var(--gutter));max-width:calc(var(--ancho) - 2*var(--gutter));margin:0 auto;padding:var(--s3) 0 var(--s4);color:var(--muted);font-size:.875rem;border-top:1px solid var(--border)}
+.pie p{max-width:80ch}
+#toast{position:fixed;left:50%;bottom:var(--s2);transform:translateX(-50%);max-width:min(92vw,440px);background:var(--text);color:var(--bg);padding:12px var(--s2);border-radius:var(--r);font-size:.9375rem;z-index:60;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:var(--shadow-lg)}
+#toast.on{opacity:1}
+body.en-cartera #toast{bottom:calc(100px + env(safe-area-inset-bottom))}
+@media (min-width:900px){body.en-cartera #toast{bottom:var(--s2)}}
+.doc{max-width:760px;margin:0 auto;padding:var(--s3) var(--gutter) var(--s4)} .doc h1{margin:var(--s3) 0 var(--s1)} .doc ul{padding-left:20px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.prev-th{color:var(--muted);font-size:.8125rem;font-weight:600;padding:4px 0}
+
+.plegable-panel textarea{width:calc(100% - 2*var(--s3))}
+@media (max-width:719px){.plegable-panel textarea{width:calc(100% - 2*var(--s2))}}
+.msg-info b{overflow-wrap:anywhere}
+
+.nota-roic{font-weight:600;font-size:.875rem;margin:0 0 4px}
+.nd{color:var(--muted);font-size:.875rem;white-space:nowrap}
+.panel-res:focus{outline:none} #filtros-precio:focus{outline:none}
+.pub-razon{margin:var(--s1) 0 0;color:var(--muted)} .pub-razon.aviso{color:var(--warn)}
+.es-lista{margin:0;display:grid;gap:var(--s2)} .es-lista dt{font-weight:700} .es-lista dd{margin:2px 0 0;color:var(--muted)}
+.tabla-h{position:relative}
+.tabla-h td:first-child,.tabla-h th:first-child{position:sticky;left:0;background:var(--surface);z-index:1;box-shadow:1px 0 0 var(--border)}
+.hint-scroll{display:none;color:var(--muted);font-size:.875rem;margin:0 0 4px} @media (max-width:719px){.hint-scroll{display:block}}
+.tabla-h:focus-visible{outline-offset:-3px}
+.ck-val{white-space:normal;text-align:right;max-width:9.5rem;margin-left:auto}
+body.teclado .barra-guardar{display:none}
+html{scroll-padding-bottom:calc(var(--barra-alto,0px) + 16px)}
+@media (max-width:899px){body.en-cartera main{padding-bottom:calc(var(--barra-alto,88px) + 24px)}}
+.prev-mas{color:var(--muted);font-size:.875rem;padding:10px 0;border-bottom:1px solid var(--border)}
+#b-falta.ok,#rb-estado.ok{color:var(--ok)} #b-falta.aviso,#rb-estado.aviso{color:var(--warn)} #b-falta.error,#rb-estado.error{color:var(--bad)}
+.res-breve #rb-estado{font-weight:600}
+.prev-fila .nd{font-size:.8125rem}
+.solo-escritorio[hidden],.solo-movil[hidden],.menu a[hidden],.menu-movil a[hidden],.menu-movil button[hidden]{display:none!important}
+.tabla-emp{table-layout:fixed}
+.tabla-emp th:nth-child(1){width:38%} .tabla-emp th:nth-child(2){width:24%} .tabla-emp th:nth-child(3){width:24%} .tabla-emp th:nth-child(4){width:14%}
+.tabla-emp th.num,.tabla-emp td.num{text-align:left}
+@media (max-width:719px){.tabla-emp{table-layout:auto}.tabla-emp th:nth-child(1){width:auto}.tabla-emp th:nth-child(3){width:auto}.tabla-emp th.num,.tabla-emp td.num{text-align:right}}
+.tabla-emp-wrap{position:relative}
+
+.demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
+
+</style>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cab">
+  <div class="cab-in">
+    <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
+    <nav class="menu menu-escritorio" aria-label="Principal">
+      <a href="#empresas" data-nav="empresas">Explorar empresas</a>
+      <a href="#publicas" data-nav="publicas">Carteras públicas</a>
+      <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
+    </nav>
+    <div class="cab-acc">
+      <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
+      <button id="salir" class="btn btn-ghost solo-escritorio" type="button" hidden>Salir</button>
+      <button id="btn-menu" class="btn btn-secundario btn-icono solo-movil" type="button" aria-expanded="false" aria-controls="menu-movil"><span aria-hidden="true">☰</span><span class="sr">Menú</span></button>
+    </div>
+  </div>
+  <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
+    <a href="#empresas" data-nav="empresas">Explorar empresas</a>
+    <a href="#publicas" data-nav="publicas">Carteras públicas</a>
+    <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
+    <button id="salir-m" type="button" hidden>Salir</button>
+  </nav>
+</header>
+
+<main id="contenido" tabindex="-1">
+  <div class="demo-banner"><b>Demo interactiva.</b> Todos los datos son inventados para enseñar el funcionamiento. En la web real las cifras vienen de la SEC y los gráficos de TradingView. Nada de aquí es información financiera real.</div>
+
+  <!-- ===== PORTADA ===== -->
+  <section id="vista-inicio" data-vista="inicio">
+    <div class="hero">
+      <div class="hero-txt">
+        <h1>Crea y entiende tu cartera simulada</h1>
+        <p class="lead">Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.</p>
+        <p><button id="probar" class="btn btn-primario btn-grande" type="button">Probar una cartera</button></p>
+        <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
+        <p class="fuentes">Datos de las empresas: informes públicos de la SEC (EDGAR).</p>
+      </div>
+      <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
+    </div>
+
+    <div class="bloque" id="plantillas">
+      <h2>Elige una plantilla para empezar</h2>
+      <div class="plantillas">
+        <button class="plantilla" type="button" data-plantilla="oro">
+          <span class="pl-cuerpo"><span class="pl-tit">Oro</span>
+          <span class="pl-desc">Dos fondos de oro físico, uno de mineras y Newmont.</span>
+          <span class="pl-tick">GLD · IAU · GDX · NEM</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+        <button class="plantilla" type="button" data-plantilla="dividendos">
+          <span class="pl-cuerpo"><span class="pl-tit">Dividendos</span>
+          <span class="pl-desc">Dos fondos de dividendos y cuatro empresas consolidadas.</span>
+          <span class="pl-tick">SCHD · VYM · KO · PG · JNJ · XOM</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+        <button class="plantilla" type="button" data-plantilla="riesgo">
+          <span class="pl-cuerpo"><span class="pl-tit">Crecimiento</span>
+          <span class="pl-desc">Seis grandes empresas tecnológicas y de consumo.</span>
+          <span class="pl-tick">NVDA · MSFT · AMZN · GOOGL · META · TSLA</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <div class="bloque-cab"><h2>Carteras públicas</h2><a href="#publicas">Ver todas</a></div>
+      <div id="muestra-publicas" class="tarjetas"></div>
+    </div>
+  </section>
+
+  <!-- ===== EXPLORAR EMPRESAS ===== -->
+  <section id="vista-empresas" data-vista="empresas" hidden>
+    <div class="pag-cab">
+      <h1>Explorar empresas</h1>
+      <p class="mut">Cinco comprobaciones sobre el último año completo, a partir de los informes de la SEC. No usa precios. Superar comprobaciones no es una recomendación de compra.</p>
+    </div>
+    <details class="plegable">
+      <summary>Cómo se calcula y cómo se ordena</summary>
+      <div class="plegable-cuerpo">
+        <p>Cada empresa suma una marca por cada comprobación que supera: deuda neta menor de 2,5 veces su EBITDA, ROIC superior al 10 %, margen neto superior al 10 %, caja libre positiva y ventas mayores que el año anterior. Una comprobación sin dato no suma ni resta y se indica como «no disponible».</p>
+        <p><b>Orden de la lista:</b> de más a menos comprobaciones superadas. Si dos empresas empatan, se ordenan alfabéticamente por símbolo.</p>
+        <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
+      </div>
+    </details>
+    <div class="busqueda">
+      <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
+      <input id="emp-buscar" type="search" placeholder="Buscar por empresa, símbolo o sector" autocomplete="off">
+      <span id="emp-cuenta" class="mut" aria-live="polite"></span>
+      <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
+    </div>
+    <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
+      <table class="tabla-emp">
+        <caption class="sr">Empresas ordenadas por comprobaciones superadas y, en caso de empate, por símbolo</caption>
+        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones superadas</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
+        <tbody id="empresas-lista"></tbody>
+      </table>
+    </div>
+    <div class="bloque" id="filtros-precio" tabindex="-1">
+      <h2>Filtros de precio</h2>
+      <p class="mut">Screener de TradingView para PER, rentabilidad y otros filtros que dependen del precio. Es independiente de nuestro ranking.</p>
+      <div id="tv-screener"></div>
+    </div>
+  </section>
+
+  <!-- ===== CARTERAS PÚBLICAS ===== -->
+  <section id="vista-publicas" data-vista="publicas" hidden>
+    <div class="pag-cab">
+      <h1>Carteras públicas</h1>
+      <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
+    </div>
+    <div id="publicas-lista" class="tarjetas"></div>
+    <div id="publica-detalle" class="panel" hidden></div>
+  </section>
+
+  <!-- ===== MIS CARTERAS ===== -->
+  <section id="vista-carteras" data-vista="carteras" hidden>
+    <div class="pag-cab"><h1>Mis carteras</h1></div>
+    <form id="form-nueva" class="panel nueva">
+      <h2>Nueva cartera</h2>
+      <div class="nueva-campos">
+        <div class="campo"><label for="nueva-nombre">Nombre</label>
+          <input id="nueva-nombre" name="nombre" maxlength="80" required placeholder="Por ejemplo: Mi cartera de oro" autocomplete="off"></div>
+        <div class="campo"><label for="nueva-plantilla">Plantilla inicial</label>
+          <select id="nueva-plantilla" name="plantilla">
+            <option value="riesgo">Crecimiento</option><option value="oro">Oro</option><option value="dividendos">Dividendos</option>
+          </select></div>
+        <button class="btn btn-primario">Crear cartera</button>
+      </div>
+    </form>
+    <ul id="mis-lista" class="lista-carteras"></ul>
+  </section>
+
+  <!-- ===== ESPACIO DE TRABAJO ===== -->
+  <section id="vista-cartera" data-vista="cartera" hidden>
+    <h1 class="sr">Editor de cartera</h1>
+    <div class="ws-cab">
+      <div class="ws-titulo">
+        <label class="sr" for="nombre">Nombre de la cartera</label>
+        <input id="nombre" class="nombre" maxlength="80" autocomplete="off" placeholder="Nombre de la cartera">
+        <div class="ws-meta">
+          <span id="chip" class="chip">Privada</span>
+          <button id="estado" class="estado-btn" type="button" aria-haspopup="dialog" aria-describedby="estado-live"></button>
+          <span id="estado-live" class="sr" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="ws-acc">
+        <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
+        <div class="menu-mas">
+          <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
+          <div id="mas-lista" class="mas-lista" role="menu" aria-label="Más acciones" hidden>
+            <button role="menuitem" type="button" id="mi-plantilla">Reemplazar por la plantilla…</button>
+            <button role="menuitem" type="button" id="mi-eliminar" class="peligro">Eliminar cartera…</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-grid">
+      <div class="ws-main">
+        <div id="res-breve" class="res-breve">
+          <div><b id="rb-total" class="num">0&nbsp;%</b> <span id="rb-estado"></span></div>
+          <span id="rb-n" class="num mut"></span>
+          <button id="rb-ver" class="enlace" type="button">Ver detalle</button>
+        </div>
+
+        <section class="panel panel-pos" aria-labelledby="h-pos">
+          <h2 id="h-pos">Posiciones</h2>
+          <div class="combo">
+            <label for="buscar-activo">Añadir un activo</label>
+            <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
+            <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
+            <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
+          </div>
+          <p id="pos-error" class="msg-error" role="status"></p>
+          <div class="tabla-scroll">
+            <table id="pos-tabla" class="tabla-pos">
+              <caption class="sr">Posiciones de la cartera</caption>
+              <thead><tr><th scope="col">Activo</th><th scope="col">Categoría</th><th scope="col" class="num">Peso</th><th scope="col" class="num"><abbr title="Rentabilidad sobre el capital invertido (aproximada)">ROIC</abbr></th><th scope="col"><span class="sr">Quitar</span></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <ul id="pos-cards" class="pos-cards"></ul>
+          <div id="pos-vacio" class="vacio" hidden>
+            <p><b>Aún no hay posiciones.</b></p>
+            <p class="mut">Busca un activo arriba o usa «Más acciones» para cargar el reparto de una plantilla.</p>
+          </div>
+        </section>
+
+        <details class="panel plegable-panel panel-graf" id="det-graficos">
+          <summary><h2>Gráficos de precio</h2></summary>
+          <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
+          <div id="graficos" class="grid-graf"></div>
+        </details>
+      </div>
+
+      <aside class="ws-resumen" aria-label="Resumen de la cartera">
+        <section class="panel panel-res" id="res-detalle" tabindex="-1">
+          <h2>Resumen</h2>
+          <div class="asig">
+            <span class="etq">Total asignado</span>
+            <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>
+            <div class="barra" role="progressbar" aria-label="Porcentaje asignado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="r-barra"></i></div>
+            <p id="r-falta" class="asig-estado"></p>
+          </div>
+          <dl class="datos">
+            <div><dt>Posiciones</dt><dd id="r-n" class="num">0</dd></div>
+            <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
+          </dl>
+          <p class="nota-roic">No representa la rentabilidad de tu cartera.</p>
+          <p id="r-cobertura" class="mut peq"></p>
+          <details class="mini">
+            <summary>Cómo se calcula el ROIC medio</summary>
+            <p>El ROIC mide cuánto gana una empresa por cada dólar invertido en su negocio. Es una característica de la empresa; no es lo que ganaría tu cartera.</p>
+            <p><b>Es una media ponderada:</b> cada ROIC se multiplica por el peso de su posición y se divide entre la suma de los pesos de las posiciones que tienen dato.</p>
+            <p><b>Datos ausentes:</b> los fondos (no aplicable) y las empresas sin dato (no disponible) quedan fuera, ni como cero ni en el denominador. La cobertura por peso se mide sobre el peso asignado.</p>
+          </details>
+          <h3>Distribución por categorías</h3>
+          <div id="r-sectores"></div>
+          <p class="mut peq">Cada activo se agrupa por su categoría: el sector de la empresa o el tipo de fondo. No incluye la exposición sectorial de las empresas que hay dentro de los ETF.</p>
+        </section>
+
+        <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">
+          <summary><h2>Publicación</h2><span id="pub-chip" class="chip">Privada</span></summary>
+          <p class="mut">Publicar hace pública la composición de esta cartera y tu tesis en «Carteras públicas». No se muestra tu email ni ninguna rentabilidad. Solo se puede publicar con el 100 % asignado, y puedes volver a hacerla privada cuando quieras.</p>
+          <label for="tesis">Tesis: por qué esta cartera <span class="mut">(obligatoria para publicar, máx. 600 caracteres)</span></label>
+          <textarea id="tesis" maxlength="600" rows="3"></textarea>
+          <div class="fila">
+            <button id="publicar" class="btn btn-secundario" type="button" aria-describedby="pub-razon">Publicar cartera</button>
+            <button id="tesis-guardar" class="btn btn-ghost" type="button" hidden aria-describedby="pub-razon">Actualizar tesis</button>
+          </div>
+          <p id="pub-razon" class="peq pub-razon"></p>
+          <p id="pub-error" class="msg-error" role="alert"></p>
+        </details>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas. Las cifras proceden de los registros públicos de la SEC (EDGAR), se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p>
+  <p>Aviso legal, privacidad y fuentes · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+</footer>
+
+<div id="barra-guardar" class="barra-guardar" hidden>
+  <div class="bg-info">
+    <div class="bg-total"><b id="b-total" class="num">0&nbsp;%</b> <span id="b-falta"></span></div>
+    <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
+  </div>
+  <button class="btn btn-primario js-guardar" type="button">Guardar cartera</button>
+</div>
+
+<!-- ===== DIÁLOGOS ===== -->
+<dialog id="dlg-acceso" aria-labelledby="acc-titulo">
+  <div class="dlg-cab"><h2 id="acc-titulo">Guarda tu cartera</h2><button class="btn btn-ghost" type="button" data-cerrar>Cerrar</button></div>
+  <div id="acc-paso1">
+    <p id="acc-sub">Te enviaremos un enlace para entrar sin contraseña.</p>
+    <p id="acc-borrador" class="peq mut" hidden>Para conservar tu borrador, abre el enlace en este mismo navegador.</p>
+    <form id="form-acceso">
+      <div class="campo"><label for="acc-email">Tu email</label>
+        <input id="acc-email" type="email" name="email" required autocomplete="email" inputmode="email"></div>
+      <label class="chk" for="acc-acepto"><input id="acc-acepto" type="checkbox" name="acepto" required> <span>He leído el aviso legal y la privacidad</span></label>
+      <p id="acc-error" class="msg-error" role="alert"></p>
+      <button class="btn btn-primario btn-bloque">Enviarme el enlace</button>
+    </form>
+  </div>
+  <div id="acc-paso2" hidden>
+    <p class="msg-info" role="status"><b>Enlace enviado.</b> Hemos enviado un enlace a <b id="acc-enviado"></b>. Revisa tu bandeja de entrada y la carpeta de spam. Caduca en 15 minutos.</p>
+    <p id="acc-aviso-borrador" class="peq" hidden><b>Sobre tu borrador:</b> se guardará en tu cuenta solo si abres el enlace en este mismo dispositivo y navegador. Si lo abres en otro, entrarás en tu cuenta pero el borrador no se trasladará: seguirá guardado solo aquí.</p>
+    <p id="acc-dev" class="mut"></p>
+    <p id="acc-error2" class="msg-error" role="alert"></p>
+    <div class="fila">
+      <button id="acc-reenviar" class="btn btn-secundario" type="button">Reenviar enlace</button>
+      <button id="acc-cambiar" class="btn btn-ghost" type="button">Cambiar email</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="dlg-estado" aria-labelledby="es-titulo">
+  <div class="dlg-cab"><h2 id="es-titulo">Estado de tu cartera</h2><button class="btn btn-ghost" type="button" data-cerrar>Cerrar</button></div>
+  <dl id="es-cuerpo" class="es-lista"></dl>
+  <div id="es-acciones" class="fila"></div>
+</dialog>
+
+<dialog id="dlg-confirmar" aria-labelledby="cf-titulo">
+  <div class="dlg-cab"><h2 id="cf-titulo"></h2></div>
+  <p id="cf-texto"></p>
+  <div class="fila fila-fin">
+    <button id="cf-no" class="btn btn-secundario" type="button">Cancelar</button>
+    <button id="cf-si" class="btn btn-primario" type="button">Aceptar</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-ficha" aria-labelledby="fi-titulo">
+  <div class="dlg-cab dlg-cab-fijo">
+    <div><h2 id="fi-titulo"></h2><p id="fi-sub" class="mut"></p></div>
+    <button class="btn btn-secundario" type="button" data-cerrar>Cerrar</button>
+  </div>
+  <div id="fi-cuerpo"></div>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+
+// ---------- Backend simulado en memoria (solo demo) ----------
+const UNIVERSE = [
+ {"ticker":"AAPL","nombre":"Apple","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"MSFT","nombre":"Microsoft","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"NVDA","nombre":"NVIDIA","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"AVGO","nombre":"Broadcom","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"ORCL","nombre":"Oracle","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"CRM","nombre":"Salesforce","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"ADBE","nombre":"Adobe","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"AMD","nombre":"Advanced Micro Devices","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"INTC","nombre":"Intel","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"CSCO","nombre":"Cisco","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"QCOM","nombre":"Qualcomm","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"TXN","nombre":"Texas Instruments","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"IBM","nombre":"IBM","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"NOW","nombre":"ServiceNow","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"INTU","nombre":"Intuit","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"AMAT","nombre":"Applied Materials","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"MU","nombre":"Micron","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"ACN","nombre":"Accenture","tipo":"accion","sector":"Tecnología"},
+ {"ticker":"GOOGL","nombre":"Alphabet","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"META","nombre":"Meta Platforms","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"NFLX","nombre":"Netflix","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"DIS","nombre":"Walt Disney","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"CMCSA","nombre":"Comcast","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"VZ","nombre":"Verizon","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"T","nombre":"AT&T","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"TMUS","nombre":"T-Mobile US","tipo":"accion","sector":"Comunicaciones"},
+ {"ticker":"AMZN","nombre":"Amazon","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"TSLA","nombre":"Tesla","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"HD","nombre":"Home Depot","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"LOW","nombre":"Lowe's","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"MCD","nombre":"McDonald's","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"NKE","nombre":"Nike","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"SBUX","nombre":"Starbucks","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"BKNG","nombre":"Booking Holdings","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"TJX","nombre":"TJX Companies","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"GM","nombre":"General Motors","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"F","nombre":"Ford","tipo":"accion","sector":"Consumo discrecional"},
+ {"ticker":"KO","nombre":"Coca-Cola","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"PEP","nombre":"PepsiCo","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"PG","nombre":"Procter & Gamble","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"WMT","nombre":"Walmart","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"COST","nombre":"Costco","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"PM","nombre":"Philip Morris International","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"MO","nombre":"Altria","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"MDLZ","nombre":"Mondelez","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"CL","nombre":"Colgate-Palmolive","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"KMB","nombre":"Kimberly-Clark","tipo":"accion","sector":"Consumo básico"},
+ {"ticker":"JNJ","nombre":"Johnson & Johnson","tipo":"accion","sector":"Salud"},
+ {"ticker":"ABBV","nombre":"AbbVie","tipo":"accion","sector":"Salud"},
+ {"ticker":"MRK","nombre":"Merck","tipo":"accion","sector":"Salud"},
+ {"ticker":"LLY","nombre":"Eli Lilly","tipo":"accion","sector":"Salud"},
+ {"ticker":"PFE","nombre":"Pfizer","tipo":"accion","sector":"Salud"},
+ {"ticker":"UNH","nombre":"UnitedHealth","tipo":"accion","sector":"Salud"},
+ {"ticker":"TMO","nombre":"Thermo Fisher","tipo":"accion","sector":"Salud"},
+ {"ticker":"ABT","nombre":"Abbott","tipo":"accion","sector":"Salud"},
+ {"ticker":"AMGN","nombre":"Amgen","tipo":"accion","sector":"Salud"},
+ {"ticker":"BMY","nombre":"Bristol-Myers Squibb","tipo":"accion","sector":"Salud"},
+ {"ticker":"GILD","nombre":"Gilead Sciences","tipo":"accion","sector":"Salud"},
+ {"ticker":"MDT","nombre":"Medtronic","tipo":"accion","sector":"Salud"},
+ {"ticker":"CVS","nombre":"CVS Health","tipo":"accion","sector":"Salud"},
+ {"ticker":"ISRG","nombre":"Intuitive Surgical","tipo":"accion","sector":"Salud"},
+ {"ticker":"DHR","nombre":"Danaher","tipo":"accion","sector":"Salud"},
+ {"ticker":"JPM","nombre":"JPMorgan Chase","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"BAC","nombre":"Bank of America","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"WFC","nombre":"Wells Fargo","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"C","nombre":"Citigroup","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"GS","nombre":"Goldman Sachs","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"MS","nombre":"Morgan Stanley","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"V","nombre":"Visa","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"MA","nombre":"Mastercard","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"AXP","nombre":"American Express","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"BLK","nombre":"BlackRock","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"SCHW","nombre":"Charles Schwab","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"USB","nombre":"U.S. Bancorp","tipo":"accion","sector":"Finanzas"},
+ {"ticker":"CAT","nombre":"Caterpillar","tipo":"accion","sector":"Industria"},
+ {"ticker":"DE","nombre":"Deere","tipo":"accion","sector":"Industria"},
+ {"ticker":"HON","nombre":"Honeywell","tipo":"accion","sector":"Industria"},
+ {"ticker":"UPS","nombre":"United Parcel Service","tipo":"accion","sector":"Industria"},
+ {"ticker":"UNP","nombre":"Union Pacific","tipo":"accion","sector":"Industria"},
+ {"ticker":"BA","nombre":"Boeing","tipo":"accion","sector":"Industria"},
+ {"ticker":"LMT","nombre":"Lockheed Martin","tipo":"accion","sector":"Industria"},
+ {"ticker":"RTX","nombre":"RTX","tipo":"accion","sector":"Industria"},
+ {"ticker":"GE","nombre":"GE Aerospace","tipo":"accion","sector":"Industria"},
+ {"ticker":"MMM","nombre":"3M","tipo":"accion","sector":"Industria"},
+ {"ticker":"FDX","nombre":"FedEx","tipo":"accion","sector":"Industria"},
+ {"ticker":"XOM","nombre":"Exxon Mobil","tipo":"accion","sector":"Energía"},
+ {"ticker":"CVX","nombre":"Chevron","tipo":"accion","sector":"Energía"},
+ {"ticker":"COP","nombre":"ConocoPhillips","tipo":"accion","sector":"Energía"},
+ {"ticker":"SLB","nombre":"Schlumberger","tipo":"accion","sector":"Energía"},
+ {"ticker":"EOG","nombre":"EOG Resources","tipo":"accion","sector":"Energía"},
+ {"ticker":"OXY","nombre":"Occidental Petroleum","tipo":"accion","sector":"Energía"},
+ {"ticker":"NEE","nombre":"NextEra Energy","tipo":"accion","sector":"Servicios públicos"},
+ {"ticker":"DUK","nombre":"Duke Energy","tipo":"accion","sector":"Servicios públicos"},
+ {"ticker":"SO","nombre":"Southern Company","tipo":"accion","sector":"Servicios públicos"},
+ {"ticker":"D","nombre":"Dominion Energy","tipo":"accion","sector":"Servicios públicos"},
+ {"ticker":"AEP","nombre":"American Electric Power","tipo":"accion","sector":"Servicios públicos"},
+ {"ticker":"LIN","nombre":"Linde","tipo":"accion","sector":"Materiales"},
+ {"ticker":"APD","nombre":"Air Products","tipo":"accion","sector":"Materiales"},
+ {"ticker":"SHW","nombre":"Sherwin-Williams","tipo":"accion","sector":"Materiales"},
+ {"ticker":"FCX","nombre":"Freeport-McMoRan","tipo":"accion","sector":"Materiales"},
+ {"ticker":"NEM","nombre":"Newmont","tipo":"accion","sector":"Materiales (oro)"},
+ {"ticker":"AMT","nombre":"American Tower","tipo":"accion","sector":"Inmobiliario"},
+ {"ticker":"PLD","nombre":"Prologis","tipo":"accion","sector":"Inmobiliario"},
+ {"ticker":"O","nombre":"Realty Income","tipo":"accion","sector":"Inmobiliario"},
+ {"ticker":"SPG","nombre":"Simon Property Group","tipo":"accion","sector":"Inmobiliario"},
+ {"ticker":"SPY","nombre":"SPDR S&P 500 ETF","tipo":"etf","sector":"ETF renta variable"},
+ {"ticker":"VOO","nombre":"Vanguard S&P 500 ETF","tipo":"etf","sector":"ETF renta variable"},
+ {"ticker":"VTI","nombre":"Vanguard Total Stock Market ETF","tipo":"etf","sector":"ETF renta variable"},
+ {"ticker":"QQQ","nombre":"Invesco QQQ (Nasdaq-100)","tipo":"etf","sector":"ETF renta variable"},
+ {"ticker":"IWM","nombre":"iShares Russell 2000 ETF","tipo":"etf","sector":"ETF renta variable"},
+ {"ticker":"SCHD","nombre":"Schwab US Dividend Equity ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"VYM","nombre":"Vanguard High Dividend Yield ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"VIG","nombre":"Vanguard Dividend Appreciation ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"DGRO","nombre":"iShares Core Dividend Growth ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"HDV","nombre":"iShares Core High Dividend ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"NOBL","nombre":"ProShares S&P 500 Dividend Aristocrats ETF","tipo":"etf","sector":"ETF dividendos"},
+ {"ticker":"GLD","nombre":"SPDR Gold Shares","tipo":"etf","sector":"ETF oro"},
+ {"ticker":"IAU","nombre":"iShares Gold Trust","tipo":"etf","sector":"ETF oro"},
+ {"ticker":"SGOL","nombre":"abrdn Physical Gold Shares ETF","tipo":"etf","sector":"ETF oro"},
+ {"ticker":"GDX","nombre":"VanEck Gold Miners ETF","tipo":"etf","sector":"ETF oro"},
+ {"ticker":"GDXJ","nombre":"VanEck Junior Gold Miners ETF","tipo":"etf","sector":"ETF oro"},
+ {"ticker":"TLT","nombre":"iShares 20+ Year Treasury Bond ETF","tipo":"etf","sector":"ETF renta fija"},
+ {"ticker":"AGG","nombre":"iShares Core US Aggregate Bond ETF","tipo":"etf","sector":"ETF renta fija"},
+ {"ticker":"VNQ","nombre":"Vanguard Real Estate ETF","tipo":"etf","sector":"ETF inmobiliario"},
+ {"ticker":"XLE","nombre":"Energy Select Sector SPDR Fund","tipo":"etf","sector":"ETF sectorial"}
+];
+function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
+for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
+  for(const y of [2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28})}
+  DB.fund[a.ticker].reverse();
+  const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
+  DB.ideas[a.ticker]={periodo:L.periodo,
+    deuda_ebitda:fin?{ok:null,valor:null}:{ok:L.deuda_neta/L.ebitda<2.5,valor:L.deuda_neta/L.ebitda},roic:fin?{ok:null,valor:null}:{ok:L.roic>0.1,valor:L.roic},
+    margen_neto:{ok:L.beneficio_neto/L.ingresos>0.1,valor:L.beneficio_neto/L.ingresos},flujo_caja:{ok:L.flujo_caja_libre>0,valor:L.flujo_caja_libre},
+    crecimiento:{ok:L.ingresos>P.ingresos,valor:L.ingresos/P.ingresos-1}}}
+const latest=t=>DB.fund[t]?.[0];
+function addPort(uid,nombre,plantilla,publico,tesis,posiciones){const id=DB.nextId++;DB.ports.push({id,usuario_id:uid,nombre,plantilla,publico:publico?1:0,tesis,creado_en:'2026-11-03'});DB.pos[id]=posiciones;return id}
+addPort(0,'Dividendos defensivos','dividendos',1,'Fondos de dividendos y empresas de consumo, salud y energía.',[{ticker:'SCHD',peso:30},{ticker:'KO',peso:20},{ticker:'PG',peso:20},{ticker:'JNJ',peso:15},{ticker:'XOM',peso:15}]);
+addPort(0,'Oro y mineras','oro',1,'Oro físico y mineras de oro como contrapeso a la renta variable.',[{ticker:'GLD',peso:50},{ticker:'IAU',peso:20},{ticker:'GDX',peso:20},{ticker:'NEM',peso:10}]);
+addPort(0,'Crecimiento tecnológico','riesgo',1,'Cinco grandes empresas tecnológicas y de internet.',[{ticker:'NVDA',peso:25},{ticker:'MSFT',peso:25},{ticker:'GOOGL',peso:20},{ticker:'AMZN',peso:20},{ticker:'META',peso:10}]);
+const A=t=>DB.assets.find(a=>a.ticker===t);
+const J=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{'content-type':'application/json'}});
+function view(p){const posiciones=(DB.pos[p.id]||[]).map(x=>({...x,nombre:A(x.ticker).nombre,sector:A(x.ticker).sector,tipo:A(x.ticker).tipo,roic:latest(x.ticker)?.roic??null,fecha_entrada:'2026-11-03'})).sort((a,b)=>b.peso-a.peso);
+  const total=posiciones.reduce((s,r)=>s+r.peso,0);const sectores={};posiciones.forEach(r=>sectores[r.sector]=(sectores[r.sector]||0)+r.peso);return{...p,posiciones,total,sectores}}
+const realFetch=window.fetch.bind(window);
+window.fetch=async(url,opts={})=>{
+  if(typeof url!=='string'||!url.startsWith('/api'))return realFetch(url,opts);
+  const path=url.slice(4),m=(opts.method||'GET').toUpperCase(),body=opts.body?JSON.parse(opts.body):{};
+  const tk=((opts.headers||{}).authorization||'').replace('Bearer ',''),uid=DB.sessions[tk];
+  let g;
+  if(path==='/assets'&&m==='GET')return J(DB.assets.map(a=>({ticker:a.ticker,nombre:a.nombre,tipo:a.tipo,sector:a.sector,...(latest(a.ticker)||{})})));
+  if((g=path.match(/^\/assets\/(\w+)$/))){const t=g[1].toUpperCase(),a=A(t);return a?J({...a,fundamentales:DB.fund[t]||[],criterios:DB.ideas[t]||null}):J({error:'No encontrado'},404)}
+  if(path==='/ideas')return J(Object.keys(DB.ideas).map(t=>{const c=DB.ideas[t],k=Object.keys(c).filter(x=>x!=='periodo');return{ticker:t,nombre:A(t).nombre,sector:A(t).sector,periodo:c.periodo,cumplidos:k.filter(x=>c[x].ok===true).length,evaluados:k.filter(x=>c[x].ok!==null).length,criterios:c}}).sort((a,b)=>b.cumplidos-a.cumplidos||a.ticker.localeCompare(b.ticker)));
+  if(path==='/public')return J(DB.ports.filter(p=>p.publico).sort((a,b)=>(a.usuario_id===0?0:1)-(b.usuario_id===0?0:1)||b.id-a.id).map(p=>({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',n_posiciones:(DB.pos[p.id]||[]).length})));
+  if((g=path.match(/^\/public\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.publico);if(!p)return J({error:'No encontrado'},404);const v=view(p);return J({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',posiciones:v.posiciones})}
+  if(path==='/login')return J({ok:true,dev_link:'#'});
+  if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
+  if(path==='/logout'){delete DB.sessions[tk];return J({ok:true})}
+  if(!uid)return J({error:'No autorizado'},401);
+  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).reverse());
+  if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);return J({id:addPort(uid,body.nombre.slice(0,80),body.plantilla,0,null,[])},201)}
+  if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
+    if(m==='GET')return J(view(p));
+    if(m==='DELETE'){DB.ports=DB.ports.filter(x=>x!==p);delete DB.pos[p.id];return J({ok:true})}
+    if(m==='PUT'){const ps=body.posiciones||[];let tot=0;for(const x of ps){if(!A(x.ticker))return J({error:'Algún ticker no está en el universo'},400);if(!(Number(x.peso)>0&&Number(x.peso)<=100))return J({error:'Posición no válida: '+x.ticker},400);tot+=Number(x.peso)}tot=Math.round(tot*10)/10;if(tot>100)return J({error:'Los pesos suman más de 100 % (exceso de asignación: '+String(Math.round((tot-100)*10)/10).replace('.',',')+' %)'},400);if(p.publico&&tot!==100)return J({error:'Esta cartera es pública y debe mantener el 100 % asignado. Deja de publicarla para guardar un reparto incompleto.'},400);DB.pos[p.id]=ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)}));return J({ok:true})}
+    if(m==='PATCH'){const nombre=body.nombre!==undefined?String(body.nombre).trim().slice(0,80):p.nombre;if(!nombre)return J({error:'El nombre no puede estar vacío'},400);const tesis=body.tesis!==undefined?String(body.tesis).trim().slice(0,600):p.tesis;const pub=body.publico!==undefined?(body.publico?1:0):p.publico;if(pub){const ps=DB.pos[p.id]||[],tot=Math.round(ps.reduce((s,x)=>s+x.peso,0)*10)/10;if(!ps.length)return J({error:'Para publicar, añade al menos una posición.'},400);if(tot!==100)return J({error:'Para publicar, la cartera debe tener el 100 % asignado (ahora tiene '+String(tot).replace('.',',')+' %).'},400);if(!tesis)return J({error:'Para publicar, escribe una tesis.'},400)}p.nombre=nombre;p.tesis=tesis||null;p.publico=pub;return J({ok:true})}}
+  return J({error:'Ruta no encontrada'},404)};
+
+// =====================================================================
+// Klever · interfaz. Sin dependencias.
+// Vistas (hash): inicio · empresas · publicas · carteras · cartera / cartera-<id>
+// Tres conceptos separados en el editor:
+//   · DÓNDE está guardada  → este dispositivo (borrador) o tu cuenta
+//   · CAMBIOS pendientes   → versión actual (rev) frente a la última guardada (savedRev)
+//   · VISIBILIDAD          → privada o pública
+// =====================================================================
+
+// ---------- utilidades ----------
+const store = (() => { const m = {}; return { // tolerante a modo privado / datos bloqueados
+  getItem: k => { try { return localStorage.getItem(k); } catch { return m[k] ?? null; } },
+  setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
+  removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } } }; })();
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const NB = ' '; // espacio duro: número y unidad nunca se separan
+const nf = (v, d = 1) => new Intl.NumberFormat('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
+const pct = v => v == null ? '—' : nf(v * 100) + NB + '%';   // fracción: 0,12 → 12,0 %
+const pesoTxt = v => nf(v) + NB + '%';                          // ya en puntos porcentuales (1 decimal)
+const pesoCorto = v => (Number.isInteger(r1(v)) ? nf(v, 0) : nf(v, 1)) + NB + '%'; // 12 % · 12,5 %
+const miles = v => v == null ? '—' : nf(v / 1e9);               // miles de millones
+const r1 = v => Math.round(v * 10) / 10;
+const parsePeso = s => { const n = parseFloat(String(s).trim().replace(/\s/g, '').replace(',', '.')); return Number.isFinite(n) ? n : NaN; };
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const reducido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let toastTimer;
+function toast(msg, ms = 4000) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); }
+function hideToast() { clearTimeout(toastTimer); $('#toast').classList.remove('on'); }
+
+const API = '/api';
+const tok = () => store.getItem('klever_token');
+const logged = () => !!tok();
+
+async function api(path, opts = {}) {
+  let r;
+  try {
+    r = await fetch(API + path, {
+      ...opts,
+      headers: { 'content-type': 'application/json', ...(tok() ? { authorization: 'Bearer ' + tok() } : {}) },
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    });
+  } catch { throw new Error('Sin conexión con el servidor. Inténtalo de nuevo.'); }
+  const data = await r.json().catch(() => ({}));
+  if (r.status === 401 && tok()) sesionCaducada();
+  if (!r.ok) throw new Error(data.error || 'Error ' + r.status);
+  return data;
+}
+async function getJson(path) { const r = await fetch(API + path); if (!r.ok) throw new Error('Error ' + r.status); return r.json(); }
+
+// ---------- plantillas ----------
+const PLANTILLAS = {
+  riesgo: { nombre: 'crecimiento', tickers: ['NVDA', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA'] },
+  oro: { nombre: 'oro', tickers: ['GLD', 'IAU', 'GDX', 'NEM'] },
+  dividendos: { nombre: 'dividendos', tickers: ['SCHD', 'VYM', 'KO', 'PG', 'JNJ', 'XOM'] },
+};
+const nombrePlantilla = p => PLANTILLAS[p]?.nombre || p;
+function repartoPlantilla(plantilla) {
+  const t = PLANTILLAS[plantilla].tickers.filter(x => by[x]);
+  if (!t.length) return [];
+  const w = Math.floor(1000 / t.length) / 10;
+  const resto = r1(100 - w * t.length); // el primero absorbe el redondeo
+  return t.map((ticker, i) => ({ ticker, peso: i === 0 ? r1(w + resto) : w }));
+}
+
+// ---------- estado ----------
+let assets = [], by = {};
+let current = null;          // { id|null, nombre, plantilla, tesis, publico }   id null = aún no está en la cuenta
+let pos = [];                // [{ ticker, peso }]
+let rev = 0, savedRev = 0, saving = false, saveErr = null;
+const DRAFT = 'klever_borrador';
+const leerBorrador = () => { try { return JSON.parse(store.getItem(DRAFT)); } catch { return null; } };
+const hayBorrador = () => !!leerBorrador()?.pos?.length;
+function guardarBorrador() {
+  if (!current || current.id) return; // solo lo que aún no está en la cuenta
+  store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos }));
+}
+const enCuenta = () => logged() && !!current?.id;
+
+async function loadAssets() {
+  try { assets = await getJson('/assets'); by = Object.fromEntries(assets.map(a => [a.ticker, a])); }
+  catch { toast('No se pudieron cargar los activos. Recarga la página.'); }
+}
+
+// ---------- reglas de composición: UNA sola fuente para guardar, publicar y la interfaz ----------
+// Mismas reglas que el servidor (functions/_lib.js). Por debajo del 100 % es un REPARTO INCOMPLETO: se puede
+// guardar en privado, pero no se publica. No existe efectivo implícito.
+function validar(ps = pos) {
+  const total = r1(ps.reduce((s, p) => s + (p.peso || 0), 0));
+  const invalidos = ps.filter(p => !(p.peso > 0 && p.peso <= 100));
+  return { total, n: ps.length, invalidos, exceso: total > 100 ? r1(total - 100) : 0, falta: total < 100 ? r1(100 - total) : 0, completa: total === 100 && !invalidos.length };
+}
+const listaTickers = inv => inv.map(p => p.ticker).join(', ');
+function razonGuardar(v) {
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.`;
+  if (current?.publico && !v.completa) return `Esta cartera es pública y debe mantener el 100 % asignado (pendiente de asignar: ${pesoCorto(v.falta)}). Para guardar un reparto incompleto, deja de publicarla antes.`;
+  return null;
+}
+function razonPublicar(v) {
+  if (!v.n) return 'Añade al menos una posición para publicar.';
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para poder publicar.`;
+  if (v.falta) return `Pendiente de asignar: ${pesoCorto(v.falta)}. Una cartera pública debe tener el 100 % asignado.`;
+  if (!$('#tesis').value.trim()) return 'Escribe una tesis para poder publicar.';
+  return null;
+}
+
+// ---------- diálogos ----------
+function cerrarAlPulsarFuera(d) { // clic en el fondo (no en el relleno del diálogo)
+  d.addEventListener('click', e => {
+    if (e.target !== d) return; const r = d.getBoundingClientRect();
+    if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close();
+  });
+}
+$$('dialog').forEach(cerrarAlPulsarFuera);
+$$('[data-cerrar]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
+
+function confirmar({ titulo, texto, ok = 'Aceptar', peligro = false }) {
+  return new Promise(res => {
+    const d = $('#dlg-confirmar');
+    $('#cf-titulo').textContent = titulo; $('#cf-texto').textContent = texto;
+    const si = $('#cf-si'); si.textContent = ok; si.className = 'btn ' + (peligro ? 'btn-peligro' : 'btn-primario');
+    d.returnValue = '';
+    d.addEventListener('close', () => res(d.returnValue === 'ok'), { once: true });
+    d.showModal(); $('#cf-no').focus();
+  });
+}
+$('#cf-si').addEventListener('click', () => $('#dlg-confirmar').close('ok'));
+$('#cf-no').addEventListener('click', () => $('#dlg-confirmar').close('no'));
+
+// ---------- acceso por enlace ----------
+let accEmail = '', cooldownT = null, avisoOtroDispositivo = false;
+function pasoAcceso(n) {
+  $('#acc-paso1').hidden = n !== 1; $('#acc-paso2').hidden = n !== 2;
+  $('#acc-aviso-borrador').hidden = !(n === 2 && hayBorrador());
+}
+function abrirAcceso(motivo = 'entrar') {
+  $('#acc-titulo').textContent = motivo === 'guardar' ? 'Guarda tu cartera' : 'Entrar';
+  $('#acc-sub').textContent = motivo === 'caducada'
+    ? 'Tu sesión ha caducado. Te enviaremos un enlace para entrar sin contraseña.'
+    : motivo === 'guardar' ? 'Te enviaremos un enlace para entrar sin contraseña.'
+      : 'Te enviaremos un enlace para entrar sin contraseña. Sirve para registrarte y para volver a entrar.';
+  $('#acc-borrador').hidden = !hayBorrador();
+  $('#acc-error').textContent = ''; $('#acc-error2').textContent = '';
+  pasoAcceso(1);
+  const d = $('#dlg-acceso'); if (!d.open) d.showModal();
+}
+function cooldown(seg) {
+  const b = $('#acc-reenviar'); clearInterval(cooldownT); let s = seg;
+  const pintar = () => { b.disabled = s > 0; b.textContent = s > 0 ? `Reenviar enlace (${s}${NB}s)` : 'Reenviar enlace'; };
+  pintar(); cooldownT = setInterval(() => { s--; pintar(); if (s <= 0) clearInterval(cooldownT); }, 1000);
+}
+async function pedirEnlace(email) {
+  const r = await api('/login', { method: 'POST', body: { email, acepto: $('#acc-acepto').checked, con_borrador: hayBorrador() } });
+  accEmail = email; $('#acc-enviado').textContent = email;
+  $('#acc-dev').innerHTML = 'En la web real recibirías un email con un enlace. En la demo, púlsalo tú: <button type="button" class="btn btn-secundario" id="demo-enter">Simular enlace del email</button>';
+  $('#demo-enter').onclick = async () => { const { token } = await api('/verify', { method: 'POST', body: { token: 'demo' } }); store.setItem('klever_token', token); $('#dlg-acceso').close(); actualizarCabecera(); await migrarBorrador(); route(); };
+  pasoAcceso(2); cooldown(60); $('#acc-reenviar').focus();
+}
+$('#form-acceso').addEventListener('submit', async e => {
+  e.preventDefault(); $('#acc-error').textContent = '';
+  const btn = e.target.querySelector('button'); btn.disabled = true;
+  try { await pedirEnlace(new FormData(e.target).get('email')); }
+  catch (err) { $('#acc-error').textContent = err.message; }
+  finally { btn.disabled = false; }
+});
+$('#acc-reenviar').addEventListener('click', async () => {
+  $('#acc-error2').textContent = '';
+  try { await pedirEnlace(accEmail); toast('Enlace reenviado'); } catch (err) { $('#acc-error2').textContent = err.message; }
+});
+$('#acc-cambiar').addEventListener('click', () => { pasoAcceso(1); $('#acc-email').value = accEmail; $('#acc-email').focus(); });
+$('#entrar').addEventListener('click', () => abrirAcceso('entrar'));
+
+async function redeem() { // canje del enlace mágico (?login=TOKEN)
+  const t = new URLSearchParams(location.search).get('login'); if (!t) return;
+  try { history.replaceState(null, '', location.pathname + location.hash); } catch {}
+  try {
+    const r = await api('/verify', { method: 'POST', body: { token: t } });
+    store.setItem('klever_token', r.token);
+    // El enlace se pidió con un borrador local. Si se abre en otro dispositivo/navegador, el borrador no está aquí.
+    avisoOtroDispositivo = !!r.con_borrador && !hayBorrador();
+  } catch (err) { toast(err.message); }
+}
+function sesionCaducada() {
+  store.removeItem('klever_token'); current = null; actualizarCabecera(); route(); abrirAcceso('caducada');
+}
+async function cerrarSesion() {
+  try { await api('/logout', { method: 'POST' }); } catch {}
+  store.removeItem('klever_token'); current = null; pos = []; actualizarCabecera(); go('#inicio');
+}
+$('#salir').addEventListener('click', cerrarSesion);
+$('#salir-m').addEventListener('click', cerrarSesion);
+function actualizarCabecera() {
+  const l = logged();
+  $('#entrar').hidden = l; $('#salir').hidden = !l; $('#salir-m').hidden = !l;
+  $$('.nav-mis').forEach(e => e.hidden = !l);
+}
+
+// ---------- menú móvil ----------
+const btnMenu = $('#btn-menu'), menuMovil = $('#menu-movil');
+function menuAbrir(v) { menuMovil.hidden = !v; btnMenu.setAttribute('aria-expanded', String(v)); }
+btnMenu.addEventListener('click', () => menuAbrir(menuMovil.hidden));
+menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) menuAbrir(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
+
+// ---------- rutas ----------
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera'];
+const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera' };
+let routeSeq = 0;
+function go(h) { if (location.hash === h) route(); else location.hash = h; }
+
+async function route(primera = false) {
+  const seq = ++routeSeq, l = logged();
+  const h = location.hash.replace(/^#/, '');
+  if (h === 'contenido') { $('#contenido').focus(); return; }
+  const m = h.match(/^cartera-(\d+)$/);
+  let v = m ? 'cartera' : h;
+  if (!VISTAS.includes(v) || v === 'inicio') v = l ? 'carteras' : 'inicio';
+  if (v === 'carteras' && !l) v = 'inicio';
+  if (v === 'cartera') {
+    if (m) {
+      if (!l) v = 'inicio';
+      else if (current?.id !== +m[1]) { const ok = await cargarCartera(+m[1]); if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
+    } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
+  }
+  mostrar(v, primera);
+}
+function mostrar(v, primera) {
+  $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
+  $$('[data-nav]').forEach(a => a.dataset.nav === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  document.body.classList.toggle('en-cartera', v === 'cartera');
+  $('#barra-guardar').hidden = v !== 'cartera'; medirBarra(); menuAbrir(false);
+  document.title = 'Klever · ' + TITULOS[v];
+  if (v === 'cartera') renderWorkspace();
+  if (v === 'carteras') cargarMisCarteras();
+  if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
+}
+window.addEventListener('hashchange', () => route());
+
+// ---------- carteras del usuario ----------
+async function cargarMisCarteras() {
+  const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista">Cargando tus carteras…</li>';
+  try {
+    const list = await api('/portfolios');
+    ul.innerHTML = list.length ? list.map(p => `<li><button class="tarjeta" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
+        <span><b>${esc(p.nombre)}</b><span class="t-meta" style="display:block">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.publico ? 'Pública' : 'Privada'}</span></span><span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`).join('')
+      : '<li class="estado-lista">Aún no tienes carteras. Crea la primera con el formulario de arriba.</li>';
+  } catch (err) { ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
+}
+$('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
+$('#form-nueva').addEventListener('submit', async e => {
+  e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
+  try {
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla') } });
+    try { await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: repartoPlantilla(f.get('plantilla')) } }); } catch (err) { toast(err.message); }
+    e.target.reset(); go('#cartera-' + id);
+  } catch (err) { toast(err.message); } finally { btn.disabled = false; }
+});
+async function cargarCartera(id) {
+  try {
+    const c = await api('/portfolios/' + id);
+    current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico };
+    pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saveErr = null;
+    chartEls.clear(); $('#graficos').innerHTML = ''; return true;
+  } catch (err) { toast(err.message); return false; }
+}
+function abrirInvitado(plantilla) {
+  current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
+  pos = repartoPlantilla(plantilla); rev = savedRev = 0; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
+  guardarBorrador(); go('#cartera');
+}
+function restaurarBorrador(d) {
+  current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
+  pos = d.pos; rev = savedRev = 0; saveErr = null;
+}
+async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
+  const d = leerBorrador(); if (!d) return;
+  if (!d.pos?.length) { store.removeItem(DRAFT); return; }
+  const v = validar(d.pos);
+  if (v.exceso || v.invalidos.length) {
+    toast('Tu borrador sigue en este dispositivo: tiene pesos que aún no se pueden guardar. Corrígelos para guardarlo en tu cuenta.', 9000);
+    location.hash = '#cartera'; return;
+  }
+  let id = null;
+  try {
+    ({ id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla } }));
+    await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: d.pos } });
+    store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
+    toast('Hemos guardado tu borrador en tu cuenta'); location.hash = '#cartera-' + id;
+  } catch (err) {
+    if (id) { try { await api('/portfolios/' + id, { method: 'DELETE' }); } catch {} } // no dejar una cartera vacía a medias
+    toast('No se pudo guardar tu borrador (' + err.message + '). Sigue en este dispositivo.', 8000);
+  }
+}
+
+// ---------- cálculo del resumen ----------
+const esFondo = t => by[t]?.tipo === 'etf';
+function calcResumen(ps) {
+  const v = validar(ps);
+  const conDato = ps.filter(p => p.peso > 0 && by[p.ticker]?.roic != null);
+  const sinDato = ps.filter(p => p.peso > 0 && by[p.ticker]?.roic == null);
+  const wCon = conDato.reduce((s, p) => s + p.peso, 0);
+  const sec = {};
+  for (const p of ps) { const s = by[p.ticker]?.sector || 'Sin categoría'; sec[s] = (sec[s] || 0) + (p.peso || 0); }
+  return {
+    ...v, nCon: conDato.length,
+    noAplic: sinDato.filter(p => esFondo(p.ticker)).length, noDisp: sinDato.filter(p => !esFondo(p.ticker)).length,
+    roic: wCon ? conDato.reduce((s, p) => s + by[p.ticker].roic * p.peso, 0) / wCon : null, // media PONDERADA; sin dato = fuera, ni como 0 ni en el denominador
+    cobPeso: v.total ? wCon / v.total : 0,                                                    // denominador: peso asignado
+    sectores: Object.entries(sec).sort((a, b) => b[1] - a[1]),
+  };
+}
+const roicTxt = a => !a ? '<span class="nd">No disponible</span>' : a.tipo === 'etf' ? '<span class="nd" title="Los fondos no tienen ROIC: no aplicable">No aplicable</span>' : a.roic == null ? '<span class="nd" title="Dato ausente en los informes">No disponible</span>' : pct(a.roic);
+function textoCobertura(r) {
+  if (!r.n) return '';
+  const sin = [r.noAplic && `${r.noAplic} ${r.noAplic === 1 ? 'fondo' : 'fondos'} (no aplicable)`, r.noDisp && `${r.noDisp} ${r.noDisp === 1 ? 'empresa' : 'empresas'} (no disponible)`].filter(Boolean).join(' y ');
+  if (r.roic == null) return `Ninguna posición tiene ROIC${sin ? ': ' + sin : ''}.`;
+  return `Con dato: ${r.nCon} de ${r.n} posiciones (${nf(r.cobPeso * 100, 0)}${NB}% del peso asignado).${sin ? ' Sin dato: ' + sin + '.' : ''} Media ponderada por peso.`;
+}
+function textoAsignado(r) {
+  return !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '✓ 100 % asignado';
+}
+
+// ---------- espacio de trabajo ----------
+function renderWorkspace() {
+  if (!current) return;
+  const l = logged(), id = !!current.id;
+  $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
+  $('#mi-eliminar').hidden = !(l && id);
+  $('#nombre').value = current.nombre; $('#tesis').value = current.tesis || '';
+  $('#pub-error').textContent = '';
+  renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
+}
+
+function filaTabla(p, i) {
+  const a = by[p.ticker] || {};
+  return `<tr><td><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></td><td>${esc(a.sector || '')}</td>
+    <td class="num"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span></td>
+    <td class="num">${roicTxt(a)}</td>
+    <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
+}
+function tarjetaPos(p, i) {
+  const a = by[p.ticker] || {}, id = 'det-' + i;
+  return `<li class="pos-card"><div class="pc-fila"><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
+    <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
+    <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
+    <div class="pc-det" id="${id}" hidden><dl>
+      <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
+      <div><dt>Categoría:</dt><dd>${esc(a.sector || '—')}</dd></div>
+      <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr>:</dt><dd class="num">${roicTxt(a)}</dd></div></dl>
+      <button class="btn btn-secundario peligro" type="button" data-quitar="${i}">Quitar</button></div></li>`;
+}
+function renderPosiciones() {
+  $('#pos-tabla tbody').innerHTML = pos.map(filaTabla).join('');
+  $('#pos-cards').innerHTML = pos.map(tarjetaPos).join('');
+  $('.tabla-scroll').hidden = !pos.length; $('#pos-cards').hidden = !pos.length; $('#pos-vacio').hidden = pos.length > 0;
+}
+function renderResumen() {
+  const r = calcResumen(pos);
+  const est = textoAsignado(r), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
+  $('#r-total').textContent = pesoTxt(r.total);
+  const f = $('#r-falta'); f.textContent = est; f.className = 'asig-estado ' + clase;
+  const barra = $('#r-barra').parentElement; barra.setAttribute('aria-valuenow', Math.min(100, Math.round(r.total)));
+  barra.classList.toggle('error', !!r.exceso); $('#r-barra').style.width = Math.min(100, r.total) + '%';
+  $('#r-n').textContent = r.n;
+  $('#r-roic').textContent = r.roic != null ? pct(r.roic) : '—';
+  $('#r-cobertura').textContent = textoCobertura(r);
+  $('#r-sectores').innerHTML = r.sectores.length ? r.sectores.map(([s, v]) =>
+    `<div class="sector"><span>${esc(s)}</span><span class="num">${pesoTxt(v)}</span><div class="barra"><i style="width:${Math.min(100, v)}%"></i></div></div>`).join('')
+    : '<p class="mut peq">Añade posiciones para ver el reparto.</p>';
+  $('#pos-error').textContent = r.invalidos.length ? `Revisa el peso de ${listaTickers(r.invalidos)}: debe ser un número entre 0,1 y 100.` : '';
+  // resumen breve (móvil/tableta) y barra inferior
+  $('#rb-total').textContent = pesoTxt(r.total); $('#rb-estado').textContent = est; $('#rb-n').textContent = `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}`;
+  $('#b-total').textContent = pesoTxt(r.total); // barra: texto breve (el resumen usa las etiquetas completas)
+  $('#b-falta').textContent = !r.n ? 'sin posiciones' : r.exceso ? `exceso ${pesoCorto(r.exceso)}` : r.falta ? `pendiente ${pesoCorto(r.falta)}` : 'asignado';
+  $('#b-falta').className = clase;
+}
+
+// ---------- estado de guardado (una sola fuente de verdad) ----------
+function pintarEstado() {
+  if (!current) return;
+  const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
+  let largo, breve, cls = '';
+  if (saving) { largo = 'Guardando en tu cuenta…'; breve = 'Guardando…'; }
+  else if (saveErr) { largo = 'Error al guardar: ' + saveErr; breve = 'Error al guardar'; cls = 'error'; }
+  else if (razon && (dirty || !id)) { largo = razon; cls = 'aviso';
+    breve = v.invalidos.length ? 'Revisa los pesos' : v.exceso ? 'Reduce el exceso' : 'Pública: debe sumar 100 %'; }
+  else if (!id) { largo = 'Guardado en este dispositivo'; breve = 'En este dispositivo'; }
+  else if (dirty) { largo = 'Cambios sin guardar'; breve = 'Sin guardar'; cls = 'aviso'; }
+  else { largo = '✓ Guardada en tu cuenta'; breve = '✓ Guardada'; cls = 'ok'; }
+  for (const [sel, t] of [['#estado', largo], ['#b-estado', breve]]) { const e = $(sel); e.textContent = t; e.className = (sel === '#b-estado' ? 'bg-estado ' : '') + 'estado-btn ' + cls; }
+  $('#estado-live').textContent = largo;
+  const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico);
+  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.setAttribute('aria-describedby', razon ? 'estado b-estado' : ''); });
+  pintarPublicacion(v);
+  window.onbeforeunload = id && dirty ? e => { e.preventDefault(); e.returnValue = ''; } : null; // no perder cambios por error
+}
+function pintarPublicacion(v = validar()) {
+  const pub = !!current?.publico, r = razonPublicar(v);
+  $('#pub-chip').textContent = pub ? 'Pública' : 'Privada'; $('#pub-chip').classList.toggle('pub', pub);
+  $('#publicar').textContent = pub ? 'Dejar de publicar' : 'Publicar cartera';
+  $('#publicar').disabled = !pub && !!r;                      // si no se puede publicar, no parece disponible
+  $('#tesis-guardar').hidden = !pub; $('#tesis-guardar').disabled = pub && !!r;
+  const z = $('#pub-razon');
+  z.textContent = pub ? (r ? `Mientras sea pública, debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r || 'Lista para publicar.');
+  z.className = 'peq pub-razon' + (r ? ' aviso' : '');
+}
+function marcarCambio() { rev++; saveErr = null; hideToast(); guardarBorrador(); pintarEstado(); }
+
+async function guardar() {
+  if (!current) return false;
+  const razon = razonGuardar(validar());
+  if (razon) { saveErr = null; pintarEstado(); return false; }   // la misma regla que bloquea el botón; no se envía nada
+  if (!logged()) { guardarBorrador(); abrirAcceso('guardar'); return false; }
+  if (saving) return false;
+  const nombre = $('#nombre').value.trim();
+  if (!nombre) { saveErr = 'escribe un nombre para la cartera'; pintarEstado(); return false; }
+  const r = rev; saving = true; saveErr = null; pintarEstado();
+  try {
+    if (!current.id) { const { id } = await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla } }); current.id = id; }
+    await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } });
+    await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
+    current.nombre = nombre; savedRev = r; // si se editó durante el guardado, rev > r y sigue "con cambios"
+    store.removeItem(DRAFT);
+    try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
+    $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
+  } catch (err) { saveErr = err.message; }
+  finally { saving = false; pintarEstado(); }
+  return !saveErr;
+}
+$$('.js-guardar').forEach(b => b.addEventListener('click', guardar));
+
+async function cambiarPublicacion(publico) {
+  const err = $('#pub-error'); err.textContent = '';
+  if (publico) { // mismas reglas que el servidor; sin petición si no son válidas
+    const r = razonPublicar(validar()); if (r) { err.textContent = r; return; }
+    if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
+  }
+  try {
+    await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
+    current.publico = publico ? 1 : 0; pintarEstado(); loadPublicas();
+    toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
+  } catch (e) { err.textContent = e.message; }
+}
+$('#publicar').addEventListener('click', () => cambiarPublicacion(!current.publico));
+$('#tesis-guardar').addEventListener('click', () => cambiarPublicacion(true));
+$('#nombre').addEventListener('input', marcarCambio);
+$('#tesis').addEventListener('input', marcarCambio);
+
+// «Dónde está guardada»: tres conceptos separados
+function abrirInfoEstado() {
+  if (!current) return;
+  const id = enCuenta(), dirty = rev !== savedRev, pub = !!current.publico;
+  $('#es-cuerpo').innerHTML = `
+    <div><dt>Dónde está guardada</dt><dd>${id ? 'En tu cuenta.' : 'Solo en este navegador, como borrador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
+    <div><dt>Cambios pendientes</dt><dd>${id ? (dirty ? 'Sí: hay cambios sin guardar en tu cuenta.' : 'No: todo lo que ves está guardado.') : 'Los cambios se guardan automáticamente en este dispositivo.'}</dd></div>
+    <div><dt>Visibilidad</dt><dd>${pub ? 'Pública: se muestra su composición y tu tesis en «Carteras públicas».' : 'Privada: solo la ves tú.'}</dd></div>`;
+  $('#es-acciones').innerHTML = id ? '' : '<button class="btn btn-primario" type="button" id="es-guardar">Guardar en mi cuenta</button>';
+  const g = $('#es-guardar'); if (g) g.addEventListener('click', () => { $('#dlg-estado').close(); guardar(); });
+  $('#dlg-estado').showModal();
+}
+$('#estado').addEventListener('click', abrirInfoEstado);
+$('#b-estado').addEventListener('click', abrirInfoEstado);
+$('#rb-ver').addEventListener('click', () => { const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); });
+
+// ---------- barra inferior: espacio reservado y teclado virtual ----------
+const barra = $('#barra-guardar');
+function medirBarra() { document.documentElement.style.setProperty('--barra-alto', (barra.hidden || document.body.classList.contains('teclado')) ? '0px' : barra.offsetHeight + 'px'); }
+if ('ResizeObserver' in window) new ResizeObserver(medirBarra).observe(barra);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', () => { // teclado abierto: la barra se oculta para no tapar el campo
+  document.body.classList.toggle('teclado', window.visualViewport.height < window.innerHeight * 0.75); medirBarra();
+});
+document.addEventListener('focusin', e => { // el campo activo queda a la vista, nunca bajo la barra
+  if (!e.target.classList?.contains('peso-in')) return;
+  const el = e.target; setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'auto' }), 300);
+});
+
+// ---------- pesos editables ----------
+function editarPeso(el, fin) {
+  const i = +el.dataset.i, v = parsePeso(el.value), ok = v > 0 && v <= 100;
+  pos[i].peso = ok ? r1(v) : 0;
+  if (fin && ok) el.value = nf(pos[i].peso);
+  for (const o of $$(`.peso-in[data-i="${i}"]`)) { o.setAttribute('aria-invalid', ok ? 'false' : 'true'); if (o !== el) o.value = el.value; }
+  marcarCambio(); renderResumen();
+}
+$('#vista-cartera').addEventListener('input', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, false); });
+$('#vista-cartera').addEventListener('change', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, true); });
+$('#vista-cartera').addEventListener('click', e => {
+  const t = e.target.closest('.pc-toggle');
+  if (t) { const abierto = t.getAttribute('aria-expanded') === 'true'; t.setAttribute('aria-expanded', String(!abierto)); document.getElementById(t.getAttribute('aria-controls')).hidden = abierto; return; }
+  const q = e.target.closest('[data-quitar]'); if (!q) return;
+  const [p] = pos.splice(+q.dataset.quitar, 1);
+  marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
+  avisar(`${p.ticker} quitada de la cartera`); $('#buscar-activo').focus();
+});
+const avisar = t => { $('#combo-aviso').textContent = ''; setTimeout(() => $('#combo-aviso').textContent = t, 50); };
+function enfocarPeso(i) { const el = [...$$(`.peso-in[data-i="${i}"]`)].find(x => x.offsetParent !== null); if (el) { el.focus(); el.select(); } }
+function agregar(ticker) {
+  const ex = pos.findIndex(p => p.ticker === ticker);
+  if (ex >= 0) { avisar(`${ticker} ya está en la cartera`); enfocarPeso(ex); return; }
+  const falta = r1(100 - validar().total);
+  pos.push({ ticker, peso: falta > 0 ? falta : 5 });
+  marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
+  avisar(`${ticker} añadida con ${pesoTxt(pos[pos.length - 1].peso)}. Ajusta el peso si quieres.`); enfocarPeso(pos.length - 1);
+}
+
+// ---------- buscador de activos (combobox accesible) ----------
+const cbIn = $('#buscar-activo'), cbList = $('#lista-activos');
+let cbOpts = [], cbAct = -1;
+function cbBuscar(qq) {
+  const q = norm(qq.trim()); if (!q) return [];
+  const score = a => { const t = norm(a.ticker), n = norm(a.nombre), s = norm(a.sector);
+    return t === q ? 0 : t.startsWith(q) ? 1 : n.startsWith(q) ? 2 : (n.includes(q) || t.includes(q)) ? 3 : s.includes(q) ? 4 : 9; };
+  return assets.map(a => [score(a), a]).filter(x => x[0] < 9).sort((a, b) => a[0] - b[0] || a[1].ticker.localeCompare(b[1].ticker)).slice(0, 8).map(x => x[1]);
+}
+function cbCerrar() { cbList.hidden = true; cbIn.setAttribute('aria-expanded', 'false'); cbIn.removeAttribute('aria-activedescendant'); cbAct = -1; }
+function cbPintar() {
+  const q = cbIn.value.trim(); cbOpts = cbBuscar(q);
+  if (!q) return cbCerrar();
+  cbList.innerHTML = cbOpts.length ? cbOpts.map((a, i) => {
+    const ya = pos.some(p => p.ticker === a.ticker);
+    return `<li role="option" id="opt-${i}" data-t="${esc(a.ticker)}" aria-selected="false"${ya ? ' aria-disabled="true"' : ''}><span><b>${esc(a.ticker)}</b> ${esc(a.nombre)}</span><small>${ya ? 'Ya en la cartera' : esc(a.sector)}</small></li>`;
+  }).join('') : `<li class="sin" role="option" aria-disabled="true">Ningún activo coincide con «${esc(q)}»</li>`;
+  cbList.hidden = false; cbIn.setAttribute('aria-expanded', 'true'); cbMarcar(cbOpts.length ? 0 : -1);
+  avisar(cbOpts.length ? `${cbOpts.length} resultados` : 'Sin resultados');
+}
+function cbMarcar(i) {
+  cbAct = i; [...cbList.children].forEach((li, k) => li.setAttribute('aria-selected', String(k === i)));
+  i >= 0 ? cbIn.setAttribute('aria-activedescendant', 'opt-' + i) : cbIn.removeAttribute('aria-activedescendant');
+  if (i >= 0) cbList.children[i]?.scrollIntoView({ block: 'nearest' });
+}
+function cbElegir(i) { const a = cbOpts[i]; if (!a) return; cbIn.value = ''; cbCerrar(); agregar(a.ticker); }
+cbIn.addEventListener('input', cbPintar);
+cbIn.addEventListener('focus', () => { if (cbIn.value.trim()) cbPintar(); });
+cbIn.addEventListener('blur', cbCerrar);
+cbIn.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); if (cbList.hidden) cbPintar(); else cbMarcar((cbAct + 1) % Math.max(1, cbOpts.length)); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); cbMarcar((cbAct - 1 + cbOpts.length) % Math.max(1, cbOpts.length)); }
+  else if (e.key === 'Enter') { if (!cbList.hidden && cbAct >= 0) { e.preventDefault(); cbElegir(cbAct); } }
+  else if (e.key === 'Escape') { if (!cbList.hidden) { e.preventDefault(); cbCerrar(); } else cbIn.value = ''; }
+});
+cbList.addEventListener('mousedown', e => { e.preventDefault(); const li = e.target.closest('li[data-t]'); if (li) cbElegir([...cbList.children].indexOf(li)); });
+
+// ---------- menú «Más acciones» ----------
+const masBtn = $('#mas'), masLista = $('#mas-lista');
+const masItems = () => [...masLista.querySelectorAll('button:not([hidden])')];
+function masAbrir(v, enfocar = true) { masLista.hidden = !v; masBtn.setAttribute('aria-expanded', String(v)); if (v && enfocar) masItems()[0]?.focus(); }
+masBtn.addEventListener('click', () => masAbrir(masLista.hidden));
+document.addEventListener('click', e => { if (!e.target.closest('.menu-mas')) masAbrir(false); });
+masLista.addEventListener('keydown', e => {
+  const it = masItems(), i = it.indexOf(document.activeElement);
+  if (e.key === 'Escape') { masAbrir(false); masBtn.focus(); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); it[(i + 1) % it.length].focus(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); it[(i - 1 + it.length) % it.length].focus(); }
+  else if (e.key === 'Tab') masAbrir(false, false);
+});
+$('#mi-plantilla').addEventListener('click', async () => {
+  masAbrir(false); masBtn.focus();
+  if (pos.length && !(await confirmar({
+    titulo: 'Reemplazar las posiciones',
+    texto: `Se sustituirán las ${pos.length} posiciones actuales por el reparto de la plantilla ${nombrePlantilla(current.plantilla)}. ${enCuenta() ? 'No se guarda en tu cuenta hasta que pulses «Guardar cartera».' : 'Seguirás teniendo el borrador en este dispositivo.'}`,
+    ok: 'Reemplazar' }))) return;
+  pos = repartoPlantilla(current.plantilla); marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
+  toast('Reparto de la plantilla aplicado');
+});
+$('#mi-eliminar').addEventListener('click', async () => {
+  masAbrir(false); masBtn.focus();
+  if (!(await confirmar({ titulo: 'Eliminar cartera', texto: `Se eliminará «${current.nombre}» de tu cuenta, con todas sus posiciones. No se puede deshacer.`, ok: 'Eliminar cartera', peligro: true }))) return;
+  try { await api('/portfolios/' + current.id, { method: 'DELETE' }); } catch (err) { return toast(err.message); }
+  current = null; pos = []; chartEls.clear(); window.onbeforeunload = null; toast('Cartera eliminada'); loadPublicas(); go('#carteras');
+});
+
+// ---------- TradingView: el consentimiento se pide donde se usa ----------
+const consent = () => store.getItem('klever_consent');
+const dark = () => matchMedia('(prefers-color-scheme: dark)').matches;
+const MARCA = '<div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span>TradingView</span></a></div>';
+const chartEls = new Map();
+function widget(container, src, config) {
+  container.innerHTML = '<div class="ph" style="min-height:' + (config.height || 200) + 'px">Aquí iría el widget de TradingView' + (config.symbol ? ' de ' + config.symbol : ' (screener de precios)') + '. En la demo no se carga.</div>';
+}
+const placeholder = texto => `<div class="ph"><span>${texto} TradingView puede usar cookies propias. ¿Cargarlo?</span>
+  <span class="fila"><button type="button" class="btn btn-secundario" data-consent="si">Cargar</button>${consent() === 'no' ? '' : '<button type="button" class="btn btn-ghost" data-consent="no">Ahora no</button>'}</span></div>`;
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return; io.unobserve(e.target); mountChart(e.target);
+}), { rootMargin: '200px' }) : null;
+function mountChart(c) {
+  widget(c, 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js',
+    { symbol: c.dataset.t, width: '100%', height: 220, locale: 'es', dateRange: '12M', colorTheme: dark() ? 'dark' : 'light', isTransparent: false, autosize: false, largeChartUrl: '' });
+}
+function renderCharts() {
+  const box = $('#graficos');
+  if (consent() !== 'si') { chartEls.clear(); box.innerHTML = pos.length ? placeholder('Los gráficos de precio los carga') : ''; return; }
+  box.querySelectorAll('.ph').forEach(n => n.remove());
+  const want = new Set(pos.map(p => p.ticker));
+  for (const [t, el] of chartEls) if (!want.has(t)) { el.remove(); chartEls.delete(t); }
+  for (const p of pos) {
+    if (chartEls.has(p.ticker)) continue;
+    const c = document.createElement('div'); c.className = 'chart-slot'; c.dataset.t = p.ticker;
+    box.appendChild(c); chartEls.set(p.ticker, c); io ? io.observe(c) : mountChart(c);
+  }
+}
+function loadScreener() {
+  const box = $('#tv-screener');
+  if (consent() !== 'si') { box.className = ''; box.innerHTML = placeholder('El screener de precios lo carga'); return; }
+  widget(box, 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js',
+    { width: '100%', height: 500, defaultColumn: 'overview', defaultScreen: 'most_capitalized', market: 'america', showToolbar: true, locale: 'es', colorTheme: dark() ? 'dark' : 'light' });
+}
+function setConsent(v) { store.setItem('klever_consent', v); loadScreener(); if (current) renderCharts(); }
+document.addEventListener('click', e => { const v = e.target.dataset?.consent; if (v) setConsent(v); });
+$('#cookies-link').addEventListener('click', () => { store.removeItem('klever_consent'); loadScreener(); if (current) renderCharts(); toast('Preferencia restablecida: se te volverá a preguntar'); });
+
+// ---------- explorar empresas ----------
+const CRIT = {
+  deuda_ebitda: ['Deuda sobre EBITDA', 'Cumple si la deuda neta es menor de 2,5 veces el EBITDA', v => nf(v) + NB + 'veces'],
+  roic: ['ROIC', 'Cumple si supera el 10 %', pct],
+  margen_neto: ['Margen neto', 'Cumple si el beneficio neto supera el 10 % de las ventas', pct],
+  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => nf(v / 1e9) + ' miles de millones de USD'],
+  crecimiento: ['Crecimiento de ventas', 'Cumple si las ventas suben respecto al año anterior', pct],
+};
+let empresas = [];
+function renderEmpresas() {
+  const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista');
+  const vistas = q ? empresas.filter(r => norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) : empresas;
+  tb.innerHTML = vistas.length ? vistas.map(r => { const nd = 5 - r.evaluados;
+    return `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span><span class="sector-m">${esc(r.sector)}</span></td><td>${esc(r.sector)}</td>
+      <td class="num"><span class="marca-n">${r.cumplidos} de 5</span>${nd ? `<small>${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}</small>` : ''}</td>
+      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`; }).join('')
+    : `<tr><td colspan="4" class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</td></tr>`;
+  $('#emp-cuenta').textContent = empresas.length ? `${vistas.length} de ${empresas.length} empresas` : '';
+}
+async function loadEmpresas() {
+  $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">Cargando empresas…</td></tr>';
+  try { empresas = await getJson('/ideas'); }
+  catch { $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button></td></tr>'; return; }
+  renderEmpresas();
+}
+$('#emp-buscar').addEventListener('input', renderEmpresas);
+$('#empresas-lista').addEventListener('click', e => { const b = e.target.closest('[data-t]') || e.target.closest('tr')?.querySelector('[data-t]'); if (b) verFicha(b.dataset.t); });
+$('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio'); s.scrollIntoView({ behavior: 'auto' }); s.focus({ preventScroll: true }); }); // salto largo: sin animación
+
+async function verFicha(t) {
+  let a; try { a = await getJson('/assets/' + t); } catch { return toast('No se pudo cargar la ficha'); }
+  const c = a.criterios, periodo = c?.periodo || a.fundamentales[0]?.periodo || '';
+  const filas = Object.entries(CRIT).map(([k, [label, regla, f]]) => {
+    const x = c?.[k], res = x?.ok === true ? ['ok', '✓ Cumple'] : x?.ok === false ? ['no', '✗ No cumple'] : ['nd', '– No disponible'];
+    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span><span class="ck-val">${x?.valor != null ? f(x.valor) : 'Dato no disponible'}</span></div></li>`;
+  }).join('');
+  const ok = c ? Object.keys(CRIT).filter(k => c[k]?.ok === true).length : 0, nd = c ? Object.keys(CRIT).filter(k => c[k]?.ok == null).length : 5;
+  const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
+  $('#fi-titulo').textContent = a.nombre;
+  $('#fi-sub').textContent = `${a.ticker} · ${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
+  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">Supera ${ok} de 5 comprobaciones${nd ? ` · ${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}` : ''}</p>
+    <ul class="checks">${filas}</ul>
+    ${nd ? '<p class="mut peq">Una comprobación no disponible no suma ni resta.</p>' : ''}
+    <h3>Cifras de los últimos años · miles de millones de dólares (USD)</h3>
+    <p class="hint-scroll">Desliza la tabla hacia los lados para ver todas las columnas →</p>
+    <div class="tabla-h" role="region" aria-label="Cifras históricas, desplazable horizontalmente" tabindex="0"><table><caption class="sr">Cifras en miles de millones de dólares (USD); el ROIC va en porcentaje</caption>
+      <thead><tr><th scope="col">Año</th><th scope="col">Ventas</th><th scope="col">Beneficio neto</th><th scope="col">EBITDA</th><th scope="col">Caja libre</th><th scope="col">ROIC (%)</th></tr></thead><tbody>${hist}</tbody></table></div>
+    <p class="mut peq">Fuente: informes anuales (10-K) de la empresa ante la SEC (EDGAR). Importes en miles de millones de dólares estadounidenses (USD).</p>
+    <details class="ficha-det"><summary>Metodología</summary><div><p>EBITDA = resultado operativo + amortizaciones. Caja libre = flujo de caja operativo − inversiones en inmovilizado. El ROIC se aproxima como resultado operativo × (1 − tasa de impuestos) ÷ (deuda a largo plazo + patrimonio − caja). Son cálculos aproximados y pueden contener errores.</p></div></details>
+    <details class="ficha-det"><summary>Glosario</summary><div>
+      <p><b>ROIC:</b> cuánto gana la empresa por cada dólar invertido en su negocio. Es una medida de la empresa; no es la rentabilidad que obtendría un inversor.</p>
+      <p><b>EBITDA:</b> beneficio operativo antes de intereses, impuestos y amortizaciones.</p>
+      <p><b>Caja libre:</b> dinero que queda tras pagar las operaciones y las inversiones necesarias.</p>
+      <p><b>No disponible:</b> el dato falta en los informes. <b>No aplicable:</b> la medida no tiene sentido para ese activo (por ejemplo, el ROIC de un fondo).</p></div></details>`;
+  const d = $('#dlg-ficha'); if (!d.open) d.showModal(); d.scrollTop = 0;
+}
+
+// ---------- carteras públicas ----------
+let publicas = null, publicasError = false;
+const etiquetaOrigen = o => o === 'ejemplo' ? '<span class="chip origen">Ejemplo de Klever</span>' : '<span class="chip origen usr">Publicada por un usuario</span>';
+function tarjetaPublica(p) {
+  return `<button class="tarjeta" type="button" data-pid="${p.id}">${etiquetaOrigen(p.origen)}<b>${esc(p.nombre)}</b>
+    <span class="t-meta">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.n_posiciones} posiciones</span>${p.tesis ? `<span class="t-tesis">${esc(p.tesis)}</span>` : ''}</button>`;
+}
+function renderPublicas() {
+  const msg = publicasError ? '<p class="estado-lista">No se pudieron cargar las carteras. <button class="enlace" data-retry="publicas" type="button">Reintentar</button></p>'
+    : publicas === null ? '<p class="estado-lista">Cargando carteras…</p>'
+    : !publicas.length ? '<p class="estado-lista">Aún no hay carteras públicas.</p>' : null;
+  $('#muestra-publicas').innerHTML = msg ?? publicas.slice(0, 3).map(tarjetaPublica).join('');
+  $('#publicas-lista').innerHTML = msg ?? publicas.map(tarjetaPublica).join('');
+}
+async function loadPublicas() {
+  publicasError = false; renderPublicas();
+  try { publicas = await getJson('/public'); } catch { publicasError = true; }
+  renderPublicas();
+}
+async function verPublica(id) {
+  if (vistaActual() !== 'publicas') { pendientePublica = id; return go('#publicas'); }
+  let p; try { p = await getJson('/public/' + id); } catch { return toast('No se pudo cargar la cartera'); }
+  const r = calcResumen(p.posiciones.map(x => ({ ticker: x.ticker, peso: x.peso })));
+  const d = $('#publica-detalle'); d.hidden = false;
+  d.innerHTML = `<h2>${esc(p.nombre)}</h2><p>${etiquetaOrigen(p.origen)} <span class="mut">Plantilla ${esc(nombrePlantilla(p.plantilla))}</span></p>${p.tesis ? `<p><b>Tesis:</b> ${esc(p.tesis)}</p>` : ''}
+    <div class="tabla-h" role="region" aria-label="Composición" tabindex="0"><table><caption class="sr">Composición de la cartera</caption><thead><tr><th scope="col">Activo</th><th scope="col">Categoría</th><th scope="col">Peso</th></tr></thead><tbody>${p.posiciones.map(x =>
+      `<tr><th scope="row"><b>${esc(x.ticker)}</b> <span class="mut">${esc(x.nombre)}</span></th><td style="text-align:left">${esc(x.sector)}</td><td class="num">${pesoTxt(x.peso)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="mut peq">Distribución por categorías: ${r.sectores.map(([s, v]) => `${esc(s)} ${pesoTxt(v)}`).join(' · ')}. Simulación educativa; no es una recomendación de inversión.</p>`;
+  d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' });
+}
+let pendientePublica = null;
+const vistaActual = () => [...$$('[data-vista]')].find(s => !s.hidden)?.dataset.vista;
+document.addEventListener('click', e => { const b = e.target.closest('[data-pid]'); if (b) verPublica(b.dataset.pid); });
+new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublica) { const id = pendientePublica; pendientePublica = null; verPublica(id); } })
+  .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
+
+// ---------- portada: acción principal y vista previa real ----------
+$('#probar').addEventListener('click', () => { // destino inequívoco: la elección de plantilla, con el foco allí
+  const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
+});
+$$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));
+function renderPreview() {
+  const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
+  const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
+  $('#prev').innerHTML = `<div class="prev"><div class="prev-cab"><b>Cartera de dividendos</b><span class="chip">Vista previa</span></div>
+    <div class="prev-fila prev-th" aria-hidden="true"><span>Activo</span><span class="num">Peso</span><span class="num"><abbr>ROIC</abbr></span></div>
+    ${vis.map(p => `<div class="prev-fila"><span><b>${esc(p.ticker)}</b><small>${esc(by[p.ticker].nombre)}</small></span><span class="num">${pesoTxt(p.peso)}</span><span class="num">${roicTxt(by[p.ticker])}</span></div>`).join('')}
+    ${resto ? `<div class="prev-mas">+${resto} posiciones más. Lista abreviada: los totales incluyen las ${ps.length} posiciones.</div>` : ''}
+    <div class="barra" aria-hidden="true"><i style="width:${Math.min(100, r.total)}%"></i></div>
+    <div class="prev-pie"><div><span>Total asignado</span><b class="num">${pesoTxt(r.total)}</b></div><div><span><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</span><b class="num">${pct(r.roic)}</b></div></div></div>`;
+}
+
+// ---------- reintentos genéricos ----------
+document.addEventListener('click', e => {
+  const r = e.target.dataset?.retry; if (!r) return;
+  ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras })[r]?.();
+});
+
+// ---------- arranque ----------
+(async () => {
+  await redeem();
+  await loadAssets();
+  actualizarCabecera(); renderPreview(); loadScreener(); loadEmpresas(); loadPublicas();
+  if (logged()) {
+    await migrarBorrador();
+    if (avisoOtroDispositivo) toast('Has entrado en tu cuenta, pero el borrador que pediste guardar no estaba en este dispositivo y no se ha guardado. Sigue en el dispositivo donde lo creaste.', 10000);
+  }
+  route(true);
+})();
+
+</script>
+
+</body>
+</html>

@@ -1,5 +1,8 @@
 # Tareas pendientes (lo que solo puedes hacer tú)
 
+## 0. Publicar la demo pública (la más rápida: solo cuenta de Cloudflare)
+- [ ] `wrangler login` y `wrangler pages deploy demo --project-name klever-demo` (ver `demo/LEEME.md`). Da una dirección pública con datos inventados que cualquiera, incluido ChatGPT, puede abrir.
+
 ## 1. Crear la cuenta de Brevo (envío del enlace de acceso)  ← siguiente
 - [ ] Crear cuenta gratuita en brevo.com
 - [ ] Verificar un correo remitente (Senders → añadir tu correo → pulsar el enlace de confirmación)
