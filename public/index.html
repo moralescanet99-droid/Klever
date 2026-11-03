@@ -3,24 +3,44 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Klever · Portafolios (beta)</title>
-<meta name="description" content="Organiza varios portafolios y descubre ideas de empresas con fundamentales sólidos. Beta gratuita, contenido educativo.">
+<title>Klever · Carteras simuladas y empresas con cuentas sólidas</title>
+<meta name="description" content="Monta carteras simuladas de oro, dividendos o crecimiento y descubre empresas de EE. UU. con cuentas sólidas, con datos oficiales de la SEC. Beta gratuita, sin dinero real.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="top">
   <strong>Klever</strong><span class="tag">beta gratuita</span>
-  <nav><a href="#portafolios">Portafolios</a> <a href="#ideas">Ideas</a> <a href="#publicos">Públicos</a> <a href="legal.html">Legal</a></nav>
+  <nav aria-label="Principal">
+    <a href="#probar">Probar</a> <a href="#ideas">Ideas</a> <a href="#publicos">Públicos</a>
+    <button id="entrar" class="sec peq" type="button">Entrar</button>
+  </nav>
 </header>
 
 <main>
+  <section id="hero" class="card hero">
+    <h1>Monta una cartera simulada y descubre empresas con cuentas sólidas</h1>
+    <p class="lead">Compara oro, dividendos y crecimiento con las cifras oficiales de la SEC ya calculadas. Sin dinero real, sin hoja de cálculo y sin abrir cuenta en ningún bróker.</p>
+    <ul class="ventajas">
+      <li><b>Cifras listas.</b> Deuda, rentabilidad sobre el capital (ROIC), márgenes y caja de unas 105 empresas de EE. UU., sacadas de sus informes públicos.</li>
+      <li><b>Tu cartera de un vistazo.</b> Reparto por sector y rentabilidad media sobre el capital, al instante.</li>
+      <li><b>Sin riesgo.</b> Es una simulación: no se compra, no se vende y no se recomienda nada.</li>
+    </ul>
+    <h2 id="probar" class="peq-h">Empieza ahora, sin registrarte</h2>
+    <div class="row plantillas">
+      <button type="button" data-plantilla="oro">Cartera de oro</button>
+      <button type="button" data-plantilla="dividendos">Cartera de dividendos</button>
+      <button type="button" data-plantilla="riesgo">Cartera de crecimiento</button>
+    </div>
+    <p class="mut">Cada plantilla carga un reparto de ejemplo que puedes cambiar. Solo te pedimos el email cuando quieras guardarla.</p>
+  </section>
+
   <section id="registro" class="card" hidden>
-    <h1>Organiza tus portafolios</h1>
-    <p>Crea carteras simuladas de riesgo, oro o dividendos y mira su composición, sectores y calidad media. Sin dinero real.</p>
+    <h2>Entra con tu email</h2>
     <form id="form-registro">
-      <p class="mut">Sin contraseña: te enviamos un enlace de acceso al email. Sirve igual para registrarte o volver a entrar.</p>
-      <label>Tu email <input type="email" name="email" required autocomplete="email"></label>
-      <label class="chk"><input type="checkbox" name="acepto" required> He leído el <a href="legal.html" target="_blank" rel="noopener">aviso legal y la privacidad</a></label>
+      <p class="mut">Sin contraseña: te enviamos un enlace de acceso. Sirve igual para registrarte o para volver a entrar. Si estabas editando una cartera, se guarda al entrar.</p>
+      <label for="reg-email">Tu email</label>
+      <input id="reg-email" type="email" name="email" required autocomplete="email">
+      <label class="chk" for="reg-acepto"><input id="reg-acepto" type="checkbox" name="acepto" required> He leído el <a href="legal.html" target="_blank" rel="noopener">aviso legal y la privacidad</a></label>
       <button>Enviarme el enlace</button>
       <p class="err" id="err-registro" role="alert"></p>
       <p id="ok-registro" aria-live="polite"></p>
@@ -29,11 +49,13 @@
 
   <section id="app" hidden>
     <div class="card" id="portafolios">
-      <div class="row between"><h2>Mis portafolios</h2><button id="salir" class="sec">Salir</button></div>
+      <div class="row between"><h2>Mis portafolios</h2><button id="salir" class="sec" type="button">Salir</button></div>
       <form id="form-nuevo" class="row">
-        <input name="nombre" placeholder="Nombre del portafolio" maxlength="80" required>
-        <select name="plantilla">
-          <option value="riesgo">Riesgo (crecimiento)</option>
+        <label class="sr" for="nuevo-nombre">Nombre del portafolio</label>
+        <input id="nuevo-nombre" name="nombre" placeholder="Nombre del portafolio" maxlength="80" required>
+        <label class="sr" for="nuevo-plantilla">Plantilla</label>
+        <select id="nuevo-plantilla" name="plantilla">
+          <option value="riesgo">Crecimiento</option>
           <option value="oro">Oro</option>
           <option value="dividendos">Dividendos</option>
         </select>
@@ -41,47 +63,69 @@
       </form>
       <ul id="lista" class="lista"></ul>
     </div>
+  </section>
 
-    <div class="card" id="editor" hidden>
-      <div class="row between"><h2 id="ed-titulo"></h2><button id="ed-borrar" class="sec">Eliminar</button></div>
-      <div class="row">
-        <select id="ed-ticker"></select>
-        <input id="ed-peso" type="number" min="0.1" max="100" step="0.1" placeholder="Peso %">
-        <button id="ed-add">Añadir</button>
-        <button id="ed-sugerir" class="sec">Rellenar con plantilla</button>
-      </div>
-      <p class="err" id="err-editor" role="status" aria-live="polite"></p>
-      <table id="ed-tabla">
-        <thead><tr><th>Activo</th><th>Sector</th><th>Peso</th><th>ROIC aprox.</th><th></th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <div class="resumen">
-        <div><span>Total asignado</span><b id="r-total">0%</b></div>
-        <div><span>Calidad media (ROIC)</span><b id="r-roic">—</b></div>
-      </div>
-      <h3>Publicación</h3>
-      <label>Tesis (por qué este portafolio, máx. 600 caracteres)
-        <textarea id="ed-tesis" maxlength="600" rows="3"></textarea></label>
-      <label class="chk"><input type="checkbox" id="ed-publico"> Hacer público (solo composición y tesis, nunca rentabilidad ni tu email)</label>
-      <h3>Peso por sector</h3>
-      <div id="r-sectores"></div>
-      <button id="ed-guardar">Guardar portafolio</button>
-      <h3>Gráficos</h3>
-      <div id="graficos" class="grid"></div>
+  <section class="card" id="editor" hidden aria-labelledby="ed-titulo">
+    <div class="row between"><h2 id="ed-titulo"></h2><button id="ed-borrar" class="sec solo-cuenta" type="button">Eliminar</button></div>
+    <p class="mut solo-invitado">Estás probando sin cuenta: nada se guarda en nuestros servidores hasta que entres con tu email.</p>
+    <div class="row">
+      <label class="sr" for="ed-ticker">Activo</label>
+      <select id="ed-ticker"></select>
+      <label class="sr" for="ed-peso">Peso en la cartera, en porcentaje</label>
+      <input id="ed-peso" type="number" inputmode="decimal" min="0.1" max="100" step="0.1" placeholder="Peso (%)">
+      <button id="ed-add" type="button">Añadir</button>
     </div>
+    <div class="row sugerir">
+      <button id="ed-sugerir" class="sec" type="button">Reemplazar por el reparto de la plantilla</button>
+      <span class="mut" id="ed-sugerir-ayuda"></span>
+    </div>
+    <p class="err" id="err-editor" role="status" aria-live="polite"></p>
+    <table id="ed-tabla">
+      <caption class="sr">Posiciones de la cartera</caption>
+      <thead><tr><th scope="col">Activo</th><th scope="col">Sector</th><th scope="col">Peso</th><th scope="col"><abbr title="Rentabilidad sobre el capital invertido (aproximada)">ROIC</abbr></th><th scope="col"><span class="sr">Quitar</span></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="resumen">
+      <div><span>Total repartido</span><b id="r-total">0 %</b></div>
+      <div><span>Rentabilidad media sobre el capital (<abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr>)</span><b id="r-roic">—</b></div>
+    </div>
+    <h3>Reparto por sector</h3>
+    <div id="r-sectores"></div>
+
+    <div class="bloque">
+      <h3>Guardar</h3>
+      <p class="mut solo-cuenta">Se guarda en tu cuenta y solo lo ves tú.</p>
+      <div class="row solo-cuenta"><button id="ed-guardar" type="button">Guardar cambios</button><span id="estado" class="mut" aria-live="polite"></span></div>
+      <div class="solo-invitado"><button id="ed-guardar-invitado" type="button">Guardar con mi email</button></div>
+    </div>
+
+    <div class="bloque solo-cuenta">
+      <h3>Publicación <span id="pub-estado" class="chip">Privado</span></h3>
+      <p class="mut">Publicar muestra en la web la composición de esta cartera y tu tesis. No se muestra tu email ni ninguna rentabilidad. Puedes dejar de publicarla cuando quieras. Al publicar también se guardan los cambios.</p>
+      <label for="ed-tesis">Tesis: por qué esta cartera (obligatoria para publicar, máx. 600 caracteres)</label>
+      <textarea id="ed-tesis" maxlength="600" rows="3"></textarea>
+      <div class="row"><button id="ed-publicar" type="button">Publicar</button><button id="ed-tesis-guardar" class="sec" type="button" hidden>Actualizar tesis</button></div>
+    </div>
+
+    <h3>Gráficos de precio</h3>
+    <div id="graficos" class="grid"></div>
   </section>
 
   <section id="publicos" class="card">
-    <h2>Portafolios públicos simulados</h2>
-    <p class="mut">Muestran composición y tesis, no rentabilidad. Contenido educativo.</p>
+    <h2>Carteras públicas de ejemplo</h2>
+    <p class="mut">Muestran qué contiene cada cartera y por qué, no su rentabilidad. Contenido educativo.</p>
     <ul id="lista-publicos" class="lista"></ul>
     <div id="detalle-publico" hidden></div>
   </section>
 
   <section id="ideas" class="card">
-    <h2>Ideas: empresas con fundamentales sólidos</h2>
-    <p class="mut">Ranking propio solo con datos de la SEC (último ejercicio anual). No usa precios ni es una recomendación.</p>
-    <table id="ideas-tabla"><thead><tr><th>Empresa</th><th>Sector</th><th>Criterios</th><th></th></tr></thead><tbody></tbody></table>
+    <h2>Ideas: empresas con cuentas sólidas</h2>
+    <p class="mut">Ranking propio con cinco comprobaciones sobre el último año completo, a partir de los informes de la SEC. No usa precios y no es una recomendación.</p>
+    <label class="sr" for="ideas-buscar">Buscar empresa o sector</label>
+    <input id="ideas-buscar" type="search" placeholder="Buscar empresa o sector" autocomplete="off">
+    <table id="ideas-tabla"><caption class="sr">Empresas ordenadas por comprobaciones superadas</caption>
+      <thead><tr><th scope="col">Empresa</th><th scope="col">Sector</th><th scope="col">Supera</th><th scope="col"><span class="sr">Acción</span></th></tr></thead><tbody></tbody></table>
+    <div class="row between"><span id="ideas-cuenta" class="mut" aria-live="polite"></span><button id="ideas-mas" class="sec" type="button" hidden></button></div>
     <div id="ficha" hidden></div>
     <h3>Filtros de precio (PER, rentabilidad…)</h3>
     <p class="mut">Bloque aparte de TradingView; no forma parte de nuestro ranking.</p>
@@ -89,14 +133,10 @@
   </section>
 </main>
 
-<footer id="legal"><p><a href="legal.html">Aviso legal, privacidad y fuentes</a></p>
-  <p><b>Aviso legal.</b> Contenido educativo; no constituye asesoramiento financiero ni recomendación personalizada. Los portafolios son simulados. Los fundamentales proceden de los registros públicos de la SEC (EDGAR) y se calculan de forma aproximada; pueden contener errores. Los precios y gráficos los muestra TradingView mediante sus widgets y no se almacenan aquí.</p>
+<footer id="legal"><p><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+  <p><b>Aviso legal.</b> Contenido educativo; no constituye asesoramiento financiero ni recomendación personalizada. Las carteras son simuladas. Los fundamentales proceden de los registros públicos de la SEC (EDGAR) y se calculan de forma aproximada; pueden contener errores. Los precios y gráficos los muestra TradingView mediante sus widgets y no se almacenan aquí.</p>
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
-<div id="consent" class="consent" role="region" aria-label="Cookies" hidden>
-  <p>Los gráficos y el screener los carga TradingView, que puede usar cookies propias. ¿Quieres cargarlos? Puedes cambiarlo cuando quieras.</p>
-  <div class="row"><button id="consent-si">Aceptar y cargar</button><button id="consent-no" class="sec">Rechazar</button></div>
-</div>
 <script src="app.js" type="module"></script>
 </body>
 </html>
