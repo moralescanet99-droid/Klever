@@ -12,7 +12,7 @@ Todo lo necesario está en este repositorio: código, dependencias fijadas (`pac
 ```bash
 git clone https://github.com/moralescanet99-droid/Klever.git
 cd Klever
-git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primeras líneas de ronda11/resultado-ejecucion.txt y en ronda11/LEEME.md (los commits posteriores solo añaden resultados e informes)
+git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primeras líneas de ronda12/resultado-ejecucion.txt y en ronda11/LEEME.md (los commits posteriores solo añaden resultados e informes)
 npm ci                                   # instala wrangler 3.114.17 y playwright 1.63.0 EXACTOS (package-lock.json)
 npx playwright install chromium          # navegador para las pruebas (una sola vez)
 ```
@@ -34,7 +34,7 @@ bash tests/run-all.sh                   # ~15 min; arranca un servidor limpio en
                                         # CÓDIGO DE SALIDA 0 solo si TODO pasa; ≠ 0 si falla el arranque, hay timeout, falta el resultado o hay fallos
 bash tests/ronda8/test-ejecutor.sh      # prueba del propio ejecutor (fallos, timeouts y puertos ocupados deliberados), ~4 min
 ```
-Escribe el resultado literal y la versión del código en `ronda11/resultado-ejecucion.txt` y los datos observados en `ronda11/evidencias-*.json`. Variables: `RONDA` (ronda11), `LIMITE_BATERIA` (900 s), `PORT` (8788).
+Escribe el resultado literal y la versión del código en `ronda12/resultado-ejecucion.txt` y los datos observados en `ronda12/evidencias-*.json`. Variables: `RONDA` (ronda12), `LIMITE_BATERIA` (900 s), `PORT` (8788).
 
 | Prueba | Qué comprueba | Contra qué |
 |---|---|---|
@@ -46,6 +46,7 @@ Escribe el resultado literal y la versión del código en `ronda11/resultado-eje
 | `tests/ronda10/testH.cjs` (16) | Pulido visual: avisos en zona reservada (sin solapes, legibles, errores persistentes), resumen de ROIC plegable, estado en móvil y acciones alcanzables en 320/390/1440 (texto ampliado y teclado **simulados**) | Servidor real local + Chromium |
 | `tests/ronda10/unit-acceso.mjs`, `tests/ronda10/seguridad-http.mjs` | Acceso: envío solo por correo (simulado), un solo uso, caducidad, límites, hash de tokens, sin enlace en pantalla ni claves en lo público; HTTP contra un servidor arrancado **sin** `DEV_RETURN_LINK` | Manejadores reales sobre SQLite; servidor local con `SIN_ENLACE_DEV=1` |
 | `tests/ronda11/testI.cjs` (16) | Identidad visual del editor: composición dibujada con los pesos reales, una sola acción principal, composición > ROIC, filas con barra de peso y táctiles, sin desbordamiento, contraste de todos los tokens en claro y oscuro | Servidor local + Chromium |
+| `tests/ronda12/testJ.cjs` (53) | «Mis carteras» (composición real, pendiente local, vacío), Explorar (píldoras vs servidor, búsqueda conservada, sin resultados, error), ficha (datos principales, datos ausentes), detalles del editor y colores estables; 320/390/1440 y texto ampliado simulado | Servidor local + Chromium |
 | `tests/ronda11/test-zip.sh` (8) | Verificación de entregas ZIP: manipulación detectada, `.dev.vars` y falta de manifiesto rechazados, y que ni un ZIP ni un repositorio nuevo declaren verificado el historial | Sin dependencias (git, zip, unzip, Node ≥ 22.13) |
 | `tests/ronda10/validar-acceso-real.mjs` | **Asistida, no entra en `run-all.sh`**: correo realmente enviado, persistencia, dos sesiones, caducidad (`CADUCIDAD=1`) | Despliegue de PRUEBA con correo real (**bloqueado: faltan credenciales**, `ronda10/BLOQUEOS.md`); en local solo con `MODO_DEV=1` (no valida correo real) |
 | `tests/ronda10/capturas.cjs`, `tests/ronda10/medir.cjs` | Capturas y mediciones comparables antes/después (`antes`/`despues`) | Servidor local + Chromium |

@@ -92,3 +92,5 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 
 ## Revisión 7 · paquete TÉCNICO de la ronda 9 — **PENDIENTE** (preparado en `revision-chatgpt/ronda-9-tecnica/`; falta que el usuario se lo entregue y traiga su feedback)
 
+
+## Revisión 10 · paquete de la ronda 12 — **PENDIENTE** (falta preparar el paquete y que el usuario traiga el feedback)

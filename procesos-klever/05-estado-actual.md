@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 11 (informe `ronda11/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 12 (informe `ronda12/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**284 comprobaciones** automáticas en la ejecución limpia de la ronda 11). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**337 comprobaciones** automáticas en la ejecución de la ronda 12). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 11 (avisos sin solapes y **editor con identidad propia** como pantalla de referencia; entregas ZIP verificables), la 10 (pulido visual y acceso) , la 9 (API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda11/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 12 (editor, «Mis carteras», «Explorar empresas» y ficha con un mismo lenguaje visual; faltan portada, públicas, acceso, pie y gráficos), la 11 (avisos sin solapes y **editor con identidad propia** como pantalla de referencia; entregas ZIP verificables), la 10 (pulido visual y acceso) , la 9 (API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda11/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -27,6 +27,7 @@ tests/ronda7/      testF (guardado fiable, conflicto, E16a, diálogo móvil), un
 tests/ronda8/      unit-carreras (R1–R6), unit-migracion, testG (respuestas tardías), test-ejecutor.sh (18 casos), fixtures, informe8
 tests/ronda9/      verificar-api.mjs (API por HTTP, repetible en remoto), informe9
 tests/ronda10/     testH (avisos, ROIC, móvil; reescrita en la ronda 11), unit-acceso (A8 en modo repositorio/ZIP), seguridad-http, capturas/medir, validar-acceso-real (asistido), informe10
+tests/ronda12/     testJ (Mis carteras, Explorar, ficha, detalles del editor), capturas antes/después
 tests/ronda11/     testI (identidad visual del editor), test-zip.sh, capturas (antes/después del editor), informe11
 scripts/entrega/   crear-zip.sh, verificar-zip.sh (huellas + ENTREGA.json; el historial solo con repositorio) · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
 tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda10/resultado-ejecucion.txt con el commit

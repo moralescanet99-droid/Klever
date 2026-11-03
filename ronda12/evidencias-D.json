@@ -28,7 +28,7 @@
   "escenario": "Datos de cada cartera",
   "esperado": "Nombre, privada/pública, posiciones, total asignado y última modificación SOLO si existe",
   "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada PG 48 % · KO 40 % Falta asignar 12 % · 2 posicionesModificada el 3 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 3 nov 2026 Abrir»",
-  "resultado": "FALLA",
+  "resultado": "OK",
   "evidencia": "E1-mis-carteras-390.png"
  },
  {

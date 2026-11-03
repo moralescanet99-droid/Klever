@@ -54,3 +54,5 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 
 ## Después de la ronda 4 (antes de la ronda 5)
 - Se pidió crear esta memoria del proyecto (`procesos-klever/` y `CLAUDE.md`). Ver `09-registro-de-cambios.md`.
+
+- 2026-11-03 · Ronda 12 (C9): coherencia visual y exploración completa; ver `ronda12/LEEME.md`.
