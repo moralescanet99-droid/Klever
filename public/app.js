@@ -282,21 +282,36 @@ let nMis = null;
 function formNuevo(abrir, enfocar = true) {
   $('#form-nueva').hidden = !abrir; $('#btn-nueva').setAttribute('aria-expanded', String(abrir));
   $('#nueva-titulo').textContent = nMis === 0 ? 'Crea tu primera cartera' : 'Nueva cartera';
-  $('#nueva-cancelar').hidden = nMis === 0; // sin carteras, crear es la acción principal: no hay nada que cancelar
+  $('#nueva-ayuda').hidden = nMis !== 0; $('#nueva-cancelar').hidden = nMis === 0; // sin carteras, crear es la acción principal: no hay nada que cancelar
   if (abrir && enfocar) $('#nueva-nombre').focus();
+}
+function composicionMini(ps) { // composición REAL de la cartera guardada: tramos proporcionales a su peso; sin datos inventados
+  const lista = (ps || []).filter(x => x.peso > 0), total = r1(lista.reduce((s, x) => s + x.peso, 0)), escala = Math.max(100, total);
+  if (!lista.length) return '<span class="ci-comp vacia" aria-hidden="true"></span>';
+  const col = new Map(); lista.forEach((x, k) => col.set(x.ticker, k % 8)); // mismo orden que el editor al abrirla: mismos colores
+  return `<span class="ci-comp${total > 100 ? ' exceso' : ''}" aria-hidden="true">${lista.map(x => `<i style="--c:var(--c${col.get(x.ticker)});width:${(x.peso / escala * 100).toFixed(2)}%"></i>`).join('')}${total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%"></i>` : ''}</span>`;
+}
+function resumenComp(ps) { // «AAPL 30 % · MSFT 25 % · +3 más»: todo sale de los pesos guardados
+  const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return '';
+  const vis = lista.slice(0, 3).map(x => `<b>${esc(x.ticker)}</b> ${pesoCorto(x.peso)}`).join(' · ');
+  return vis + (lista.length > 3 ? ` · +${lista.length - 3} más` : '');
 }
 function itemCartera(p) {
   const n = p.n_posiciones, total = r1(p.total), loc = leerCopia(p.id), hayLocal = !!store.getItem('klever_edit_' + p.id);
   const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
   const chipLocal = hayLocal ? '<span class="chip aviso">Cambios locales pendientes de guardar en tu cuenta</span>' : '';
+  const estadoAsig = !n ? 'Sin posiciones' : total === 100 ? '✓ Asignada al 100 %' : total > 100 ? `⚠ Exceso: ${pesoCorto(r1(total - 100))}` : `Falta asignar ${pesoCorto(r1(100 - total))}`;
+  const claseAsig = !n ? '' : total === 100 ? 'ok' : total > 100 ? 'error' : 'aviso';
   // con cambios locales, cada cifra dice a qué versión pertenece: nunca se mezclan las de una con el estado de la otra
-  const l2 = hayLocal ? `<span class="ci-l2"><span class="ci-v">Versión de tu cuenta:</span> ${txtAsig(n, total)}</span>` : `<span class="ci-l2">${txtAsig(n, total)}</span>`;
+  const l2 = hayLocal ? `<span class="ci-l2"><span class="ci-v">Versión de tu cuenta:</span> ${txtAsig(n, total)}</span>` : `<span class="ci-l2 ${claseAsig}">${estadoAsig}${n ? ` · ${n} ${n === 1 ? 'posición' : 'posiciones'}` : ''}</span>`;
   const lLoc = hayLocal && Array.isArray(loc?.pos)
     ? `<span class="ci-l2 ci-loc"><span class="ci-v">Versión de este dispositivo:</span> ${txtAsig(loc.pos.length, totalPos(loc.pos))}${loc.t ? ` · editada el ${fmtFechaHora(loc.t)}` : ''}</span>` : '';
-  return `<li><button class="tarjeta cartera-item" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
+  const comp = resumenComp(p.posiciones);
+  return `<li><button class="tarjeta cartera-item${hayLocal ? ' pendiente' : ''}" type="button" data-id="${p.id}" aria-label="${hayLocal ? 'Continuar editando' : 'Abrir'} ${esc(p.nombre)}">
     <span class="ci-l1"><b>${esc(p.nombre)}</b><span class="chip${p.publico ? ' pub' : ''}">${p.publico ? 'Pública' : 'Privada'}</span>${chipLocal}</span>
+    ${composicionMini(p.posiciones)}${comp ? `<span class="ci-top">${comp}</span>` : ''}
     ${l2}${lLoc}${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
-    <span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`;
+    <span class="pl-acc"><span class="pl-acc-txt">${hayLocal ? 'Continuar editando' : 'Abrir'}</span></span></button></li>`;
 }
 async function cargarMisCarteras() {
   pintarAviso();
@@ -322,7 +337,7 @@ async function cargarCartera(id) {
   let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
   current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
-  chartEls.clear(); $('#graficos').innerHTML = '';
+  chartEls.clear(); $('#graficos').innerHTML = ''; colores.clear();
   await recuperarCambiosLocales(); return true;
 }
 // ---------- conflicto entre la versión de este dispositivo y la de la cuenta ----------
@@ -443,19 +458,27 @@ function renderWorkspace() {
   if (recuperado) { recuperado = false; toast('Hemos recuperado tus cambios locales'); }
 }
 
+const colores = new Map(); // ticker → índice de color (0-7). Estable mientras la posición exista: quitar o añadir otra no recolorea las demás
+function asignarColores() {
+  const vivos = new Set(pos.map(p => p.ticker));
+  for (const t of [...colores.keys()]) if (!vivos.has(t)) colores.delete(t);
+  const usados = new Set(colores.values());
+  for (const p of pos) { if (colores.has(p.ticker)) continue; let k = 0; while (usados.has(k) && k < 8) k++; if (k >= 8) k = colores.size % 8; colores.set(p.ticker, k); usados.add(k); }
+}
+const colorDe = t => colores.get(t) ?? 0;
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
-  return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${i % 8})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
-    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><span class="pbar" aria-hidden="true"><i style="--c:var(--c${i % 8});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
+  return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
+    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
     <td class="num">${roicTxt(a)}</td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
 function tarjetaPos(p, i) {
   const a = by[p.ticker] || {}, id = 'det-' + i;
-  return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${i % 8})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
+  return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
     <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
-    <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${i % 8});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
+    <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
     <div class="pc-det" id="${id}" hidden><dl>
       <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
       <div><dt>Categoría:</dt><dd>${esc(a.sector || '—')}</dd></div>
@@ -463,15 +486,17 @@ function tarjetaPos(p, i) {
       <button class="btn btn-secundario peligro" type="button" data-quitar="${i}">Quitar</button></div></li>`;
 }
 function renderPosiciones() {
+  asignarColores();
   $('#pos-tabla tbody').innerHTML = pos.map(filaTabla).join('');
   $('#pos-cards').innerHTML = pos.map(tarjetaPos).join('');
   $('.tabla-scroll').hidden = !pos.length; $('#pos-cards').hidden = !pos.length; $('#pos-vacio').hidden = pos.length > 0;
 }
 function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada tramo es su peso; no se inventa nada
+  asignarColores();
   const total = r.total, escala = Math.max(100, total), cab = $('#comp'), barra = $('#comp-barra');
   $('#comp-total').textContent = pesoCorto(total); $('#comp-n').textContent = r.n ? `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}` : '';
   const seg = pos.map((p, i) => ({ t: p.ticker, w: Math.max(0, p.peso || 0), i })).filter(x => x.w > 0);
-  barra.innerHTML = seg.map(x => `<i style="--c:var(--c${x.i % 8});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
+  barra.innerHTML = seg.map(x => `<i style="--c:var(--c${colorDe(x.t)});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
   barra.classList.toggle('exceso', total > 100); barra.classList.toggle('vacia', !seg.length);
   barra.setAttribute('aria-label', 'Composición de la cartera: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)}`).join(', ') : 'sin posiciones') + (total < 100 && seg.length ? `; sin asignar ${pesoCorto(r1(100 - total))}` : '') + (total > 100 ? `; exceso de ${pesoCorto(r1(total - 100))}` : ''));
   $('#comp-pie').textContent = !r.n ? 'Añade posiciones para ver el reparto.' : total > 100 ? `⚠ Exceso de asignación: ${pesoCorto(r1(total - 100))}` : total < 100 ? `Pendiente de asignar: ${pesoCorto(r1(100 - total))}` : '';
@@ -509,6 +534,20 @@ function textoPersistencia(id, dirty) { // [largo, breve, clase]
   if (dirty) return ['Cambios locales pendientes de guardar en tu cuenta' + (copiaLocal ? '' : '. Si cierras la pestaña se perderán'), 'Cambios locales pendientes', 'aviso'];
   return ['Guardada en tu cuenta', '✓ Guardada', 'ok'];
 }
+function mensajeCorto(v) { // la frase principal del bloqueo, sin explicaciones
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}`;
+  if (v.exceso) return `Sobra un ${pesoCorto(v.exceso)} de asignación`;
+  if (current?.publico && !v.completa) return `Falta asignar un ${pesoCorto(v.falta)} para actualizar la publicación`;
+  return '';
+}
+function pintarMotivo(v, razon) { // jerarquía: título · estado · acción; el motivo largo queda en un desplegable que no se cierra al teclear
+  const m = $('#motivo'), principal = saveErr ? saveErr : (razon ? mensajeCorto(v) || razon : '');
+  m.hidden = !principal; m.classList.toggle('error', !!saveErr);
+  $('#mv-main').textContent = principal;
+  $('#mv-sub').hidden = !(razon && !saveErr && current?.publico);
+  const hayDetalle = !!razon && !saveErr && razon !== principal;
+  $('#mv-det').hidden = !hayDetalle; $('#mv-txt').textContent = hayDetalle ? razon : '';
+}
 function pintarEstado() {
   if (!current) return;
   const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
@@ -517,7 +556,7 @@ function pintarEstado() {
   const brevePeso = v.invalidos.length ? 'Revisa los pesos' : v.exceso ? `Exceso: ${pesoCorto(v.exceso)}` : 'Pública: debe sumar 100 %';
   const be = $('#b-estado'), bloqueo = razon && !saveErr;                                             // barra: el motivo del bloqueo, si lo hay
   be.textContent = bloqueo ? '⚠ ' + brevePeso : breve; be.className = 'bg-estado estado-btn ' + (bloqueo ? 'aviso' : cls);
-  const m = $('#motivo'); m.textContent = saveErr ? saveErr : (razon || ''); m.className = 'motivo solo-escritorio-ws' + (saveErr ? ' error' : ''); // motivo al lado de Guardar
+  pintarMotivo(v, razon);                                                                            // motivo al lado de Guardar: mensaje corto + detalle plegado
   $('#estado-live').textContent = largo + (razon ? '. ' + razon : '');
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
@@ -817,27 +856,36 @@ $('#cookies-link').addEventListener('click', () => { store.removeItem('klever_co
 // ---------- explorar empresas ----------
 // Cada comprobación: [nombre, regla, formato → [cifra, unidad]]. La unidad larga va aparte para no competir con la regla.
 const CRIT = {
-  deuda_ebitda: ['Deuda sobre EBITDA', 'Se supera si la deuda neta es menor de 2,5 veces el EBITDA', v => [nf(v), 'veces']],
+  deuda_ebitda: ['Deuda sobre EBITDA', 'Se supera si la deuda neta es menor de 2,5 veces el EBITDA', v => [nf(v, Math.abs(v) < 0.1 && v !== 0 ? 2 : 1), 'veces']],
   roic: ['ROIC', 'Se supera si es mayor del 10 %', v => [pct(v), '']],
   margen_neto: ['Margen neto', 'Se supera si el beneficio neto supera el 10 % de las ventas', v => [pct(v), '']],
   flujo_caja: ['Caja libre', 'Se supera si el flujo de caja libre es positivo', v => [nf(v / 1e9), 'miles de millones de USD']],
   crecimiento: ['Crecimiento de ventas', 'Se supera si las ventas suben respecto al año anterior', v => [pct(v), '']],
 };
 let empresas = [];
+const ABR = { deuda_ebitda: 'Deuda', roic: 'ROIC', margen_neto: 'Margen', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' };
+const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nombre)}">${Object.keys(ABR).map(k => { const x = r.criterios?.[k]; // el estado va escrito, no solo en color
+  const e = x?.ok === true ? ['ok', '✓', 'superada'] : x?.ok === false ? ['no', '✗', 'no superada'] : ['nd', '–', 'sin datos'];
+  return `<li class="pil-${e[0]}"><span aria-hidden="true">${e[1]}</span> ${ABR[k]}<span class="sr">: ${e[2]}</span></li>`; }).join('')}</ul>`;
+const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, cambiar de pantalla y recargar (solo en esta pestaña)
+const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
+const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
 function renderEmpresas() {
-  const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista'), ul = $('#empresas-cards');
+  const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards');
   const vistas = q ? empresas.filter(r => norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) : empresas;
   const resultado = r => { const nd = r.sin_datos ?? 5 - r.evaluados; // sin datos NO es una comprobación fallida ni una evaluación completa: se muestra como parcial
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
+  const vacio = empresas.length ? `Ninguna empresa coincide con «${esc(bruto)}». <button class="enlace" type="button" data-borrar-busqueda>Borrar búsqueda</button>` : 'Aún no hay datos. Se cargan desde la SEC cada noche.';
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span></td><td>${esc(r.sector)}</td>
-      <td class="num">${resultado(r)}</td>
+      <td class="num">${resultado(r)}${pildoras(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`).join('')
-    : `<tr><td colspan="4" class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</td></tr>`;
+    : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
       <div class="ec-l1"><span class="nombre-emp">${esc(r.nombre)}</span><span class="ec-res">${resultado(r)}</span></div>
-      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div></li>`).join('')
-    : `<li class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</li>`;
-  $('#emp-cuenta').textContent = empresas.length ? `${vistas.length} de ${empresas.length} empresas` : '';
+      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
+    : `<li class="estado-lista">${vacio}</li>`;
+  $('#emp-cuenta').textContent = empresas.length ? (q ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
+  $('#emp-borrar').hidden = !bruto;
 }
 async function loadEmpresas() {
   $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">Cargando empresas…</td></tr>';
@@ -846,7 +894,12 @@ async function loadEmpresas() {
   catch { const m = 'No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button>'; $('#empresas-lista').innerHTML = `<tr><td colspan="4" class="estado-lista">${m}</td></tr>`; $('#empresas-cards').innerHTML = `<li class="estado-lista">${m}</li>`; return; }
   renderEmpresas();
 }
-$('#emp-buscar').addEventListener('input', renderEmpresas);
+$('#emp-buscar').addEventListener('input', () => { busqGuardar($('#emp-buscar').value.trim()); renderEmpresas(); });
+const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); renderEmpresas(); $('#emp-buscar').focus(); };
+$('#emp-borrar').addEventListener('click', borrarBusqueda);
+$('#empresas-lista').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
+$('#empresas-cards').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
+$('#emp-buscar').value = busqLeer();
 for (const lista of [$('#empresas-lista'), $('#empresas-cards')]) lista.addEventListener('click', e => { const b = e.target.closest('[data-t]') || e.target.closest('tr,li')?.querySelector('[data-t]'); if (b) verFicha(b.dataset.t); });
 $('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio'); s.scrollIntoView({ behavior: 'auto' }); s.focus({ preventScroll: true }); }); // salto largo: sin animación
 
@@ -862,7 +915,10 @@ async function verFicha(t) {
   const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
   $('#fi-titulo').textContent = a.nombre;
   $('#fi-sub').textContent = `${a.ticker} · ${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
-  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
+  const f0 = a.fundamentales[0], U = 'miles de millones de USD';
+  const dato = (l, v, u) => v == null ? `<div class="ausente"><dt>${l}</dt><dd><span class="v">No disponible</span><span class="u">dato ausente en el informe</span></dd></div>` : `<div><dt>${l}</dt><dd><span class="v num">${v}</span><span class="u">${u}</span></dd></div>`;
+  const principal = f0 ? `<section class="ficha-datos" aria-labelledby="fd-t"><h3 id="fd-t">Datos principales · ejercicio ${esc(f0.periodo)}</h3><dl class="fd-grid">${dato('Ventas', f0.ingresos == null ? null : miles(f0.ingresos), U)}${dato('Beneficio neto', f0.beneficio_neto == null ? null : miles(f0.beneficio_neto), U)}${dato('EBITDA', f0.ebitda == null ? null : miles(f0.ebitda), U)}${dato('Caja libre', f0.flujo_caja_libre == null ? null : miles(f0.flujo_caja_libre), U)}${dato('ROIC', f0.roic == null ? null : pct(f0.roic), 'del capital invertido (cálculo aproximado)')}</dl></section>` : '<p class="mut peq">No hay cifras anuales disponibles para esta empresa.</p>';
+  $('#fi-cuerpo').innerHTML = `${principal}<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
     ${seccion('Superadas', ok, grupos.ok)}${seccion('No superadas', no, grupos.no)}${seccion('Sin datos', nd, grupos.nd)}
     ${nd ? '<p class="mut peq">Una comprobación sin datos no suma ni resta: no cuenta como no superada.</p>' : ''}
     <h3>Cifras de los últimos años</h3>

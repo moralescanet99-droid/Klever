@@ -1,4 +1,4 @@
-# Sistema visual de Klever (ronda 11): base para extender al resto de pantallas
+# Sistema visual de Klever (rondas 11 y 12): base para extender al resto de pantallas
 
 Dirección: **sobria, moderna y agradable** para explorar empresas y organizar carteras simuladas. Fondo claro ligeramente cálido, superficies blancas, texto azul tinta y un único acento verde petróleo. Sin fuentes externas (pila del sistema), sin dependencias nuevas, sin imágenes: todo es CSS y datos reales de la cartera.
 
@@ -32,4 +32,24 @@ El contraste de **todos** los pares se calcula desde el CSS real en ambos temas 
 4. **Gráficos solo con datos existentes**; si falta un dato se dice («sin dato»), nunca se rellena.
 5. **Móvil**: filas para tocar y leer (≥ 44 px), explicación en desplegables, nada tapado por lo fijo (`scroll-padding`), y adaptación a texto ampliado con consultas de contenedor en `rem`.
 
-Pendiente de extender (otra fase): portada, explorar empresas, ficha, carteras públicas, «Mis carteras», acceso y pie legal.
+---
+
+# Ronda 12: el mismo lenguaje en «Mis carteras», «Explorar empresas» y la ficha
+
+## Reglas nuevas que valen para todo el producto
+1. **Color estable por activo.** Cada símbolo conserva su color mientras exista en la cartera: quitar o añadir otra posición no recolorea las demás (mapa símbolo → color en `public/app.js`, `asignarColores`). Con más de ocho posiciones los colores se repiten (hay ocho), **por eso el color nunca va solo**: cada fila lleva su símbolo escrito, la barra de composición nombra los símbolos en su `aria-label` y solo etiqueta los tramos anchos (≥ 9 %). Un peso pequeño (0,5 %) conserva un tramo mínimo visible de 3 px.
+2. **Un dato, un sitio.** El % asignado está en la composición (información principal). El resumen lateral conserva solo categorías, cobertura y ROIC; en móvil la barra inferior ya dice «Asignado: N %» y no se repite en el resumen.
+3. **Mensaje corto + detalle plegado.** Un bloqueo se dice en una frase («Falta asignar un 32 % para actualizar la publicación»), junto con lo que sigue valiendo («La versión pública sigue igual.»); la explicación larga va en un `<details>` «Detalle» que **no se cierra al teclear**. Jerarquía de la cabecera: título → estado (privacidad, cambios no públicos, guardado) → acción.
+4. **El estado se escribe.** Superada / no superada / sin datos se muestran siempre con símbolo y texto (✓ ✗ –), nunca solo con color; un dato ausente dice «No disponible», no se rellena.
+5. **Unidades y periodos a la vista.** Toda cifra de la ficha indica periodo (ejercicio) y unidad; la fuente (informes 10-K ante la SEC) se nombra.
+6. **Lo que se explica una vez no desplaza resultados.** Las explicaciones largas (cómo se calcula, cómo se ordena) van **debajo** de los resultados, plegadas.
+
+## Componentes nuevos
+- **Tarjeta de cartera** (`.cartera-item`): nombre (hasta tres líneas, sin cortar), chips de privacidad y de cambios locales, **mini-composición real** (`.ci-comp`: tramos proporcionales a los pesos guardados, rayado = sin asignar, contorno rojo = exceso), las tres mayores posiciones con su peso («+N más»), estado de asignación en texto («✓ Asignada al 100 %», «Falta asignar 1,5 %»), fecha existente y acción. Con **cambios locales pendientes** (`.pendiente`): borde izquierdo reforzado en ámbar, chip y acción «Continuar editando»; las cifras separan «Versión de tu cuenta» y «Versión de este dispositivo». Cuadrícula de 19–26 rem: una tarjeta no se estira; varias se reparten; en móvil, una columna.
+- **Estado vacío de «Mis carteras»**: el formulario «Crea tu primera cartera» con una frase que explica qué es una cartera simulada y una única acción («Crear cartera»).
+- **Buscador** (`#emp-buscar`): campo de 52 px con borde reforzado, recuento («N de 105 empresas») y «Borrar búsqueda»; la búsqueda se conserva (en la pestaña) al abrir la ficha, cambiar de pantalla y recargar.
+- **Píldoras de comprobaciones** (`.pil`): las cinco comprobaciones de cada empresa con ✓ / ✗ / – y texto («Deuda», «ROIC», «Margen», «Caja libre», «Crecimiento»; lectores: «superada / no superada / sin datos»). Salen de `/api/ideas`: ninguna cifra nueva. Se mantiene el recuento («3 superadas · 2 sin datos») y el orden de la lista.
+- **Datos principales de la ficha** (`.fd-grid`): Ventas, Beneficio neto, EBITDA, Caja libre y ROIC del último ejercicio con su unidad; si falta uno, «No disponible · dato ausente en el informe». Debajo, los criterios agrupados (superadas / no superadas / sin datos), la evolución por años y las explicaciones plegadas (metodología, glosario).
+
+## Qué pantallas faltan por adaptar
+Portada, carteras públicas (lista y detalle), acceso (diálogo de entrada), pie legal y gráficos de precio. Siguen funcionando con el estilo de la ronda 10/11; no se han rediseñado.

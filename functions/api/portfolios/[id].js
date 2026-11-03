@@ -17,7 +17,7 @@ export async function onRequestGet({ request, env, params }) {
     FROM posiciones po JOIN activos a ON a.ticker = po.ticker
     LEFT JOIN fundamentales f ON f.ticker = po.ticker
       AND f.periodo = (SELECT MAX(periodo) FROM fundamentales WHERE ticker = po.ticker)
-    WHERE po.portafolio_id = ? ORDER BY po.peso DESC`).bind(params.id)]);
+    WHERE po.portafolio_id = ? ORDER BY po.peso DESC, po.ticker`).bind(params.id)]);
   } catch (e) { console.error('leer cartera:', e); return json({ error: 'No se pudo leer la cartera. Inténtalo de nuevo.' }, 500); }
   const p = rc.results[0];
   if (!p) return json({ error: 'No encontrado' }, 404);

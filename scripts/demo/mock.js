@@ -23,7 +23,7 @@ const J=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{'content-ty
 const conf=p=>J({error:'La cartera cambió en tu cuenta después de la versión desde la que editas.',conflicto:true,revision:p.revision,actualizado_en:p.actualizado_en||p.creado_en||null},409);
 const revOk=r=>Number.isInteger(r)&&r>=0;
 function valida(ps){if(!Array.isArray(ps)||ps.length>50)return{e:'Posiciones no válidas'};let tot=0;const seen={};for(const x of ps){if(!A(x.ticker))return{e:'Algún ticker no está en el universo'};if(seen[x.ticker]||!(Number(x.peso)>0&&Number(x.peso)<=100))return{e:'Posición no válida: '+x.ticker};seen[x.ticker]=1;tot+=Number(x.peso)}tot=Math.round(tot*10)/10;if(tot>100)return{e:'Los pesos suman más de 100 %% (exceso de asignación: '+String(Math.round((tot-100)*10)/10).replace('.',',')+' %%)'};return{tot}}
-function view(p){const posiciones=(DB.pos[p.id]||[]).map(x=>({...x,nombre:A(x.ticker).nombre,sector:A(x.ticker).sector,tipo:A(x.ticker).tipo,roic:latest(x.ticker)?.roic??null,fecha_entrada:'2026-11-03'})).sort((a,b)=>b.peso-a.peso);
+function view(p){const posiciones=(DB.pos[p.id]||[]).map(x=>({...x,nombre:A(x.ticker).nombre,sector:A(x.ticker).sector,tipo:A(x.ticker).tipo,roic:latest(x.ticker)?.roic??null,fecha_entrada:'2026-11-03'})).sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1));
   const total=posiciones.reduce((s,r)=>s+r.peso,0);const sectores={};posiciones.forEach(r=>sectores[r.sector]=(sectores[r.sector]||0)+r.peso);return{...p,posiciones,total,sectores}}
 const realFetch=window.fetch.bind(window);
 window.fetch=async(url,opts={})=>{
@@ -41,7 +41,7 @@ window.fetch=async(url,opts={})=>{
   if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
   if(path==='/logout'){delete DB.sessions[tk];return J({ok:true})}
   if(!uid)return J({error:'No autorizado'},401);
-  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0)}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
+  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0),posiciones:ps.slice().sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1)).map(x=>({ticker:x.ticker,peso:x.peso}))}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
   if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);const ps=body.posiciones===undefined?[]:body.posiciones,v=valida(ps);if(v.e)return J({error:v.e},400);const id=addPort(uid,body.nombre.trim().slice(0,80),body.plantilla,0,body.tesis?String(body.tesis).trim().slice(0,600):null,ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)})));return J({id,revision:0,actualizado_en:null},201)}
   if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
     if(m==='GET')return J(view(p));

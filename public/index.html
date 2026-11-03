@@ -94,11 +94,20 @@
     <div class="busqueda">
       <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
       <input id="emp-buscar" type="search" placeholder="Buscar por empresa, símbolo o sector" autocomplete="off">
+      <button id="emp-borrar" class="btn btn-ghost emp-borrar" type="button" hidden>Borrar búsqueda</button>
       <span id="emp-cuenta" class="mut" aria-live="polite"></span>
       <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
     </div>
+    <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
+      <table class="tabla-emp">
+        <caption class="sr">Empresas ordenadas por comprobaciones superadas; a igualdad, menos no superadas; después, por símbolo</caption>
+        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
+        <tbody id="empresas-lista"></tbody>
+      </table>
+    </div>
+    <ul id="empresas-cards" class="emp-cards" aria-label="Lista de empresas"></ul>
     <details class="plegable">
-      <summary>Cómo se calcula, qué significa cada comprobación y cómo se ordena</summary>
+      <summary>Cómo se calcula cada comprobación y cómo se ordena la lista</summary>
       <div class="plegable-cuerpo">
         <p>Cada empresa suma una marca por cada comprobación que supera:</p>
         <ul>
@@ -113,14 +122,6 @@
         <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
       </div>
     </details>
-    <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
-      <table class="tabla-emp">
-        <caption class="sr">Empresas ordenadas por comprobaciones superadas; a igualdad, menos no superadas; después, por símbolo</caption>
-        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
-        <tbody id="empresas-lista"></tbody>
-      </table>
-    </div>
-    <ul id="empresas-cards" class="emp-cards" aria-label="Lista de empresas"></ul>
     <div class="bloque" id="filtros-precio" tabindex="-1">
       <h2>Filtros de precio</h2>
       <p class="mut">Screener de TradingView para PER, rentabilidad y otros filtros que dependen del precio. Es independiente de nuestro ranking.</p>
@@ -148,6 +149,7 @@
     </div>
     <form id="form-nueva" class="panel nueva" hidden>
       <h2 id="nueva-titulo">Nueva cartera</h2>
+      <p id="nueva-ayuda" class="mut" hidden>Una cartera simulada es un reparto de porcentajes entre empresas y fondos, sin dinero real. Elige una plantilla y ajústala después: podrás guardarla en tu cuenta y publicarla cuando quieras.</p>
       <div class="nueva-campos">
         <div class="campo"><label for="nueva-nombre">Nombre</label>
           <input id="nueva-nombre" name="nombre" maxlength="80" required placeholder="Por ejemplo: Mi cartera de oro" autocomplete="off"></div>
@@ -176,7 +178,7 @@
         </div>
       </div>
       <div class="ws-acc">
-        <span id="motivo" class="motivo solo-escritorio-ws" role="status"></span>
+        <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
           <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>

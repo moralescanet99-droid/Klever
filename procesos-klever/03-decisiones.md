@@ -121,5 +121,15 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Entregas ZIP:** un ZIP no tiene `.git`. A8 funciona en **modo repositorio** (≥ 2 commits: además comprueba que `.dev.vars` nunca se versionó y que `wrangler.toml` nunca tuvo un `database_id` real) o **modo ZIP** (solo contenido; «historial: NO verificado»). Un repositorio vacío o de un commit **no acredita historial**. `scripts/entrega/{crear,verificar}-zip.sh` (manifiesto SHA-256 + `ENTREGA.json`), `tests/ronda11/test-zip.sh`, y guía en `LEEME-PRUEBAS.md`.
 - **Validación remota:** sigue **bloqueada** (sin credenciales; se rechaza pedir secretos por el chat); el único bloque está en `ronda10/BLOQUEOS.md`.
 
+## Ronda 12 (coherencia visual y exploración completa)
+- **Color estable por activo (mapa símbolo → color, no índice de fila).** Motivo: al quitar una posición se recoloreaban las demás y la persona perdía la referencia. Con más de ocho posiciones los colores se repiten; por eso el color **nunca** sustituye a la etiqueta (símbolo escrito en cada fila, `aria-label` de la composición).
+- **El % asignado se muestra solo en la composición**; el bloque `.asig` del resumen se oculta (sigue actualizándose, por compatibilidad con pruebas). Motivo: era la misma cifra y la misma barra dos veces.
+- **Motivo de bloqueo en dos niveles:** frase corta («Falta asignar un X % para actualizar la publicación») + «La versión pública sigue igual.» + `<details>` «Detalle» con el texto largo. Motivo: la cabecera de una pública con cambios inválidos mostraba un párrafo; el detalle no se re-renderiza (no se cierra al teclear).
+- **La lista de carteras (`GET /api/portfolios`) devuelve las posiciones** (en un lote de lecturas, ordenadas por peso desc y símbolo) para dibujar la composición real en «Mis carteras». Motivo: no inventar ni pedir N peticiones; el orden determinista hace que los colores de la tarjeta coincidan con los del editor.
+- **Los «filtros existentes» de Explorar son la búsqueda y el screener de precio (TradingView).** No se inventan filtros nuevos; se añaden píldoras de las cinco comprobaciones (datos de `/api/ideas`).
+- **La búsqueda de Explorar se guarda en `sessionStorage`** (solo la pestaña; no se guarda nada en servidor). Motivo: conservar búsqueda al abrir la ficha, cambiar de pantalla o recargar.
+- **Las explicaciones largas de Explorar van debajo de los resultados.** Motivo: no desplazar los resultados.
+- **Ficha: «Datos principales» del último ejercicio** (ventas, beneficio, EBITDA, caja libre, ROIC) con periodo y unidad; dato ausente = «No disponible».
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

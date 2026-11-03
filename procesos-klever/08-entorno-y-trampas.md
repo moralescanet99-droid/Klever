@@ -97,3 +97,12 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Mutación por `sed` sobre `public/style.css`:** guardar una copia antes (`cp … /tmp`) y restaurarla; comprobar con `git diff --stat` que solo quedan los cambios previstos.
 - **Elementos ocultos en la prueba:** el título «Posiciones» (`display:none` en móvil) o `.ver-ficha` de la tabla de escritorio no se pueden medir; usar un elemento visible (`offsetParent !== null`).
 
+## Ronda 12
+- **Espacio no separable en las cifras:** `pesoCorto()` y `pct()` usan U+00A0 antes de «%». En pruebas, comparar con `\s` o normalizar `\u00a0`; un literal con espacio normal falla sin que se vea.
+- **Nombre de cartera: máximo 80 caracteres.** Un nombre de 86 se trunca/rechaza y la prueba «no encuentra» la tarjeta; el de prueba mide 74.
+- **En móvil, «Quitar» está dentro de la tarjeta plegada** (`.pc-det`, oculta): hay que pulsar antes `.pc-toggle`.
+- **Un elemento oculto aparece primero:** en móvil, la tabla de empresas (oculta) precede a las tarjetas; medir con `offsetParent !== null` también para `[data-borrar-busqueda]`.
+- **Cartera pública y pruebas de guardado:** con pesos que no suman 100 %, «Guardar» está desactivado (es la regla); para probar el guardado, repartir de forma que sume 100.
+- **Lista de carteras:** `GET /api/portfolios` ya trae `posiciones`; si se cambia el orden en `[id].js`, hay que cambiarlo también en la lista y en `scripts/demo/mock.js` (colores coherentes entre tarjeta y editor).
+- **Un foreground `sleep` largo pasa a segundo plano** (límite de 120 s): esperar a la batería con un bucle `until grep …` en segundo plano.
+

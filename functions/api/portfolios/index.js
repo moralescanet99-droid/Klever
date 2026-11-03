@@ -7,14 +7,22 @@ export async function onRequestGet({ request, env }) {
   if (!user) return json({ error: 'No autorizado' }, 401);
   // Resumen para «Mis carteras»: posiciones y total asignado salen de las posiciones guardadas.
   // actualizado_en es NULL hasta la primera modificación real (no se inventa ninguna fecha).
-  const { results } = await env.DB.prepare(
-    `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en,
-            COUNT(po.ticker) AS n_posiciones, COALESCE(SUM(po.peso), 0) AS total
-     FROM portafolios p LEFT JOIN posiciones po ON po.portafolio_id = p.id
-     WHERE p.usuario_id = ? GROUP BY p.id
-     ORDER BY COALESCE(p.actualizado_en, p.creado_en) DESC, p.id DESC`
-  ).bind(user.id).all();
-  return json(results);
+  // Cartera y posiciones en UN lote (una instantánea): la composición que se dibuja en «Mis carteras» son las posiciones reales guardadas.
+  let rl, rp;
+  try {
+    [rl, rp] = await env.DB.batch([
+      env.DB.prepare(
+        `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en,
+                COUNT(po.ticker) AS n_posiciones, COALESCE(SUM(po.peso), 0) AS total
+         FROM portafolios p LEFT JOIN posiciones po ON po.portafolio_id = p.id
+         WHERE p.usuario_id = ? GROUP BY p.id
+         ORDER BY COALESCE(p.actualizado_en, p.creado_en) DESC, p.id DESC`).bind(user.id),
+      env.DB.prepare(
+        `SELECT po.portafolio_id, po.ticker, po.peso FROM posiciones po JOIN portafolios p ON p.id = po.portafolio_id
+         WHERE p.usuario_id = ? ORDER BY po.portafolio_id, po.peso DESC, po.ticker`).bind(user.id)]);
+  } catch (e) { console.error('listar carteras:', e); return json({ error: 'No se pudieron leer tus carteras. Inténtalo de nuevo.' }, 500); }
+  const por = {}; for (const x of rp.results) (por[x.portafolio_id] ||= []).push({ ticker: x.ticker, peso: x.peso });
+  return json(rl.results.map(c => ({ ...c, posiciones: por[c.id] || [] })));
 }
 
 export async function onRequestPost({ request, env }) {
