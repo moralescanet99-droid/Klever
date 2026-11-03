@@ -14,7 +14,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   const bh = await alto('#barra-guardar'); ok('móvil: barra inferior 72–88 px', bh >= 72 && bh <= 88, bh + 'px');
   ok('móvil: persistencia explícita en la cabecera y versión breve en la barra', await p.isVisible('#estado') && (await T(p, '#estado')) === 'Guardada en tu cuenta' && (await T(p, '#b-estado')).includes('Guardada'));
   ok('móvil: la barra muestra «Asignado: 100 %», estado breve y acción', (await T(p, '#barra-guardar')).includes('Asignado: 100 %') && await p.locator('#barra-guardar .js-guardar').isVisible());
-  ok('móvil: margen exterior de 16 px', await p.evaluate(() => { const m = getComputedStyle(document.querySelector('main')); const r = document.querySelector('.panel-pos h2').getBoundingClientRect(); return parseFloat(m.paddingLeft) === 16 && Math.round(r.left) === 16; }));
+  ok('móvil: margen exterior de 16 px', await p.evaluate(() => { const m = getComputedStyle(document.querySelector('main')); const r = document.querySelector('#comp').getBoundingClientRect(); return parseFloat(m.paddingLeft) === 16 && Math.round(r.left) === 16; }));   // ronda 11: el título «Posiciones» se oculta en móvil; el primer elemento visible es la composición
   ok('móvil: texto principal de 16 px', await p.evaluate(() => getComputedStyle(document.body).fontSize === '16px' && getComputedStyle(document.querySelector('.peso-in')).fontSize === '16px'));
   const minimos = await p.evaluate(() => ['.peso-in', '.pc-toggle', '#mas', '#btn-menu', '#b-estado', '#barra-guardar .js-guardar', '#buscar-activo', '#nombre'].map(s => { const e = [...document.querySelectorAll(s)].find(x => x.offsetParent || getComputedStyle(x).position === 'fixed'); const r = e.getBoundingClientRect(); return [s, Math.round(r.width), Math.round(r.height)]; }));
   ok('móvil: controles táctiles ≥ 44 × 44', minimos.every(([s, w, h]) => h >= 44 && w >= 44 || (s === '.peso-in' && h >= 44) || (s === '#buscar-activo' && h >= 44) || (s === '#nombre' && h >= 40) || (s === '#b-estado' && h >= 44)), JSON.stringify(minimos));
@@ -42,7 +42,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   for (const w of [390, 768]) {
     await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
     await p.evaluate(() => { document.querySelector('#det-pub').open = true; document.querySelector('#det-graficos').open = true; });
-    const ys = await p.evaluate(() => ['#comp', '.panel-pos', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
+    const ys = await p.evaluate(() => ['#comp', '#pos-cards', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
     ok(`orden ${w}px: resumen breve → posiciones → resumen detallado → gráficos → publicación`, ys.every((y, i) => i === 0 || y > ys[i - 1]), ys.join(' < '));
   }
   await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(200);

@@ -73,7 +73,17 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | Migración 0007 sobre base antigua con datos | Prueba nueva con el esquema anterior y datos |
 | Informe | Local / D1 remoto / pendiente separados; E16a antigua sustituida |
 
-## Revisión 8 · paquete TÉCNICO de la ronda 10 — **PENDIENTE** (preparado en `revision-chatgpt/ronda-10/`: texto + 16 imágenes antes/después + zip del proyecto `klever-ronda10-chatgpt.zip`; falta que el usuario se lo pase a ChatGPT y traiga su feedback)
+## Revisión 8 · paquete TÉCNICO y visual de la ronda 10 — **RECIBIDA** (resumen en `06-` C8): superó 25 pruebas técnicas y los casos A1–A7 de acceso; **A8 se interrumpió porque el ZIP no contiene `.git`**; señaló que H1 daba por superado un solape (excluía las muestras «pegado»), que había que hacer visibles y utilizables las acciones y el elemento enfocado, el espacio útil a 320 px con texto ampliado y la legibilidad durante la animación con la opacidad real; y pidió empezar la dirección visual por el editor. Acciones: ronda 11
+| Punto | Acción en la ronda 11 |
+|---|---|
+| A8 sin `.git` | A8 en dos modos (repositorio / ZIP: «historial NO verificado»); `crear-zip.sh`/`verificar-zip.sh`; `test-zip.sh`; guía en `LEEME-PRUEBAS.md` |
+| H1 podía pasar sin muestras | Reescrita: muestras elegibles obligatorias, inicio y tras desplazarse, acciones inaccesibles frente a contenido que pasa por debajo; mutación que la hace fallar |
+| Acciones y foco | `scroll-padding-top` medido; fijo solo errores (y éxito en escritorio); botón de cierre compacto; foco centrado entre aviso y barra |
+| 320 px con texto ampliado | Mensaje a todo el ancho, barra reorganizada (consulta de contenedor), H7: trabajar sin cerrar el aviso |
+| Contraste y animación | Sin animar la opacidad; contraste con la opacidad real en cada fotograma (H1b, H8) |
+| Dirección visual | Editor rediseñado como pantalla de referencia (`ronda11/SISTEMA-VISUAL.md`) |
+
+## Revisión 9 · paquete de la ronda 11 — **PENDIENTE** (falta preparar/entregar y traer su feedback)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).

@@ -1,0 +1,6 @@
+MUTACIÓN: sin scroll-padding-top (la zona fija puede tapar lo enfocado). H1c debe FALLAR:
+OK    [H1c-320] Aviso fijo tras desplazarse (320 px, desplazado 496 px)
+OK    [H1c-390] Aviso fijo tras desplazarse (390 px, desplazado 398 px)
+FALLA [H1c-1440] Aviso fijo tras desplazarse (1440 px, desplazado 172 px)  [13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=false, sin tapar=true (49–93 dentro de 59–900) | en zona libre=true, sin tapar=true (550–594 dentro de 59–900) | en zona libre=true, sin tapar=true (59–83 dentro de 
+RESULTADO: 24 correctas, 1 fallos
+- [H1c-1440] Aviso fijo tras desplazarse (1440 px, desplazado 172 px) → 13 muestras elegibles; pegado arriba=true; contraste real mín. 5.6:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=false, sin tapar=true (49–93 dentro de 59–900) | en zona libre=true, sin tapar=true (550–594 dentro de 59–900) | en zona libre=true, sin tapar=true (59–83 dentro de 59

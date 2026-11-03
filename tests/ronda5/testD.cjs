@@ -71,6 +71,8 @@ const EV = EVDIR;
   ev('E7', 'Con error de asignación, la persistencia sigue visible', 'Texto explícito de persistencia + motivo del bloqueo + privacidad, por separado', `persistencia «${per}»; validez «${mot}»; privacidad «${await T(p, '#chip')}»; el ⓘ solo amplía`, per.startsWith('Cambios locales pendientes de guardar en tu cuenta') && mot.includes('Exceso') && mot.includes('Reduce los pesos hasta sumar 100 %') && (await T(p, '#chip')) === 'Privada', 'E4-103-escritorio.png');
   // vuelve a 100, guarda y mide el aviso flotante
   await peso(p).fill('17'); await p.waitForTimeout(150); await G(p).click(); await guardado(p); await p.waitForTimeout(200);
+  await p.evaluate(() => window.scrollTo(0, 0)); await p.waitForTimeout(450);   // ronda 11: «no tapa campos» se mide con el aviso en su sitio (inicio de la página); con la página desplazada el contenido pasa por debajo de la zona fija y lo que se exige es que ninguna acción quede inaccesible (H1c).
+  //  el aviso anima su altura (200 ms); se mide ya asentado, con la geometría de los campos del mismo instante (el solape durante la animación lo cubre H1a con el rectángulo VISIBLE)
   const toast = await T(p, '#toast'), tb = await p.locator('#toast').boundingBox();
   const campos = await p.evaluate(() => ['#nombre', '#buscar-activo', '.peso-in', '#tesis'].map(s => { const e = document.querySelector(s); if (!e || !e.offsetParent) return null; const r = e.getBoundingClientRect(); return [s, r.top, r.bottom, r.left, r.right]; }).filter(Boolean));
   const solapa = campos.some(([s, t, bo, l, r]) => !(tb.y + tb.height < t || tb.y > bo || tb.x + tb.width < l || tb.x > r));

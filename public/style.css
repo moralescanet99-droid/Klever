@@ -574,3 +574,9 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
   .pc-id b{overflow-wrap:normal} .pc-id span{-webkit-line-clamp:3}
 }
 .comp-cab{flex-wrap:wrap} .comp-der{min-width:0;margin-left:auto} #rb-ver{white-space:normal;text-align:right}
+@media (max-width:719px){.nombre{font-size:1.25rem}}
+/* barra de composición: con texto muy ampliado las etiquetas no caben y se omiten (el reparto sigue legible por color, filas y nombre accesible) */
+.comp-barra{container-type:inline-size}
+@container (max-width:14rem){.comp-barra i{font-size:0}}
+/* motivo junto a Guardar: alineado a la izquierda y más contenido */
+.motivo{text-align:left;font-size:var(--t-s);max-width:24rem}

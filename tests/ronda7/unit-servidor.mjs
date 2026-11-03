@@ -53,5 +53,5 @@ async function nuevo() { const env = crearEnv(); await sembrar(env); const r = a
   t('U5b', 'Cartera pública: un reparto válido actualiza todo a la vez', 'HTTP 200; posiciones, nombre y tesis nuevos juntos', `HTTP ${val.s}; ${estado(env)}`, val.s === 200 && estado(env) === JSON.stringify({ nombre: 'Y', tesis: 'T2', publico: 1, revision: 1, pos: 'GDX:70,NEM:30' }));
 }
 console.log(`\nRESULTADO: ${ok} correctas, ${fallos.length} fallos` + (fallos.length ? '\nFALLOS:\n- ' + fallos.join('\n- ') : ''));
-const R = process.env.RONDA || 'ronda10'; mkdirSync(path.resolve(RAIZ, R), { recursive: true }); writeFileSync(path.resolve(RAIZ, R, 'evidencias-U.json'), JSON.stringify(ev, null, 1));
+const R = process.env.RONDA || 'ronda11'; mkdirSync(path.resolve(RAIZ, R), { recursive: true }); writeFileSync(path.resolve(RAIZ, R, 'evidencias-U.json'), JSON.stringify(ev, null, 1));
 process.exit(fallos.length ? 1 : 0);
