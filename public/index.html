@@ -100,15 +100,15 @@
           <li><b>Caja libre:</b> el flujo de caja libre es positivo.</li>
           <li><b>Crecimiento:</b> las ventas son mayores que las del año anterior.</li>
         </ul>
-        <p><b>Datos ausentes:</b> si una empresa no tiene el dato de una comprobación, esta no suma ni resta y se indica como «no disponible». No se cuenta como fallida.</p>
-        <p><b>Orden de la lista:</b> de más a menos comprobaciones superadas. Si dos empresas empatan, se ordenan alfabéticamente por símbolo.</p>
+        <p><b>Datos ausentes:</b> si una empresa no tiene el dato de una comprobación, esta no suma ni resta y se indica como «sin datos». No se cuenta como no superada.</p>
+        <p><b>Orden de la lista:</b> primero las que superan más comprobaciones; a igualdad, las que tienen menos comprobaciones no superadas; después, por símbolo. Las comprobaciones sin datos no suman ni restan, y una evaluación con datos ausentes se muestra siempre como parcial («3 superadas · 2 sin datos»).</p>
         <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
       </div>
     </details>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
-        <caption class="sr">Empresas ordenadas por comprobaciones superadas y, en caso de empate, por símbolo</caption>
-        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones superadas</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
+        <caption class="sr">Empresas ordenadas por comprobaciones superadas; a igualdad, menos no superadas; después, por símbolo</caption>
+        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
         <tbody id="empresas-lista"></tbody>
       </table>
     </div>
@@ -133,6 +133,11 @@
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
     <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
+      <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
+        <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
+      <button id="aviso-cerrar" class="btn btn-secundario" type="button">Entendido</button>
+    </div>
     <form id="form-nueva" class="panel nueva" hidden>
       <h2 id="nueva-titulo">Nueva cartera</h2>
       <div class="nueva-campos">
@@ -154,9 +159,10 @@
     <div class="ws-cab">
       <div class="ws-titulo">
         <label class="sr" for="nombre">Nombre de la cartera</label>
-        <input id="nombre" class="nombre" maxlength="80" autocomplete="off" placeholder="Nombre de la cartera">
+        <textarea id="nombre" class="nombre" rows="1" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Nombre de la cartera"></textarea>
         <div class="ws-meta">
           <span id="chip" class="chip">Privada</span>
+          <span id="pub-pend" class="chip aviso" hidden>Tus cambios aún no son públicos</span>
           <button id="estado" class="estado-btn" type="button" aria-haspopup="dialog" aria-describedby="estado-live"></button>
           <span id="estado-live" class="sr" role="status" aria-live="polite"></span>
         </div>
@@ -168,7 +174,7 @@
           <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
           <div id="mas-lista" class="mas-lista" role="menu" aria-label="Más acciones" hidden>
             <button role="menuitem" type="button" id="mi-plantilla">Reemplazar por la plantilla…</button>
-            <button role="menuitem" type="button" id="mi-descartar">Descartar cambios sin guardar…</button>
+            <button role="menuitem" type="button" id="mi-descartar">Descartar cambios locales…</button>
             <button role="menuitem" type="button" id="mi-eliminar" class="peligro">Eliminar cartera…</button>
           </div>
         </div>
@@ -304,6 +310,19 @@
   <div class="dlg-cab"><h2 id="es-titulo">Estado de tu cartera</h2><button class="btn btn-ghost" type="button" data-cerrar>Cerrar</button></div>
   <dl id="es-cuerpo" class="es-lista"></dl>
   <div id="es-acciones" class="fila"></div>
+</dialog>
+
+<dialog id="dlg-conflicto" data-fijo aria-labelledby="cn-titulo">
+  <div class="dlg-cab"><h2 id="cn-titulo" tabindex="-1">Hay dos versiones de esta cartera</h2></div>
+  <p id="cn-intro"></p>
+  <div class="cn-cols"><section id="cn-local" class="cn-v" aria-label="Versión de este dispositivo"></section><section id="cn-cuenta" class="cn-v" aria-label="Versión de tu cuenta"></section></div>
+  <div id="cn-dif" class="cn-dif"></div>
+  <p class="mut peq">«Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» solo la guarda en tu cuenta cuando pulses Guardar.</p>
+  <div class="fila fila-fin cn-acc">
+    <button id="cn-despues" class="btn btn-ghost" type="button">Decidir después</button>
+    <button id="cn-cuenta-b" class="btn btn-secundario" type="button">Usar la versión de tu cuenta</button>
+    <button id="cn-local-b" class="btn btn-primario" type="button">Conservar la de este dispositivo</button>
+  </div>
 </dialog>
 
 <dialog id="dlg-confirmar" aria-labelledby="cf-titulo">

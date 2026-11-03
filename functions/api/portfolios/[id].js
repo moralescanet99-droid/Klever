@@ -32,6 +32,10 @@ export async function onRequestPut({ request, env, params }) {
   const p = await owned(env, user, params.id);
   if (!p) return json({ error: 'No encontrado' }, 404);
   const b = await readJson(request);
+  // Control de versión: si el cliente parte de una versión que ya no es la de la cuenta, no se sobrescribe en silencio.
+  const vigente = p.actualizado_en || p.creado_en || '';
+  if (b?.version !== undefined && String(b.version) !== String(vigente))
+    return json({ error: 'La cartera cambió en tu cuenta después de la versión desde la que editas.', conflicto: true, version: vigente }, 409);
   const pos = Array.isArray(b?.posiciones) ? b.posiciones : null;
   const v = validarComposicion(pos);
   if (!v.ok) return json({ error: v.error }, 400);

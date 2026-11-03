@@ -1,0 +1,18 @@
+const { chromium } = require('playwright');
+const F='http://localhost:8790/';
+(async()=>{const b=await chromium.launch();let bad=0;const ok=(n,c,x='')=>{console.log((c?'OK   ':'FALLA')+' '+n+(c?'':' ['+x+']'));if(!c)bad++};
+for(const [w,h] of [[390,844],[1440,900]]){
+ const c=await b.newContext({viewport:{width:w,height:h}});const p=await c.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
+ await p.goto(F);await p.waitForSelector('.plantilla');await p.waitForSelector('#muestra-publicas .tarjeta');
+ ok(w+': portada, banner de demo, 3 plantillas, ejemplos con etiqueta',await p.locator('.demo-banner').count()===1&&await p.locator('.plantilla').count()===3&&(await p.locator('#muestra-publicas .chip.origen').allTextContents()).every(t=>t==='Ejemplo de Klever'));
+ await p.click('[data-plantilla=dividendos]');await p.waitForSelector('#vista-cartera:not([hidden])');
+ await p.locator('.peso-in').filter({visible:true}).first().fill('20');await p.waitForTimeout(150);
+ ok(w+': 103 % → Guardar desactivado con motivo',await p.locator('.js-guardar >> visible=true').isDisabled()&&((await p.locator(w<900?'#b-estado':'#motivo').textContent())||'').match(/exceso|Exceso/));
+ await p.locator('.peso-in').filter({visible:true}).first().fill('17');
+ await p.click('.js-guardar >> visible=true');await p.waitForSelector('#dlg-acceso[open]');await p.fill('#acc-email','a@b.co');await p.check('#acc-acepto');await p.click('#form-acceso button');await p.waitForSelector('#demo-enter');await p.click('#demo-enter');await p.waitForTimeout(900);
+ ok(w+': tras "simular enlace" la cartera queda en la cuenta',/^#cartera-\d+$/.test(await p.evaluate(()=>location.hash)));
+ await p.evaluate(()=>{document.querySelector('#det-pub').open=true});await p.fill('#tesis','Dividendos.');await p.click('#publicar');await p.waitForFunction(()=>document.querySelector('#chip').textContent==='Pública');
+ await p.goto(F+'#publicas');await p.waitForSelector('#publicas-lista .tarjeta');ok(w+': publicada con etiqueta de usuario',(await p.locator('#publicas-lista .chip.origen').allTextContents()).includes('Publicada por un usuario'));
+ await p.goto(F+'#empresas');await p.waitForSelector('[data-t]:visible');await p.locator('[data-t]:visible').nth(1).click();await p.waitForSelector('#dlg-ficha[open]');ok(w+': ficha con 5 comprobaciones',await p.locator('#fi-cuerpo .checks li').count()===5);
+ ok(w+': sin desbordamiento y sin errores',(await p.evaluate(()=>document.documentElement.scrollWidth))<=w&&errs.length===0,errs.join('|'));await c.close();}
+await b.close();console.log(bad?'HAY FALLOS':'DEMO OK')})();

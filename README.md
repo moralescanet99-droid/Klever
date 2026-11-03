@@ -20,6 +20,7 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql
+- [x] Ronda 6: aviso persistente al abrir el enlace en otro navegador, «Cambios locales pendientes de guardar en tu cuenta», conflicto con las dos versiones (409 en el servidor), «N superadas · M sin datos», «Guardar y actualizar publicación», versión para pruebas de uso. Ver `ronda6/LEEME.md` y `PRUEBAS-DE-USO.md`
 - [x] Ronda 5: «Mis carteras» con lista primero, botones desactivados coherentes, pública con edición inválida sin despublicar, estado de persistencia explícito, resumen simplificado, empresas en móvil, ficha. Ver `ronda5/LEEME.md`
 - [x] Ronda 4: reglas únicas de guardar/publicar, resumen con etiquetas exactas, cabecera y barra móviles compactas, orden en una columna, empresas con encabezados, ficha móvil. Ver `ronda4/LEEME.md`
 - [x] Rediseño completo (3.ª ronda): portada, editor como espacio de trabajo, móvil específico, sistema visual, acceso y ficha. Ver `rediseno/LEEME.md`

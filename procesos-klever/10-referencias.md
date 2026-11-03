@@ -18,6 +18,8 @@
 | `ronda4/LEEME.md` | Informe de la ronda 4: regla de guardar/publicar, lo probado y lo pendiente |
 | `revision-chatgpt/INSTRUCCIONES_PARA_CHATGPT.md`, `…/ronda-3/…`, `…/ronda-4/…`, `…/ronda-5/…` | Textos para ChatGPT de cada ronda |
 | `ronda5/LEEME.md`, `ronda5/pruebas-manuales.md` | Informe de la ronda 5 con tabla de evidencias y pruebas manuales pendientes |
+| `ronda6/LEEME.md`, `ronda6/pruebas-manuales.md` | Informe de la ronda 6 (siete flujos con esperado/observado) y pruebas manuales pendientes |
+| `PRUEBAS-DE-USO.md`, `scripts/local/arrancar.sh`, `data/seed-prueba.sql` | Versión para pruebas de uso: cómo abrirla, guion de tareas y datos de prueba |
 | `demo/LEEME.md` | Cómo publicar la demo |
 | `tests/ronda4/README.md` | Cómo reproducir las 130 comprobaciones y las capturas |
 

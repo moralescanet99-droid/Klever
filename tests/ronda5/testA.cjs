@@ -14,7 +14,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   await peso(p).fill('20'); await p.waitForTimeout(150);
   const g = p.locator('.js-guardar >> visible=true');
   ok('103 %: Guardar desactivado y motivo junto a la acción', await g.isDisabled() && (await T(p, '#motivo')).includes('Exceso de asignación: 3 %'), await T(p, '#motivo'));
-  ok('103 %: la persistencia sigue visible («Cambios sin guardar en tu cuenta» + copia local)', (await T(p, '#estado')).startsWith('Cambios sin guardar en tu cuenta') && (await T(p, '#estado')).includes('copia en este dispositivo'), await T(p, '#estado'));
+  ok('103 %: la persistencia sigue visible («Cambios locales pendientes de guardar en tu cuenta»)', (await T(p, '#estado')).startsWith('Cambios locales pendientes de guardar en tu cuenta'), await T(p, '#estado'));
   await p.evaluate(() => { document.querySelector('#det-pub').open = true; }); await p.fill('#tesis', 'Una tesis.'); await p.waitForTimeout(100);
   ok('103 %: Publicar también desactivado, con motivo al lado', await p.locator('#publicar').isDisabled() && (await T(p, '#pub-razon')).includes('Exceso de asignación: 3 %'), await T(p, '#pub-razon'));
   const r1 = await api('PUT', `/portfolios/${id}`, { posiciones: [{ ticker: 'KO', peso: 60 }, { ticker: 'PG', peso: 60 }] });

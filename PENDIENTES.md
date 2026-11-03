@@ -31,4 +31,5 @@
 - [ ] Si ya cargaste `data/demo.sql`, vuelve a cargarlo (o actualiza las tesis) para que las descripciones sean las nuevas, completas
 
 ## 5. Pruebas manuales que no se pueden ejecutar desde el entorno de trabajo
-- [ ] Ver `ronda5/pruebas-manuales.md` (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos, TradingView, carga de la SEC).
+- [ ] Ver `ronda6/pruebas-manuales.md` (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
+- [ ] Pruebas de uso con personas: seguir `PRUEBAS-DE-USO.md` (demo `demo/index.html`, o `bash scripts/local/arrancar.sh`) y anotar dónde dudan.

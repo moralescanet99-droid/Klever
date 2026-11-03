@@ -30,9 +30,9 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
 
   // ===== 3. el enlace se abre en OTRO navegador/dispositivo =====
   const q = await nuevo(b, 1440, 900); await q.goto(link); await q.waitForSelector('#vista-carteras:not([hidden])'); await q.waitForTimeout(500);
-  const toastQ = await T(q, '#toast');
+  await q.waitForSelector('#vista-carteras:not([hidden])'); const toastQ = await T(q, '#aviso-cuenta'); const toastCorto = await q.locator('#toast.on').count();
   ok('otro navegador: se entra en la cuenta pero NO hay borrador', (await q.evaluate(() => localStorage.getItem('klever_borrador'))) === null && await q.isVisible('.menu-escritorio .nav-mis'));
-  ok('otro navegador: avisa de que el borrador no se ha guardado (no promete lo contrario)', toastQ.includes('no estaba en este dispositivo') && toastQ.includes('no se ha guardado') && !toastQ.includes('Hemos guardado'), toastQ);
+  ok('otro navegador: aviso PERSISTENTE en «Mis carteras» («todavía no se ha guardado en la cuenta», borrador no disponible en este navegador), sin toast ni confirmación de guardado', toastQ.includes('todavía no se ha guardado en la cuenta') && toastQ.includes('El borrador no está disponible en este navegador') && !toastQ.includes('Hemos guardado') && toastCorto === 0, toastQ);
   ok('otro navegador: sin carteras (no se inventó ninguna) y crear es la acción principal', (await q.locator('.cartera-item').count()) === 0 && (await T(q, '#nueva-titulo')) === 'Crea tu primera cartera' && await q.isVisible('#form-nueva') && !(await q.isVisible('#btn-nueva')), await T(q, '#nueva-titulo'));
   ok('el borrador original sigue intacto en el primer dispositivo', (await draft(p)).pos[0].peso === 18 && (await draft(p)).pos.length === 6);
   await q.ctx.close();
@@ -52,8 +52,8 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
   ok('Mis carteras: lista la cartera con visibilidad, posiciones y total asignado', (await T(p, '#mis-lista')).includes('Privada') && (await T(p, '#mis-lista')).includes('6 posiciones') && (await T(p, '#mis-lista')).includes('Asignado: 100 %'), await T(p, '#mis-lista'));
   await p.click('#mis-lista .tarjeta'); await p.waitForSelector('#pos-tabla tbody tr');
   ok('volver desde Mis carteras: versión guardada (17,0 %) y estado «Guardada»', (await peso(p, 0).inputValue()) === '17,0' && (await T(p, '#estado')).includes('Guardada'));
-  await peso(p, 0).fill('10'); await p.waitForTimeout(100); ok('editar sin guardar: «Cambios sin guardar en tu cuenta»', (await T(p, '#estado')).startsWith('Cambios sin guardar en tu cuenta'), await T(p, '#estado'));
-  await p.reload(); await p.waitForSelector('#pos-tabla tbody tr'); await p.waitForTimeout(300); ok('recargar: se RECUPERAN los cambios sin guardar (10 %) y siguen marcados como pendientes', (await peso(p, 0).inputValue()) === '10,0' && (await T(p, '#estado')).startsWith('Cambios sin guardar en tu cuenta'), await peso(p, 0).inputValue() + ' / ' + await T(p, '#estado'));
+  await peso(p, 0).fill('10'); await p.waitForTimeout(100); ok('editar sin guardar: «Cambios locales pendientes de guardar en tu cuenta»', (await T(p, '#estado')).startsWith('Cambios locales pendientes de guardar en tu cuenta'), await T(p, '#estado'));
+  await p.reload(); await p.waitForSelector('#pos-tabla tbody tr'); await p.waitForTimeout(300); ok('recargar: se RECUPERAN los cambios sin guardar (10 %) y siguen marcados como pendientes', (await peso(p, 0).inputValue()) === '10,0' && (await T(p, '#estado')).startsWith('Cambios locales pendientes de guardar en tu cuenta'), await peso(p, 0).inputValue() + ' / ' + await T(p, '#estado'));
   await p.click('#mas'); await p.click('#mi-descartar'); await p.waitForSelector('#dlg-confirmar[open]'); await p.click('#cf-si'); await p.waitForTimeout(500); ok('descartar cambios: vuelve la versión GUARDADA (17,0 %)', (await peso(p, 0).inputValue()) === '17,0' && (await T(p, '#estado')) === 'Guardada en tu cuenta', await peso(p, 0).inputValue());
 
   // ===== 6. publicar y etiqueta de origen =====

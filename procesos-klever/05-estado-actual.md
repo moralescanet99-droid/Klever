@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 5 (informe `ronda5/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 6 (informe `ronda6/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**161 comprobaciones** en la ejecución final de la ronda 5). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**176 comprobaciones** en la ejecución final de la ronda 6). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 5 (cerrar los problemas de la ronda 4) está implementada y probada en local; el **paquete para ChatGPT está preparado** (`revision-chatgpt/ronda-5/`); **falta que el usuario se lo entregue y traiga su feedback**.
+4. La ronda 6 (puntos de ChatGPT sobre la ronda 5) está implementada y probada en local, y hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: demo autónoma, `scripts/local/arrancar.sh` y artefacto privado). **No se ha preparado paquete para ChatGPT** (no se pidió); **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -22,8 +22,9 @@ scripts/           fetch_fundamentals.mjs (SEC → SQL) · metrics.sql (decisió
 data/              universe.json (125 activos) · demo.sql (3 carteras públicas de ejemplo)
 .github/workflows/ nightly.yml (carga nocturna de la SEC en D1)
 demo/              index.html (demo autónoma) · LEEME.md
-tests/ronda5/      baterías A–D (161 comprobaciones), ejecutor limpio, generador del informe y datos de prueba (tests/ronda4: histórico)
-ronda5/ ronda4/ rediseno/  informes LEEME.md de cada ronda · ronda5/pruebas-manuales.md (pendientes reales)
+tests/ronda5/      baterías A–E (176 comprobaciones), ejecutor limpio, generadores de informe y datos de prueba (tests/ronda4: histórico)
+ronda6/ ronda5/ ronda4/ rediseno/  informes LEEME.md de cada ronda · ronda6/pruebas-manuales.md (pendientes reales)
+PRUEBAS-DE-USO.md · scripts/local/arrancar.sh · data/seed-prueba.sql   versión para pruebas de uso
 revision-chatgpt/  instrucciones para cada ronda de crítica de ChatGPT
 procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 ```
@@ -32,7 +33,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 `#inicio` portada · `#empresas` explorar empresas (+ screener) · `#publicas` carteras públicas · `#carteras` mis carteras (con sesión) · `#cartera` borrador · `#cartera-<id>` cartera guardada.
 
 ### API
-`GET /api/assets`, `GET /api/assets/:ticker`, `GET /api/ideas`, `POST /api/login` (email, acepto, con_borrador), `POST /api/verify`, `POST /api/logout`, `GET|POST /api/portfolios`, `GET|PUT|PATCH|DELETE /api/portfolios/:id`, `GET /api/public`, `GET /api/public/:id`.
+`GET /api/assets`, `GET /api/assets/:ticker`, `GET /api/ideas`, `POST /api/login` (email, acepto, con_borrador), `POST /api/verify`, `POST /api/logout`, `GET|POST /api/portfolios`, `GET|PUT|PATCH|DELETE /api/portfolios/:id` (el `PUT` acepta `version` y responde `409` si la cuenta cambió), `GET /api/public`, `GET /api/public/:id`.
 
 ### Base de datos (D1)
 `usuarios` (+`acepto_en`) · `enlaces` (+`con_borrador`) · `sesiones` (+`ultimo_acceso`) · `activos` · `fundamentales` · `portafolios` (+`tesis`, +`actualizado_en`) · `posiciones` · `ideas`. Sin tabla de precios.
@@ -44,7 +45,12 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | «Mis carteras»: lista primero (nombre, privada/pública, posiciones, total asignado, fecha real), «Nueva cartera» a petición, creación como acción principal si no hay carteras | ✅ |
 | Botones desactivados con aspecto de desactivados y motivo al lado (Guardar y Publicar) | ✅ |
 | Cartera pública con edición inválida: versión publicada intacta, sin despublicar | ✅ (interfaz y servidor) |
-| Copia local de cambios sin guardar de carteras de la cuenta (recuperación, conflicto, descartar) | ✅ |
+| Copia local de cambios sin guardar de carteras de la cuenta (recuperación, descartar) | ✅ |
+| Conflicto entre la versión local y la de la cuenta: diálogo con las dos versiones, al abrir y al guardar (409) | ✅ con una petición directa a la API como «otro dispositivo» · dos navegadores reales 🟡 pendiente |
+| Aviso persistente en «Mis carteras» al abrir el enlace en otro navegador (sin toast largo) | ✅ |
+| Comprobaciones con datos ausentes: «N superadas · M sin datos», ficha por grupos, orden documentado | ✅ |
+| Cartera pública: «Guardar y actualizar publicación», «Tus cambios aún no son públicos», «Reintentar guardado» | ✅ |
+| Versión para pruebas de uso: demo (también `file://`), `arrancar.sh`, artefacto | ✅ comprobado aquí · con personas ⬜ |
 | Estado en tres planos con texto explícito de persistencia | ✅ |
 | Probar sin registro, borrador local, migración a la cuenta | ✅ |
 | Editor: nombre y pesos editables, buscador accesible, resumen, menú de acciones con confirmación | ✅ |
@@ -61,28 +67,30 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | Safari, Firefox, móviles reales | ⛔ |
 
 ## Pruebas
-- `tests/ronda5/`: **161 comprobaciones** en la ejecución limpia final (A: 31 validaciones, estados y resumen · B: 51 móvil, orden, empresas, ficha y portada · C: 50 recorrido, otro navegador, errores, teclado, anchuras 320–1440 en ambos temas · D: 29 escenarios con evidencia). La tabla esperado/observado/evidencia está en `ronda5/LEEME.md`. Cómo ejecutarlas: `08-entorno-y-trampas.md`.
+- `tests/ronda5/`: **176 comprobaciones** en la ejecución limpia final de la ronda 6 (A: 31 validaciones, estados y resumen · B: 51 móvil, orden, empresas, ficha y portada · C: 50 recorrido, otro navegador, errores, teclado, anchuras 320–1440 en ambos temas · D: 29 escenarios con evidencia · E: 15 escenarios de los siete flujos de la prueba de uso). La tabla esperado/observado/evidencia está en `ronda6/LEEME.md`. Demo: `tests/ronda5/demotest.cjs`, 12/12 y apertura por `file://`. Cómo ejecutarlas: `08-entorno-y-trampas.md`.
 - Mediciones (390 px): cabecera global 61 px (antes 105); barra inferior 72 px; tres plantillas 357 px (antes 649).
 
 ## Pendiente del usuario (ver `PENDIENTES.md`)
-0. Publicar la demo: `wrangler pages deploy demo --project-name klever-demo`.
+0. Publicar la demo: `wrangler pages deploy demo --project-name klever-demo`. Para pruebas con personas, seguir `PRUEBAS-DE-USO.md`.
 1. Cuenta de Brevo: remitente verificado, clave API, secretos `BREVO_API_KEY` y `MAIL_FROM`.
 2. Cloudflare: `wrangler d1 create klever`, pegar el `database_id` en `wrangler.toml`, cargar `schema.sql`, secretos de GitHub (`SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`), lanzar el flujo nocturno, cargar `data/demo.sql`, desplegar, activar Web Analytics.
 3. Antes de abrir al público: leer los términos de TradingView (secciones 3 y 4) completos; abogado para `legal.html` y contacto de derechos de datos.
 4. Con usuarios: ejecutar `scripts/metrics.sql`; aplicar migraciones 0002–0006 en bases antiguas; recargar `data/demo.sql` si ya estaba cargado.
 
 ## Decisiones abiertas / dudas
-- **Feedback de ChatGPT sobre la ronda 5** pendiente (hay que entregarle su paquete). Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
+- **Feedback de ChatGPT sobre la ronda 6:** todavía no hay paquete preparado; se ofrece al usuario. Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
 - Los **umbrales de las 5 comprobaciones** son una propuesta inicial.
 - Al reabrir una cartera el servidor devuelve las posiciones **ordenadas por peso**; mientras se edita mantienen el orden de inserción.
 - La lista de 105 empresas es una página larga (sin paginación, a petición expresa).
-- Los cambios sin guardar de una cartera de la cuenta **sí sobreviven a recargar** (copia local, ronda 5); si la cartera cambió desde otro dispositivo se pregunta qué conservar (probado con la lógica; el caso con dos dispositivos reales está en las pruebas manuales). El aviso del navegador al salir está implementado y no probado.
+- Los cambios locales pendientes de una cartera de la cuenta **sí sobreviven a recargar** (copia local); si la cartera cambió desde otro dispositivo se muestra el diálogo con las dos versiones (al abrir y al guardar, con 409 del servidor). Probado con una petición directa a la API como segundo dispositivo; con dos dispositivos reales está en las pruebas manuales. El aviso del navegador al salir está implementado y no probado.
+- **Título largo:** con 80 caracteres en móvil necesita tres líneas y se desplaza dentro del campo (límite asumido).
+- **«Decidir después»** en el diálogo de conflicto es una decisión de producto añadida (no pedida) para no atrapar al usuario; conviene validarla con ChatGPT/personas.
 - ChatGPT quizá no pueda **interactuar** con la demo aunque sea pública; las capturas siguen siendo la vía segura.
 
 ## Siguientes pasos sugeridos
-1. Entregar a ChatGPT el paquete de la ronda 5, pegar su feedback y revisarlo contra el código antes de tocar nada.
+1. Hacer las pruebas de uso con personas (`PRUEBAS-DE-USO.md`) y/o preparar el paquete de la ronda 6 para ChatGPT si el usuario lo pide.
 2. Publicar la demo en Cloudflare Pages y comprobar que carga.
 3. Crear la cuenta de Brevo y desplegar la web real; probar el acceso por email real (spam en Gmail, otro proveedor).
 4. Ejecutar la carga nocturna con la SEC real y revisar qué empresas no devuelven datos.
 5. Leer términos de TradingView y revisar el texto legal con un abogado.
-6. Ejecutar las pruebas manuales pendientes de `ronda5/pruebas-manuales.md` (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).
+6. Ejecutar las pruebas manuales pendientes de `ronda6/pruebas-manuales.md` (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).

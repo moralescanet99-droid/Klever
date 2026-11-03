@@ -56,3 +56,11 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Una tabla con `tabindex=0` se desplaza con las flechas, no con `Fin`.**
 - **Pruebas de «200 %»:** `font-size: 200%` en `<html>` + buscar con `document.documentElement.scrollWidth`; los elementos `position: fixed` no se ven con `offsetParent`: para localizar desbordes, ocultar bloques uno a uno y medir.
 - `mock.js` se formatea con `%`; la constante de `ahora()` debe definirse **antes** de crear las carteras de ejemplo (si no, error de zona temporal muerta y la demo queda en blanco).
+- **`textarea{min-height:96px}` global** hacía que el título (textarea de una fila) midiera tres líneas y media: un campo de una línea necesita su propio `min-height` y `max-height`.
+- **Cambiar la marca de versión de la cuenta sin refrescar la copia local** (p. ej. al despublicar) crea un conflicto falso al recargar: tras cualquier cambio de `current.version` con cambios pendientes, reescribir la copia local conservando su fecha (`guardarBorrador(true)`).
+- **Orden de filas tras reabrir:** el servidor ordena por peso y desempata sin garantía (GDX, GLD, IAU…): en pruebas, comparar por conjunto o ordenar los valores, no por índice.
+- **Los detalles plegables (`<details>`) se cierran al recargar y el redimensionado puede cambiarlos:** abrir `#det-pub` explícitamente antes de pulsar «Publicar» en las pruebas.
+- **Un script con `localStorage.removeItem` dentro de un heredoc de shell puede ser bloqueado por el comprobador de seguridad** (lo confunde con un borrado): guardar el script en un archivo con la herramienta de escritura y ejecutarlo.
+- **La demo usa `#demo-enter` (botón que simula el enlace), no `#acc-dev a`:** las pruebas de la demo (`tests/ronda5/demotest.cjs`) lo tienen en cuenta; en la demo `#estado` es persistencia y el bloqueo está en `#motivo` (escritorio) o `#b-estado` (móvil).
+- **`scripts/local/arrancar.sh` no necesita editar `wrangler.toml`:** wrangler@3 acepta el marcador `REEMPLAZAR_CON_ID_DE_D1` en local si se usa `--persist-to` en `d1 execute` y en `pages dev`; usar `--binding DEV_RETURN_LINK=1` en vez de `.dev.vars`.
+

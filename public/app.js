@@ -45,7 +45,7 @@ async function api(path, opts = {}) {
   } catch { throw new Error('Sin conexión con el servidor. Inténtalo de nuevo.'); }
   const data = await r.json().catch(() => ({}));
   if (r.status === 401 && tok()) sesionCaducada();
-  if (!r.ok) throw new Error(data.error || 'Error ' + r.status);
+  if (!r.ok) { const e = new Error(data.error || 'Error ' + r.status); e.status = r.status; e.data = data; throw e; }
   return data;
 }
 async function getJson(path) { const r = await fetch(API + path); if (!r.ok) throw new Error('Error ' + r.status); return r.json(); }
@@ -74,13 +74,17 @@ const DRAFT = 'klever_borrador';
 const leerBorrador = () => { try { return JSON.parse(store.getItem(DRAFT)); } catch { return null; } };
 const hayBorrador = () => !!leerBorrador()?.pos?.length;
 let copiaLocal = false, recuperado = false; // copiaLocal: hay una copia de los cambios en este dispositivo (y persiste de verdad)
-function guardarBorrador() {
+const leerCopia = id => { try { return JSON.parse(store.getItem('klever_edit_' + id)); } catch { return null; } };
+function guardarBorrador(conservarFecha = false) { // conservarFecha: se reescribe la copia (p. ej. nueva versión base) sin cambiar cuándo se editó
   if (!current) return;
   if (!current.id) { // aún no está en la cuenta: borrador del dispositivo
     store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
   }
   const key = 'klever_edit_' + current.id; // cartera de la cuenta: copia de los cambios sin guardar
-  if (rev !== savedRev) { store.setItem(key, JSON.stringify({ nombre: $('#nombre').value, tesis: $('#tesis').value, pos, base: current.version })); copiaLocal = store.ok; }
+  if (rev !== savedRev) {
+    const t = (conservarFecha && leerCopia(current.id)?.t) || new Date().toISOString();
+    store.setItem(key, JSON.stringify({ nombre: $('#nombre').value, tesis: $('#tesis').value, pos, base: current.version, t })); copiaLocal = store.ok;
+  }
   else { store.removeItem(key); copiaLocal = false; }
 }
 const enCuenta = () => logged() && !!current?.id;
@@ -102,21 +106,22 @@ const listaTickers = inv => inv.map(p => p.ticker).join(', ');
 function razonGuardar(v) {
   const nota = current?.publico ? ' La versión publicada no cambia.' : ''; // en una cartera pública, aclarar que lo publicado sigue intacto
   if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.${nota}`;
-  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.${nota}`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce los pesos hasta sumar 100 %.${nota}`;
   if (current?.publico && !v.completa) return `Cartera pública: la versión publicada no cambia hasta que el reparto vuelva a sumar el 100 % (pendiente de asignar: ${pesoCorto(v.falta)}). ${copiaLocal ? 'Tus cambios siguen en este dispositivo. ' : ''}Si prefieres guardar un reparto incompleto, deja de publicarla.`;
   return null;
 }
 function razonPublicar(v) {
   if (!v.n) return 'Añade al menos una posición para publicar.';
   if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
-  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para poder publicar.`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce los pesos hasta sumar 100 %.`;
   if (v.falta) return `Pendiente de asignar: ${pesoCorto(v.falta)}. Una cartera pública debe tener el 100 % asignado.`;
   if (!$('#tesis').value.trim()) return 'Escribe una tesis para poder publicar.';
   return null;
 }
 
 // ---------- diálogos ----------
-function cerrarAlPulsarFuera(d) { // clic en el fondo (no en el relleno del diálogo)
+function cerrarAlPulsarFuera(d) { // clic en el fondo (no en el relleno del diálogo); los diálogos de decisión (data-fijo) no se cierran así
+  if (d.hasAttribute('data-fijo')) return;
   d.addEventListener('click', e => {
     if (e.target !== d) return; const r = d.getBoundingClientRect();
     if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) d.close();
@@ -139,7 +144,8 @@ $('#cf-si').addEventListener('click', () => $('#dlg-confirmar').close('ok'));
 $('#cf-no').addEventListener('click', () => $('#dlg-confirmar').close('no'));
 
 // ---------- acceso por enlace ----------
-let accEmail = '', cooldownT = null, avisoOtroDispositivo = false;
+let accEmail = '', cooldownT = null;
+const AVISO = 'klever_aviso_borrador'; // el enlace se pidió con un borrador que no está en este navegador
 function pasoAcceso(n) {
   $('#acc-paso1').hidden = n !== 1; $('#acc-paso2').hidden = n !== 2;
   $('#acc-aviso-borrador').hidden = !(n === 2 && hayBorrador());
@@ -187,7 +193,7 @@ async function redeem() { // canje del enlace mágico (?login=TOKEN)
     const r = await api('/verify', { method: 'POST', body: { token: t } });
     store.setItem('klever_token', r.token);
     // El enlace se pidió con un borrador local. Si se abre en otro dispositivo/navegador, el borrador no está aquí.
-    avisoOtroDispositivo = !!r.con_borrador && !hayBorrador();
+    if (r.con_borrador && !hayBorrador()) store.setItem(AVISO, '1'); else store.removeItem(AVISO);
   } catch (err) { toast(err.message); }
 }
 function sesionCaducada() {
@@ -195,7 +201,7 @@ function sesionCaducada() {
 }
 async function cerrarSesion() {
   try { await api('/logout', { method: 'POST' }); } catch {}
-  store.removeItem('klever_token'); current = null; pos = []; actualizarCabecera(); go('#inicio');
+  store.removeItem('klever_token'); store.removeItem(AVISO); current = null; pos = []; actualizarCabecera(); go('#inicio');
 }
 $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
@@ -229,7 +235,8 @@ async function route(primera = false) {
   if (v === 'cartera') {
     if (m) {
       if (!l) v = 'inicio';
-      else if (current?.id !== +m[1]) { const ok = await cargarCartera(+m[1]); if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
+      else if (current?.id !== +m[1]) { $$('[data-vista]').forEach(x => x.hidden = true); const ok = await cargarCartera(+m[1]); // sin vista de fondo mientras carga: un diálogo de conflicto no debe salir sobre la portada
+ if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
     } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
   }
   mostrar(v, primera);
@@ -247,7 +254,16 @@ function mostrar(v, primera) {
 window.addEventListener('hashchange', () => route());
 
 // ---------- carteras del usuario ----------
-const fmtFecha = iso => { const d = new Date(String(iso).replace(' ', 'T') + 'Z'); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).format(d); };
+const parseF = iso => { const t = String(iso); return new Date(/[zZ]$|[+-]\d\d:?\d\d$/.test(t) ? t : t.replace(' ', 'T') + 'Z'); }; // sello del servidor (UTC, «AAAA-MM-DD HH:MM:SS») o ISO
+const fmtFecha = iso => { const d = parseF(iso); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).format(d); };
+const fmtFechaHora = iso => { const d = parseF(iso); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d); };
+const txtAsig = (n, total) => !n ? 'Sin posiciones' : `${n} ${n === 1 ? 'posición' : 'posiciones'} · Asignado: ${pesoCorto(total)}${total < 100 ? ' (incompleta)' : total > 100 ? ' (exceso)' : ''}`;
+const totalPos = ps => r1(ps.reduce((s, p) => s + (p.peso || 0), 0));
+function pintarAviso() { // aviso persistente en «Mis carteras»: el borrador no está en este navegador
+  const mostrar = !!store.getItem(AVISO) && !hayBorrador();
+  $('#aviso-cuenta').hidden = !mostrar;
+}
+$('#aviso-cerrar').addEventListener('click', () => { store.removeItem(AVISO); pintarAviso(); $('#btn-nueva').hidden ? $('#nueva-nombre').focus() : $('#btn-nueva').focus(); });
 let nMis = null;
 function formNuevo(abrir, enfocar = true) {
   $('#form-nueva').hidden = !abrir; $('#btn-nueva').setAttribute('aria-expanded', String(abrir));
@@ -256,16 +272,20 @@ function formNuevo(abrir, enfocar = true) {
   if (abrir && enfocar) $('#nueva-nombre').focus();
 }
 function itemCartera(p) {
-  const n = p.n_posiciones, total = r1(p.total);
-  const asig = !n ? 'Sin posiciones' : `${n} ${n === 1 ? 'posición' : 'posiciones'} · Asignado: ${pesoCorto(total)}${total < 100 ? ' (incompleta)' : total > 100 ? ' (exceso)' : ''}`;
+  const n = p.n_posiciones, total = r1(p.total), loc = leerCopia(p.id), hayLocal = !!store.getItem('klever_edit_' + p.id);
   const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
-  const local = store.getItem('klever_edit_' + p.id) ? '<span class="chip aviso">Cambios sin guardar en este dispositivo</span>' : '';
+  const chipLocal = hayLocal ? '<span class="chip aviso">Cambios locales pendientes de guardar en tu cuenta</span>' : '';
+  // con cambios locales, cada cifra dice a qué versión pertenece: nunca se mezclan las de una con el estado de la otra
+  const l2 = hayLocal ? `<span class="ci-l2"><span class="ci-v">Versión de tu cuenta:</span> ${txtAsig(n, total)}</span>` : `<span class="ci-l2">${txtAsig(n, total)}</span>`;
+  const lLoc = hayLocal && Array.isArray(loc?.pos)
+    ? `<span class="ci-l2 ci-loc"><span class="ci-v">Versión de este dispositivo:</span> ${txtAsig(loc.pos.length, totalPos(loc.pos))}${loc.t ? ` · editada el ${fmtFechaHora(loc.t)}` : ''}</span>` : '';
   return `<li><button class="tarjeta cartera-item" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
-    <span class="ci-l1"><b>${esc(p.nombre)}</b><span class="chip${p.publico ? ' pub' : ''}">${p.publico ? 'Pública' : 'Privada'}</span>${local}</span>
-    <span class="ci-l2">${asig}</span>${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
+    <span class="ci-l1"><b>${esc(p.nombre)}</b><span class="chip${p.publico ? ' pub' : ''}">${p.publico ? 'Pública' : 'Privada'}</span>${chipLocal}</span>
+    ${l2}${lLoc}${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
     <span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`;
 }
 async function cargarMisCarteras() {
+  pintarAviso();
   const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista">Cargando tus carteras…</li>';
   try {
     const list = await api('/portfolios'); nMis = list.length;
@@ -292,13 +312,49 @@ async function cargarCartera(id) {
   chartEls.clear(); $('#graficos').innerHTML = '';
   await recuperarCambiosLocales(); return true;
 }
-async function recuperarCambiosLocales() { // cambios sin guardar de una sesión anterior en este dispositivo
+// ---------- conflicto entre la versión de este dispositivo y la de la cuenta ----------
+const sinDup = ps => ps.map(p => ({ ticker: p.ticker, peso: p.peso }));
+function diferencias(loc, cta) { // lista breve y legible de qué cambia entre las dos versiones
+  const d = [], L = Object.fromEntries(loc.pos.map(p => [p.ticker, p.peso])), C = Object.fromEntries(cta.pos.map(p => [p.ticker, p.peso]));
+  if ((loc.nombre || '').trim() !== (cta.nombre || '').trim()) d.push(`Nombre: «${loc.nombre}» (este dispositivo) · «${cta.nombre}» (tu cuenta)`);
+  if ((loc.tesis || '').trim() !== (cta.tesis || '').trim()) d.push('La tesis es distinta.');
+  const soloL = Object.keys(L).filter(t => !(t in C)), soloC = Object.keys(C).filter(t => !(t in L));
+  if (soloL.length) d.push(`Solo en este dispositivo: ${soloL.join(', ')}`);
+  if (soloC.length) d.push(`Solo en tu cuenta: ${soloC.join(', ')}`);
+  for (const t of Object.keys(L)) if (t in C && L[t] !== C[t]) d.push(`${t}: ${pesoCorto(L[t])} en este dispositivo · ${pesoCorto(C[t])} en tu cuenta`);
+  return d;
+}
+function tarjetaVersion(titulo, fechaTxt, v) {
+  return `<h3>${titulo}</h3><p class="mut peq">${fechaTxt}</p><p><b>${esc(v.nombre)}</b></p><p>${txtAsig(v.pos.length, totalPos(v.pos))}</p>`;
+}
+function dialogoConflicto(loc, cta, intro) { // decisión obligatoria: Escape y clic fuera no deciden nada; «Decidir después» no cambia nada
+  return new Promise(res => {
+    const d = $('#dlg-conflicto');
+    $('#cn-intro').textContent = intro;
+    $('#cn-local').innerHTML = tarjetaVersion('Versión de este dispositivo', loc.fecha ? `Editada el ${fmtFechaHora(loc.fecha)}` : 'Editada en este dispositivo', loc);
+    $('#cn-cuenta').innerHTML = tarjetaVersion('Versión de tu cuenta', cta.fecha ? `Modificada el ${fmtFechaHora(cta.fecha)}` : 'Guardada en tu cuenta', cta);
+    const dif = diferencias(loc, cta), ver = dif.slice(0, 6);
+    $('#cn-dif').innerHTML = `<h3>Qué cambia</h3>${ver.length ? `<ul>${ver.map(t => `<li>${esc(t)}</li>`).join('')}${dif.length > 6 ? `<li>y ${dif.length - 6} diferencias más</li>` : ''}</ul>` : '<p class="mut">El contenido es el mismo; solo cambian las fechas.</p>'}`;
+    d.returnValue = '';
+    d.addEventListener('close', () => res(d.returnValue || 'despues'), { once: true });
+    d.showModal(); $('#cn-titulo').focus();
+  });
+}
+$('#dlg-conflicto').addEventListener('cancel', e => e.preventDefault());
+$('#cn-local-b').addEventListener('click', () => $('#dlg-conflicto').close('local'));
+$('#cn-cuenta-b').addEventListener('click', () => $('#dlg-conflicto').close('cuenta'));
+$('#cn-despues').addEventListener('click', () => $('#dlg-conflicto').close('despues'));
+
+async function recuperarCambiosLocales() { // cambios locales pendientes de una sesión anterior en este dispositivo
   const key = 'klever_edit_' + current.id, raw = store.getItem(key); if (!raw) return;
   let e; try { e = JSON.parse(raw); } catch { store.removeItem(key); return; }
   if (!Array.isArray(e.pos) || (e.nombre === current.nombre && (e.tesis || '') === (current.tesis || '') && JSON.stringify(e.pos) === JSON.stringify(pos))) { store.removeItem(key); return; }
-  if (e.base !== current.version) { // la cartera cambió desde otro sitio después de esa copia
-    const usar = await confirmar({ titulo: 'Cambios sin guardar de otra sesión', texto: 'Esta cartera se modificó después de que hicieras esos cambios en este dispositivo. Si los conservas y los guardas, sustituirán la versión guardada.', ok: 'Conservar mis cambios', no: 'Usar la versión guardada' });
-    if (!usar) { store.removeItem(key); return; }
+  if (e.base !== current.version) { // la cartera cambió en la cuenta después de esa copia: nunca se elige en silencio
+    const r = await dialogoConflicto({ nombre: e.nombre, tesis: e.tesis, pos: e.pos, fecha: e.t }, { nombre: current.nombre, tesis: current.tesis, pos: pos, fecha: current.version },
+      'Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. Elige cuál conservar: no se sobrescribirá nada hasta que lo decidas.');
+    if (r === 'cuenta') { store.removeItem(key); return; }
+    if (r === 'despues') return; // se queda como está: la copia local sigue guardada y se volverá a preguntar
+    store.setItem(key, JSON.stringify({ ...e, base: current.version })); // elegida la local: parte de la versión actual de la cuenta
   }
   current.nombre = e.nombre; current.tesis = e.tesis || ''; pos = e.pos; rev = 1; savedRev = 0; copiaLocal = store.ok; recuperado = true;
 }
@@ -316,7 +372,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
   if (!d.pos?.length) { store.removeItem(DRAFT); return; }
   const v = validar(d.pos);
   if (v.exceso || v.invalidos.length) {
-    toast('Tu borrador sigue en este dispositivo: tiene pesos que aún no se pueden guardar. Corrígelos para guardarlo en tu cuenta.', 9000);
+    toast('Tu borrador sigue en este dispositivo: corrige los pesos para guardarlo en tu cuenta.', 7000);
     location.hash = '#cartera'; return;
   }
   let id = null;
@@ -327,7 +383,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
     if (id) { try { await api('/portfolios/' + id, { method: 'DELETE' }); } catch {} } // no dejar una cartera vacía a medias
-    toast('No se pudo guardar tu borrador (' + err.message + '). Sigue en este dispositivo.', 8000);
+    toast('No se pudo guardar el borrador. Sigue en este dispositivo.', 7000);
   }
 }
 
@@ -364,10 +420,10 @@ function renderWorkspace() {
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
-  $('#nombre').value = current.nombre; $('#tesis').value = current.tesis || '';
+  $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
-  if (recuperado) { recuperado = false; toast('Hemos recuperado tus cambios sin guardar'); }
+  if (recuperado) { recuperado = false; toast('Hemos recuperado tus cambios locales'); }
 }
 
 function filaTabla(p, i) {
@@ -420,7 +476,7 @@ function textoPersistencia(id, dirty) { // [largo, breve, clase]
   if (saving) return ['Guardando en tu cuenta…', 'Guardando…', ''];
   if (saveErr) return ['No se pudo guardar' + (copiaLocal ? '. Tus cambios siguen en este dispositivo' : ''), 'No se pudo guardar', 'error'];
   if (!id) return ['Solo en este dispositivo', 'Solo en este dispositivo', ''];
-  if (dirty) return ['Cambios sin guardar en tu cuenta' + (copiaLocal ? ' · copia en este dispositivo' : ''), 'Sin guardar en tu cuenta', 'aviso'];
+  if (dirty) return ['Cambios locales pendientes de guardar en tu cuenta' + (copiaLocal ? '' : '. Si cierras la pestaña se perderán'), 'Cambios locales pendientes', 'aviso'];
   return ['Guardada en tu cuenta', '✓ Guardada', 'ok'];
 }
 function pintarEstado() {
@@ -434,7 +490,9 @@ function pintarEstado() {
   const m = $('#motivo'); m.textContent = saveErr ? saveErr : (razon || ''); m.className = 'motivo solo-escritorio-ws' + (saveErr ? ' error' : ''); // motivo al lado de Guardar
   $('#estado-live').textContent = largo + (razon ? '. ' + razon : '');
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
-  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.setAttribute('aria-describedby', 'motivo estado'); });
+  const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
+  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
+  $('#pub-pend').hidden = !(current.publico && id && dirty);                                          // lo publicado sigue intacto hasta guardar
   $('#mi-descartar').hidden = !(id && dirty);
   pintarPublicacion(v);
   window.onbeforeunload = id && dirty ? e => { e.preventDefault(); e.returnValue = ''; } : null; // no perder cambios por error
@@ -446,7 +504,8 @@ function pintarPublicacion(v = validar()) {
   $('#publicar').disabled = !pub && !!r;                      // no disponible: se ve igual que Guardar desactivado, con su motivo al lado
   $('#tesis-guardar').hidden = !pub; $('#tesis-guardar').disabled = pub && !!r;
   const z = $('#pub-razon');
-  z.textContent = pub ? (r ? `Mientras sea pública debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r ? `No disponible: ${r}` : 'Lista para publicar.');
+  const pend = pub && enCuenta() && rev !== savedRev ? 'Tus cambios aún no son públicos. La versión publicada no cambia hasta que guardes. ' : '';
+  z.textContent = pub ? pend + (r ? `Mientras sea pública debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r ? `No disponible: ${r}` : 'Lista para publicar.');
   z.className = 'peq pub-razon' + (r ? ' aviso' : '');
 }
 function marcarCambio() { rev++; saveErr = null; hideToast(); guardarBorrador(); pintarEstado(); }
@@ -460,18 +519,33 @@ async function guardar() {
   const nombre = $('#nombre').value.trim();
   if (!nombre) { saveErr = 'Escribe un nombre para la cartera.'; pintarEstado(); return false; }
   const r = rev; saving = true; saveErr = null; pintarEstado();
+  let conflicto = false;
   try {
     if (!current.id) { const { id } = await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla } }); current.id = id; }
-    await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } });
+    await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos, version: current.version } });
     const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
     current.nombre = nombre; current.version = u.actualizado_en || current.version; savedRev = r; // si se editó durante el guardado, rev > r y sigue «con cambios»
     store.removeItem(DRAFT); guardarBorrador();                                                      // limpia la copia local si ya no hay cambios pendientes
     try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
     $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
-    toast('Cartera guardada');
-  } catch (err) { saveErr = err.message; }                                                            // un fallo nunca muestra «guardada»; los cambios siguen en local
+    toast(current.publico ? 'Cartera guardada y publicación actualizada' : 'Cartera guardada');
+  } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else saveErr = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
   finally { saving = false; pintarEstado(); }
+  if (conflicto) return resolverConflictoGuardado();
   return !saveErr;
+}
+async function resolverConflictoGuardado() { // el servidor dice que la cuenta cambió después de la versión desde la que se editaba
+  let c; try { c = await api('/portfolios/' + current.id); } catch (err) { saveErr = err.message; pintarEstado(); return false; }
+  const cta = { nombre: c.nombre, tesis: c.tesis || '', pos: sinDup(c.posiciones), fecha: c.actualizado_en || c.creado_en || '', publico: c.publico };
+  const loc = { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, pos: sinDup(pos), fecha: leerCopia(current.id)?.t };
+  const r = await dialogoConflicto(loc, cta, 'Tu cuenta tiene una versión más reciente de esta cartera que la desde la que estabas editando. No se ha guardado nada. Elige cuál conservar.');
+  if (r === 'local') { current.version = cta.fecha; current.publico = cta.publico; guardarBorrador(true); return guardar(); } // se guarda la local sobre la actual, por decisión expresa
+  if (r === 'cuenta') {
+    store.removeItem('klever_edit_' + current.id);
+    current = { ...current, nombre: cta.nombre, tesis: cta.tesis, publico: cta.publico, version: cta.fecha };
+    pos = cta.pos; rev = savedRev = 0; saveErr = null; copiaLocal = false; renderWorkspace(); toast('Has vuelto a la versión de tu cuenta'); return false;
+  }
+  saveErr = 'La cartera cambió en tu cuenta. Elige qué versión conservar para poder guardar.'; pintarEstado(); return false;
 }
 $$('.js-guardar').forEach(b => b.addEventListener('click', guardar));
 
@@ -483,13 +557,18 @@ async function cambiarPublicacion(publico) {
   }
   try {
     const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
-    current.publico = publico ? 1 : 0; current.version = u.actualizado_en || current.version; pintarEstado(); loadPublicas();
+    current.publico = publico ? 1 : 0; current.version = u.actualizado_en || current.version; guardarBorrador(true); pintarEstado(); loadPublicas();
     toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
   } catch (e) { err.textContent = e.message; }
 }
 $('#publicar').addEventListener('click', () => cambiarPublicacion(!current.publico));
 $('#tesis-guardar').addEventListener('click', () => cambiarPublicacion(true));
-$('#nombre').addEventListener('input', marcarCambio);
+function ajustarNombre() { // el título puede ocupar hasta dos líneas (móvil); no admite saltos de línea
+  const n = $('#nombre'); n.style.height = 'auto'; n.style.height = (n.scrollHeight + n.offsetHeight - n.clientHeight) + 'px';
+}
+$('#nombre').addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+$('#nombre').addEventListener('input', e => { const n = e.target; if (/\n/.test(n.value)) n.value = n.value.replace(/\s*\n\s*/g, ' '); ajustarNombre(); marcarCambio(); });
+window.addEventListener('resize', ajustarNombre);
 $('#tesis').addEventListener('input', marcarCambio);
 
 // Detalle ampliado (lo esencial ya está en el texto visible de estado)
@@ -498,7 +577,7 @@ function abrirInfoEstado() {
   const id = enCuenta(), dirty = rev !== savedRev, pub = !!current.publico, v = validar(), r = calcResumen(pos);
   const reparto = !r.n ? 'Sin posiciones todavía.' : v.exceso ? `Exceso de asignación: ${pesoCorto(v.exceso)}. No se puede guardar en la cuenta ni publicar hasta corregirlo.` : v.falta ? `Pendiente de asignar: ${pesoCorto(v.falta)}. Se puede guardar en privado como reparto incompleto; no se puede publicar.` : 'Asignado: 100 %. Es un reparto completo.';
   $('#es-cuerpo').innerHTML = `
-    <div><dt>Persistencia</dt><dd>${id ? (dirty ? 'Tienes cambios sin guardar en tu cuenta.' + (copiaLocal ? ' Se conservan en este dispositivo.' : '') : 'Guardada en tu cuenta. Todo lo que ves está guardado.') : 'Solo en este dispositivo, como borrador en este navegador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
+    <div><dt>Persistencia</dt><dd>${id ? (dirty ? 'Tienes cambios locales pendientes de guardar en tu cuenta.' + (copiaLocal ? ' Se conservan en este dispositivo.' : '') : 'Guardada en tu cuenta. Todo lo que ves está guardado.') : 'Solo en este dispositivo, como borrador en este navegador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
     <div><dt>Validez del reparto</dt><dd>${reparto}</dd></div>
     <div><dt>Privacidad</dt><dd>${pub ? 'Pública: se muestra su composición y tu tesis en «Carteras públicas». La versión publicada solo cambia cuando guardas un reparto válido.' : 'Privada: solo la ves tú.'}</dd></div>`;
   $('#es-acciones').innerHTML = id ? '' : '<button class="btn btn-primario" type="button" id="es-guardar">Guardar en mi cuenta</button>';
@@ -667,18 +746,18 @@ $('#cookies-link').addEventListener('click', () => { store.removeItem('klever_co
 // ---------- explorar empresas ----------
 // Cada comprobación: [nombre, regla, formato → [cifra, unidad]]. La unidad larga va aparte para no competir con la regla.
 const CRIT = {
-  deuda_ebitda: ['Deuda sobre EBITDA', 'Cumple si la deuda neta es menor de 2,5 veces el EBITDA', v => [nf(v), 'veces']],
-  roic: ['ROIC', 'Cumple si supera el 10 %', v => [pct(v), '']],
-  margen_neto: ['Margen neto', 'Cumple si el beneficio neto supera el 10 % de las ventas', v => [pct(v), '']],
-  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => [nf(v / 1e9), 'miles de millones de USD']],
-  crecimiento: ['Crecimiento de ventas', 'Cumple si las ventas suben respecto al año anterior', v => [pct(v), '']],
+  deuda_ebitda: ['Deuda sobre EBITDA', 'Se supera si la deuda neta es menor de 2,5 veces el EBITDA', v => [nf(v), 'veces']],
+  roic: ['ROIC', 'Se supera si es mayor del 10 %', v => [pct(v), '']],
+  margen_neto: ['Margen neto', 'Se supera si el beneficio neto supera el 10 % de las ventas', v => [pct(v), '']],
+  flujo_caja: ['Caja libre', 'Se supera si el flujo de caja libre es positivo', v => [nf(v / 1e9), 'miles de millones de USD']],
+  crecimiento: ['Crecimiento de ventas', 'Se supera si las ventas suben respecto al año anterior', v => [pct(v), '']],
 };
 let empresas = [];
 function renderEmpresas() {
   const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista'), ul = $('#empresas-cards');
   const vistas = q ? empresas.filter(r => norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) : empresas;
-  const resultado = r => { const nd = 5 - r.evaluados; // un dato ausente NO es una comprobación fallida: se indica aparte y en neutro
-    return `<span class="marca-n">${r.cumplidos} de 5</span>${nd ? `<small>${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}</small>` : ''}`; };
+  const resultado = r => { const nd = r.sin_datos ?? 5 - r.evaluados; // sin datos NO es una comprobación fallida ni una evaluación completa: se muestra como parcial
+    return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span></td><td>${esc(r.sector)}</td>
       <td class="num">${resultado(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`).join('')
@@ -703,22 +782,24 @@ $('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio
 async function verFicha(t) {
   let a; try { a = await getJson('/assets/' + t); } catch { return toast('No se pudo cargar la ficha'); }
   const c = a.criterios, periodo = c?.periodo || a.fundamentales[0]?.periodo || '';
-  const filas = Object.entries(CRIT).map(([k, [label, regla, f]]) => {
-    const x = c?.[k], res = x?.ok === true ? ['ok', '✓ Cumple'] : x?.ok === false ? ['no', '✗ No cumple'] : ['nd', '– No disponible'];
-    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span>${x?.valor != null ? (([c, u]) => `<span class="ck-val"><b class="v">${c}</b>${u ? `<span class="u">${u}</span>` : ''}</span>`)(f(x.valor)) : '<span class="ck-val"><span class="u">Dato no disponible</span></span>'}</div></li>`;
-  }).join('');
-  const ok = c ? Object.keys(CRIT).filter(k => c[k]?.ok === true).length : 0, nd = c ? Object.keys(CRIT).filter(k => c[k]?.ok == null).length : 5;
+  const fila = ([label, regla, f], x, res) => `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span>${x?.valor != null ? (([c, u]) => `<span class="ck-val"><b class="v">${c}</b>${u ? `<span class="u">${u}</span>` : ''}</span>`)(f(x.valor)) : '<span class="ck-val"><span class="u">Dato no disponible</span></span>'}</div></li>`;
+  const grupos = { ok: [], no: [], nd: [] };
+  for (const [k, def] of Object.entries(CRIT)) { const x = c?.[k]; grupos[x?.ok === true ? 'ok' : x?.ok === false ? 'no' : 'nd'].push(fila(def, x, x?.ok === true ? ['ok', '✓ Superada'] : x?.ok === false ? ['no', '✗ No superada'] : ['nd', '– Sin datos'])); }
+  const ok = grupos.ok.length, no = grupos.no.length, nd = grupos.nd.length;
+  const seccion = (t, n, l) => n ? `<h3 class="grp">${t} (${n})</h3><ul class="checks">${l.join('')}</ul>` : '';
+  const resumenF = [`${ok} ${ok === 1 ? 'superada' : 'superadas'}`, `${no} ${no === 1 ? 'no superada' : 'no superadas'}`, `${nd} sin datos`].filter((_, i) => [ok, no, nd][i] || i === 0).join(' · ');
   const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
   $('#fi-titulo').textContent = a.nombre;
   $('#fi-sub').textContent = `${a.ticker} · ${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
-  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">Supera ${ok} de 5 comprobaciones${nd ? ` · ${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}` : ''}</p>
-    <ul class="checks">${filas}</ul>
-    ${nd ? '<p class="mut peq">Una comprobación no disponible no suma ni resta.</p>' : ''}
-    <h3>Cifras de los últimos años · miles de millones de dólares (USD)</h3>
+  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
+    ${seccion('Superadas', ok, grupos.ok)}${seccion('No superadas', no, grupos.no)}${seccion('Sin datos', nd, grupos.nd)}
+    ${nd ? '<p class="mut peq">Una comprobación sin datos no suma ni resta: no cuenta como no superada.</p>' : ''}
+    <h3>Cifras de los últimos años</h3>
+    <p class="mut peq unidades">Importes en miles de millones de USD; ROIC en %</p>
     <p class="hint-scroll">Desliza la tabla hacia los lados para ver todas las columnas →</p>
-    <div class="tabla-h" role="region" aria-label="Cifras históricas, desplazable horizontalmente" tabindex="0"><table><caption class="sr">Cifras en miles de millones de dólares (USD); el ROIC va en porcentaje</caption>
+    <div class="tabla-h" role="region" aria-label="Cifras históricas, desplazable horizontalmente" tabindex="0"><table><caption class="sr">Importes en miles de millones de USD; ROIC en %</caption>
       <thead><tr><th scope="col">Año</th><th scope="col">Ventas</th><th scope="col">Beneficio neto</th><th scope="col">EBITDA</th><th scope="col">Caja libre</th><th scope="col">ROIC (%)</th></tr></thead><tbody>${hist}</tbody></table></div>
-    <p class="mut peq">Fuente: informes anuales (10-K) de la empresa ante la SEC (EDGAR). Importes en miles de millones de dólares estadounidenses (USD).</p>
+    <p class="mut peq">Fuente: informes anuales (10-K) de la empresa ante la SEC (EDGAR).</p>
     <details class="ficha-det"><summary>Metodología</summary><div><p>EBITDA = resultado operativo + amortizaciones. Caja libre = flujo de caja operativo − inversiones en inmovilizado. El ROIC se aproxima como resultado operativo × (1 − tasa de impuestos) ÷ (deuda a largo plazo + patrimonio − caja). Son cálculos aproximados y pueden contener errores.</p></div></details>
     <details class="ficha-det"><summary>Glosario</summary><div>
       <p><b>ROIC:</b> cuánto gana la empresa por cada dólar invertido en su negocio. Es una medida de la empresa; no es la rentabilidad que obtendría un inversor.</p>
@@ -793,7 +874,6 @@ document.addEventListener('click', e => {
   actualizarCabecera(); renderPreview(); loadScreener(); loadEmpresas(); loadPublicas();
   if (logged()) {
     await migrarBorrador();
-    if (avisoOtroDispositivo) toast('Has entrado en tu cuenta, pero el borrador que pediste guardar no estaba en este dispositivo y no se ha guardado. Sigue en el dispositivo donde lo creaste.', 10000);
   }
   route(true);
 })();

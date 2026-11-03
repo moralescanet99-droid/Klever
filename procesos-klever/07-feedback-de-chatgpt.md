@@ -47,9 +47,20 @@ Valoración del usuario: «La ronda 4 mejora claramente Klever». Se conserva es
 | Ficha: unidad larga compitiendo con el criterio; desplazamiento de la tabla sin verificar | Cifra y unidad separadas; desplazamiento real verificado con teclado y columna del año fija |
 | Entregar evidencias, no solo un total de comprobaciones | Tabla de escenarios con esperado, observado y evidencia, y pruebas manuales pendientes |
 
-## Revisión 4 · sobre el paquete de la ronda 5 — **PENDIENTE** (paquete preparado en `revision-chatgpt/ronda-5/`)
-Se le pidió que cuestione expresamente: que la versión pública se actualice al guardar un reparto válido sin pedir confirmación; la copia local de cambios sin guardar y su aviso de conflicto; la persistencia en cabecera y barra (y que en la barra el motivo del bloqueo sustituya a la persistencia); que en móvil «La versión publicada no cambia» no se vea en la barra; «Dato ausente» frente a «No aplicable»; «Asignado: 100 %» repetido en tres sitios; el formato de fecha de «Mis carteras»; y el aviso «Cartera guardada» arriba.
-Cuando el usuario entregue el paquete a ChatGPT y vuelva con su respuesta: pegarla aquí, revisarla contra el código, descartar lo que no aplique y registrar qué se hace con cada punto.
+## Revisión 4 · sobre el paquete de la ronda 5 (recibida; texto literal C3 en `06-`)
+Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro rediseño general.»
+
+| Punto | Qué se hace (ronda 6) |
+|---|---|
+| Notificación larga de la captura 18 («borrador no disponible») | Aviso persistente dentro de «Mis carteras», antes del formulario; sin afirmar que el borrador sigue en otro dispositivo; sin confirmación de guardado al completar solo el acceso |
+| «Cambios sin guardar en este dispositivo» | «Cambios locales pendientes de guardar en tu cuenta», con el mismo significado en «Mis carteras» y en el editor; la tarjeta no mezcla métricas de la versión local con las de la cuenta |
+| Conflicto local/cuenta: «otra sesión» como única explicación | Diálogo con «Versión de este dispositivo» y «Versión de tu cuenta», fechas y horas reales y comparación; sin sobrescritura silenciosa (el servidor rechaza con 409 si la cartera cambió) |
+| «3 de 5» con «2 no disponibles» debajo | «3 superadas · 2 sin datos»; ficha con Superadas / No superadas / Sin datos; orden documentado y sin tratar los datos ausentes como fallos |
+| Guardar una cartera pública actualiza la publicación | «Guardar y actualizar publicación» (dos líneas en móvil), «Tus cambios aún no son públicos» mientras haya cambios pendientes; retirar la publicación con cambios locales inválidos sin perder el trabajo |
+| Fallo de guardado, exceso, tabla histórica, título móvil | «Reintentar guardado» con la explicación de dónde están los cambios; «Reduce los pesos hasta sumar 100 %»; «Importes en miles de millones de USD; ROIC en %»; título de hasta dos líneas |
+| Entrega para probar | Versión ejecutable en local (`PRUEBAS-DE-USO.md`) + demo autónoma; evidencias de los siete recorridos; pruebas manuales pendientes aparte |
+
+## Revisión 5 · sobre el paquete de la ronda 6 — **PENDIENTE** (todavía no se ha preparado paquete para ChatGPT)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).

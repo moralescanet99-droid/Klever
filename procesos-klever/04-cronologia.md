@@ -34,5 +34,8 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - Además: las ediciones inválidas de una cartera pública obligaban a despublicar; los cambios sin guardar de una cartera de la cuenta se perdían al recargar; «Mis carteras» abría con el formulario por delante de las carteras.
 - Hallazgos de la propia batería: a texto ampliado al 200 % el panel «Publicación» desbordaba la página (416 px sobre 390), y el servidor no devolvía la marca de versión tras guardar (una copia local legítima se trataba como de «otra sesión»).
 
+## Ronda 6 · Cerrar los puntos de ChatGPT sobre la ronda 5 y preparar pruebas de uso (encargo del usuario)
+- El usuario pasó el feedback de ChatGPT sobre la ronda 5 («no hagas otro rediseño general»): aviso persistente en lugar del toast largo, textos de cambios locales y conflicto, datos ausentes en las comprobaciones, publicación, reintento, unidades, título de dos líneas y una versión para pruebas de uso. Literal en `06-` (C3). Implementado y probado en local; ver `ronda6/LEEME.md`. Todavía no se ha preparado paquete para ChatGPT.
+
 ## Después de la ronda 4 (antes de la ronda 5)
 - Se pidió crear esta memoria del proyecto (`procesos-klever/` y `CLAUDE.md`). Ver `09-registro-de-cambios.md`.

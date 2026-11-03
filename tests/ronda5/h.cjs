@@ -20,5 +20,5 @@ const peso = (p, i = 0) => p.locator('.peso-in >> visible=true').nth(i);
 const evid = []; // evidencias: escenario, esperado, observado (medido en la ejecución), resultado
 const ev = (id, escenario, esperado, observado, cond, evidencia) => { ok(`[${id}] ${escenario}`, cond, observado); evid.push({ id, escenario, esperado, observado, resultado: cond ? 'OK' : 'FALLA', evidencia }); };
 const fin = (nombre) => { console.log(`\nRESULTADO: ${pass} correctas, ${fail} fallos` + (fail ? '\nFALLOS:\n- ' + fails.join('\n- ') : ''));
-  if (nombre && evid.length) { require('fs').mkdirSync('/home/user/Klever/ronda5', { recursive: true }); require('fs').writeFileSync(`/home/user/Klever/ronda5/${nombre}.json`, JSON.stringify(evid, null, 1)); } };
+  if (nombre && evid.length) { const R = process.env.RONDA || 'ronda5'; require('fs').mkdirSync(`/home/user/Klever/${R}`, { recursive: true }); require('fs').writeFileSync(`/home/user/Klever/${R}/${nombre}.json`, JSON.stringify(evid, null, 1)); } };
 module.exports = { chromium, B, ok, ev, T, nuevo, entrar, peso, fin, mail };

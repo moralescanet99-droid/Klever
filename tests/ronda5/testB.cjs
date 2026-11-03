@@ -50,13 +50,13 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== EXPLORAR EMPRESAS =====
   p = await nuevo(b, 1440, 900); await p.goto(B + '#empresas'); await p.waitForSelector('[data-t] >> visible=true');
-  ok('empresas: encabezados Empresa · Sector · Comprobaciones superadas · acción', (await p.locator('.tabla-emp thead th').allTextContents()).map(t => t.trim()).join('|') === 'Empresa|Sector|Comprobaciones superadas|Acción');
+  ok('empresas: encabezados Empresa · Sector · Comprobaciones · acción', (await p.locator('.tabla-emp thead th').allTextContents()).map(t => t.trim()).join('|') === 'Empresa|Sector|Comprobaciones|Acción');
   const f1 = (await T(p, '#empresas-lista tr:first-child .nombre-emp')) + ' / ' + (await T(p, '#empresas-lista tr:first-child .simbolo')); ok('empresas: nombre con protagonismo y símbolo complementario', /^[A-Za-z].+ \/ [A-Z]{1,5}$/.test(f1) && (await p.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.nombre-emp')).fontWeight) >= 600)), f1);
   const alt = await p.evaluate(() => [...document.querySelectorAll('#empresas-lista tr')].slice(0, 20).map(r => Math.round(r.getBoundingClientRect().height))); ok('empresas: filas de 56–64 px', alt.every(a => a >= 56 && a <= 66), alt.join(','));
   ok('empresas: «Ver ficha» visible en cada fila', (await p.locator('#empresas-lista .ver-ficha:visible').count()) === 105 && (await T(p, '#empresas-lista tr:first-child .ver-ficha')).startsWith('Ver ficha'));
-  const orden = await p.evaluate(() => [...document.querySelectorAll('#empresas-lista tr')].map(r => [parseInt(r.querySelector('.marca-n').textContent), r.querySelector('[data-t]').dataset.t]));
-  ok('empresas: orden real = comprobaciones (desc) y símbolo (A–Z) en empates', orden.every((x, i) => i === 0 || x[0] < orden[i - 1][0] || (x[0] === orden[i - 1][0] && x[1] > orden[i - 1][1])), orden.slice(0, 4).join(' | '));
-  ok('empresas: criterio de orden y empates explicados', (await T(p, '.plegable')).includes('ordenan alfabéticamente por símbolo') && (await T(p, '.plegable')).includes('de más a menos'));
+  const orden = await p.evaluate(() => [...document.querySelectorAll('#empresas-lista tr')].map(r => [parseInt(r.querySelector('.marca-n').textContent), parseInt((r.querySelector('.sin-d')?.textContent || '').trim()) || 0, r.querySelector('[data-t]').dataset.t]));
+  ok('empresas: orden real = superadas (desc) → no superadas (asc) → símbolo (A–Z); sin datos no cuentan como fallo', orden.every((x, i) => { if (i === 0) return true; const y = orden[i - 1], ns = r => 5 - r[0] - r[1]; return x[0] < y[0] || (x[0] === y[0] && (ns(x) > ns(y) || (ns(x) === ns(y) && x[2] > y[2]))); }), orden.slice(0, 4).join(' | '));
+  ok('empresas: criterio de orden y empates explicados', (await T(p, '.plegable')).includes('después, por símbolo') && (await T(p, '.plegable')).includes('menos comprobaciones no superadas') && (await T(p, '.plegable')).includes('sin datos no suman ni restan'));
   ok('empresas: «no es una recomendación de compra»', (await T(p, '.pag-cab')).includes('no es una recomendación de compra'));
   ok('empresas: sin paginación ficticia', (await p.locator('[aria-label*="ágina"], .paginacion, [data-page]').count()) === 0 && (await T(p, '#emp-cuenta')) === '105 de 105 empresas');
   await p.focus('#empresas-lista tr:first-child .ver-ficha'); await p.keyboard.press('Enter'); await p.waitForSelector('#dlg-ficha[open]'); ok('empresas: «Ver ficha» se abre con teclado', true); await p.keyboard.press('Escape');
@@ -68,9 +68,9 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== FICHA EN MÓVIL =====
   p = await nuevo(b, 390, 844); await p.goto(B + '#empresas'); await p.waitForSelector('[data-t] >> visible=true'); await p.locator('[data-t] >> visible=true').nth(2).click(); await p.waitForSelector('#dlg-ficha[open]'); await p.waitForTimeout(300);
-  ok('ficha móvil: cinco comprobaciones con valor, icono y texto', (await p.locator('#fi-cuerpo .checks li').count()) === 5 && (await p.locator('#fi-cuerpo .res').allTextContents()).every(t => /[✓✗–]/.test(t) && /Cumple|No cumple|No disponible/.test(t)));
+  ok('ficha móvil: cinco comprobaciones con valor, icono y texto', (await p.locator('#fi-cuerpo .checks li').count()) === 5 && (await p.locator('#fi-cuerpo .res').allTextContents()).every(t => /[✓✗–]/.test(t) && /Superada|No superada|Sin datos/.test(t)));
   const ficha = await T(p, '#dlg-ficha');
-  ok('ficha móvil: moneda y escala en el título; sin «mil M»', ficha.includes('miles de millones de dólares (USD)') && !/mil M\b/.test(ficha), '');
+  ok('ficha móvil: moneda y escala en el título; sin «mil M»', ficha.includes('Importes en miles de millones de USD; ROIC en %') && !/mil M\b/.test(ficha), '');
   ok('ficha móvil: periodo y fuente visibles, metodología accesible', (await T(p, '#fi-sub')).includes('FY20') && ficha.includes('Fuente: informes anuales') && await p.locator('#fi-cuerpo details summary', { hasText: 'Metodología' }).count() === 1);
   const sc = await p.evaluate(() => { const t = document.querySelector('#dlg-ficha .tabla-h'); return { s: t.scrollWidth, c: t.clientWidth }; });
   ok('ficha móvil: tabla desplazable dentro de su contenedor, con aviso visible', sc.s > sc.c && await p.isVisible('.hint-scroll'), JSON.stringify(sc));

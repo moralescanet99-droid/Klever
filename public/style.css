@@ -387,3 +387,27 @@ html{scroll-padding-bottom:calc(var(--barra-alto,0px) + 16px)}
 /* ficha: la regla del criterio conserva al menos la mitad del ancho */
 .ck-res{max-width:7.75rem}
 .checks li{grid-template-columns:minmax(0,1fr) auto}
+
+/* ---- ronda 6 ---- */
+/* título del editor: hasta dos líneas, sin saltos de línea manuales */
+.nombre{display:block;resize:none;min-height:44px;overflow:hidden;font-family:inherit;line-height:1.25;white-space:normal;overflow-wrap:anywhere;max-height:calc(2 * 1.25em + 12px)}
+.nombre:focus{overflow:auto}
+/* aviso persistente en «Mis carteras» */
+.aviso-panel{display:flex;gap:var(--s2);align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warn-bg);color:var(--text);border:1px solid var(--border-strong);border-left:4px solid var(--warn);border-radius:var(--r);padding:var(--s2);margin:0 0 var(--s2)}
+.aviso-panel[hidden]{display:none}
+.aviso-panel p{margin:4px 0 0}
+/* tarjeta de cartera con cambios locales: cada cifra dice a qué versión pertenece */
+.ci-v{font-weight:600} .ci-loc{color:var(--warn)}
+/* botón de guardar con etiqueta larga («Guardar y actualizar publicación»): hasta dos líneas */
+.btn.dos-lineas{white-space:normal;text-align:center;line-height:1.2;padding-top:6px;padding-bottom:6px}
+.barra-guardar .btn.dos-lineas{max-width:52%}
+/* resultados con datos ausentes */
+.sin-d{display:block;color:var(--muted)} .tabla-emp .num .marca-n{white-space:nowrap}
+h3.grp{font-size:1rem;margin:var(--s2) 0 0}
+/* diálogo de conflicto */
+.cn-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s2) 0}
+.cn-v{border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);min-width:0;overflow-wrap:anywhere} .cn-v h3{font-size:1rem;margin:0 0 4px} .cn-v p{margin:4px 0}
+.cn-dif h3{font-size:1rem;margin:0 0 4px} .cn-dif ul{margin:0;padding-left:1.2em}
+.cn-acc{flex-wrap:wrap}
+@media (max-width:719px){.cn-cols{grid-template-columns:1fr}.cn-acc .btn{width:100%}}
+@media (max-width:719px){.nombre{font-size:1.25rem}}

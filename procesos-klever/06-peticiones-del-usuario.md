@@ -323,6 +323,83 @@ Aquí están los encargos largos **literales** (no resumidos) y, después, el re
 
 ---
 
+## C3. Feedback de ChatGPT sobre la ronda 5 y encargo de la ronda 6 (pegado por el usuario)
+
+> La ronda 5 tiene una base visual suficiente. No hagas otro rediseño general. Cierra los siguientes puntos y después prepara una versión para pruebas de uso.
+>
+> 1. AVISO DE BORRADOR NO DISPONIBLE
+>
+> Sustituye la notificación flotante larga de la captura 18 por un aviso persistente dentro de «Mis carteras», antes del formulario.
+>
+> Texto orientativo:
+> «Tu cartera todavía no se ha guardado en la cuenta. El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo».
+>
+> No afirmes que el borrador sigue existiendo en otro dispositivo si no puedes verificarlo. No muestres una confirmación de guardado cuando solo se ha completado el acceso.
+>
+> Conserva las notificaciones breves para éxitos simples como «Cartera guardada».
+>
+> 2. COHERENCIA ENTRE COPIA LOCAL Y VERSIÓN DE LA CUENTA
+>
+> Sustituye «Cambios sin guardar en este dispositivo» por «Cambios locales pendientes de guardar en tu cuenta».
+>
+> Usa el mismo significado en Mis carteras y en el editor.
+>
+> Si existe un borrador local diferente de la versión de la cuenta, identifica a cuál corresponden las posiciones y el porcentaje que muestra la tarjeta. No mezcles métricas de una versión con el estado de otra.
+>
+> Conserva la recuperación local y la detección de conflictos. En un conflicto, muestra «Versión de este dispositivo» y «Versión de tu cuenta», con fechas y horas reales y una breve comparación. Evita «otra sesión» como única explicación. No sobrescribas silenciosamente.
+>
+> 3. COMPROBACIONES CON DATOS AUSENTES
+>
+> En lugar de «3 de 5» como resultado dominante y «2 no disponibles» debajo, muestra «3 superadas · 2 sin datos».
+>
+> Distingue en la ficha:
+>
+> - Superadas.
+> - No superadas.
+> - Sin datos.
+>
+> Comprueba que la ordenación no trate los datos ausentes como fallos ni presente una evaluación parcial como completa. Documenta la regla real aplicada.
+>
+> 4. GUARDADO Y PUBLICACIÓN
+>
+> Cuando guardar una cartera pública actualice su publicación, usa «Guardar y actualizar publicación». Adapta el botón móvil permitiendo dos líneas si hace falta.
+>
+> No añadas una confirmación repetitiva en cada guardado.
+>
+> Mientras haya cambios pendientes, muestra junto al estado público: «Tus cambios aún no son públicos». Mantén la última versión publicada intacta hasta completar correctamente el guardado válido.
+>
+> Verifica también qué ocurre al dejar de publicar con cambios locales inválidos: debe poder retirarse la publicación sin perder el trabajo local.
+>
+> 5. RECUPERACIÓN Y TEXTOS FINALES
+>
+> Tras un fallo de guardado, usa «Reintentar guardado» y conserva la explicación de dónde permanecen los cambios.
+>
+> En exceso de asignación, acompaña el dato con una instrucción breve: «Reduce los pesos hasta sumar 100 %».
+>
+> En la tabla histórica, distingue las unidades: «Importes en miles de millones de USD; ROIC en %».
+>
+> Permite hasta dos líneas en el título móvil de la cartera.
+>
+> 6. ENTREGA PARA PROBAR, NO OTRA RONDA DE REDISEÑO
+>
+> Prepara una versión ejecutable o enlace de prueba, según el entorno disponible, e indica cómo abrirla.
+>
+> Acompaña la entrega con evidencias de estos recorridos:
+>
+> - Crear, editar, guardar, cerrar y recuperar una cartera.
+> - Conservar cambios tras recargar.
+> - Recuperarse de un guardado fallido.
+> - Abrir el enlace de acceso en otro navegador.
+> - Resolver un conflicto entre cambios locales y cambios de la cuenta.
+> - Editar una cartera pública sin alterar prematuramente su publicación.
+> - Mostrar comprobaciones con datos ausentes correctamente.
+>
+> Distingue resultados automáticos de pruebas manuales pendientes. No presentes el número de comprobaciones como sustituto de sus resultados.
+>
+> Mantén fuera de esta entrega las funcionalidades del futuro plan de pago.
+
+---
+
 ## D. El resto de instrucciones, en orden aproximado
 
 1. Enlace al Claude Doc del plan: «Léelo». → se leyó y se resumió.
@@ -346,3 +423,4 @@ Aquí están los encargos largos **literales** (no resumidos) y, después, el re
 19. «Ahora pásame tu actualización para que la vea ChatGPT y te pase feedback.» → paquete de la ronda 4.
 20. «Almacena todo el contexto en una carpeta que se diga procesos klever y ve actualizándola a medida que vamos creando la web, así no pierdes contexto en ningún momento.» → esta carpeta y `CLAUDE.md`. *(La carpeta se llama `procesos-klever` por no usar espacios en la ruta.)*
 21. Encargo de la ronda 5 (texto C2). → ronda 5. *Fuera de alcance, para un futuro plan de pago:* conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión.
+22. «Ya se lo he pasado a ChatGPT, te cuento su feedback» (texto C3). → ronda 6: cerrar esos puntos y preparar una versión para pruebas de uso (no otro rediseño, no paquete para ChatGPT todavía).
