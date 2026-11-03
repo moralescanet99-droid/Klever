@@ -36,7 +36,7 @@
 <div id="avisos" class="avisos">
   <div class="avisos-in">
     <div id="toast" role="status" aria-live="polite"></div>
-    <button id="toast-x" class="btn btn-secundario av-x" type="button" aria-label="Cerrar aviso" hidden>Cerrar</button>
+    <button id="toast-x" class="av-x" type="button" aria-label="Cerrar aviso" hidden><span aria-hidden="true">✕</span></button>
   </div>
 </div>
 
@@ -194,11 +194,16 @@
         <div id="res-breve" class="res-breve">
           <b id="rb-total" class="num">Asignado: 0&nbsp;%</b>
           <p id="rb-estado" class="rb-estado"></p>
-          <div class="rb-pie"><span id="rb-n" class="num mut"></span><button id="rb-ver" class="enlace" type="button">Ver detalle</button></div>
+          <div class="rb-pie"><span id="rb-n" class="num mut"></span></div>
         </div>
 
         <section class="panel panel-pos" aria-labelledby="h-pos">
           <h2 id="h-pos">Posiciones</h2>
+          <div class="comp" id="comp">
+            <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button id="rb-ver" class="enlace" type="button">Ver detalle</button></span></div>
+            <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
+            <p id="comp-pie" class="comp-pie"></p>
+          </div>
           <div class="combo">
             <label for="buscar-activo">Añadir un activo</label>
             <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
@@ -236,6 +241,14 @@
             <div class="barra" role="progressbar" aria-label="Porcentaje asignado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="r-barra"></i></div>
             <p id="r-falta" class="asig-estado"></p>
           </div>
+          <h3>Distribución por categorías</h3>
+          <div id="r-sectores"></div>
+          <details class="mini">
+            <summary>Más sobre las categorías</summary>
+            <p>Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
+            <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
+          </details>
+          <div class="roic-bloque">
           <dl class="datos datos-roic">
             <div class="dato-roic"><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
             <div><dt>Posiciones</dt><dd id="r-n" class="num">0</dd></div>
@@ -243,7 +256,7 @@
           <p class="nota-roic">No representa la rentabilidad de tu cartera.</p>
           <div id="r-cobertura" class="cobertura">
           <p id="r-cob-corta" class="cob-corta"></p>
-          <details class="mini">
+          <details class="mini" id="roic-det">
             <summary>Cómo se calcula y qué se excluye</summary>
             <div id="r-cob-larga" class="cob-larga"></div>
             <p>El ROIC mide cuánto gana una empresa por cada dólar invertido en su negocio. Es una característica de la empresa; no es lo que ganaría tu cartera.</p>
@@ -252,13 +265,7 @@
             <p><b>Cobertura:</b> número de posiciones con dato sobre el total de posiciones, y su peso sobre el peso asignado.</p>
           </details>
           </div>
-          <h3>Distribución por categorías</h3>
-          <div id="r-sectores"></div>
-          <details class="mini">
-            <summary>Más sobre las categorías</summary>
-            <p>Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
-            <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
-          </details>
+          </div>
         </section>
 
         <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">

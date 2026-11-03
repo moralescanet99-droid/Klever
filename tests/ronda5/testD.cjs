@@ -130,7 +130,7 @@ const EV = EVDIR;
 
   // ===== E9: resumen y exceso a 360 px =====
   p = await nuevo(b, 360, 780); await entrar(p, 'dividendos', 'D4'); await peso(p).fill('30'); await p.waitForTimeout(200);
-  const m360 = await p.evaluate(() => ({ ancho: document.documentElement.scrollWidth, fuente: getComputedStyle(document.querySelector('#rb-estado')).fontSize, barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().height), rb: document.querySelector('#rb-estado').textContent, bt: document.querySelector('#b-total').textContent, be: document.querySelector('#b-estado').textContent, desborde: [...document.querySelectorAll('#barra-guardar *')].some(e => e.getBoundingClientRect().right > innerWidth + 1) }));
+  const m360 = await p.evaluate(() => ({ ancho: document.documentElement.scrollWidth, fuente: getComputedStyle(document.querySelector('#comp-pie')).fontSize, barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().height), rb: document.querySelector('#comp-pie').textContent, bt: document.querySelector('#b-total').textContent, be: document.querySelector('#b-estado').textContent, desborde: [...document.querySelectorAll('#barra-guardar *')].some(e => e.getBoundingClientRect().right > innerWidth + 1) }));
   await p.screenshot({ path: EV + 'E9-exceso-360.png' });
   const resumenTxt = await p.evaluate(() => document.querySelector('#vista-cartera').innerText);
   // Ronda 10: la nota de categorías pasó al desplegable «Más sobre las categorías» (menos texto secundario visible): debe seguir existiendo, dentro de ese desplegable accesible

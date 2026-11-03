@@ -32,12 +32,15 @@ let toastTimer;
 function mostrarAviso(msg, error, ms) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('on'); t.classList.toggle('error', error);
   t.setAttribute('role', error ? 'alert' : 'status'); t.setAttribute('aria-live', error ? 'assertive' : 'polite');
-  $('#toast-x').hidden = !error; $('#avisos').classList.add('on'); clearTimeout(toastTimer);
+  $('#toast-x').hidden = !error; const w = $('#avisos'); w.classList.add('on'); w.classList.toggle('fija', error || matchMedia('(min-width:720px)').matches); medirAvisos(); clearTimeout(toastTimer);
   if (!error) toastTimer = setTimeout(cerrarAviso, ms);
 }
 const toast = (msg, ms = 4000) => mostrarAviso(msg, false, ms);
 const toastError = msg => mostrarAviso(msg, true);
-function cerrarAviso() { clearTimeout(toastTimer); $('#toast').classList.remove('on', 'error'); $('#avisos').classList.remove('on'); $('#toast-x').hidden = true; }
+function cerrarAviso() { clearTimeout(toastTimer); $('#toast').classList.remove('on', 'error'); $('#avisos').classList.remove('on', 'fija'); $('#toast-x').hidden = true; medirAvisos(); }
+// Zona fija de arriba: solo cuenta si el aviso está pegado (.fija). El navegador la respeta al enfocar o desplazar (scroll-padding-top), así ningún campo ni botón queda bajo ella.
+function medirAvisos() { const w = $('#avisos'); document.documentElement.style.setProperty('--avisos-alto', (w.classList.contains('on') && w.classList.contains('fija') ? Math.ceil(w.getBoundingClientRect().height) : 0) + 'px'); }
+if ('ResizeObserver' in window) new ResizeObserver(medirAvisos).observe($('#avisos'));
 function hideToast() { if (!$('#toast').classList.contains('error')) cerrarAviso(); } // al editar se retiran los avisos de éxito, nunca un error pendiente
 $('#toast-x').addEventListener('click', cerrarAviso);
 
@@ -442,16 +445,17 @@ function renderWorkspace() {
 
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
-  return `<tr><td><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></td><td>${esc(a.sector || '')}</td>
-    <td class="num"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span></td>
+  return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${i % 8})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
+    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><span class="pbar" aria-hidden="true"><i style="--c:var(--c${i % 8});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
     <td class="num">${roicTxt(a)}</td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
 function tarjetaPos(p, i) {
   const a = by[p.ticker] || {}, id = 'det-' + i;
-  return `<li class="pos-card"><div class="pc-fila"><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
+  return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${i % 8})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
     <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
+    <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${i % 8});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
     <div class="pc-det" id="${id}" hidden><dl>
       <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
       <div><dt>Categoría:</dt><dd>${esc(a.sector || '—')}</dd></div>
@@ -463,8 +467,20 @@ function renderPosiciones() {
   $('#pos-cards').innerHTML = pos.map(tarjetaPos).join('');
   $('.tabla-scroll').hidden = !pos.length; $('#pos-cards').hidden = !pos.length; $('#pos-vacio').hidden = pos.length > 0;
 }
+function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada tramo es su peso; no se inventa nada
+  const total = r.total, escala = Math.max(100, total), cab = $('#comp'), barra = $('#comp-barra');
+  $('#comp-total').textContent = pesoCorto(total); $('#comp-n').textContent = r.n ? `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}` : '';
+  const seg = pos.map((p, i) => ({ t: p.ticker, w: Math.max(0, p.peso || 0), i })).filter(x => x.w > 0);
+  barra.innerHTML = seg.map(x => `<i style="--c:var(--c${x.i % 8});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
+  barra.classList.toggle('exceso', total > 100); barra.classList.toggle('vacia', !seg.length);
+  barra.setAttribute('aria-label', 'Composición de la cartera: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)}`).join(', ') : 'sin posiciones') + (total < 100 && seg.length ? `; sin asignar ${pesoCorto(r1(100 - total))}` : '') + (total > 100 ? `; exceso de ${pesoCorto(r1(total - 100))}` : ''));
+  $('#comp-pie').textContent = !r.n ? 'Añade posiciones para ver el reparto.' : total > 100 ? `⚠ Exceso de asignación: ${pesoCorto(r1(total - 100))}` : total < 100 ? `Pendiente de asignar: ${pesoCorto(r1(100 - total))}` : '';
+  cab.classList.toggle('error', total > 100); cab.classList.toggle('aviso', total < 100 && r.n > 0);
+  $$('.pbar i').forEach(el => { const i = +(el.closest('tr')?.querySelector('.peso-in') || el.closest('li')?.querySelector('.peso-in'))?.dataset.i; if (Number.isInteger(i)) el.style.width = Math.max(0, Math.min(100, pos[i]?.peso || 0)) + '%'; });
+}
 function renderResumen() {
   const r = calcResumen(pos), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
+  pintarComposicion(r);
   const dif = !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '';
   $('#r-total').textContent = pesoCorto(r.total);
   const f = $('#r-falta'); f.textContent = dif; f.hidden = !dif; f.className = 'asig-estado ' + clase;

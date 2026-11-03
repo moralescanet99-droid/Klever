@@ -5,12 +5,16 @@
    Contraste verificado: texto >= 4,5:1, controles y foco >= 3:1.
    ========================================================= */
 :root{
-  --bg:#F6F8FB; --surface:#FFFFFF; --surface-2:#EDF1F6;
-  --text:#17212F; --muted:#4A586D;
-  --border:#DCE3EC; --border-strong:#7B8BA1;
-  --accent:#0F766E; --on-accent:#FFFFFF; --accent-soft:#DDF1EE; --accent-on-soft:#0B5E57;
+  --bg:#F7F5F0; --surface:#FFFFFF; --surface-2:#F0EDE6;
+  --text:#14213D; --muted:#4A5873;
+  --border:#E6E1D6; --border-strong:#7C879B;
+  --accent:#0B6B6B; --on-accent:#FFFFFF; --accent-soft:#DCEDEA; --accent-on-soft:#095555;
   --ok:#166534; --ok-bg:#E3F4EA; --warn:#8A3B0B; --warn-bg:#FDF0D5; --bad:#B42318; --bad-bg:#FCE8E6;
-  --focus:#0F766E; --scrim:rgba(11,18,25,.55);
+  --focus:#0B6B6B; --scrim:rgba(11,18,25,.55);
+  /* reparto de la cartera: una paleta categórica corta (texto blanco ≥ 4,5:1 sobre cada tramo) */
+  --c0:#0B6B6B; --c1:#2F5D9E; --c2:#9A5F14; --c3:#6B4688; --c4:#2F7D5C; --c5:#A8433B; --c6:#54648A; --c7:#8A7220; --c-txt:#FFFFFF;
+  /* escala tipográfica y de forma */
+  --t-xs:.8125rem; --t-s:.875rem; --t-m:1rem; --t-l:1.25rem; --t-xl:1.75rem; --t-num:2.25rem; --radio-campo:10px;
   --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.08);
   --shadow-lg:0 4px 8px rgba(16,24,40,.06),0 12px 28px rgba(16,24,40,.10);
   --s1:8px; --s2:16px; --s3:24px; --s4:32px; --r:12px;
@@ -19,10 +23,11 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0B1219; --surface:#121B26; --surface-2:#182433;
-    --text:#E6EDF5; --muted:#A6B4C6;
-    --border:#26364A; --border-strong:#6B7F99;
-    --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#10373A; --accent-on-soft:#7FE8D8;
+    --bg:#0D1524; --surface:#142033; --surface-2:#1B2A40;
+    --text:#E8EEF8; --muted:#A9B7CC;
+    --border:#2A3B55; --border-strong:#6F83A0;
+    --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#12383C; --accent-on-soft:#7FE8D8;
+    --c0:#2DD4BF; --c1:#7DA7F0; --c2:#F0B35A; --c3:#C39BE0; --c4:#7CD6A8; --c5:#F0968D; --c6:#9FB0D4; --c7:#D9C25E; --c-txt:#0B1219;
     --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
     --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
     --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
@@ -30,10 +35,11 @@
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0B1219; --surface:#121B26; --surface-2:#182433;
-  --text:#E6EDF5; --muted:#A6B4C6;
-  --border:#26364A; --border-strong:#6B7F99;
-  --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#10373A; --accent-on-soft:#7FE8D8;
+  --bg:#0D1524; --surface:#142033; --surface-2:#1B2A40;
+  --text:#E8EEF8; --muted:#A9B7CC;
+  --border:#2A3B55; --border-strong:#6F83A0;
+  --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#12383C; --accent-on-soft:#7FE8D8;
+  --c0:#2DD4BF; --c1:#7DA7F0; --c2:#F0B35A; --c3:#C39BE0; --c4:#7CD6A8; --c5:#F0968D; --c6:#9FB0D4; --c7:#D9C25E; --c-txt:#0B1219;
   --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
   --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
   --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
@@ -417,15 +423,20 @@ h3.grp{font-size:1rem;margin:var(--s2) 0 0}
 
 /* ---- ronda 10: pulido visual ---- */
 /* Avisos: zona reservada bajo la cabecera, en el flujo; pegada arriba al desplazarse; los errores permanecen hasta cerrarlos */
-.avisos{position:sticky;top:0;z-index:55;display:grid;grid-template-rows:0fr;transition:grid-template-rows .2s ease}
+/* Avisos (ronda 11): zona en el flujo bajo la cabecera. Solo se anima la ALTURA: el texto es siempre opaco, así que es legible en cada fotograma.
+   Quedan pegados arriba (.fija) los errores y, en escritorio, los de éxito; en móvil el éxito no se fija (lo confirma además la barra inferior).
+   scroll-padding-top (medido en JS) hace que lo enfocado o desplazado nunca quede bajo la zona fija. */
+.avisos{display:grid;grid-template-rows:0fr;transition:grid-template-rows .2s ease}
 .avisos.on{grid-template-rows:1fr;background:var(--bg);border-bottom:1px solid var(--border)}
-.avisos-in{width:100%;min-height:0;overflow:hidden;display:flex;align-items:flex-start;justify-content:flex-start;gap:var(--s1);max-width:var(--ancho);margin:0 auto;padding:0 var(--gutter)}
-#toast{flex:0 1 auto;min-width:0;margin:8px 0;padding:10px var(--s2);border-radius:var(--r);font-size:.9375rem;background:var(--text);color:var(--bg);opacity:0;transition:opacity .2s;overflow-wrap:anywhere}
-#toast.on{opacity:1}
-#toast.error{flex:1 1 auto;background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad);font-weight:600}
-.av-x{flex:none;min-height:40px;padding:0 var(--s2)}
-@media (max-width:480px){.av-x{margin:8px 0;padding:0 var(--s1);min-height:44px}}
-@media (prefers-reduced-motion:reduce){.avisos,#toast{transition:none}}
+.avisos.fija{position:sticky;top:0;z-index:55}
+.avisos-in{width:100%;min-height:0;overflow:hidden;display:flex;align-items:flex-start;gap:var(--s1);max-width:var(--ancho);margin:0 auto;padding:0 var(--gutter)}
+#toast{flex:1 1 auto;min-width:0;margin:8px 0;padding:10px var(--s2);border-radius:var(--r);font-size:.9375rem;line-height:1.35;background:var(--text);color:var(--bg);overflow-wrap:anywhere;max-height:30vh;overflow:auto}
+#avisos:not(.on) #toast{visibility:hidden;transition:visibility 0s .2s}
+#toast.error{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad);font-weight:600}
+.av-x{flex:none;align-self:center;width:44px;height:44px;margin:4px 0;border:1px solid var(--border-strong);border-radius:var(--radio-campo);background:var(--surface);color:var(--text);font:inherit;font-size:1.125rem;cursor:pointer}
+.av-x:hover{background:var(--surface-2)}
+html{scroll-padding-top:var(--avisos-alto,0px)}
+@media (prefers-reduced-motion:reduce){.avisos{transition:none}}
 /* Resumen de ROIC: el indicador primero y grande; cobertura y advertencia breves; el detalle, plegado */
 .datos-roic{grid-template-columns:1fr auto;align-items:end;margin-bottom:6px}
 .datos-roic .dato-roic dd{font-size:2rem;letter-spacing:-.02em;line-height:1.1;color:var(--accent-on-soft,var(--text))}
@@ -444,8 +455,121 @@ h3.grp{font-size:1rem;margin:var(--s2) 0 0}
   /* barra inferior: el estado conserva sitio; el botón puede ocupar dos líneas */
   .barra-guardar{flex-wrap:wrap;row-gap:4px;max-height:40vh;overflow-y:auto;overscroll-behavior:contain;container-type:inline-size}
   /* texto muy ampliado: el botón (acción principal) pasa arriba y a todo el ancho; el estado queda debajo */
-  @container (max-width:18rem){.barra-guardar .js-guardar{order:-1;flex:1 1 100%;margin-left:0}.barra-guardar .bg-info{flex:1 1 100%}}   /* si no cabe (texto muy ampliado), el botón baja a su propia fila en vez de recortarse */
+  @container (max-width:15rem){.barra-guardar .js-guardar{order:-1;flex:1 1 100%;margin-left:0}.barra-guardar .bg-info{flex:1 1 100%}}   /* si no cabe (texto muy ampliado), el botón baja a su propia fila en vez de recortarse */
   .barra-guardar .js-guardar{flex:0 1 auto;min-width:8.5rem;max-width:100%;margin-left:auto;white-space:normal;line-height:1.15;padding:6px 12px}
   .barra-guardar .bg-info{flex:1 1 6rem;min-width:0}
   .res-breve{padding:10px var(--s2)}
+}
+
+/* =========================================================
+   Ronda 11 · editor de cartera (pantalla de referencia)
+   Menos cajas: el contenido se separa con espacio y líneas finas. Composición primero; ROIC, secundario.
+   Componentes reutilizables: .btn (primario/secundario/ghost), campos, .chip, .estado-btn, .punto, .pbar, .comp.
+   ========================================================= */
+body{background:var(--bg)}
+h1,h2,h3{color:var(--text)} h2{font-size:var(--t-l);letter-spacing:-.015em}
+.num,.num-grande,.datos dd,.tabla-pos .num,.sector span:last-child{font-variant-numeric:tabular-nums}
+/* botones: una acción principal inequívoca (acento sólido) y las demás discretas */
+.btn{border-radius:var(--radio-campo)}
+.btn-primario{background:var(--accent);color:var(--on-accent);box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.btn-primario:hover{filter:none;background:color-mix(in srgb,var(--accent) 88%,#000)}
+.btn-secundario{background:transparent;border-color:var(--border);color:var(--text)} .btn-secundario:hover{background:var(--surface-2)}
+.btn-icono{border-color:transparent;color:var(--muted)} .btn-icono:hover{color:var(--text)}
+/* campos: sin caja pesada; la línea sube de tono al enfocar */
+input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border-strong)}
+.peso input{background:var(--surface-2);border-color:transparent;font-weight:600}
+.peso input:hover{border-color:var(--border-strong)} .peso input:focus{background:var(--surface);border-color:var(--accent)}
+/* superficies: una sola capa blanca con línea fina; sin sombra */
+.panel{box-shadow:none;border-color:var(--border);padding:var(--s3)}
+.panel-pos{padding:var(--s3) var(--s3) var(--s2)}
+.plegable-panel{border-color:var(--border)}
+/* cabecera de la cartera */
+.ws-cab{align-items:center;margin-bottom:var(--s3)}
+.nombre{font-size:clamp(1.5rem,1.2rem + 1.2vw,2rem);letter-spacing:-.025em}
+.ws-meta{margin-top:6px;gap:6px 10px}
+.chip{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.chip.pub{background:var(--accent-soft);color:var(--accent-on-soft);border-color:transparent}
+.estado-btn::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+.estado-btn{color:var(--muted)}
+.ws-acc .js-guardar{min-width:156px}
+/* composición: el dato principal */
+.comp{margin:0 0 var(--s2)}
+.comp-cab{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s1);margin-bottom:10px}
+.comp-tot{font-size:var(--t-s);color:var(--muted)} .comp-tot b{font-size:var(--t-num);line-height:1;letter-spacing:-.03em;color:var(--text);margin-right:4px}
+.comp-n{font-size:var(--t-s);color:var(--muted)}
+.comp-barra{display:flex;gap:2px;height:40px;border-radius:var(--radio-campo);overflow:hidden;background:var(--surface-2)}
+.comp-barra i{display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;white-space:nowrap;font:600 var(--t-xs)/1 var(--fuente);font-style:normal;color:var(--c-txt);background:var(--c)}
+.comp-barra .libre{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,var(--border) 6px 12px)}
+.comp-barra.exceso{outline:2px solid var(--bad);outline-offset:1px}
+.comp-barra.vacia{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,var(--border) 6px 12px)}
+.comp-pie{margin:8px 0 0;font-size:var(--t-s);font-weight:600;min-height:0} .comp-pie:empty{display:none}
+.comp.aviso .comp-pie{color:var(--warn)} .comp.error .comp-pie{color:var(--bad)}
+/* filas de activos: punto de color (el mismo del reparto), peso con su barra, ROIC discreto */
+.punto{flex:none;width:10px;height:10px;border-radius:3px;background:var(--c)}
+.tabla-pos th{border-bottom:1px solid var(--border);font-size:var(--t-xs);font-weight:600;letter-spacing:.02em;padding:8px var(--s1)}
+.tabla-pos td{border-bottom:1px solid var(--border);padding:12px var(--s1)}
+.tabla-pos tr:last-child td{border-bottom:0}
+.tabla-pos .id{display:flex;align-items:center;gap:10px} .tabla-pos .id-txt b{font-size:1.0625rem} .tabla-pos .id-txt small{font-size:var(--t-s)}
+.tabla-pos .cat{color:var(--muted);font-size:var(--t-s)}
+.tabla-pos td:nth-child(4){color:var(--muted);font-size:var(--t-s)}
+.peso-celda{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.pbar{display:block;height:4px;width:100%;min-width:96px;background:var(--surface-2);border-radius:99px;overflow:hidden} .pbar i{display:block;height:100%;background:var(--c);border-radius:99px;width:0}
+.combo label{font-size:var(--t-s);color:var(--muted);font-weight:600}
+.combo input{background:var(--surface-2);border-color:transparent} .combo input:focus{background:var(--surface);border-color:var(--accent)}
+/* resumen: lo secundario, sin tarjeta propia dentro de otra; ROIC como indicador secundario */
+.panel-res{padding:var(--s3)}
+.panel-res h2{font-size:var(--t-l)}
+.asig .etq{font-size:var(--t-xs);text-transform:none}
+.num-grande{font-size:var(--t-xl)}
+.barra{height:6px;border:0;background:var(--surface-2);margin-top:10px}
+.panel-res h3{font-size:var(--t-s);font-weight:700;color:var(--muted);letter-spacing:.01em;margin:var(--s3) 0 6px}
+.sector{margin:8px 0} .sector span:first-child{font-size:var(--t-s)} .sector .barra{height:4px;margin:0}
+.roic-bloque{margin-top:var(--s3);padding-top:var(--s2);border-top:1px solid var(--border)}
+.datos-roic{margin:0 0 6px;grid-template-columns:1fr auto;gap:var(--s1) var(--s2)}
+.datos-roic .dato-roic dd{font-size:var(--t-xl);color:var(--text);letter-spacing:-.02em}
+.datos-roic div:last-child dd{font-size:var(--t-m);font-weight:600;color:var(--muted)}
+.roic-bloque .nota-roic{font-size:var(--t-s);color:var(--text)}
+/* resumen breve (móvil): una línea, sin tarjeta */
+.res-breve{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0;padding:0 0 10px;flex-direction:row;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px var(--s2)}
+.res-breve b{font-size:var(--t-m)} .rb-pie{margin-left:auto}
+.rb-estado{flex:1 1 100%}
+/* barra inferior (móvil): plana, con el botón principal en acento */
+.barra-guardar{box-shadow:none;border-top:1px solid var(--border);background:var(--surface)}
+@container (max-width:15rem){.barra-guardar .bg-total{display:none}}
+/* móvil: filas para tocar y leer, no la tabla trasladada */
+@media (max-width:719px){
+  .panel-pos{padding:0;background:transparent;border:0}
+  .panel-pos>h2{display:none}
+  .comp{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2)}
+  .comp-barra{height:32px} .comp-tot b{font-size:2rem}
+  .pos-cards{margin-top:var(--s1)}
+  .pos-card{padding:12px 0 10px;border-bottom:1px solid var(--border)}
+  .pc-fila{grid-template-columns:auto minmax(0,1fr) auto 44px;gap:10px}
+  .pc-id b{font-size:1.0625rem}
+  .peso input{width:calc(5ch + 28px)}
+  .pbar-movil{margin:8px 0 0 20px;width:auto;min-width:0}
+  .panel-res{padding:var(--s2)}
+  .roic-bloque{margin-top:var(--s2)}
+  .datos-roic .dato-roic dd{font-size:1.5rem}
+}
+@media (min-width:900px){
+  .panel-res{background:transparent;border:0;padding:0 0 0 var(--s2);border-left:1px solid var(--border);border-radius:0}
+  .ws-grid{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+}
+/* plegables (Gráficos, Publicación): planos, alineados con el resumen */
+.plegable-panel{background:transparent;border:0;border-top:1px solid var(--border);border-radius:0;box-shadow:none}
+.plegable-panel>summary{padding:var(--s2) 0}
+.plegable-panel>:not(summary){margin-left:0;margin-right:0}
+.plegable-panel textarea{width:100%}
+/* el resumen breve (móvil) se integra en la composición: su texto sigue en el DOM, pero la información se ve una sola vez */
+.res-breve{display:none!important}
+.comp-der{display:flex;align-items:baseline;gap:var(--s1);flex-wrap:wrap;justify-content:flex-end} #rb-ver{min-height:32px;margin-block:-6px}
+@media (min-width:900px){#rb-ver{display:none}}
+@media (max-width:719px){.comp-pie{font-size:1rem}}
+/* fila de activo en móvil: con texto muy ampliado el peso baja a su línea y nada se corta (consulta de contenedor en rem: sigue al tamaño del texto) */
+.pos-card{container-type:inline-size}
+@container (max-width:16rem){
+  .pc-fila{grid-template-columns:auto minmax(0,1fr) 44px;grid-template-areas:"punto id toggle" ". peso peso"}
+  .pc-fila>.punto{grid-area:punto} .pc-fila>.pc-id{grid-area:id} .pc-fila>.pc-toggle{grid-area:toggle} .pc-fila>.peso{grid-area:peso;justify-self:start}
+  .pc-id b{overflow-wrap:normal} .pc-id span{-webkit-line-clamp:3}
 }

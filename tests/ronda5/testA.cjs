@@ -66,7 +66,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   ok('resumen: «No representa la rentabilidad de tu cartera»', (await T(p, '.nota-roic')) === 'No representa la rentabilidad de tu cartera.');
   const cob = await T(p, '#r-cobertura');
   ok('resumen: cobertura por posiciones y por peso con denominador definido', /Con dato: \d+ de \d+ posiciones \(\d+ % del peso asignado\)/.test(cob), cob);
-  ok('resumen: media ponderada, fórmula y datos ausentes en el desplegable', (await T(p, '#res-detalle details')).includes('media ponderada') && (await T(p, '#res-detalle details')).includes('suma de (ROIC') && (await T(p, '#res-detalle details')).includes('ni como cero ni en el denominador'));
+  ok('resumen: media ponderada, fórmula y datos ausentes en el desplegable', (await T(p, '#roic-det')).includes('media ponderada') && (await T(p, '#roic-det')).includes('suma de (ROIC') && (await T(p, '#roic-det')).includes('ni como cero ni en el denominador'));
   ok('ROIC: fondos «No aplicable»', (await T(p, '#pos-tabla tbody')).includes('No aplicable') && !(await T(p, '#pos-tabla tbody')).includes('—'));
   await p.fill('#buscar-activo', 'jpmorgan'); await p.keyboard.press('Enter'); await p.waitForTimeout(150);
   ok('ROIC: empresa sin dato «No disponible» (distinto de «No aplicable»)', (await T(p, '#pos-tabla tbody')).includes('No disponible') && (await T(p, '#r-cobertura')).includes('Dato ausente (no disponible)') && (await T(p, '#r-cobertura')).includes('No aplicable'), await T(p, '#r-cobertura'));

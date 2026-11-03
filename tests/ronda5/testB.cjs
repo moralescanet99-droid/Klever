@@ -42,7 +42,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   for (const w of [390, 768]) {
     await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
     await p.evaluate(() => { document.querySelector('#det-pub').open = true; document.querySelector('#det-graficos').open = true; });
-    const ys = await p.evaluate(() => ['#res-breve', '.panel-pos', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
+    const ys = await p.evaluate(() => ['#comp', '.panel-pos', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
     ok(`orden ${w}px: resumen breve → posiciones → resumen detallado → gráficos → publicación`, ys.every((y, i) => i === 0 || y > ys[i - 1]), ys.join(' < '));
   }
   await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(200);

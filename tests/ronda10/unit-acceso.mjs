@@ -2,7 +2,7 @@
 // límites; tokens guardados con hash; y la configuración pública no expone nada. Manejadores reales de functions/api/{login,verify}.js sobre SQLite real.
 // El «correo» se simula interceptando fetch (Brevo): NO es correo real.
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import * as LOGIN from '../../functions/api/login.js';
 import * as VERIFY from '../../functions/api/verify.js';
@@ -57,11 +57,18 @@ const idEnv = () => { const e = crearEnv(); return e; };
   t('A7', 'Límites de envío por correo', 'Un segundo envío en menos de un minuto: 429; a partir del 5.º del día: 429', `2.º inmediato HTTP ${b.s}; tras 2 min HTTP ${c.s}; 6.º del día HTTP ${d.s} «${d.j.error}»`, a.s === 200 && b.s === 429 && c.s === 200 && d.s === 429);
 }
 globalThis.fetch = fetchReal;
-{ // A8 configuración pública
+{ // A8 configuración pública. Modo REPOSITORIO (con .git e historial) o modo ZIP (sin .git): en el ZIP se verifica el CONTENIDO, nunca el historial.
   const toml = readFileSync(path.join(RAIZ, 'wrangler.toml'), 'utf8'), ign = readFileSync(path.join(RAIZ, '.gitignore'), 'utf8');
-  const rastreados = execFileSync('git', ['ls-files'], { cwd: RAIZ, encoding: 'utf8' }).split('\n');
-  const conClave = rastreados.filter(f => f && !/^(tests\/|ronda\d|procesos-klever\/|LEEME|PRUEBAS|PENDIENTES|README|scripts\/|revision-chatgpt\/|demo\/|package-lock)/.test(f) && (() => { try { return /DEV_RETURN_LINK/.test(readFileSync(path.join(RAIZ, f), 'utf8')); } catch { return false; } })());
-  t('A8', 'La configuración desplegable no activa el enlace en pantalla ni guarda secretos', 'wrangler.toml sin [vars] ni DEV_RETURN_LINK; .dev.vars ignorado y no versionado; DEV_RETURN_LINK solo aparece en el manejador de acceso (y en scripts/pruebas/documentación)', `[vars] en wrangler.toml=${/\[vars\]/.test(toml)}; DEV_RETURN_LINK en wrangler.toml=${/DEV_RETURN_LINK/.test(toml)}; .dev.vars ignorado=${/^\.dev\.vars$/m.test(ign)}; versionado=${rastreados.includes('.dev.vars')}; ficheros de código con DEV_RETURN_LINK: ${conClave.join(', ')}; database_id es el marcador=${/REEMPLAZAR_CON_ID_DE_D1/.test(toml)}`,
-    !/\[vars\]/.test(toml) && !/DEV_RETURN_LINK/.test(toml) && /^\.dev\.vars$/m.test(ign) && !rastreados.includes('.dev.vars') && conClave.join() === 'functions/api/login.js' && /REEMPLAZAR_CON_ID_DE_D1/.test(toml));
+  let commits = 0; try { commits = Number(execFileSync('git', ['rev-list', '--count', 'HEAD'], { cwd: RAIZ, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })); } catch {}
+  const repo = existsSync(path.join(RAIZ, '.git')) && commits >= 2;                 // un repositorio vacío o de un solo commit no acredita ningún historial
+  const lista = dir => readdirSync(dir, { withFileTypes: true }).flatMap(e => e.name === 'node_modules' || e.name === '.git' || e.name === '.wrangler' ? [] : e.isDirectory() ? lista(path.join(dir, e.name)) : [path.relative(RAIZ, path.join(dir, e.name))]);
+  const archivos = repo ? execFileSync('git', ['ls-files'], { cwd: RAIZ, encoding: 'utf8' }).split('\n').filter(Boolean) : lista(RAIZ);
+  const conClave = archivos.filter(f => !/^(tests\/|ronda\d|procesos-klever\/|LEEME|PRUEBAS|PENDIENTES|README|scripts\/|revision-chatgpt\/|demo\/|package-lock)/.test(f) && (() => { try { return /DEV_RETURN_LINK/.test(readFileSync(path.join(RAIZ, f), 'utf8')); } catch { return false; } })());
+  let historial = 'NO verificado: esta copia no tiene repositorio con historial (ZIP o repositorio de 0–1 commits); requiere el repositorio original';
+  let historialOk = true;
+  if (repo) { const h = execFileSync('git', ['log', '--all', '--oneline', '--', '.dev.vars'], { cwd: RAIZ, encoding: 'utf8' }).trim(); const tomlH = execFileSync('git', ['log', '--all', '-p', '--', 'wrangler.toml'], { cwd: RAIZ, encoding: 'utf8' }); const idReal = [...tomlH.matchAll(/^\+database_id = "([^"]*)"/gm)].map(m => m[1]).filter(v => v !== 'REEMPLAZAR_CON_ID_DE_D1');
+    historialOk = h === '' && idReal.length === 0; historial = `VERIFICADO en el repositorio (${commits} commits): .dev.vars nunca se versionó=${h === ''}; wrangler.toml nunca tuvo un database_id distinto del marcador=${idReal.length === 0}`; }
+  t('A8', 'La configuración desplegable no activa el enlace en pantalla ni guarda secretos (' + (repo ? 'modo repositorio' : 'modo ZIP: solo contenido') + ')', 'wrangler.toml sin [vars] ni DEV_RETURN_LINK; .dev.vars ignorado y ausente del contenido; DEV_RETURN_LINK solo en el manejador de acceso (y en scripts/pruebas/documentación); marcador de database_id; el HISTORIAL solo se declara verificado si hay repositorio con historial real', `[vars]=${/\[vars\]/.test(toml)}; DEV_RETURN_LINK en wrangler.toml=${/DEV_RETURN_LINK/.test(toml)}; .dev.vars ignorado=${/^\.dev\.vars$/m.test(ign)}; presente en el contenido=${archivos.includes('.dev.vars')}; código con DEV_RETURN_LINK: ${conClave.join(', ')}; marcador de database_id=${/REEMPLAZAR_CON_ID_DE_D1/.test(toml)}; historial: ${historial}`,
+    !/\[vars\]/.test(toml) && !/DEV_RETURN_LINK/.test(toml) && /^\.dev\.vars$/m.test(ign) && !archivos.includes('.dev.vars') && conClave.join() === 'functions/api/login.js' && /REEMPLAZAR_CON_ID_DE_D1/.test(toml) && historialOk);
 }
 await fin();
