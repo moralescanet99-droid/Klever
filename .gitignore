@@ -2,3 +2,5 @@ node_modules/
 build/
 .wrangler/
 .dev.vars
+revision-chatgpt/*.png
+revision-chatgpt.zip
