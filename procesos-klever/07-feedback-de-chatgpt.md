@@ -60,7 +60,7 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | Fallo de guardado, exceso, tabla histórica, título móvil | «Reintentar guardado» con la explicación de dónde están los cambios; «Reduce los pesos hasta sumar 100 %»; «Importes en miles de millones de USD; ROIC en %»; título de hasta dos líneas |
 | Entrega para probar | Versión ejecutable en local (`PRUEBAS-DE-USO.md`) + demo autónoma; evidencias de los siete recorridos; pruebas manuales pendientes aparte |
 
-## Revisión 5 · paquete de las rondas 6 y 7 (visual) — entregado; feedback visual aún no traído
+## Revisión 5 · paquete de las rondas 6 y 7 (visual) — **RECIBIDA** (a la ronda 7 se le dijo «la revisión visual de la ronda 6 queda suficientemente cerrada»; resumen en `06-` C4). Los tres pulidos visuales pendientes que se arrastraron se cerraron en la ronda 10
 ## Revisión 6 · paquete TÉCNICO de la ronda 7 — **RECIBIDA** (literal resumido en `06-` C5)
 | Punto | Acción en la ronda 8 |
 |---|---|
@@ -72,6 +72,8 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | 5 pruebas | Añadidas, con evidencia «falla antes / pasa después» |
 | Migración 0007 sobre base antigua con datos | Prueba nueva con el esquema anterior y datos |
 | Informe | Local / D1 remoto / pendiente separados; E16a antigua sustituida |
+
+## Revisión 8 · paquete TÉCNICO de la ronda 10 — **PENDIENTE** (se entrega `klever-ronda10-tecnico.zip`; falta que el usuario se lo pase a ChatGPT y traiga su feedback)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).

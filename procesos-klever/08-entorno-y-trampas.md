@@ -80,4 +80,11 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Toda lectura pública que combine «¿es pública?» con otros datos debe ir en la misma instantánea**; si no, se filtran posiciones o tesis de una versión que nunca fue pública. Condicionar también la segunda consulta a la visibilidad.
 - **Una comprobación que solo mira «DEMO OK» no basta:** también el código de salida, el timeout, el arranque del servidor y que el puerto no sea de otro (si lo es, se probaría un servidor ajeno).
 - **`python3 -m http.server --directory /no/existe` arranca igualmente** (responde 404): comprobar antes que existe `index.html`.
+- **Un aviso `position: fixed` arriba tapa lo que haya debajo (cabecera, título, botones):** usar una zona en el flujo con `position: sticky` y animar su altura (`grid-template-rows: 0fr → 1fr`); los elementos animados se miden recortados por su contenedor (`overflow: hidden`), no por su caja completa.
+- **La barra inferior fija tapa el final de la página:** la reserva debe estar en el **último elemento** (el pie), no en `main`; medirlo con el último enlace del pie, no con la última posición.
+- **Con texto muy ampliado una barra fija de una sola fila recorta el botón:** permitir fila doble con `flex-wrap`, un tope de altura (`max-height: 40vh`) y una consulta de contenedor en `rem` (en `@media` los `rem` usan el tamaño inicial del navegador, no el del `html`).
+- **El «elemento alcanzable» se comprueba con un clic de prueba** (`click({trial:true})`), no con `elementFromPoint` en el centro: los enlaces que se parten en varias líneas tienen el centro en un hueco.
+- **Un «teclado emulado» con la ventana reducida no oculta la barra** (`visualViewport` y `innerHeight` bajan a la vez): `body.teclado` no se ejercita así; no se afirma probado.
+- **`git stash push -- public` sirve para medir el «antes» con el mismo servidor** (sirve ficheros vivos); recuperar con `git stash pop`.
+- **Sin acceso remoto no se inventa:** `wrangler whoami` y las variables de entorno dicen qué existe; si falta, se entrega un único bloque de requisitos y los scripts listos.
 

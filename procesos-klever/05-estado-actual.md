@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 9 (informe `ronda9/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 10 (informe `ronda10/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**221 comprobaciones** automáticas en la ejecución limpia de la ronda 9). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**251 comprobaciones** automáticas en la ejecución limpia de la ronda 10). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 9 (cierre técnico: API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda9/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 10 (pulido visual: avisos, resumen de ROIC y móvil; pruebas de acceso) , la 9 (API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda10/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -25,8 +25,9 @@ demo/              index.html (demo autónoma) · LEEME.md
 tests/ronda5/      baterías A–E, demotest, generadores de informe y datos de prueba (tests/ronda4: histórico)
 tests/ronda7/      testF (guardado fiable, conflicto, E16a, diálogo móvil), unit-servidor (SQLite real), informe7
 tests/ronda8/      unit-carreras (R1–R6), unit-migracion, testG (respuestas tardías), test-ejecutor.sh (18 casos), fixtures, informe8
-tests/ronda9/      verificar-api.mjs (API por HTTP, repetible en remoto), informe9 · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
-tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda9/resultado-ejecucion.txt con el commit
+tests/ronda9/      verificar-api.mjs (API por HTTP, repetible en remoto), informe9
+tests/ronda10/     testH (pulido visual), unit-acceso, seguridad-http, capturas/medir (antes/después), validar-acceso-real (asistido), informe10 · tests/lib/d1-sqlite.mjs (adaptador de D1 sobre SQLite)
+tests/run-all.sh  ejecuta todo con servidor limpio entre baterías, sale con código ≠ 0 si algo falla y deja ronda10/resultado-ejecucion.txt con el commit
 ronda6/ ronda5/ ronda4/ rediseno/  informes LEEME.md de cada ronda · ronda6/pruebas-manuales.md (pendientes reales)
 PRUEBAS-DE-USO.md · scripts/local/arrancar.sh · data/seed-prueba.sql   versión para pruebas de uso
 revision-chatgpt/  instrucciones para cada ronda de crítica de ChatGPT
@@ -54,6 +55,10 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 | Guardado en una sola operación transaccional con revisión atómica; la respuesta lleva la revisión de su propia escritura; lecturas coherentes; errores internos = 500 | ✅ servidor real local + SQLite real (carreras simuladas de forma determinista) · D1 real de Cloudflare ⛔ no probado |
 | Respuesta tardía de guardado/publicación con otra cartera abierta (no la toca) | ✅ (H1, H2) |
 | `GET /api/public/:id` en una sola instantánea (nunca devuelve una versión que no fue pública) | ✅ R6a/R6b + estrés V7 local · D1 remoto ⛔ |
+| Avisos en zona reservada bajo la cabecera, errores persistentes con «Cerrar aviso» | ✅ H1–H3 en 320/390/1440 (Chromium) |
+| Resumen de ROIC: indicador, cobertura y advertencia visibles; explicación en un desplegable accesible | ✅ H4 |
+| Móvil: pie compacto, barra inferior adaptable, acciones alcanzables (texto ampliado y teclado SIMULADOS) | ✅ H5 · zoom real y teclado real ⛔ |
+| Acceso: enlace solo por correo en la configuración pública; un solo uso; caducidad; límites | ✅ manejadores reales + HTTP sin enlace en pantalla · **correo real ⛔ bloqueado** |
 | Guion de beta y D1 remoto (`ronda9/GUION-BETA-Y-D1-REMOTO.md`) y `verificar-api.mjs` | ✅ el script pasa en local · el guion **no se ha ejecutado** en Cloudflare ⛔ |
 | Migración 0007 sobre una base antigua con datos | ✅ SQLite real con fixture · D1 remoto con datos reales ⛔ |
 | Diálogo de conflicto en móvil (320×568, texto al 200 % simulado): «Decidir después» y decisiones siempre alcanzables | ✅ simulado · zoom real y teclado real ⬜ pendientes |
@@ -89,7 +94,7 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 4. Con usuarios: ejecutar `scripts/metrics.sql`; aplicar migraciones 0002–0007 en bases antiguas; recargar `data/demo.sql` si ya estaba cargado.
 
 ## Decisiones abiertas / dudas
-- **Feedback de ChatGPT sobre las rondas 6 y 7:** paquete preparado (`revision-chatgpt/ronda-7/`), pendiente de entrega. Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
+- **Feedback de ChatGPT:** las revisiones 5 (visual, rondas 6–7), 6 (técnica, ronda 7) y 7 (técnica, ronda 9) están recibidas y tratadas; **pendiente la revisión 8** (paquete técnico de la ronda 10). Para la ronda 4 se preguntó por: regla del reparto incompleto, estado en tres conceptos (ⓘ en móvil), redundancia del resumen breve y la barra, etiquetas técnicas, nombre «Carteras públicas», mensajes cortos de la barra.
 - Los **umbrales de las 5 comprobaciones** son una propuesta inicial.
 - Al reabrir una cartera el servidor devuelve las posiciones **ordenadas por peso**; mientras se edita mantienen el orden de inserción.
 - La lista de 105 empresas es una página larga (sin paginación, a petición expresa).
@@ -106,4 +111,4 @@ procesos-klever/   esta memoria · CLAUDE.md (raíz) apunta aquí
 3. Crear la cuenta de Brevo y desplegar la web real; probar el acceso por email real (spam en Gmail, otro proveedor).
 4. Ejecutar la carga nocturna con la SEC real y revisar qué empresas no devuelven datos.
 5. Leer términos de TradingView y revisar el texto legal con un abogado.
-6. Ejecutar las pruebas manuales pendientes de `ronda8/pruebas-manuales.md` (M1–M23; ninguna ejecutada) (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).
+6. Conseguir los accesos de `ronda10/BLOQUEOS.md` y ejecutar `ronda10/GUION-VALIDACION-REMOTA.md`; después las pruebas manuales de `ronda10/pruebas-manuales.md` (M1–M28; ninguna ejecutada) (teclado móvil real, lector de pantalla real, zoom real, Safari/Firefox, email real).
