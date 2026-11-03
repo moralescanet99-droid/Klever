@@ -12,7 +12,7 @@ Todo lo necesario está en este repositorio: código, dependencias fijadas (`pac
 ```bash
 git clone https://github.com/moralescanet99-droid/Klever.git
 cd Klever
-git checkout 156235065d2c27f1d8269b5588e5aec68a536bc6   # commit EXACTO del código con el que se obtuvo ronda8/resultado-ejecucion.txt (los commits posteriores solo añaden resultados e informes)
+git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primera líneas de ronda9/resultado-ejecucion.txt y en ronda9/LEEME.md (los commits posteriores solo añaden resultados e informes)
 npm ci                                   # instala wrangler 3.114.17 y playwright 1.63.0 EXACTOS (package-lock.json)
 npx playwright install chromium          # navegador para las pruebas (una sola vez)
 ```
@@ -32,9 +32,9 @@ El enlace de acceso **no se envía por email**: aparece en pantalla («Modo desa
 ```bash
 bash tests/run-all.sh                   # ~15 min; arranca un servidor limpio entre baterías y lo para al final.
                                         # CÓDIGO DE SALIDA 0 solo si TODO pasa; ≠ 0 si falla el arranque, hay timeout, falta el resultado o hay fallos
-bash tests/ronda8/test-ejecutor.sh      # prueba del propio ejecutor (fallos y timeouts deliberados), ~2 min
+bash tests/ronda8/test-ejecutor.sh      # prueba del propio ejecutor (fallos, timeouts y puertos ocupados deliberados), ~4 min
 ```
-Escribe el resultado literal y la versión del código en `ronda8/resultado-ejecucion.txt` y los datos observados en `ronda8/evidencias-*.json` (capturas en `ronda8/evidencias/`). Variables: `RONDA`, `LIMITE_BATERIA` (900 s), `PORT` (8788).
+Escribe el resultado literal y la versión del código en `ronda9/resultado-ejecucion.txt` y los datos observados en `ronda9/evidencias-*.json`. Variables: `RONDA` (ronda9), `LIMITE_BATERIA` (900 s), `PORT` (8788).
 
 | Prueba | Qué comprueba | Contra qué |
 |---|---|---|
@@ -42,13 +42,14 @@ Escribe el resultado literal y la versión del código en `ronda8/resultado-ejec
 | `tests/ronda5/testA`–`testE` | Interfaz completa, móvil, empresas, acceso, escenarios con evidencia | Servidor real local (D1 simulada) + Chromium |
 | `tests/ronda7/testF` | Guardado fiable, conflicto, E16a corregida, diálogo móvil, desconexión real | Servidor real local + Chromium |
 | `tests/ronda8/testG` | Respuesta tardía de un guardado/publicación mientras se abre otra cartera | Servidor real local + Chromium |
-| `tests/ronda8/test-ejecutor.sh` | Que `run-all.sh` falle (código ≠ 0) ante fallos, caídas, timeouts y servidor que no arranca, y limpie procesos | Fixtures en `tests/ronda8/fixtures/` |
+| `tests/ronda8/test-ejecutor.sh` (18 casos) | Que `run-all.sh` falle (código ≠ 0) ante fallos, caídas, timeouts, servidor que no arranca y, para la demo, «DEMO OK» con código 1, puerto ocupado (sin usar un servidor ajeno), etc., y limpie procesos | Fixtures en `tests/ronda8/fixtures/` |
+| `tests/ronda9/verificar-api.mjs` | La API por HTTP: guardado atómico, revisión, 20 pares concurrentes, lecturas sin mezcla, `GET` público sin versiones no públicas. **Repetible contra un despliegue remoto de PRUEBA** (`BASE_URL=…`) | Servidor local en `run-all.sh`; D1 remoto: `ronda9/GUION-BETA-Y-D1-REMOTO.md` |
 | `tests/ronda5/demotest.cjs` | La demo HTML (simulada, sin persistencia) | `demo/index.html` en memoria |
 
 Las baterías antiguas `tests/ronda4/` y `shots*.cjs` son históricas (generan capturas de rondas anteriores y llevan rutas de aquel entorno).
 
 ## Qué NO se puede repetir con este proyecto
-Email real (Brevo), carga real de la SEC, widgets de TradingView, móviles reales, Safari/Firefox, lector de pantalla, zoom real del navegador y teclado móvil real: ver `ronda8/pruebas-manuales.md`. **Ninguna de ellas se ha ejecutado.** Tampoco se ha probado **Cloudflare D1 remoto**: todo lo «transaccional» está probado con D1 local simulada (Miniflare) y con SQLite real.
+Email real (Brevo), carga real de la SEC, widgets de TradingView, móviles reales, Safari/Firefox, lector de pantalla, zoom real del navegador y teclado móvil real: ver `ronda9/pruebas-manuales.md`. **Ninguna de ellas se ha ejecutado.** Tampoco se ha probado **Cloudflare D1 remoto**: todo lo «transaccional» está probado con D1 local simulada (Miniflare) y con SQLite real.
 
 ## Demo HTML
 `demo/index.html` es una **demostración sin persistencia de cuenta**: simula el servidor en la memoria de la página y al recargar se pierde todo. No es equivalente al servidor probado; sirve para enseñar la interfaz. Su casilla «Simular fallo de red al guardar» es una simulación explícita (el modo sin conexión del navegador no afecta a las peticiones simuladas en memoria). Para probar la desconexión de verdad, usa la versión completa local.

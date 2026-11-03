@@ -40,10 +40,10 @@ async function nuevo() { const env = crearEnv(); await sembrar(env); const r = a
   const r = await llamar(P.onRequestPut, env, 'PUT', { posiciones: B, nombre: 'Mío', tesis: '', revision: 0 });
   t('U3', 'Escritura ajena entre la lectura y la escritura (carrera simulada de forma determinista)', 'HTTP 409; NO se sobrescribe lo ajeno ni se mezclan posiciones', `HTTP ${r.s}; ${estado(env)}`, r.s === 409 && estado(env) === JSON.stringify({ nombre: 'AJENO', tesis: null, publico: 0, revision: 1, pos: 'NEM:100' }));
 }
-{ // U4 todo o nada ante un fallo a mitad del lote
+{ // U4 ticker desconocido: validación previa (no es un fallo a mitad de transacción; el rollback ante un error interno es R4a)
   const { env } = await nuevo(); const antes = estado(env);
   const r = await llamar(P.onRequestPut, env, 'PUT', { posiciones: [{ ticker: 'GDX', peso: 50 }, { ticker: 'ZZZZ', peso: 50 }], nombre: 'Cambiado', tesis: 'T', revision: 0 });
-  t('U4', 'Fallo a mitad del lote (ticker desconocido en la última posición con nombre y tesis cambiados)', 'HTTP 400 y NADA queda a medias: ni nombre, ni tesis, ni posiciones, ni revisión', `HTTP ${r.s}; sin cambios=${estado(env) === antes}`, r.s === 400 && estado(env) === antes);
+  t('U4', 'Ticker desconocido con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)', 'HTTP 400 por validación y no cambia nada: ni nombre, ni tesis, ni posiciones, ni revisión (el rollback ante un error interno es la evidencia R4a)', `HTTP ${r.s}; sin cambios=${estado(env) === antes}`, r.s === 400 && estado(env) === antes);
 }
 { // U5 cartera pública: reglas y atomicidad
   const { env } = await nuevo(); env.sql.prepare("UPDATE portafolios SET tesis='T0', publico=1 WHERE id=1").run(); const antes = estado(env);
@@ -53,5 +53,5 @@ async function nuevo() { const env = crearEnv(); await sembrar(env); const r = a
   t('U5b', 'Cartera pública: un reparto válido actualiza todo a la vez', 'HTTP 200; posiciones, nombre y tesis nuevos juntos', `HTTP ${val.s}; ${estado(env)}`, val.s === 200 && estado(env) === JSON.stringify({ nombre: 'Y', tesis: 'T2', publico: 1, revision: 1, pos: 'GDX:70,NEM:30' }));
 }
 console.log(`\nRESULTADO: ${ok} correctas, ${fallos.length} fallos` + (fallos.length ? '\nFALLOS:\n- ' + fallos.join('\n- ') : ''));
-const R = process.env.RONDA || 'ronda8'; mkdirSync(path.resolve(RAIZ, R), { recursive: true }); writeFileSync(path.resolve(RAIZ, R, 'evidencias-U.json'), JSON.stringify(ev, null, 1));
+const R = process.env.RONDA || 'ronda9'; mkdirSync(path.resolve(RAIZ, R), { recursive: true }); writeFileSync(path.resolve(RAIZ, R, 'evidencias-U.json'), JSON.stringify(ev, null, 1));
 process.exit(fallos.length ? 1 : 0);

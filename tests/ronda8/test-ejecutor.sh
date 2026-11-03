@@ -24,4 +24,20 @@ ejecutar BATERIAS="$F/bateria-ok.cjs"
 if [ $CODIGO -ne 0 ] && grep -q "el servidor no arrancó" "$SALIDA"; then chequear E5 ok "Si el servidor no arranca (puerto ocupado), el ejecutor falla y no sigue en silencio (código $CODIGO)"; else chequear E5 mal "Si el servidor no arranca, el ejecutor falla" "código $CODIGO"; fi
 kill -0 "$OCUPA" 2>/dev/null && chequear E5b ok "El ejecutor no mata un servidor ajeno que ocupa el puerto" || chequear E5b mal "El ejecutor no mata un servidor ajeno" "murió"
 kill "$OCUPA" 2>/dev/null
+# ---- La comprobación de la DEMO (ronda 9): exige código 0, «DEMO OK», sin timeout; comprueba su servidor; no usa un servidor ajeno ----
+export DEMO_PORT="${DEMO_PORT:-8798}" BATERIAS=" "; DEM="env OMITIR_DEMO=0"
+demo() { ejecutar BATERIAS=" " OMITIR_DEMO=0 "$@"; }
+demo DEMO_TEST="$F/demo-ok.cjs"; if [ $CODIGO -eq 0 ] && grep -q "todo correcto" "$SALIDA"; then chequear D1 ok "Control: demo con «DEMO OK» y código 0 → ejecutor correcto"; else chequear D1 mal "Control de la demo" "código $CODIGO"; fi
+demo DEMO_TEST="$F/demo-ok-codigo1.cjs"; if [ $CODIGO -ne 0 ] && grep -q "salió con código 1" "$SALIDA"; then chequear D2 ok "La demo imprime «DEMO OK» pero termina con código 1 → el ejecutor falla (código $CODIGO)"; else chequear D2 mal "DEMO OK con código 1" "código $CODIGO"; fi
+demo DEMO_TEST="$F/demo-sin-ok.cjs"; if [ $CODIGO -ne 0 ] && grep -q "no terminó en" "$SALIDA"; then chequear D3 ok "La demo sin «DEMO OK» → el ejecutor falla"; else chequear D3 mal "Demo sin DEMO OK" "código $CODIGO"; fi
+demo DEMO_TEST="$F/demo-hay-fallos.cjs"; if [ $CODIGO -ne 0 ] && grep -q "HAY FALLOS" "$SALIDA"; then chequear D4 ok "La demo con «HAY FALLOS» → el ejecutor falla"; else chequear D4 mal "Demo con HAY FALLOS" "código $CODIGO"; fi
+INI=$(date +%s); demo DEMO_TEST="$F/demo-cuelga.cjs" LIMITE_BATERIA=3; DUR=$(( $(date +%s) - INI ))
+if [ $CODIGO -ne 0 ] && grep -q "la demo superó el límite" "$SALIDA"; then chequear D5 ok "La demo que se cuelga (timeout) → el ejecutor falla (código $CODIGO, ${DUR}s)"; else chequear D5 mal "Demo con timeout" "código $CODIGO"; fi
+demo DEMO_DIR="/no/existe"; if [ $CODIGO -ne 0 ] && grep -q "no existe /no/existe/index.html" "$SALIDA"; then chequear D6 ok "Sin demo que servir → el ejecutor falla"; else chequear D6 mal "Sin demo" "código $CODIGO"; fi
+demo DEMO_TEST="$F/demo-ok.cjs" DEMO_SERVIDOR="false"; if [ $CODIGO -ne 0 ] && grep -q "el servidor de la demo no arrancó" "$SALIDA"; then chequear D7 ok "El servidor de la demo no arranca → el ejecutor falla"; else chequear D7 mal "Servidor de la demo que no arranca" "código $CODIGO"; fi
+MARCA="$(mktemp -u)"; python3 -m http.server "$DEMO_PORT" >/dev/null 2>&1 & AJENO=$!; sleep 1
+demo DEMO_TEST="$F/demo-marca.cjs" MARCA="$MARCA"
+if [ $CODIGO -ne 0 ] && grep -q "ya está ocupado por otro programa" "$SALIDA" && [ ! -e "$MARCA" ]; then chequear D8 ok "Puerto de la demo ocupado → falla y NO ejecuta la prueba contra el servidor ajeno"; else chequear D8 mal "Puerto de la demo ocupado" "código $CODIGO, prueba ejecutada=$([ -e "$MARCA" ] && echo sí || echo no)"; fi
+kill -0 "$AJENO" 2>/dev/null && chequear D8b ok "El servidor ajeno sigue vivo (no se mata lo que no es nuestro)" || chequear D8b mal "El servidor ajeno sigue vivo" "murió"
+kill "$AJENO" 2>/dev/null; rm -f "$MARCA"
 echo; echo "RESULTADO: $OK correctas, $MAL fallos"; [ $MAL -eq 0 ]

@@ -43,5 +43,5 @@ export const estado = env => { const c = env.sql.prepare('SELECT nombre, tesis, 
 export function registro(salida) { let ok = 0; const fallos = [], ev = [];
   const t = (id, esc, esperado, obs, cond) => { cond ? ok++ : fallos.push(`${id} ${esc} → ${obs}`); console.log((cond ? 'OK   ' : 'FALLA') + ` [${id}] ${esc}${cond ? '' : '  [' + obs + ']'}`); ev.push({ id, escenario: esc, esperado, observado: obs, resultado: cond ? 'OK' : 'FALLA', evidencia: '' }); };
   const fin = async () => { const fs = await import('node:fs'); console.log(`\nRESULTADO: ${ok} correctas, ${fallos.length} fallos` + (fallos.length ? '\nFALLOS:\n- ' + fallos.join('\n- ') : ''));
-    fs.mkdirSync(path.resolve(RAIZ, process.env.RONDA || 'ronda8'), { recursive: true }); fs.writeFileSync(path.resolve(RAIZ, process.env.RONDA || 'ronda8', salida), JSON.stringify(ev, null, 1)); process.exit(fallos.length ? 1 : 0); };
+    fs.mkdirSync(path.resolve(RAIZ, process.env.RONDA || 'ronda9'), { recursive: true }); fs.writeFileSync(path.resolve(RAIZ, process.env.RONDA || 'ronda9', salida), JSON.stringify(ev, null, 1)); process.exit(fallos.length ? 1 : 0); };
   return { t, fin }; }

@@ -31,9 +31,9 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
     `antes ${resumen(antes)}; tras fallar ${resumen(tras)} (idéntica=${resumen(antes) === resumen(tras)}); público antes/después igual=${pubAntes === pubTras}; interfaz «${est}» / «${mot}» / botón «${etq}»; peticiones de escritura enviadas en todo el guardado: ${metodos.join(',')}; tras reintentar ${resumen(final)}; público ${pubFinal}`,
     resumen(antes) === resumen(tras) && pubAntes === pubTras && est.startsWith('No se pudo guardar') && etq === 'Reintentar guardado' && metodos.filter(m => m === 'PATCH').length === 0 && final.nombre === 'Nombre nuevo' && final.tesis === 'Tesis NUEVA' && pubFinal.includes('Nombre nuevo') && pubFinal.includes('Tesis NUEVA'), 'G1-fallo-sin-parciales-1440.png');
 
-  // ===== G2: el servidor tampoco deja nada a medias si falla DENTRO de la operación =====
+  // ===== G2: un ticker desconocido se rechaza ANTES del lote (validación previa): la cartera no cambia. No es un fallo a mitad de transacción (el rollback ante un error interno lo prueba R4a en tests/ronda8/unit-carreras.mjs) =====
   const c2 = await cartera(p, id1), r2 = await api(p, 'PUT', '/portfolios/' + id1, { posiciones: [{ ticker: 'GLD', peso: 50 }, { ticker: 'ZZZZ', peso: 50 }], nombre: 'No debe quedar', tesis: 'No debe quedar', revision: c2.revision }), c2b = await cartera(p, id1);
-  ev('G2', 'Fallo interno del servidor a mitad de la operación (ticker desconocido en la última posición)', 'HTTP 400 y la cartera queda exactamente igual (revisión incluida)', `HTTP ${r2.s}; antes ${resumen(c2)}; después ${resumen(c2b)}`, r2.s === 400 && resumen(c2) === resumen(c2b), '');
+  ev('G2', 'Ticker desconocido en un guardado con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)', 'HTTP 400 por validación y la cartera queda exactamente igual (revisión incluida); el rollback ante un error interno es la evidencia R4a', `HTTP ${r2.s}; antes ${resumen(c2)}; después ${resumen(c2b)}`, r2.s === 400 && resumen(c2) === resumen(c2b), '');
 
   // ===== G3: revisión y concurrencia (HTTP real) =====
   const rev0 = (await cartera(p, id1)).revision; await p.waitForTimeout(1100);

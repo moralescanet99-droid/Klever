@@ -2,12 +2,12 @@
 # Ejecuta TODAS las pruebas con un servidor LIMPIO entre baterías. SALE CON CÓDIGO ≠ 0 si ALGO falla:
 # fallo de arranque, límite de tiempo, batería sin resultado, código de salida ≠ 0 o «N fallos» > 0. Limpia procesos con trap.
 # Requisitos: Node >= 22.13, «npm ci», «npx playwright install chromium»; sistema: bash, curl, git, python3, pgrep (Linux o macOS).
-# Variables: RONDA (carpeta de resultados, ronda8), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
-#            BATERIAS / UNIDAD (listas de pruebas, para probar el propio ejecutor), OMITIR_DEMO=1.
+# Variables: RONDA (carpeta de resultados, ronda9), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
+#            BATERIAS / UNIDAD / DEMO_TEST / DEMO_DIR / DEMO_PORT / DEMO_SERVIDOR (para probar el propio ejecutor), OMITIR_DEMO=1.
 set -uo pipefail
 cd "$(dirname "$0")/.."
-export RONDA="${RONDA:-ronda8}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs}"
+export RONDA="${RONDA:-ronda9}"; LIMITE="${LIMITE_BATERIA:-900}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs}"
 UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs}"
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
 reg() { echo "$@" | tee -a "$SALIDA"; }
@@ -54,12 +54,31 @@ done
 bash scripts/local/servidor.sh stop >/dev/null 2>&1 || fallo "no se pudo parar el servidor"
 if [ "${OMITIR_DEMO:-0}" != 1 ]; then
   reg "=== demo (demotest) ==="
-  python3 -m http.server 8790 --directory demo >/dev/null 2>&1 &
-  echo $! > .wrangler/demo.pid; sleep 1
-  DEMO_URL="http://localhost:8790/" con_limite "$LIMITE" node tests/ronda5/demotest.cjs
-  echo "$SALIDA_T" | grep -E "^FALLA|DEMO OK|HAY FALLOS" | tee -a "$SALIDA"
-  echo "$SALIDA_T" | grep -q "DEMO OK" || fallo "la demo no terminó en «DEMO OK»"
-  [ "$TIEMPO_AGOTADO" = 1 ] && fallo "la demo superó el límite de tiempo"
+  DPORT="${DEMO_PORT:-8790}"; DDIR="${DEMO_DIR:-demo}"; DTEST="${DEMO_TEST:-tests/ronda5/demotest.cjs}"
+  DSERV="${DEMO_SERVIDOR:-python3 -m http.server $DPORT --directory $DDIR}"
+  if [ ! -f "$DDIR/index.html" ]; then
+    fallo "no existe $DDIR/index.html: no hay demo que probar"
+  elif curl -s -o /dev/null "http://localhost:$DPORT/" 2>/dev/null; then
+    fallo "el puerto $DPORT de la demo ya está ocupado por otro programa: NO se ejecuta la prueba (probaría un servidor ajeno)"
+  else
+    $DSERV >.wrangler/demo.log 2>&1 &
+    DPID=$!; echo "$DPID" > .wrangler/demo.pid; listo=0
+    for _ in $(seq 1 20); do
+      kill -0 "$DPID" 2>/dev/null || break
+      curl -s -o /dev/null "http://localhost:$DPORT/" 2>/dev/null && { listo=1; break; }; sleep 1
+    done
+    if [ "$listo" != 1 ]; then
+      fallo "el servidor de la demo no arrancó ($(tail -1 .wrangler/demo.log 2>/dev/null))"
+    else
+      DEMO_URL="http://localhost:$DPORT/" con_limite "$LIMITE" node "$DTEST"
+      echo "$SALIDA_T" | grep -E "^FALLA|DEMO OK|HAY FALLOS" | tee -a "$SALIDA"
+      [ "$TIEMPO_AGOTADO" = 1 ] && fallo "la demo superó el límite de ${LIMITE}s (proceso detenido)"
+      [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "la demo salió con código $CODIGO (aunque imprimiera «DEMO OK»)"
+      echo "$SALIDA_T" | grep -q "DEMO OK" || fallo "la demo no terminó en «DEMO OK»"
+      echo "$SALIDA_T" | grep -q "HAY FALLOS" && fallo "la demo informa «HAY FALLOS»"
+    fi
+    matar_arbol "$DPID"; rm -f .wrangler/demo.pid
+  fi
 fi
 if [ "$FALLOS" -gt 0 ]; then reg "RESUMEN: $FALLOS problema(s) en la ejecución. Código de salida 1."; exit 1; fi
 reg "RESUMEN: todo correcto. Código de salida 0."

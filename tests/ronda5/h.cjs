@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const path = require('path'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '..', '..');                       // raíz del repositorio (nada va con rutas absolutas)
 const B = process.env.BASE_URL || 'http://localhost:8788/';
-const RONDA = process.env.RONDA || 'ronda8';
+const RONDA = process.env.RONDA || 'ronda9';
 const EVDIR = path.resolve(ROOT, RONDA, 'evidencias') + path.sep;          // capturas de esta ejecución (no se versionan salvo que se indique)
 fs.mkdirSync(EVDIR, { recursive: true });
 let pass = 0, fail = 0; const fails = [];
