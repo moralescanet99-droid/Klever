@@ -35,3 +35,14 @@ label.chk input{display:inline;width:auto;margin-right:.4rem}
 .top{flex-wrap:wrap}
 select,input{max-width:100%}
 #ed-ticker{min-width:0;flex:1 1 200px}
+
+#toast{position:fixed;left:50%;bottom:1rem;transform:translateX(-50%);max-width:min(90vw,420px);background:var(--fg);color:var(--bg);padding:.6rem 1rem;border-radius:10px;font-size:.9rem;z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.consent{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:.8rem 1rem;z-index:15;display:flex;gap:1rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.consent p{margin:0;flex:1 1 280px;font-size:.9rem}
+.ph{display:flex;flex-direction:column;gap:.5rem;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--line);border-radius:10px;color:var(--mut);font-size:.85rem;padding:1rem;min-height:120px}
+.chart-slot{min-height:220px}
+.state{color:var(--mut);padding:.5rem 0}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,tr[tabindex]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+[hidden]{display:none!important}

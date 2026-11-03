@@ -17,9 +17,14 @@ const SESSION_DAYS = 30;
 export async function auth(request, env) {
   const t = (request.headers.get('authorization') || '').replace(/^Bearer /, '');
   if (!t) return null;
-  return await env.DB.prepare(
+  const hash = await sha256(t);
+  const user = await env.DB.prepare(
     `SELECT u.id, u.email FROM sesiones s JOIN usuarios u ON u.id = s.usuario_id
-     WHERE s.hash = ? AND s.creado_en > datetime('now', ?)`).bind(await sha256(t), `-${SESSION_DAYS} days`).first();
+     WHERE s.hash = ? AND s.creado_en > datetime('now', ?)`).bind(hash, `-${SESSION_DAYS} days`).first();
+  if (user) // registra el último acceso (máx. 1 escritura por hora y sesión)
+    await env.DB.prepare(`UPDATE sesiones SET ultimo_acceso = datetime('now')
+      WHERE hash = ? AND (ultimo_acceso IS NULL OR ultimo_acceso < datetime('now','-1 hour'))`).bind(hash).run();
+  return user;
 }
 
 // Envío de email (Brevo). Aislado aquí para poder cambiar de proveedor.

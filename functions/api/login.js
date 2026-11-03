@@ -5,6 +5,7 @@ export async function onRequestPost({ request, env }) {
   const body = await readJson(request);
   const email = String(body?.email || '').trim().toLowerCase();
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || email.length > 200) return json({ error: 'Email no válido' }, 400);
+  if (body?.acepto !== true) return json({ error: 'Debes aceptar el aviso legal y la privacidad' }, 400);
 
   // Límites: 1 envío por minuto y 5 al día por email.
   const rec = await env.DB.prepare(

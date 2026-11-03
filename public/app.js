@@ -1,15 +1,26 @@
+// Almacenamiento tolerante a modo privado / datos bloqueados.
+const store = (() => { const m = {}; return {
+  getItem: k => { try { return localStorage.getItem(k); } catch { return m[k] ?? null; } },
+  setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
+  removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } } }; })();
 const $ = s => document.querySelector(s);
+let toastTimer;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 4000); }
+let sessionExpired = false;
 const API = '/api';
-const tok = () => localStorage.getItem('klever_token');
+const tok = () => store.getItem('klever_token');
 
 async function api(path, opts = {}) {
-  const r = await fetch(API + path, {
-    ...opts,
-    headers: { 'content-type': 'application/json', ...(tok() ? { authorization: 'Bearer ' + tok() } : {}) },
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
-  });
+  let r;
+  try {
+    r = await fetch(API + path, {
+      ...opts,
+      headers: { 'content-type': 'application/json', ...(tok() ? { authorization: 'Bearer ' + tok() } : {}) },
+      body: opts.body ? JSON.stringify(opts.body) : undefined,
+    });
+  } catch { throw new Error('Sin conexión con el servidor. Inténtalo de nuevo.'); }
   const data = await r.json().catch(() => ({}));
-  if (r.status === 401) { localStorage.removeItem('klever_token'); start(); }
+  if (r.status === 401 && tok()) { store.removeItem('klever_token'); sessionExpired = true; start(); }
   if (!r.ok) throw new Error(data.error || 'Error ' + r.status);
   return data;
 }
@@ -30,24 +41,31 @@ async function start() {
   const logged = !!tok();
   $('#registro').hidden = logged;
   $('#app').hidden = !logged;
-  if (!logged) return;
-  assets = await api('/assets');
-  $('#ed-ticker').innerHTML = assets.map(a => `<option value="${a.ticker}">${esc(a.ticker)} · ${esc(a.nombre)}</option>`).join('');
-  await loadList();
+  if (!logged) {
+    if (sessionExpired) { $('#err-registro').textContent = 'Tu sesión ha caducado. Pide un enlace nuevo para entrar.'; sessionExpired = false; }
+    return;
+  }
+  try {
+    assets = await api('/assets');
+    $('#ed-ticker').innerHTML = assets.map(a => `<option value="${a.ticker}">${esc(a.ticker)} · ${esc(a.nombre)}</option>`).join('');
+    await loadList();
+  } catch (err) { toast(err.message); $('#lista').innerHTML = '<li class="state">No se pudieron cargar tus portafolios. <a href="#" id="reintentar">Reintentar</a></li>'; }
 }
 
 $('#form-registro').addEventListener('submit', async e => {
   e.preventDefault();
   $('#err-registro').textContent = ''; $('#ok-registro').textContent = '';
+  const btn = e.target.querySelector('button'); btn.disabled = true;
   try {
-    const r = await api('/login', { method: 'POST', body: { email: new FormData(e.target).get('email') } });
+    const r = await api('/login', { method: 'POST', body: { email: new FormData(e.target).get('email'), acepto: e.target.acepto.checked } });
     $('#ok-registro').innerHTML = r.dev_link ? `Modo desarrollo: <a href="${esc(r.dev_link)}">entrar</a>` : 'Revisa tu email: te hemos enviado el enlace (caduca en 15 minutos).';
   } catch (err) { $('#err-registro').textContent = err.message; }
+  finally { btn.disabled = false; }
 });
 
 $('#salir').addEventListener('click', async () => {
   try { await api('/logout', { method: 'POST' }); } catch {}
-  localStorage.removeItem('klever_token'); $('#editor').hidden = true; start();
+  store.removeItem('klever_token'); $('#editor').hidden = true; start();
 });
 
 // Canje del enlace mágico (?login=TOKEN) antes de arrancar.
@@ -57,18 +75,21 @@ async function redeem() {
   history.replaceState(null, '', location.pathname);
   try {
     const { token } = await api('/verify', { method: 'POST', body: { token: t } });
-    localStorage.setItem('klever_token', token);
-  } catch (err) { alert(err.message); }
+    store.setItem('klever_token', token);
+  } catch (err) { toast(err.message); }
 }
 
 async function loadList() {
   const list = await api('/portfolios');
   $('#lista').innerHTML = list.length
-    ? list.map(p => `<li><a data-id="${p.id}">${esc(p.nombre)}</a><span>${esc(p.plantilla)}</span></li>`).join('')
+    ? list.map(p => `<li><a href="#" role="button" data-id="${p.id}">${esc(p.nombre)}</a><span>${esc(p.plantilla)}</span></li>`).join('')
     : '<li>Aún no tienes portafolios. Crea el primero arriba.</li>';
 }
 
-$('#lista').addEventListener('click', e => { const id = e.target.dataset.id; if (id) open(id); });
+$('#lista').addEventListener('click', e => {
+  if (e.target.id === 'reintentar') { e.preventDefault(); start(); return; }
+  const id = e.target.dataset.id; if (id) { e.preventDefault(); open(id); }
+});
 
 $('#form-nuevo').addEventListener('submit', async e => {
   e.preventDefault();
@@ -78,11 +99,12 @@ $('#form-nuevo').addEventListener('submit', async e => {
     e.target.reset();
     await loadList();
     open(id);
-  } catch (err) { alert(err.message); }
+  } catch (err) { toast(err.message); }
 });
 
 async function open(id) {
-  current = await api('/portfolios/' + id);
+  try { current = await api('/portfolios/' + id); } catch (err) { return toast(err.message); }
+  chartEls.clear(); $('#graficos').innerHTML = '';
   pos = current.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso }));
   $('#editor').hidden = false;
   $('#ed-tesis').value = current.tesis || '';
@@ -110,18 +132,45 @@ function render() {
   renderCharts();
 }
 
-// Widgets oficiales de TradingView, intactos (con su enlace de marca). No se leen sus datos.
+// ---- TradingView: solo con consentimiento, carga diferida y sin redibujar lo ya cargado ----
+const consent = () => store.getItem('klever_consent');
+const dark = () => matchMedia('(prefers-color-scheme: dark)').matches;
+const MARCA = '<div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span>TradingView</span></a></div>';
+const chartEls = new Map();
+
+function widget(container, src, config) {
+  container.classList.add('tradingview-widget-container');
+  container.innerHTML = '<div class="tradingview-widget-container__widget"></div>' + MARCA;
+  const sc = document.createElement('script');
+  sc.src = src; sc.async = true; sc.textContent = JSON.stringify(config);
+  container.appendChild(sc);
+}
+const placeholder = texto => `<div class="ph"><span>${texto}</span><button type="button" class="sec" data-consent="si">Aceptar cookies de TradingView y cargar</button></div>`;
+
+const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries => entries.forEach(e => {
+  if (!e.isIntersecting) return; io.unobserve(e.target); mountChart(e.target);
+}), { rootMargin: '200px' }) : null;
+
+function mountChart(c) {
+  widget(c, 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js',
+    { symbol: c.dataset.t, width: '100%', height: 220, locale: 'es', dateRange: '12M', colorTheme: dark() ? 'dark' : 'light', isTransparent: false, autosize: false, largeChartUrl: '' });
+}
+
 function renderCharts() {
-  const box = $('#graficos'); box.innerHTML = '';
+  const box = $('#graficos');
+  if (consent() !== 'si') {
+    chartEls.clear();
+    box.innerHTML = pos.length ? placeholder(consent() === 'no' ? 'Gráficos desactivados.' : 'Los gráficos de cada posición los carga TradingView.') : '';
+    return;
+  }
+  box.querySelectorAll('.ph').forEach(n => n.remove());
+  const want = new Set(pos.map(p => p.ticker));
+  for (const [t, el] of chartEls) if (!want.has(t)) { el.remove(); chartEls.delete(t); }
   for (const p of pos) {
-    const c = document.createElement('div');
-    c.className = 'tradingview-widget-container';
-    c.innerHTML = '<div class="tradingview-widget-container__widget"></div><div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span>TradingView</span></a></div>';
-    const s = document.createElement('script');
-    s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
-    s.async = true;
-    s.textContent = JSON.stringify({ symbol: p.ticker, width: '100%', height: 220, locale: 'es', dateRange: '12M', colorTheme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', isTransparent: false, autosize: false, largeChartUrl: '' });
-    c.appendChild(s); box.appendChild(c);
+    if (chartEls.has(p.ticker)) continue;
+    const c = document.createElement('div'); c.className = 'chart-slot'; c.dataset.t = p.ticker;
+    box.appendChild(c); chartEls.set(p.ticker, c);
+    io ? io.observe(c) : mountChart(c);
   }
 }
 
@@ -153,10 +202,17 @@ $('#ed-guardar').addEventListener('click', async () => {
   catch (err) { $('#err-editor').textContent = err.message; }
 });
 
-$('#ed-borrar').addEventListener('click', async () => {
-  if (!confirm('¿Eliminar este portafolio?')) return;
-  await api('/portfolios/' + current.id, { method: 'DELETE' });
-  $('#editor').hidden = true; current = null; loadList();
+let borrarTimer;
+$('#ed-borrar').addEventListener('click', async e => {
+  const b = e.currentTarget;
+  if (b.dataset.armed !== '1') { // primera pulsación: pide confirmar
+    b.dataset.armed = '1'; b.textContent = '¿Seguro? Pulsa otra vez';
+    clearTimeout(borrarTimer); borrarTimer = setTimeout(() => { b.dataset.armed = ''; b.textContent = 'Eliminar'; }, 4000); return;
+  }
+  clearTimeout(borrarTimer); b.dataset.armed = ''; b.textContent = 'Eliminar';
+  try { await api('/portfolios/' + current.id, { method: 'DELETE' }); toast('Portafolio eliminado'); }
+  catch (err) { return toast(err.message); }
+  $('#editor').hidden = true; current = null; chartEls.clear(); loadList();
 });
 
 redeem().then(start);
@@ -175,15 +231,18 @@ const critRows = c => Object.entries(CRIT).map(([k, [label, f]]) => {
 }).join('');
 
 async function loadIdeas() {
-  const rows = await (await fetch(API + '/ideas')).json();
+  $('#ideas-tabla tbody').innerHTML = '<tr><td colspan="4" class="state">Cargando ideas…</td></tr>';
+  let rows;
+  try { const r = await fetch(API + '/ideas'); if (!r.ok) throw 0; rows = await r.json(); }
+  catch { $('#ideas-tabla tbody').innerHTML = '<tr><td colspan="4" class="state">No se pudieron cargar las ideas. <a href="#" data-retry="ideas">Reintentar</a></td></tr>'; return; }
   $('#ideas-tabla tbody').innerHTML = rows.length ? rows.map(r =>
-    `<tr data-t="${esc(r.ticker)}"><td>${esc(r.ticker)} <small>${esc(r.nombre)}</small></td><td>${esc(r.sector)}</td><td>${r.cumplidos}/${r.evaluados}</td><td><a>Ver ficha</a></td></tr>`).join('')
+    `<tr tabindex="0" data-t="${esc(r.ticker)}"><td>${esc(r.ticker)} <small>${esc(r.nombre)}</small></td><td>${esc(r.sector)}</td><td>${r.cumplidos}/${r.evaluados}</td><td><a>Ver ficha</a></td></tr>`).join('')
     : '<tr><td colspan="4">Aún no hay datos: ejecuta la carga de la SEC.</td></tr>';
 }
 
-$('#ideas-tabla').addEventListener('click', async e => {
-  const t = e.target.closest('tr')?.dataset.t; if (!t) return;
-  const a = await (await fetch(API + '/assets/' + t)).json();
+async function verFicha(t) {
+  let a;
+  try { const r = await fetch(API + '/assets/' + t); if (!r.ok) throw 0; a = await r.json(); } catch { return toast('No se pudo cargar la ficha'); }
   const f = $('#ficha'); f.hidden = false;
   const hist = a.fundamentales.map(x => `<tr><td>${esc(x.periodo)}</td><td>${(x.ingresos / 1e9).toFixed(1)}</td><td>${x.beneficio_neto != null ? (x.beneficio_neto / 1e9).toFixed(1) : '—'}</td><td>${x.ebitda != null ? (x.ebitda / 1e9).toFixed(1) : '—'}</td><td>${x.flujo_caja_libre != null ? (x.flujo_caja_libre / 1e9).toFixed(1) : '—'}</td><td>${fmtPct(x.roic)}</td></tr>`).join('');
   f.innerHTML = `<h3>${esc(a.nombre)} (${esc(a.ticker)}) · ${esc(a.sector)}</h3>
@@ -192,30 +251,37 @@ $('#ideas-tabla').addEventListener('click', async e => {
     <table><thead><tr><th>Periodo</th><th>Ingresos</th><th>Beneficio</th><th>EBITDA</th><th>FCF</th><th>ROIC</th></tr></thead><tbody>${hist}</tbody></table>
     <small class="mut">Miles de millones de USD. Fuente: SEC EDGAR; ROIC y EBITDA son cálculos aproximados.</small>`;
   f.scrollIntoView({ behavior: 'smooth' });
-});
+}
+$('#ideas-tabla').addEventListener('click', e => { const t = e.target.closest('tr')?.dataset.t; if (t) verFicha(t); });
+$('#ideas-tabla').addEventListener('keydown', e => { if (e.key !== 'Enter') return; const t = e.target.closest('tr')?.dataset.t; if (t) verFicha(t); });
 
-// Screener oficial de TradingView, intacto y separado del ranking propio.
-(function () {
+// Screener oficial de TradingView (con consentimiento), separado del ranking propio.
+function loadScreener() {
   const box = $('#tv-screener');
-  box.className = 'tradingview-widget-container';
-  box.innerHTML = '<div class="tradingview-widget-container__widget"></div><div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span>TradingView</span></a></div>';
-  const s = document.createElement('script');
-  s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js'; s.async = true;
-  s.textContent = JSON.stringify({ width: '100%', height: 500, defaultColumn: 'overview', defaultScreen: 'most_capitalized', market: 'america', showToolbar: true, locale: 'es', colorTheme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' });
-  box.appendChild(s);
-})();
+  if (consent() !== 'si') { box.className = ''; box.innerHTML = placeholder('El screener para filtros de precio lo carga TradingView.'); return; }
+  widget(box, 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js',
+    { width: '100%', height: 500, defaultColumn: 'overview', defaultScreen: 'most_capitalized', market: 'america', showToolbar: true, locale: 'es', colorTheme: dark() ? 'dark' : 'light' });
+}
+function setConsent(v) { store.setItem('klever_consent', v); $('#consent').hidden = true; loadScreener(); if (current) renderCharts(); }
+document.addEventListener('click', e => { const v = e.target.dataset?.consent; if (v) setConsent(v); });
+$('#consent-si').addEventListener('click', () => setConsent('si'));
+$('#consent-no').addEventListener('click', () => setConsent('no'));
+$('#consent').hidden = consent() !== null;
+loadScreener();
 loadIdeas();
 
 // ---- Portafolios públicos (semana 4) ----
 async function loadPublicos() {
-  const rows = await (await fetch(API + '/public')).json();
+  let rows;
+  try { const r = await fetch(API + '/public'); if (!r.ok) throw 0; rows = await r.json(); }
+  catch { $('#lista-publicos').innerHTML = '<li class="state">No se pudieron cargar. <a href="#" data-retry="publicos">Reintentar</a></li>'; return; }
   $('#lista-publicos').innerHTML = rows.length
-    ? rows.map(p => `<li><a data-pid="${p.id}">${esc(p.nombre)}</a><span>${esc(p.plantilla)} · ${p.n_posiciones} posiciones</span></li>`).join('')
+    ? rows.map(p => `<li><a href="#" role="button" data-pid="${p.id}">${esc(p.nombre)}</a><span>${esc(p.plantilla)} · ${p.n_posiciones} posiciones</span></li>`).join('')
     : '<li>Aún no hay portafolios públicos.</li>';
 }
 $('#lista-publicos').addEventListener('click', async e => {
-  const id = e.target.dataset.pid; if (!id) return;
-  const p = await (await fetch(API + '/public/' + id)).json();
+  const id = e.target.dataset.pid; if (!id) return; e.preventDefault();
+  let p; try { const r = await fetch(API + '/public/' + id); if (!r.ok) throw 0; p = await r.json(); } catch { return toast('No se pudo cargar el portafolio'); }
   const d = $('#detalle-publico'); d.hidden = false;
   d.innerHTML = `<h3>${esc(p.nombre)}</h3><p>${esc(p.tesis || '')}</p>
     <table><thead><tr><th>Activo</th><th>Sector</th><th>Peso</th></tr></thead><tbody>${p.posiciones.map(x =>
@@ -223,3 +289,5 @@ $('#lista-publicos').addEventListener('click', async e => {
     <small class="mut">Simulación educativa; no es una recomendación de inversión.</small>`;
 });
 loadPublicos();
+
+document.addEventListener('click', e => { const r = e.target.dataset?.retry; if (!r) return; e.preventDefault(); r === 'ideas' ? loadIdeas() : loadPublicos(); });

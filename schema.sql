@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS usuarios (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL UNIQUE,
-  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+  creado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  acepto_en TEXT                -- cuándo aceptó aviso legal y privacidad
 );
 -- Enlaces mágicos de un solo uso (se guarda el hash, nunca el token).
 CREATE TABLE IF NOT EXISTS enlaces (
@@ -16,7 +17,8 @@ CREATE INDEX IF NOT EXISTS idx_enlaces_email ON enlaces(email, creado_en);
 CREATE TABLE IF NOT EXISTS sesiones (
   hash TEXT PRIMARY KEY,
   usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
-  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+  creado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  ultimo_acceso TEXT            -- se actualiza como mucho una vez por hora
 );
 CREATE TABLE IF NOT EXISTS activos (
   ticker TEXT PRIMARY KEY,

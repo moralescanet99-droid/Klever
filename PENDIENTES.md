@@ -11,7 +11,7 @@
 
 ## 2. Cloudflare (puesta en marcha)
 - [ ] `wrangler d1 create klever` y pegar el `database_id` en `wrangler.toml`
-- [ ] Cargar el esquema: `wrangler d1 execute klever --remote --file=schema.sql`
+- [ ] Cargar el esquema: `wrangler d1 execute klever --remote --file=schema.sql` (base nueva: no hace falta ninguna migración)
 - [ ] Secretos de GitHub: `SEC_USER_AGENT` (app + correo), `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 - [ ] Lanzar a mano el flujo «Fundamentales SEC (nocturno)» para cargar datos
 - [ ] Cargar `data/demo.sql` (portafolios públicos de ejemplo)
@@ -21,3 +21,7 @@
 - [ ] Leer los términos de TradingView completos (secciones 3 y 4)
 - [ ] Que un abogado revise `public/legal.html` y añadir el contacto para derechos de datos
 - [x] Universo ampliado a 125 activos (105 acciones y 20 ETFs) (`data/universe.json`); revísalo y quita o añade lo que quieras
+
+## 4. Cuando haya usuarios
+- [ ] Medir la decisión de la beta: `wrangler d1 execute klever --remote --file=scripts/metrics.sql` (registros, portafolios creados, usuarios que vuelven pasada una semana)
+- [ ] Bases creadas con versiones anteriores: aplicar `migrations/0002`, `0003` y `0004` en orden

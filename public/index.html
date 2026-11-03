@@ -20,9 +20,10 @@
     <form id="form-registro">
       <p class="mut">Sin contraseña: te enviamos un enlace de acceso al email. Sirve igual para registrarte o volver a entrar.</p>
       <label>Tu email <input type="email" name="email" required autocomplete="email"></label>
+      <label class="chk"><input type="checkbox" name="acepto" required> He leído el <a href="legal.html" target="_blank" rel="noopener">aviso legal y la privacidad</a></label>
       <button>Enviarme el enlace</button>
-      <p class="err" id="err-registro"></p>
-      <p id="ok-registro"></p>
+      <p class="err" id="err-registro" role="alert"></p>
+      <p id="ok-registro" aria-live="polite"></p>
     </form>
   </section>
 
@@ -49,7 +50,7 @@
         <button id="ed-add">Añadir</button>
         <button id="ed-sugerir" class="sec">Rellenar con plantilla</button>
       </div>
-      <p class="err" id="err-editor"></p>
+      <p class="err" id="err-editor" role="status" aria-live="polite"></p>
       <table id="ed-tabla">
         <thead><tr><th>Activo</th><th>Sector</th><th>Peso</th><th>ROIC aprox.</th><th></th></tr></thead>
         <tbody></tbody>
@@ -91,6 +92,11 @@
 <footer id="legal"><p><a href="legal.html">Aviso legal, privacidad y fuentes</a></p>
   <p><b>Aviso legal.</b> Contenido educativo; no constituye asesoramiento financiero ni recomendación personalizada. Los portafolios son simulados. Los fundamentales proceden de los registros públicos de la SEC (EDGAR) y se calculan de forma aproximada; pueden contener errores. Los precios y gráficos los muestra TradingView mediante sus widgets y no se almacenan aquí.</p>
 </footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="consent" class="consent" role="region" aria-label="Cookies" hidden>
+  <p>Los gráficos y el screener los carga TradingView, que puede usar cookies propias. ¿Quieres cargarlos? Puedes cambiarlo cuando quieras.</p>
+  <div class="row"><button id="consent-si">Aceptar y cargar</button><button id="consent-no" class="sec">Rechazar</button></div>
+</div>
 <script src="app.js" type="module"></script>
 </body>
 </html>

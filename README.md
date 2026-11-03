@@ -20,6 +20,7 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql
+- [x] Consentimiento de cookies de TradingView (los widgets solo se cargan si se acepta), casilla legal en el registro, último acceso por sesión y `scripts/metrics.sql`
 - [ ] Analítica: activar Cloudflare Web Analytics en el panel de Pages (sin código)
 - [ ] Bases existentes: `wrangler d1 execute klever --remote --file=migrations/0002_tesis.sql`
 
