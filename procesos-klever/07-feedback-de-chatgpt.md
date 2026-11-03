@@ -83,7 +83,7 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | Contraste y animación | Sin animar la opacidad; contraste con la opacidad real en cada fotograma (H1b, H8) |
 | Dirección visual | Editor rediseñado como pantalla de referencia (`ronda11/SISTEMA-VISUAL.md`) |
 
-## Revisión 9 · paquete de la ronda 11 — **PENDIENTE** (falta preparar/entregar y traer su feedback)
+## Revisión 9 · paquete de la ronda 11 — **PENDIENTE** (preparado en `revision-chatgpt/ronda-11/`: texto + 23 imágenes antes/después + ZIP verificable del proyecto; falta que el usuario se lo pase a ChatGPT y traiga su feedback)
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).
