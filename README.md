@@ -19,6 +19,8 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 - [x] Esquema D1, universo inicial (26 activos), tarea nocturna SEC
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
-- [ ] Semana 4: textos legales completos, analítica, portafolios públicos
+- [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql
+- [ ] Analítica: activar Cloudflare Web Analytics en el panel de Pages (sin código)
+- [ ] Bases existentes: `wrangler d1 execute klever --remote --file=migrations/0002_tesis.sql`
 
 Pendiente antes de lanzar: revisar secciones 3 y 4 de los términos de TradingView; ROIC es una aproximación.

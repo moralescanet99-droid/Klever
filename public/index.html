@@ -10,10 +10,17 @@
 <body>
 <header class="top">
   <strong>Klever</strong><span class="tag">beta gratuita</span>
-  <nav><a href="#portafolios">Portafolios</a> <a href="#ideas">Ideas</a> <a href="#legal">Aviso legal</a></nav>
+  <nav><a href="#portafolios">Portafolios</a> <a href="#ideas">Ideas</a> <a href="#publicos">Públicos</a> <a href="legal.html">Legal</a></nav>
 </header>
 
 <main>
+  <section id="publicos" class="card">
+    <h2>Portafolios públicos simulados</h2>
+    <p class="mut">Muestran composición y tesis, no rentabilidad. Contenido educativo.</p>
+    <ul id="lista-publicos" class="lista"></ul>
+    <div id="detalle-publico" hidden></div>
+  </section>
+
   <section id="registro" class="card" hidden>
     <h1>Organiza tus portafolios</h1>
     <p>Crea carteras simuladas de riesgo, oro o dividendos y mira su composición, sectores y calidad media. Sin dinero real.</p>
@@ -56,6 +63,10 @@
         <div><span>Total asignado</span><b id="r-total">0%</b></div>
         <div><span>Calidad media (ROIC)</span><b id="r-roic">—</b></div>
       </div>
+      <h3>Publicación</h3>
+      <label>Tesis (por qué este portafolio, máx. 600 caracteres)
+        <textarea id="ed-tesis" maxlength="600" rows="3"></textarea></label>
+      <label class="chk"><input type="checkbox" id="ed-publico"> Hacer público (solo composición y tesis, nunca rentabilidad ni tu email)</label>
       <h3>Peso por sector</h3>
       <div id="r-sectores"></div>
       <button id="ed-guardar">Guardar portafolio</button>
@@ -75,7 +86,7 @@
   </section>
 </main>
 
-<footer id="legal">
+<footer id="legal"><p><a href="legal.html">Aviso legal, privacidad y fuentes</a></p>
   <p><b>Aviso legal.</b> Contenido educativo; no constituye asesoramiento financiero ni recomendación personalizada. Los portafolios son simulados. Los fundamentales proceden de los registros públicos de la SEC (EDGAR) y se calculan de forma aproximada; pueden contener errores. Los precios y gráficos los muestra TradingView mediante sus widgets y no se almacenan aquí.</p>
 </footer>
 <script src="app.js" type="module"></script>

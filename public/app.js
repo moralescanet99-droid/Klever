@@ -70,6 +70,8 @@ async function open(id) {
   current = await api('/portfolios/' + id);
   pos = current.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso }));
   $('#editor').hidden = false;
+  $('#ed-tesis').value = current.tesis || '';
+  $('#ed-publico').checked = !!current.publico;
   $('#ed-titulo').textContent = `${current.nombre} (${current.plantilla})`;
   $('#editor').scrollIntoView({ behavior: 'smooth' });
   render();
@@ -130,7 +132,8 @@ $('#ed-sugerir').addEventListener('click', () => {
 
 $('#ed-guardar').addEventListener('click', async () => {
   $('#err-editor').textContent = '';
-  try { await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } }); $('#err-editor').textContent = 'Guardado ✓'; }
+  try { await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } });
+    await api('/portfolios/' + current.id, { method: 'PATCH', body: { tesis: $('#ed-tesis').value, publico: $('#ed-publico').checked } }); loadPublicos(); $('#err-editor').textContent = 'Guardado ✓'; }
   catch (err) { $('#err-editor').textContent = err.message; }
 });
 
@@ -186,3 +189,21 @@ $('#ideas-tabla').addEventListener('click', async e => {
   box.appendChild(s);
 })();
 loadIdeas();
+
+// ---- Portafolios públicos (semana 4) ----
+async function loadPublicos() {
+  const rows = await (await fetch(API + '/public')).json();
+  $('#lista-publicos').innerHTML = rows.length
+    ? rows.map(p => `<li><a data-pid="${p.id}">${esc(p.nombre)}</a><span>${esc(p.plantilla)} · ${p.n_posiciones} posiciones</span></li>`).join('')
+    : '<li>Aún no hay portafolios públicos.</li>';
+}
+$('#lista-publicos').addEventListener('click', async e => {
+  const id = e.target.dataset.pid; if (!id) return;
+  const p = await (await fetch(API + '/public/' + id)).json();
+  const d = $('#detalle-publico'); d.hidden = false;
+  d.innerHTML = `<h3>${esc(p.nombre)}</h3><p>${esc(p.tesis || '')}</p>
+    <table><thead><tr><th>Activo</th><th>Sector</th><th>Peso</th></tr></thead><tbody>${p.posiciones.map(x =>
+      `<tr><td>${esc(x.ticker)} <small>${esc(x.nombre)}</small></td><td>${esc(x.sector)}</td><td>${x.peso}%</td></tr>`).join('')}</tbody></table>
+    <small class="mut">Simulación educativa; no es una recomendación de inversión.</small>`;
+});
+loadPublicos();

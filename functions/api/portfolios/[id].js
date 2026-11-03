@@ -58,3 +58,20 @@ export async function onRequestDelete({ request, env, params }) {
     env.DB.prepare('DELETE FROM portafolios WHERE id = ?').bind(p.id)]);
   return json({ ok: true });
 }
+
+// Edita nombre, tesis y visibilidad. Para hacerlo público: tesis obligatoria y al menos 1 posición.
+export async function onRequestPatch({ request, env, params }) {
+  const user = await auth(request, env);
+  if (!user) return json({ error: 'No autorizado' }, 401);
+  const p = await owned(env, user, params.id);
+  if (!p) return json({ error: 'No encontrado' }, 404);
+  const b = await readJson(request) || {};
+  const tesis = b.tesis !== undefined ? String(b.tesis).trim().slice(0, 600) : p.tesis;
+  const publico = b.publico !== undefined ? (b.publico ? 1 : 0) : p.publico;
+  if (publico) {
+    const n = await env.DB.prepare('SELECT COUNT(*) c FROM posiciones WHERE portafolio_id = ?').bind(p.id).first();
+    if (!tesis || !n.c) return json({ error: 'Para hacerlo público añade posiciones y una tesis' }, 400);
+  }
+  await env.DB.prepare('UPDATE portafolios SET tesis = ?, publico = ? WHERE id = ?').bind(tesis || null, publico, p.id).run();
+  return json({ ok: true });
+}
