@@ -36,3 +36,8 @@
 - [ ] Ver `ronda11/pruebas-manuales.md` (M1–M32; sustituye a las anteriores), en especial Safari/Firefox, tema oscuro, texto y zoom reales y la verificación del ZIP en macOS.
 - [ ] Extender la dirección visual (`ronda11/SISTEMA-VISUAL.md`) al resto de pantallas tras revisar la del editor. Incluye probar `batch`/`RETURNING` y la migración 0007 en **D1 remoto** (M21, M22) (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos reales, zona horaria, TradingView, carga de la SEC). Ninguna se ha ejecutado todavía.
 - [ ] Pruebas de uso con personas: seguir `PRUEBAS-DE-USO.md` (demo `demo/index.html`, o `bash scripts/local/arrancar.sh`) y anotar dónde dudan.
+
+## Ronda 13 (pendiente de accesos y decisiones)
+- Ejecutar la carga real de la SEC y comprobar que `nightly.yml` funciona (la interfaz solo dirá «SEC» cuando el cargador escriba `origen = sec`): ver `ronda13/DATOS.md` y `ronda10/BLOQUEOS.md`.
+- Aplicar la migración `0008_radar_escenarios.sql` en la D1 real y validar radar, escenarios y aislamiento entre cuentas (M46, M47).
+- Decidir: responsables editoriales y proceso de revisión (`ronda13/EDITORIAL.md`); reparto gratuito/pago.
