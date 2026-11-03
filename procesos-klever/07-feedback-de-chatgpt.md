@@ -77,3 +77,6 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).
 2. `INSTRUCCIONES_PARA_CHATGPT.md`: contexto del producto, qué se pidió y qué se hizo (citando sus capturas), qué ve y qué no, decisiones que debe cuestionar, formato de respuesta (veredicto de 3 líneas, notas del 1 al 10 comparadas, problemas por gravedad, 5 cambios, 3 cosas a quitar, lista de lo no comprobable).
 3. Zip con imágenes + instrucciones. El usuario copia el texto **bajo la primera línea `---`** y sube las imágenes a la misma conversación.
+
+## Revisión 7 · paquete TÉCNICO de la ronda 9 — **PENDIENTE** (preparado en `revision-chatgpt/ronda-9-tecnica/`; falta que el usuario se lo entregue y traiga su feedback)
+
