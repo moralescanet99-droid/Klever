@@ -142,7 +142,8 @@ $('#ed-add').addEventListener('click', () => {
 $('#ed-sugerir').addEventListener('click', () => {
   const t = PLANTILLAS[current.plantilla].filter(x => assets.some(a => a.ticker === x));
   const w = Math.floor(1000 / t.length) / 10;
-  pos = t.map(ticker => ({ ticker, peso: w })); render();
+  const resto = Math.round((100 - w * t.length) * 10) / 10; // el primero absorbe el redondeo
+  pos = t.map((ticker, i) => ({ ticker, peso: i === 0 ? Math.round((w + resto) * 10) / 10 : w })); render();
 });
 
 $('#ed-guardar').addEventListener('click', async () => {
