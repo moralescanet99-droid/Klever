@@ -25,6 +25,8 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 
 Pendiente antes de lanzar: revisar secciones 3 y 4 de los términos de TradingView; ROIC es una aproximación.
 
+Pendientes tuyos: ver `PENDIENTES.md`.
+
 ## Acceso por enlace mágico (Brevo)
 1. Cuenta gratuita en Brevo → verifica un correo remitente → crea una clave API.
 2. `wrangler pages secret put BREVO_API_KEY` y `wrangler pages secret put MAIL_FROM` (el remitente verificado).

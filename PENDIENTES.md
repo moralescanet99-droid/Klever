@@ -1,0 +1,23 @@
+# Tareas pendientes (lo que solo puedes hacer tú)
+
+## 1. Crear la cuenta de Brevo (envío del enlace de acceso)  ← siguiente
+- [ ] Crear cuenta gratuita en brevo.com
+- [ ] Verificar un correo remitente (Senders → añadir tu correo → pulsar el enlace de confirmación)
+- [ ] Crear una clave API (SMTP & API → API keys → Generate) y copiarla
+- [ ] Guardar los secretos en Cloudflare Pages:
+  - `wrangler pages secret put BREVO_API_KEY` (la clave)
+  - `wrangler pages secret put MAIL_FROM` (el correo remitente verificado)
+- [ ] Probar el acceso con tu Gmail y con otro proveedor; mirar la carpeta de spam
+
+## 2. Cloudflare (puesta en marcha)
+- [ ] `wrangler d1 create klever` y pegar el `database_id` en `wrangler.toml`
+- [ ] Cargar el esquema: `wrangler d1 execute klever --remote --file=schema.sql`
+- [ ] Secretos de GitHub: `SEC_USER_AGENT` (app + correo), `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
+- [ ] Lanzar a mano el flujo «Fundamentales SEC (nocturno)» para cargar datos
+- [ ] Cargar `data/demo.sql` (portafolios públicos de ejemplo)
+- [ ] Desplegar en Pages y activar Web Analytics (un clic en el panel)
+
+## 3. Antes de abrir al público
+- [ ] Leer los términos de TradingView completos (secciones 3 y 4)
+- [ ] Que un abogado revise `public/legal.html` y añadir el contacto para derechos de datos
+- [ ] Ampliar el universo de 26 a 100-150 activos (`data/universe.json`)
