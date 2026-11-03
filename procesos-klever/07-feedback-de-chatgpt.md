@@ -67,7 +67,7 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 | 1 Revisión devuelta leída después del lote (crítico) | Revisión y fecha de la propia escritura dentro de la operación (`UPDATE … RETURNING`), PUT y PATCH |
 | 2 GET mezcla versiones | Lectura de cartera y posiciones en un solo lote transaccional |
 | 3 `run-all.sh` éxito falso | Código de salida agregado, `trap`, fallos de arranque/timeout/resultado ausente cuentan; prueba del ejecutor |
-| 4 Requisitos (Node, timeout/setsid) | Node ≥ 22.13 fijado (`engines`, `.nvmrc`, docs); scripts portables sin `timeout`/`setsid`; commit/tag exacto |
+| 4 Requisitos (Node, timeout/setsid) | Node ≥ 22.13 fijado (`engines`, `.nvmrc`, docs); scripts portables sin `timeout`/`setsid`; commit exacto |
 | 5 Todo error = «ticker desconocido» | Validación previa → 400; error interno → 500 genérico + detalle en el log |
 | 5 pruebas | Añadidas, con evidencia «falla antes / pasa después» |
 | Migración 0007 sobre base antigua con datos | Prueba nueva con el esquema anterior y datos |
