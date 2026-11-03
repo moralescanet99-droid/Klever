@@ -13,7 +13,7 @@ SALIDA="$RONDA/resultado-ejecucion.txt"
   echo
 } | tee "$SALIDA"
 for t in tests/ronda5/testA tests/ronda5/testB tests/ronda5/testC tests/ronda5/testD tests/ronda5/testE tests/ronda7/testF; do
-  bash scripts/local/servidor.sh start >/dev/null || { echo "No arrancó el servidor para $t" | tee -a "$SALIDA"; continue; }
+  bash scripts/local/servidor.sh start >/dev/null 2>&1 || { echo "No arrancó el servidor para $t" | tee -a "$SALIDA"; continue; }
   echo "=== $(basename "$t") ===" | tee -a "$SALIDA"
   salida_t="$(timeout 900 node "$t.cjs" 2>&1)"
   echo "$salida_t" | grep -E "^FALLA|RESULTADO|^- |Timeout" | tee -a "$SALIDA"
@@ -25,6 +25,7 @@ echo "=== unit-servidor ===" | tee -a "$SALIDA"
 node tests/ronda7/unit-servidor.mjs 2>&1 | grep -E "^FALLA|RESULTADO|^- " | tee -a "$SALIDA"
 # Demostración HTML (NO equivale al servidor real: datos en memoria, sin persistencia)
 echo "=== demo (demotest) ===" | tee -a "$SALIDA"
+mkdir -p .wrangler
 ( cd demo && python3 -m http.server 8790 >/dev/null 2>&1 & echo $! > ../.wrangler/demo.pid )
 sleep 1
 DEMO_URL="http://localhost:8790/" timeout 300 node tests/ronda5/demotest.cjs 2>&1 | grep -E "^FALLA|DEMO OK|HAY FALLOS|Timeout" | tee -a "$SALIDA"

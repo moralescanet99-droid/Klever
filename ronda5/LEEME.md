@@ -1,5 +1,7 @@
 # Ronda 5: cerrar los problemas concretos de la ronda 4
 
+> **Nota (ronda 7):** las capturas citadas en este informe **no están en el repositorio** (se regeneran con las baterías; las de la ronda 6 se entregaron en un zip). Ver `ronda7/EVIDENCIAS.md`. Además, desde la ronda 7 el servidor exige la `revision` para guardar: las pruebas de esta ronda se ejecutaron con el servidor de entonces (anterior a la ronda 7).
+
 Se conservan la estructura, la paleta, la portada compacta, las posiciones móviles y la tabla de escritorio. No se ha rediseñado nada: solo se cierran los puntos pedidos.
 
 > Este informe se genera con `tests/ronda5/informe.py` a partir de lo **observado** en una ejecución limpia de las cuatro baterías (`tests/ronda5/run-all.sh`). Las filas de la tabla de evidencias salen de `ronda5/evidencias-D.json`, no están escritas a mano.

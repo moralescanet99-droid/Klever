@@ -1,5 +1,7 @@
 # Ronda 6: cerrar los puntos de ChatGPT y dejar una versión lista para pruebas de uso
 
+> **Nota (ronda 7):** las capturas citadas en este informe **no están en el repositorio** (se regeneran con las baterías; las de la ronda 6 se entregaron en un zip). Ver `ronda7/EVIDENCIAS.md`. Además, desde la ronda 7 el servidor exige la `revision` para guardar: las pruebas de esta ronda se ejecutaron con el servidor de entonces (anterior a la ronda 7).
+
 No se ha rediseñado nada: se conservan estructura, paleta y disposición de la ronda 5. Solo se cierran los puntos pedidos y se prepara la versión de pruebas (`PRUEBAS-DE-USO.md`).
 
 > Este informe se genera con `tests/ronda5/informe6.py` a partir de lo **observado** en una ejecución limpia de las cinco baterías (`tests/ronda5/run-all.sh`). Las tablas salen de `ronda6/evidencias-E.json` y `ronda6/evidencias-D.json`, no están escritas a mano.
