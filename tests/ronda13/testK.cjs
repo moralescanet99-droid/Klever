@@ -27,7 +27,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.reload(); await abrir(p, 'Base dividendos');
     const rad = await p.evaluate(() => ({ t: document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '), vis: document.querySelector('#radio-cuerpo').offsetParent !== null }));
     ev('K1-' + w, `Radiografía de la versión guardada (${w} px)`, 'Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide',
-      rad.t.slice(0, 330), rad.vis && /Analizando: la versión guardada en tu cuenta/.test(rad.t) && /La mayor posición es KO \(60 %\)/.test(rad.t) && /Solo hay 2 posiciones: suman el 100 %/.test(rad.t) && /Qué muestra y qué no/.test(rad.t) && /Mayores posiciones/.test(rad.t));
+      rad.t.slice(0, 330), rad.vis && /Analizando: la versión guardada en tu cuenta/.test(rad.t) && /La mayor posición es KO \(60 %\)/.test(rad.t) && /Solo hay 2 posiciones: suman el 100 %/.test(rad.t) && /Concentración no es riesgo/.test(rad.t) && /Mayores posiciones/.test(rad.t));
     // ---------- 2. Límite personal: se explica el hecho, no se impone un umbral
     await p.fill('#radio-lim', '50'); await p.click('#radio-lim-form button[type=submit]'); await p.waitForFunction(() => /supera el límite/.test(document.querySelector('#radio-cuerpo').textContent)); await p.waitForTimeout(300);
     const lim = await p.evaluate(() => document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '));

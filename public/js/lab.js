@@ -114,10 +114,7 @@ export function pintarRadiografia() {
       <div><dt>${r.estado === 'exceso' ? 'Exceso' : 'Sin asignar'}</dt><dd>${P(r.estado === 'exceso' ? r.exceso : r.pendiente)}</dd></div></dl>`}
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
-    <details class="mini"><summary>Qué muestra y qué no</summary>
-      <p>Muestra cuánto pesa lo más grande de tu reparto. <b>Concentración no es riesgo</b>: no mide volatilidad, pérdidas posibles ni diversificación.</p>
-      <p>Las categorías de los fondos son comerciales (por ejemplo «ETF oro»), no la exposición real de lo que contienen. No se deducen países ni divisas, ni se calculan solapamientos entre fondos, porque no hay composiciones verificadas y fechadas.</p>
-      <p>Una cartera incompleta se analiza tal cual: no se rellena ni se reescala al 100 %.</p></details>
+    <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
     <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
   cont.dataset.sig = html; cont.innerHTML = html;

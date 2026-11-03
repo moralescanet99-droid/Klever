@@ -111,3 +111,6 @@
 }
 @media (max-width:480px){.tabla-lab th,.tabla-lab td{padding:8px 3px}.tabla-lab thead th{font-size:.6875rem}}
 .tabla-lab th,.tabla-lab td{white-space:normal}
+.emp-filtros label{min-width:0;max-width:100%} .emp-filtros select{box-sizing:border-box;max-width:100%;width:100%}
+@media (max-width:480px){.emp-filtros label:not(.chk){flex:1 1 100%}}
+@media (min-width:481px){.emp-filtros label:not(.chk){flex:0 1 14rem}}

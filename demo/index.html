@@ -775,6 +775,9 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 }
 @media (max-width:480px){.tabla-lab th,.tabla-lab td{padding:8px 3px}.tabla-lab thead th{font-size:.6875rem}}
 .tabla-lab th,.tabla-lab td{white-space:normal}
+.emp-filtros label{min-width:0;max-width:100%} .emp-filtros select{box-sizing:border-box;max-width:100%;width:100%}
+@media (max-width:480px){.emp-filtros label:not(.chk){flex:1 1 100%}}
+@media (min-width:481px){.emp-filtros label:not(.chk){flex:0 1 14rem}}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
@@ -1059,6 +1062,7 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
           <details class="mini">
             <summary>Más sobre las categorías</summary>
             <p>Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
+            <p><b>Qué no calcula la radiografía:</b> no mide riesgo, volatilidad ni diversificación; no deduce países ni divisas del mercado de cotización; no calcula solapamientos entre fondos (no hay composiciones verificadas y fechadas); y una cartera incompleta se analiza tal cual, sin rellenarla ni reescalarla al 100 %.</p>
             <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
           </details>
           <div class="roic-bloque">
@@ -1684,10 +1688,7 @@ function pintarRadiografia() {
       <div><dt>${r.estado === 'exceso' ? 'Exceso' : 'Sin asignar'}</dt><dd>${P(r.estado === 'exceso' ? r.exceso : r.pendiente)}</dd></div></dl>`}
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
-    <details class="mini"><summary>Qué muestra y qué no</summary>
-      <p>Muestra cuánto pesa lo más grande de tu reparto. <b>Concentración no es riesgo</b>: no mide volatilidad, pérdidas posibles ni diversificación.</p>
-      <p>Las categorías de los fondos son comerciales (por ejemplo «ETF oro»), no la exposición real de lo que contienen. No se deducen países ni divisas, ni se calculan solapamientos entre fondos, porque no hay composiciones verificadas y fechadas.</p>
-      <p>Una cartera incompleta se analiza tal cual: no se rellena ni se reescala al 100 %.</p></details>
+    <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
     <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
   cont.dataset.sig = html; cont.innerHTML = html;
