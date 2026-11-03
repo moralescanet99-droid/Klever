@@ -32,3 +32,6 @@ textarea{font:inherit;width:100%;padding:.5rem;border-radius:8px;border:1px soli
 label.chk input{display:inline;width:auto;margin-right:.4rem}
 #detalle-publico{border:1px solid var(--line);border-radius:10px;padding:1rem;margin-top:1rem}
 .doc{max-width:760px;margin:0 auto;padding:1rem}
+.top{flex-wrap:wrap}
+select,input{max-width:100%}
+#ed-ticker{min-width:0;flex:1 1 200px}
