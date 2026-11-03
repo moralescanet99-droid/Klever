@@ -18,7 +18,7 @@ Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, 
 ## Estado (plan, semanas 1-2)
 - [x] Esquema D1, universo inicial (26 activos), tarea nocturna SEC
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
-- [ ] Semana 3: screener/ideas, ficha de empresa
+- [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [ ] Semana 4: textos legales completos, analítica, portafolios públicos
 
 Pendiente antes de lanzar: revisar secciones 3 y 4 de los términos de TradingView; ROIC es una aproximación.

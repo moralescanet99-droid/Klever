@@ -141,3 +141,48 @@ $('#ed-borrar').addEventListener('click', async () => {
 });
 
 start();
+
+// ---- Ideas (semana 3) ----
+const CRIT = {
+  deuda_ebitda: ['Deuda neta / EBITDA < 2,5', v => v.toFixed(2) + 'x'],
+  roic: ['ROIC aprox. > 10%', fmtPct],
+  margen_neto: ['Margen neto > 10%', fmtPct],
+  flujo_caja: ['Flujo de caja libre > 0', v => (v / 1e9).toFixed(2) + ' mil M$'],
+  crecimiento: ['Ingresos crecen vs. año anterior', fmtPct],
+};
+const critRows = c => Object.entries(CRIT).map(([k, [label, f]]) => {
+  const x = c[k]; const mark = x?.ok === true ? '<b class="ok">✓</b>' : x?.ok === false ? '<b class="no">✗</b>' : '<span class="mut">sin dato</span>';
+  return `<li>${mark} ${label} <span class="mut">${x?.valor != null ? '(' + f(x.valor) + ')' : ''}</span></li>`;
+}).join('');
+
+async function loadIdeas() {
+  const rows = await (await fetch(API + '/ideas')).json();
+  $('#ideas-tabla tbody').innerHTML = rows.length ? rows.map(r =>
+    `<tr data-t="${esc(r.ticker)}"><td>${esc(r.ticker)} <small>${esc(r.nombre)}</small></td><td>${esc(r.sector)}</td><td>${r.cumplidos}/${r.evaluados}</td><td><a>Ver ficha</a></td></tr>`).join('')
+    : '<tr><td colspan="4">Aún no hay datos: ejecuta la carga de la SEC.</td></tr>';
+}
+
+$('#ideas-tabla').addEventListener('click', async e => {
+  const t = e.target.closest('tr')?.dataset.t; if (!t) return;
+  const a = await (await fetch(API + '/assets/' + t)).json();
+  const f = $('#ficha'); f.hidden = false;
+  const hist = a.fundamentales.map(x => `<tr><td>${esc(x.periodo)}</td><td>${(x.ingresos / 1e9).toFixed(1)}</td><td>${x.beneficio_neto != null ? (x.beneficio_neto / 1e9).toFixed(1) : '—'}</td><td>${x.ebitda != null ? (x.ebitda / 1e9).toFixed(1) : '—'}</td><td>${x.flujo_caja_libre != null ? (x.flujo_caja_libre / 1e9).toFixed(1) : '—'}</td><td>${fmtPct(x.roic)}</td></tr>`).join('');
+  f.innerHTML = `<h3>${esc(a.nombre)} (${esc(a.ticker)}) · ${esc(a.sector)}</h3>
+    <p>Aparece en el ranking según estos criterios${a.criterios?.periodo ? ' (' + esc(a.criterios.periodo) + ')' : ''}:</p>
+    <ul>${a.criterios ? critRows(a.criterios) : '<li>Sin datos</li>'}</ul>
+    <table><thead><tr><th>Periodo</th><th>Ingresos</th><th>Beneficio</th><th>EBITDA</th><th>FCF</th><th>ROIC</th></tr></thead><tbody>${hist}</tbody></table>
+    <small class="mut">Miles de millones de USD. Fuente: SEC EDGAR; ROIC y EBITDA son cálculos aproximados.</small>`;
+  f.scrollIntoView({ behavior: 'smooth' });
+});
+
+// Screener oficial de TradingView, intacto y separado del ranking propio.
+(function () {
+  const box = $('#tv-screener');
+  box.className = 'tradingview-widget-container';
+  box.innerHTML = '<div class="tradingview-widget-container__widget"></div><div class="tradingview-widget-copyright"><a href="https://es.tradingview.com/" rel="noopener nofollow" target="_blank"><span>TradingView</span></a></div>';
+  const s = document.createElement('script');
+  s.src = 'https://s3.tradingview.com/external-embedding/embed-widget-screener.js'; s.async = true;
+  s.textContent = JSON.stringify({ width: '100%', height: 500, defaultColumn: 'overview', defaultScreen: 'most_capitalized', market: 'america', showToolbar: true, locale: 'es', colorTheme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light' });
+  box.appendChild(s);
+})();
+loadIdeas();

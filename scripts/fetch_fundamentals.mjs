@@ -57,6 +57,7 @@ ON CONFLICT(ticker) DO UPDATE SET nombre=excluded.nombre,tipo=excluded.tipo,sect
     const eq = annual(facts, ['StockholdersEquity']);
     const tax = annual(facts, ['EffectiveIncomeTaxRateContinuingOperations'], 'pure');
     const years = [...rev.keys()].sort().slice(-3);
+    const hist = {};
     for (const y of years) {
       const g = m => m.get(y)?.val;
       const ebitda = g(op) != null ? g(op) + (g(da) ?? 0) : null;
@@ -66,10 +67,24 @@ ON CONFLICT(ticker) DO UPDATE SET nombre=excluded.nombre,tipo=excluded.tipo,sect
       const t = Math.min(Math.max(g(tax) ?? 0.21, 0), 0.4);
       const invested = (g(ltd) ?? 0) + (g(eq) ?? 0) - (g(cash) ?? 0);
       const roic = g(op) != null && invested > 0 ? g(op) * (1 - t) / invested : null;
+      hist[y] = { ingresos: g(rev), ni: g(ni), debt, ebitda, fcf, roic };
       out.push(`INSERT INTO fundamentales (ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic)
 VALUES (${q(a.ticker)},'FY${y}',${n(g(rev))},${n(g(ni))},${n(debt)},${n(ebitda)},${n(fcf)},${n(roic)})
 ON CONFLICT(ticker,periodo) DO UPDATE SET ingresos=excluded.ingresos,beneficio_neto=excluded.beneficio_neto,
 deuda_neta=excluded.deuda_neta,ebitda=excluded.ebitda,flujo_caja_libre=excluded.flujo_caja_libre,roic=excluded.roic;`);
+    }
+    const ys = Object.keys(hist).sort();
+    if (ys.length) {
+      const L = hist[ys.at(-1)], P = ys.length > 1 ? hist[ys.at(-2)] : null;
+      const crit = {
+        deuda_ebitda: { ok: L.debt != null && L.ebitda > 0 ? L.debt / L.ebitda < 2.5 : null, valor: L.debt != null && L.ebitda > 0 ? L.debt / L.ebitda : null },
+        roic: { ok: L.roic != null ? L.roic > 0.1 : null, valor: L.roic },
+        margen_neto: { ok: L.ingresos > 0 && L.ni != null ? L.ni / L.ingresos > 0.1 : null, valor: L.ingresos > 0 && L.ni != null ? L.ni / L.ingresos : null },
+        flujo_caja: { ok: L.fcf != null ? L.fcf > 0 : null, valor: L.fcf },
+        crecimiento: { ok: P?.ingresos > 0 && L.ingresos != null ? L.ingresos > P.ingresos : null, valor: P?.ingresos > 0 && L.ingresos != null ? L.ingresos / P.ingresos - 1 : null },
+      };
+      out.push(`INSERT INTO ideas (ticker,criterios_cumplidos,calculado_en) VALUES (${q(a.ticker)},${q(JSON.stringify({ periodo: 'FY' + ys.at(-1), ...crit }))},datetime('now'))
+ON CONFLICT(ticker) DO UPDATE SET criterios_cumplidos=excluded.criterios_cumplidos,calculado_en=excluded.calculado_en;`);
     }
     console.error(`ok ${a.ticker} (${years.length} años)`);
   } catch (e) { console.error(`fallo ${a.ticker}: ${e.message}`); }

@@ -24,3 +24,7 @@ td button{padding:.1rem .5rem}
 .bar{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}.bar i{display:block;height:10px;background:var(--acc);border-radius:5px}.bar span{font-size:.85rem;min-width:11rem}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.75rem}
 footer{max-width:960px;margin:2rem auto;padding:0 1rem;color:var(--mut);font-size:.85rem}
+.mut{color:var(--mut)}
+.ok{color:var(--acc)}.no{color:#c0392b}
+#ideas-tabla tbody tr{cursor:pointer}#ideas-tabla tbody tr:hover{background:var(--bg)}
+#ficha{border:1px solid var(--line);border-radius:10px;padding:1rem;margin:1rem 0}
