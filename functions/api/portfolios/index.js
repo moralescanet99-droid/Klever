@@ -5,8 +5,14 @@ const PLANTILLAS = ['riesgo', 'oro', 'dividendos'];
 export async function onRequestGet({ request, env }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
+  // Resumen para «Mis carteras»: posiciones y total asignado salen de las posiciones guardadas.
+  // actualizado_en es NULL hasta la primera modificación real (no se inventa ninguna fecha).
   const { results } = await env.DB.prepare(
-    'SELECT id, nombre, plantilla, publico, creado_en FROM portafolios WHERE usuario_id = ? ORDER BY id DESC'
+    `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en,
+            COUNT(po.ticker) AS n_posiciones, COALESCE(SUM(po.peso), 0) AS total
+     FROM portafolios p LEFT JOIN posiciones po ON po.portafolio_id = p.id
+     WHERE p.usuario_id = ? GROUP BY p.id
+     ORDER BY COALESCE(p.actualizado_en, p.creado_en) DESC, p.id DESC`
   ).bind(user.id).all();
   return json(results);
 }

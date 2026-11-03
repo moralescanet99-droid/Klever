@@ -8,7 +8,7 @@
 // =====================================================================
 
 // ---------- utilidades ----------
-const store = (() => { const m = {}; return { // tolerante a modo privado / datos bloqueados
+const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
   getItem: k => { try { return localStorage.getItem(k); } catch { return m[k] ?? null; } },
   setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
   removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } } }; })();
@@ -73,9 +73,15 @@ let rev = 0, savedRev = 0, saving = false, saveErr = null;
 const DRAFT = 'klever_borrador';
 const leerBorrador = () => { try { return JSON.parse(store.getItem(DRAFT)); } catch { return null; } };
 const hayBorrador = () => !!leerBorrador()?.pos?.length;
+let copiaLocal = false, recuperado = false; // copiaLocal: hay una copia de los cambios en este dispositivo (y persiste de verdad)
 function guardarBorrador() {
-  if (!current || current.id) return; // solo lo que aún no está en la cuenta
-  store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos }));
+  if (!current) return;
+  if (!current.id) { // aún no está en la cuenta: borrador del dispositivo
+    store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
+  }
+  const key = 'klever_edit_' + current.id; // cartera de la cuenta: copia de los cambios sin guardar
+  if (rev !== savedRev) { store.setItem(key, JSON.stringify({ nombre: $('#nombre').value, tesis: $('#tesis').value, pos, base: current.version })); copiaLocal = store.ok; }
+  else { store.removeItem(key); copiaLocal = false; }
 }
 const enCuenta = () => logged() && !!current?.id;
 
@@ -96,7 +102,7 @@ const listaTickers = inv => inv.map(p => p.ticker).join(', ');
 function razonGuardar(v) {
   if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
   if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.`;
-  if (current?.publico && !v.completa) return `Esta cartera es pública y debe mantener el 100 % asignado (pendiente de asignar: ${pesoCorto(v.falta)}). Para guardar un reparto incompleto, deja de publicarla antes.`;
+  if (current?.publico && !v.completa) return `Cartera pública: la versión publicada no cambia hasta que el reparto vuelva a sumar el 100 % (pendiente de asignar: ${pesoCorto(v.falta)}). ${copiaLocal ? 'Tus cambios siguen en este dispositivo. ' : ''}Si prefieres guardar un reparto incompleto, deja de publicarla.`;
   return null;
 }
 function razonPublicar(v) {
@@ -118,10 +124,10 @@ function cerrarAlPulsarFuera(d) { // clic en el fondo (no en el relleno del diá
 $$('dialog').forEach(cerrarAlPulsarFuera);
 $$('[data-cerrar]').forEach(b => b.addEventListener('click', () => b.closest('dialog').close()));
 
-function confirmar({ titulo, texto, ok = 'Aceptar', peligro = false }) {
+function confirmar({ titulo, texto, ok = 'Aceptar', no = 'Cancelar', peligro = false }) {
   return new Promise(res => {
     const d = $('#dlg-confirmar');
-    $('#cf-titulo').textContent = titulo; $('#cf-texto').textContent = texto;
+    $('#cf-titulo').textContent = titulo; $('#cf-texto').textContent = texto; $('#cf-no').textContent = no;
     const si = $('#cf-si'); si.textContent = ok; si.className = 'btn ' + (peligro ? 'btn-peligro' : 'btn-primario');
     d.returnValue = '';
     d.addEventListener('close', () => res(d.returnValue === 'ok'), { once: true });
@@ -240,16 +246,36 @@ function mostrar(v, primera) {
 window.addEventListener('hashchange', () => route());
 
 // ---------- carteras del usuario ----------
+const fmtFecha = iso => { const d = new Date(String(iso).replace(' ', 'T') + 'Z'); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric' }).format(d); };
+let nMis = null;
+function formNuevo(abrir, enfocar = true) {
+  $('#form-nueva').hidden = !abrir; $('#btn-nueva').setAttribute('aria-expanded', String(abrir));
+  $('#nueva-titulo').textContent = nMis === 0 ? 'Crea tu primera cartera' : 'Nueva cartera';
+  $('#nueva-cancelar').hidden = nMis === 0; // sin carteras, crear es la acción principal: no hay nada que cancelar
+  if (abrir && enfocar) $('#nueva-nombre').focus();
+}
+function itemCartera(p) {
+  const n = p.n_posiciones, total = r1(p.total);
+  const asig = !n ? 'Sin posiciones' : `${n} ${n === 1 ? 'posición' : 'posiciones'} · Asignado: ${pesoCorto(total)}${total < 100 ? ' (incompleta)' : total > 100 ? ' (exceso)' : ''}`;
+  const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
+  const local = store.getItem('klever_edit_' + p.id) ? '<span class="chip aviso">Cambios sin guardar en este dispositivo</span>' : '';
+  return `<li><button class="tarjeta cartera-item" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
+    <span class="ci-l1"><b>${esc(p.nombre)}</b><span class="chip${p.publico ? ' pub' : ''}">${p.publico ? 'Pública' : 'Privada'}</span>${local}</span>
+    <span class="ci-l2">${asig}</span>${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
+    <span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`;
+}
 async function cargarMisCarteras() {
   const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista">Cargando tus carteras…</li>';
   try {
-    const list = await api('/portfolios');
-    ul.innerHTML = list.length ? list.map(p => `<li><button class="tarjeta" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
-        <span><b>${esc(p.nombre)}</b><span class="t-meta" style="display:block">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.publico ? 'Pública' : 'Privada'}</span></span><span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`).join('')
-      : '<li class="estado-lista">Aún no tienes carteras. Crea la primera con el formulario de arriba.</li>';
+    const list = await api('/portfolios'); nMis = list.length;
+    $('#btn-nueva').hidden = nMis === 0;
+    if (nMis === 0) { ul.innerHTML = ''; formNuevo(true, false); return; }
+    formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
   } catch (err) { ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
+$('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
+$('#nueva-cancelar').addEventListener('click', () => { formNuevo(false); $('#btn-nueva').focus(); });
 $('#form-nueva').addEventListener('submit', async e => {
   e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
   try {
@@ -259,12 +285,21 @@ $('#form-nueva').addEventListener('submit', async e => {
   } catch (err) { toast(err.message); } finally { btn.disabled = false; }
 });
 async function cargarCartera(id) {
-  try {
-    const c = await api('/portfolios/' + id);
-    current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico };
-    pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saveErr = null;
-    chartEls.clear(); $('#graficos').innerHTML = ''; return true;
-  } catch (err) { toast(err.message); return false; }
+  let c; try { c = await api('/portfolios/' + id); } catch (err) { toast(err.message); return false; }
+  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, version: c.actualizado_en || c.creado_en || '' };
+  pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saveErr = null; copiaLocal = false;
+  chartEls.clear(); $('#graficos').innerHTML = '';
+  await recuperarCambiosLocales(); return true;
+}
+async function recuperarCambiosLocales() { // cambios sin guardar de una sesión anterior en este dispositivo
+  const key = 'klever_edit_' + current.id, raw = store.getItem(key); if (!raw) return;
+  let e; try { e = JSON.parse(raw); } catch { store.removeItem(key); return; }
+  if (!Array.isArray(e.pos) || (e.nombre === current.nombre && (e.tesis || '') === (current.tesis || '') && JSON.stringify(e.pos) === JSON.stringify(pos))) { store.removeItem(key); return; }
+  if (e.base !== current.version) { // la cartera cambió desde otro sitio después de esa copia
+    const usar = await confirmar({ titulo: 'Cambios sin guardar de otra sesión', texto: 'Esta cartera se modificó después de que hicieras esos cambios en este dispositivo. Si los conservas y los guardas, sustituirán la versión guardada.', ok: 'Conservar mis cambios', no: 'Usar la versión guardada' });
+    if (!usar) { store.removeItem(key); return; }
+  }
+  current.nombre = e.nombre; current.tesis = e.tesis || ''; pos = e.pos; rev = 1; savedRev = 0; copiaLocal = store.ok; recuperado = true;
 }
 function abrirInvitado(plantilla) {
   current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
@@ -273,7 +308,7 @@ function abrirInvitado(plantilla) {
 }
 function restaurarBorrador(d) {
   current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
-  pos = d.pos; rev = savedRev = 0; saveErr = null;
+  pos = d.pos; rev = savedRev = 0; saveErr = null; copiaLocal = store.ok;
 }
 async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
   const d = leerBorrador(); if (!d) return;
@@ -288,7 +323,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     ({ id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla } }));
     await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: d.pos } });
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
-    toast('Hemos guardado tu borrador en tu cuenta'); location.hash = '#cartera-' + id;
+    toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
     if (id) { try { await api('/portfolios/' + id, { method: 'DELETE' }); } catch {} } // no dejar una cartera vacía a medias
     toast('No se pudo guardar tu borrador (' + err.message + '). Sigue en este dispositivo.', 8000);
@@ -313,14 +348,13 @@ function calcResumen(ps) {
   };
 }
 const roicTxt = a => !a ? '<span class="nd">No disponible</span>' : a.tipo === 'etf' ? '<span class="nd" title="Los fondos no tienen ROIC: no aplicable">No aplicable</span>' : a.roic == null ? '<span class="nd" title="Dato ausente en los informes">No disponible</span>' : pct(a.roic);
-function textoCobertura(r) {
+function lineasCobertura(r) {
   if (!r.n) return '';
-  const sin = [r.noAplic && `${r.noAplic} ${r.noAplic === 1 ? 'fondo' : 'fondos'} (no aplicable)`, r.noDisp && `${r.noDisp} ${r.noDisp === 1 ? 'empresa' : 'empresas'} (no disponible)`].filter(Boolean).join(' y ');
-  if (r.roic == null) return `Ninguna posición tiene ROIC${sin ? ': ' + sin : ''}.`;
-  return `Con dato: ${r.nCon} de ${r.n} posiciones (${nf(r.cobPeso * 100, 0)}${NB}% del peso asignado).${sin ? ' Sin dato: ' + sin + '.' : ''} Media ponderada por peso.`;
-}
-function textoAsignado(r) {
-  return !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '✓ 100 % asignado';
+  const pl = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
+  const l = [r.roic == null ? 'Ninguna posición tiene ROIC.' : `Con dato: ${r.nCon} de ${r.n} posiciones (${nf(r.cobPeso * 100, 0)}${NB}% del peso asignado).`];
+  if (r.noDisp) l.push(`Dato ausente (no disponible): ${pl(r.noDisp, 'empresa', 'empresas')}.`);
+  if (r.noAplic) l.push(`No aplicable: ${pl(r.noAplic, 'fondo', 'fondos')}; los ETF no tienen ROIC.`);
+  return l.map(t => `<span class="linea">${t}</span>`).join('');
 }
 
 // ---------- espacio de trabajo ----------
@@ -332,6 +366,7 @@ function renderWorkspace() {
   $('#nombre').value = current.nombre; $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
+  if (recuperado) { recuperado = false; toast('Hemos recuperado tus cambios sin guardar'); }
 }
 
 function filaTabla(p, i) {
@@ -358,42 +393,48 @@ function renderPosiciones() {
   $('.tabla-scroll').hidden = !pos.length; $('#pos-cards').hidden = !pos.length; $('#pos-vacio').hidden = pos.length > 0;
 }
 function renderResumen() {
-  const r = calcResumen(pos);
-  const est = textoAsignado(r), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
-  $('#r-total').textContent = pesoTxt(r.total);
-  const f = $('#r-falta'); f.textContent = est; f.className = 'asig-estado ' + clase;
+  const r = calcResumen(pos), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
+  const dif = !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '';
+  $('#r-total').textContent = pesoCorto(r.total);
+  const f = $('#r-falta'); f.textContent = dif; f.hidden = !dif; f.className = 'asig-estado ' + clase;
   const barra = $('#r-barra').parentElement; barra.setAttribute('aria-valuenow', Math.min(100, Math.round(r.total)));
   barra.classList.toggle('error', !!r.exceso); $('#r-barra').style.width = Math.min(100, r.total) + '%';
   $('#r-n').textContent = r.n;
   $('#r-roic').textContent = r.roic != null ? pct(r.roic) : '—';
-  $('#r-cobertura').textContent = textoCobertura(r);
+  $('#r-cobertura').innerHTML = lineasCobertura(r);
   $('#r-sectores').innerHTML = r.sectores.length ? r.sectores.map(([s, v]) =>
     `<div class="sector"><span>${esc(s)}</span><span class="num">${pesoTxt(v)}</span><div class="barra"><i style="width:${Math.min(100, v)}%"></i></div></div>`).join('')
     : '<p class="mut peq">Añade posiciones para ver el reparto.</p>';
   $('#pos-error').textContent = r.invalidos.length ? `Revisa el peso de ${listaTickers(r.invalidos)}: debe ser un número entre 0,1 y 100.` : '';
-  // resumen breve (móvil/tableta) y barra inferior
-  $('#rb-total').textContent = pesoTxt(r.total); $('#rb-estado').textContent = est; $('#rb-n').textContent = `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}`;
-  $('#b-total').textContent = pesoTxt(r.total); // barra: texto breve (el resumen usa las etiquetas completas)
-  $('#b-falta').textContent = !r.n ? 'sin posiciones' : r.exceso ? `exceso ${pesoCorto(r.exceso)}` : r.falta ? `pendiente ${pesoCorto(r.falta)}` : 'asignado';
-  $('#b-falta').className = clase;
+  // resumen breve (una columna): «Asignado: 100 %», sin repetir; la diferencia en su propia línea, a tamaño normal
+  $('#rb-total').textContent = `Asignado: ${pesoCorto(r.total)}`;
+  const re = $('#rb-estado'); re.textContent = dif; re.hidden = !dif; re.className = 'rb-estado ' + clase;
+  $('#rb-n').textContent = `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}`;
+  // barra inferior
+  const bt = $('#b-total'); bt.textContent = (r.exceso ? '⚠ ' : '') + `Asignado: ${pesoCorto(r.total)}`; bt.className = 'num ' + clase;
 }
 
-// ---------- estado de guardado (una sola fuente de verdad) ----------
+// ---------- estado de guardado: privacidad, validez del reparto y persistencia, por separado ----------
+function textoPersistencia(id, dirty) { // [largo, breve, clase]
+  if (saving) return ['Guardando en tu cuenta…', 'Guardando…', ''];
+  if (saveErr) return ['No se pudo guardar' + (copiaLocal ? '. Tus cambios siguen en este dispositivo' : ''), 'No se pudo guardar', 'error'];
+  if (!id) return ['Solo en este dispositivo', 'Solo en este dispositivo', ''];
+  if (dirty) return ['Cambios sin guardar en tu cuenta' + (copiaLocal ? ' · copia en este dispositivo' : ''), 'Sin guardar en tu cuenta', 'aviso'];
+  return ['Guardada en tu cuenta', '✓ Guardada', 'ok'];
+}
 function pintarEstado() {
   if (!current) return;
   const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
-  let largo, breve, cls = '';
-  if (saving) { largo = 'Guardando en tu cuenta…'; breve = 'Guardando…'; }
-  else if (saveErr) { largo = 'Error al guardar: ' + saveErr; breve = 'Error al guardar'; cls = 'error'; }
-  else if (razon && (dirty || !id)) { largo = razon; cls = 'aviso';
-    breve = v.invalidos.length ? 'Revisa los pesos' : v.exceso ? 'Reduce el exceso' : 'Pública: debe sumar 100 %'; }
-  else if (!id) { largo = 'Guardado en este dispositivo'; breve = 'En este dispositivo'; }
-  else if (dirty) { largo = 'Cambios sin guardar'; breve = 'Sin guardar'; cls = 'aviso'; }
-  else { largo = '✓ Guardada en tu cuenta'; breve = '✓ Guardada'; cls = 'ok'; }
-  for (const [sel, t] of [['#estado', largo], ['#b-estado', breve]]) { const e = $(sel); e.textContent = t; e.className = (sel === '#b-estado' ? 'bg-estado ' : '') + 'estado-btn ' + cls; }
-  $('#estado-live').textContent = largo;
-  const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico);
-  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.setAttribute('aria-describedby', razon ? 'estado b-estado' : ''); });
+  const [largo, breve, cls] = textoPersistencia(id, dirty);
+  const est = $('#estado'); est.textContent = largo; est.className = 'estado-btn ' + cls;           // persistencia, siempre explícita
+  const brevePeso = v.invalidos.length ? 'Revisa los pesos' : v.exceso ? `Exceso: ${pesoCorto(v.exceso)}` : 'Pública: debe sumar 100 %';
+  const be = $('#b-estado'), bloqueo = razon && !saveErr;                                             // barra: el motivo del bloqueo, si lo hay
+  be.textContent = bloqueo ? '⚠ ' + brevePeso : breve; be.className = 'bg-estado estado-btn ' + (bloqueo ? 'aviso' : cls);
+  const m = $('#motivo'); m.textContent = saveErr ? saveErr : (razon || ''); m.className = 'motivo solo-escritorio-ws' + (saveErr ? ' error' : ''); // motivo al lado de Guardar
+  $('#estado-live').textContent = largo + (razon ? '. ' + razon : '');
+  const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
+  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.setAttribute('aria-describedby', 'motivo estado'); });
+  $('#mi-descartar').hidden = !(id && dirty);
   pintarPublicacion(v);
   window.onbeforeunload = id && dirty ? e => { e.preventDefault(); e.returnValue = ''; } : null; // no perder cambios por error
 }
@@ -401,10 +442,10 @@ function pintarPublicacion(v = validar()) {
   const pub = !!current?.publico, r = razonPublicar(v);
   $('#pub-chip').textContent = pub ? 'Pública' : 'Privada'; $('#pub-chip').classList.toggle('pub', pub);
   $('#publicar').textContent = pub ? 'Dejar de publicar' : 'Publicar cartera';
-  $('#publicar').disabled = !pub && !!r;                      // si no se puede publicar, no parece disponible
+  $('#publicar').disabled = !pub && !!r;                      // no disponible: se ve igual que Guardar desactivado, con su motivo al lado
   $('#tesis-guardar').hidden = !pub; $('#tesis-guardar').disabled = pub && !!r;
   const z = $('#pub-razon');
-  z.textContent = pub ? (r ? `Mientras sea pública, debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r || 'Lista para publicar.');
+  z.textContent = pub ? (r ? `Mientras sea pública debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r ? `No disponible: ${r}` : 'Lista para publicar.');
   z.className = 'peq pub-razon' + (r ? ' aviso' : '');
 }
 function marcarCambio() { rev++; saveErr = null; hideToast(); guardarBorrador(); pintarEstado(); }
@@ -416,17 +457,18 @@ async function guardar() {
   if (!logged()) { guardarBorrador(); abrirAcceso('guardar'); return false; }
   if (saving) return false;
   const nombre = $('#nombre').value.trim();
-  if (!nombre) { saveErr = 'escribe un nombre para la cartera'; pintarEstado(); return false; }
+  if (!nombre) { saveErr = 'Escribe un nombre para la cartera.'; pintarEstado(); return false; }
   const r = rev; saving = true; saveErr = null; pintarEstado();
   try {
     if (!current.id) { const { id } = await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla } }); current.id = id; }
     await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } });
-    await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
-    current.nombre = nombre; savedRev = r; // si se editó durante el guardado, rev > r y sigue "con cambios"
-    store.removeItem(DRAFT);
+    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
+    current.nombre = nombre; current.version = u.actualizado_en || current.version; savedRev = r; // si se editó durante el guardado, rev > r y sigue «con cambios»
+    store.removeItem(DRAFT); guardarBorrador();                                                      // limpia la copia local si ya no hay cambios pendientes
     try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
     $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
-  } catch (err) { saveErr = err.message; }
+    toast('Cartera guardada');
+  } catch (err) { saveErr = err.message; }                                                            // un fallo nunca muestra «guardada»; los cambios siguen en local
   finally { saving = false; pintarEstado(); }
   return !saveErr;
 }
@@ -439,8 +481,8 @@ async function cambiarPublicacion(publico) {
     if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
   }
   try {
-    await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
-    current.publico = publico ? 1 : 0; pintarEstado(); loadPublicas();
+    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
+    current.publico = publico ? 1 : 0; current.version = u.actualizado_en || current.version; pintarEstado(); loadPublicas();
     toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
   } catch (e) { err.textContent = e.message; }
 }
@@ -449,14 +491,15 @@ $('#tesis-guardar').addEventListener('click', () => cambiarPublicacion(true));
 $('#nombre').addEventListener('input', marcarCambio);
 $('#tesis').addEventListener('input', marcarCambio);
 
-// «Dónde está guardada»: tres conceptos separados
+// Detalle ampliado (lo esencial ya está en el texto visible de estado)
 function abrirInfoEstado() {
   if (!current) return;
-  const id = enCuenta(), dirty = rev !== savedRev, pub = !!current.publico;
+  const id = enCuenta(), dirty = rev !== savedRev, pub = !!current.publico, v = validar(), r = calcResumen(pos);
+  const reparto = !r.n ? 'Sin posiciones todavía.' : v.exceso ? `Exceso de asignación: ${pesoCorto(v.exceso)}. No se puede guardar en la cuenta ni publicar hasta corregirlo.` : v.falta ? `Pendiente de asignar: ${pesoCorto(v.falta)}. Se puede guardar en privado como reparto incompleto; no se puede publicar.` : 'Asignado: 100 %. Es un reparto completo.';
   $('#es-cuerpo').innerHTML = `
-    <div><dt>Dónde está guardada</dt><dd>${id ? 'En tu cuenta.' : 'Solo en este navegador, como borrador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
-    <div><dt>Cambios pendientes</dt><dd>${id ? (dirty ? 'Sí: hay cambios sin guardar en tu cuenta.' : 'No: todo lo que ves está guardado.') : 'Los cambios se guardan automáticamente en este dispositivo.'}</dd></div>
-    <div><dt>Visibilidad</dt><dd>${pub ? 'Pública: se muestra su composición y tu tesis en «Carteras públicas».' : 'Privada: solo la ves tú.'}</dd></div>`;
+    <div><dt>Persistencia</dt><dd>${id ? (dirty ? 'Tienes cambios sin guardar en tu cuenta.' + (copiaLocal ? ' Se conservan en este dispositivo.' : '') : 'Guardada en tu cuenta. Todo lo que ves está guardado.') : 'Solo en este dispositivo, como borrador en este navegador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
+    <div><dt>Validez del reparto</dt><dd>${reparto}</dd></div>
+    <div><dt>Privacidad</dt><dd>${pub ? 'Pública: se muestra su composición y tu tesis en «Carteras públicas». La versión publicada solo cambia cuando guardas un reparto válido.' : 'Privada: solo la ves tú.'}</dd></div>`;
   $('#es-acciones').innerHTML = id ? '' : '<button class="btn btn-primario" type="button" id="es-guardar">Guardar en mi cuenta</button>';
   const g = $('#es-guardar'); if (g) g.addEventListener('click', () => { $('#dlg-estado').close(); guardar(); });
   $('#dlg-estado').showModal();
@@ -565,11 +608,16 @@ $('#mi-plantilla').addEventListener('click', async () => {
   pos = repartoPlantilla(current.plantilla); marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
   toast('Reparto de la plantilla aplicado');
 });
+$('#mi-descartar').addEventListener('click', async () => {
+  masAbrir(false); masBtn.focus();
+  if (!(await confirmar({ titulo: 'Descartar cambios sin guardar', texto: 'Se borrarán los cambios que no has guardado, también la copia de este dispositivo, y volverás a la versión guardada en tu cuenta.', ok: 'Descartar cambios', peligro: true }))) return;
+  const id = current.id; store.removeItem('klever_edit_' + id); current = null; if (await cargarCartera(id)) renderWorkspace();
+});
 $('#mi-eliminar').addEventListener('click', async () => {
   masAbrir(false); masBtn.focus();
   if (!(await confirmar({ titulo: 'Eliminar cartera', texto: `Se eliminará «${current.nombre}» de tu cuenta, con todas sus posiciones. No se puede deshacer.`, ok: 'Eliminar cartera', peligro: true }))) return;
   try { await api('/portfolios/' + current.id, { method: 'DELETE' }); } catch (err) { return toast(err.message); }
-  current = null; pos = []; chartEls.clear(); window.onbeforeunload = null; toast('Cartera eliminada'); loadPublicas(); go('#carteras');
+  store.removeItem('klever_edit_' + current.id); current = null; pos = []; chartEls.clear(); window.onbeforeunload = null; toast('Cartera eliminada'); loadPublicas(); go('#carteras');
 });
 
 // ---------- TradingView: el consentimiento se pide donde se usa ----------
@@ -616,32 +664,39 @@ document.addEventListener('click', e => { const v = e.target.dataset?.consent; i
 $('#cookies-link').addEventListener('click', () => { store.removeItem('klever_consent'); loadScreener(); if (current) renderCharts(); toast('Preferencia restablecida: se te volverá a preguntar'); });
 
 // ---------- explorar empresas ----------
+// Cada comprobación: [nombre, regla, formato → [cifra, unidad]]. La unidad larga va aparte para no competir con la regla.
 const CRIT = {
-  deuda_ebitda: ['Deuda sobre EBITDA', 'Cumple si la deuda neta es menor de 2,5 veces el EBITDA', v => nf(v) + NB + 'veces'],
-  roic: ['ROIC', 'Cumple si supera el 10 %', pct],
-  margen_neto: ['Margen neto', 'Cumple si el beneficio neto supera el 10 % de las ventas', pct],
-  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => nf(v / 1e9) + ' miles de millones de USD'],
-  crecimiento: ['Crecimiento de ventas', 'Cumple si las ventas suben respecto al año anterior', pct],
+  deuda_ebitda: ['Deuda sobre EBITDA', 'Cumple si la deuda neta es menor de 2,5 veces el EBITDA', v => [nf(v), 'veces']],
+  roic: ['ROIC', 'Cumple si supera el 10 %', v => [pct(v), '']],
+  margen_neto: ['Margen neto', 'Cumple si el beneficio neto supera el 10 % de las ventas', v => [pct(v), '']],
+  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => [nf(v / 1e9), 'miles de millones de USD']],
+  crecimiento: ['Crecimiento de ventas', 'Cumple si las ventas suben respecto al año anterior', v => [pct(v), '']],
 };
 let empresas = [];
 function renderEmpresas() {
-  const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista');
+  const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista'), ul = $('#empresas-cards');
   const vistas = q ? empresas.filter(r => norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) : empresas;
-  tb.innerHTML = vistas.length ? vistas.map(r => { const nd = 5 - r.evaluados;
-    return `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span><span class="sector-m">${esc(r.sector)}</span></td><td>${esc(r.sector)}</td>
-      <td class="num"><span class="marca-n">${r.cumplidos} de 5</span>${nd ? `<small>${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}</small>` : ''}</td>
-      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`; }).join('')
+  const resultado = r => { const nd = 5 - r.evaluados; // un dato ausente NO es una comprobación fallida: se indica aparte y en neutro
+    return `<span class="marca-n">${r.cumplidos} de 5</span>${nd ? `<small>${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}</small>` : ''}`; };
+  tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span></td><td>${esc(r.sector)}</td>
+      <td class="num">${resultado(r)}</td>
+      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</td></tr>`;
+  ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
+      <div class="ec-l1"><span class="nombre-emp">${esc(r.nombre)}</span><span class="ec-res">${resultado(r)}</span></div>
+      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div></li>`).join('')
+    : `<li class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? `${vistas.length} de ${empresas.length} empresas` : '';
 }
 async function loadEmpresas() {
   $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">Cargando empresas…</td></tr>';
+  $('#empresas-cards').innerHTML = '<li class="estado-lista">Cargando empresas…</li>';
   try { empresas = await getJson('/ideas'); }
-  catch { $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button></td></tr>'; return; }
+  catch { const m = 'No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button>'; $('#empresas-lista').innerHTML = `<tr><td colspan="4" class="estado-lista">${m}</td></tr>`; $('#empresas-cards').innerHTML = `<li class="estado-lista">${m}</li>`; return; }
   renderEmpresas();
 }
 $('#emp-buscar').addEventListener('input', renderEmpresas);
-$('#empresas-lista').addEventListener('click', e => { const b = e.target.closest('[data-t]') || e.target.closest('tr')?.querySelector('[data-t]'); if (b) verFicha(b.dataset.t); });
+for (const lista of [$('#empresas-lista'), $('#empresas-cards')]) lista.addEventListener('click', e => { const b = e.target.closest('[data-t]') || e.target.closest('tr,li')?.querySelector('[data-t]'); if (b) verFicha(b.dataset.t); });
 $('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio'); s.scrollIntoView({ behavior: 'auto' }); s.focus({ preventScroll: true }); }); // salto largo: sin animación
 
 async function verFicha(t) {
@@ -649,7 +704,7 @@ async function verFicha(t) {
   const c = a.criterios, periodo = c?.periodo || a.fundamentales[0]?.periodo || '';
   const filas = Object.entries(CRIT).map(([k, [label, regla, f]]) => {
     const x = c?.[k], res = x?.ok === true ? ['ok', '✓ Cumple'] : x?.ok === false ? ['no', '✗ No cumple'] : ['nd', '– No disponible'];
-    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span><span class="ck-val">${x?.valor != null ? f(x.valor) : 'Dato no disponible'}</span></div></li>`;
+    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span>${x?.valor != null ? (([c, u]) => `<span class="ck-val"><b class="v">${c}</b>${u ? `<span class="u">${u}</span>` : ''}</span>`)(f(x.valor)) : '<span class="ck-val"><span class="u">Dato no disponible</span></span>'}</div></li>`;
   }).join('');
   const ok = c ? Object.keys(CRIT).filter(k => c[k]?.ok === true).length : 0, nd = c ? Object.keys(CRIT).filter(k => c[k]?.ok == null).length : 5;
   const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');

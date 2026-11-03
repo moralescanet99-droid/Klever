@@ -21,6 +21,7 @@ Principio de diseño (tomado de Administrea y la app de recordatorios de WhatsAp
 - **Precios**: solo con **widgets de TradingView intactos** (marca visible); **no se leen, extraen ni guardan**. Sus términos limitan los datos a visualización y no permiten uso comercial sin acuerdo.
 - No usar APIs gratuitas de precios (Tiingo, FMP): su plan gratuito es de uso interno.
 - **Legal**: contenido educativo, no asesoramiento; consultar a un abogado antes de permitir copiar carteras con dinero real (MiFID II, CNMV). Las cookies de TradingView se piden **donde se usan**.
+- **Futuro plan de pago (NO implementar en la beta):** conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión.
 - Prohibido: testimonios inventados, rentabilidades ficticias, dependencias de pago, funciones nuevas que distraigan de la beta.
 - Idioma: **español de España** en toda la interfaz y documentación.
 

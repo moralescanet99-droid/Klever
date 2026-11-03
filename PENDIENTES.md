@@ -27,5 +27,8 @@
 
 ## 4. Cuando haya usuarios
 - [ ] Medir la decisión de la beta: `wrangler d1 execute klever --remote --file=scripts/metrics.sql` (registros, portafolios creados, usuarios que vuelven pasada una semana)
-- [ ] Bases creadas con versiones anteriores: aplicar `migrations/0002`, `0003`, `0004` y `0005` en orden (en una base nueva basta `schema.sql`)
+- [ ] Bases creadas con versiones anteriores: aplicar `migrations/0002`, `0003`, `0004`, `0005` y `0006` en orden (en una base nueva basta `schema.sql`)
 - [ ] Si ya cargaste `data/demo.sql`, vuelve a cargarlo (o actualiza las tesis) para que las descripciones sean las nuevas, completas
+
+## 5. Pruebas manuales que no se pueden ejecutar desde el entorno de trabajo
+- [ ] Ver `ronda5/pruebas-manuales.md` (teclado móvil real, lector de pantalla real, zoom real, Safari y Firefox, email real, conflicto entre dos dispositivos, TradingView, carga de la SEC).

@@ -44,3 +44,15 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - El borrador y la sesión viven en `localStorage`; para simular «otro dispositivo» hay que usar **otro contexto de navegador**, no otra pestaña.
 - El teclado virtual no se puede reproducir de verdad: se emula reduciendo la altura de la ventana; el ocultado de la barra solo se comprueba a nivel de estilos.
 - Los widgets de TradingView se bloquean en pruebas (`page.route` a `tradingview.com`): sin Internet fallan igualmente.
+
+## Añadido en la ronda 5
+- **Las baterías comparten la base de datos local y se contaminan** (carteras públicas acumuladas, límite de emails). Reiniciar el servidor entre baterías: `tests/ronda5/run-all.sh`.
+- **`[data-t]` existe dos veces** (tabla de escritorio y lista móvil): usar `[data-t] >> visible=true`, o Playwright escoge el oculto y se agota el tiempo.
+- **Selectores duplicados escritorio/móvil:** igual con los campos de peso (`.peso-in >> visible=true`) y el botón de guardar (`.js-guardar >> visible=true`).
+- **Un `.click()` sobre un localizador con varias coincidencias falla** (modo estricto): usar `.first()`.
+- **Estilos `:disabled`:** si un botón desactivado «parece activo», falta el estilo para esa variante (`.btn-secundario:disabled`), no la lógica.
+- **Las marcas de tiempo de SQLite (`datetime('now')`) tienen resolución de un segundo:** no usarlas para detectar cambios sin devolver la marca desde el servidor.
+- **Un diálogo nativo `<dialog>` deja pasar el foco a la interfaz del navegador:** en pruebas, «foco atrapado» significa que nunca cae en controles de la página de fondo (no que `activeElement` siempre esté dentro).
+- **Una tabla con `tabindex=0` se desplaza con las flechas, no con `Fin`.**
+- **Pruebas de «200 %»:** `font-size: 200%` en `<html>` + buscar con `document.documentElement.scrollWidth`; los elementos `position: fixed` no se ven con `offsetParent`: para localizar desbordes, ocultar bloques uno a uno y medir.
+- `mock.js` se formatea con `%`; la constante de `ahora()` debe definirse **antes** de crear las carteras de ejemplo (si no, error de zona temporal muerta y la demo queda en blanco).

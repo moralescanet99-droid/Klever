@@ -1,0 +1,234 @@
+[
+ {
+  "id": "E2",
+  "escenario": "Mis carteras sin carteras",
+  "esperado": "La creación es la acción principal (formulario abierto, sin botón «Nueva cartera»)",
+  "observado": "título «Crea tu primera cartera»; formulario visible=true; botón «Nueva cartera» visible=false; botón primario «Crear cartera»",
+  "resultado": "OK",
+  "evidencia": "E2-mis-carteras-vacia-390.png"
+ },
+ {
+  "id": "E1",
+  "escenario": "Mis carteras con carteras",
+  "esperado": "Las carteras guardadas primero; «Nueva cartera» como botón; formulario cerrado",
+  "observado": "items=2; formulario oculto=true; botón «Nueva cartera» visible=true; la lista aparece por encima del formulario",
+  "resultado": "OK",
+  "evidencia": "E1-mis-carteras-390.png"
+ },
+ {
+  "id": "E1b",
+  "escenario": "Abrir «Nueva cartera»",
+  "esperado": "El formulario solo se abre al pulsar el botón y toma el foco",
+  "observado": "formulario visible=true; foco en «nueva-nombre»; aria-expanded=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E3",
+  "escenario": "Datos de cada cartera",
+  "esperado": "Nombre, privada/pública, posiciones, total asignado y última modificación SOLO si existe",
+  "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada 2 posiciones · Asignado: 88 % (incompleta)Modificada el 3 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 3 nov 2026 Abrir»",
+  "resultado": "OK",
+  "evidencia": "E1-mis-carteras-390.png"
+ },
+ {
+  "id": "E3b",
+  "escenario": "Fechas no inventadas",
+  "esperado": "Una cartera nunca modificada muestra «Creada el», no «Modificada»",
+  "observado": "actualizado_en de «Solo creada» = null; texto: Creada el 3 nov 2026",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E4a",
+  "escenario": "Cartera privada al 88 %",
+  "esperado": "Se guarda en privado como reparto incompleto; NO se publica (interfaz y servidor); sin efectivo implícito",
+  "observado": "Pendiente de asignar: 12 %; Guardar activo=true; Publicar activo=false; motivo: «No disponible: Pendiente de asignar: 12 %. Una cartera pública debe tener el 100 % asignado.»; guardado=Guardada en tu cuenta; servidor al publicar: HTTP 400 «Para publicar, la cartera debe tener el 100 % asignado (ahora tiene 88 %).»",
+  "resultado": "OK",
+  "evidencia": "E4-88-escritorio.png"
+ },
+ {
+  "id": "E4b",
+  "escenario": "Cartera privada al 100 %",
+  "esperado": "Se guarda y puede publicarse (con tesis)",
+  "observado": "Asignado: 100 %; Publicar activo=true; Guardada en tu cuenta",
+  "resultado": "OK",
+  "evidencia": "E4-100-escritorio.png"
+ },
+ {
+  "id": "E4c",
+  "escenario": "Cartera privada al 103 %",
+  "esperado": "No se guarda ni se publica; motivo junto a cada acción; cambios conservados en el dispositivo",
+  "observado": "Guardar desactivado=true; Publicar desactivado=true; Exceso de asignación: 3 %. Reduce algún peso para guardar.; publicar: «No disponible: Exceso de asignación: 3 %. Reduce algún peso para poder publicar.»; servidor PUT 103 %: HTTP 400; copia local=true",
+  "resultado": "OK",
+  "evidencia": "E4-103-escritorio.png"
+ },
+ {
+  "id": "E5",
+  "escenario": "Publicar desactivado se ve como Guardar desactivado",
+  "esperado": "Mismo tratamiento visual y motivo pegado a cada botón",
+  "observado": "color Guardar rgb(74, 88, 109) / Publicar rgb(74, 88, 109); cursor not-allowed / not-allowed; borde Guardar solid / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=true",
+  "resultado": "OK",
+  "evidencia": "E4-103-escritorio.png"
+ },
+ {
+  "id": "E7",
+  "escenario": "Con error de asignación, la persistencia sigue visible",
+  "esperado": "Texto explícito de persistencia + motivo del bloqueo + privacidad, por separado",
+  "observado": "persistencia «Cambios sin guardar en tu cuenta · copia en este dispositivo»; validez «Exceso de asignación: 3 %. Reduce algún peso para guardar.»; privacidad «Privada»; el ⓘ solo amplía",
+  "resultado": "OK",
+  "evidencia": "E4-103-escritorio.png"
+ },
+ {
+  "id": "E8",
+  "escenario": "Aviso flotante y vocabulario",
+  "esperado": "El aviso dice «Cartera guardada», no tapa campos editables y no se llama «borrador» a una cartera guardada",
+  "observado": "aviso «Cartera guardada»; solapa campos=false; aparece «borrador» en el editor de una cartera guardada=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E7b",
+  "escenario": "Guardada",
+  "esperado": "Texto «Guardada en tu cuenta»",
+  "observado": "Guardada en tu cuenta",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E6",
+  "escenario": "Edición inválida de una cartera pública",
+  "esperado": "La versión publicada no cambia mientras el borrador es inválido; se recupera tras recargar; al ser válido de nuevo se guarda sin despublicar",
+  "observado": "publicada antes «SCHD:17,JNJ:16.6,KO:16.6,PG:16.6,VYM:16.6,XOM:16.6»; durante la edición (108 %) «SCHD:17,JNJ:16.6,KO:16.6,PG:16.6,VYM:16.6,XOM:16.6» (igual=true); Guardar desactivado=true; chip=Pública; copia local=true; servidor PUT incompleto: HTTP 400; tras recargar sigue «SCHD:17,JNJ:16.6,KO:16.6,PG:16.6,VYM:16.6,XOM:16.6» con el valor recuperado 25,0; al corregir, Guardar activo=true; versión publicada final «SCHD:18,KO:16.6,PG:16.6,VYM:16.6,XOM:16.6,JNJ:15.6» (cambió=true); chip final=Pública",
+  "resultado": "OK",
+  "evidencia": "E6-publica-invalida-escritorio.png"
+ },
+ {
+  "id": "E12",
+  "escenario": "Guardado fallido y recuperación",
+  "esperado": "Se muestra «No se pudo guardar», sin confirmar; los cambios siguen en pantalla y en el dispositivo; al reintentar se guarda",
+  "observado": "tras fallar: «No se pudo guardar. Tus cambios siguen en este dispositivo» / barra «No se pudo guardar»; confirmación flotante=0; valores conservados 30,0 y 20,0; tras reintentar: «Guardada en tu cuenta»",
+  "resultado": "OK",
+  "evidencia": "E12-fallo-390.png"
+ },
+ {
+  "id": "E14",
+  "escenario": "Regreso desde «Mis carteras»",
+  "esperado": "Se abre la versión guardada con sus pesos y «Guardada en tu cuenta»",
+  "observado": "pesos 30,0 y 20,0; estado «Guardada en tu cuenta»; hash #cartera-7",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E15",
+  "escenario": "Teclado móvil abierto al editar la última posición (EMULADO: ventana de 390×420)",
+  "esperado": "El campo queda visible, por encima de la barra, y acepta el valor",
+  "observado": "campo 144–188 px; barra desde 348; ventana 420; valor 12,5",
+  "resultado": "OK",
+  "evidencia": "E15-teclado-emulado-390x420.png"
+ },
+ {
+  "id": "E13b",
+  "escenario": "Acceso por email en OTRO navegador",
+  "esperado": "Se entra, pero NO se guarda el borrador y se avisa sin prometerlo",
+  "observado": "aviso previo: «Sobre tu borrador: se guardará en tu cuenta solo si abres el enlace en este mismo dispositivo y navegador. Si lo abres e…»; aviso al entrar: «Has entrado en tu cuenta, pero el borrador que pediste guardar no estaba en este dispositivo y no se ha guardado. Sigue en el dispositivo donde lo creaste.»; borrador en el otro navegador=null; borrador original sigue en el primero (peso 16); carteras creadas=0",
+  "resultado": "OK",
+  "evidencia": "E13-otro-navegador.png"
+ },
+ {
+  "id": "E13a",
+  "escenario": "Acceso por email en el MISMO navegador",
+  "esperado": "El borrador pasa a la cuenta con sus pesos y se borra del dispositivo",
+  "observado": "hash #cartera-8; pesos 16,6 16,6 16,6 16,6 16,6 16,0 (el editado es 16,0); borrador local=null; estado «Guardada en tu cuenta»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E9a",
+  "escenario": "Exceso de asignación a 360 px",
+  "esperado": "Se lee bien sin reducir la letra; sin desbordamiento; barra ≤ 88 px",
+  "observado": "página 360/360 px; texto del exceso a 16px; barra 72 px; resumen «⚠ Exceso de asignación: 13 %»; barra «⚠ Asignado: 113 %» · «⚠ Exceso: 13 %»; contenido de la barra fuera de pantalla=false",
+  "resultado": "OK",
+  "evidencia": "E9-exceso-360.png"
+ },
+ {
+  "id": "E9b",
+  "escenario": "Etiquetas del resumen",
+  "esperado": "«Asignado: 100 %» sin «100,0 % ✓ 100 % asignado»; «No representa la rentabilidad de tu cartera»; categorías con nota breve",
+  "observado": "«✓ 100 % asignado» aparece=false; nota ROIC=true; nota categorías=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E9c",
+  "escenario": "Cobertura: datos ausentes distintos de no aplicable",
+  "esperado": "Líneas separadas: «Dato ausente (no disponible)» y «No aplicable»",
+  "observado": "«Con dato: 4 de 6 posiciones (66 % del peso asignado).No aplicable: 2 fondos; los ETF no tienen ROIC.»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E9d",
+  "escenario": "Con una empresa sin dato (JPMorgan)",
+  "esperado": "Aparece como «Dato ausente (no disponible)», aparte de los fondos «No aplicable»",
+  "observado": "Con dato: 4 de 7 posiciones (63 % del peso asignado).Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E10a",
+  "escenario": "Explorar empresas en móvil: dos líneas",
+  "esperado": "Línea 1: nombre y resultado; línea 2: símbolo, sector y «Ver ficha»; buscador cerca del título",
+  "observado": "nombre y resultado en la misma línea=true; símbolo/sector/«Ver ficha» en la línea inferior=true; distancia título→buscador 92 px; ancho del nombre 50 px",
+  "resultado": "OK",
+  "evidencia": "E10-empresas-390.png"
+ },
+ {
+  "id": "E10b",
+  "escenario": "Nombres largos, sectores largos, resultados incompletos",
+  "esperado": "Sin desbordamiento a 320/360/390; datos ausentes en neutro y como «no disponible», no como fallo",
+  "observado": "anchos de página 320:320, 360:360, 390:390; nombres largos hallados: Philip Morris International; empresas de «Consumo discrecional»: 11; JPMorgan: «3 de 5 2 no disponibles» (color rgb(74, 88, 109), rojo=false)",
+  "resultado": "OK",
+  "evidencia": "E10-empresas-sin-dato-390.png"
+ },
+ {
+  "id": "E11a",
+  "escenario": "Ficha: cifra y unidad separadas",
+  "esperado": "«29,6» arriba y «miles de millones de USD» debajo; la regla del criterio conserva ancho",
+  "observado": "cifra «29,6», unidad «miles de millones de USD» debajo=true; ancho del criterio 182 de 354 px",
+  "resultado": "OK",
+  "evidencia": "E11-ficha-unidad-390.png"
+ },
+ {
+  "id": "E11b",
+  "escenario": "Tabla histórica: desplazamiento horizontal REAL con teclado (flecha derecha) y columna del año fija",
+  "esperado": "La tabla se desplaza dentro de su contenedor, la columna del año queda como referencia y se llega a la última columna",
+  "observado": "scrollLeft 0 → 88 de 88; la columna del año sigue a 0 px del borde izquierdo; la última columna termina 0 px respecto al borde; página sin desbordar=true",
+  "resultado": "OK",
+  "evidencia": "E11-ficha-tabla-desplazada-390.png"
+ },
+ {
+  "id": "E16a",
+  "escenario": "Texto ampliado al 200 % en el editor (APROXIMADO: tamaño de texto de la página, no zoom del navegador)",
+  "esperado": "Sin desbordamiento horizontal; la barra crece; la última posición sigue alcanzable",
+  "observado": "página 390/390 px; barra 139 px; última posición termina en -1979 y la barra empieza en 705",
+  "resultado": "OK",
+  "evidencia": "E16-texto-200-editor-390.png"
+ },
+ {
+  "id": "E16b",
+  "escenario": "Foco en diálogos con teclado",
+  "esperado": "Al abrir, el foco entra; Tab no sale del diálogo; Escape cierra y el foco vuelve al origen",
+  "observado": "estado: entra=true, atrapado=true, cierra=true, vuelve=true | confirmación: entra=true, atrapado=true, cierra=true, vuelve=true | ficha: entra=true, atrapado=true, cierra=true, vuelve=true | acceso: entra=true, atrapado=true, cierra=true, vuelve=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E16c",
+  "escenario": "Sin errores de JavaScript en toda la ronda",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -36,7 +36,8 @@ export async function onRequestPut({ request, env, params }) {
   const v = validarComposicion(pos);
   if (!v.ok) return json({ error: v.error }, 400);
   if (p.publico && !v.completa) return json({ error: 'Esta cartera es pública y debe mantener el 100 % asignado. Deja de publicarla para guardar un reparto incompleto.' }, 400);
-  const stmts = [env.DB.prepare('DELETE FROM posiciones WHERE portafolio_id = ?').bind(p.id)];
+  const stmts = [env.DB.prepare('DELETE FROM posiciones WHERE portafolio_id = ?').bind(p.id),
+    env.DB.prepare(`UPDATE portafolios SET actualizado_en = datetime('now') WHERE id = ?`).bind(p.id)];
   for (const x of pos)
     stmts.push(env.DB.prepare('INSERT INTO posiciones (portafolio_id, ticker, peso) VALUES (?,?,?)').bind(p.id, x.ticker, Number(x.peso)));
   try { await env.DB.batch(stmts); } catch { return json({ error: 'Algún ticker no está en el universo' }, 400); }
@@ -70,6 +71,7 @@ export async function onRequestPatch({ request, env, params }) {
     const motivo = puedePublicar({ total: r.s, n: r.c, tesis });
     if (motivo) return json({ error: motivo }, 400);
   }
-  await env.DB.prepare('UPDATE portafolios SET nombre = ?, tesis = ?, publico = ? WHERE id = ?').bind(nombre, tesis || null, publico, p.id).run();
-  return json({ ok: true });
+  await env.DB.prepare('UPDATE portafolios SET nombre = ?, tesis = ?, publico = ?, actualizado_en = datetime(\'now\') WHERE id = ?').bind(nombre, tesis || null, publico, p.id).run();
+  const u = await env.DB.prepare('SELECT actualizado_en FROM portafolios WHERE id = ?').bind(p.id).first();
+  return json({ ok: true, actualizado_en: u.actualizado_en }); // la marca de versión que usa el cliente para detectar cambios de otra sesión
 }

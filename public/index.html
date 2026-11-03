@@ -79,24 +79,32 @@
 
   <!-- ===== EXPLORAR EMPRESAS ===== -->
   <section id="vista-empresas" data-vista="empresas" hidden>
-    <div class="pag-cab">
+    <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
-      <p class="mut">Cinco comprobaciones sobre el último año completo, a partir de los informes de la SEC. No usa precios. Superar comprobaciones no es una recomendación de compra.</p>
+      <p class="mut">Cinco comprobaciones con cifras de la SEC. Superarlas no es una recomendación de compra.</p>
     </div>
-    <details class="plegable">
-      <summary>Cómo se calcula y cómo se ordena</summary>
-      <div class="plegable-cuerpo">
-        <p>Cada empresa suma una marca por cada comprobación que supera: deuda neta menor de 2,5 veces su EBITDA, ROIC superior al 10 %, margen neto superior al 10 %, caja libre positiva y ventas mayores que el año anterior. Una comprobación sin dato no suma ni resta y se indica como «no disponible».</p>
-        <p><b>Orden de la lista:</b> de más a menos comprobaciones superadas. Si dos empresas empatan, se ordenan alfabéticamente por símbolo.</p>
-        <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
-      </div>
-    </details>
     <div class="busqueda">
       <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
       <input id="emp-buscar" type="search" placeholder="Buscar por empresa, símbolo o sector" autocomplete="off">
       <span id="emp-cuenta" class="mut" aria-live="polite"></span>
       <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
     </div>
+    <details class="plegable">
+      <summary>Cómo se calcula, qué significa cada comprobación y cómo se ordena</summary>
+      <div class="plegable-cuerpo">
+        <p>Cada empresa suma una marca por cada comprobación que supera:</p>
+        <ul>
+          <li><b>Deuda:</b> la deuda neta es menor de 2,5 veces su EBITDA.</li>
+          <li><b>ROIC:</b> supera el 10 %.</li>
+          <li><b>Margen neto:</b> el beneficio neto supera el 10 % de las ventas.</li>
+          <li><b>Caja libre:</b> el flujo de caja libre es positivo.</li>
+          <li><b>Crecimiento:</b> las ventas son mayores que las del año anterior.</li>
+        </ul>
+        <p><b>Datos ausentes:</b> si una empresa no tiene el dato de una comprobación, esta no suma ni resta y se indica como «no disponible». No se cuenta como fallida.</p>
+        <p><b>Orden de la lista:</b> de más a menos comprobaciones superadas. Si dos empresas empatan, se ordenan alfabéticamente por símbolo.</p>
+        <p>Las cifras salen de los informes anuales (10-K) presentados ante la SEC. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
+      </div>
+    </details>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
         <caption class="sr">Empresas ordenadas por comprobaciones superadas y, en caso de empate, por símbolo</caption>
@@ -104,6 +112,7 @@
         <tbody id="empresas-lista"></tbody>
       </table>
     </div>
+    <ul id="empresas-cards" class="emp-cards" aria-label="Lista de empresas"></ul>
     <div class="bloque" id="filtros-precio" tabindex="-1">
       <h2>Filtros de precio</h2>
       <p class="mut">Screener de TradingView para PER, rentabilidad y otros filtros que dependen del precio. Es independiente de nuestro ranking.</p>
@@ -123,9 +132,9 @@
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab"><h1>Mis carteras</h1></div>
-    <form id="form-nueva" class="panel nueva">
-      <h2>Nueva cartera</h2>
+    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <form id="form-nueva" class="panel nueva" hidden>
+      <h2 id="nueva-titulo">Nueva cartera</h2>
       <div class="nueva-campos">
         <div class="campo"><label for="nueva-nombre">Nombre</label>
           <input id="nueva-nombre" name="nombre" maxlength="80" required placeholder="Por ejemplo: Mi cartera de oro" autocomplete="off"></div>
@@ -133,8 +142,8 @@
           <select id="nueva-plantilla" name="plantilla">
             <option value="riesgo">Crecimiento</option><option value="oro">Oro</option><option value="dividendos">Dividendos</option>
           </select></div>
-        <button class="btn btn-primario">Crear cartera</button>
       </div>
+      <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
     <ul id="mis-lista" class="lista-carteras"></ul>
   </section>
@@ -153,11 +162,13 @@
         </div>
       </div>
       <div class="ws-acc">
+        <span id="motivo" class="motivo solo-escritorio-ws" role="status"></span>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
           <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
           <div id="mas-lista" class="mas-lista" role="menu" aria-label="Más acciones" hidden>
             <button role="menuitem" type="button" id="mi-plantilla">Reemplazar por la plantilla…</button>
+            <button role="menuitem" type="button" id="mi-descartar">Descartar cambios sin guardar…</button>
             <button role="menuitem" type="button" id="mi-eliminar" class="peligro">Eliminar cartera…</button>
           </div>
         </div>
@@ -167,9 +178,9 @@
     <div class="ws-grid">
       <div class="ws-main">
         <div id="res-breve" class="res-breve">
-          <div><b id="rb-total" class="num">0&nbsp;%</b> <span id="rb-estado"></span></div>
-          <span id="rb-n" class="num mut"></span>
-          <button id="rb-ver" class="enlace" type="button">Ver detalle</button>
+          <b id="rb-total" class="num">Asignado: 0&nbsp;%</b>
+          <p id="rb-estado" class="rb-estado"></p>
+          <div class="rb-pie"><span id="rb-n" class="num mut"></span><button id="rb-ver" class="enlace" type="button">Ver detalle</button></div>
         </div>
 
         <section class="panel panel-pos" aria-labelledby="h-pos">
@@ -206,7 +217,7 @@
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
           <div class="asig">
-            <span class="etq">Total asignado</span>
+            <span class="etq">Asignado</span>
             <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>
             <div class="barra" role="progressbar" aria-label="Porcentaje asignado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="r-barra"></i></div>
             <p id="r-falta" class="asig-estado"></p>
@@ -216,16 +227,21 @@
             <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
           </dl>
           <p class="nota-roic">No representa la rentabilidad de tu cartera.</p>
-          <p id="r-cobertura" class="mut peq"></p>
+          <div id="r-cobertura" class="mut peq cobertura"></div>
           <details class="mini">
             <summary>Cómo se calcula el ROIC medio</summary>
             <p>El ROIC mide cuánto gana una empresa por cada dólar invertido en su negocio. Es una característica de la empresa; no es lo que ganaría tu cartera.</p>
-            <p><b>Es una media ponderada:</b> cada ROIC se multiplica por el peso de su posición y se divide entre la suma de los pesos de las posiciones que tienen dato.</p>
-            <p><b>Datos ausentes:</b> los fondos (no aplicable) y las empresas sin dato (no disponible) quedan fuera, ni como cero ni en el denominador. La cobertura por peso se mide sobre el peso asignado.</p>
+            <p><b>Fórmula:</b> ROIC medio = suma de (ROIC de cada posición × su peso) ÷ suma de los pesos de las posiciones que tienen dato. Es una media ponderada, no simple.</p>
+            <p><b>Datos ausentes:</b> una empresa sin dato («no disponible») queda fuera del cálculo, ni como cero ni en el denominador. <b>No aplicable:</b> los fondos (ETF) no tienen ROIC y también quedan fuera.</p>
+            <p><b>Cobertura:</b> número de posiciones con dato sobre el total de posiciones, y su peso sobre el peso asignado.</p>
           </details>
           <h3>Distribución por categorías</h3>
           <div id="r-sectores"></div>
-          <p class="mut peq">Cada activo se agrupa por su categoría: el sector de la empresa o el tipo de fondo. No incluye la exposición sectorial de las empresas que hay dentro de los ETF.</p>
+          <p class="mut peq">Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
+          <details class="mini">
+            <summary>Más sobre las categorías</summary>
+            <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
+          </details>
         </section>
 
         <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">
@@ -233,11 +249,11 @@
           <p class="mut">Publicar hace pública la composición de esta cartera y tu tesis en «Carteras públicas». No se muestra tu email ni ninguna rentabilidad. Solo se puede publicar con el 100 % asignado, y puedes volver a hacerla privada cuando quieras.</p>
           <label for="tesis">Tesis: por qué esta cartera <span class="mut">(obligatoria para publicar, máx. 600 caracteres)</span></label>
           <textarea id="tesis" maxlength="600" rows="3"></textarea>
-          <div class="fila">
+          <div class="fila fila-motivo">
             <button id="publicar" class="btn btn-secundario" type="button" aria-describedby="pub-razon">Publicar cartera</button>
             <button id="tesis-guardar" class="btn btn-ghost" type="button" hidden aria-describedby="pub-razon">Actualizar tesis</button>
+            <p id="pub-razon" class="peq pub-razon"></p>
           </div>
-          <p id="pub-razon" class="peq pub-razon"></p>
           <p id="pub-error" class="msg-error" role="alert"></p>
         </details>
       </aside>
@@ -252,7 +268,7 @@
 
 <div id="barra-guardar" class="barra-guardar" hidden>
   <div class="bg-info">
-    <div class="bg-total"><b id="b-total" class="num">0&nbsp;%</b> <span id="b-falta"></span></div>
+    <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
     <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
   </div>
   <button class="btn btn-primario js-guardar" type="button">Guardar cartera</button>

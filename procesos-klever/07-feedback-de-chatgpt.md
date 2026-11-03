@@ -32,16 +32,23 @@ Puntos que el usuario trasladó en el encargo de la ronda 4:
 | Portada: texto largo, vista previa alta, plantillas altas, avisos recortados | Texto acortado, vista previa abreviada, plantillas 357 px, descripciones completas | `b45376e` |
 | Enlace abierto en otro dispositivo | Aviso honesto; el borrador no se reescala | `b45376e` |
 
-## Revisión 3 · sobre el paquete de la ronda 4 — **PENDIENTE**
-Paquete entregado al usuario (`revision-chatgpt/ronda-4/`, 21 capturas + instrucciones). Se pidió a ChatGPT que cuestione expresamente:
-- La regla «reparto incompleto: se guarda en privado, no se publica; las públicas suman 100 %».
-- El estado en tres conceptos, y el ⓘ de la barra inferior móvil (¿se descubre?).
-- La redundancia entre el resumen breve de arriba y el total de la barra inferior en móvil.
-- Las etiquetas nuevas («Exceso de asignación», «Pendiente de asignar», «ROIC medio de empresas con datos», «No aplicable»/«No disponible»).
-- El nombre «Carteras públicas» y las etiquetas de origen.
-- Los mensajes cortos de la barra («exceso 3 %», «Reduce el exceso»).
+## Revisión 3 · sobre el paquete de la ronda 4 (recibida a través del encargo C2 de `06-`)
+Valoración del usuario: «La ronda 4 mejora claramente Klever». Se conserva estructura, paleta, portada compacta, posiciones móviles y tabla de escritorio. Puntos a cerrar:
 
-Cuando llegue su respuesta: **pegarla aquí, revisarla contra el código antes de tocar nada, descartar lo que no aplique y registrar en esta tabla qué se hace con cada punto.**
+| Punto | Qué se hizo (ronda 5) |
+|---|---|
+| «Mis carteras» abre con el formulario por delante de las carteras guardadas | Lista primero (nombre, privada/pública, posiciones, total asignado, fecha real); botón «Nueva cartera» que abre el formulario a petición; sin carteras, crear es lo principal |
+| Con 103 % «Publicar cartera» sigue pareciendo disponible | Causa: solo el botón primario tenía estilo `:disabled`. Ahora todos los botones desactivados lo muestran y el motivo va al lado de Guardar y de Publicar |
+| Editar una cartera pública con un reparto temporalmente inválido | No modifica la versión publicada; se conserva en el dispositivo; se guarda al volver a ser válido sin despublicar |
+| El estado dependía del ⓘ | Textos explícitos de persistencia («Guardada en tu cuenta», «Solo en este dispositivo», «Cambios sin guardar en tu cuenta», «No se pudo guardar»), separados de privacidad y validez; el ⓘ solo amplía |
+| Confirmación flotante larga y que tapaba campos; «borrador» para todo | «Cartera guardada», arriba; «borrador» solo para lo no guardado en la cuenta |
+| Resumen con redundancias («100,0 % ✓ 100 % asignado», «Sin dato: 2 fondos (no aplicable)») | «Asignado: 100 %»; «Dato ausente (no disponible)» y «No aplicable» por separado; fórmula en el desplegable; nota breve de categorías; exceso legible a 360 px |
+| Explorar empresas en móvil con tres columnas que estrechan el nombre | Dos líneas por empresa; buscador junto al título; introducción de una frase; un desplegable de metodología |
+| Ficha: unidad larga compitiendo con el criterio; desplazamiento de la tabla sin verificar | Cifra y unidad separadas; desplazamiento real verificado con teclado y columna del año fija |
+| Entregar evidencias, no solo un total de comprobaciones | Tabla de escenarios con esperado, observado y evidencia, y pruebas manuales pendientes |
+
+## Revisión 4 · sobre el paquete de la ronda 5 — **PENDIENTE**
+Cuando el usuario entregue el paquete a ChatGPT y vuelva con su respuesta: pegarla aquí, revisarla contra el código, descartar lo que no aplique y registrar qué se hace con cada punto.
 
 ## Cómo se prepara un paquete para ChatGPT
 1. Capturas con Playwright (≤ 8000 px por lado; las largas se parten; PNG optimizado a 256 colores).

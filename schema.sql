@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS portafolios (
   plantilla TEXT NOT NULL CHECK (plantilla IN ('riesgo','oro','dividendos')),
   publico INTEGER NOT NULL DEFAULT 0,
   tesis TEXT,
+  actualizado_en TEXT,          -- última modificación real (NULL hasta la primera)
   creado_en TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS posiciones (

@@ -28,5 +28,11 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - **`a842619`**: demo pública autónoma (`demo/index.html`), lista para publicar en Cloudflare Pages (pendiente de que el usuario la despliegue).
 - **`2692b08`**: paquete de revisión para ChatGPT (ronda 4). **Pendiente: feedback de ChatGPT.**
 
-## Después de la ronda 4
+## Ronda 5 · Cerrar problemas concretos de la ronda 4 (encargo del usuario)
+- Encargo literal en `06-` (texto C2). Informe: `ronda5/LEEME.md` (con la tabla de evidencias).
+- Hallazgo: el bloqueo de «Publicar» a 103 % ya existía en la lógica, pero **solo el botón primario tenía estilo de desactivado**; el secundario se veía igual que activo.
+- Además: las ediciones inválidas de una cartera pública obligaban a despublicar; los cambios sin guardar de una cartera de la cuenta se perdían al recargar; «Mis carteras» abría con el formulario por delante de las carteras.
+- Hallazgos de la propia batería: a texto ampliado al 200 % el panel «Publicación» desbordaba la página (416 px sobre 390), y el servidor no devolvía la marca de versión tras guardar (una copia local legítima se trataba como de «otra sesión»).
+
+## Después de la ronda 4 (antes de la ronda 5)
 - Se pidió crear esta memoria del proyecto (`procesos-klever/` y `CLAUDE.md`). Ver `09-registro-de-cambios.md`.

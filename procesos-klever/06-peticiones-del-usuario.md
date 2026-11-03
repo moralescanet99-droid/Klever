@@ -223,6 +223,106 @@ Aquí están los encargos largos **literales** (no resumidos) y, después, el re
 
 ---
 
+## C2. Encargo de la ronda 5 (cerrar problemas concretos de la ronda 4)
+
+> La ronda 4 mejora claramente Klever. Conserva la estructura, la paleta, la portada compacta, las posiciones móviles y la tabla de escritorio. Esta ronda debe cerrar problemas concretos, sin reiniciar el diseño.
+>
+> 1. PRIORIZA LAS CARTERAS EXISTENTES
+>
+> En «Mis carteras», muestra primero las carteras guardadas y un botón «Nueva cartera». Abre el formulario únicamente al solicitarlo.
+>
+> Cada elemento debe permitir reconocer y recuperar la cartera: nombre, privada/pública, posiciones, total asignado y última modificación si existe ese dato. No inventes fechas ni metadatos.
+>
+> Si todavía no hay carteras, entonces sí muestra la creación como acción principal.
+>
+> 2. UNIFICA EL BLOQUEO VISUAL DE GUARDAR Y PUBLICAR
+>
+> Con un 103 %, «Publicar cartera» sigue pareciendo disponible en las capturas, aunque el documento indica que la lógica ya lo impide.
+>
+> Representa su indisponibilidad de forma coherente con Guardar y muestra el motivo al lado. Mantén las validaciones tanto en interfaz como en servidor.
+>
+> Conserva las reglas actuales:
+>
+> - Más del 100 %: no guardar en cuenta ni publicar; conservar el borrador local.
+> - Menos del 100 %: guardar en privado como reparto incompleto, sin efectivo implícito.
+> - Publicar: exigir el 100 % y los demás requisitos de publicación.
+>
+> Comprueba que una edición temporalmente inválida de una cartera pública no modifica la versión publicada. Permite corregir el borrador y guardar cuando vuelva a ser válido, sin exigir despublicar durante cada cambio de peso.
+>
+> 3. MUESTRA EL ESTADO DE GUARDADO SIN DEPENDER DEL ICONO DE INFORMACIÓN
+>
+> Distingue privacidad, validez del reparto y persistencia.
+>
+> Muestra textos explícitos según el estado real:
+>
+> - «Guardada en tu cuenta».
+> - «Solo en este dispositivo».
+> - «Cambios sin guardar en tu cuenta».
+> - «No se pudo guardar».
+>
+> Un error de asignación no debe ocultar si los cambios están conservados localmente. El icono de información puede ampliar detalles, pero no contener la información esencial.
+>
+> Acorta la confirmación flotante a «Cartera guardada» y evita que tape campos editables. No llames «borrador» a toda cartera guardada si no existe una distinción funcional que lo justifique.
+>
+> 4. SIMPLIFICA EL RESUMEN SIN PERDER PRECISIÓN
+>
+> Mantén visibles:
+>
+> - Total asignado y diferencia respecto al 100 %.
+> - Número de posiciones.
+> - ROIC de las empresas con datos.
+> - Cobertura.
+> - «No representa la rentabilidad de tu cartera».
+>
+> Lleva la fórmula y el desarrollo metodológico al desplegable.
+>
+> Sustituye «Sin dato: 2 fondos (no aplicable)» por una distinción clara entre datos ausentes e indicadores no aplicables.
+>
+> En categorías, usa una nota breve: «Los ETF se agrupan por tipo; no se desglosan sus empresas». Deja la explicación completa accesible.
+>
+> Elimina «100,0 % ✓ 100 % asignado»: basta «Asignado: 100 %». Diseña el estado de exceso para que se lea bien a 360 px, sin reducir el tamaño de letra.
+>
+> 5. TERMINA EXPLORAR EMPRESAS EN MÓVIL
+>
+> Conserva la tabla de escritorio.
+>
+> En móvil, evita tres columnas que estrechan el nombre:
+>
+> - Primera línea: nombre de empresa y resultado.
+> - Segunda línea: símbolo, sector y «Ver ficha», permitiendo crecimiento para nombres largos.
+>
+> Acerca el buscador al título. Resume la introducción y mantén metodología y significado de las comprobaciones accesibles.
+>
+> Comprueba nombres largos, sectores largos, resultados incompletos y empresas con datos ausentes. No presentes datos ausentes como comprobaciones fallidas.
+>
+> 6. CONSERVA LA PORTADA Y AJUSTA LA FICHA SOLO DONDE HACE FALTA
+>
+> No vuelvas a rediseñar la portada.
+>
+> En la ficha, conserva unidades y acceso al cierre. Separa visualmente cifra y unidad cuando esta sea larga: por ejemplo, «29,6» y debajo «miles de millones de USD». Evita que la unidad compita con la explicación del criterio.
+>
+> Verifica el desplazamiento horizontal real de la tabla histórica y la columna de año fija; la captura solo demuestra que se ha añadido una instrucción.
+>
+> 7. CIERRA CON PRUEBAS Y EVIDENCIAS
+>
+> Entrega una tabla breve con escenario, resultado esperado, resultado observado y evidencia. El número total de comprobaciones no sustituye esta información.
+>
+> Incluye:
+>
+> - Cartera privada al 88 %, 100 % y 103 %.
+> - Edición de una cartera pública y conservación de su última versión publicada.
+> - Guardado fallido y recuperación sin perder cambios.
+> - Acceso por email en el mismo navegador y en otro.
+> - Regreso desde «Mis carteras».
+> - Teclado móvil abierto al editar la última posición.
+> - Texto ampliado al 200 %, navegación por teclado y foco en diálogos.
+>
+> Distingue pruebas automáticas de pruebas manuales y deja explícitamente pendientes las que no puedas ejecutar.
+>
+> Las conexiones con Revolut y Trade Republic, el artículo diario personalizado y el consejo diario de inversión pertenecen al futuro plan de pago. No los implementes en esta ronda.
+
+---
+
 ## D. El resto de instrucciones, en orden aproximado
 
 1. Enlace al Claude Doc del plan: «Léelo». → se leyó y se resumió.
@@ -245,3 +345,4 @@ Aquí están los encargos largos **literales** (no resumidos) y, después, el re
 18. «Quiero poder ver la página web y poder interactuar con ella sin que sea privada para que ChatGPT también pueda acceder.» → demo autónoma `demo/index.html`; el usuario **lo hará después** (desplegar en Cloudflare Pages).
 19. «Ahora pásame tu actualización para que la vea ChatGPT y te pase feedback.» → paquete de la ronda 4.
 20. «Almacena todo el contexto en una carpeta que se diga procesos klever y ve actualizándola a medida que vamos creando la web, así no pierdes contexto en ningún momento.» → esta carpeta y `CLAUDE.md`. *(La carpeta se llama `procesos-klever` por no usar espacios en la ruta.)*
+21. Encargo de la ronda 5 (texto C2). → ronda 5. *Fuera de alcance, para un futuro plan de pago:* conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión.
