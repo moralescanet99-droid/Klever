@@ -16,7 +16,7 @@ Local: `wrangler d1 execute klever --local --file=schema.sql` y `wrangler pages 
 Secrets de GitHub para `nightly.yml`: `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`.
 
 ## Estado (plan, semanas 1-2)
-- [x] Esquema D1, universo inicial (26 activos), tarea nocturna SEC
+- [x] Esquema D1, universo de 125 activos (105 acciones de EE. UU. y 20 ETFs), tarea nocturna SEC
 - [x] Registro, portafolios por plantilla, composición, sectores, ROIC medio, mini gráficos TradingView
 - [x] Semana 3: ranking de ideas (5 criterios), ficha de empresa, screener de TradingView aparte
 - [x] Semana 4: legal.html (borrador), portafolios públicos con tesis, demo en data/demo.sql

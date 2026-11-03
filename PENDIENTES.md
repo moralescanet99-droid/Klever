@@ -20,4 +20,4 @@
 ## 3. Antes de abrir al público
 - [ ] Leer los términos de TradingView completos (secciones 3 y 4)
 - [ ] Que un abogado revise `public/legal.html` y añadir el contacto para derechos de datos
-- [ ] Ampliar el universo de 26 a 100-150 activos (`data/universe.json`)
+- [x] Universo ampliado a 125 activos (105 acciones y 20 ETFs) (`data/universe.json`); revísalo y quita o añade lo que quieras
