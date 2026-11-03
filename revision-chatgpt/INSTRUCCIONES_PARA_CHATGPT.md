@@ -1,41 +1,57 @@
-# Pide una crítica de diseño e interacción (para pegar en ChatGPT)
+# Segunda ronda de crítica de diseño e interacción (para pegar en ChatGPT)
 
-Sube a ChatGPT las capturas de esta carpeta (todas los `.png`) y pega el texto de abajo.
+Sube a ChatGPT todas las capturas `.png` de esta carpeta y pega el texto de abajo. Conviene usar la misma conversación de la primera ronda; si no, el texto funciona solo.
 
 ---
 
-Actúa como un diseñador de producto y experto en interfaces (UI/UX) con mucha experiencia en productos financieros para particulares. Te adjunto capturas de una web en fase beta. Quiero una crítica **dura, concreta y sin cortesías**: prefiero que me digas todo lo que está mal a que me digas lo que está bien.
+Actúa como un diseñador de producto y experto en interfaces (UI/UX) con mucha experiencia en productos financieros para particulares. Esta es la **segunda versión** de una web en beta que ya criticaste. Te adjunto capturas nuevas. Quiero otra crítica **dura, concreta y sin cortesías**: prefiero que me digas todo lo que sigue mal a que me confirmes lo que está bien.
 
 ## Qué es el producto
-**Klever**: web gratuita (beta de un mes) en la que inversores particulares crean **portafolios simulados** (plantillas de riesgo, oro y dividendos), ven su composición, el peso por sector y la «calidad media» (ROIC), y descubren **ideas de empresas** con fundamentales sólidos mediante un ranking propio de 5 criterios (deuda/EBITDA, ROIC, margen neto, flujo de caja, crecimiento). Hay portafolios públicos simulados (solo composición y tesis, sin rentabilidad). Acceso por enlace al email, sin contraseña. Idioma: español de España. Sin dinero real y sin recomendaciones personalizadas.
+**Klever**: web gratuita (beta de un mes) en la que inversores particulares crean **carteras simuladas** (plantillas de oro, dividendos y crecimiento), ven su composición, el reparto por sector y la rentabilidad media sobre el capital (ROIC), y descubren **ideas de empresas** de EE. UU. con un ranking propio de 5 comprobaciones sobre cifras oficiales de la SEC (deuda, rentabilidad, margen, caja, crecimiento). Hay carteras públicas de ejemplo (solo composición y tesis, sin rentabilidad). Acceso por enlace al email, sin contraseña. Español de España. Sin dinero real y sin recomendaciones personalizadas.
 
-**Objetivo de la beta:** que los visitantes se registren, creen al menos un portafolio y vuelvan pasada una semana. Todo lo que no ayude a eso sobra.
+**Objetivo de la beta:** que los visitantes prueben una cartera, se registren, guarden al menos una y vuelvan pasada una semana. Todo lo que no ayude a eso sobra.
+
+## Qué dijiste en la primera ronda y qué se ha cambiado
+Tu veredicto fue: se entiende como herramienta de carteras simuladas, interfaz limpia, pero parece más una demo que un producto financiero que genere confianza. Se ha hecho esto:
+
+1. **Banner de cookies que tapaba el registro en móvil:** se ha eliminado el banner global. El permiso para cargar los gráficos de TradingView se pide ahora en el propio hueco del gráfico («Cargar» / «Ahora no») y se puede cambiar desde el pie de la página.
+2. **Propuesta de valor poco clara frente a una hoja de cálculo o un bróker:** nueva portada con título y subtítulo concretos y tres frases de valor.
+3. **Dejar probar antes de pedir el email:** tres botones de plantilla abren un editor sin registro; el borrador se conserva y se guarda en la cuenta al entrar con el email.
+4. **Guardar, publicar y cargar mezclados en el editor:** ahora «Guardar» (privado) y «Publicación» son bloques separados, con estado (Privada/Pública), explicación de consecuencias y aviso de cambios sin guardar. El botón de plantilla explica qué sustituye.
+5. **Métricas financieras poco claras:** unidades y términos en español (veces, %, miles de millones de USD), coma decimal, criterios redactados en claro y glosario desplegable en la ficha de empresa.
+6. **Tabla completa de empresas en la portada:** ahora salen 8, con buscador y «Ver las N empresas».
+7. **Accesibilidad:** etiquetas en campos, cabeceras de tabla, objetivos táctiles de 44 px, contraste revisado (todo ≥ 4,5:1).
+
+**Evalúa si cada punto está realmente resuelto o si lo he arreglado a medias o creado problemas nuevos.**
 
 ## Qué ves en las capturas
-- `01-...`: lo primero que ve un visitante (con el banner de cookies encima).
-- `02-...`: la página completa de inicio (en móvil va partida en parte1 y parte2, de arriba a abajo).
-- `03-...`: el editor de un portafolio ya con sesión iniciada.
-- `04-...`: la ficha de una empresa del ranking de ideas.
-- Variantes en escritorio y móvil, en claro y oscuro.
+- `01-primera-pantalla-…`: lo primero que ve un visitante nuevo.
+- `01b-pagina-completa-…`: la página de inicio entera (en móvil va partida en varias partes, de arriba a abajo).
+- `02-editor-sin-registro-…`: el editor tras pulsar «Cartera de dividendos», sin cuenta.
+- `03-pedir-email-…`: lo que aparece al pulsar «Guardar con mi email».
+- `04-editor-con-cuenta-guardar-y-publicar-…`: el editor ya con sesión iniciada (bloques Guardar y Publicación).
+- `05-ficha-de-empresa-…`: la ficha de una empresa del ranking.
+- Variantes en escritorio y móvil, en claro y oscuro (algunas solo en claro).
 
 ## Limitaciones de las capturas (no las critiques)
 - Es una demo con **datos inventados**; los números no significan nada.
-- Los recuadros punteados que dicen «Aquí iría el widget de TradingView» son huecos donde en la web real aparecen gráficos de precios y un screener de TradingView. Juzga el espacio que ocupan y cómo encajan, no su contenido.
-- Algunas capturas, como el editor o la ficha, muestran solo esa parte de la página.
+- Los recuadros punteados que dicen «Aquí iría el widget de TradingView» son huecos de gráficos y de un screener de precios que en la web real carga TradingView. Juzga el espacio y cómo encajan, no su contenido.
+- Un aviso amarillo de «Demo interactiva» aparece arriba solo en esta demo; en la web real no existe.
+- Algunas capturas muestran solo una parte de la página.
 
-## Qué quiero que evalúes (en este orden)
-1. **Primera impresión (5 segundos):** ¿se entiende qué es, para quién es y qué hago primero? ¿Inspira confianza para algo relacionado con dinero?
-2. **Jerarquía y composición visual:** orden de las secciones, qué compite por la atención, espacio en blanco, tamaño y peso de los títulos, uso del color, consistencia entre componentes.
-3. **Tipografía y color:** legibilidad, contraste (claro y oscuro), si la identidad visual es genérica o tiene personalidad.
-4. **Interacción y flujos:** registro, crear portafolio, añadir posiciones, guardar, publicar, explorar ideas, abrir una ficha. Fricciones, pasos que sobran, controles poco claros, feedback ausente, errores previsibles, qué haría un usuario nuevo mal.
-5. **Móvil:** si es realmente usable con una mano (tablas, formularios, banner, navegación).
-6. **Accesibilidad:** contraste, tamaños táctiles, foco de teclado, lectores de pantalla, color como único indicador.
-7. **Datos financieros:** cómo se presentan cifras, porcentajes, criterios cumplidos/no cumplidos; si se entiende sin ser experto; si el aviso legal está donde corresponde sin molestar.
-8. **Textos:** claridad, tono, etiquetas de botones y mensajes.
-9. **Lo que haría que un usuario se vaya** y lo que haría que vuelva a la semana.
+## Qué quiero que evalúes
+1. Primera impresión en 5 segundos: ¿se entiende qué es, para quién y qué hago primero? ¿Genera confianza para algo relacionado con dinero?
+2. Jerarquía y composición: orden de secciones, qué compite por la atención, espacio, consistencia.
+3. Tipografía y color: legibilidad, contraste, si la identidad es genérica.
+4. Interacción y flujos: probar sin cuenta → guardar → pedir email → editor con cuenta → guardar → publicar → ver ideas y fichas. Fricciones, pasos que sobran, controles poco claros, feedback ausente.
+5. Móvil: usabilidad real con una mano (tablas, formularios, botones, longitud de la página).
+6. Accesibilidad.
+7. Cifras financieras: ¿se entienden sin ser experto? ¿Aviso legal bien ubicado sin molestar?
+8. Textos: claridad, tono, etiquetas de botones.
+9. Qué haría que un usuario se vaya y qué haría que vuelva a la semana.
 
 ## Formato de respuesta
-- Empieza con un **veredicto de 3 líneas** y una nota del 1 al 10 en: visual, interacción, confianza y móvil.
-- Después una lista de problemas ordenados por **gravedad** (crítico / importante / menor). Para cada uno: *qué ocurre, por qué es un problema, cómo arreglarlo de forma concreta* (con valores aproximados de tamaños, espacios, colores o textos cuando ayude).
-- Cierra con **los 5 cambios que más mejorarían el producto**, en orden, y **3 cosas que quitarías**.
+- **Veredicto de 3 líneas** y nota del 1 al 10 en: visual, interacción, confianza y móvil, **comparando con tu valoración anterior**.
+- Lista de problemas ordenados por gravedad (crítico / importante / menor). Para cada uno: qué ocurre, por qué es un problema y cómo arreglarlo de forma concreta (valores aproximados de tamaños, espacios, colores o textos cuando ayude).
+- **Los 5 cambios que más mejorarían el producto**, en orden, y **3 cosas que quitaría**.
 - Si algo no puedes juzgarlo con las capturas, dilo en vez de suponerlo.

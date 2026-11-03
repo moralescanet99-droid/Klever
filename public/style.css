@@ -62,3 +62,10 @@ button.enlace{background:none;border:0;color:var(--acc);text-decoration:underlin
 #ideas-buscar{width:100%;max-width:360px;margin-bottom:.5rem}
 details.glosario{margin:.5rem 0;color:var(--mut)}details.glosario summary{cursor:pointer;color:var(--fg)}
 @media (pointer:coarse){button,input,select{min-height:44px}td button{min-width:44px}}
+.resumen b{white-space:nowrap}
+@media (max-width:600px){
+  #ed-tabla th,#ed-tabla td{white-space:normal;padding:.4rem .3rem}
+  #ed-tabla th:nth-child(2),#ed-tabla td:nth-child(2){display:none} /* el sector ya se ve en "Reparto por sector" */
+  #ed-tabla td small{display:block}
+  .resumen{gap:1rem}
+}
