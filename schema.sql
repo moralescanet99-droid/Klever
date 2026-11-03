@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS enlaces (
   hash TEXT PRIMARY KEY,
   email TEXT NOT NULL,
   expira TEXT NOT NULL,
-  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+  creado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  con_borrador INTEGER NOT NULL DEFAULT 0   -- la persona tenía un borrador local al pedir el enlace (solo para avisar)
 );
 CREATE INDEX IF NOT EXISTS idx_enlaces_email ON enlaces(email, creado_en);
 -- Sesiones por dispositivo (se guarda el hash).

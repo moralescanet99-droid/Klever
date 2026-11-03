@@ -36,3 +36,30 @@ export async function sendMail(env, to, subject, html) {
   });
   if (!r.ok) throw new Error('mail ' + r.status);
 }
+
+// ---------- reglas de composición (una sola fuente para guardar y publicar) ----------
+export const DEMO_EMAIL = 'demo@klever.invalid';
+const r1 = v => Math.round(v * 10) / 10;
+const coma = v => String(v).replace('.', ',');
+
+// Guardar: cada peso > 0 y <= 100, sin repetidos, total <= 100 %. Por debajo de 100 % es un reparto incompleto (no hay efectivo implícito).
+export function validarComposicion(pos) {
+  if (!Array.isArray(pos) || pos.length > 50) return { ok: false, error: 'Posiciones no válidas' };
+  const seen = new Set(); let suma = 0;
+  for (const x of pos) {
+    const peso = Number(x?.peso);
+    if (!/^[A-Z.]{1,6}$/.test(x?.ticker) || seen.has(x.ticker) || !(peso > 0 && peso <= 100)) return { ok: false, error: 'Posición no válida: ' + x?.ticker };
+    seen.add(x.ticker); suma += peso;
+  }
+  const total = r1(suma);
+  if (total > 100) return { ok: false, error: `Los pesos suman más de 100 % (exceso de asignación: ${coma(r1(total - 100))} %)`, total };
+  return { ok: true, total, completa: total === 100 };
+}
+
+// Publicar: además de ser válida, la composición debe estar completa (100 %) y llevar tesis.
+export function puedePublicar({ total, n, tesis }) {
+  if (!n) return 'Para publicar, añade al menos una posición.';
+  if (r1(total) !== 100) return `Para publicar, la cartera debe tener el 100 % asignado (ahora tiene ${coma(r1(total))} %).`;
+  if (!tesis) return 'Para publicar, escribe una tesis.';
+  return null;
+}

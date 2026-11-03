@@ -2,11 +2,11 @@
 -- Ejecutar DESPUÉS de cargar activos: wrangler d1 execute klever --remote --file=data/demo.sql
 INSERT OR IGNORE INTO usuarios (email) VALUES ('demo@klever.invalid');
 INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis)
-SELECT id, 'Dividendos defensivos', 'dividendos', 1, 'Empresas y ETFs de dividendo con negocios estables. Simulación educativa, no recomendación.' FROM usuarios WHERE email='demo@klever.invalid';
+SELECT id, 'Dividendos defensivos', 'dividendos', 1, 'Fondos de dividendos y empresas de consumo, salud y energía.' FROM usuarios WHERE email='demo@klever.invalid';
 INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis)
-SELECT id, 'Oro y mineras', 'oro', 1, 'Exposición al oro físico y a mineras como cobertura. Simulación educativa, no recomendación.' FROM usuarios WHERE email='demo@klever.invalid';
+SELECT id, 'Oro y mineras', 'oro', 1, 'Oro físico y mineras de oro como contrapeso a la renta variable.' FROM usuarios WHERE email='demo@klever.invalid';
 INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis)
-SELECT id, 'Crecimiento tecnológico', 'riesgo', 1, 'Grandes tecnológicas con alto ROIC y crecimiento. Simulación educativa, no recomendación.' FROM usuarios WHERE email='demo@klever.invalid';
+SELECT id, 'Crecimiento tecnológico', 'riesgo', 1, 'Cinco grandes empresas tecnológicas y de internet.' FROM usuarios WHERE email='demo@klever.invalid';
 INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT p.id, t.ticker, t.peso FROM portafolios p,
  (SELECT 'SCHD' ticker, 30.0 peso UNION SELECT 'KO',20 UNION SELECT 'PG',20 UNION SELECT 'JNJ',15 UNION SELECT 'XOM',15) t WHERE p.nombre='Dividendos defensivos';
 INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT p.id, t.ticker, t.peso FROM portafolios p,

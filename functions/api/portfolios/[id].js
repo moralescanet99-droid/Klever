@@ -1,4 +1,4 @@
-import { json, auth, readJson } from '../../_lib.js';
+import { json, auth, readJson, validarComposicion, puedePublicar } from '../../_lib.js';
 
 async function owned(env, user, id) {
   return await env.DB.prepare('SELECT * FROM portafolios WHERE id = ? AND usuario_id = ?').bind(id, user.id).first();
@@ -24,7 +24,8 @@ export async function onRequestGet({ request, env, params }) {
   return json({ ...p, posiciones: results, total, sectores, calidad_media_roic: calidad });
 }
 
-// Reemplaza todas las posiciones: { posiciones: [{ticker, peso}] }, suma <= 100.
+// Reemplaza todas las posiciones: { posiciones: [{ticker, peso}] }. Suma <= 100 %.
+// Si la cartera es pública, debe seguir completa (100 %).  Misma regla que la interfaz.
 export async function onRequestPut({ request, env, params }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
@@ -32,15 +33,9 @@ export async function onRequestPut({ request, env, params }) {
   if (!p) return json({ error: 'No encontrado' }, 404);
   const b = await readJson(request);
   const pos = Array.isArray(b?.posiciones) ? b.posiciones : null;
-  if (!pos || pos.length > 50) return json({ error: 'Posiciones no válidas' }, 400);
-  const seen = new Set(); let total = 0;
-  for (const x of pos) {
-    const peso = Number(x.peso);
-    if (!/^[A-Z.]{1,6}$/.test(x.ticker) || seen.has(x.ticker) || !(peso > 0 && peso <= 100))
-      return json({ error: 'Posición no válida: ' + x.ticker }, 400);
-    seen.add(x.ticker); total += peso;
-  }
-  if (total > 100.0001) return json({ error: 'Los pesos suman más de 100%' }, 400);
+  const v = validarComposicion(pos);
+  if (!v.ok) return json({ error: v.error }, 400);
+  if (p.publico && !v.completa) return json({ error: 'Esta cartera es pública y debe mantener el 100 % asignado. Deja de publicarla para guardar un reparto incompleto.' }, 400);
   const stmts = [env.DB.prepare('DELETE FROM posiciones WHERE portafolio_id = ?').bind(p.id)];
   for (const x of pos)
     stmts.push(env.DB.prepare('INSERT INTO posiciones (portafolio_id, ticker, peso) VALUES (?,?,?)').bind(p.id, x.ticker, Number(x.peso)));
@@ -59,7 +54,7 @@ export async function onRequestDelete({ request, env, params }) {
   return json({ ok: true });
 }
 
-// Edita nombre, tesis y visibilidad. Para hacerlo público: tesis obligatoria y al menos 1 posición.
+// Edita nombre, tesis y visibilidad. Para publicar: composición completa (100 %), al menos 1 posición y tesis.
 export async function onRequestPatch({ request, env, params }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
@@ -71,8 +66,9 @@ export async function onRequestPatch({ request, env, params }) {
   const tesis = b.tesis !== undefined ? String(b.tesis).trim().slice(0, 600) : p.tesis;
   const publico = b.publico !== undefined ? (b.publico ? 1 : 0) : p.publico;
   if (publico) {
-    const n = await env.DB.prepare('SELECT COUNT(*) c FROM posiciones WHERE portafolio_id = ?').bind(p.id).first();
-    if (!tesis || !n.c) return json({ error: 'Para hacerlo público añade posiciones y una tesis' }, 400);
+    const r = await env.DB.prepare('SELECT COUNT(*) c, COALESCE(SUM(peso), 0) s FROM posiciones WHERE portafolio_id = ?').bind(p.id).first();
+    const motivo = puedePublicar({ total: r.s, n: r.c, tesis });
+    if (motivo) return json({ error: motivo }, 400);
   }
   await env.DB.prepare('UPDATE portafolios SET nombre = ?, tesis = ?, publico = ? WHERE id = ?').bind(nombre, tesis || null, publico, p.id).run();
   return json({ ok: true });

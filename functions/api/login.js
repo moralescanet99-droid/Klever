@@ -15,8 +15,9 @@ export async function onRequestPost({ request, env }) {
   if (rec.dia >= 5) return json({ error: 'Demasiados intentos hoy; inténtalo mañana' }, 429);
 
   const token = newToken();
-  await env.DB.prepare(`INSERT INTO enlaces (hash, email, expira) VALUES (?, ?, datetime('now','+15 minutes'))`)
-    .bind(await sha256(token), email).run();
+  // con_borrador: el usuario tenía un borrador en el dispositivo desde el que pide el enlace (solo un aviso; el borrador nunca sale del dispositivo)
+  await env.DB.prepare(`INSERT INTO enlaces (hash, email, expira, con_borrador) VALUES (?, ?, datetime('now','+15 minutes'), ?)`)
+    .bind(await sha256(token), email, body?.con_borrador === true ? 1 : 0).run();
   const link = `${new URL(request.url).origin}/?login=${token}`;
 
   // Solo para desarrollo local (.dev.vars): devuelve el enlace en vez de enviarlo.

@@ -1,6 +1,10 @@
 // =====================================================================
 // Klever · interfaz. Sin dependencias.
 // Vistas (hash): inicio · empresas · publicas · carteras · cartera / cartera-<id>
+// Tres conceptos separados en el editor:
+//   · DÓNDE está guardada  → este dispositivo (borrador) o tu cuenta
+//   · CAMBIOS pendientes   → versión actual (rev) frente a la última guardada (savedRev)
+//   · VISIBILIDAD          → privada o pública
 // =====================================================================
 
 // ---------- utilidades ----------
@@ -14,14 +18,16 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 const NB = ' '; // espacio duro: número y unidad nunca se separan
 const nf = (v, d = 1) => new Intl.NumberFormat('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
 const pct = v => v == null ? '—' : nf(v * 100) + NB + '%';   // fracción: 0,12 → 12,0 %
-const pesoTxt = v => nf(v) + NB + '%';                          // ya en puntos porcentuales
+const pesoTxt = v => nf(v) + NB + '%';                          // ya en puntos porcentuales (1 decimal)
+const pesoCorto = v => (Number.isInteger(r1(v)) ? nf(v, 0) : nf(v, 1)) + NB + '%'; // 12 % · 12,5 %
 const miles = v => v == null ? '—' : nf(v / 1e9);               // miles de millones
 const r1 = v => Math.round(v * 10) / 10;
 const parsePeso = s => { const n = parseFloat(String(s).trim().replace(/\s/g, '').replace(',', '.')); return Number.isFinite(n) ? n : NaN; };
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+const reducido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 let toastTimer;
-function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 4000); }
+function toast(msg, ms = 4000) { const t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), ms); }
 function hideToast() { clearTimeout(toastTimer); $('#toast').classList.remove('on'); }
 
 const API = '/api';
@@ -61,21 +67,45 @@ function repartoPlantilla(plantilla) {
 
 // ---------- estado ----------
 let assets = [], by = {};
-let current = null;          // { id|null, nombre, plantilla, tesis, publico }
+let current = null;          // { id|null, nombre, plantilla, tesis, publico }   id null = aún no está en la cuenta
 let pos = [];                // [{ ticker, peso }]
-let rev = 0, savedRev = 0, saving = false, saveErr = null; // máquina de estados de guardado
+let rev = 0, savedRev = 0, saving = false, saveErr = null;
 const DRAFT = 'klever_borrador';
 const leerBorrador = () => { try { return JSON.parse(store.getItem(DRAFT)); } catch { return null; } };
+const hayBorrador = () => !!leerBorrador()?.pos?.length;
 function guardarBorrador() {
-  if (logged() || !current || current.id) return;
+  if (!current || current.id) return; // solo lo que aún no está en la cuenta
   store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos }));
 }
-const totalPeso = () => r1(pos.reduce((s, p) => s + (p.peso || 0), 0));
+const enCuenta = () => logged() && !!current?.id;
 
 async function loadAssets() {
-  try {
-    assets = await getJson('/assets'); by = Object.fromEntries(assets.map(a => [a.ticker, a]));
-  } catch { toast('No se pudieron cargar los activos. Recarga la página.'); }
+  try { assets = await getJson('/assets'); by = Object.fromEntries(assets.map(a => [a.ticker, a])); }
+  catch { toast('No se pudieron cargar los activos. Recarga la página.'); }
+}
+
+// ---------- reglas de composición: UNA sola fuente para guardar, publicar y la interfaz ----------
+// Mismas reglas que el servidor (functions/_lib.js). Por debajo del 100 % es un REPARTO INCOMPLETO: se puede
+// guardar en privado, pero no se publica. No existe efectivo implícito.
+function validar(ps = pos) {
+  const total = r1(ps.reduce((s, p) => s + (p.peso || 0), 0));
+  const invalidos = ps.filter(p => !(p.peso > 0 && p.peso <= 100));
+  return { total, n: ps.length, invalidos, exceso: total > 100 ? r1(total - 100) : 0, falta: total < 100 ? r1(100 - total) : 0, completa: total === 100 && !invalidos.length };
+}
+const listaTickers = inv => inv.map(p => p.ticker).join(', ');
+function razonGuardar(v) {
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para guardar.`;
+  if (current?.publico && !v.completa) return `Esta cartera es pública y debe mantener el 100 % asignado (pendiente de asignar: ${pesoCorto(v.falta)}). Para guardar un reparto incompleto, deja de publicarla antes.`;
+  return null;
+}
+function razonPublicar(v) {
+  if (!v.n) return 'Añade al menos una posición para publicar.';
+  if (v.invalidos.length) return `Revisa el peso de ${listaTickers(v.invalidos)}: debe ser un número entre 0,1 y 100.`;
+  if (v.exceso) return `Exceso de asignación: ${pesoCorto(v.exceso)}. Reduce algún peso para poder publicar.`;
+  if (v.falta) return `Pendiente de asignar: ${pesoCorto(v.falta)}. Una cartera pública debe tener el 100 % asignado.`;
+  if (!$('#tesis').value.trim()) return 'Escribe una tesis para poder publicar.';
+  return null;
 }
 
 // ---------- diálogos ----------
@@ -102,15 +132,18 @@ $('#cf-si').addEventListener('click', () => $('#dlg-confirmar').close('ok'));
 $('#cf-no').addEventListener('click', () => $('#dlg-confirmar').close('no'));
 
 // ---------- acceso por enlace ----------
-let accEmail = '', cooldownT = null;
-function pasoAcceso(n) { $('#acc-paso1').hidden = n !== 1; $('#acc-paso2').hidden = n !== 2; }
+let accEmail = '', cooldownT = null, avisoOtroDispositivo = false;
+function pasoAcceso(n) {
+  $('#acc-paso1').hidden = n !== 1; $('#acc-paso2').hidden = n !== 2;
+  $('#acc-aviso-borrador').hidden = !(n === 2 && hayBorrador());
+}
 function abrirAcceso(motivo = 'entrar') {
   $('#acc-titulo').textContent = motivo === 'guardar' ? 'Guarda tu cartera' : 'Entrar';
   $('#acc-sub').textContent = motivo === 'caducada'
     ? 'Tu sesión ha caducado. Te enviaremos un enlace para entrar sin contraseña.'
-    : motivo === 'guardar'
-      ? 'Te enviaremos un enlace para entrar sin contraseña. Tu borrador se guardará al entrar.'
+    : motivo === 'guardar' ? 'Te enviaremos un enlace para entrar sin contraseña.'
       : 'Te enviaremos un enlace para entrar sin contraseña. Sirve para registrarte y para volver a entrar.';
+  $('#acc-borrador').hidden = !hayBorrador();
   $('#acc-error').textContent = ''; $('#acc-error2').textContent = '';
   pasoAcceso(1);
   const d = $('#dlg-acceso'); if (!d.open) d.showModal();
@@ -121,12 +154,10 @@ function cooldown(seg) {
   pintar(); cooldownT = setInterval(() => { s--; pintar(); if (s <= 0) clearInterval(cooldownT); }, 1000);
 }
 async function pedirEnlace(email) {
-  const r = await api('/login', { method: 'POST', body: { email, acepto: $('#acc-acepto').checked } });
-  accEmail = email;
-  $('#acc-enviado').textContent = email;
+  const r = await api('/login', { method: 'POST', body: { email, acepto: $('#acc-acepto').checked, con_borrador: hayBorrador() } });
+  accEmail = email; $('#acc-enviado').textContent = email;
   $('#acc-dev').innerHTML = r.dev_link ? `Modo desarrollo: <a href="${esc(r.dev_link)}">entrar</a>` : '';
-  pasoAcceso(2); cooldown(60);
-  $('#acc-reenviar').focus();
+  pasoAcceso(2); cooldown(60); $('#acc-reenviar').focus();
 }
 $('#form-acceso').addEventListener('submit', async e => {
   e.preventDefault(); $('#acc-error').textContent = '';
@@ -144,21 +175,35 @@ $('#entrar').addEventListener('click', () => abrirAcceso('entrar'));
 
 async function redeem() { // canje del enlace mágico (?login=TOKEN)
   const t = new URLSearchParams(location.search).get('login'); if (!t) return;
-  history.replaceState(null, '', location.pathname + location.hash);
-  try { const { token } = await api('/verify', { method: 'POST', body: { token: t } }); store.setItem('klever_token', token); }
-  catch (err) { toast(err.message); }
+  try { history.replaceState(null, '', location.pathname + location.hash); } catch {}
+  try {
+    const r = await api('/verify', { method: 'POST', body: { token: t } });
+    store.setItem('klever_token', r.token);
+    // El enlace se pidió con un borrador local. Si se abre en otro dispositivo/navegador, el borrador no está aquí.
+    avisoOtroDispositivo = !!r.con_borrador && !hayBorrador();
+  } catch (err) { toast(err.message); }
 }
 function sesionCaducada() {
   store.removeItem('klever_token'); current = null; actualizarCabecera(); route(); abrirAcceso('caducada');
 }
-$('#salir').addEventListener('click', async () => {
+async function cerrarSesion() {
   try { await api('/logout', { method: 'POST' }); } catch {}
   store.removeItem('klever_token'); current = null; pos = []; actualizarCabecera(); go('#inicio');
-});
+}
+$('#salir').addEventListener('click', cerrarSesion);
+$('#salir-m').addEventListener('click', cerrarSesion);
 function actualizarCabecera() {
   const l = logged();
-  $('#entrar').hidden = l; $('#salir').hidden = !l; $('#nav-mis').hidden = !l;
+  $('#entrar').hidden = l; $('#salir').hidden = !l; $('#salir-m').hidden = !l;
+  $$('.nav-mis').forEach(e => e.hidden = !l);
 }
+
+// ---------- menú móvil ----------
+const btnMenu = $('#btn-menu'), menuMovil = $('#menu-movil');
+function menuAbrir(v) { menuMovil.hidden = !v; btnMenu.setAttribute('aria-expanded', String(v)); }
+btnMenu.addEventListener('click', () => menuAbrir(menuMovil.hidden));
+menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) menuAbrir(false); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
 const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera'];
@@ -178,8 +223,7 @@ async function route(primera = false) {
     if (m) {
       if (!l) v = 'inicio';
       else if (current?.id !== +m[1]) { const ok = await cargarCartera(+m[1]); if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
-    } else if (l) v = 'carteras';
-    else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarInvitado(d); else v = 'inicio'; }
+    } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
   }
   mostrar(v, primera);
 }
@@ -187,7 +231,7 @@ function mostrar(v, primera) {
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
   $$('[data-nav]').forEach(a => a.dataset.nav === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
-  $('#barra-guardar').hidden = v !== 'cartera';
+  $('#barra-guardar').hidden = v !== 'cartera'; medirBarra(); menuAbrir(false);
   document.title = 'Klever · ' + TITULOS[v];
   if (v === 'cartera') renderWorkspace();
   if (v === 'carteras') cargarMisCarteras();
@@ -201,7 +245,7 @@ async function cargarMisCarteras() {
   try {
     const list = await api('/portfolios');
     ul.innerHTML = list.length ? list.map(p => `<li><button class="tarjeta" type="button" data-id="${p.id}" aria-label="Abrir ${esc(p.nombre)}">
-        <span><b>${esc(p.nombre)}</b><span class="t-meta" style="display:block">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.publico ? 'Pública' : 'Privada'}</span></span><span class="pl-acc">Abrir</span></button></li>`).join('')
+        <span><b>${esc(p.nombre)}</b><span class="t-meta" style="display:block">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.publico ? 'Pública' : 'Privada'}</span></span><span class="pl-acc"><span class="pl-acc-txt">Abrir</span></span></button></li>`).join('')
       : '<li class="estado-lista">Aún no tienes carteras. Crea la primera con el formulario de arriba.</li>';
   } catch (err) { ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
@@ -227,77 +271,85 @@ function abrirInvitado(plantilla) {
   pos = repartoPlantilla(plantilla); rev = savedRev = 0; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
   guardarBorrador(); go('#cartera');
 }
-function restaurarInvitado(d) {
+function restaurarBorrador(d) {
   current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
   pos = d.pos; rev = savedRev = 0; saveErr = null;
 }
-async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta
+async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
   const d = leerBorrador(); if (!d) return;
   if (!d.pos?.length) { store.removeItem(DRAFT); return; }
-  let ps = d.pos, ajustado = false;
-  const tot = ps.reduce((s, x) => s + x.peso, 0);
-  if (tot > 100.0001) { const k = 100 / tot; ps = ps.map(x => ({ ticker: x.ticker, peso: Math.floor(x.peso * k * 10) / 10 })); ajustado = true; }
+  const v = validar(d.pos);
+  if (v.exceso || v.invalidos.length) {
+    toast('Tu borrador sigue en este dispositivo: tiene pesos que aún no se pueden guardar. Corrígelos para guardarlo en tu cuenta.', 9000);
+    location.hash = '#cartera'; return;
+  }
   let id = null;
   try {
     ({ id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla } }));
-    await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: ps } });
+    await api('/portfolios/' + id, { method: 'PUT', body: { posiciones: d.pos } });
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
-    toast(ajustado ? 'Guardada en tu cuenta. Los pesos pasaban de 100 %, los hemos ajustado en proporción.' : 'Hemos guardado tu cartera en tu cuenta');
-    location.hash = '#cartera-' + id;
+    toast('Hemos guardado tu borrador en tu cuenta'); location.hash = '#cartera-' + id;
   } catch (err) {
     if (id) { try { await api('/portfolios/' + id, { method: 'DELETE' }); } catch {} } // no dejar una cartera vacía a medias
-    toast('No se pudo guardar tu borrador (' + err.message + '). Sigue en este navegador.');
+    toast('No se pudo guardar tu borrador (' + err.message + '). Sigue en este dispositivo.', 8000);
   }
 }
 
 // ---------- cálculo del resumen ----------
+const esFondo = t => by[t]?.tipo === 'etf';
 function calcResumen(ps) {
-  const total = r1(ps.reduce((s, p) => s + (p.peso || 0), 0));
-  const con = ps.filter(p => by[p.ticker]?.roic != null && p.peso > 0);
-  const wCon = con.reduce((s, p) => s + p.peso, 0);
+  const v = validar(ps);
+  const conDato = ps.filter(p => p.peso > 0 && by[p.ticker]?.roic != null);
+  const sinDato = ps.filter(p => p.peso > 0 && by[p.ticker]?.roic == null);
+  const wCon = conDato.reduce((s, p) => s + p.peso, 0);
   const sec = {};
-  for (const p of ps) { const s = by[p.ticker]?.sector || 'Sin sector'; sec[s] = (sec[s] || 0) + (p.peso || 0); }
+  for (const p of ps) { const s = by[p.ticker]?.sector || 'Sin categoría'; sec[s] = (sec[s] || 0) + (p.peso || 0); }
   return {
-    total, n: ps.length, nCon: con.length,
-    roic: wCon ? con.reduce((s, p) => s + by[p.ticker].roic * p.peso, 0) / wCon : null, // se excluyen los activos sin dato (no cuentan como 0)
-    cobertura: total ? wCon / total : 0,
+    ...v, nCon: conDato.length,
+    noAplic: sinDato.filter(p => esFondo(p.ticker)).length, noDisp: sinDato.filter(p => !esFondo(p.ticker)).length,
+    roic: wCon ? conDato.reduce((s, p) => s + by[p.ticker].roic * p.peso, 0) / wCon : null, // media PONDERADA; sin dato = fuera, ni como 0 ni en el denominador
+    cobPeso: v.total ? wCon / v.total : 0,                                                    // denominador: peso asignado
     sectores: Object.entries(sec).sort((a, b) => b[1] - a[1]),
   };
+}
+const roicTxt = a => !a ? '<span class="nd">No disponible</span>' : a.tipo === 'etf' ? '<span class="nd" title="Los fondos no tienen ROIC: no aplicable">No aplicable</span>' : a.roic == null ? '<span class="nd" title="Dato ausente en los informes">No disponible</span>' : pct(a.roic);
+function textoCobertura(r) {
+  if (!r.n) return '';
+  const sin = [r.noAplic && `${r.noAplic} ${r.noAplic === 1 ? 'fondo' : 'fondos'} (no aplicable)`, r.noDisp && `${r.noDisp} ${r.noDisp === 1 ? 'empresa' : 'empresas'} (no disponible)`].filter(Boolean).join(' y ');
+  if (r.roic == null) return `Ninguna posición tiene ROIC${sin ? ': ' + sin : ''}.`;
+  return `Con dato: ${r.nCon} de ${r.n} posiciones (${nf(r.cobPeso * 100, 0)}${NB}% del peso asignado).${sin ? ' Sin dato: ' + sin + '.' : ''} Media ponderada por peso.`;
+}
+function textoAsignado(r) {
+  return !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '✓ 100 % asignado';
 }
 
 // ---------- espacio de trabajo ----------
 function renderWorkspace() {
   if (!current) return;
-  const l = logged();
-  $$('.solo-cuenta').forEach(e => e.hidden = !l);
-  $('#mi-eliminar').hidden = !l;
+  const l = logged(), id = !!current.id;
+  $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
+  $('#mi-eliminar').hidden = !(l && id);
   $('#nombre').value = current.nombre; $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
-  pintarChips(); renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
-}
-function pintarChips() {
-  const l = logged(), pub = !!current?.publico;
-  const c = $('#chip'); c.textContent = !l ? 'Borrador' : pub ? 'Pública' : 'Privada'; c.classList.toggle('pub', l && pub);
-  const pc = $('#pub-chip'); pc.textContent = pub ? 'Pública' : 'Privada'; pc.classList.toggle('pub', pub);
-  $('#publicar').textContent = pub ? 'Dejar de publicar' : 'Publicar cartera';
-  $('#tesis-guardar').hidden = !pub;
+  renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
 }
 
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
   return `<tr><td><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></td><td>${esc(a.sector || '')}</td>
-    <td class="num"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span></td>
-    <td class="num">${pct(a.roic)}</td>
+    <td class="num"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span></td>
+    <td class="num">${roicTxt(a)}</td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
 function tarjetaPos(p, i) {
   const a = by[p.ticker] || {}, id = 'det-' + i;
   return `<li class="pos-card"><div class="pc-fila"><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
-    <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
+    <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
     <div class="pc-det" id="${id}" hidden><dl>
-      <div><dt>Sector: </dt><dd>${esc(a.sector || '—')}</dd></div>
-      <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr>: </dt><dd class="num">${a.roic != null ? pct(a.roic) : 'Sin dato'}</dd></div></dl>
+      <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
+      <div><dt>Categoría:</dt><dd>${esc(a.sector || '—')}</dd></div>
+      <div><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr>:</dt><dd class="num">${roicTxt(a)}</dd></div></dl>
       <button class="btn btn-secundario peligro" type="button" data-quitar="${i}">Quitar</button></div></li>`;
 }
 function renderPosiciones() {
@@ -306,58 +358,74 @@ function renderPosiciones() {
   $('.tabla-scroll').hidden = !pos.length; $('#pos-cards').hidden = !pos.length; $('#pos-vacio').hidden = pos.length > 0;
 }
 function renderResumen() {
-  const r = calcResumen(pos), falta = r1(100 - r.total);
+  const r = calcResumen(pos);
+  const est = textoAsignado(r), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
   $('#r-total').textContent = pesoTxt(r.total);
-  const est = $('#r-falta');
-  if (!r.n) { est.textContent = 'Sin posiciones todavía'; est.className = 'asig-estado'; }
-  else if (falta > 0.0001) { est.textContent = `Faltan ${pesoTxt(falta)}`; est.className = 'asig-estado aviso'; }
-  else if (falta < -0.0001) { est.textContent = `⚠ Sobran ${pesoTxt(-falta)}`; est.className = 'asig-estado error'; }
-  else { est.textContent = '✓ Cartera completa'; est.className = 'asig-estado ok'; }
+  const f = $('#r-falta'); f.textContent = est; f.className = 'asig-estado ' + clase;
   const barra = $('#r-barra').parentElement; barra.setAttribute('aria-valuenow', Math.min(100, Math.round(r.total)));
-  barra.classList.toggle('error', falta < -0.0001); $('#r-barra').style.width = Math.min(100, r.total) + '%';
+  barra.classList.toggle('error', !!r.exceso); $('#r-barra').style.width = Math.min(100, r.total) + '%';
   $('#r-n').textContent = r.n;
   $('#r-roic').textContent = r.roic != null ? pct(r.roic) : '—';
-  $('#r-cobertura').textContent = !r.n ? '' : r.roic == null
-    ? 'Ningún activo de la cartera tiene dato de ROIC.'
-    : r.nCon === r.n ? `Calculado con los ${r.n} activos.`
-      : `Cobertura parcial: ${r.nCon} de ${r.n} activos con dato (${nf(r.cobertura * 100, 0)}${NB}% del peso). Los demás se excluyen.`;
+  $('#r-cobertura').textContent = textoCobertura(r);
   $('#r-sectores').innerHTML = r.sectores.length ? r.sectores.map(([s, v]) =>
     `<div class="sector"><span>${esc(s)}</span><span class="num">${pesoTxt(v)}</span><div class="barra"><i style="width:${Math.min(100, v)}%"></i></div></div>`).join('')
     : '<p class="mut peq">Añade posiciones para ver el reparto.</p>';
-  $('#b-total').textContent = pesoTxt(r.total);
-  $('#b-falta').textContent = !r.n ? 'sin posiciones' : falta > 0.0001 ? `faltan ${pesoTxt(falta)}` : falta < -0.0001 ? `sobran ${pesoTxt(-falta)}` : '✓ completa';
+  $('#pos-error').textContent = r.invalidos.length ? `Revisa el peso de ${listaTickers(r.invalidos)}: debe ser un número entre 0,1 y 100.` : '';
+  // resumen breve (móvil/tableta) y barra inferior
+  $('#rb-total').textContent = pesoTxt(r.total); $('#rb-estado').textContent = est; $('#rb-n').textContent = `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}`;
+  $('#b-total').textContent = pesoTxt(r.total); // barra: texto breve (el resumen usa las etiquetas completas)
+  $('#b-falta').textContent = !r.n ? 'sin posiciones' : r.exceso ? `exceso ${pesoCorto(r.exceso)}` : r.falta ? `pendiente ${pesoCorto(r.falta)}` : 'asignado';
+  $('#b-falta').className = clase;
 }
 
 // ---------- estado de guardado (una sola fuente de verdad) ----------
 function pintarEstado() {
   if (!current) return;
-  const l = logged(), total = totalPeso(), over = total > 100.0001, inval = pos.some(p => !(p.peso > 0)), dirty = rev !== savedRev;
-  let txt, cls = '';
-  if (!l && over) { txt = 'Los pesos suman más de 100 %. Ajusta antes de guardar.'; cls = 'aviso'; }
-  else if (!l && inval) { txt = 'Cada posición necesita un peso mayor que 0.'; cls = 'aviso'; }
-  else if (!l) txt = 'Borrador guardado solo en este navegador';
-  else if (saving) txt = 'Guardando…';
-  else if (saveErr) { txt = 'Error al guardar: ' + saveErr; cls = 'error'; }
-  else if (dirty && over) { txt = 'Los pesos suman más de 100 %. Ajusta para guardar.'; cls = 'aviso'; }
-  else if (dirty && inval) { txt = 'Cada posición necesita un peso mayor que 0.'; cls = 'aviso'; }
-  else if (dirty) { txt = 'Cambios sin guardar'; cls = 'aviso'; }
-  else { txt = '✓ Guardado'; cls = 'ok'; }
-  for (const id of ['#estado', '#b-estado']) { const e = $(id); e.textContent = txt; e.className = (id === '#estado' ? 'estado ' : 'bg-estado ') + cls; }
-  $$('.js-guardar').forEach(b => b.disabled = over || inval || (l && (saving || !dirty)));
-  window.onbeforeunload = l && dirty ? e => { e.preventDefault(); e.returnValue = ''; } : null; // no perder cambios por error
+  const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
+  let largo, breve, cls = '';
+  if (saving) { largo = 'Guardando en tu cuenta…'; breve = 'Guardando…'; }
+  else if (saveErr) { largo = 'Error al guardar: ' + saveErr; breve = 'Error al guardar'; cls = 'error'; }
+  else if (razon && (dirty || !id)) { largo = razon; cls = 'aviso';
+    breve = v.invalidos.length ? 'Revisa los pesos' : v.exceso ? 'Reduce el exceso' : 'Pública: debe sumar 100 %'; }
+  else if (!id) { largo = 'Guardado en este dispositivo'; breve = 'En este dispositivo'; }
+  else if (dirty) { largo = 'Cambios sin guardar'; breve = 'Sin guardar'; cls = 'aviso'; }
+  else { largo = '✓ Guardada en tu cuenta'; breve = '✓ Guardada'; cls = 'ok'; }
+  for (const [sel, t] of [['#estado', largo], ['#b-estado', breve]]) { const e = $(sel); e.textContent = t; e.className = (sel === '#b-estado' ? 'bg-estado ' : '') + 'estado-btn ' + cls; }
+  $('#estado-live').textContent = largo;
+  const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico);
+  $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.setAttribute('aria-describedby', razon ? 'estado b-estado' : ''); });
+  pintarPublicacion(v);
+  window.onbeforeunload = id && dirty ? e => { e.preventDefault(); e.returnValue = ''; } : null; // no perder cambios por error
+}
+function pintarPublicacion(v = validar()) {
+  const pub = !!current?.publico, r = razonPublicar(v);
+  $('#pub-chip').textContent = pub ? 'Pública' : 'Privada'; $('#pub-chip').classList.toggle('pub', pub);
+  $('#publicar').textContent = pub ? 'Dejar de publicar' : 'Publicar cartera';
+  $('#publicar').disabled = !pub && !!r;                      // si no se puede publicar, no parece disponible
+  $('#tesis-guardar').hidden = !pub; $('#tesis-guardar').disabled = pub && !!r;
+  const z = $('#pub-razon');
+  z.textContent = pub ? (r ? `Mientras sea pública, debe cumplir: ${r}` : 'Esta cartera es pública: se muestra su composición y tu tesis.') : (r || 'Lista para publicar.');
+  z.className = 'peq pub-razon' + (r ? ' aviso' : '');
 }
 function marcarCambio() { rev++; saveErr = null; hideToast(); guardarBorrador(); pintarEstado(); }
 
 async function guardar() {
-  if (!logged()) { guardarBorrador(); return abrirAcceso('guardar'); }
+  if (!current) return false;
+  const razon = razonGuardar(validar());
+  if (razon) { saveErr = null; pintarEstado(); return false; }   // la misma regla que bloquea el botón; no se envía nada
+  if (!logged()) { guardarBorrador(); abrirAcceso('guardar'); return false; }
   if (saving) return false;
   const nombre = $('#nombre').value.trim();
   if (!nombre) { saveErr = 'escribe un nombre para la cartera'; pintarEstado(); return false; }
   const r = rev; saving = true; saveErr = null; pintarEstado();
   try {
+    if (!current.id) { const { id } = await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla } }); current.id = id; }
     await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos } });
     await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre, tesis: $('#tesis').value } });
     current.nombre = nombre; savedRev = r; // si se editó durante el guardado, rev > r y sigue "con cambios"
+    store.removeItem(DRAFT);
+    try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
+    $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
   } catch (err) { saveErr = err.message; }
   finally { saving = false; pintarEstado(); }
   return !saveErr;
@@ -366,10 +434,13 @@ $$('.js-guardar').forEach(b => b.addEventListener('click', guardar));
 
 async function cambiarPublicacion(publico) {
   const err = $('#pub-error'); err.textContent = '';
-  if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se pudo guardar antes de publicar: ' + (saveErr || 'revisa los pesos'); return; }
+  if (publico) { // mismas reglas que el servidor; sin petición si no son válidas
+    const r = razonPublicar(validar()); if (r) { err.textContent = r; return; }
+    if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
+  }
   try {
-    await api('/portfolios/' + current.id, { method: 'PATCH', body: { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico } });
-    current.publico = publico ? 1 : 0; pintarChips(); loadPublicas();
+    await api('/portfolios/' + current.id, { method: 'PATCH', body: publico ? { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, publico: true } : { publico: false } });
+    current.publico = publico ? 1 : 0; pintarEstado(); loadPublicas();
     toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
   } catch (e) { err.textContent = e.message; }
 }
@@ -377,6 +448,34 @@ $('#publicar').addEventListener('click', () => cambiarPublicacion(!current.publi
 $('#tesis-guardar').addEventListener('click', () => cambiarPublicacion(true));
 $('#nombre').addEventListener('input', marcarCambio);
 $('#tesis').addEventListener('input', marcarCambio);
+
+// «Dónde está guardada»: tres conceptos separados
+function abrirInfoEstado() {
+  if (!current) return;
+  const id = enCuenta(), dirty = rev !== savedRev, pub = !!current.publico;
+  $('#es-cuerpo').innerHTML = `
+    <div><dt>Dónde está guardada</dt><dd>${id ? 'En tu cuenta.' : 'Solo en este navegador, como borrador. No está en tu cuenta ni se sincroniza con otros dispositivos, y se perdería si borras los datos del navegador.'}</dd></div>
+    <div><dt>Cambios pendientes</dt><dd>${id ? (dirty ? 'Sí: hay cambios sin guardar en tu cuenta.' : 'No: todo lo que ves está guardado.') : 'Los cambios se guardan automáticamente en este dispositivo.'}</dd></div>
+    <div><dt>Visibilidad</dt><dd>${pub ? 'Pública: se muestra su composición y tu tesis en «Carteras públicas».' : 'Privada: solo la ves tú.'}</dd></div>`;
+  $('#es-acciones').innerHTML = id ? '' : '<button class="btn btn-primario" type="button" id="es-guardar">Guardar en mi cuenta</button>';
+  const g = $('#es-guardar'); if (g) g.addEventListener('click', () => { $('#dlg-estado').close(); guardar(); });
+  $('#dlg-estado').showModal();
+}
+$('#estado').addEventListener('click', abrirInfoEstado);
+$('#b-estado').addEventListener('click', abrirInfoEstado);
+$('#rb-ver').addEventListener('click', () => { const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); });
+
+// ---------- barra inferior: espacio reservado y teclado virtual ----------
+const barra = $('#barra-guardar');
+function medirBarra() { document.documentElement.style.setProperty('--barra-alto', (barra.hidden || document.body.classList.contains('teclado')) ? '0px' : barra.offsetHeight + 'px'); }
+if ('ResizeObserver' in window) new ResizeObserver(medirBarra).observe(barra);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', () => { // teclado abierto: la barra se oculta para no tapar el campo
+  document.body.classList.toggle('teclado', window.visualViewport.height < window.innerHeight * 0.75); medirBarra();
+});
+document.addEventListener('focusin', e => { // el campo activo queda a la vista, nunca bajo la barra
+  if (!e.target.classList?.contains('peso-in')) return;
+  const el = e.target; setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'auto' }), 300);
+});
 
 // ---------- pesos editables ----------
 function editarPeso(el, fin) {
@@ -401,7 +500,7 @@ function enfocarPeso(i) { const el = [...$$(`.peso-in[data-i="${i}"]`)].find(x =
 function agregar(ticker) {
   const ex = pos.findIndex(p => p.ticker === ticker);
   if (ex >= 0) { avisar(`${ticker} ya está en la cartera`); enfocarPeso(ex); return; }
-  const falta = r1(100 - totalPeso());
+  const falta = r1(100 - validar().total);
   pos.push({ ticker, peso: falta > 0 ? falta : 5 });
   marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
   avisar(`${ticker} añadida con ${pesoTxt(pos[pos.length - 1].peso)}. Ajusta el peso si quieres.`); enfocarPeso(pos.length - 1);
@@ -461,7 +560,7 @@ $('#mi-plantilla').addEventListener('click', async () => {
   masAbrir(false); masBtn.focus();
   if (pos.length && !(await confirmar({
     titulo: 'Reemplazar las posiciones',
-    texto: `Se sustituirán las ${pos.length} posiciones actuales por el reparto de la plantilla ${nombrePlantilla(current.plantilla)}. ${logged() ? 'No se guarda hasta que pulses «Guardar cartera».' : 'Seguirás teniendo el borrador en este navegador.'}`,
+    texto: `Se sustituirán las ${pos.length} posiciones actuales por el reparto de la plantilla ${nombrePlantilla(current.plantilla)}. ${enCuenta() ? 'No se guarda en tu cuenta hasta que pulses «Guardar cartera».' : 'Seguirás teniendo el borrador en este dispositivo.'}`,
     ok: 'Reemplazar' }))) return;
   pos = repartoPlantilla(current.plantilla); marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
   toast('Reparto de la plantilla aplicado');
@@ -521,58 +620,63 @@ const CRIT = {
   deuda_ebitda: ['Deuda sobre EBITDA', 'Cumple si la deuda neta es menor de 2,5 veces el EBITDA', v => nf(v) + NB + 'veces'],
   roic: ['ROIC', 'Cumple si supera el 10 %', pct],
   margen_neto: ['Margen neto', 'Cumple si el beneficio neto supera el 10 % de las ventas', pct],
-  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => nf(v / 1e9) + NB + 'mil M USD'],
+  flujo_caja: ['Caja libre', 'Cumple si el flujo de caja libre es positivo', v => nf(v / 1e9) + ' miles de millones de USD'],
   crecimiento: ['Crecimiento de ventas', 'Cumple si las ventas suben respecto al año anterior', pct],
 };
 let empresas = [];
 function renderEmpresas() {
-  const q = norm($('#emp-buscar').value.trim()), ul = $('#empresas-lista');
+  const q = norm($('#emp-buscar').value.trim()), tb = $('#empresas-lista');
   const vistas = q ? empresas.filter(r => norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) : empresas;
-  ul.innerHTML = vistas.length ? vistas.map(r => `<li><button class="fila-emp" type="button" data-t="${esc(r.ticker)}" aria-label="Ver ficha de ${esc(r.nombre)} (${esc(r.ticker)}), ${esc(r.sector)}: supera ${r.cumplidos} de 5 comprobaciones">
-      <span><b>${esc(r.ticker)}</b> <small>${esc(r.nombre)}</small></span><span class="sector">${esc(r.sector)}</span>
-      <span class="marca-n">${r.cumplidos} de 5${r.evaluados < 5 ? `<small style="display:block;font-weight:400;color:var(--muted)">${5 - r.evaluados} sin dato</small>` : ''}</span></button></li>`).join('')
-    : `<li class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</li>`;
+  tb.innerHTML = vistas.length ? vistas.map(r => { const nd = 5 - r.evaluados;
+    return `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span><span class="sector-m">${esc(r.sector)}</span></td><td>${esc(r.sector)}</td>
+      <td class="num"><span class="marca-n">${r.cumplidos} de 5</span>${nd ? `<small>${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}</small>` : ''}</td>
+      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`; }).join('')
+    : `<tr><td colspan="4" class="estado-lista">${empresas.length ? 'Ninguna empresa coincide con tu búsqueda.' : 'Aún no hay datos. Se cargan desde la SEC cada noche.'}</td></tr>`;
   $('#emp-cuenta').textContent = empresas.length ? `${vistas.length} de ${empresas.length} empresas` : '';
 }
 async function loadEmpresas() {
-  $('#empresas-lista').innerHTML = '<li class="estado-lista">Cargando empresas…</li>';
+  $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">Cargando empresas…</td></tr>';
   try { empresas = await getJson('/ideas'); }
-  catch { $('#empresas-lista').innerHTML = '<li class="estado-lista">No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button></li>'; return; }
+  catch { $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button></td></tr>'; return; }
   renderEmpresas();
 }
 $('#emp-buscar').addEventListener('input', renderEmpresas);
-$('#empresas-lista').addEventListener('click', e => { const b = e.target.closest('[data-t]'); if (b) verFicha(b.dataset.t); });
+$('#empresas-lista').addEventListener('click', e => { const b = e.target.closest('[data-t]') || e.target.closest('tr')?.querySelector('[data-t]'); if (b) verFicha(b.dataset.t); });
+$('#ir-screener').addEventListener('click', () => { const s = $('#filtros-precio'); s.scrollIntoView({ behavior: 'auto' }); s.focus({ preventScroll: true }); }); // salto largo: sin animación
 
 async function verFicha(t) {
   let a; try { a = await getJson('/assets/' + t); } catch { return toast('No se pudo cargar la ficha'); }
   const c = a.criterios, periodo = c?.periodo || a.fundamentales[0]?.periodo || '';
   const filas = Object.entries(CRIT).map(([k, [label, regla, f]]) => {
-    const x = c?.[k], res = x?.ok === true ? ['ok', '✓ Cumple'] : x?.ok === false ? ['no', '✗ No cumple'] : ['nd', '– Sin dato'];
-    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span><span class="ck-val">${x?.valor != null ? f(x.valor) : 'No disponible'}</span></div></li>`;
+    const x = c?.[k], res = x?.ok === true ? ['ok', '✓ Cumple'] : x?.ok === false ? ['no', '✗ No cumple'] : ['nd', '– No disponible'];
+    return `<li><div class="ck-crit"><b>${label}</b><small>${regla}</small></div><div class="ck-res"><span class="res ${res[0]}">${res[1]}</span><span class="ck-val">${x?.valor != null ? f(x.valor) : 'Dato no disponible'}</span></div></li>`;
   }).join('');
-  const ok = c ? Object.entries(CRIT).filter(([k]) => c[k]?.ok === true).length : 0, nd = c ? Object.keys(CRIT).filter(k => c[k]?.ok == null).length : 5;
-  const hist = a.fundamentales.map(x => `<tr><td>${esc(x.periodo)}</td><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
+  const ok = c ? Object.keys(CRIT).filter(k => c[k]?.ok === true).length : 0, nd = c ? Object.keys(CRIT).filter(k => c[k]?.ok == null).length : 5;
+  const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
   $('#fi-titulo').textContent = a.nombre;
   $('#fi-sub').textContent = `${a.ticker} · ${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
-  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">Supera ${ok} de 5 comprobaciones${nd ? ` · ${nd} sin dato` : ''}</p>
+  $('#fi-cuerpo').innerHTML = `<p class="resumen-ficha">Supera ${ok} de 5 comprobaciones${nd ? ` · ${nd} no ${nd === 1 ? 'disponible' : 'disponibles'}` : ''}</p>
     <ul class="checks">${filas}</ul>
-    ${nd ? '<p class="mut peq">Una comprobación sin dato no cuenta ni a favor ni en contra.</p>' : ''}
-    <h3>Cifras de los últimos años</h3>
-    <div class="tabla-h" role="region" aria-label="Cifras históricas" tabindex="0"><table><caption class="sr">Cifras en miles de millones de USD; ROIC en porcentaje</caption>
-      <thead><tr><th scope="col">Año</th><th scope="col">Ventas</th><th scope="col">Beneficio neto</th><th scope="col">EBITDA</th><th scope="col">Caja libre</th><th scope="col">ROIC</th></tr></thead><tbody>${hist}</tbody></table></div>
-    <p class="mut peq">Miles de millones de dólares (USD), salvo el ROIC.</p>
-    <details class="ficha-det"><summary>Metodología y fuentes</summary><div><p>Las cifras salen de los informes anuales (10-K) que la empresa presenta ante la SEC (EDGAR). EBITDA = resultado operativo + amortizaciones. Caja libre = flujo de caja operativo − inversiones en inmovilizado. El ROIC se aproxima como resultado operativo × (1 − tasa de impuestos) ÷ (deuda a largo plazo + patrimonio − caja). Son cálculos aproximados y pueden contener errores.</p></div></details>
+    ${nd ? '<p class="mut peq">Una comprobación no disponible no suma ni resta.</p>' : ''}
+    <h3>Cifras de los últimos años · miles de millones de dólares (USD)</h3>
+    <p class="hint-scroll">Desliza la tabla hacia los lados para ver todas las columnas →</p>
+    <div class="tabla-h" role="region" aria-label="Cifras históricas, desplazable horizontalmente" tabindex="0"><table><caption class="sr">Cifras en miles de millones de dólares (USD); el ROIC va en porcentaje</caption>
+      <thead><tr><th scope="col">Año</th><th scope="col">Ventas</th><th scope="col">Beneficio neto</th><th scope="col">EBITDA</th><th scope="col">Caja libre</th><th scope="col">ROIC (%)</th></tr></thead><tbody>${hist}</tbody></table></div>
+    <p class="mut peq">Fuente: informes anuales (10-K) de la empresa ante la SEC (EDGAR). Importes en miles de millones de dólares estadounidenses (USD).</p>
+    <details class="ficha-det"><summary>Metodología</summary><div><p>EBITDA = resultado operativo + amortizaciones. Caja libre = flujo de caja operativo − inversiones en inmovilizado. El ROIC se aproxima como resultado operativo × (1 − tasa de impuestos) ÷ (deuda a largo plazo + patrimonio − caja). Son cálculos aproximados y pueden contener errores.</p></div></details>
     <details class="ficha-det"><summary>Glosario</summary><div>
       <p><b>ROIC:</b> cuánto gana la empresa por cada dólar invertido en su negocio. Es una medida de la empresa; no es la rentabilidad que obtendría un inversor.</p>
       <p><b>EBITDA:</b> beneficio operativo antes de intereses, impuestos y amortizaciones.</p>
-      <p><b>Caja libre:</b> dinero que queda tras pagar las operaciones y las inversiones necesarias.</p></div></details>`;
+      <p><b>Caja libre:</b> dinero que queda tras pagar las operaciones y las inversiones necesarias.</p>
+      <p><b>No disponible:</b> el dato falta en los informes. <b>No aplicable:</b> la medida no tiene sentido para ese activo (por ejemplo, el ROIC de un fondo).</p></div></details>`;
   const d = $('#dlg-ficha'); if (!d.open) d.showModal(); d.scrollTop = 0;
 }
 
 // ---------- carteras públicas ----------
 let publicas = null, publicasError = false;
+const etiquetaOrigen = o => o === 'ejemplo' ? '<span class="chip origen">Ejemplo de Klever</span>' : '<span class="chip origen usr">Publicada por un usuario</span>';
 function tarjetaPublica(p) {
-  return `<button class="tarjeta" type="button" data-pid="${p.id}"><b>${esc(p.nombre)}</b>
+  return `<button class="tarjeta" type="button" data-pid="${p.id}">${etiquetaOrigen(p.origen)}<b>${esc(p.nombre)}</b>
     <span class="t-meta">Plantilla ${esc(nombrePlantilla(p.plantilla))} · ${p.n_posiciones} posiciones</span>${p.tesis ? `<span class="t-tesis">${esc(p.tesis)}</span>` : ''}</button>`;
 }
 function renderPublicas() {
@@ -592,11 +696,11 @@ async function verPublica(id) {
   let p; try { p = await getJson('/public/' + id); } catch { return toast('No se pudo cargar la cartera'); }
   const r = calcResumen(p.posiciones.map(x => ({ ticker: x.ticker, peso: x.peso })));
   const d = $('#publica-detalle'); d.hidden = false;
-  d.innerHTML = `<h2>${esc(p.nombre)}</h2><p class="mut">Plantilla ${esc(nombrePlantilla(p.plantilla))}</p>${p.tesis ? `<p><b>Tesis:</b> ${esc(p.tesis)}</p>` : ''}
-    <div class="tabla-h" role="region" aria-label="Composición" tabindex="0"><table><caption class="sr">Composición de la cartera</caption><thead><tr><th scope="col">Activo</th><th scope="col">Sector</th><th scope="col">Peso</th></tr></thead><tbody>${p.posiciones.map(x =>
-      `<tr><td><b>${esc(x.ticker)}</b> <span class="mut">${esc(x.nombre)}</span></td><td style="text-align:left">${esc(x.sector)}</td><td class="num">${pesoTxt(x.peso)}</td></tr>`).join('')}</tbody></table></div>
-    <p class="mut peq">Reparto por sector: ${r.sectores.map(([s, v]) => `${esc(s)} ${pesoTxt(v)}`).join(' · ')}. Simulación educativa; no es una recomendación de inversión.</p>`;
-  d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  d.innerHTML = `<h2>${esc(p.nombre)}</h2><p>${etiquetaOrigen(p.origen)} <span class="mut">Plantilla ${esc(nombrePlantilla(p.plantilla))}</span></p>${p.tesis ? `<p><b>Tesis:</b> ${esc(p.tesis)}</p>` : ''}
+    <div class="tabla-h" role="region" aria-label="Composición" tabindex="0"><table><caption class="sr">Composición de la cartera</caption><thead><tr><th scope="col">Activo</th><th scope="col">Categoría</th><th scope="col">Peso</th></tr></thead><tbody>${p.posiciones.map(x =>
+      `<tr><th scope="row"><b>${esc(x.ticker)}</b> <span class="mut">${esc(x.nombre)}</span></th><td style="text-align:left">${esc(x.sector)}</td><td class="num">${pesoTxt(x.peso)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="mut peq">Distribución por categorías: ${r.sectores.map(([s, v]) => `${esc(s)} ${pesoTxt(v)}`).join(' · ')}. Simulación educativa; no es una recomendación de inversión.</p>`;
+  d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' });
 }
 let pendientePublica = null;
 const vistaActual = () => [...$$('[data-vista]')].find(s => !s.hidden)?.dataset.vista;
@@ -605,16 +709,19 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
   .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
 
 // ---------- portada: acción principal y vista previa real ----------
-$('#probar').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
+$('#probar').addEventListener('click', () => { // destino inequívoco: la elección de plantilla, con el foco allí
+  const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
+});
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));
 function renderPreview() {
   const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
-  const r = calcResumen(ps);
+  const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
   $('#prev').innerHTML = `<div class="prev"><div class="prev-cab"><b>Cartera de dividendos</b><span class="chip">Vista previa</span></div>
     <div class="prev-fila prev-th" aria-hidden="true"><span>Activo</span><span class="num">Peso</span><span class="num"><abbr>ROIC</abbr></span></div>
-    ${ps.map(p => `<div class="prev-fila"><span><b>${esc(p.ticker)}</b><small>${esc(by[p.ticker].nombre)}</small></span><span class="num">${pesoTxt(p.peso)}</span><span class="num mut">${pct(by[p.ticker].roic)}</span></div>`).join('')}
+    ${vis.map(p => `<div class="prev-fila"><span><b>${esc(p.ticker)}</b><small>${esc(by[p.ticker].nombre)}</small></span><span class="num">${pesoTxt(p.peso)}</span><span class="num">${roicTxt(by[p.ticker])}</span></div>`).join('')}
+    ${resto ? `<div class="prev-mas">+${resto} posiciones más. Lista abreviada: los totales incluyen las ${ps.length} posiciones.</div>` : ''}
     <div class="barra" aria-hidden="true"><i style="width:${Math.min(100, r.total)}%"></i></div>
-    <div class="prev-pie"><div><span>Asignado</span><b class="num">${pesoTxt(r.total)}</b></div><div><span><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio · ${r.nCon} de ${r.n} con dato</span><b class="num">${pct(r.roic)}</b></div></div></div>`;
+    <div class="prev-pie"><div><span>Total asignado</span><b class="num">${pesoTxt(r.total)}</b></div><div><span><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</span><b class="num">${pct(r.roic)}</b></div></div></div>`;
 }
 
 // ---------- reintentos genéricos ----------
@@ -628,6 +735,9 @@ document.addEventListener('click', e => {
   await redeem();
   await loadAssets();
   actualizarCabecera(); renderPreview(); loadScreener(); loadEmpresas(); loadPublicas();
-  if (logged()) await migrarBorrador();
+  if (logged()) {
+    await migrarBorrador();
+    if (avisoOtroDispositivo) toast('Has entrado en tu cuenta, pero el borrador que pediste guardar no estaba en este dispositivo y no se ha guardado. Sigue en el dispositivo donde lo creaste.', 10000);
+  }
   route(true);
 })();

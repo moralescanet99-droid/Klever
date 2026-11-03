@@ -7,7 +7,7 @@ export async function onRequestPost({ request, env }) {
   if (!/^[0-9a-f]{64}$/.test(token)) return json({ error: 'Enlace no válido' }, 400);
   const hash = await sha256(token);
   // Borrado atómico: solo uno puede canjearlo.
-  const row = await env.DB.prepare(`DELETE FROM enlaces WHERE hash = ? AND expira > datetime('now') RETURNING email`).bind(hash).first();
+  const row = await env.DB.prepare(`DELETE FROM enlaces WHERE hash = ? AND expira > datetime('now') RETURNING email, con_borrador`).bind(hash).first();
   if (!row) return json({ error: 'El enlace ha caducado o ya se usó' }, 400);
   await env.DB.prepare(`INSERT OR IGNORE INTO usuarios (email, acepto_en) VALUES (?, datetime('now'))`).bind(row.email).run();
   const user = await env.DB.prepare('SELECT id FROM usuarios WHERE email = ?').bind(row.email).first();
@@ -16,5 +16,5 @@ export async function onRequestPost({ request, env }) {
     env.DB.prepare(`INSERT INTO sesiones (hash, usuario_id, ultimo_acceso) VALUES (?, ?, datetime('now'))`).bind(await sha256(session), user.id),
     env.DB.prepare(`DELETE FROM enlaces WHERE expira < datetime('now','-1 day')`),
   ]);
-  return json({ token: session });
+  return json({ token: session, con_borrador: !!row.con_borrador });
 }
