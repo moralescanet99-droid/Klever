@@ -28,7 +28,7 @@ const EV = EVDIR;
   await p.reload(); await p.waitForSelector('#pos-tabla tbody tr'); await p.waitForTimeout(300); const trasRecarga = await vals(p);
   ev('F1', 'Crear, editar, guardar, cerrar, reabrir y recargar', 'Antes de guardar «Cambios locales pendientes…»; tras guardar «Guardada en tu cuenta» y toast corto «Cartera guardada»; la tarjeta no marca cambios locales; reabrir y recargar conservan 30/25/25/20',
     `inicial ${inicial}; antes de guardar «${antesG}»; tras guardar «${estG}», toast «${toastG}»; tarjeta «${tarjeta}»; reabierta ${reabierta}; tras recargar ${trasRecarga}`,
-    inicial === '25,0 25,0 25,0 25,0' && antesG.startsWith('Cambios locales pendientes de guardar en tu cuenta') && estG === 'Guardada en tu cuenta' && toastG === 'Cartera guardada' && !tarjeta.includes('Cambios locales') && tarjeta.includes('Asignado: 100 %') && reabierta === '30,0 25,0 25,0 20,0' && trasRecarga === reabierta, 'F1-mis-carteras-guardada.png');
+    inicial === '25,0 25,0 25,0 25,0' && antesG.startsWith('Cambios locales pendientes de guardar en tu cuenta') && estG === 'Guardada en tu cuenta' && toastG === 'Cartera guardada' && !tarjeta.includes('Cambios locales') && tarjeta.includes('Asignada al 100 %') && reabierta === '30,0 25,0 25,0 20,0' && trasRecarga === reabierta, 'F1-mis-carteras-guardada.png');
 
   // ===== F3: cambios locales pendientes: la tarjeta dice a qué versión pertenece cada cifra =====
   await peso(p).fill('28'); await p.waitForTimeout(150);                // 98 %: incompleta, pendiente de guardar

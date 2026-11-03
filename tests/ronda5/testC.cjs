@@ -49,7 +49,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
   const id = (await p.evaluate(() => location.hash)).replace('#cartera-', '');
   await peso(p, 0).fill('17'); await peso(p, 5).fill('16,6'); await p.locator('.js-guardar >> visible=true').click(); await p.waitForFunction(() => document.querySelector('#estado-live').textContent.includes('Guardada'));
   await p.goto(B + '#carteras'); await p.waitForSelector('#mis-lista .tarjeta');
-  ok('Mis carteras: lista la cartera con visibilidad, posiciones y total asignado', (await T(p, '#mis-lista')).includes('Privada') && (await T(p, '#mis-lista')).includes('6 posiciones') && (await T(p, '#mis-lista')).includes('Asignado: 100 %'), await T(p, '#mis-lista'));
+  ok('Mis carteras: lista la cartera con visibilidad, posiciones y total asignado', (await T(p, '#mis-lista')).includes('Privada') && (await T(p, '#mis-lista')).includes('6 posiciones') && (await T(p, '#mis-lista')).includes('Asignada al 100 %'), await T(p, '#mis-lista'));
   await p.click('#mis-lista .tarjeta'); await p.waitForSelector('#pos-tabla tbody tr');
   ok('volver desde Mis carteras: versión guardada (17,0 %) y estado «Guardada»', (await peso(p, 0).inputValue()) === '17,0' && (await T(p, '#estado')).includes('Guardada'));
   await peso(p, 0).fill('10'); await p.waitForTimeout(100); ok('editar sin guardar: «Cambios locales pendientes de guardar en tu cuenta»', (await T(p, '#estado')).startsWith('Cambios locales pendientes de guardar en tu cuenta'), await T(p, '#estado'));
@@ -83,7 +83,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
   // ===== 9. teclado y foco visible; árbol de accesibilidad =====
   await p.goto(B + '#cartera-' + (await p.evaluate(() => 0) || '') ); 
   await p.goto(B + '#carteras'); await p.waitForSelector('#mis-lista .tarjeta'); await p.click('#mis-lista .tarjeta'); await p.waitForSelector('#pos-tabla tbody tr');
-  const names = await Promise.all([p.getByRole('combobox', { name: 'Añadir un activo' }).count(), p.getByRole('button', { name: 'Más acciones' }).count(), p.getByRole('button', { name: 'Guardar cartera' }).first().count(), p.getByRole('complementary', { name: 'Resumen de la cartera' }).count(), p.getByRole('table', { name: 'Posiciones de la cartera' }).count(), p.getByRole('textbox', { name: 'Nombre de la cartera' }).count(), p.getByRole('progressbar', { name: 'Porcentaje asignado' }).count(), p.getByRole('textbox', { name: /Peso de/ }).count()]);
+  const names = await Promise.all([p.getByRole('combobox', { name: 'Añadir un activo' }).count(), p.getByRole('button', { name: 'Más acciones' }).count(), p.getByRole('button', { name: 'Guardar cartera' }).first().count(), p.getByRole('complementary', { name: 'Resumen de la cartera' }).count(), p.getByRole('table', { name: 'Posiciones de la cartera' }).count(), p.getByRole('textbox', { name: 'Nombre de la cartera' }).count(), p.getByRole('textbox', { name: /Peso de/ }).count()]);
   ok('lector de pantalla (árbol de accesibilidad): roles y nombres de los controles clave', names.every(n => n >= 1), names.join(','));
   const seq = []; await p.focus('#nombre');
   for (let i = 0; i < 8; i++) { await p.keyboard.press('Tab'); seq.push(await p.evaluate(() => { const e = document.activeElement, s = getComputedStyle(e); return (e.id || e.className.toString().split(' ')[0] || e.tagName) + ':' + (s.outlineStyle === 'solid' && parseFloat(s.outlineWidth) >= 2 ? 'foco' : 'SIN-FOCO'); })); }

@@ -30,7 +30,7 @@ const EV = EVDIR;
   await p.click('#nueva-cancelar');
   const txt = (await T(p, '#mis-lista')).replace(/\s+/g, ' ');
   ev('E3', 'Datos de cada cartera', 'Nombre, privada/pública, posiciones, total asignado y última modificación SOLO si existe', `«${txt}»`,
-    txt.includes('Con posiciones') && txt.includes('Privada') && txt.includes('2 posiciones · Asignado: 88 % (incompleta)') && txt.includes('Modificada el') && txt.includes('Sin posiciones') && /Solo creada.*Creada el/.test(txt) && !/Solo creada.*Modificada/.test(txt), 'E1-mis-carteras-390.png');
+    txt.includes('Con posiciones') && txt.includes('Privada') && /Falta asignar 12\s%.*2 posiciones/.test(txt) && txt.includes('Modificada el') && txt.includes('Sin posiciones') && /Solo creada.*Creada el/.test(txt) && !/Solo creada.*Modificada/.test(txt), 'E1-mis-carteras-390.png');
   ev('E3b', 'Fechas no inventadas', 'Una cartera nunca modificada muestra «Creada el», no «Modificada»', `actualizado_en de «Solo creada» = ${JSON.stringify((await api(p, 'GET', '/portfolios')).j.find(x => x.nombre === 'Solo creada').actualizado_en)}; texto: ${/Solo creada.*?(Creada el [^A]*)/.exec(txt)?.[1]?.trim()}`,
     (await api(p, 'GET', '/portfolios')).j.find(x => x.nombre === 'Solo creada').actualizado_en === null, '');
   await p.ctx.close();
