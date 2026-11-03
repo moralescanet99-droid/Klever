@@ -31,6 +31,8 @@ Pendiente antes de lanzar: revisar secciones 3 y 4 de los términos de TradingVi
 
 Pendientes tuyos: ver `PENDIENTES.md`.
 
+**Memoria del proyecto (contexto, decisiones, estado, cómo retomar): `procesos-klever/README.md`.**
+
 ## Acceso por enlace mágico (Brevo)
 1. Cuenta gratuita en Brevo → verifica un correo remitente → crea una clave API.
 2. `wrangler pages secret put BREVO_API_KEY` y `wrangler pages secret put MAIL_FROM` (el remitente verificado).

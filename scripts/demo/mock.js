@@ -1,0 +1,46 @@
+
+// ---------- Backend simulado en memoria (solo demo) ----------
+const UNIVERSE = %s;
+function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
+for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
+  for(const y of [2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28})}
+  DB.fund[a.ticker].reverse();
+  const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
+  DB.ideas[a.ticker]={periodo:L.periodo,
+    deuda_ebitda:fin?{ok:null,valor:null}:{ok:L.deuda_neta/L.ebitda<2.5,valor:L.deuda_neta/L.ebitda},roic:fin?{ok:null,valor:null}:{ok:L.roic>0.1,valor:L.roic},
+    margen_neto:{ok:L.beneficio_neto/L.ingresos>0.1,valor:L.beneficio_neto/L.ingresos},flujo_caja:{ok:L.flujo_caja_libre>0,valor:L.flujo_caja_libre},
+    crecimiento:{ok:L.ingresos>P.ingresos,valor:L.ingresos/P.ingresos-1}}}
+const latest=t=>DB.fund[t]?.[0];
+function addPort(uid,nombre,plantilla,publico,tesis,posiciones){const id=DB.nextId++;DB.ports.push({id,usuario_id:uid,nombre,plantilla,publico:publico?1:0,tesis,creado_en:'2026-11-03'});DB.pos[id]=posiciones;return id}
+addPort(0,'Dividendos defensivos','dividendos',1,'Fondos de dividendos y empresas de consumo, salud y energía.',[{ticker:'SCHD',peso:30},{ticker:'KO',peso:20},{ticker:'PG',peso:20},{ticker:'JNJ',peso:15},{ticker:'XOM',peso:15}]);
+addPort(0,'Oro y mineras','oro',1,'Oro físico y mineras de oro como contrapeso a la renta variable.',[{ticker:'GLD',peso:50},{ticker:'IAU',peso:20},{ticker:'GDX',peso:20},{ticker:'NEM',peso:10}]);
+addPort(0,'Crecimiento tecnológico','riesgo',1,'Cinco grandes empresas tecnológicas y de internet.',[{ticker:'NVDA',peso:25},{ticker:'MSFT',peso:25},{ticker:'GOOGL',peso:20},{ticker:'AMZN',peso:20},{ticker:'META',peso:10}]);
+const A=t=>DB.assets.find(a=>a.ticker===t);
+const J=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{'content-type':'application/json'}});
+function view(p){const posiciones=(DB.pos[p.id]||[]).map(x=>({...x,nombre:A(x.ticker).nombre,sector:A(x.ticker).sector,tipo:A(x.ticker).tipo,roic:latest(x.ticker)?.roic??null,fecha_entrada:'2026-11-03'})).sort((a,b)=>b.peso-a.peso);
+  const total=posiciones.reduce((s,r)=>s+r.peso,0);const sectores={};posiciones.forEach(r=>sectores[r.sector]=(sectores[r.sector]||0)+r.peso);return{...p,posiciones,total,sectores}}
+const realFetch=window.fetch.bind(window);
+window.fetch=async(url,opts={})=>{
+  if(typeof url!=='string'||!url.startsWith('/api'))return realFetch(url,opts);
+  const path=url.slice(4),m=(opts.method||'GET').toUpperCase(),body=opts.body?JSON.parse(opts.body):{};
+  const tk=((opts.headers||{}).authorization||'').replace('Bearer ',''),uid=DB.sessions[tk];
+  let g;
+  if(path==='/assets'&&m==='GET')return J(DB.assets.map(a=>({ticker:a.ticker,nombre:a.nombre,tipo:a.tipo,sector:a.sector,...(latest(a.ticker)||{})})));
+  if((g=path.match(/^\/assets\/(\w+)$/))){const t=g[1].toUpperCase(),a=A(t);return a?J({...a,fundamentales:DB.fund[t]||[],criterios:DB.ideas[t]||null}):J({error:'No encontrado'},404)}
+  if(path==='/ideas')return J(Object.keys(DB.ideas).map(t=>{const c=DB.ideas[t],k=Object.keys(c).filter(x=>x!=='periodo');return{ticker:t,nombre:A(t).nombre,sector:A(t).sector,periodo:c.periodo,cumplidos:k.filter(x=>c[x].ok===true).length,evaluados:k.filter(x=>c[x].ok!==null).length,criterios:c}}).sort((a,b)=>b.cumplidos-a.cumplidos||a.ticker.localeCompare(b.ticker)));
+  if(path==='/public')return J(DB.ports.filter(p=>p.publico).sort((a,b)=>(a.usuario_id===0?0:1)-(b.usuario_id===0?0:1)||b.id-a.id).map(p=>({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',n_posiciones:(DB.pos[p.id]||[]).length})));
+  if((g=path.match(/^\/public\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.publico);if(!p)return J({error:'No encontrado'},404);const v=view(p);return J({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',posiciones:v.posiciones})}
+  if(path==='/login')return J({ok:true,dev_link:'#'});
+  if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
+  if(path==='/logout'){delete DB.sessions[tk];return J({ok:true})}
+  if(!uid)return J({error:'No autorizado'},401);
+  if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).reverse());
+  if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);return J({id:addPort(uid,body.nombre.slice(0,80),body.plantilla,0,null,[])},201)}
+  if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
+    if(m==='GET')return J(view(p));
+    if(m==='DELETE'){DB.ports=DB.ports.filter(x=>x!==p);delete DB.pos[p.id];return J({ok:true})}
+    if(m==='PUT'){const ps=body.posiciones||[];let tot=0;for(const x of ps){if(!A(x.ticker))return J({error:'Algún ticker no está en el universo'},400);if(!(Number(x.peso)>0&&Number(x.peso)<=100))return J({error:'Posición no válida: '+x.ticker},400);tot+=Number(x.peso)}tot=Math.round(tot*10)/10;if(tot>100)return J({error:'Los pesos suman más de 100 %% (exceso de asignación: '+String(Math.round((tot-100)*10)/10).replace('.',',')+' %%)'},400);if(p.publico&&tot!==100)return J({error:'Esta cartera es pública y debe mantener el 100 %% asignado. Deja de publicarla para guardar un reparto incompleto.'},400);DB.pos[p.id]=ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)}));return J({ok:true})}
+    if(m==='PATCH'){const nombre=body.nombre!==undefined?String(body.nombre).trim().slice(0,80):p.nombre;if(!nombre)return J({error:'El nombre no puede estar vacío'},400);const tesis=body.tesis!==undefined?String(body.tesis).trim().slice(0,600):p.tesis;const pub=body.publico!==undefined?(body.publico?1:0):p.publico;if(pub){const ps=DB.pos[p.id]||[],tot=Math.round(ps.reduce((s,x)=>s+x.peso,0)*10)/10;if(!ps.length)return J({error:'Para publicar, añade al menos una posición.'},400);if(tot!==100)return J({error:'Para publicar, la cartera debe tener el 100 %% asignado (ahora tiene '+String(tot).replace('.',',')+' %%).'},400);if(!tesis)return J({error:'Para publicar, escribe una tesis.'},400)}p.nombre=nombre;p.tesis=tesis||null;p.publico=pub;return J({ok:true})}}
+  return J({error:'Ruta no encontrada'},404)};
