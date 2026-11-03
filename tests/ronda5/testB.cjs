@@ -27,8 +27,9 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   await p.locator('.pc-toggle').first().click();
   // reserva de espacio: llegar a la última posición
   await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); await p.waitForTimeout(200);
-  const ult = await p.evaluate(() => { const els = [...document.querySelectorAll('.peso-in')].filter(x => x.offsetParent); const e = els[els.length - 1]; return { b: Math.round(e.getBoundingClientRect().bottom), barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().top), pad: parseFloat(getComputedStyle(document.querySelector('main')).paddingBottom) }; });
-  ok('móvil: se puede llegar a la última posición sin que la barra la tape', ult.b <= ult.barra && ult.pad >= 72, JSON.stringify(ult));
+  const ult = await p.evaluate(() => { const els = [...document.querySelectorAll('.peso-in')].filter(x => x.offsetParent); const e = els[els.length - 1]; return { b: Math.round(e.getBoundingClientRect().bottom), barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().top), enlace: Math.round(document.querySelector('#cookies-link').getBoundingClientRect().bottom), padPie: parseFloat(getComputedStyle(document.querySelector('.pie')).paddingBottom), alto: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().height) }; });
+  // Ronda 10: la reserva de la barra pasó de <main> al pie (lo que de verdad quedaba tapado eran sus enlaces). Se exige MÁS: el último enlace del pie queda sobre la barra y el relleno del pie cubre su altura.
+  ok('móvil: se puede llegar a la última posición y al último enlace del pie sin que la barra los tape', ult.b <= ult.barra && ult.enlace <= ult.barra && ult.padPie >= ult.alto, JSON.stringify(ult));
   // teclado virtual (emulado con viewport reducido)
   await p.setViewportSize({ width: 390, height: 420 }); await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); await p.locator('.peso-in >> visible=true').last().focus(); await p.waitForTimeout(600);
   const kb = await p.evaluate(() => { const e = document.activeElement.getBoundingClientRect(), bar = document.querySelector('#barra-guardar').getBoundingClientRect(); return { top: Math.round(e.top), bottom: Math.round(e.bottom), barraTop: Math.round(bar.top), vh: innerHeight }; });

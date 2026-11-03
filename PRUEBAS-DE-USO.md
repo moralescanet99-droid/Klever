@@ -27,8 +27,8 @@ Cada tarea tiene un resultado esperado. Anota si coincide, si dudaste o si te pe
 
 ## Qué se ha probado ya y qué no
 
-- **Automático (hecho):** estos flujos están cubiertos por las baterías E y F en Chromium, con servidor local y datos inventados; los resultados esperado/observado están en `ronda8/LEEME.md`. Cómo repetirlo desde cero: `LEEME-PRUEBAS.md`.
-- **Pendiente (manual):** móviles reales, Safari y Firefox, lector de pantalla, zoom real, email real, conflicto entre dos dispositivos reales (ver `ronda8/pruebas-manuales.md`). **Nadie ha ejecutado todavía ninguna de ellas.**
+- **Automático (hecho):** estos flujos están cubiertos por las baterías E y F en Chromium, con servidor local y datos inventados; los resultados esperado/observado están en `ronda10/LEEME.md`. Cómo repetirlo desde cero: `LEEME-PRUEBAS.md`.
+- **Pendiente (manual):** móviles reales, Safari y Firefox, lector de pantalla, zoom real, email real, conflicto entre dos dispositivos reales (ver `ronda10/pruebas-manuales.md`). **Nadie ha ejecutado todavía ninguna de ellas.**
 
 ## Qué observar y cómo anotarlo
 
@@ -37,3 +37,10 @@ Por tarea: ¿tardó en entenderse?, ¿qué texto no se entendió?, ¿dónde dud�
 ## Fuera de alcance
 
 No hay (ni se simulan) las conexiones con Revolut y Trade Republic, el artículo diario personalizado ni el consejo diario de inversión: forman parte de un futuro plan de pago.
+
+## Novedades de la ronda 10 que conviene observar
+- **Avisos:** los de éxito («Cartera guardada») salen bajo la cabecera y se cierran solos; los **errores** (por ejemplo «No se pudo cargar la ficha») **se quedan** hasta pulsar «Cerrar aviso». Un fallo de guardado del editor sigue en el estado y la barra inferior.
+- **Resumen de ROIC:** a la vista el ROIC medio, su cobertura y «No representa la rentabilidad de tu cartera»; «Cómo se calcula y qué se excluye» abre el detalle.
+- **Móvil:** el pie es más corto («Fuentes y límites de los datos» plegado) y al llegar al final de la página sus enlaces ya no quedan tapados por la barra inferior.
+- **Estado:** «Solo en este dispositivo» → «Cambios locales pendientes…» → «Guardada en tu cuenta» → «Pública» + «Tus cambios aún no son públicos».
+- **Para validar con correo real y en remoto:** `ronda10/GUION-VALIDACION-REMOTA.md` (bloqueado hasta tener accesos: `ronda10/BLOQUEOS.md`).

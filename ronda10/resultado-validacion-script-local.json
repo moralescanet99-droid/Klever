@@ -1,0 +1,54 @@
+{
+ "base": "http://localhost:8788",
+ "modoDev": true,
+ "resultados": [
+  {
+   "id": "R1",
+   "escenario": "Acceso con enlace recibido por correo",
+   "resultado": "OK",
+   "observado": "MODO_DEV: enlace de la respuesta (no es correo real)"
+  },
+  {
+   "id": "R2",
+   "escenario": "El enlace es de un solo uso",
+   "resultado": "OK",
+   "observado": "segundo canje HTTP 400"
+  },
+  {
+   "id": "R3",
+   "escenario": "Persistencia al recargar (misma sesión, lectura nueva)",
+   "resultado": "OK",
+   "observado": "HTTP 201/200"
+  },
+  {
+   "id": "R4",
+   "escenario": "Cerrar sesión invalida la sesión",
+   "resultado": "OK",
+   "observado": "logout HTTP 200; usar la sesión cerrada HTTP 401"
+  },
+  {
+   "id": "R5",
+   "escenario": "Persistencia tras cerrar sesión y volver a entrar",
+   "resultado": "OK",
+   "observado": "HTTP 200; revisión 0"
+  },
+  {
+   "id": "R6",
+   "escenario": "Conflicto entre dos sesiones independientes (misma revisión)",
+   "resultado": "OK",
+   "observado": "sesión 2 HTTP 200; sesión 3 HTTP 409; cuenta final GLD:70,IAU:30"
+  },
+  {
+   "id": "R7",
+   "escenario": "Fallo de guardado (ticker inexistente) sin cambios y recuperación al reintentar",
+   "resultado": "OK",
+   "observado": "fallo HTTP 400 sin cambiar la revisión (1); reintento HTTP 200"
+  },
+  {
+   "id": "R8",
+   "escenario": "Separación público / privado",
+   "resultado": "OK",
+   "observado": "privada→HTTP 404; pública→HTTP 200 sin email/usuario/revisión; despublicada→HTTP 404"
+  }
+ ]
+}

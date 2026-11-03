@@ -12,7 +12,7 @@ Todo lo necesario está en este repositorio: código, dependencias fijadas (`pac
 ```bash
 git clone https://github.com/moralescanet99-droid/Klever.git
 cd Klever
-git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primeras líneas de ronda9/resultado-ejecucion.txt y en ronda9/LEEME.md (los commits posteriores solo añaden resultados e informes)
+git checkout <COMMIT>   # el commit EXACTO del código probado figura en la primeras líneas de ronda10/resultado-ejecucion.txt y en ronda10/LEEME.md (los commits posteriores solo añaden resultados e informes)
 npm ci                                   # instala wrangler 3.114.17 y playwright 1.63.0 EXACTOS (package-lock.json)
 npx playwright install chromium          # navegador para las pruebas (una sola vez)
 ```
@@ -34,7 +34,7 @@ bash tests/run-all.sh                   # ~15 min; arranca un servidor limpio en
                                         # CÓDIGO DE SALIDA 0 solo si TODO pasa; ≠ 0 si falla el arranque, hay timeout, falta el resultado o hay fallos
 bash tests/ronda8/test-ejecutor.sh      # prueba del propio ejecutor (fallos, timeouts y puertos ocupados deliberados), ~4 min
 ```
-Escribe el resultado literal y la versión del código en `ronda9/resultado-ejecucion.txt` y los datos observados en `ronda9/evidencias-*.json`. Variables: `RONDA` (ronda9), `LIMITE_BATERIA` (900 s), `PORT` (8788).
+Escribe el resultado literal y la versión del código en `ronda10/resultado-ejecucion.txt` y los datos observados en `ronda10/evidencias-*.json`. Variables: `RONDA` (ronda10), `LIMITE_BATERIA` (900 s), `PORT` (8788).
 
 | Prueba | Qué comprueba | Contra qué |
 |---|---|---|
@@ -43,13 +43,17 @@ Escribe el resultado literal y la versión del código en `ronda9/resultado-ejec
 | `tests/ronda7/testF` | Guardado fiable, conflicto, E16a corregida, diálogo móvil, desconexión real | Servidor real local + Chromium |
 | `tests/ronda8/testG` | Respuesta tardía de un guardado/publicación mientras se abre otra cartera | Servidor real local + Chromium |
 | `tests/ronda8/test-ejecutor.sh` (18 casos) | Que `run-all.sh` falle (código ≠ 0) ante fallos, caídas, timeouts, servidor que no arranca y, para la demo, «DEMO OK» con código 1, puerto ocupado (sin usar un servidor ajeno), etc., y limpie procesos | Fixtures en `tests/ronda8/fixtures/` |
-| `tests/ronda9/verificar-api.mjs` | La API por HTTP: guardado atómico, revisión, 20 pares concurrentes, lecturas sin mezcla, `GET` público sin versiones no públicas. **Repetible contra un despliegue remoto de PRUEBA** (`BASE_URL=…`) | Servidor local en `run-all.sh`; D1 remoto: `ronda9/GUION-BETA-Y-D1-REMOTO.md` |
+| `tests/ronda10/testH.cjs` (16) | Pulido visual: avisos en zona reservada (sin solapes, legibles, errores persistentes), resumen de ROIC plegable, estado en móvil y acciones alcanzables en 320/390/1440 (texto ampliado y teclado **simulados**) | Servidor real local + Chromium |
+| `tests/ronda10/unit-acceso.mjs`, `tests/ronda10/seguridad-http.mjs` | Acceso: envío solo por correo (simulado), un solo uso, caducidad, límites, hash de tokens, sin enlace en pantalla ni claves en lo público; HTTP contra un servidor arrancado **sin** `DEV_RETURN_LINK` | Manejadores reales sobre SQLite; servidor local con `SIN_ENLACE_DEV=1` |
+| `tests/ronda10/validar-acceso-real.mjs` | **Asistida, no entra en `run-all.sh`**: correo realmente enviado, persistencia, dos sesiones, caducidad (`CADUCIDAD=1`) | Despliegue de PRUEBA con correo real (**bloqueado: faltan credenciales**, `ronda10/BLOQUEOS.md`); en local solo con `MODO_DEV=1` (no valida correo real) |
+| `tests/ronda10/capturas.cjs`, `tests/ronda10/medir.cjs` | Capturas y mediciones comparables antes/después (`antes`/`despues`) | Servidor local + Chromium |
+| `tests/ronda9/verificar-api.mjs` | La API por HTTP: guardado atómico, revisión, 20 pares concurrentes, lecturas sin mezcla, `GET` público sin versiones no públicas. **Repetible contra un despliegue remoto de PRUEBA** (`BASE_URL=…`) | Servidor local en `run-all.sh`; D1 remoto: `ronda10/GUION-VALIDACION-REMOTA.md` |
 | `tests/ronda5/demotest.cjs` | La demo HTML (simulada, sin persistencia) | `demo/index.html` en memoria |
 
 Las baterías antiguas `tests/ronda4/` y `shots*.cjs` son históricas (generan capturas de rondas anteriores y llevan rutas de aquel entorno).
 
 ## Qué NO se puede repetir con este proyecto
-Email real (Brevo), carga real de la SEC, widgets de TradingView, móviles reales, Safari/Firefox, lector de pantalla, zoom real del navegador y teclado móvil real: ver `ronda9/pruebas-manuales.md`. **Ninguna de ellas se ha ejecutado.** Tampoco se ha probado **Cloudflare D1 remoto**: todo lo «transaccional» está probado con D1 local simulada (Miniflare) y con SQLite real.
+Email real (Brevo), carga real de la SEC, widgets de TradingView, móviles reales, Safari/Firefox, lector de pantalla, zoom real del navegador y teclado móvil real: ver `ronda10/pruebas-manuales.md`. **Ninguna de ellas se ha ejecutado.** Tampoco se ha probado **Cloudflare D1 remoto**: todo lo «transaccional» está probado con D1 local simulada (Miniflare) y con SQLite real.
 
 ## Demo HTML
 `demo/index.html` es una **demostración sin persistencia de cuenta**: simula el servidor en la memoria de la página y al recargar se pierde todo. No es equivalente al servidor probado; sirve para enseñar la interfaz. Su casilla «Simular fallo de red al guardar» es una simulación explícita (el modo sin conexión del navegador no afecta a las peticiones simuladas en memoria). Para probar la desconexión de verdad, usa la versión completa local.
