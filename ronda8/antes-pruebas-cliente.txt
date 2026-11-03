@@ -1,0 +1,6 @@
+Batería G (cliente) de la ronda 8 ejecutada contra el cliente de la ronda 7 (commit 8d427c2), ANTES de corregir
+
+FALLA [H1] Guardado lento de A que termina cuando ya se ha abierto B  [durante: B «Cartera B» / «Guardando en tu cuenta…»; tras la respuesta de A: B «Cartera B» / «Cambios locales pendientes de guardar en tu cuenta», pesos 50,0 50,0; A en la cuenta: «Nombre de A guardado», revisión 1; copia local de A=true, de B=false; guardar B después: botón Guardar activo=false, diálogo de conflicto=0, estado «Guardada en tu cuenta», cuenta B «Cartera B» KO:50,PG:50]
+FALLA [H2] Publicación lenta de A que termina cuando ya se ha abierto B  [B «Cartera B2»: chip «Pública», botón «Dejar de publicar»; A pública en la cuenta=1; guardar B después: botón Guardar activo=true, estado «Cambios locales pendientes de guardar en tu cuenta», diálogo de conflicto=1]
+OK    [H3] Sin errores de JavaScript en la batería G
+RESULTADO: 1 correctas, 2 fallos

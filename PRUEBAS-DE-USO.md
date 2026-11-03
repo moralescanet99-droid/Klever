@@ -27,8 +27,8 @@ Cada tarea tiene un resultado esperado. Anota si coincide, si dudaste o si te pe
 
 ## Qué se ha probado ya y qué no
 
-- **Automático (hecho):** estos flujos están cubiertos por las baterías E y F en Chromium, con servidor local y datos inventados; los resultados esperado/observado están en `ronda7/LEEME.md`. Cómo repetirlo desde cero: `LEEME-PRUEBAS.md`.
-- **Pendiente (manual):** móviles reales, Safari y Firefox, lector de pantalla, zoom real, email real, conflicto entre dos dispositivos reales (ver `ronda7/pruebas-manuales.md`). **Nadie ha ejecutado todavía ninguna de ellas.**
+- **Automático (hecho):** estos flujos están cubiertos por las baterías E y F en Chromium, con servidor local y datos inventados; los resultados esperado/observado están en `ronda8/LEEME.md`. Cómo repetirlo desde cero: `LEEME-PRUEBAS.md`.
+- **Pendiente (manual):** móviles reales, Safari y Firefox, lector de pantalla, zoom real, email real, conflicto entre dos dispositivos reales (ver `ronda8/pruebas-manuales.md`). **Nadie ha ejecutado todavía ninguna de ellas.**
 
 ## Qué observar y cómo anotarlo
 

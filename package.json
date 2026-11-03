@@ -1,6 +1,6 @@
 {
   "name": "klever",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "description": "Klever (beta gratuita): carteras simuladas. Cloudflare Pages + Functions + D1.",
   "type": "module",
@@ -11,13 +11,14 @@
     "servidor:stop": "bash scripts/local/servidor.sh stop",
     "test": "bash tests/run-all.sh",
     "demo:build": "python3 scripts/demo/build_demo.py",
-    "test:servidor": "node tests/ronda7/unit-servidor.mjs"
+    "test:servidor": "node tests/ronda7/unit-servidor.mjs && node tests/ronda8/unit-carreras.mjs && node tests/ronda8/unit-migracion.mjs",
+    "test:ejecutor": "bash tests/ronda8/test-ejecutor.sh"
   },
   "devDependencies": {
     "playwright": "1.63.0",
     "wrangler": "3.114.17"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.13"
   }
 }

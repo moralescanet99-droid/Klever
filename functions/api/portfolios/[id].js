@@ -1,4 +1,4 @@
-import { json, auth, readJson, validarComposicion, puedePublicar } from '../../_lib.js';
+import { json, auth, readJson, validarComposicion, puedePublicar, tickersDesconocidos, ERROR_INTERNO } from '../../_lib.js';
 
 async function owned(env, user, id) {
   return await env.DB.prepare('SELECT * FROM portafolios WHERE id = ? AND usuario_id = ?').bind(id, user.id).first();
@@ -7,14 +7,21 @@ async function owned(env, user, id) {
 export async function onRequestGet({ request, env, params }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
-  const p = await owned(env, user, params.id);
-  if (!p) return json({ error: 'No encontrado' }, 404);
-  const { results } = await env.DB.prepare(`
+  // Cartera y posiciones en UN lote (una transacción = una instantánea): nunca se mezclan dos versiones.
+  let rc, rp;
+  try {
+    [rc, rp] = await env.DB.batch([
+      env.DB.prepare('SELECT * FROM portafolios WHERE id = ? AND usuario_id = ?').bind(params.id, user.id),
+      env.DB.prepare(`
     SELECT po.ticker, po.peso, po.fecha_entrada, a.nombre, a.sector, a.tipo, f.roic
     FROM posiciones po JOIN activos a ON a.ticker = po.ticker
     LEFT JOIN fundamentales f ON f.ticker = po.ticker
       AND f.periodo = (SELECT MAX(periodo) FROM fundamentales WHERE ticker = po.ticker)
-    WHERE po.portafolio_id = ? ORDER BY po.peso DESC`).bind(p.id).all();
+    WHERE po.portafolio_id = ? ORDER BY po.peso DESC`).bind(params.id)]);
+  } catch (e) { console.error('leer cartera:', e); return json({ error: 'No se pudo leer la cartera. Inténtalo de nuevo.' }, 500); }
+  const p = rc.results[0];
+  if (!p) return json({ error: 'No encontrado' }, 404);
+  const results = rp.results;
   const total = results.reduce((s, r) => s + r.peso, 0);
   const sectores = {};
   for (const r of results) sectores[r.sector] = (sectores[r.sector] || 0) + r.peso;
@@ -50,19 +57,22 @@ export async function onRequestPut({ request, env, params }) {
   }
   if (!esRevision(b.revision)) return json({ error: 'Falta la revisión de la cartera desde la que editas.' }, 400);
   if (b.revision !== p.revision) return conflicto(p);          // salida rápida; la garantía real es la condición del UPDATE
+  const desconocidos = await tickersDesconocidos(env, pos);
+  if (desconocidos.length) return json({ error: 'Algún ticker no está en el universo' }, 400);
   const token = crypto.randomUUID();
   const mia = 'EXISTS (SELECT 1 FROM portafolios WHERE id = ? AND token_escritura = ?)';
   const stmts = [
-    env.DB.prepare(`UPDATE portafolios SET nombre = ?, tesis = ?, revision = revision + 1, token_escritura = ?, actualizado_en = datetime('now') WHERE id = ? AND revision = ?`)
+    // RETURNING: la revisión y la fecha que se devuelven son las de ESTA escritura, leídas dentro de la misma transacción
+    env.DB.prepare(`UPDATE portafolios SET nombre = ?, tesis = ?, revision = revision + 1, token_escritura = ?, actualizado_en = datetime('now') WHERE id = ? AND revision = ? RETURNING revision, actualizado_en`)
       .bind(nombre, tesis || null, token, p.id, p.revision),
     env.DB.prepare(`DELETE FROM posiciones WHERE portafolio_id = ? AND ${mia}`).bind(p.id, p.id, token)];
   for (const x of pos)
     stmts.push(env.DB.prepare(`INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT id, ?, ? FROM portafolios WHERE id = ? AND token_escritura = ?`).bind(x.ticker, Number(x.peso), p.id, token));
   let res;
-  try { res = await env.DB.batch(stmts); } catch { return json({ error: 'Algún ticker no está en el universo' }, 400); } // el lote se revierte entero
-  if (res[0].meta.changes !== 1) return conflicto(await owned(env, user, params.id) || p);                              // otra escritura ganó: no se tocó nada
-  const u = await env.DB.prepare('SELECT revision, actualizado_en FROM portafolios WHERE id = ?').bind(p.id).first();
-  return json({ ok: true, revision: u.revision, actualizado_en: u.actualizado_en });
+  try { res = await env.DB.batch(stmts); } catch (e) { console.error('guardar cartera (PUT):', e); return json({ error: ERROR_INTERNO }, 500); } // el lote se revierte entero
+  const mio = res[0].results?.[0];
+  if (!mio) return conflicto(await owned(env, user, params.id) || p);                                                                         // otra escritura ganó: no se tocó nada
+  return json({ ok: true, revision: mio.revision, actualizado_en: mio.actualizado_en });
 }
 
 export async function onRequestDelete({ request, env, params }) {
@@ -94,9 +104,12 @@ export async function onRequestPatch({ request, env, params }) {
   }
   if (!esRevision(b.revision)) return json({ error: 'Falta la revisión de la cartera desde la que editas.' }, 400);
   if (b.revision !== p.revision) return conflicto(p);
-  const r = await env.DB.prepare(`UPDATE portafolios SET nombre = ?, tesis = ?, publico = ?, revision = revision + 1, token_escritura = ?, actualizado_en = datetime('now') WHERE id = ? AND revision = ?`)
-    .bind(nombre, tesis || null, publico, crypto.randomUUID(), p.id, p.revision).run();
-  if (r.meta.changes !== 1) return conflicto(await owned(env, user, params.id) || p);
-  const u = await env.DB.prepare('SELECT revision, actualizado_en FROM portafolios WHERE id = ?').bind(p.id).first();
-  return json({ ok: true, revision: u.revision, actualizado_en: u.actualizado_en });
+  let mio;
+  try {
+    const r = await env.DB.prepare(`UPDATE portafolios SET nombre = ?, tesis = ?, publico = ?, revision = revision + 1, token_escritura = ?, actualizado_en = datetime('now') WHERE id = ? AND revision = ? RETURNING revision, actualizado_en`)
+      .bind(nombre, tesis || null, publico, crypto.randomUUID(), p.id, p.revision).all();
+    mio = r.results?.[0];
+  } catch (e) { console.error('guardar cartera (PATCH):', e); return json({ error: ERROR_INTERNO }, 500); }
+  if (!mio) return conflicto(await owned(env, user, params.id) || p);
+  return json({ ok: true, revision: mio.revision, actualizado_en: mio.actualizado_en }); // los de ESTA escritura, no «los vigentes»
 }

@@ -307,7 +307,7 @@ $('#form-nueva').addEventListener('submit', async e => {
 async function cargarCartera(id) {
   let c; try { c = await api('/portfolios/' + id); } catch (err) { toast(err.message); return false; }
   current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, fecha: c.actualizado_en || c.creado_en || '' };
-  pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saveErr = null; copiaLocal = false;
+  pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = '';
   await recuperarCambiosLocales(); return true;
 }
@@ -358,12 +358,12 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
 }
 function abrirInvitado(plantilla) {
   current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
-  pos = repartoPlantilla(plantilla); rev = savedRev = 0; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
+  pos = repartoPlantilla(plantilla); rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
   guardarBorrador(); go('#cartera');
 }
 function restaurarBorrador(d) {
   current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
-  pos = d.pos; rev = savedRev = 0; saveErr = null; copiaLocal = store.ok;
+  pos = d.pos; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = store.ok;
 }
 async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
   const d = leerBorrador(); if (!d) return;
@@ -505,6 +505,12 @@ function pintarPublicacion(v = validar()) {
 }
 function marcarCambio() { rev++; saveErr = null; hideToast(); guardarBorrador(); pintarEstado(); }
 
+// La copia local de una cartera ya guardada: se borra si coincide con lo guardado; si hay ediciones posteriores, se conservan y solo cambia su revisión base.
+function liberarCopia(id, snap, revision) {
+  const key = 'klever_edit_' + id, c = leerCopia(id); if (!c) return;
+  if (c.nombre === snap.nombre && (c.tesis || '') === snap.tesis && JSON.stringify(c.pos) === snap.pos) store.removeItem(key);
+  else store.setItem(key, JSON.stringify({ ...c, base: revision }));
+}
 async function guardar() {
   if (!current) return false;
   const razon = razonGuardar(validar());
@@ -513,26 +519,40 @@ async function guardar() {
   if (saving) return false;
   const nombre = $('#nombre').value.trim();
   if (!nombre) { saveErr = 'Escribe un nombre para la cartera.'; pintarEstado(); return false; }
-  const r = rev; saving = true; saveErr = null; pintarEstado();
-  let conflicto = false;
+  // La respuesta puede llegar cuando ya se ha abierto OTRA cartera: todo lo que sigue usa `cur` (la que inició el guardado), nunca `current`.
+  const cur = current, r = rev, snap = { nombre, tesis: $('#tesis').value.trim(), pos: JSON.stringify(pos) };
+  saving = true; saveErr = null; pintarEstado();
+  let conflicto = false, u = null, fallo = null;
   try {
     // UNA sola operación en el servidor (posiciones + nombre + tesis, con la revisión desde la que se edita): todo o nada
-    const u = current.id
-      ? await api('/portfolios/' + current.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: current.revision } })
-      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: current.plantilla, tesis: $('#tesis').value, posiciones: pos } });
-    if (!current.id) current.id = u.id;
-    current.nombre = nombre; current.tesis = $('#tesis').value.trim(); current.revision = u.revision; current.fecha = u.actualizado_en || current.fecha; savedRev = r; // si se editó durante el guardado, rev > r y sigue «con cambios»
-    store.removeItem(DRAFT); guardarBorrador();                                                      // limpia la copia local si ya no hay cambios pendientes
-    try { if (location.hash !== '#cartera-' + current.id) history.replaceState(null, '', '#cartera-' + current.id); } catch {}
-    $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
-    toast(current.publico ? 'Cartera guardada y publicación actualizada' : 'Cartera guardada');
-  } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else saveErr = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
-  finally { saving = false; pintarEstado(); }
+    u = cur.id
+      ? await api('/portfolios/' + cur.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: cur.revision } })
+      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, tesis: $('#tesis').value, posiciones: pos } });
+  } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else fallo = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
+  const vigente = current === cur;           // ¿sigue abierta la misma cartera?
+  if (vigente) saving = false;
+  if (u) {
+    const eraNueva = !cur.id; if (eraNueva) cur.id = u.id;
+    cur.nombre = nombre; cur.tesis = snap.tesis; cur.revision = u.revision; cur.fecha = u.actualizado_en || cur.fecha;
+    if (vigente) {
+      savedRev = r;                                                                                   // si se editó durante el guardado, rev > r y sigue «con cambios»
+      store.removeItem(DRAFT); guardarBorrador();                                                     // limpia la copia local si ya no hay cambios pendientes
+      try { if (location.hash !== '#cartera-' + cur.id) history.replaceState(null, '', '#cartera-' + cur.id); } catch {}
+      $$('.solo-cuenta').forEach(e => e.hidden = false); $('#mi-eliminar').hidden = false;
+    } else if (!eraNueva) liberarCopia(cur.id, snap, u.revision);                                     // otra cartera abierta: ni su editor ni su copia local se tocan
+    toast(vigente ? (cur.publico ? 'Cartera guardada y publicación actualizada' : 'Cartera guardada') : `«${nombre}» guardada`);
+  } else if (!vigente) {
+    toast(conflicto ? `«${nombre}» cambió en tu cuenta: ábrela para elegir qué versión conservar.` : `No se pudo guardar «${nombre}». Sus cambios siguen en este dispositivo.`, 6000);
+    return false;
+  }
+  if (fallo) saveErr = fallo;
+  if (vigente) pintarEstado();
   if (conflicto) return resolverConflictoGuardado();
-  return !saveErr;
+  return !!u;
 }
 async function resolverConflictoGuardado() { // el servidor dice que la cuenta cambió después de la versión desde la que se editaba
-  let c; try { c = await api('/portfolios/' + current.id); } catch (err) { saveErr = err.message; pintarEstado(); return false; }
+  const cur = current; let c; try { c = await api('/portfolios/' + current.id); } catch (err) { saveErr = err.message; pintarEstado(); return false; }
+  if (current !== cur) return false;
   const cta = { nombre: c.nombre, tesis: c.tesis || '', pos: sinDup(c.posiciones), fecha: c.actualizado_en || c.creado_en || '', publico: c.publico, revision: c.revision };
   const loc = { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, pos: sinDup(pos), fecha: leerCopia(current.id)?.t };
   const r = await dialogoConflicto(loc, cta, 'Tu cuenta tiene una versión más reciente de esta cartera que la desde la que estabas editando. No se ha guardado nada. Elige cuál conservar.');
@@ -552,18 +572,24 @@ $$('.js-guardar').forEach(b => b.addEventListener('click', guardar));
 
 async function cambiarPublicacion(publico) {
   const err = $('#pub-error'); err.textContent = '';
+  const cur = current;                       // la respuesta puede llegar con otra cartera abierta: se usa `cur`, nunca `current`
   if (publico) { // mismas reglas que el servidor; sin petición si no son válidas
     const r = razonPublicar(validar()); if (r) { err.textContent = r; return; }
-    if (rev !== savedRev && !(await guardar())) { err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
+    if (rev !== savedRev && !(await guardar())) { if (current === cur) err.textContent = 'No se ha publicado: no se pudieron guardar los cambios' + (saveErr ? ' (' + saveErr + ')' : '') + '.'; return; }
+    if (current !== cur) return;
   }
-  if (publico && current.publico) return; // ya es pública: «Actualizar tesis» = guardar (arriba), sin otra escritura
+  if (publico && cur.publico) return; // ya es pública: «Actualizar tesis» = guardar (arriba), sin otra escritura
   try {
-    const u = await api('/portfolios/' + current.id, { method: 'PATCH', body: { publico: !!publico, revision: current.revision } });
-    current.publico = publico ? 1 : 0; current.revision = u.revision; current.fecha = u.actualizado_en || current.fecha; guardarBorrador(true); pintarEstado(); loadPublicas();
-    toast(publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada');
+    const u = await api('/portfolios/' + cur.id, { method: 'PATCH', body: { publico: !!publico, revision: cur.revision } });
+    cur.publico = publico ? 1 : 0; cur.revision = u.revision; cur.fecha = u.actualizado_en || cur.fecha;
+    const c = leerCopia(cur.id); if (c && current !== cur) store.setItem('klever_edit_' + cur.id, JSON.stringify({ ...c, base: u.revision }));
+    if (current === cur) { guardarBorrador(true); pintarEstado(); }
+    loadPublicas();
+    toast(current === cur ? (publico ? 'Cartera publicada' : 'La cartera vuelve a ser privada') : (publico ? `«${cur.nombre}» publicada` : `«${cur.nombre}» vuelve a ser privada`));
   } catch (e) {
+    if (current !== cur) { toast(`No se pudo cambiar la publicación de «${cur.nombre}».`, 6000); return; }
     if (e.status === 409 && e.data?.conflicto) { // la cuenta cambió desde otro sitio: se recarga y, si hay cambios locales, se pregunta cuál conservar
-      await cargarCartera(current.id); renderWorkspace(); err.textContent = 'La cartera había cambiado en tu cuenta. No se ha modificado la publicación.';
+      await cargarCartera(cur.id); renderWorkspace(); err.textContent = 'La cartera había cambiado en tu cuenta. No se ha modificado la publicación.';
     } else err.textContent = e.message;
   }
 }

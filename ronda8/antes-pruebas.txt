@@ -1,0 +1,9 @@
+Pruebas de carreras de la ronda 8 ejecutadas contra el código de la ronda 7 (commit 8d427c2), ANTES de corregir
+
+FALLA [R1] PUT: una escritura ajena llega entre el commit y la respuesta  [HTTP 200, revisión devuelta 2; siguiente guardado HTTP 200; estado {"nombre":"A2","tesis":null,"publico":0,"revision":3,"pos":"GDX:100"}]
+FALLA [R2] PATCH: una escritura ajena llega entre el commit y la respuesta  [HTTP 200, revisión devuelta 2; siguiente HTTP 200; estado {"nombre":"A2","tesis":null,"publico":0,"revision":3,"pos":"NEM:100"}]
+FALLA [R3] GET: una escritura ajena llega entre la lectura de la cartera y la de sus posiciones  [nombre «Prueba», revisión 0, posiciones NEM:100; la escritura ajena sí se aplicó=true]
+FALLA [R4a] Error interno de infraestructura a mitad del lote (PUT)  [HTTP 400; «Algún ticker no está en el universo»; sin cambios=true; registrado=false]
+OK    [R4b] Ticker desconocido (validación)
+FALLA [R5] POST: error interno a mitad del lote  [HTTP 400; carteras=0]
+RESULTADO: 1 correctas, 5 fallos

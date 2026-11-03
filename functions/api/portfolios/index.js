@@ -1,4 +1,4 @@
-import { json, auth, readJson, validarComposicion } from '../../_lib.js';
+import { json, auth, readJson, validarComposicion, tickersDesconocidos, ERROR_INTERNO } from '../../_lib.js';
 
 const PLANTILLAS = ['riesgo', 'oro', 'dividendos'];
 
@@ -27,11 +27,14 @@ export async function onRequestPost({ request, env }) {
   const pos = b.posiciones === undefined ? [] : b.posiciones;
   const v = validarComposicion(pos); if (!v.ok) return json({ error: v.error }, 400);
   const tesis = b.tesis === undefined ? null : String(b.tesis).trim().slice(0, 600) || null;
+  if ((await tickersDesconocidos(env, pos)).length) return json({ error: 'Algún ticker no está en el universo' }, 400);
   const token = crypto.randomUUID();
   const stmts = [env.DB.prepare('INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis, token_escritura) VALUES (?,?,?,0,?,?)').bind(user.id, nombre, b.plantilla, tesis, token)];
   for (const x of pos)
     stmts.push(env.DB.prepare('INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT id, ?, ? FROM portafolios WHERE token_escritura = ?').bind(x.ticker, Number(x.peso), token));
-  try { await env.DB.batch(stmts); } catch { return json({ error: 'Algún ticker no está en el universo' }, 400); }
-  const c = await env.DB.prepare('SELECT id, revision, actualizado_en FROM portafolios WHERE token_escritura = ?').bind(token).first();
+  stmts.push(env.DB.prepare('SELECT id, revision, actualizado_en FROM portafolios WHERE token_escritura = ?').bind(token)); // dentro del mismo lote
+  let res;
+  try { res = await env.DB.batch(stmts); } catch (e) { console.error('crear cartera:', e); return json({ error: ERROR_INTERNO }, 500); }
+  const c = res[res.length - 1].results[0];
   return json({ id: c.id, revision: c.revision, actualizado_en: c.actualizado_en }, 201);
 }

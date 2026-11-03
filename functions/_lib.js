@@ -63,3 +63,12 @@ export function puedePublicar({ total, n, tesis }) {
   if (!tesis) return 'Para publicar, escribe una tesis.';
   return null;
 }
+
+// Validación previa (HTTP 400): ¿están todos los tickers en el universo? Así un fallo del lote es un error interno (500), no «ticker desconocido».
+export async function tickersDesconocidos(env, pos) {
+  if (!pos.length) return [];
+  const { results } = await env.DB.prepare(`SELECT ticker FROM activos WHERE ticker IN (${pos.map(() => '?').join(',')})`).bind(...pos.map(x => x.ticker)).all();
+  const ok = new Set(results.map(r => r.ticker)); return pos.map(x => x.ticker).filter(t => !ok.has(t));
+}
+export const ERROR_INTERNO = 'No se pudo guardar por un error del servidor. Inténtalo de nuevo.';
+
