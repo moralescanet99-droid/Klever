@@ -573,3 +573,4 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
   .pc-fila>.punto{grid-area:punto} .pc-fila>.pc-id{grid-area:id} .pc-fila>.pc-toggle{grid-area:toggle} .pc-fila>.peso{grid-area:peso;justify-self:start}
   .pc-id b{overflow-wrap:normal} .pc-id span{-webkit-line-clamp:3}
 }
+.comp-cab{flex-wrap:wrap} .comp-der{min-width:0;margin-left:auto} #rb-ver{white-space:normal;text-align:right}

@@ -7,8 +7,9 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export RONDA="${RONDA:-ronda10}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs}"
 UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs}"
+PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
 reg() { echo "$@" | tee -a "$SALIDA"; }
@@ -46,6 +47,10 @@ node -e 'const [a,b]=process.versions.node.split(".").map(Number); process.exit(
 for t in $UNIDAD; do
   n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
   con_limite "$LIMITE" node "$t"; evaluar "$n"
+done
+for t in $PRUEBAS_SH; do
+  n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
+  con_limite "$LIMITE" bash "$t"; evaluar "$n"
 done
 for t in $BATERIAS; do
   n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="

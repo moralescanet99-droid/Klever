@@ -3,7 +3,7 @@
 # Uso: bash tests/ronda8/test-ejecutor.sh   (necesita «npm ci»; unos 2 minutos: arranca el servidor local en cada escenario)
 set -uo pipefail
 cd "$(dirname "$0")/../.."
-export PORT="${PORT:-8799}" OMITIR_DEMO=1 UNIDAD=" " SEGURIDAD=" "
+export PORT="${PORT:-8799}" OMITIR_DEMO=1 UNIDAD=" " SEGURIDAD=" " PRUEBAS_SH=" "
 OK=0; MAL=0; RES=()
 chequear() { if [ "$2" = ok ]; then OK=$((OK + 1)); echo "OK    [$1] $3"; else MAL=$((MAL + 1)); echo "FALLA [$1] $3  [$4]"; fi; }
 ejecutar() { # RONDA_TMP, resto = variables y bateria → deja CODIGO y SALIDA
