@@ -425,7 +425,7 @@ h3.grp{font-size:1rem;margin:var(--s2) 0 0}
 .cn-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s2) 0}
 .cn-v{border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);min-width:0;overflow-wrap:anywhere} .cn-v h3{font-size:1rem;margin:0 0 4px} .cn-v p{margin:4px 0}
 .cn-dif h3{font-size:1rem;margin:0 0 4px} .cn-dif ul{margin:0;padding-left:1.2em}
-@media (max-width:719px){.cn-cols{grid-template-columns:1fr}.cn-pie .btn{flex:1 1 100%}.cn-cab,.cn-cuerpo,.cn-pie{padding-left:var(--s2);padding-right:var(--s2)}.cn-cab .btn{flex:1 1 100%}}
+@media (max-width:719px){.cn-cols{grid-template-columns:1fr}.cn-pie .btn{flex:1 1 100%}.cn-cab,.cn-cuerpo,.cn-pie{padding-left:var(--s2);padding-right:var(--s2)}.cn-cab,.cn-pie{padding-top:var(--s1);padding-bottom:var(--s1)}.cn-cab h2{font-size:1.0625rem}.cn-pie .btn,.cn-cab .btn{min-height:44px;padding-top:0;padding-bottom:0}.cn-cab .btn{flex:1 1 100%}}
 @media (max-width:719px){.nombre{font-size:1.25rem}}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
@@ -1491,6 +1491,7 @@ async function resolverConflictoGuardado() { // el servidor dice que la cuenta c
   const cta = { nombre: c.nombre, tesis: c.tesis || '', pos: sinDup(c.posiciones), fecha: c.actualizado_en || c.creado_en || '', publico: c.publico, revision: c.revision };
   const loc = { nombre: $('#nombre').value.trim(), tesis: $('#tesis').value, pos: sinDup(pos), fecha: leerCopia(current.id)?.t };
   const r = await dialogoConflicto(loc, cta, 'Tu cuenta tiene una versión más reciente de esta cartera que la desde la que estabas editando. No se ha guardado nada. Elige cuál conservar.');
+  const guardarBtn = [...$$('.js-guardar')].find(x => x.offsetParent); setTimeout(() => guardarBtn?.focus({ preventScroll: true }), 0); // el foco vuelve al botón Guardar (se había desactivado durante el guardado)
   if (r === 'local') { // vuelve al editor SIN escribir en la cuenta: parte de la revisión actual y el usuario revisa y pulsa Guardar
     current.revision = cta.revision; current.fecha = cta.fecha; current.publico = cta.publico; saveErr = null; guardarBorrador(true); pintarEstado();
     toast('Has conservado la versión de este dispositivo. Revísala y pulsa Guardar.', 6000); return false;

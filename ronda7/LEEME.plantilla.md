@@ -28,7 +28,7 @@ No hay rediseño ni funciones nuevas. Se corrige la contradicción del conflicto
 {{RESULTADO}}
 ```
 
-La instalación limpia se comprobó clonando el commit en una carpeta nueva con `npm ci` (ver `ronda7/resultado-ejecucion.txt`, primera línea con la carpeta y el commit).
+Se obtuvo en un **clon nuevo** del commit indicado (`git clone`, `npm ci`, `bash tests/run-all.sh`). Dos ejecuciones limpias anteriores sirvieron para corregir fallos del propio script de ejecución (avisos de wrangler en el resultado y un servidor de la demo sin parar); esta es la tercera y es la que se entrega. **Nota sobre la demo:** `demo/index.html` se reconstruyó después de esa ejecución (un último ajuste de foco y CSS del diálogo) y se volvió a probar: `ronda7/resultado-demo-reconstruida.txt`.
 
 ## 4. Evidencia por escenario
 
