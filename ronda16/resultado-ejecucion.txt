@@ -1,5 +1,5 @@
-Ejecución: 2026-11-04 18:06 UTC
-Código: commit 5e5cf5bad7f11c462c5e0df4d03b37125a6971a0; árbol de trabajo CON CAMBIOS sin commitear
+Ejecución: 2026-11-04 18:19 UTC
+Código: commit 725741479b0a08e8cbcec5245103230a5a6cf122; árbol de trabajo limpio
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -27,14 +27,3 @@ RESULTADO: 9 correctas, 0 fallos
 === unit-escenarios16 ===
 RESULTADO: 11 correctas, 0 fallos
 === test-zip ===
-RESULTADO: 8 correctas, 0 fallos
-=== testA ===
-RESULTADO: 31 correctas, 0 fallos
-=== testB ===
-FALLA empresas: «Ver ficha» visible en cada fila
-FALLA empresas: sin paginación ficticia
-RESULTADO: 49 correctas, 2 fallos
-- empresas: «Ver ficha» visible en cada fila
-- empresas: sin paginación ficticia
-FALLA (ejecutor): testB tiene 2 fallos
-=== testC ===

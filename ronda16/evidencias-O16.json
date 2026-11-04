@@ -1,0 +1,100 @@
+[
+ {
+  "id": "O1-320",
+  "escenario": "Ejemplo con la nota CALCULADA (320 px)",
+  "esperado": "Una cifra de 1 a 10, la fecha de los datos (4 nov 2026), una explicación con la posición real («Coca-Cola (KO) … 60 %») y sin «fecha no disponible» ni «pendiente»",
+  "observado": "4,4 de 10; Coca-Cola (KO) pesa el 60 % de la cartera: el reparto equivale a 1,9 empresas del mismo tamaño. Además, el 100 % está en Consumo básico: el reparto por sectores y actividades es lo que más resta.; Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad n",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2-320",
+  "escenario": "Ejemplo INCOMPLETO: nota pendiente con su motivo en lenguaje claro (320 px)",
+  "esperado": "«Nota pendiente.» una sola vez, «Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez»», «Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento»» y la causa concreta (JPM 50 %: sector sin metodología); sin «Nota pendiente. Nota pendiente» ni «fecha no disponible»",
+  "observado": "Nota pendiente. Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez». Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento». Causa principal: JPM (50 % de la cartera): sector sin metodología de deuda/EBITDA (banca y seguros).",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2b-320",
+  "escenario": "Sin errores de JavaScript en los dos ejemplos (320 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1-390",
+  "escenario": "Ejemplo con la nota CALCULADA (390 px)",
+  "esperado": "Una cifra de 1 a 10, la fecha de los datos (4 nov 2026), una explicación con la posición real («Coca-Cola (KO) … 60 %») y sin «fecha no disponible» ni «pendiente»",
+  "observado": "4,4 de 10; Coca-Cola (KO) pesa el 60 % de la cartera: el reparto equivale a 1,9 empresas del mismo tamaño. Además, el 100 % está en Consumo básico: el reparto por sectores y actividades es lo que más resta.; Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad n",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2-390",
+  "escenario": "Ejemplo INCOMPLETO: nota pendiente con su motivo en lenguaje claro (390 px)",
+  "esperado": "«Nota pendiente.» una sola vez, «Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez»», «Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento»» y la causa concreta (JPM 50 %: sector sin metodología); sin «Nota pendiente. Nota pendiente» ni «fecha no disponible»",
+  "observado": "Nota pendiente. Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez». Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento». Causa principal: JPM (50 % de la cartera): sector sin metodología de deuda/EBITDA (banca y seguros).",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2b-390",
+  "escenario": "Sin errores de JavaScript en los dos ejemplos (390 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "O3",
+  "escenario": "Comparador: deuda neta / EBITDA en veces y qué cantidades se comparan",
+  "esperado": "La fila dice «en veces», explica «deuda neta (deuda menos caja) dividida entre el EBITDA», que 2,0 veces son dos años de EBITDA y que NO es un plazo de devolución; cada cifra acaba en «veces» o es «Caja neta»",
+  "observado": "Deuda neta / EBITDADeuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: 2,0 veces = la deuda neta equivale a dos años de EBITDA. No es un plazo de devolución. Negativa = caja neta (veces)1,0 veces FY2024 · datos de prueba · car",
+  "resultado": "OK"
+ },
+ {
+  "id": "O4",
+  "escenario": "Laboratorio: quién cede el peso justo al calcular, y el desarrollo debajo",
+  "esperado": "Primero «Cuánto espacio ocuparía», justo después «Quién cede el peso: … KO cede 6 …», después las dos barras (antes/después) y debajo las tablas",
+  "observado": "Quién cede el peso: Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %).; orden true; barras 2",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5a",
+  "escenario": "Guardar desde la historia: la casilla «Sigo la pregunta de la historia» viene marcada y la pregunta propia, con las palabras de la historia",
+  "esperado": "Casilla marcada; el escenario queda vinculado al identificador, no al texto",
+  "observado": "{\"ref\":true,\"preg\":\"¿Se han firmado los dos contratos anunciados?\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5b",
+  "escenario": "Editar la pregunta con otras palabras: se conserva el vínculo y la ficha lo dice",
+  "esperado": "Casilla marcada al editar; tras guardar sigue «responde» y ofrece «Ver revisión de la historia»",
+  "observado": "true; La revisión de la historia responde a la cuestión que sigues: «¿Se han firmado los dos contratos anunciados?».",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5c",
+  "escenario": "Tres casos con la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva",
+  "esperado": "Original → «Con novedades»; reformulación → «Con novedades» y avisa de que las palabras son distintas; nueva → «Pregunta pendiente», «Pregunta distinta a la de la historia» y «Ver revisión de la historia», sin «Sin novedades»",
+  "observado": "3 tarjetas; Pregunta pendiente Ejemplo ficticio «¿Y si pierden al cliente principal?»Fecha de revisión: 20 dic 2026. Pregunta distinta a la de la historia. La revisión publicada de esta historia responde a otra c",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5d",
+  "escenario": "Cierro sesión y vuelvo con la misma cuenta",
+  "esperado": "Las tres tarjetas siguen igual (texto, vínculo, fecha y estado)",
+  "observado": "3 tarjetas; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5e",
+  "escenario": "Otra cuenta en otro navegador",
+  "esperado": "No ve ninguna de las tres preguntas ni sus pesos; el ejemplo de visitante tampoco aparece (hay cuenta)",
+  "observado": "Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces",
+  "resultado": "OK"
+ },
+ {
+  "id": "O6",
+  "escenario": "Escenario guardado con una evaluación manipulada (el servidor la entrega con marcado en la nota)",
+  "esperado": "La interfaz la vuelve a validar: no se crea ninguna etiqueta, no se ejecuta nada y se dice que no supera las comprobaciones de formato",
+  "observado": "imgs 0; ejecutado false; no supera las comprobaciones de formato: no se muestra.",
+  "resultado": "OK"
+ }
+]
