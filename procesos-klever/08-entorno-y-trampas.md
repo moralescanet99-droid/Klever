@@ -136,3 +136,11 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Semilla:** los años 2020–2021 salen de otro generador para que 2022–2024 no cambien; 126 activos (106 con comprobaciones) al incluir la empresa ficticia.
 - **Cinco ejercicios** son necesarios para la nota; la carga real ahora los pide (`slice(-5)`).
 
+## Ronda 16
+- **Añadir empresas a `data/ficticios.json` cambia los recuentos de las pruebas** (testB, testJ, testK: «126»); regenerar la semilla (`python3 tests/ronda5/seed.py`) y revisar los recuentos.
+- **Los tickers de escenarios solo admiten letras** (`^[A-Z.]{1,6}$`): las empresas ficticias son `EJBA…EJBT`, sin dígitos.
+- **El «antes» de una prueba se ejecuta en un árbol de trabajo aparte** (`git worktree add /tmp/x <commit>`); borrarlo después (`git worktree remove --force`) para que no entre en el ZIP ni en el estado.
+- **`#salir` está oculto en móvil (`solo-escritorio`):** en pruebas a 390 px, `evaluate(() => document.querySelector('#salir').click())`.
+- **Los reemplazos de texto con `str.replace` en Python fallan en silencio** si la cadena no está: comprobar siempre con `grep` o `assert old in s`.
+- **`resumenNota` no debe incluir campos nuevos sin actualizar `validarResumen`** (rechaza campos desconocidos): `origenDatos` solo vive en el resultado de `evaluar`.
+

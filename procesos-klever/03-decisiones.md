@@ -163,5 +163,13 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Historial de la ficha:** se añade una entrada al abrirla para que «atrás» la cierre; al navegar desde ella se quita la marca para no deshacer la navegación; `scrollRestoration = 'manual'`.
 - **La empresa del caso (ficticia) está en el universo de la semilla y de la demo** y sale en Explorar rotulada «(empresa ficticia)»; **no** está en el universo real.
 
+## Ronda 16 (nota protegida y corregida; vínculo estable; dos salidas demostrables)
+- **Una evaluación guardada es un registro, no un dato verificado:** el servidor valida su FORMA (al guardar y al leer) y guarda una copia reconstruida; no la recalcula. La interfaz la revalida y nunca interpola texto del servidor sin escapar. Motivo: el universo de entonces ya no existe y el campo era texto libre.
+- **Ausente, cero y negativo son tres entradas distintas;** un dato ausente deja el indicador pendiente (ausencia ≠ cero). Cobertura por INDICADOR (≥ 90 %), como se acordó; el bloque se publica si todos sus indicadores la tienen. Umbrales y pesos de la v1 sin cambios.
+- **Liquidez:** 60 sesiones y moneda, fuente y fecha; moneda y fuente de referencia = las más frecuentes (empate → ninguna).
+- **Origen de los datos:** `sintetico` solo si todas las filas con fuente son prueba/demo; con otros orígenes la nota no se publica hasta una habilitación explícita posterior a la calibración.
+- **Vínculo con la pregunta editorial = identificador `historia:n`** (columna `pregunta_ref`), no el texto; `pregunta` es la formulación personal. Solo se migran coincidencias inequívocas. Una pregunta distinta no hereda respuestas ajenas: sigue pendiente y ofrece ver la revisión.
+- **Semilla y demo con 20 empresas ficticias** en «Consumo básico» (`EJBA…EJBT`) para que el ejemplo tenga ≥ 20 comparables sin tocar los umbrales; nunca en el universo real.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

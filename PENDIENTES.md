@@ -53,3 +53,8 @@
 - Cargar mercado real (capitalización, importe negociado) y calibrar los umbrales de la nota antes de activarla con datos reales (M64); la carga SEC con la lógica nueva (M63).
 - Probar con dos cuentas reales y red lenta (M60), la D1 real con migraciones 0008–0010 y restauración (M66).
 - Diagnosticar los fallos intermitentes de `testE` (R13), `testF` (R14) y la carrera del historial de la ficha.
+
+## Ronda 16 (pendiente de accesos y decisiones)
+- Prueba con cinco principiantes (`ronda16/PRUEBA-CON-USUARIOS.md`) y entorno privado con persistencia para «mañana, cierra y vuelve».
+- D1 real con migraciones 0008–0011 y restauración (M70); datos de mercado reales y calibración antes de habilitar la nota (M71).
+- Exposición entre cuentas de una nota manipulada con una D1 real (M69); móvil físico, lector de pantalla y tema oscuro (M67, M72).

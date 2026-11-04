@@ -84,3 +84,15 @@ Un ZIP creado con `git archive` **no contiene `.git`**: por eso no se puede comp
 bash scripts/entrega/verificar-zip.sh klever-ronda11-tecnico.zip     # requiere bash, unzip y Node >= 22.13; no requiere npm ci
 ```
 Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo que no ha podido verificar. **Un repositorio nuevo creado a partir del ZIP (vacío, o con un único commit del propio contenido) no verifica el historial**: A8 lo trata como «modo ZIP» y escribe «historial: NO verificado». Para verificar el historial hay que clonar el repositorio original y ejecutar `node tests/ronda10/unit-acceso.mjs` (A8 dirá «VERIFICADO en el repositorio (N commits)»). Para crear una entrega: `bash scripts/entrega/crear-zip.sh salida.zip` (desde un commit limpio).
+
+## Baterías de las rondas 15 y 16 (añadidas)
+| Batería | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda15/unit-nota.mjs` (35) | Nota de estructura v1: efectivas, cobertura por indicador, ausente/cero/negativo, 60 sesiones, moneda y fuente, origen sintético, guardar y reabrir | Módulo (sin navegador) |
+| `tests/ronda15/unit-comparador.mjs` (9) | Comparador de dos empresas | Módulo |
+| `tests/ronda15/unit-almacen.mjs` (9) | Privacidad del almacén de radar con carreras deterministas | Módulo |
+| `tests/ronda16/unit-escenarios16.mjs` (11) | Validación de evaluaciones guardadas (al guardar y al leer) y vínculo estable de la pregunta; cierre de sesión y otra cuenta | Servidor sobre SQLite real |
+| `tests/ronda15/testM.cjs` (7) | Privacidad con cuentas A y B | Navegador |
+| `tests/ronda15/testN.cjs` (41) | Interfaz y recorridos de la ronda 15 en 320/390/1440 | Navegador |
+| `tests/ronda16/testO.cjs` (14) | Notas en el móvil, comparador, laboratorio, seguimiento con tres casos, nota manipulada | Navegador |
+| `tests/ronda16/antes-despues-r16.mjs <raíz>` | Antes/después de los tres fallos contra un árbol de trabajo anterior | Módulo/servidor |

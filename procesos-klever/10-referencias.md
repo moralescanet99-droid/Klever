@@ -46,3 +46,5 @@ Cloudflare (Pages, D1), GitHub Actions (secretos `SEC_USER_AGENT`, `CLOUDFLARE_A
 - Ronda 14: informe `ronda14/LEEME.md`; antes/después `ronda14/ANTES-Y-DESPUES.md`; procedencia `ronda14/PROCEDENCIA.md`; abrir en móvil `ronda14/ABRIR-EN-MOVIL.md`; capturas `ronda14/capturas/`.
 
 - Ronda 15: informe `ronda15/LEEME.md`; antes/después `ronda15/ANTES-Y-DESPUES.md`; casos `ronda15/TABLA-CASOS.md`; prueba con usuarios (pendiente) `ronda15/PRUEBA-CON-USUARIOS.md`; abrir en móvil `ronda15/ABRIR-EN-MOVIL.md`; capturas `ronda15/capturas/`.
+
+- Ronda 16: informe `ronda16/LEEME.md`; antes/después `ronda16/ANTES-Y-DESPUES.md`; tabla de la nota `ronda16/TABLA-NOTA.md`; prueba con usuarios (pendiente) `ronda16/PRUEBA-CON-USUARIOS.md`; capturas `ronda16/capturas/`.
