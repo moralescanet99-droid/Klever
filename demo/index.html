@@ -808,6 +808,8 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 .esc-preg{font-size:1.125rem;font-weight:600;margin:0 0 var(--s1)} .esc-historia{margin:var(--s1) 0}
 .esc-estado .fila{display:flex;flex-wrap:wrap;gap:8px}
 .lab-metodo details{margin-top:8px}
+.lab-guardar{grid-template-columns:minmax(0,1fr)} .lab-guardar input,.lab-guardar textarea,.lab-guardar select{min-width:0;width:100%;box-sizing:border-box}
+.lab-guardar input[type=date]{max-width:100%;min-height:44px}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}

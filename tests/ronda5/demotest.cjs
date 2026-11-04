@@ -27,14 +27,16 @@ for(const [w,h] of [[390,844],[1440,900]]){
  // ronda 13: recorrido radar → laboratorio → escenario en la demo (simulado en memoria; etiquetado como demostración)
  await p.evaluate(()=>{location.hash='#empresas'});await p.waitForSelector('.ver-ficha >> visible=true');await p.fill('#emp-buscar','AAPL');await p.waitForTimeout(250);
  const origen=((await p.textContent('#aviso-datos'))||'').trim();
- await p.locator('.ver-ficha >> visible=true').first().click();await p.waitForSelector('#fir-toggle');await p.click('#fir-toggle');await p.waitForSelector('#fir-nota');
+ await p.locator('.ver-ficha >> visible=true').first().click();await p.waitForSelector('#fir-toggle');await p.click('#fir-toggle');await p.waitForSelector('#fi-radar [data-nota=editar]');
  ok('demo: el origen se declara como DEMOSTRACIÓN y no se atribuye a la SEC',/DEMOSTRACIÓN/.test(origen)&&!/SEC EDGAR/.test(await p.textContent('#fi-cuerpo')),origen);
  await p.click('#fir-sim');await p.waitForSelector('#lab-form');await p.fill('#lab-peso','5');await p.check('input[name=lab-fin][value=proporcional]');await p.click('#lab-form button[type=submit]');await p.waitForSelector('#lab-res table.tabla-lab');
  ok('demo: la simulación muestra la tabla y la etiqueta «Simulación»',(await p.locator('#lab-res .chip.sim').count())>=1&&/AAPL/.test(await p.textContent('#lab-res')));
- await p.click('#lab-guardar-btn');await p.waitForSelector('#esc-form');
+ await p.click('#lab-guardar-btn');await p.waitForSelector('#esc-editar');
  ok('demo: el escenario se guarda y se reabre como simulación',(await p.locator('#vista-lab h1 .chip.sim').count())===1&&/AAPL al 5/.test(await p.textContent('#vista-lab')));
  await p.evaluate(()=>{location.hash='#seguimiento'});await p.waitForSelector('.seg-item');await p.waitForSelector('.esc-item');
  ok('demo: el seguimiento lista el radar y el escenario',(await p.locator('.seg-item').count())===1&&(await p.locator('.esc-item').count())===1);
+ await p.evaluate(()=>{location.hash='#historia-hidrogeno-norte'});await p.waitForSelector('.art h1');
+ ok('demo: la historia de ejemplo se lee y es ficticia desde el título',/Caso ficticio/.test(await p.textContent('.art h1'))&&(await p.locator('.art-fuentes li').count())===6);
  await p.evaluate(()=>{location.hash='#inicio'});await p.waitForTimeout(300);await p.reload();await p.waitForSelector('.plantilla');await p.waitForTimeout(1200);
  ok('demo: al recargar se pierde todo (sin sesión ni carteras)',(await p.locator('#dlg-acceso[open]').count())===1||(await p.locator('.cartera-item').count())===0);
  ok('demo: sin errores de JavaScript',errs.length===0,errs.join('|'));await c.close();}
