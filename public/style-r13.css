@@ -146,3 +146,10 @@
 .lab-metodo details{margin-top:8px}
 .lab-guardar{grid-template-columns:minmax(0,1fr)} .lab-guardar input,.lab-guardar textarea,.lab-guardar select{min-width:0;width:100%;box-sizing:border-box}
 .lab-guardar input[type=date]{max-width:100%;min-height:44px}
+/* la tabla de la historia no hereda el reparto fijo de columnas de las tablas del laboratorio: las palabras no se parten */
+@media (max-width:480px){
+  .art .tabla-lab{table-layout:auto;font-size:var(--t-s)}
+  .art .tabla-lab thead th{width:auto}
+  .art .tabla-lab th,.art .tabla-lab td{overflow-wrap:normal;word-break:normal;padding:8px 6px}
+  .art .tabla-h{overflow-x:auto}
+}

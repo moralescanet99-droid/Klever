@@ -41,7 +41,7 @@ function cta(esc, h) {
 export function mostrarArticulo({ tipo, id, n }) {
   const { $, esc, go } = rx(), cont = $('#articulo-cuerpo'), h = historia(id);
   if (!h || (tipo === 'tesis' && !tesisDe(h, n))) { cont.innerHTML = '<p class="estado-lista">No encontramos esa pieza.</p><p><a class="btn btn-secundario" href="#revista">Volver a la revista</a></p>'; return; }
-  const aviso = h.ficticia ? `<p class="art-aviso" role="note"><b>Caso ficticio.</b> ${esc(AVISO_FICTICIO.replace(/^Caso ficticio: /, ''))}</p>` : '';
+  const aviso = h.ficticia ? `<p class="art-aviso" role="note"><b>Caso ficticio.</b> ${esc(AVISO_FICTICIO.replace(/^Caso ficticio: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : '';
   if (tipo === 'historia') {
     cont.innerHTML = `<article class="art"><p><a class="enlace" href="#revista">← Revista</a></p>${aviso}
       <h1>${esc(h.titulo)}</h1><p class="art-bajada">${esc(h.bajada)}</p>

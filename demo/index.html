@@ -810,6 +810,13 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 .lab-metodo details{margin-top:8px}
 .lab-guardar{grid-template-columns:minmax(0,1fr)} .lab-guardar input,.lab-guardar textarea,.lab-guardar select{min-width:0;width:100%;box-sizing:border-box}
 .lab-guardar input[type=date]{max-width:100%;min-height:44px}
+/* la tabla de la historia no hereda el reparto fijo de columnas de las tablas del laboratorio: las palabras no se parten */
+@media (max-width:480px){
+  .art .tabla-lab{table-layout:auto;font-size:var(--t-s)}
+  .art .tabla-lab thead th{width:auto}
+  .art .tabla-lab th,.art .tabla-lab td{overflow-wrap:normal;word-break:normal;padding:8px 6px}
+  .art .tabla-h{overflow-x:auto}
+}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
@@ -1652,7 +1659,7 @@ function cta(esc, h) {
 function mostrarArticulo({ tipo, id, n }) {
   const { $, esc, go } = rx(), cont = $('#articulo-cuerpo'), h = historia(id);
   if (!h || (tipo === 'tesis' && !tesisDe(h, n))) { cont.innerHTML = '<p class="estado-lista">No encontramos esa pieza.</p><p><a class="btn btn-secundario" href="#revista">Volver a la revista</a></p>'; return; }
-  const aviso = h.ficticia ? `<p class="art-aviso" role="note"><b>Caso ficticio.</b> ${esc(AVISO_FICTICIO.replace(/^Caso ficticio: /, ''))}</p>` : '';
+  const aviso = h.ficticia ? `<p class="art-aviso" role="note"><b>Caso ficticio.</b> ${esc(AVISO_FICTICIO.replace(/^Caso ficticio: /, '').replace(/^./, c => c.toUpperCase()))}</p>` : '';
   if (tipo === 'historia') {
     cont.innerHTML = `<article class="art"><p><a class="enlace" href="#revista">← Revista</a></p>${aviso}
       <h1>${esc(h.titulo)}</h1><p class="art-bajada">${esc(h.bajada)}</p>
