@@ -624,3 +624,55 @@ Envía ZIP, demo autónoma e instrucciones de apertura. Añade cuatro capturas c
 ChatGPT revisará cálculos, casos límite y recorridos. Para probar con usuarios, observar a cinco principiantes con un móvil: si construyen una cartera sin ayuda, explican de dónde sale el 10 % y distinguen una nota de estructura de una previsión de rentabilidad. Registrar dificultades reales por separado de las pruebas automáticas.
 
 **Verificación pendiente.** TestL/K contra el servidor completo, batería completa en clon limpio, correo y D1 remotos, carga SEC real, recuperación tras recarga en dos dispositivos, Safari/Firefox, móvil físico, tema oscuro y lector de pantalla. Priorizar M50–M57 antes de abrir cuentas a terceros y M58 antes de publicar contenido real. Para accesibilidad comprobar lectura por fila, orden del foco, recuperación tras confirmar o cancelar y anuncio de resultados, además de la presencia de atributos.
+
+## C13 · Ronda 16 (2026-11-04) — revisión de la ronda 15 y encargo, literal
+
+# Klever · Revisión de la ronda 15 y encargo para Claude
+
+## Decisión
+
+Conservaría Cartera, Ideas y Seguimiento como estructura de la demo. La portada permite crear una cartera o entender una de ejemplo. El comparador permite investigar dos empresas del mismo sector, ver tres indicadores y pasar al laboratorio. La tarjeta de seguimiento ya ilustra el servicio que Javier quiere probar. Recupera la pregunta sobre los contratos, distingue el firmado del aplazado, enlaza la revisión y separa el peso simulado del peso actual. La etiqueta «En beta · Formará parte del futuro plan de pago» corresponde al alcance acordado.
+
+Usaría esta entrega en una revisión interna. Antes de abrir cuentas a terceros hay que corregir cómo se guarda y presenta la nota. Antes de demostrársela a principiantes hay que enseñar un caso en el que la nota se pueda calcular y otro en el que deba quedar pendiente.
+
+## Qué se verificó
+
+Repetí 168 comprobaciones en 11 suites locales. Pasaron las 9 de almacenamiento, 9 del comparador, 26 de la nota, 18 de carga, 12 de migración y 94 de cálculo, acceso y servidor de rondas anteriores. Revisé las nueve capturas adjuntas a 390 px, los módulos y las rutas de la API. En Chromium a 390 px abrí la cartera de ejemplo de la demo autónoma y encontré la nota pendiente y sin fecha. No completé una nueva pasada del recorrido en navegador: al reanudar las pruebas, Chromium se cerró durante el arranque.
+
+Claude declara 623 comprobaciones correctas en su última pasada completa. Tras dos retoques de texto volvió a ejecutar testN y a construir la demo. Las pruebas de módulo del radar respaldan el arreglo del cambio de sesión. Las de navegador con A y B proceden de Claude. En una caducidad involuntaria quedan copias locales de ediciones pendientes según la política documentada. Siguen pendientes la validación de D1 remoto, correo real, datos financieros reales, dispositivo físico y la prueba con cinco principiantes.
+
+## Hallazgos y encargo de la ronda 16
+
+Claude, empieza en la última versión y entrega estos cambios por orden. El objetivo es que una persona pueda entender por qué recibe una nota y recuperar su pregunta cuando cambie un hecho importante.
+
+### 1. Proteger las notas de escenarios guardados
+
+En functions/api/escenarios/index.js se verifica la presencia de una versión, pero el campo de nota admite texto. Envié un marcador HTML inocuo dentro de ese campo al manejador con SQLite y obtuve HTTP 201 con el marcador intacto. En public/js/lab.js, mostrarEscenario interpola ese campo en innerHTML sin escaparlo. La prueba demuestra aceptación y persistencia; no demuestra exposición entre cuentas.
+
+Exige números finitos entre 1 y 10 o null según el estado, controles de fecha, cobertura, versión y estructura. Renderiza como texto incluso registros antiguos manipulados. Si el servidor no puede verificar la evaluación, trátala como tal. Criterio de cierre: una nota con marcado se rechaza al guardar y una fila antigua equivalente se abre sin crear etiquetas en el DOM. Un escenario válido conserva su nota histórica.
+
+### 2. Corregir la puntuación antes de calibrarla
+
+En public/js/nota.js, un EBITDA ausente se evalúa como un EBITDA observado igual o inferior a cero cuando hay deuda positiva. Al crear una cartera sintética con una posición al 100 %, EBITDA ausente y una sola sesión de negociación, obtuve **3,5/10 con 100 % de cobertura**. La liquidez comprueba un importe positivo, pero omite la longitud de la ventana. El endpoint universo lee moneda y fuente de mercado, aunque no las transmite por empresa al evaluador.
+
+Distingue tres entradas: ausente, cero y negativa. Si falta EBITDA deja pendiente ese indicador. Para liquidez exige las 60 sesiones acordadas, moneda común, procedencia y fecha. Mantén umbrales y pesos de la v1 y calcula cobertura por indicador, como se acordó; la implementación actual exige datos conjuntos por bloque. Prueba una cartera con datos ausentes en posiciones distintas que conserve un 90 % evaluable en cada indicador. Conserva por separado el caso de solo 89,9 %. Activa la nota de ejemplo solo para un conjunto sintético identificado; con datos reales o mixtos la publicación requiere una habilitación explícita posterior a la calibración.
+
+Pruebas mínimas independientes: EBITDA ausente frente a cero con los demás datos válidos; 59 frente a 60 sesiones con EBITDA válido; mezcla de monedas o fuentes; cartera completa con cobertura suficiente. Guardar y reabrir la misma evaluación debe conservar cifra, fecha, cobertura y versión.
+
+### 3. Mantener el seguimiento cuando cambia la redacción
+
+En public/js/contenido.js, casoSeguimiento vincula respuesta y pregunta mediante igualdad literal del texto. En el módulo, añadir un espacio dejó la revisión sin vínculo. Una reformulación equivalente también lo pierde. La frase «Sin novedades» puede aparecer pese a que existe una revisión publicada de esa historia.
+
+Guarda un identificador estable para la cuestión editorial y separa la nota personal del usuario. Si la persona escribe una pregunta distinta, ofrece «Ver revisión de la historia» y aclara si responde o sigue pendiente. Migra las coincidencias antiguas inequívocas. Prueba tres casos con la misma empresa: texto original, reformulación que conserva el vínculo y pregunta nueva sin respuesta. Mantén el ejemplo de ambos contratos, la fecha, la fuente y la etiqueta del futuro plan de pago. Comprueba cada caso al guardar, cerrar sesión y volver con la misma cuenta, y luego verifica el aislamiento con otra cuenta.
+
+### 4. Hacer demostrables las dos salidas de la nota en móvil
+
+La primera cartera de ejemplo muestra «Nota pendiente. Nota pendiente» y «observados el fecha no disponible». Conserva un ejemplo incompleto, con una explicación como «Podemos medir el reparto. Faltan datos para valorar la deuda». Prepara también un ejemplo con cinco ejercicios, suficientes comparables, liquidez válida y fecha. Debe producir una nota calculada por el mismo módulo y una explicación concreta basada en sus posiciones. Por ejemplo, si una empresa concentra el 60 %, nómbrala y muestra el porcentaje. El encabezado, una fortaleza y una limitación bastan antes de «¿Por qué esta nota?».
+
+En el comparador mantén crecimiento de ventas, margen operativo y deuda neta/EBITDA con fuente y periodo. Expresa la última ratio en veces y describe qué cantidades se comparan. «Años para cubrir la deuda» puede leerse como un plazo efectivo de devolución. En el laboratorio, coloca la frase sobre quién cede el peso justo al calcular y deja el desarrollo debajo.
+
+## Entrega y prueba de aceptación
+
+Entrega el ZIP, la demo autónoma reconstruida del mismo código y las pruebas antes y después de los fallos. Adjunta cuatro capturas legibles del teléfono: una nota calculada, una pendiente con su motivo, la actualización tras editar una pregunta y la comparación con los pesos antes y después. Ejecuta la batería sobre el código definitivo e identifica por separado lo probado en módulos, navegador y entorno remoto.
+
+La demo autónoma pierde sus datos al recargar. Úsala para observar la primera visita y mostrar el ejemplo de regreso. Para probar con personas «mañana, cierra y vuelve», usa un entorno privado con persistencia ya verificada o declara la tarea pendiente. Registra si cada participante entiende de dónde sale el 10 %, qué mide la nota y cuál de los dos contratos se firmó. La disposición a pagar por el seguimiento sigue siendo una hipótesis.

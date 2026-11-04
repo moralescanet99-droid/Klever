@@ -41,8 +41,16 @@ t('M1c', 'Aplicar 0009 (ronda 14) con filas previas', 'Las filas previas siguen:
 const mig10 = readFileSync(path.join(RAIZ, 'migrations/0010_nota_y_comparador.sql'), 'utf8'); db.exec(mig10);
 const nuevo10 = crearEnv().sql, f10 = db.prepare('SELECT resultado_operativo, informe FROM fundamentales WHERE ticker=?').get('MIG'), e10 = db.prepare("SELECT nota_json FROM escenarios WHERE clave='antiguo-0001'").get(), a10 = db.prepare("SELECT actividad, emisor FROM activos WHERE ticker='MIG'").get();
 t('M1d', 'Aplicar 0010 (ronda 15) con filas previas', 'Filas previas intactas (resultado operativo, informe, actividad, emisor y evaluación en NULL = «sin dato»); tablas idénticas a schema.sql; existe `mercado`',
-  `fundamentales ${J(f10)}; activos ${J(a10)}; escenario ${J(e10)}; iguales: ${['fundamentales', 'escenarios', 'activos', 'mercado'].map(x => x + '=' + (colsDe(db, x) === colsDe(nuevo10, x))).join(',')}`,
-  f10.resultado_operativo === null && f10.informe === null && a10.actividad === null && a10.emisor === null && e10.nota_json === null && ['fundamentales', 'escenarios', 'activos', 'mercado'].every(x => colsDe(db, x) === colsDe(nuevo10, x)));
+  `fundamentales ${J(f10)}; activos ${J(a10)}; escenario ${J(e10)}; iguales: ${['fundamentales', 'activos', 'mercado'].map(x => x + '=' + (colsDe(db, x) === colsDe(nuevo10, x))).join(',')}`,
+  f10.resultado_operativo === null && f10.informe === null && a10.actividad === null && a10.emisor === null && e10.nota_json === null && ['fundamentales', 'activos', 'mercado'].every(x => colsDe(db, x) === colsDe(nuevo10, x)));
+// Ronda 16: la migración 0011 (vínculo estable con la pregunta editorial) encadenada. Antes de aplicarla hay escenarios antiguos de cuatro tipos.
+const ins = (clave, pregunta, historia) => db.prepare("INSERT INTO escenarios(usuario_id,clave,nombre,metodo,cartera_id,cartera_nombre,base_revision,ticker,peso_objetivo,base_json,propuesta_json,pregunta,historia) VALUES (7,?,'x','proporcional',1,'X',0,'MIG',10,'[]','[]',?,?)").run(clave, pregunta, historia);
+ins('mig11-igual-01', '¿Se han firmado los dos contratos anunciados?', 'hidrogeno-norte'); ins('mig11-otra-001', '¿Y si la empresa cambia de cliente?', 'hidrogeno-norte');
+ins('mig11-sinhis-01', '¿Se han firmado los dos contratos anunciados?', null); ins('mig11-casi-0001', '¿Se han firmado los dos contratos anunciados? ', 'hidrogeno-norte');
+const mig11 = readFileSync(path.join(RAIZ, 'migrations/0011_pregunta_estable.sql'), 'utf8'); db.exec(mig11);
+const nuevo11 = crearEnv().sql, r11 = Object.fromEntries(db.prepare("SELECT clave, pregunta_ref FROM escenarios WHERE clave LIKE 'mig11-%' OR clave='antiguo-0001'").all().map(x => [x.clave, x.pregunta_ref]));
+t('M1e', 'Aplicar 0011 (ronda 16) con escenarios antiguos: solo la coincidencia INEQUÍVOCA se vincula', 'mig11-igual-01 → hidrogeno-norte:1; el resto NULL; escenarios idéntico a schema.sql', `${J(r11)}; escenarios iguales=${colsDe(db, 'escenarios') === colsDe(nuevo11, 'escenarios')}`,
+  r11['mig11-igual-01'] === 'hidrogeno-norte:1' && r11['mig11-otra-001'] === null && r11['mig11-sinhis-01'] === null && r11['mig11-casi-0001'] === null && r11['antiguo-0001'] === null && colsDe(db, 'escenarios') === colsDe(nuevo11, 'escenarios'));
 const nuevoCols = crearEnv().sql.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');
 const migCols = db.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');
 t('M2', 'La base migrada y la base nueva (schema.sql) tienen la misma tabla portafolios', 'Mismas columnas, tipos, obligatoriedad y valores por defecto', `iguales=${nuevoCols === migCols}`, nuevoCols === migCols);
@@ -59,4 +67,6 @@ let err9 = ''; try { crearEnv().sql.exec(mig9); } catch (e) { err9 = e.message; 
 t('M7', 'Aplicar 0009 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${err9}`, /duplicate column/i.test(err9));
 let err10 = ''; try { crearEnv().sql.exec(mig10); } catch (e) { err10 = e.message; }
 t('M8', 'Aplicar 0010 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${err10}`, /duplicate column/i.test(err10));
+let err11 = ''; try { crearEnv().sql.exec(mig11); } catch (e) { err11 = e.message; }
+t('M9', 'Aplicar 0011 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${err11}`, /duplicate column/i.test(err11));
 await fin();

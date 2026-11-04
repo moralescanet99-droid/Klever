@@ -1,6 +1,7 @@
 import { json, auth, readJson, tickersDesconocidos, ERROR_INTERNO } from '../../_lib.js';
+import { validarResumen } from '../../../public/js/nota.js';
 import { propuestaCoincide, simular, esDecima } from '../../../public/js/calculos.js';
-import { SELECT_ESCENARIO, formato, fechaValida, MAX_PREGUNTA, ID_HISTORIA } from './_comun.js';
+import { SELECT_ESCENARIO, formato, fechaValida, MAX_PREGUNTA, ID_HISTORIA, REF_PREGUNTA } from './_comun.js';
 
 const MAX_ESCENARIOS = 100;
 
@@ -37,13 +38,18 @@ export async function onRequestPost({ request, env }) {
   // Evaluación de estructura FECHADA que vio la persona (antes/después): se guarda tal cual y NUNCA se recalcula. Es un registro suyo, no un dato autoritativo.
   let evaluacion = null;
   if (b.evaluacion != null) {
-    const ok = o => o && typeof o === 'object' && typeof o.version === 'string';
-    if (!ok(b.evaluacion?.antes) || !ok(b.evaluacion?.despues)) return json({ error: 'La evaluación adjunta no es válida.' }, 400);
-    evaluacion = JSON.stringify({ antes: b.evaluacion.antes, despues: b.evaluacion.despues });
+    // Se valida la FORMA de cada resumen (números finitos y en rango, fechas reales, bloques conocidos, texto sin marcado) y se guarda una copia RECONSTRUIDA.
+    // El servidor no puede recalcular la evaluación (el universo de entonces ya no existe): es un registro de lo que vio la persona y así se presenta.
+    if (!b.evaluacion || typeof b.evaluacion !== 'object' || Object.keys(b.evaluacion).some(k => !['antes', 'despues'].includes(k))) return json({ error: 'La evaluación adjunta no es válida.' }, 400);
+    const va = validarResumen(b.evaluacion.antes), vd = validarResumen(b.evaluacion.despues);
+    if (!va.ok || !vd.ok) return json({ error: 'La evaluación adjunta no es válida: ' + (va.ok ? vd.motivo : va.motivo) }, 400);
+    evaluacion = JSON.stringify({ antes: va.limpio, despues: vd.limpio });
     if (evaluacion.length > 6000) return json({ error: 'La evaluación adjunta es demasiado grande.' }, 400);
   }
   const historia = b.historia == null || b.historia === '' ? null : String(b.historia);
   if (historia !== null && !ID_HISTORIA.test(historia)) return json({ error: 'La historia vinculada no es válida.' }, 400);
+  const ref = b.pregunta_ref == null || b.pregunta_ref === '' ? null : String(b.pregunta_ref);
+  if (ref !== null && (!REF_PREGUNTA.test(ref) || historia === null || ref.split(':')[0] !== historia)) return json({ error: 'La pregunta de la historia vinculada no es válida.' }, 400);
   try {
     const previo = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? AND e.clave = ?`).bind(user.id, clave).first();
     if (previo) return json({ ...formato(previo), duplicado: true });             // reintento: ya estaba guardado
@@ -63,9 +69,9 @@ export async function onRequestPost({ request, env }) {
     try {
       // El tope se comprueba EN la propia sentencia (no antes): dos guardados simultáneos no pueden superarlo.
       const r = await env.DB.prepare(
-        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, pregunta, revisar_en, historia, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
-         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
-        .bind(user.id, clave, nombre, nota, pregunta, revisar, historia, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
+        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, pregunta, revisar_en, historia, pregunta_ref, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
+         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
+        .bind(user.id, clave, nombre, nota, pregunta, revisar, historia, ref, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
       if (!r.meta?.changes) return json({ error: `Puedes guardar hasta ${MAX_ESCENARIOS} escenarios. Elimina alguno para guardar otro.` }, 400);
     } catch (e) {
       const otro = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? AND e.clave = ?`).bind(user.id, clave).first(); // carrera entre dos reintentos

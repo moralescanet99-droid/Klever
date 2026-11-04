@@ -199,4 +199,5 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 .caso-pesos{background:var(--surface-2);border-radius:8px;padding:8px 10px} .caso-acc{display:flex;flex-wrap:wrap;gap:8px} .caso-acc .btn{min-height:44px}
 /* explorar: filtros plegados */
 .emp-filtros-det{margin:0 0 var(--s1)} .emp-filtros-det summary{cursor:pointer;font-weight:600;color:var(--accent);min-height:44px;display:flex;align-items:center}
-@media (max-width:480px){.esp-fila{grid-template-columns:3.4rem minmax(0,1fr)} .nota-num b{font-size:2rem}}
+@media (max-width:480px){.esp-fila{grid-template-columns:4.2rem minmax(0,1fr)} .nota-num b{font-size:2rem}}
+.esc-vinculo{margin:.6rem 0;font-size:var(--t-s)}

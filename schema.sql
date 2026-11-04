@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS escenarios (
   revisar_en TEXT CHECK (revisar_en IS NULL OR revisar_en GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
   historia TEXT CHECK (historia IS NULL OR length(historia) BETWEEN 1 AND 60),   -- identificador de la historia editorial de origen
   nota_json TEXT,                                                       -- ronda 15: evaluación de estructura fechada (antes/después)
+  pregunta_ref TEXT CHECK (pregunta_ref IS NULL OR (length(pregunta_ref) BETWEEN 3 AND 70 AND pregunta_ref GLOB '*:[0-9]*')),   -- ronda 16 (migración 0011): cuestión editorial estable («historia:n»)
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE (usuario_id, clave)

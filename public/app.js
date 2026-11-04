@@ -317,7 +317,7 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
-  if (v === 'ejemplo') mostrarEjemplo();
+  if (v === 'ejemplo') mostrarEjemplo(true);
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
 }

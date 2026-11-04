@@ -67,7 +67,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const marca = await p.evaluate(() => [...document.querySelectorAll('.chip.radar')].filter(e => e.offsetParent !== null).length);
     await p.fill('#emp-buscar', ''); await p.click('#emp-filtros-det summary'); await p.check('#emp-radar'); await p.waitForTimeout(300);
     const soloRadar = await p.evaluate(() => ({ cuenta: document.querySelector('#emp-cuenta').textContent, filas: [...document.querySelectorAll(window.innerWidth >= 720 ? '#empresas-lista tr' : '#empresas-cards li')].filter(e => e.querySelector('[data-t]')).length }));
-    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 106; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 106/.test(soloRadar.cuenta) && soloRadar.filas === 1);
+    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 126/.test(soloRadar.cuenta) && soloRadar.filas === 1);
     await p.uncheck('#emp-radar');
     // ---------- 5. Mi seguimiento: nota y paso al laboratorio con cartera y activo elegidos
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('.seg-item');
@@ -204,8 +204,8 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const recarga = await p.evaluate(() => ({ s: document.querySelector('#emp-sector').value, e: document.querySelector('#emp-estado').value }));
     await p.click('#emp-borrar'); await p.waitForTimeout(300);
     const borr = N(await p.textContent('#emp-cuenta'));
-    ev('K25', 'Filtros explícitos: sector + comprobación + resultado', `Sector «${sector}» con ROIC «no superada»: ${esperado} empresa(s) según el servidor; los filtros sobreviven a abrir la ficha y a recargar; «Borrar» devuelve las 106; no se crea ningún ranking nuevo`,
-      `${cuenta}; tras ficha ${tras.s}/${tras.c}/${tras.e}; recarga ${recarga.s}/${recarga.e}; borrar ${borr}`, new RegExp(`^${esperado} de 106`).test(cuenta) && tras.s === sector && tras.e === 'no' && recarga.s === sector && recarga.e === 'no' && /^106 empresas/.test(borr));
+    ev('K25', 'Filtros explícitos: sector + comprobación + resultado', `Sector «${sector}» con ROIC «no superada»: ${esperado} empresa(s) según el servidor; los filtros sobreviven a abrir la ficha y a recargar; «Borrar» devuelve las 126; no se crea ningún ranking nuevo`,
+      `${cuenta}; tras ficha ${tras.s}/${tras.c}/${tras.e}; recarga ${recarga.s}/${recarga.e}; borrar ${borr}`, new RegExp(`^${esperado} de 126`).test(cuenta) && tras.s === sector && tras.e === 'no' && recarga.s === sector && recarga.e === 'no' && /^126 empresas/.test(borr));
     // origen de los datos
     const av = N(await p.textContent('#aviso-datos')), pie = await p.evaluate(() => document.body.innerText);
     await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open]'); await p.waitForTimeout(400);

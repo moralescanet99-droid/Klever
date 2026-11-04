@@ -1,15 +1,15 @@
 // Vistas de «Cartera de ejemplo» y «Comparar con otra empresa». Presentación; los cálculos están en comparador.js y nota.js.
-import { CARTERA_EJEMPLO } from './contenido.js';
+import { CARTERA_EJEMPLO, CARTERA_EJEMPLO_INCOMPLETA } from './contenido.js';
 import { compararEmpresas } from './comparador.js';
 import { evaluar } from './nota.js';
 import { htmlNotaEstructura } from './nota-ui.js';
 
-const ID = { ctx: null };
+const ID = { ctx: null, incompleto: false };
 const xi = () => ID.ctx;
 export function iniciarIdeas(ctx) {
   ID.ctx = ctx;
   ctx.$('#vista-ejemplo').addEventListener('click', e => {
-    if (e.target.closest('#ej-lab')) ctx.abrirEjemplo(); else if (e.target.closest('#ej-crear')) { ctx.go('#inicio'); setTimeout(() => ctx.$('#plantillas')?.scrollIntoView(), 50); }
+    if (e.target.closest('#ej-lab')) ctx.abrirEjemplo(); else if (e.target.closest('#ej-otro')) { ID.incompleto = !ID.incompleto; mostrarEjemplo(); } else if (e.target.closest('#ej-crear')) { ctx.go('#inicio'); setTimeout(() => ctx.$('#plantillas')?.scrollIntoView(), 50); }
   });
   ctx.$('#vista-comparar').addEventListener('click', e => {
     const b = e.target.closest('[data-comparar-con]'); if (b) { ctx.go(`#comparar-${b.dataset.a}-${b.dataset.compararCon}`); return; }
@@ -18,13 +18,14 @@ export function iniciarIdeas(ctx) {
   });
 }
 const C = v => String(v).replace('.', ',');
-export async function mostrarEjemplo() {
+export async function mostrarEjemplo(inicio) {
+  if (inicio) ID.incompleto = false;
   const { $, esc } = xi(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
-  const pos = CARTERA_EJEMPLO.posiciones;
-  cont.innerHTML = `<div class="pag-cab"><h1>${esc(CARTERA_EJEMPLO.nombre)}</h1><p class="mut">${esc(CARTERA_EJEMPLO.aviso)}</p></div>
+  const EJ = ID.incompleto ? CARTERA_EJEMPLO_INCOMPLETA : CARTERA_EJEMPLO, pos = EJ.posiciones;
+  cont.innerHTML = `<div class="pag-cab"><h1>${esc(EJ.nombre)}</h1><p class="mut">${esc(EJ.aviso)}</p></div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
-    <p class="ej-acc"><button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> <button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
+    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button> <button class="enlace" type="button" id="ej-otro">${ID.incompleto ? 'Ver el ejemplo con la nota calculada' : 'Ver un ejemplo con datos incompletos'}</button></p>
     <div id="ej-nota"></div><p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
   try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
 }

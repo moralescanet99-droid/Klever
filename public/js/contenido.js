@@ -77,6 +77,16 @@ export const CARTERA_EJEMPLO = {
   ],
 };
 
+// Segundo ejemplo, INCOMPLETO a propósito: enseña cómo se ve una nota que no se puede calcular y por qué (un banco no tiene deuda/EBITDA comparable).
+export const CARTERA_EJEMPLO_INCOMPLETA = {
+  nombre: 'Ejemplo con datos incompletos (no es tuyo)',
+  aviso: 'Es un ejemplo para aprender cuándo Klever dice «pendiente» y por qué: no es una recomendación.',
+  posiciones: [
+    { ticker: 'KO', peso: 50, razon: 'Una empresa de bebidas muy conocida: de ella sí hay todos los datos que necesita la nota.' },
+    { ticker: 'JPM', peso: 50, razon: 'Un banco. Los bancos no se miden con deuda neta/EBITDA ni con ROIC, así que la mitad de la cartera queda sin valorar en esos apartados.' },
+  ],
+};
+
 // Preguntas que se pueden seguir con la historia de ejemplo y qué dice la revisión editorial sobre cada una. TODO el desenlace es SIMULADO.
 // `respuesta: null` = la fuente aún no permite responder (se dice qué sigue pendiente). Las fechas son las del caso ficticio.
 export const SEGUIMIENTO_CASOS = [
@@ -87,4 +97,19 @@ export const SEGUIMIENTO_CASOS = [
   { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
     pendiente: 'La fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
 ];
-export const casoSeguimiento = (hid, pregunta) => SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.pregunta === pregunta) || null;
+// Vínculo ESTABLE entre una pregunta de la persona y la cuestión editorial de la historia: un identificador «historia:n» (n = número de la tesis que la plantea),
+// no el texto. Reescribir la pregunta, añadir un espacio o reformularla NO rompe el vínculo; una pregunta nueva (sin vínculo) no hereda respuestas ajenas.
+export const refPregunta = (hid, n) => `${hid}:${n}`;
+export const casoPorRef = ref => SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
+export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
+// Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
+//  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
+//  · «pendiente»  — vinculado, pero la fuente aún no permite responder;
+//  · «otra»       — la persona hizo una pregunta DISTINTA y la historia tiene revisión publicada de otra: no la responde, sigue pendiente, y se ofrece verla;
+//  · «sin»        — sin historia: nada que responda.
+export function estadoSeguimiento({ historia: hid, pregunta_ref: ref, pregunta }) {
+  const caso = ref ? casoPorRef(ref) : null;
+  if (caso) return { tipo: caso.respuesta ? 'responde' : 'pendiente', caso, distinta: normalizaPregunta(pregunta) !== normalizaPregunta(caso.pregunta) };
+  const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta);
+  return hay ? { tipo: 'otra', caso: null, editorial: hay } : { tipo: 'sin', caso: null };
+}
