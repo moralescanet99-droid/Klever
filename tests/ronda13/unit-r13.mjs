@@ -105,10 +105,10 @@ const r8 = await llama(ES.onRequestPost, 1, 'POST', cuerpo({ clave: 'intento-000
 t('R8', 'Fallo de infraestructura al guardar y reintento', 'El fallo da 500 sin dejar filas; el reintento con la misma clave guarda UNA', `fallo HTTP ${r.s}, filas ${filas}→${tras}; reintento HTTP ${r8.s}, filas ${n('escenarios')}`, r.s === 500 && tras === filas && r8.s === 201 && n('escenarios') === filas + 1);
 r = await llama(EI.onRequestDelete, 1, 'DELETE', undefined, { id: r8.j.id });
 t('R9', 'Descartar un escenario lo borra sin tocar la cartera', 'HTTP 200; la cartera 3 intacta', `HTTP ${r.s}; ${env.sql.prepare('SELECT COUNT(*) c FROM posiciones WHERE portafolio_id=3').get().c} posiciones`, r.s === 200 && env.sql.prepare('SELECT COUNT(*) c FROM posiciones WHERE portafolio_id=3').get().c === 2);
-// origen de los datos
+// origen de los datos (ronda 14: derivado de la procedencia de cada fila, no de una declaración global)
 r = await llama(DA.onRequestGet, 0, 'GET');
 const sinFila = r.j.origen;
-env.sql.exec("INSERT INTO datos_meta(clave,valor) VALUES('origen','prueba')"); const conFila = (await llama(DA.onRequestGet, 0, 'GET')).j;
-t('R10', 'Origen de los datos', 'Sin fila: origen null (no se atribuye); con «prueba»: «prueba»', `${sinFila} / ${conFila.origen}`, sinFila === null && conFila.origen === 'prueba');
+env.sql.exec("INSERT INTO fundamentales(ticker,periodo,ingresos,fuente,actualizado_en) VALUES('A','FY2024',1,'prueba','2026-11-01')"); const conFila = (await llama(DA.onRequestGet, 0, 'GET')).j;
+t('R10', 'Origen de los datos (derivado de las filas)', 'Sin filas: origen null (no se atribuye); con una fila «prueba»: «prueba»', `${sinFila} / ${conFila.origen}`, sinFila === null && conFila.origen === 'prueba');
 function J(x) { return JSON.stringify(x); }
 await fin();

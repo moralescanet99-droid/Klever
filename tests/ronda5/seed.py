@@ -1,7 +1,7 @@
 # Datos de PRUEBA locales (inventados): universo completo, con huecos para probar "sin dato" y cobertura.
 import json, random, hashlib, pathlib
 RAIZ = pathlib.Path(__file__).resolve().parents[2]
-uni = json.load(open(RAIZ / 'data/universe.json'))
+uni = json.load(open(RAIZ / 'data/universe.json')) + json.load(open(RAIZ / 'data/ficticios.json'))   # ronda 14: además, el caso FICTICIO de la historia editorial (no está en el universo real)
 out = []
 def q(s): return "'" + str(s).replace("'", "''") + "'"
 for a in uni:
@@ -15,7 +15,7 @@ for a in uni:
         rows.append(dict(y=y, ing=ing, ni=ing*m, debt=None if fin else d, ebitda=None if fin else e, fcf=ing*(r.random()*.25 - .03), roic=None if fin else .02 + r.random()*.28))
     for x in rows:
         v = lambda z: 'NULL' if z is None else repr(float(z))
-        out.append(f"INSERT INTO fundamentales VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])});")
+        out.append(f"INSERT INTO fundamentales(ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en) VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])},'prueba',date('now'));")
     L, P = rows[-1], rows[-2]
     ok = lambda c, val: dict(ok=None if val is None else c, valor=val)
     crit = dict(periodo='FY2024',
@@ -25,7 +25,6 @@ for a in uni:
         flujo_caja=ok(L['fcf'] > 0, L['fcf']),
         crecimiento=ok(L['ing'] > P['ing'], L['ing']/P['ing'] - 1))
     out.append(f"INSERT INTO ideas VALUES({q(a['ticker'])},{q(json.dumps(crit))},datetime('now'));")
-out.append("INSERT OR REPLACE INTO datos_meta(clave,valor) VALUES('origen','prueba');")  # ronda 13: la interfaz identifica estos datos como ficticios
 cab = ['-- Klever · datos de PRUEBA (inventados). Solo para ejecutar la web en local con scripts/local/arrancar.sh.', '-- No son cifras reales de ninguna empresa. Se generan con tests/ronda5/seed.py (semilla fija: siempre salen los mismos).']
 open(RAIZ / 'data/seed-prueba.sql', 'w').write('\n'.join(cab + out))
 print(len(uni), 'activos sembrados')

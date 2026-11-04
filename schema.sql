@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS fundamentales (
   periodo TEXT NOT NULL,            -- ej. FY2024
   ingresos REAL, beneficio_neto REAL, deuda_neta REAL,
   ebitda REAL, flujo_caja_libre REAL, roic REAL,
+  fuente TEXT CHECK (fuente IS NULL OR fuente IN ('sec','prueba','demo')),   -- procedencia de ESTA fila (NULL = sin fuente verificada)
+  actualizado_en TEXT,                                                        -- fecha de la carga que la escribió
   PRIMARY KEY (ticker, periodo)
 );
 CREATE TABLE IF NOT EXISTS portafolios (
@@ -86,6 +88,9 @@ CREATE TABLE IF NOT EXISTS escenarios (
   base_json TEXT NOT NULL,                                              -- copia de la composición de la cartera en esa revisión
   propuesta_json TEXT NOT NULL,                                         -- composición propuesta (calculada por el método; nunca se recalcula)
   revision INTEGER NOT NULL DEFAULT 0,                                  -- control de escrituras de nombre, nota y estado
+  pregunta TEXT NOT NULL DEFAULT '' CHECK (length(pregunta) <= 200),     -- ronda 14: qué quiere averiguar la persona (opcional)
+  revisar_en TEXT CHECK (revisar_en IS NULL OR revisar_en GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  historia TEXT CHECK (historia IS NULL OR length(historia) BETWEEN 1 AND 60),   -- identificador de la historia editorial de origen
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE (usuario_id, clave)
@@ -94,4 +99,13 @@ CREATE INDEX IF NOT EXISTS idx_escenarios_usuario ON escenarios (usuario_id, id 
 CREATE TABLE IF NOT EXISTS datos_meta (
   clave TEXT PRIMARY KEY,
   valor TEXT NOT NULL
+);
+-- Ronda 14 (migración 0009): lotes de carga trazables
+CREATE TABLE IF NOT EXISTS cargas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  origen TEXT NOT NULL CHECK (origen IN ('sec','prueba','demo')),
+  fecha TEXT NOT NULL,
+  n_ok INTEGER NOT NULL, n_vacias INTEGER NOT NULL, n_fallidas INTEGER NOT NULL,
+  estado TEXT NOT NULL CHECK (estado IN ('correcta','parcial','vacia')),
+  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
 );

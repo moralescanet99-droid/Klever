@@ -4,6 +4,8 @@
 // real de un fondo ni calculan solapamientos, y no normalizan una cartera incompleta para que parezca asignada al 100 %.
 
 const aDec = p => Math.round(Number(p) * 10);          // % → décimas
+// ¿Tiene como mucho UNA decimal? (10,04 no: se rechaza en vez de redondearlo en silencio)
+export const esDecima = v => Number.isFinite(Number(v)) && Math.abs(Number(v) * 10 - Math.round(Number(v) * 10)) < 1e-7;
 const dePct = d => d / 10;                              // décimas → %
 const num = d => String(dePct(d)).replace('.', ',');    // 54 → «54»; 5,4 → «5,4»
 const porTicker = (a, b) => (a.ticker < b.ticker ? -1 : a.ticker > b.ticker ? 1 : 0);
@@ -62,6 +64,7 @@ export function simular(base, op, financiacion) {
   const nuevo = aDec(op?.peso);
   if (!op?.ticker) { res.motivo = 'Elige un activo.'; return res; }
   if (!Number.isFinite(nuevo) || nuevo < 1 || nuevo > 1000) { res.motivo = 'El peso propuesto debe estar entre 0,1 y 100 %.'; return res; }
+  if (!esDecima(op.peso)) { res.motivo = 'El peso propuesto admite como mucho un decimal (por ejemplo 10 o 10,5 %).'; return res; }
   if (total > 1000) { res.motivo = `La cartera base suma ${num(total)} % (exceso de ${num(total - 1000)} %). Corrígela antes de simular.`; return res; }
   const actual = antes.find(p => p.ticker === op.ticker)?.d || 0, delta = nuevo - actual, otras = antes.filter(p => p.ticker !== op.ticker), S = otras.reduce((s, p) => s + p.d, 0);
   res.delta = dePct(delta);
@@ -100,6 +103,18 @@ export function simular(base, op, financiacion) {
   return res;
 }
 
+// «De dónde sale el peso»: una frase por posición que cambia, para leerla ANTES de la tabla y del detalle del cálculo.
+export function origenPeso(sim) {
+  if (!sim?.viable) return '';
+  const nuevo = sim.cambios.find(c => c.ticker === sim.ticker), otros = sim.cambios.filter(c => c.ticker !== sim.ticker && c.delta !== 0);
+  const p = v => String(Math.abs(v)).replace('.', ',');
+  if (sim.financiacion === 'sin_asignar') {
+    return nuevo.delta > 0 ? `Los ${p(nuevo.delta)} puntos de ${sim.ticker} salen del porcentaje que no estaba asignado (${p(Math.round((100 - sim.totalAntes) * 10) / 10)} % libre antes del cambio). Ninguna otra posición cambia.` : `${sim.ticker} cede ${p(nuevo.delta)} puntos, que quedan sin asignar. Ninguna otra posición cambia.`;
+  }
+  if (!otros.length) return nuevo.delta < 0 ? `${sim.ticker} cede ${p(nuevo.delta)} puntos, que quedan sin asignar. Ninguna otra posición cambia.` : '';
+  return `Los ${p(nuevo.delta)} puntos de ${sim.ticker} salen de reducir las otras posiciones en proporción: ${otros.map(o => `${o.ticker} cede ${p(o.delta)} (${p(o.antes)} → ${p(o.despues)} %)`).join(', ')}.`;
+}
+
 // Compara dos composiciones con las mismas reglas de lectura.
 export function comparar(antes, despues, activos = {}, limite = null) {
   const A = radiografia(antes, activos, limite), D = radiografia(despues, activos, limite);
@@ -112,10 +127,19 @@ export function comparar(antes, despues, activos = {}, limite = null) {
     limites: { nuevos: D.superados.filter(s => !antesSup.has(s.ticker)), resueltos: A.superados.filter(s => !despSup.has(s.ticker)), siguen: D.superados.filter(s => antesSup.has(s.ticker)) } };
 }
 
-// Comprobación de un escenario guardado (servidor): ¿la propuesta es exactamente la que sale del método con esa base y esa operación?
+// Comprobación de un escenario guardado (servidor): ¿la propuesta es EXACTAMENTE la que sale del método con esa base y esa operación?
+// Se valida la propuesta tal como llega (sin normalizarla antes): símbolos únicos, una decimal como mucho y misma longitud.
 export function propuestaCoincide(base, op, financiacion, propuesta) {
+  if (!esDecima(op?.peso)) return { ok: false, motivo: 'El peso admite como mucho un decimal.' };
   const s = simular(base, op, financiacion);
   if (!s.viable) return { ok: false, motivo: s.motivo };
+  if (!Array.isArray(propuesta)) return { ok: false, motivo: 'La propuesta no es válida.' };
+  const vistos = new Set();
+  for (const p of propuesta) {
+    if (typeof p?.ticker !== 'string' || vistos.has(p.ticker)) return { ok: false, motivo: 'La propuesta repite o no identifica algún símbolo.' };
+    vistos.add(p.ticker);
+    if (!(Number(p.peso) > 0) || !esDecima(p.peso)) return { ok: false, motivo: 'La propuesta contiene un peso con más de un decimal o no válido.' };
+  }
   const a = JSON.stringify(s.despues), b = JSON.stringify(normalizar(propuesta).map(p => ({ ticker: p.ticker, peso: dePct(p.d) })));
-  return a === b ? { ok: true } : { ok: false, motivo: 'La propuesta no coincide con el resultado del método elegido.' };
+  return propuesta.length === s.despues.length && a === b ? { ok: true } : { ok: false, motivo: 'La propuesta no coincide con el resultado del método elegido.' };
 }

@@ -56,9 +56,9 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.selectOption('#fir-cartera', { label: 'Base dividendos' }); await p.waitForTimeout(200);
     ev('K4-' + w, `La ficha dice si el activo ya figura DIRECTAMENTE en la cartera elegida (${w} px)`, 'En «Base dividendos» no figura directamente (y avisa de que no se miran los fondos por dentro); en «Para cambios locales» figura con el 20 % guardado',
       `${noFig.slice(0, 120)} | ${fig.slice(0, 90)}`, /no figura directamente/.test(noFig) && /posiciones internas de los fondos/.test(noFig) && /ya figura directamente con el 20 %/.test(fig));
-    await p.focus('#fir-toggle'); await p.keyboard.press('Enter'); await p.waitForSelector('#fir-nota');
+    await p.focus('#fir-toggle'); await p.keyboard.press('Enter'); await p.waitForSelector('#fi-radar [data-nota=editar]');
     const foco = await p.evaluate(() => document.activeElement?.id);
-    await p.fill('#fir-nota', 'Revisar deuda y caja libre'); await p.click('#fir-nota-g'); await p.waitForTimeout(500);
+    await p.click('#fi-radar [data-nota=editar]'); await p.waitForSelector('#fir-nota'); await p.fill('#fir-nota', 'Revisar deuda y caja libre'); await p.click('#fi-radar [data-nota=guardar]'); await p.waitForSelector('#fi-radar .nota-txt'); await p.waitForTimeout(300);
     const ar = await api(p, 'GET', '/radar');
     ev('K5-' + w, `Guardar en el radar con teclado y con nota privada (${w} px)`, 'Intro sobre el botón guarda; el foco se queda en el botón; la nota se guarda en la cuenta (comprobado en la API) y el estado dice «Guardada en tu cuenta»',
       `foco ${foco}; API ${JSON.stringify(ar.j.map(x => [x.ticker, x.nota]))}; ${N(await p.textContent('#fir-estado'))}`, foco === 'fir-toggle' && ar.j.length === 1 && ar.j[0].ticker === 'JNJ' && ar.j[0].nota === 'Revisar deuda y caja libre' && /Guardada en tu cuenta/.test(await p.textContent('#fir-estado')));
@@ -67,12 +67,12 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const marca = await p.evaluate(() => [...document.querySelectorAll('.chip.radar')].filter(e => e.offsetParent !== null).length);
     await p.fill('#emp-buscar', ''); await p.check('#emp-radar'); await p.waitForTimeout(300);
     const soloRadar = await p.evaluate(() => ({ cuenta: document.querySelector('#emp-cuenta').textContent, filas: [...document.querySelectorAll(window.innerWidth >= 720 ? '#empresas-lista tr' : '#empresas-cards li')].filter(e => e.querySelector('[data-t]')).length }));
-    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 105; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 105/.test(soloRadar.cuenta) && soloRadar.filas === 1);
+    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 106; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 106/.test(soloRadar.cuenta) && soloRadar.filas === 1);
     await p.uncheck('#emp-radar');
     // ---------- 5. Mi seguimiento: nota y paso al laboratorio con cartera y activo elegidos
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('.seg-item');
     await p.selectOption('#seg-ref', { label: 'Base dividendos' });
-    const seg = await p.evaluate(() => ({ nota: document.querySelector('.seg-item textarea').value, en: document.querySelector('.seg-item [data-en]').textContent.replace(/\s+/g, ' ') }));
+    const seg = await p.evaluate(() => ({ nota: document.querySelector('.seg-item .nota-txt').textContent.trim(), en: document.querySelector('.seg-item [data-en]').textContent.replace(/\s+/g, ' ') }));
     await snap(p, 'R3-seguimiento-radar', w);
     ev('K7-' + w, `Mi seguimiento conserva la nota y la cartera de referencia (${w} px)`, 'La nota guardada reaparece; dice que en «Base dividendos» no figura directamente; sin desbordamiento', `«${seg.nota}»; ${seg.en.slice(0, 70)}`, seg.nota === 'Revisar deuda y caja libre' && /«Base dividendos» no figura directamente/.test(seg.en) && await sinDesborde(p));
     await p.click('.seg-item [data-acc=sim]'); await p.waitForSelector('#lab-form');
@@ -97,7 +97,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     // ---------- 7. Guardar el escenario (no toca la cartera ni su versión pública)
     const antes = JSON.stringify((await api(p, 'GET', '/portfolios/' + idBase)).j.posiciones), revAntes = (await api(p, 'GET', '/portfolios/' + idBase)).j.revision;
     const pub0 = await api(p, 'GET', '/public', undefined, 'ninguno');
-    await p.fill('#lab-nombre', 'Añadir JNJ al 10 %'); await p.fill('#lab-nota', 'Comparar con KO'); await p.click('#lab-guardar-btn'); await p.waitForSelector('#esc-form'); await p.waitForTimeout(400);
+    await p.fill('#lab-nombre', 'Añadir JNJ al 10 %'); await p.fill('#lab-nota', 'Comparar con KO'); await p.click('#lab-guardar-btn'); await p.waitForSelector('#esc-editar'); await p.waitForTimeout(400);
     const idEsc = +(await p.evaluate(() => location.hash.match(/escenario-(\d+)/)[1]));
     const despues = JSON.stringify((await api(p, 'GET', '/portfolios/' + idBase)).j.posiciones), revDesp = (await api(p, 'GET', '/portfolios/' + idBase)).j.revision;
     const escApi = await api(p, 'GET', '/escenarios/' + idEsc);
@@ -106,12 +106,12 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await snap(p, 'R5-escenario-guardado', w, true);
     // ---------- 8. La cartera cambia: el escenario conserva su base y avisa, sin recalcular
     await api(p, 'PUT', '/portfolios/' + idBase, { posiciones: [{ ticker: 'KO', peso: 50 }, { ticker: 'PG', peso: 50 }], nombre: 'Base dividendos', tesis: 'Cartera de prueba', revision: revBase });
-    await p.reload(); await p.waitForSelector('#esc-form'); await p.waitForTimeout(500);
+    await p.reload(); await p.waitForSelector('#esc-editar'); await p.waitForTimeout(500);
     const post = await p.evaluate(() => ({ aviso: document.querySelector('#vista-lab .aviso-panel')?.textContent.replace(/\s+/g, ' ') || '', cuerpo: document.querySelector('#vista-lab').textContent.replace(/ /g, ' ').replace(/\s+/g, ' ') }));
     ev('K12-' + w, `Reabrir un escenario tras cambiar la cartera original (${w} px)`, 'Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula',
       `${post.aviso.slice(0, 110)}…; ${/Base: KO 60 % · PG 40 %/.test(post.cuerpo)}; ${/Propuesta: KO 54 %/.test(post.cuerpo)}`, /La cartera cambió después de este escenario/.test(post.aviso) && /revisión 0 → 1/.test(post.aviso) && /Base: KO 60 % · PG 40 %/.test(post.cuerpo) && /Propuesta: KO 54 % · PG 36 % · JNJ 10 %/.test(post.cuerpo));
     // ---------- 9. Estado, nota y seguimiento
-    await p.selectOption('#esc-estado', 'archivado'); await p.fill('#esc-nota', 'Archivado: ya no me interesa'); await p.click('#esc-guardar'); await p.waitForTimeout(500);
+    await p.click('#esc-editar'); await p.fill('#esc-nota', 'Archivado: ya no me interesa'); await p.click('#esc-guardar'); await p.waitForSelector('#esc-editar'); await p.click('[data-estado=archivado]'); await p.waitForFunction(() => /Archivado/.test(document.querySelector('#lab-cuerpo h1')?.textContent || '')); await p.waitForTimeout(300);
     const escB = await api(p, 'GET', '/escenarios/' + idEsc);
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#seg-escenarios');
     await p.waitForFunction(() => !document.querySelector('#seg-escenarios').textContent.includes('Cargando')); await p.waitForTimeout(200);
@@ -122,7 +122,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       `API ${escB.j.estado}/«${escB.j.nota}»; en estudio ${enEstudio}; archivados: ${archivados[0]}`, escB.j.estado === 'archivado' && escB.j.nota === 'Archivado: ya no me interesa' && enEstudio === 0 && archivados.length === 1 && /Simulación/.test(archivados[0]) && /Hay una versión posterior de la cartera/.test(archivados[0]) && await sinDesborde(p));
     await snap(p, 'R6-seguimiento-escenarios', w, true);
     // ---------- 10. Descartar
-    await p.click('#seg-escenarios a.btn'); await p.waitForSelector('#esc-descartar'); await p.click('#esc-descartar'); await p.waitForSelector('#seg-escenarios'); await p.waitForTimeout(500);
+    await p.click('#seg-escenarios a.btn'); await p.waitForSelector('#esc-eliminar'); await p.click('#esc-eliminar'); await p.waitForSelector('#seg-escenarios'); await p.waitForTimeout(500);
     const quedan = (await api(p, 'GET', '/escenarios')).j.length, cartDesp = JSON.stringify((await api(p, 'GET', '/portfolios/' + idBase)).j.posiciones);
     ev('K14-' + w, `Descartar un escenario no toca la cartera (${w} px)`, 'Tras descartarlo no queda ninguno; la cartera conserva su estado (50/50)', `escenarios ${quedan}; ${cartDesp}`, quedan === 0 && /"peso":50/.test(cartDesp));
     // ---------- 11. Operación inviable con motivo
@@ -152,7 +152,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const claves = []; await p.route('**/api/escenarios', async r => { if (r.request().method() === 'POST') { claves.push(JSON.parse(r.request().postData()).clave); if (claves.length === 1) return r.abort(); } return r.continue(); });
     await p.click('#lab-guardar-btn'); await p.waitForFunction(() => /Tus datos siguen aquí/.test(document.querySelector('#lab-guardar-error')?.textContent || '')); const nFallo = (await api(p, 'GET', '/escenarios')).j.length;
     const conserva = await p.evaluate(() => ({ nombre: document.querySelector('#lab-nombre').value, form: !!document.querySelector('#lab-guardar') }));
-    await p.click('#lab-guardar-btn'); await p.waitForSelector('#esc-form'); const nOk = (await api(p, 'GET', '/escenarios')).j.length;
+    await p.click('#lab-guardar-btn'); await p.waitForSelector('#esc-editar'); const nOk = (await api(p, 'GET', '/escenarios')).j.length;
     ev('K18', 'Fallo de red al guardar un escenario y reintento', 'El fallo no guarda nada y conserva el formulario con un mensaje; el reintento usa la MISMA clave y guarda exactamente uno', `fallo: ${nFallo} escenarios, formulario ${conserva.form}; reintento: ${nOk}; claves iguales ${claves[0] === claves[1]}`, nFallo === 0 && conserva.form && nOk === 1 && claves.length === 2 && claves[0] === claves[1]);
     // aislamiento por HTTP real entre dos usuarios (otra sesión)
     const idEsc = +(await p.evaluate(() => location.hash.match(/escenario-(\d+)/)[1])); const idCart = (await api(p, 'GET', '/portfolios')).j[0].id;
@@ -172,9 +172,9 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     for (const w of [390, 1440]) {
       const p = await nuevo(b, w, 800); p.on('dialog', d => d.accept());
       await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true'); await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#fir-toggle');
-      const sinRef = N(await p.textContent('#fi-radar')); await p.click('#fir-toggle'); await p.waitForSelector('#fir-nota'); await p.fill('#fir-nota', 'Mirar con calma'); await p.click('#fir-nota-g'); await p.waitForTimeout(300);
+      const sinRef = N(await p.textContent('#fi-radar')); await p.click('#fir-toggle'); await p.waitForSelector('#fi-radar [data-nota=editar]'); await p.click('#fi-radar [data-nota=editar]'); await p.fill('#fir-nota', 'Mirar con calma'); await p.click('#fi-radar [data-nota=guardar]'); await p.waitForSelector('#fi-radar .nota-txt'); await p.waitForTimeout(300);
       const est = N(await p.textContent('#fir-estado')), local = await p.evaluate(() => localStorage.getItem('klever_radar_local'));
-      ev('K21-' + w, `Visitante: el radar se guarda SOLO en este dispositivo y lo dice (${w} px)`, 'Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage', `${est}; ${local}`, /solo en este dispositivo/.test(est) && !/Guardada en tu cuenta/.test(est) && /Mirar con calma/.test(local || '') && /Simular su incorporación/.test(sinRef));
+      ev('K21-' + w, `Visitante: el radar se guarda SOLO en este dispositivo y lo dice (${w} px)`, 'Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage', `${est}; ${local}`, /solo en este dispositivo/.test(est) && !/Guardada en tu cuenta/.test(est) && /Mirar con calma/.test(local || '') && /Probar en mi cartera/.test(sinRef));
       await p.keyboard.press('Escape');
       // probar una cartera (borrador) y simular de forma temporal
       await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.locator('.peso-in >> visible=true').first().waitFor(); await p.waitForTimeout(400);
@@ -185,7 +185,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       ev('K23-' + w, `Visitante: la simulación es temporal y no se dice «guardado» (${w} px)`, 'El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»', g.slice(0, 140), /temporal/.test(g) && (await p.locator('#lab-guardar-btn').count()) === 0 && !/Guardado en tu cuenta|Escenario guardado/.test(await p.textContent('body')));
       await p.ctx.close();
     }
-    const p = await nuevo(b, 1440, 800); await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true'); await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#fir-toggle'); await p.click('#fir-toggle'); await p.waitForSelector('#fir-nota'); await p.fill('#fir-nota', 'Desde el visitante'); await p.click('#fir-nota-g'); await p.waitForTimeout(300); await p.keyboard.press('Escape');
+    const p = await nuevo(b, 1440, 800); await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true'); await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#fir-toggle'); await p.click('#fir-toggle'); await p.waitForSelector('#fi-radar [data-nota=editar]'); await p.click('#fi-radar [data-nota=editar]'); await p.fill('#fir-nota', 'Desde el visitante'); await p.click('#fi-radar [data-nota=guardar]'); await p.waitForSelector('#fi-radar .nota-txt'); await p.waitForTimeout(300); await p.keyboard.press('Escape');
     await p.click('#entrar'); await p.fill('#acc-email', mail('KM')); await p.check('#acc-acepto'); await p.click('#form-acceso button'); await p.waitForSelector('#acc-paso2:not([hidden])'); await p.goto(await p.getAttribute('#acc-dev a', 'href')); await p.waitForSelector('#vista-carteras:not([hidden])'); await p.waitForTimeout(1200);
     const rem = await api(p, 'GET', '/radar'), loc = await p.evaluate(() => localStorage.getItem('klever_radar_local'));
     ev('K24', 'Al iniciar sesión, el radar del visitante pasa a la cuenta', 'La API devuelve JNJ con su nota; lo local se borra solo tras guardar todo', `${JSON.stringify(rem.j.map(x => [x.ticker, x.nota]))}; local ${loc}`, rem.j.length === 1 && rem.j[0].ticker === 'JNJ' && rem.j[0].nota === 'Desde el visitante' && loc === null);
@@ -204,8 +204,8 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const recarga = await p.evaluate(() => ({ s: document.querySelector('#emp-sector').value, e: document.querySelector('#emp-estado').value }));
     await p.click('#emp-borrar'); await p.waitForTimeout(300);
     const borr = N(await p.textContent('#emp-cuenta'));
-    ev('K25', 'Filtros explícitos: sector + comprobación + resultado', `Sector «${sector}» con ROIC «no superada»: ${esperado} empresa(s) según el servidor; los filtros sobreviven a abrir la ficha y a recargar; «Borrar» devuelve las 105; no se crea ningún ranking nuevo`,
-      `${cuenta}; tras ficha ${tras.s}/${tras.c}/${tras.e}; recarga ${recarga.s}/${recarga.e}; borrar ${borr}`, new RegExp(`^${esperado} de 105`).test(cuenta) && tras.s === sector && tras.e === 'no' && recarga.s === sector && recarga.e === 'no' && /^105 empresas/.test(borr));
+    ev('K25', 'Filtros explícitos: sector + comprobación + resultado', `Sector «${sector}» con ROIC «no superada»: ${esperado} empresa(s) según el servidor; los filtros sobreviven a abrir la ficha y a recargar; «Borrar» devuelve las 106; no se crea ningún ranking nuevo`,
+      `${cuenta}; tras ficha ${tras.s}/${tras.c}/${tras.e}; recarga ${recarga.s}/${recarga.e}; borrar ${borr}`, new RegExp(`^${esperado} de 106`).test(cuenta) && tras.s === sector && tras.e === 'no' && recarga.s === sector && recarga.e === 'no' && /^106 empresas/.test(borr));
     // origen de los datos
     const av = N(await p.textContent('#aviso-datos')), pie = await p.evaluate(() => document.body.innerText);
     await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open]'); await p.waitForTimeout(400);

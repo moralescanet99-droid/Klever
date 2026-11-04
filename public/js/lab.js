@@ -1,82 +1,122 @@
 // Presentación de «Mi cartera» (radiografía), «Mi radar», «Mi laboratorio» y «Mi seguimiento». Los cálculos viven en calculos.js; el almacenamiento, en almacen.js.
 // app.js le pasa sus utilidades (DOM, API, sesión, ficha…) por un contexto: este módulo no conoce el resto del estado de la aplicación.
-import { radiografia, simular, comparar, FINANCIACIONES } from './calculos.js';
+// Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
+import { radiografia, simular, comparar, origenPeso, FINANCIACIONES } from './calculos.js';
 import { crearAlmacen } from './almacen.js';
+import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta } from './contenido.js';
 
-const LAB = { ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null };
+const LAB = { ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
 const ESTADOS = { en_estudio: 'En estudio', descartado: 'Descartado', archivado: 'Archivado' };
 const METODOS = { sin_asignar: 'usando el porcentaje sin asignar', proporcional: 'reduciendo proporcionalmente las otras posiciones' };
+// Cartera de ejemplo para quien aún no tiene ninguna (visitante sin borrador o cuenta sin carteras). NO es de la persona y se rotula así.
+const EJEMPLO = { id: 'ejemplo', nombre: 'Cartera de ejemplo (no es tuya)', pos: [{ ticker: 'KO', peso: 60 }, { ticker: 'PG', peso: 40 }], revision: null, limite: null, publico: false, guardada: false, ejemplo: true };
 const x = () => LAB.ctx;
 const P = v => x().pesoCorto(v);
+const vigente = g => g === LAB.gen;                              // ¿sigue siendo la misma sesión que cuando se pidió esto?
+const hoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 
 export function iniciarLab(ctx) {
   LAB.ctx = ctx;
   LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos });
   const $ = ctx.$;
-  // --- radiografía del editor
   $('#radio-cuerpo').addEventListener('click', e => {
     const b = e.target.closest('[data-modo]'); if (b) { LAB.radioModo = b.dataset.modo; pintarRadiografia(); return; }
     if (e.target.closest('#radio-lab')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); }
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
-  // --- seguimiento
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
+  $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#seg-radar').addEventListener('change', e => { if (e.target.id === 'seg-ref') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarSeguimientoRadar(); $('#seg-ref')?.focus(); } });
-  $('#seg-escenarios').addEventListener('click', () => {});
   $('#seg-filtro').addEventListener('change', pintarSeguimientoEscenarios);
-  // --- laboratorio
   const lab = $('#lab-cuerpo');
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
   lab.addEventListener('click', onLabClic);
-  // --- ficha
   $('#fi-cuerpo').addEventListener('click', onFichaClic);
+  $('#fi-cuerpo').addEventListener('input', e => { if (e.target.id === 'fir-nota' && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#fi-cuerpo').addEventListener('change', e => { if (e.target.id === 'fir-cartera') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarFichaRadar(LAB.fichaActivo); $('#fir-cartera')?.focus(); } });
 }
 
-// =============== origen de los datos (nada se atribuye a la SEC sin verificar) ===============
+// =============== salir / caducar la sesión: nada privado queda en memoria ni en pantalla ===============
+export function limpiarSesionLab() {
+  if (!LAB.ctx) return;
+  LAB.gen++;                                                      // las respuestas pendientes de la sesión anterior se descartan al llegar
+  LAB.alm.reiniciar();
+  Object.assign(LAB, { carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, radarError: null, nota: null, editEsc: false });
+  const { $, store } = LAB.ctx;
+  for (const s of ['#fi-radar', '#seg-radar', '#seg-escenarios', '#lab-cuerpo', '#radio-cuerpo']) { const e = $(s); if (e) { e.innerHTML = ''; delete e.dataset.sig; } }
+  const pend = $('#seg-radar-n'), pend2 = $('#seg-esc-n'); if (pend) pend.textContent = ''; if (pend2) pend2.textContent = '';
+  store.removeItem(CLAVE_REF); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }
+  if ($('#dlg-ficha')?.open && LAB.fichaActivo) pintarFichaRadar(LAB.fichaActivo);   // la ficha abierta pasa a verse como visitante
+}
+
+// =============== origen de los datos: derivado de la procedencia de CADA dato ===============
 export async function cargarOrigenDatos() {
   try { LAB.datos = await x().getJson('/datos'); } catch { LAB.datos = null; }
   aplicarOrigen();
 }
 export function origenDatos() {
-  const d = LAB.datos, fmt = x().fmtFecha;
-  if (d?.origen === 'sec') return { nivel: 'real', corto: `Fuente: SEC EDGAR (informes anuales 10-K). ${d.actualizado_en ? 'Datos actualizados el ' + fmt(d.actualizado_en) + '.' : 'La fecha de actualización de los datos no está disponible.'}` };
+  const d = LAB.datos, fmt = fechaCorta, g = f => d?.grupos?.find(q => q.fuente === f);
+  const rango = q => q.desde && q.hasta ? (q.desde === q.hasta ? `cargadas el ${fmt(q.desde)}` : `cargadas entre el ${fmt(q.desde)} y el ${fmt(q.hasta)}`) : 'fecha de carga no disponible';
+  if (d?.origen === 'sec') return { nivel: 'real', corto: `Fuente: SEC EDGAR (informes anuales 10-K) para las ${g('sec').n} empresas, ${rango(g('sec'))}.` };
   if (d?.origen === 'prueba') return { nivel: 'ficticio', corto: 'Datos de PRUEBA ficticios: no son cifras reales de ninguna empresa ni proceden de la SEC.' };
   if (d?.origen === 'demo') return { nivel: 'ficticio', corto: 'Datos de DEMOSTRACIÓN inventados: no son cifras reales de ninguna empresa ni proceden de la SEC.' };
+  if (d?.origen === 'mixto') {
+    const partes = [g('sec') && `${g('sec').n} con fuente SEC EDGAR (${rango(g('sec'))})`, g('prueba') && `${g('prueba').n} de prueba ficticias`, g('demo') && `${g('demo').n} de demostración inventadas`, g('sin_fuente') && `${g('sin_fuente').n} sin fuente verificada`].filter(Boolean);
+    return { nivel: 'ficticio', corto: `Datos mixtos: ${partes.join('; ')}. Mira la fuente de cada ficha.` };
+  }
   return { nivel: 'desconocido', corto: 'Origen de los datos sin verificar: no se atribuye a ninguna fuente.' };
+}
+// Procedencia de UNA ficha: la fuente y la fecha de la fila del último ejercicio, no una declaración global.
+export function origenFicha(f0) {
+  const p = f0?.periodo ? ` (ejercicio ${f0.periodo})` : '';
+  if (f0?.fuente === 'sec') return { nivel: 'real', corto: `Fuente: SEC EDGAR, informe anual 10-K${p}. ${f0.actualizado_en ? 'Cargado el ' + fechaCorta(f0.actualizado_en) + '.' : 'La fecha de carga no está disponible.'}` };
+  if (f0?.fuente === 'prueba') return { nivel: 'ficticio', corto: `Datos de PRUEBA ficticios${p}: no son cifras reales de esta empresa ni proceden de la SEC.` };
+  if (f0?.fuente === 'demo') return { nivel: 'ficticio', corto: `Datos de DEMOSTRACIÓN inventados${p}: no son cifras reales de esta empresa ni proceden de la SEC.` };
+  return { nivel: 'desconocido', corto: `Sin fuente verificada para estos datos${p}: no se atribuyen a ninguna fuente.` };
 }
 function aplicarOrigen() {
   const o = origenDatos(), { $, $$ } = x();
   const av = $('#aviso-datos'); av.hidden = false; av.textContent = o.corto; av.className = 'aviso-datos ' + o.nivel;
-  $$('[data-origen]').forEach(e => { e.textContent = o.nivel === 'real' ? o.corto : o.corto; });
+  $$('[data-origen]').forEach(e => { e.textContent = o.corto; });
 }
 
 // =============== radar ===============
-export const cargarRadar = () => LAB.alm.radar.cargar().catch(() => []);
+export async function cargarRadar() {                              // true = leído bien; false = error de lectura (NO es «radar vacío»)
+  const g = LAB.gen;
+  try { await LAB.alm.radar.cargar(); if (vigente(g)) LAB.radarError = null; return true; }
+  catch (e) { if (vigente(g)) LAB.radarError = e.message; return false; }
+}
 export const enRadar = t => LAB.alm.radar.tiene(t);
 export const migrarRadarLocal = () => LAB.alm.radar.migrarLocal().catch(() => 0);
 
-// Carteras que sirven de referencia: las guardadas (con sesión) o el borrador de este dispositivo (sin sesión).
+// Carteras que sirven de referencia: las guardadas (con sesión) o el borrador de este dispositivo (sin sesión). La de ejemplo va aparte.
 async function cargarCarteras() {
-  const { api, logged, leerBorrador } = x();
-  if (logged()) { try { LAB.carteras = (await api('/portfolios')).map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones, revision: c.revision, limite: c.limite_peso, publico: !!c.publico, guardada: true })); } catch { LAB.carteras = []; } }
-  else { const d = leerBorrador(); LAB.carteras = d?.pos?.length ? [{ id: null, nombre: 'Tu borrador (sin guardar)', pos: d.pos.map(p => ({ ticker: p.ticker, peso: p.peso })), revision: null, limite: null, guardada: false }] : []; }
-  return LAB.carteras;
+  const { api, logged, leerBorrador } = x(), g = LAB.gen; let lista = [];
+  if (logged()) { try { lista = (await api('/portfolios')).map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones, revision: c.revision, limite: c.limite_peso, publico: !!c.publico, guardada: true })); } catch { lista = []; } }
+  else { const d = leerBorrador(); lista = d?.pos?.length ? [{ id: null, nombre: 'Tu borrador (sin guardar)', pos: d.pos.map(p => ({ ticker: p.ticker, peso: p.peso })), revision: null, limite: null, guardada: false }] : []; }
+  if (!vigente(g)) return [];
+  LAB.carteras = lista; return lista;
 }
+const basesLab = () => LAB.carteras.length ? LAB.carteras : [EJEMPLO];
 function carteraRef() {
   const id = x().store.getItem(CLAVE_REF), l = LAB.carteras;
   return l.find(c => String(c.id) === id) || l.find(c => c.id === x().editor().current?.id && c.id != null) || l[0] || null;
 }
-const opcionesCartera = (sel) => LAB.carteras.map(c => `<option value="${c.id ?? 'borrador'}"${c === sel ? ' selected' : ''}>${x().esc(c.nombre)}</option>`).join('');
+const opcionesCartera = (sel, lista = LAB.carteras) => lista.map(c => `<option value="${c.id ?? 'borrador'}"${c === sel ? ' selected' : ''}>${x().esc(c.nombre)}</option>`).join('');
 function textoEnCartera(t, c) { // «ya figura DIRECTAMENTE»: no se miran las posiciones internas de los fondos
   if (!c) return 'Aún no tienes una cartera de referencia.';
   const p = c.pos.find(q => q.ticker === t);
   return p ? `En «${c.nombre}» ya figura directamente con el ${P(p.peso)}.` : `En «${c.nombre}» no figura directamente. (No se analizan las posiciones internas de los fondos: un fondo podría contenerla.)`;
 }
+const htmlNota = (esc, id, nota, editando, texto, err) => editando
+  ? `<div class="nota-ed"><label for="${id}">Nota privada: por qué te interesa y qué quieres investigar</label><textarea id="${id}" rows="3" maxlength="500">${esc(texto)}</textarea>
+      <p class="nota-acc"><button class="btn btn-primario" type="button" data-nota="guardar">${err ? 'Reintentar guardado' : 'Guardar nota'}</button><button class="btn btn-ghost" type="button" data-nota="cancelar">Cancelar</button></p>
+      <p class="error peq" role="alert" data-nota-err>${esc(err || '')}</p></div>`
+  : `<div class="nota-ver"><p class="nota-txt">${nota ? esc(nota) : '<span class="mut">Sin nota.</span>'}</p><button class="btn btn-secundario" type="button" data-nota="editar">${nota ? 'Editar nota' : 'Añadir nota'}</button></div>`;
 
 // =============== radiografía (editor) ===============
 function frase(r) {
@@ -88,7 +128,7 @@ function frase(r) {
 }
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
-  if (!ed.current) { cont.innerHTML = ''; return; }
+  if (!ed.current) { cont.innerHTML = ''; delete cont.dataset.sig; return; }
   if (cont.contains(document.activeElement) && document.activeElement.tagName === 'INPUT') return; // no se repinta mientras se escribe el límite
   const id = ed.current.id, guardable = logged() && !!id;
   if (LAB.radioCartera !== id) { LAB.radioCartera = id; LAB.radioModo = null; }
@@ -120,131 +160,178 @@ export function pintarRadiografia() {
   cont.dataset.sig = html; cont.innerHTML = html;
 }
 async function guardarLimite(valor) {
-  const { $, api, toast, toastError } = x(), ed = x().editor(), id = ed.current?.id; if (!id) return;
+  const { $, api, toast, toastError } = x(), ed = x().editor(), id = ed.current?.id, g = LAB.gen; if (!id) return;
   const txt = valor === null ? null : String(valor).trim().replace(',', '.'), num = txt === null ? null : Number(txt);
   if (txt !== null && !(num >= 0.1 && num <= 100)) { $('#radio-lim-error').textContent = 'Escribe un número entre 0,1 y 100.'; return; }
-  try { const r = await api('/portfolios/' + id + '/limite', { method: 'PUT', body: { limite: num } }); x().fijarLimite(r.limite_peso); toast(r.limite_peso == null ? 'Límite quitado' : 'Límite guardado'); }
-  catch (e) { toastError(e.message); }
-  pintarRadiografia();
+  try { const r = await api('/portfolios/' + id + '/limite', { method: 'PUT', body: { limite: num } }); if (!vigente(g)) return; x().fijarLimite(r.limite_peso); toast(r.limite_peso == null ? 'Límite quitado' : 'Límite guardado'); }
+  catch (e) { if (vigente(g)) toastError(e.message); }
+  if (vigente(g)) pintarRadiografia();
 }
 
 // =============== ficha: radar, cartera de referencia y laboratorio ===============
 export async function pintarFichaRadar(a) {
-  LAB.fichaActivo = a; const { $, esc } = x(), cont = $('#fi-radar'); if (!cont || !a) return;
+  LAB.fichaActivo = a; const { $, esc } = x(), cont = $('#fi-radar'), g = LAB.gen; if (!cont || !a) return;
   if (!LAB.carteras.length) await cargarCarteras();
+  if (!vigente(g) || LAB.fichaActivo !== a) return;                // otra sesión u otra ficha: esta respuesta ya no vale
   const alm = LAB.alm.radar, dentro = alm.tiene(a.ticker), ref = carteraRef();
-  cont.innerHTML = `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
+  const editando = LAB.nota?.ticker === a.ticker && LAB.nota.donde === 'ficha';
+  const hist = historiasDeTicker(a.ticker);
+  const radar = LAB.radarError
+    ? `<div class="fir-fila"><p class="error" role="alert">${esc(LAB.radarError)}</p><button class="btn btn-secundario" type="button" id="fir-reintentar">Reintentar</button></div>`
+    : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
       <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, el radar se guarda solo en este dispositivo.'}</span></div>
-    ${dentro ? `<div class="fir-nota"><label for="fir-nota">Nota privada: por qué te interesa y qué quieres investigar</label><textarea id="fir-nota" rows="2" maxlength="500">${esc(alm.nota(a.ticker))}</textarea><button class="btn btn-secundario" type="button" id="fir-nota-g">Guardar nota</button></div>` : ''}
-    <div class="fir-cartera">${LAB.carteras.length ? `<label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select>` : ''}<p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p></div>
-    <p><button class="btn btn-secundario" type="button" id="fir-sim"${ref ? '' : ' disabled'}>Simular su incorporación en el laboratorio</button>${ref ? '' : '<span class="mut peq"> Necesitas una cartera (o un borrador) como base.</span>'}</p>`;
+      ${dentro ? `<div class="fir-nota" data-nota-zona="ficha">${htmlNota(esc, 'fir-nota', alm.nota(a.ticker), editando, editando ? LAB.nota.texto : '', editando ? LAB.nota.err : '')}</div>` : ''}`;
+  cont.innerHTML = `${radar}
+    <div class="fir-cartera">${LAB.carteras.length ? `<label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select><p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p>` : '<p class="peq mut" id="fir-en">Aún no tienes una cartera: al probarla en el laboratorio te ofrecemos una de ejemplo.</p>'}</div>
+    <p><button class="btn btn-secundario" type="button" id="fir-sim">Probar en mi cartera</button></p>
+    ${hist.length ? `<p class="peq">Historia relacionada: ${hist.map(h => `<a href="#historia-${esc(h.id)}" data-cerrar-ficha>${esc(h.titulo)}</a>`).join(' · ')}</p>` : ''}`;
 }
 async function onFichaClic(e) {
-  const { $, toast, toastError } = x(), a = LAB.fichaActivo; if (!a) return;
-  const alm = LAB.alm.radar;
+  const { $, toast, toastError } = x(), a = LAB.fichaActivo, g = LAB.gen; if (!a) return;
+  const alm = LAB.alm.radar, t = a.ticker;
+  const err = m => { const z = $('#fi-radar [data-nota-err]'); if (z) z.textContent = m; const b = $('#fi-radar [data-nota=guardar]'); if (b) b.textContent = 'Reintentar guardado'; };
   try {
+    if (e.target.closest('[data-cerrar-ficha]')) { $('#dlg-ficha').close(); return; }
+    if (e.target.closest('#fir-reintentar')) { await cargarRadar(); await pintarFichaRadar(a); return; }
     if (e.target.closest('#fir-toggle')) {
-      if (alm.tiene(a.ticker)) { await alm.quitar(a.ticker); toast('Quitada de tu radar'); } else { const r = await alm.guardar(a.ticker); toast(r.local ? 'Guardada en el radar de este dispositivo' : 'Guardada en tu radar'); }
-      await pintarFichaRadar(a); $('#fir-toggle')?.focus(); actualizarMarcasRadar();
-    } else if (e.target.closest('#fir-nota-g')) { await alm.guardar(a.ticker, $('#fir-nota').value); toast('Nota guardada'); await pintarFichaRadar(a); $('#fir-nota')?.focus(); }
-    else if (e.target.closest('#fir-sim')) { const ref = carteraRef(); $('#dlg-ficha').close(); abrirLab({ carteraId: ref?.id ?? null, ticker: a.ticker }); }
-  } catch (err) { toastError(err.message); }
+      try {
+        if (alm.tiene(t)) { await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); } else { const r = await alm.guardar(t); if (!vigente(g)) return; toast(r.local ? 'Guardada en el radar de este dispositivo' : 'Guardada en tu radar'); }
+        await pintarFichaRadar(a); $('#fir-toggle')?.focus(); actualizarMarcasRadar();
+      } catch (er) { const s = $('#fir-estado'); if (s) { s.textContent = 'No se ha podido guardar: ' + er.message; s.classList.add('error'); } }
+      return;
+    }
+    const nb = e.target.closest('#fi-radar [data-nota]');
+    if (nb) {
+      const modo = nb.dataset.nota;
+      if (modo === 'editar') { LAB.nota = { ticker: t, donde: 'ficha', texto: alm.nota(t), err: '' }; await pintarFichaRadar(a); $('#fir-nota')?.focus(); }
+      else if (modo === 'cancelar') { LAB.nota = null; await pintarFichaRadar(a); $('#fi-radar [data-nota=editar]')?.focus(); }
+      else if (modo === 'guardar') {
+        const texto = $('#fir-nota').value; LAB.nota.texto = texto;
+        try { await alm.guardar(t, texto); if (!vigente(g)) return; LAB.nota = null; toast('Nota guardada'); await pintarFichaRadar(a); $('#fi-radar [data-nota=editar]')?.focus(); }
+        catch (er) { if (vigente(g)) { LAB.nota.err = 'No se ha podido guardar. ' + er.message; err(LAB.nota.err); toastError('No se ha podido guardar la nota'); } }   // el texto se conserva en pantalla y en LAB.nota
+      }
+      return;
+    }
+    if (e.target.closest('#fir-sim')) { const ref = carteraRef(); $('#dlg-ficha').close(); abrirLab({ carteraId: ref?.id ?? null, ticker: t }); }
+  } catch (er) { toastError(er.message); }
 }
 let marcasPend = false;
 export function actualizarMarcasRadar() { if (!marcasPend) { marcasPend = true; queueMicrotask(() => { marcasPend = false; x().refrescarEmpresas?.(); }); } }
 
 // =============== mi seguimiento ===============
 export async function mostrarSeguimiento() {
-  const { $, logged } = x();
+  const { $, logged } = x(), g = LAB.gen;
   $('#seg-aviso').hidden = logged();
   $('#seg-aviso').innerHTML = logged() ? '' : '<b>Estás sin cuenta.</b> Tu radar se guarda solo en este dispositivo y pasará a tu cuenta cuando entres. Los escenarios se guardan en tu cuenta: entra para conservarlos.';
   await Promise.all([cargarCarteras(), cargarRadar()]);
+  if (!vigente(g)) return;
   pintarSeguimientoRadar();
   await pintarSeguimientoEscenarios();
 }
 function pintarSeguimientoRadar() {
   const { $, esc } = x(), alm = LAB.alm.radar, filas = alm.todos(), ref = carteraRef();
+  if (LAB.radarError) { $('#seg-radar-n').textContent = ''; $('#seg-radar').innerHTML = `<div class="vacio-util"><p class="error" role="alert">${esc(LAB.radarError)}</p><p class="mut">Esto no significa que tu radar esté vacío: no se ha podido leer.</p><p><button class="btn btn-secundario" type="button" data-acc="reintentar">Reintentar</button></p></div>`; return; }
   $('#seg-radar-n').textContent = filas.length ? `(${filas.length})` : '';
   if (!filas.length) { $('#seg-radar').innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna empresa.</b></p><p class="mut">Abre la ficha de una empresa en «Explorar empresas» y pulsa «Guardar en mi radar». Podrás añadir una nota con lo que quieres investigar.</p><p><a class="btn btn-primario" href="#empresas">Explorar empresas</a></p></div>'; return; }
   const cab = LAB.carteras.length ? `<div class="seg-ref"><label for="seg-ref">Cartera de referencia</label><select id="seg-ref">${opcionesCartera(ref)}</select></div>` : '';
-  $('#seg-radar').innerHTML = cab + filas.map(f => `<article class="seg-item" data-t="${esc(f.ticker)}">
+  $('#seg-radar').innerHTML = cab + filas.map(f => { const ed = LAB.nota?.ticker === f.ticker && LAB.nota.donde === 'seg';
+    return `<article class="seg-item" data-t="${esc(f.ticker)}">
       <header><b>${esc(f.nombre)}</b> <span class="simbolo">${esc(f.ticker)}</span> <span class="mut">${esc(f.sector || '')}</span></header>
-      <label for="nota-${esc(f.ticker)}">Nota privada: por qué te interesa y qué quieres investigar</label>
-      <textarea id="nota-${esc(f.ticker)}" rows="2" maxlength="500">${esc(f.nota || '')}</textarea>
+      ${htmlNota(esc, 'nota-' + f.ticker, f.nota, ed, ed ? LAB.nota.texto : '', ed ? LAB.nota.err : '')}
       <p class="peq" data-en>${esc(textoEnCartera(f.ticker, ref))}</p>
-      <div class="seg-acc"><button class="btn btn-secundario" type="button" data-acc="nota">Guardar nota</button><button class="btn btn-secundario" type="button" data-acc="ficha">Ver ficha<span class="sr"> de ${esc(f.nombre)}</span></button>
-      <button class="btn btn-secundario" type="button" data-acc="sim"${ref ? '' : ' disabled'}>Simular en el laboratorio</button><button class="btn btn-ghost" type="button" data-acc="quitar">Quitar del radar<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`).join('');
+      <div class="seg-acc"><button class="btn btn-secundario" type="button" data-acc="ficha">Ver ficha<span class="sr"> de ${esc(f.nombre)}</span></button>
+      <button class="btn btn-secundario" type="button" data-acc="sim">Probar en mi cartera</button><button class="btn btn-ghost" type="button" data-acc="quitar">Quitar del radar<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`; }).join('');
 }
 async function clicSeguimientoRadar(e) {
-  const { $, toast, toastError } = x(), b = e.target.closest('[data-acc]'); if (!b) return;
-  const art = b.closest('.seg-item'), t = art.dataset.t, alm = LAB.alm.radar;
+  const { $, toast, toastError } = x(), g = LAB.gen, alm = LAB.alm.radar;
+  if (e.target.closest('[data-acc=reintentar]')) { await cargarRadar(); pintarSeguimientoRadar(); return; }
+  const art = e.target.closest('.seg-item'); if (!art) return; const t = art.dataset.t;
   try {
+    const nb = e.target.closest('[data-nota]');
+    if (nb) {
+      const modo = nb.dataset.nota;
+      if (modo === 'editar') { LAB.nota = { ticker: t, donde: 'seg', texto: alm.nota(t), err: '' }; pintarSeguimientoRadar(); $(`#nota-${t}`)?.focus(); }
+      else if (modo === 'cancelar') { LAB.nota = null; pintarSeguimientoRadar(); $(`.seg-item[data-t="${t}"] [data-nota=editar]`)?.focus(); }
+      else if (modo === 'guardar') {
+        const texto = art.querySelector('textarea').value; LAB.nota.texto = texto;
+        try { await alm.guardar(t, texto); if (!vigente(g)) return; LAB.nota = null; toast('Nota guardada'); pintarSeguimientoRadar(); $(`.seg-item[data-t="${t}"] [data-nota=editar]`)?.focus(); }
+        catch (er) { if (!vigente(g)) return; LAB.nota.err = 'No se ha podido guardar. ' + er.message; art.querySelector('[data-nota-err]').textContent = LAB.nota.err; nb.textContent = 'Reintentar guardado'; toastError('No se ha podido guardar la nota'); }
+      }
+      return;
+    }
+    const b = e.target.closest('[data-acc]'); if (!b) return;
     if (b.dataset.acc === 'ficha') x().verFicha(t);
     else if (b.dataset.acc === 'sim') abrirLab({ carteraId: carteraRef()?.id ?? null, ticker: t });
-    else if (b.dataset.acc === 'nota') { await alm.guardar(t, art.querySelector('textarea').value); toast('Nota guardada'); }
     else if (b.dataset.acc === 'quitar') {
       const sig = art.nextElementSibling?.dataset?.t || art.previousElementSibling?.dataset?.t;
-      await alm.quitar(t); toast('Quitada de tu radar'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
+      await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
     }
   } catch (err) { toastError(err.message); }
 }
+const textoRevision = e => e.revisar_en ? `Revisión prevista: ${fechaCorta(e.revisar_en)}${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : ''}.` : '';
 async function pintarSeguimientoEscenarios() {
-  const { $, esc, logged, fmtFecha } = x(), cont = $('#seg-escenarios');
+  const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
   if (!logged()) { $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
   cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
-  let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
-  LAB.listaEsc = lista; const f = $('#seg-filtro').value;
+  let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
+  if (!vigente(g)) return;
+  const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
-  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
+  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
   cont.innerHTML = vistos.length ? vistos.map(e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
+      ${e.pregunta ? `<p class="esc-preg"><span class="sr">Pregunta: </span>«${esc(e.pregunta)}»</p>` : ''}${textoRevision(e) ? `<p class="peq">${esc(textoRevision(e))}</p>` : ''}
       <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>
-      <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(fmtFecha(e.creado_en))}</p>
+      <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(x().fmtFecha(e.creado_en))}</p>
       ${!e.cartera_existe ? '<p class="chip aviso">La cartera original ya no existe</p>' : e.hay_version_posterior ? '<p class="chip aviso">Hay una versión posterior de la cartera</p>' : ''}
       ${e.nota ? `<p class="esc-nota">${esc(e.nota.length > 140 ? e.nota.slice(0, 140) + '…' : e.nota)}</p>` : ''}
       <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
 }
 
 // =============== laboratorio ===============
-export function abrirLab({ carteraId = null, ticker = '' } = {}) {
-  LAB.sim = { carteraId, ticker, peso: '', fin: '', clave: null, res: null };
+export function abrirLab({ carteraId = null, ticker = '', historia: hid = null } = {}) {
+  LAB.sim = { carteraId, ticker, peso: '', fin: '', clave: null, res: null, historia: hid };
   guardarEstadoLab(); x().go('#laboratorio');
 }
-const guardarEstadoLab = () => { try { sessionStorage.setItem(CLAVE_LAB, JSON.stringify({ carteraId: LAB.sim.carteraId, ticker: LAB.sim.ticker, peso: LAB.sim.peso, fin: LAB.sim.fin })); } catch { /* sin almacenamiento */ } };
+const guardarEstadoLab = () => { try { sessionStorage.setItem(CLAVE_LAB, JSON.stringify({ carteraId: LAB.sim.carteraId, ticker: LAB.sim.ticker, peso: LAB.sim.peso, fin: LAB.sim.fin, historia: LAB.sim.historia })); } catch { /* sin almacenamiento */ } };
 const leerEstadoLab = () => { try { return JSON.parse(sessionStorage.getItem(CLAVE_LAB)); } catch { return null; } };
-const nombreActivo = t => x().activos()[t]?.nombre || t;
 
 export async function mostrarLab(modo, id) {
-  const { $, esc } = x(); $('#lab-cuerpo').innerHTML = '<p class="mut">Cargando…</p>';
+  const { $ } = x(), g = LAB.gen; $('#lab-cuerpo').innerHTML = '<p class="mut">Cargando…</p>';
   if (modo === 'escenario') return mostrarEscenario(id);
   await Promise.all([cargarCarteras(), cargarRadar()]);
-  if (!LAB.sim) { const g = leerEstadoLab(); LAB.sim = { carteraId: g?.carteraId ?? null, ticker: g?.ticker || '', peso: g?.peso || '', fin: g?.fin || '', clave: null, res: null }; }
+  if (!vigente(g)) return;
+  if (!LAB.sim) { const s = leerEstadoLab(); LAB.sim = { carteraId: s?.carteraId ?? null, ticker: s?.ticker || '', peso: s?.peso || '', fin: s?.fin || '', clave: null, res: null, historia: s?.historia || null }; }
   pintarLabForm();
 }
-const baseLab = () => { const s = LAB.sim; return LAB.carteras.find(c => String(c.id) === String(s.carteraId)) || LAB.carteras[0] || null; };
+const baseLab = () => { const l = basesLab(), s = LAB.sim; return l.find(c => String(c.id) === String(s.carteraId)) || l[0] || null; };
 const metodoTexto = fin => ({
-  sin_asignar: 'El peso nuevo se toma del porcentaje que ahora no está asignado. Las demás posiciones no cambian. Si no hay suficiente, este método no se puede usar.',
-  proporcional: 'Las demás posiciones bajan todas en la misma proporción para liberar el porcentaje necesario: cada una se multiplica por (lo que deben sumar) / (lo que suman ahora). Se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Si el peso nuevo es menor que el actual, lo liberado queda sin asignar: no se reparte al alza.',
-}[fin] || 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.');
+  sin_asignar: { corto: 'El peso nuevo se toma del porcentaje que ahora no está asignado. Las demás posiciones no cambian. Si no hay suficiente, este método no se puede usar.', redondeo: '' },
+  proporcional: { corto: 'Las demás posiciones bajan todas en la misma proporción para liberar el porcentaje necesario. Si el peso nuevo es menor que el actual, lo liberado queda sin asignar: no se reparte al alza.',
+    redondeo: 'Cada posición se multiplica por (lo que deben sumar) / (lo que suman ahora) y se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Así los totales siempre cuadran.' },
+}[fin] || { corto: 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.', redondeo: '' });
+const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<b>Cómo se calcula:</b> ${esc(m.corto)}${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}`; };
 function pintarLabForm() {
-  const { $, esc, logged } = x(), s = LAB.sim, base = baseLab(), alm = LAB.alm.radar;
-  if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<div class="vacio-util"><p><b>Necesitas una cartera como base.</b></p><p class="mut">El laboratorio compara el reparto de una cartera antes y después de un cambio. ${logged() ? 'Crea una cartera en «Mis carteras».' : 'Prueba una cartera (se guarda como borrador en este dispositivo) y vuelve.'}</p><p><a class="btn btn-primario" href="${logged() ? '#carteras' : '#inicio'}">${logged() ? 'Ir a Mis carteras' : 'Probar una cartera'}</a></p></div>`; return; }
+  const { $, esc, logged } = x(), s = LAB.sim, alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
+  if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
   s.carteraId = base.id;
   const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
   const radar = alm.todos().map(f => `<option value="${esc(f.ticker)}">${esc(f.nombre)}</option>`).join('');
-  $('#lab-cuerpo').innerHTML = `${cabLab()}
+  const h = s.historia && historia(s.historia);
+  $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». ` : '')}
     <form id="lab-form" class="lab-form" novalidate>
       <fieldset><legend>1 · Cartera base</legend>
-        <label for="lab-base">Cartera</label><select id="lab-base">${opcionesCartera(base)}</select>
-        <p class="mut peq">${base.guardada ? `Versión guardada (revisión ${base.revision}).` : 'Tu borrador de este dispositivo, sin guardar.'} ${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} · asignado ${P(r.total)}${r.estado === 'incompleta' ? ` (falta asignar ${P(r.pendiente)})` : r.estado === 'exceso' ? ` (exceso de ${P(r.exceso)})` : ''}. El laboratorio parte siempre de lo guardado, no de cambios sin guardar.</p></fieldset>
+        ${base.ejemplo ? '<p class="lab-ejemplo" role="note"><b>No tienes ninguna cartera, así que usamos una de ejemplo</b> (KO 60 % · PG 40 %) para que puedas probar. No es tuya y la simulación es temporal.</p>' : ''}
+        <label for="lab-base">Cartera</label><select id="lab-base">${opcionesCartera(base, lista)}</select>
+        <p class="mut peq">${base.ejemplo ? 'Cartera de ejemplo.' : base.guardada ? `Versión guardada (revisión ${base.revision}).` : 'Tu borrador de este dispositivo, sin guardar.'} ${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} · asignado ${P(r.total)}${r.estado === 'incompleta' ? ` (falta asignar ${P(r.pendiente)})` : r.estado === 'exceso' ? ` (exceso de ${P(r.exceso)})` : ''}. El laboratorio parte siempre de lo guardado, no de cambios sin guardar.</p></fieldset>
       <fieldset><legend>2 · Activo y peso</legend>
         <label for="lab-ticker">Activo (símbolo o nombre)</label><input id="lab-ticker" list="lab-activos" autocomplete="off" value="${esc(s.ticker)}" placeholder="Por ejemplo: KO"><datalist id="lab-activos">${Object.values(activos).map(a => `<option value="${esc(a.ticker)}">${esc(a.nombre)}</option>`).join('')}</datalist>
-        ${radar ? `<label for="lab-radar">…o elige uno de tu radar</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
+        ${radar ? `<label for="lab-radar">…o elige uno de tu radar (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
         <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10"></fieldset>
       <fieldset><legend>3 · Cómo se financia</legend>
         ${Object.entries(FINANCIACIONES).map(([k, v]) => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${v}${k === 'sin_asignar' ? ` <span class="mut">(ahora hay ${P(r.pendiente)} sin asignar)</span>` : ''}</label>`).join('')}
-        <div class="lab-metodo" id="lab-metodo" aria-live="polite"><b>Cómo se calcula:</b> ${esc(metodoTexto(s.fin))}</div></fieldset>
+        <div class="lab-metodo" id="lab-metodo" aria-live="polite">${htmlMetodo(esc, s.fin)}</div></fieldset>
       <p class="mut peq">Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos, y no es una recomendación.</p>
       <p><button class="btn btn-primario" type="submit">Simular</button></p><p id="lab-error" class="error" role="alert"></p>
     </form><div id="lab-res" aria-live="polite"></div>`;
@@ -259,9 +346,9 @@ function leerFormulario() {
 function invalidarResultado() { if (LAB.sim) { LAB.sim.res = null; LAB.sim.clave = null; } const r = x().$('#lab-res'); if (r) r.innerHTML = ''; }
 function onLabCambio(e) {
   const { $, esc } = x(), id = e.target.id;
-  if (id === 'lab-base') { LAB.sim.carteraId = e.target.value === 'borrador' ? null : Number(e.target.value); invalidarResultado(); pintarLabForm(); $('#lab-base').focus(); }
+  if (id === 'lab-base') { LAB.sim.carteraId = e.target.value === 'borrador' ? null : (/^\d+$/.test(e.target.value) ? Number(e.target.value) : e.target.value); invalidarResultado(); pintarLabForm(); $('#lab-base').focus(); }
   else if (id === 'lab-radar' && e.target.value) { LAB.sim.ticker = e.target.value; invalidarResultado(); leerCampos(); pintarLabForm(); $('#lab-peso').focus(); }
-  else if (e.target.name === 'lab-fin') { invalidarResultado(); $('#lab-metodo').innerHTML = `<b>Cómo se calcula:</b> ${esc(metodoTexto(e.target.value))}`; leerFormulario(); }
+  else if (e.target.name === 'lab-fin') { invalidarResultado(); $('#lab-metodo').innerHTML = htmlMetodo(esc, e.target.value); leerFormulario(); }
   else if (id === 'lab-ticker') { leerFormulario(); const a = x().activos()[LAB.sim.ticker]; $('#lab-activo-info').textContent = a ? a.nombre : ''; }
 }
 function leerCampos() { const { $ } = x(); LAB.sim.peso = $('#lab-peso')?.value || LAB.sim.peso; }
@@ -308,33 +395,55 @@ function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
   const activos = x().activos(), c = comparar(sim.antes, sim.despues, activos, base.limite), n = sim.cambios.filter(f => f.delta !== 0).length;
-  const concl = `${esc(sim.ticker)} pasaría del ${P(sim.cambios.find(f => f.ticker === sim.ticker).antes)} al ${P(sim.cambios.find(f => f.ticker === sim.ticker).despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
+  const mio = sim.cambios.find(f => f.ticker === sim.ticker);
+  const concl = `${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
+  const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
   const guardar = logged() && base.guardada
     ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
-        <label for="lab-nota">Nota <span class="mut">(por qué lo pruebas, qué quieres revisar)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        <label for="lab-pregunta">Pregunta que quieres responder <span class="mut">(opcional)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
+        <label for="lab-revisar">Fecha de revisión <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
+        <label for="lab-nota">Nota <span class="mut">(opcional: por qué lo pruebas, qué quieres revisar)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        ${h ? `<p class="peq mut">Se vincula a la historia «${esc(h.titulo)}»${rev && rev.n > 1 ? ' y a su revisión editorial' : ''}.</p>` : ''}
         <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar escenario</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
-    : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Estás sin cuenta: esta simulación es temporal y se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (vuelve a simular con tu cartera guardada).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
+    : base.ejemplo && logged()
+      ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
+      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (con una cartera guardada en tu cuenta).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2><p class="lab-concl">${concl}</p>
+    <p class="lab-origen"><b>De dónde sale el peso:</b> ${esc(origenPeso(sim))}</p>
     ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
 }
 async function guardarEscenario() {
-  const { $, toast, toastError } = x(), s = LAB.sim, sim = s.res, base = baseLab(), btn = $('#lab-guardar-btn'), err = $('#lab-guardar-error'); err.textContent = '';
+  const { $, toast, toastError } = x(), s = LAB.sim, sim = s.res, base = baseLab(), btn = $('#lab-guardar-btn'), err = $('#lab-guardar-error'), g = LAB.gen; err.textContent = '';
   if (!sim?.viable || !base?.guardada) return;
   s.clave = s.clave || LAB.alm.escenarios.nuevaClave();                 // el mismo intento reutiliza la clave: un reintento no duplica
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
-    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues });
+    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null,
+      cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues });
+    if (!vigente(g)) return;
     toast(r.duplicado ? 'Ese escenario ya estaba guardado' : 'Escenario guardado en tu seguimiento'); x().go('#escenario-' + r.id);
   } catch (e) {
+    if (!vigente(g)) return;
     if (e.status === 409) { err.textContent = 'La cartera cambió después de la versión que simulaste. Se ha actualizado la base: vuelve a simular.'; await cargarCarteras(); s.res = null; s.clave = null; pintarLabForm(); return; }
     err.textContent = e.message + ' Tus datos siguen aquí: puedes reintentar.'; toastError(e.message);
   } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Guardar escenario'; } }
 }
+async function crearEjemploEnCuenta() {
+  const { $, api, toastError } = x(), g = LAB.gen, btn = $('#lab-crear-ejemplo'); btn.disabled = true;
+  try {
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: 'Cartera de ejemplo', plantilla: 'dividendos', posiciones: EJEMPLO.pos } }); if (!vigente(g)) return;
+    await cargarCarteras(); LAB.sim.carteraId = id; LAB.sim.clave = null; simularAhora(); x().toast('Cartera de ejemplo creada en tu cuenta');
+  } catch (e) { if (vigente(g)) { $('#lab-crear-error').textContent = e.message; toastError(e.message); btn.disabled = false; } }
+}
 function onLabClic(e) {
   if (e.target.closest('#lab-entrar')) x().abrirAcceso('guardar');
-  else if (e.target.closest('#esc-descartar')) descartarEscenario();
+  else if (e.target.closest('#lab-crear-ejemplo')) crearEjemploEnCuenta();
+  else if (e.target.closest('#esc-editar')) { LAB.editEsc = true; pintarEscenario(); x().$('#esc-pregunta')?.focus(); }
+  else if (e.target.closest('#esc-cancelar')) { LAB.editEsc = false; pintarEscenario(); x().$('#esc-editar')?.focus(); }
+  else if (e.target.closest('[data-estado]')) cambiarEstadoEscenario(e.target.closest('[data-estado]').dataset.estado);
+  else if (e.target.closest('#esc-eliminar')) eliminarEscenario();
 }
 
 // =============== escenario guardado: se muestra TAL COMO SE GUARDÓ ===============
@@ -344,31 +453,48 @@ function cambiosEntre(base, prop) {
     .sort((p, q) => q.despues - p.despues || (p.ticker < q.ticker ? -1 : 1));
 }
 async function mostrarEscenario(id) {
-  const { $, esc, go, logged, fmtFechaHora } = x();
+  const { $, esc, go, logged } = x(), g = LAB.gen;
   if (!logged()) { go('#seguimiento'); return; }
-  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas descartado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
-  LAB.esc = e; await cargarCarteras();
+  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
+  await cargarCarteras(); if (!vigente(g)) return;
+  LAB.esc = e; LAB.editEsc = false; pintarEscenario();
+}
+function pintarEscenario() {
+  const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
   const viva = LAB.carteras.find(c => c.id === e.cartera_id), activos = x().activos();
   const c = comparar(e.base, e.propuesta, activos, viva?.limite ?? null);
   const aviso = !e.cartera_existe ? `<p class="aviso-panel"><b>La cartera original ya no existe.</b> Este escenario conserva su copia de la base.</p>`
     : e.hay_version_posterior ? `<div class="aviso-panel"><div><b>La cartera cambió después de este escenario</b> (revisión ${e.base_revision} → ${e.revision_actual}). El escenario conserva la base con la que se simuló y no se recalcula. <a href="#cartera-${e.cartera_id}">Abrir la cartera</a>. Si quieres, simula de nuevo con su versión actual.</div></div>` : '';
-  $('#lab-cuerpo').innerHTML = `<div class="pag-cab"><p><a class="enlace" href="#seguimiento">← Mi seguimiento</a></p><h1>${esc(e.nombre)} <span class="chip sim">Simulación</span></h1>
+  const h = e.historia && historia(e.historia), rev = h && ultimaTesis(h);
+  const enlHist = h ? `<p class="esc-historia"><b>Historia de origen:</b> <a href="#historia-${esc(h.id)}">${esc(h.titulo)}</a> · <a href="#tesis-${esc(h.id)}-1">Opinión original (${esc(fechaCorta(h.tesis[0].fecha))})</a>${rev && rev.n > 1 ? ` · <a href="#tesis-${esc(h.id)}-${rev.n}">Revisión editorial (${esc(fechaCorta(rev.fecha))}${rev.simulada ? ', desenlace simulado' : ''})</a>` : ''}</p>` : '';
+  const estados = Object.keys(ESTADOS).filter(k => k !== e.estado).map(k => k === 'descartado' ? '<button class="btn btn-secundario" type="button" data-estado="descartado">Marcar como descartado</button>' : k === 'archivado' ? '<button class="btn btn-secundario" type="button" data-estado="archivado">Archivar</button>' : '<button class="btn btn-secundario" type="button" data-estado="en_estudio">Volver a «en estudio»</button>').join(' ');
+  $('#lab-cuerpo').innerHTML = `<div class="pag-cab"><p><a class="enlace" href="#seguimiento">← Mi seguimiento</a></p><h1 tabindex="-1">${esc(e.nombre)} <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></h1>
       <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}», revisión ${e.base_revision}. Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
-    <form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
-      <label for="esc-estado">Estado</label><select id="esc-estado">${Object.entries(ESTADOS).map(([k, v]) => `<option value="${k}"${e.estado === k ? ' selected' : ''}>${v}</option>`).join('')}</select>
-      <label for="esc-nota">Nota</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
-      <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost peligro" type="button" id="esc-descartar">Descartar escenario</button></p><p class="error" id="esc-error" role="alert"></p></form>
+    <section class="esc-ficha" aria-label="Lo que querías averiguar">
+      ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
+      ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}
+      <h2>Tu nota</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
+      ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
+        <label for="esc-pregunta">Pregunta <span class="mut">(opcional)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
+        <label for="esc-revisar">Fecha de revisión <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
+        <label for="esc-nota">Nota</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
+        <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost" type="button" id="esc-cancelar">Cancelar</button></p><p class="error" id="esc-error" role="alert"></p></form>`
+        : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar nota y pregunta</button></p>'}
+    </section>
+    <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
+      <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
 }
-async function guardarCambiosEscenario() {
-  const { $, toast, toastError } = x(), e = LAB.esc, btn = $('#esc-guardar'), err = $('#esc-error'); err.textContent = ''; btn.disabled = true;
-  try { LAB.esc = await LAB.alm.escenarios.actualizar(e.id, { nombre: $('#esc-nombre').value, nota: $('#esc-nota').value, estado: $('#esc-estado').value, revision: e.revision }); toast('Cambios guardados'); }
-  catch (er) { err.textContent = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual.' : er.message; toastError(err.textContent); }
-  finally { btn.disabled = false; }
+async function aplicarCambios(cambios, mensaje, errId) {
+  const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
+  try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
+  catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
-async function descartarEscenario() {
-  const { toast, toastError, go } = x(), e = LAB.esc;
-  if (!window.confirm(`¿Descartar el escenario «${e.nombre}»? Se borra del todo; tu cartera no cambia.`)) return;
-  try { await LAB.alm.escenarios.borrar(e.id); toast('Escenario descartado'); go('#seguimiento'); } catch (er) { toastError(er.message); }
+function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value }, 'Cambios guardados', '#esc-error'); }
+function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
+async function eliminarEscenario() {
+  const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;
+  if (!window.confirm(`¿Eliminar definitivamente el escenario «${e.nombre}»? Se borra del todo y no se puede deshacer; tu cartera no cambia. (Si solo quieres dejar de verlo, usa «Marcar como descartado»: se conserva.)`)) return;
+  try { await LAB.alm.escenarios.borrar(e.id); if (!vigente(g)) return; toast('Escenario eliminado'); go('#seguimiento'); } catch (er) { if (vigente(g)) toastError(er.message); }
 }

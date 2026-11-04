@@ -8,11 +8,14 @@
 // =====================================================================
 
 // ---------- utilidades ----------
-import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos } from './js/lab.js';
+import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, abrirLab } from './js/lab.js';
+import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
   getItem: k => { try { return localStorage.getItem(k); } catch { return m[k] ?? null; } },
   setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
-  removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } } }; })();
+  removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } },
+  // Variantes ESTRICTAS (radar del visitante): lanzan si el almacenamiento falla, en vez de caer en silencio a la memoria y devolver después el valor anterior.
+  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k) }; })();
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -212,12 +215,21 @@ async function redeem() { // canje del enlace mágico (?login=TOKEN)
     if (r.con_borrador && !hayBorrador()) store.setItem(AVISO, '1'); else store.removeItem(AVISO);
   } catch (err) { toastError(err.message); }
 }
+// Al salir o caducar la sesión se borra TODO lo privado de la memoria y de la pantalla, y se invalidan las respuestas que aún estén en vuelo.
+let sesionSeq = 0;
+function limpiarPrivado() {
+  sesionSeq++; misSeq++; nMis = null;
+  current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
+  for (const s of ['#mis-lista', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
+  limpiarSesionLab();
+}
 function sesionCaducada() {
-  store.removeItem('klever_token'); current = null; actualizarCabecera(); route(); abrirAcceso('caducada');
+  store.removeItem('klever_token'); limpiarPrivado(); actualizarCabecera(); route(); abrirAcceso('caducada');
 }
 async function cerrarSesion() {
   try { await api('/logout', { method: 'POST' }); } catch {}
-  store.removeItem('klever_token'); store.removeItem(AVISO); current = null; pos = []; posGuardada = []; actualizarCabecera(); go('#inicio');
+  store.removeItem('klever_token'); store.removeItem(AVISO); limpiarPrivado(); actualizarCabecera(); go('#inicio');
 }
 $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
@@ -235,8 +247,8 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab'];
-const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Mi seguimiento', lab: 'Laboratorio' };
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo'];
+const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Mi seguimiento', lab: 'Laboratorio', revista: 'Revista', articulo: 'Revista' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -244,8 +256,9 @@ async function route(primera = false) {
   const seq = ++routeSeq, l = logged();
   const h = location.hash.replace(/^#/, '');
   if (h === 'contenido') { $('#contenido').focus(); return; }
-  const m = h.match(/^cartera-(\d+)$/), me = h.match(/^escenario-(\d+)$/);
-  let v = m ? 'cartera' : me || h === 'laboratorio' ? 'lab' : h;
+  const m = h.match(/^cartera-(\d+)$/), me = h.match(/^escenario-(\d+)$/), mh = h.match(/^historia-([a-z0-9-]+)$/), mt = h.match(/^tesis-([a-z0-9-]+)-(\d+)$/);
+  const articulo = mh ? { tipo: 'historia', id: mh[1] } : mt ? { tipo: 'tesis', id: mt[1], n: +mt[2] } : null;
+  let v = m ? 'cartera' : me || h === 'laboratorio' ? 'lab' : articulo ? 'articulo' : h;
   if (!VISTAS.includes(v) || v === 'inicio') v = l ? 'carteras' : 'inicio';
   if (v === 'carteras' && !l) v = 'inicio';
   if (v === 'cartera') {
@@ -255,9 +268,10 @@ async function route(primera = false) {
  if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
     } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
   }
-  mostrar(v, primera, me ? +me[1] : null);
+  mostrar(v, primera, { escenarioId: me ? +me[1] : null, articulo });
 }
-function mostrar(v, primera, escenarioId = null) {
+function mostrar(v, primera, extra = {}) {
+  const { escenarioId = null, articulo = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
   $$('[data-nav]').forEach(a => a.dataset.nav === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
@@ -267,6 +281,8 @@ function mostrar(v, primera, escenarioId = null) {
   if (v === 'carteras') cargarMisCarteras();
   if (v === 'seguimiento') mostrarSeguimiento();
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
+  if (v === 'revista') mostrarRevista();
+  if (v === 'articulo') mostrarArticulo(articulo);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
 }
 window.addEventListener('hashchange', () => route());
@@ -317,15 +333,17 @@ function itemCartera(p) {
     ${l2}${lLoc}${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
     <span class="pl-acc"><span class="pl-acc-txt">${hayLocal ? 'Continuar editando' : 'Abrir'}</span></span></button></li>`;
 }
+let misSeq = 0;
 async function cargarMisCarteras() {
-  pintarAviso();
+  pintarAviso(); const seq = ++misSeq;
   const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista">Cargando tus carteras…</li>';
   try {
-    const list = await api('/portfolios'); nMis = list.length;
+    const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
+    nMis = list.length;
     $('#btn-nueva').hidden = nMis === 0;
     if (nMis === 0) { ul.innerHTML = ''; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
-  } catch (err) { ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
+  } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
@@ -951,7 +969,7 @@ async function verFicha(t) {
     <p class="hint-scroll">Desliza la tabla hacia los lados para ver todas las columnas →</p>
     <div class="tabla-h" role="region" aria-label="Cifras históricas, desplazable horizontalmente" tabindex="0"><table><caption class="sr">Importes en miles de millones de USD; ROIC en %</caption>
       <thead><tr><th scope="col">Año</th><th scope="col">Ventas</th><th scope="col">Beneficio neto</th><th scope="col">EBITDA</th><th scope="col">Caja libre</th><th scope="col">ROIC (%)</th></tr></thead><tbody>${hist}</tbody></table></div>
-    <p class="mut peq aviso-datos ${origenDatos().nivel}">${esc(origenDatos().corto)}</p>
+    <p class="mut peq aviso-datos ${origenFicha(a.fundamentales[0]).nivel}">${esc(origenFicha(a.fundamentales[0]).corto)}</p>
     <details class="ficha-det"><summary>Metodología</summary><div><p>EBITDA = resultado operativo + amortizaciones. Caja libre = flujo de caja operativo − inversiones en inmovilizado. El ROIC se aproxima como resultado operativo × (1 − tasa de impuestos) ÷ (deuda a largo plazo + patrimonio − caja). Son cálculos aproximados y pueden contener errores.</p></div></details>
     <details class="ficha-det"><summary>Glosario</summary><div>
       <p><b>ROIC:</b> cuánto gana la empresa por cada dólar invertido en su negocio. Es una medida de la empresa; no es la rentabilidad que obtendría un inversor.</p>
@@ -1025,13 +1043,14 @@ function contextoLab() {
   return { $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
     activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
-    fijarLimite: v => { if (current) current.limite_peso = v; } };
+    fijarLimite: v => { if (current) current.limite_peso = v; },
+    probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }) };
 }
 // ---------- arranque ----------
 (async () => {
   await redeem();
   await loadAssets();
-  iniciarLab(contextoLab());
+  const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab);
   actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
   if (logged()) await migrarRadarLocal();            // el radar de este dispositivo pasa a la cuenta (idempotente)
   await cargarRadar(); loadEmpresas();               // el radar se carga antes de pintar la lista (marcas «En tu radar»)

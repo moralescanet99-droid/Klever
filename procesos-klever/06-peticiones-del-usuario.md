@@ -484,3 +484,44 @@ Recorrido a implementar de principio a fin: *abrir una cartera → comprender su
 - **Editorial (solo diseño breve, sin construir)**: *Bajo el radar*, *¿Qué está pasando?*, *El Superespeculador*, *Seguimos la pista*; fuente, fecha, responsable, hechos vs interpretación, historial de tesis; sin contenido generado automático ni noticias ficticias. Futuras: datos internos de fondos y solapamientos, importar posiciones y simulaciones monetarias, Revolut/Trade Republic, artículos personalizados y tip diario, avisos externos, monetización.
 - **Pruebas**: cálculos (completa/incompleta/vacía/exceso, activo existente, pesos pequeños, inviables, redondeo), guardar escenario sin tocar la cartera ni su versión pública, reabrir tras cambiar la cartera, persistencia de radar/notas/escenarios, **aislamiento entre dos usuarios**, fallos y reintentos y duplicados, recorrido en 320/390/1440, teclado y texto ampliado; batería completa; demo reconstruida con sus límites visibles. La ronda 12 informa 337 comprobaciones; ChatGPT no las repitió.
 - **Entrega**: código y migraciones, demo, capturas del recorrido, resultados y versión probada, explicación de cálculos y límites, documentación de continuidad, plan por fases, y **un ejemplo de qué puede hacer ahora una persona que no podía en la ronda 12**. Validación remota y correo real siguen pendientes de accesos (un único bloque; no pedir secretos).
+
+## C11 · Ronda 14: revisión de la ronda 13 y encargo definitivo (LITERAL, archivo `Klever_Claude_Ronda_14.md`)
+# Klever · Revisión de la ronda 13 y encargo definitivo de la ronda 14
+
+Claude, parte de tu última versión funcional de Klever. Implementa y prueba el recorrido descrito aquí. Tú te encargas del desarrollo. ChatGPT hará la revisión independiente de la entrega. El resultado esperado es una versión interna que Javier pueda abrir y probar desde el móvil.
+
+## 1. Revisión de tu entrega
+
+El mayor avance de la ronda 13 es que una persona ya puede descubrir una empresa, simular el efecto de incorporarla y guardar la comparación. Conserva la radiografía de la cartera, el radar privado, el laboratorio y el historial de escenarios. Conserva también la distinción entre la versión guardada de una cartera y sus cambios locales.
+
+ChatGPT revisó las 16 capturas y repitió 88 comprobaciones locales de cálculo, servidor, migración, concurrencia y acceso. Las 88 pasaron. Las 467 comprobaciones completas figuran en tu informe. La revisión independiente no cubrió la ejecución completa en navegador, un móvil físico ni el despliegue remoto.
+
+**Juicio de producto.** En la primera visita, una persona que llega desde una idea y carece de cartera encuentra el simulador desactivado. En la segunda visita puede recuperar cifras y notas, pero le cuesta reconocer qué quería averiguar. Son los dos momentos que la ronda 14 debe resolver.
+
+## 2. Primero, corregir los fallos de confianza
+
+| Prioridad | Evidencia de la ronda 13 | Trabajo y prueba de aceptación |
+|---|---|---|
+| Privacidad al salir | Al cambiar de cuenta a visitante en una prueba del módulo de la ficha, el HTML aún contenía la nota y el nombre de la cartera anterior. Revisar public/app.js y public/js/lab.js. | Limpiar memoria y pantalla al salir y al caducar la sesión. Invalidar respuestas pendientes. En navegador, abrir una ficha con una nota reconocible en A, salir sin recargar, volver a abrirla como visitante y después entrar como B. Repetir con una respuesta lenta de A. En ningún paso posterior deben aparecer los datos de A. |
+| Procedencia de datos | Con un catálogo vacío simulado, scripts/fetch_fundamentals.mjs generó cero filas financieras y aun así marcó el origen global como SEC actualizado hoy. | Registrar fuente, periodo y fecha por dato o lote trazable. Probar carga vacía, parcial y correcta sobre datos previos. Una empresa fallida conserva su fecha anterior. Distinguir ausencia y cero en las métricas derivadas. Usar datos de demostración rotulados mientras falte validación real. |
+| Guardado y recuperación | La ficha anuncia que el radar se guarda en el dispositivo. Una escritura fallida tras un primer guardado puede devolver el valor anterior. Revisar public/js/almacen.js y el adaptador de almacenamiento. | Provocar el fallo, conservar el texto en la sesión, mostrar «No se ha podido guardar» y ofrecer reintento. Recuperar espacio, reintentar y recargar para comprobar la nota. Diferenciar error de lectura y radar vacío. |
+| Integridad de escenarios | El servidor aceptó un peso de 10,04 % y una propuesta con un símbolo duplicado. Guardó un objetivo de 10,04 y una posición de 10 %. | Validar símbolo único y precisión en décimas antes de guardar. En una prueba con dos pestañas, una revisión antigua no debe borrar una edición más reciente. Verificar también reintentos y topes con escrituras concurrentes. |
+
+## 3. Después, entregar una historia que se pueda leer, probar y retomar
+
+1. **Revista.** Publica en la versión interna una pieza legible sin cuenta y accesible desde el móvil. Puede tratar sobre cómo una empresa de hidrógeno convierte proyectos anunciados en contratos. Indica autor, fecha, fuentes y empresa vinculada. Si utilizas un caso ficticio, identifícalo desde el título y usa documentación de ejemplo identificada como tal. Si utilizas una empresa real, verifica cada cifra y enlaza su documento de origen.
+2. **El Superespeculador.** Enlaza una opinión firmada sobre esa misma historia. Distingue el hecho observado, la interpretación del autor y qué evidencia le haría cambiar de opinión. Añade una revisión fechada vinculada a la tesis inicial. En una demo, identifica el desenlace como simulado. La tesis original debe seguir accesible aunque después cambie la opinión.
+3. **Laboratorio.** Desde la historia o la ficha, ofrece «Probar en mi cartera». Conserva la empresa seleccionada. Si el visitante carece de cartera, ofrece una de ejemplo en ese mismo punto. Haz opcional el paso por el radar. Muestra primero de dónde sale el peso asignado y después la tabla y el detalle del cálculo.
+4. **Seguimiento.** Al guardar la comparación en la cuenta, permite añadir una pregunta y una fecha de revisión, ambas opcionales. Al regresar, muestra la pregunta, la fecha elegida, la comparación original y el enlace a la historia o a su revisión. Los escenarios anteriores que no tengan esos campos deben seguir abriendo. Diferencia «Marcar como descartado», que conserva la historia, y «Eliminar definitivamente».
+5. **Móvil.** A 320 y 390 px, comprobar que se pueda leer la pieza, abrir la simulación, entender los cambios y retomar la pregunta. Lleva el método de redondeo a un detalle desplegable y ofrece «Editar nota» en vez de abrir todos los formularios. Conserva la navegación existente donde sea posible.
+
+## 4. Cómo aceptaré la entrega
+
+- **Primera visita sin cuenta.** Abro la historia desde cero, leo la opinión y pruebo la empresa con la cartera de ejemplo. Con A al 60 % y B al 40 %, doy un 10 % a C reduciendo ambas posiciones en proporción. Aparecen A al 54 %, B al 36 % y C al 10 %. Entiendo que A cede seis puntos y B cuatro. La simulación es temporal.
+- **Regreso con cuenta.** Guardo la comparación con la pregunta «¿Se han firmado los dos contratos anunciados?». Cierro, vuelvo a entrar y encuentro mi pregunta, la base original y la revisión editorial. Un cambio posterior en mi cartera conserva los pesos históricos del escenario.
+- **Errores y datos privados.** Demuestra los fallos anteriores antes y después del arreglo. Comprueba que simular y guardar el escenario deja intactas tanto la composición privada como la publicación de la cartera.
+- **Entrega a Javier.** Incluye ZIP del proyecto, instrucciones para abrirlo, capturas del primer uso y del regreso, versión revisada, pruebas ejecutadas y resultado. Separa módulo, navegador y entorno remoto. Indica los bloqueos reales y las pruebas pendientes. ChatGPT repetirá los casos críticos y revisará si el recorrido se entiende en móvil.
+
+## 5. Alcance reservado para después
+
+La ronda 14 cubre una historia, una opinión y una revisión relacionadas. El piloto editorial de tres piezas, la revista con categorías, las publicaciones semanales, los avisos automáticos, la comparación de escenarios y el análisis interno de ETF quedan para fases posteriores. También quedan reservadas las integraciones con Revolut y Trade Republic, el artículo diario personalizado, el tip diario y las suscripciones. La apertura pública se decidirá tras validar privacidad, migración, D1 remoto, correo y procedencia de las cifras reales.

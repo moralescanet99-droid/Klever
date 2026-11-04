@@ -19,6 +19,7 @@
       <a href="#publicas" data-nav="publicas">Carteras públicas</a>
       <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
       <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
+      <a href="#revista" data-nav="revista">Revista</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -31,6 +32,7 @@
     <a href="#publicas" data-nav="publicas">Carteras públicas</a>
     <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
     <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
+    <a href="#revista" data-nav="revista">Revista</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -53,6 +55,7 @@
         <p class="lead">Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.</p>
         <p><button id="probar" class="btn btn-primario btn-grande" type="button">Probar una cartera</button></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
+        <p class="inicio-revista"><a href="#revista">Lee una historia de ejemplo</a> y pruébala en una cartera, sin cuenta.</p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
@@ -171,6 +174,15 @@
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
     <ul id="mis-lista" class="lista-carteras"></ul>
+  </section>
+
+  <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
+  <section id="vista-revista" data-vista="revista" hidden>
+    <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
+    <div id="revista-cuerpo"></div>
+  </section>
+  <section id="vista-articulo" data-vista="articulo" hidden>
+    <div id="articulo-cuerpo"></div>
   </section>
 
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->

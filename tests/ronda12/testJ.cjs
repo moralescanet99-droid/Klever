@@ -130,7 +130,7 @@ const T10 = ['AAPL', 'MSFT', 'KO', 'PG', 'JNJ', 'XOM', 'NVDA', 'AMZN', 'GOOGL', 
     await q.locator('[data-borrar-busqueda] >> visible=true').click(); await q.waitForTimeout(300);
     const borr = await q.evaluate(() => ({ v: document.querySelector('#emp-buscar').value, c: document.querySelector('#emp-cuenta').textContent, filas: document.querySelectorAll('.ver-ficha').length }));
     ev('J13-' + w, `Explorar sin resultados: mensaje con la búsqueda y acción para borrarla (${w} px)`, 'Dice qué se buscó, ofrece «Borrar búsqueda» y, al usarla, vuelve la lista completa; sin desbordamiento',
-      `«${sin.msg.trim()}» · tras borrar: campo «${borr.v}», ${borr.c}`, /zzzzzz/.test(sin.msg) && sin.btn && borr.v === '' && /^105 empresas/.test(borr.c) && borr.filas > 50 && await sinDesborde(q));
+      `«${sin.msg.trim()}» · tras borrar: campo «${borr.v}», ${borr.c}`, /zzzzzz/.test(sin.msg) && sin.btn && borr.v === '' && /^106 empresas/.test(borr.c) && borr.filas > 50 && await sinDesborde(q));
     // datos ausentes: la ficha los identifica, no inventa cifras
     await q.route('**/api/assets/ADBE', async r => { const resp = await r.fetch(); const j = await resp.json(); j.fundamentales[0].ebitda = null; j.fundamentales[0].roic = null; await r.fulfill({ response: resp, json: j }); });
     await q.fill('#emp-buscar', 'adobe'); await q.waitForTimeout(250); await q.locator('.ver-ficha >> visible=true').first().click(); await q.waitForSelector('#dlg-ficha[open]'); await q.waitForTimeout(400);

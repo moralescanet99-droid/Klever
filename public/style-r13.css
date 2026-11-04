@@ -114,3 +114,35 @@
 .emp-filtros label{min-width:0;max-width:100%} .emp-filtros select{box-sizing:border-box;max-width:100%;width:100%}
 @media (max-width:480px){.emp-filtros label:not(.chk){flex:1 1 100%}}
 @media (min-width:481px){.emp-filtros label:not(.chk){flex:0 1 14rem}}
+
+/* ===== ronda 14 · revista: historia, opinión y revisión (legibles en móvil) ===== */
+.rev-tarjeta{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);max-width:46rem;margin-bottom:var(--s2)}
+.rev-tarjeta h2{margin:var(--s1) 0;font-size:1.375rem;line-height:1.25} .rev-tarjeta h2 a{color:var(--text);text-decoration:none} .rev-tarjeta h2 a:hover,.rev-tarjeta h2 a:focus-visible{text-decoration:underline}
+.rev-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0} .rev-enlaces{display:flex;flex-wrap:wrap;gap:8px;margin:var(--s1) 0 0}
+.art{max-width:42rem;font-size:1.0625rem;line-height:1.6;min-width:0;overflow-wrap:anywhere}
+.art h1{font-size:1.75rem;line-height:1.2;margin:var(--s1) 0}
+.art h2{font-size:1.25rem;margin:var(--s3) 0 var(--s1)}
+.art p,.art ul,.art ol{margin:0 0 var(--s2)} .art ul,.art ol{padding-left:1.4rem}
+.art-aviso{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:10px 14px;font-size:var(--t-s);line-height:1.45;margin:0 0 var(--s2)}
+.art-aviso a{color:inherit;font-weight:700}
+.art-bajada{font-size:1.1875rem;color:var(--muted)}
+.art-firma{font-size:var(--t-s);color:var(--muted)} .art-firma b{color:var(--text)}
+.art sup.ref{font-size:.7em;color:var(--accent);font-weight:700;margin-left:1px}
+.art-versiones{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 var(--s2)}
+.art-versiones a{padding:8px 12px;border:1px solid var(--border-strong);border-radius:999px;text-decoration:none;color:var(--text);font-size:var(--t-s);font-weight:600;min-height:44px;display:inline-flex;align-items:center}
+.art-versiones a.actual{background:var(--accent-soft);color:var(--accent-on-soft);border-color:var(--accent)}
+.art-acc{border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);background:var(--surface-2);margin:var(--s3) 0}
+.art-acc p{margin:0 0 var(--s1)} .art-acc .btn{margin:0 8px 8px 0}
+.art-fuentes ol{font-size:var(--t-s)} .art .tabla-h{margin:0 0 var(--s2)}
+.inicio-revista{margin-top:var(--s1);font-size:var(--t-s)}
+.lab-origen{background:var(--accent-soft);color:var(--accent-on-soft);border-radius:var(--r);padding:10px 14px;margin:var(--s1) 0}
+.lab-ejemplo{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:10px 12px;margin:0 0 var(--s1)}
+.nota-ver,.nota-ed{display:grid;gap:8px;min-width:0} .nota-txt{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+.nota-ed textarea{width:100%;box-sizing:border-box;font:inherit;border:1px solid var(--border-strong);border-radius:var(--radio-campo);padding:10px;background:var(--surface);color:var(--text)}
+.nota-acc{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.esc-ficha,.esc-estado{max-width:42rem;margin:0 0 var(--s2)} .esc-ficha h2,.esc-estado h2{font-size:1.125rem;margin:var(--s2) 0 6px}
+.esc-preg{font-size:1.125rem;font-weight:600;margin:0 0 var(--s1)} .esc-historia{margin:var(--s1) 0}
+.esc-estado .fila{display:flex;flex-wrap:wrap;gap:8px}
+.lab-metodo details{margin-top:8px}
+.lab-guardar{grid-template-columns:minmax(0,1fr)} .lab-guardar input,.lab-guardar textarea,.lab-guardar select{min-width:0;width:100%;box-sizing:border-box}
+.lab-guardar input[type=date]{max-width:100%;min-height:44px}

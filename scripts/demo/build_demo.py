@@ -12,8 +12,9 @@ HERE=pathlib.Path(__file__).resolve().parent; R=str(HERE.parent.parent)+'/'; SP=
 html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read()+'\n'+open(R+'public/style-r13.css').read()
 def quitar_modulos(txt):  # los módulos ES se concatenan en un solo script clásico: sin import/export (los nombres no chocan entre archivos)
     txt=re.sub(r"^import [^\n]*from '[^']+';\n",'',txt,flags=re.M); return re.sub(r'^export (async function|function|const|let)',r'\1',txt,flags=re.M)
-js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','almacen.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
-uni=open(R+'data/universe.json').read().strip(); mock=open(SP+'mock.js').read() % uni
+js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','almacen.js','contenido.js','revista.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
+import json
+uni=json.dumps(json.load(open(R+'data/universe.json'))+json.load(open(R+'data/ficticios.json')),ensure_ascii=False); mock=open(SP+'mock.js').read() % uni
 body=re.search(r'<a class="saltar".*?(?=<script src="app.js")',html,re.S).group(0)
 body=re.sub(r'<a href="legal.html"[^>]*>(.*?)</a>',r'\1',body)
 body=body.replace('<main id="contenido" tabindex="-1">','<main id="contenido" tabindex="-1">\n  <div class="demo-banner"><b>Demostración sin persistencia de cuenta.</b> Todo vive en la memoria de esta página: <b>al recargar se pierde todo</b> (cuentas, carteras y cambios), y no es equivalente al servidor real que se prueba con las baterías automáticas. Todos los datos son inventados; nada de aquí es información financiera real.<label class="demo-fallo"><input type="checkbox" id="demo-fallo" onchange="window.__demoFalloGuardado=this.checked"> <b>Simular fallo de red al guardar</b> (solo demo: las peticiones de esta página son simuladas y no fallan por activar el modo sin conexión del navegador)</label></div>',1)

@@ -17,14 +17,13 @@ export async function onRequestPut({ request, env, params }) {
   if ((await tickersDesconocidos(env, [{ ticker }])).length) return json({ error: 'Ese activo no está en el universo' }, 400);
   try {
     const ya = await env.DB.prepare('SELECT 1 x FROM radar WHERE usuario_id = ? AND ticker = ?').bind(user.id, ticker).first();
-    if (!ya) {
-      const { c } = await env.DB.prepare('SELECT COUNT(*) c FROM radar WHERE usuario_id = ?').bind(user.id).first();
-      if (c >= MAX_RADAR) return json({ error: `Tu radar admite hasta ${MAX_RADAR} empresas. Quita alguna para añadir otra.` }, 400);
-    }
+    // El tope se aplica EN la sentencia: una fila nueva solo entra si hay hueco; actualizar una existente nunca lo supera.
     const r = await env.DB.prepare(
-      `INSERT INTO radar (usuario_id, ticker, nota) VALUES (?, ?, COALESCE(?, ''))
+      `INSERT INTO radar (usuario_id, ticker, nota) SELECT ?, ?, COALESCE(?, '')
+       WHERE EXISTS (SELECT 1 FROM radar WHERE usuario_id = ? AND ticker = ?) OR (SELECT COUNT(*) FROM radar WHERE usuario_id = ?) < ?
        ON CONFLICT (usuario_id, ticker) DO UPDATE SET nota = COALESCE(?, nota), actualizado_en = datetime('now')
-       RETURNING ticker, nota, creado_en, actualizado_en`).bind(user.id, ticker, nota, nota).all();
+       RETURNING ticker, nota, creado_en, actualizado_en`).bind(user.id, ticker, nota, user.id, ticker, user.id, MAX_RADAR, nota).all();
+    if (!r.results.length) return json({ error: `Tu radar admite hasta ${MAX_RADAR} empresas. Quita alguna para añadir otra.` }, 400);
     return json({ ok: true, nuevo: !ya, ...r.results[0] });
   } catch (e) { console.error('guardar radar:', e); return json({ error: ERROR_INTERNO }, 500); }
 }
