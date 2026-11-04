@@ -98,3 +98,5 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 ## Revisión 11 · paquete de la ronda 13 — **PENDIENTE** (falta que el usuario traiga el feedback de ChatGPT)
 
 ## Revisión 12 · ronda 14 — la revisión de la ronda 13 la trajo el usuario en `Klever_Claude_Ronda_14.md` (guardada literal como C11 en `06-`); ChatGPT repetirá los casos críticos de la ronda 14 (**PENDIENTE**)
+
+## Revisión 13 · paquete de la ronda 14 — **PENDIENTE** (falta que el usuario traiga el feedback de ChatGPT; esta vez repetirá los casos críticos)
