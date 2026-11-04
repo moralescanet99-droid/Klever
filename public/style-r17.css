@@ -81,13 +81,18 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 
 /* --- creador por pasos: «Distribución» (controles + resumen) y «Revisión» (resultado primero, motivo, guardado) --- */
 .res-breve{display:none!important}
-#vista-cartera[data-paso="2"] .panel-nota,#vista-cartera[data-paso="2"] .panel-res,#vista-cartera[data-paso="2"] .panel-graf,#vista-cartera[data-paso="2"] .panel-pub{display:none}
-#vista-cartera[data-paso="3"] .panel-pos{display:none}
-.paso3-volver{display:none;margin:0 0 var(--s2)} #vista-cartera[data-paso="3"] .paso3-volver{display:block}
-#vista-cartera[data-paso="3"] .ws-grid{display:flex;flex-direction:column;gap:var(--s2);max-width:880px}
-#vista-cartera[data-paso="3"] .ws-main,#vista-cartera[data-paso="3"] .ws-resumen{display:contents}
+.res-breve{display:none!important}
+.paso3-volver{display:none;margin:0 0 var(--s2)}
+/* móvil: cada paso muestra SOLO lo suyo (distribución: controles; revisión: resultado, motivo, guardado). Escritorio: las dos columnas siguen enteras y «Revisar» lleva el foco al resultado. */
+@media (max-width:899px){
+  #vista-cartera[data-paso="2"] .panel-nota,#vista-cartera[data-paso="2"] .panel-res,#vista-cartera[data-paso="2"] .panel-graf,#vista-cartera[data-paso="2"] .panel-pub{display:none}
+  #vista-cartera[data-paso="3"] .panel-pos{display:none}
+  #vista-cartera[data-paso="3"] .paso3-volver{display:block}
+  #vista-cartera[data-paso="3"] .ws-grid{display:flex;flex-direction:column;gap:var(--s2);max-width:880px}
+  #vista-cartera[data-paso="3"] .ws-main,#vista-cartera[data-paso="3"] .ws-resumen{display:contents}
+}
 .panel-pos{order:1} .panel-donut{order:2} .ws-pie{order:3}
-#vista-cartera[data-paso="3"] .panel-nota{order:1} #vista-cartera[data-paso="3"] .panel-donut{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-graf{order:4} #vista-cartera[data-paso="3"] .panel-pub{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}
+@media (max-width:899px){#vista-cartera[data-paso="3"] .panel-nota{order:1} #vista-cartera[data-paso="3"] .panel-donut{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-graf{order:4} #vista-cartera[data-paso="3"] .panel-pub{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}}
 .paso-b:disabled{opacity:.6}
 .nombre{font-size:1.25rem;font-weight:600}
 
@@ -198,3 +203,9 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
   .panel-pos .comp{padding:10px 12px;margin-bottom:var(--s1)} .comp-cab{margin-bottom:6px}
   .ws-cab{margin-bottom:var(--s1)} .ws-meta{margin-top:4px}
 }
+
+/* cabecera del editor: las acciones pueden pasar a otra línea (texto ampliado, avisos largos) sin ensanchar la página */
+.ws-cab{flex-wrap:wrap} .ws-acc{flex-wrap:wrap;justify-content:flex-end;min-width:0;max-width:100%}
+.ws-acc .btn{max-width:100%;white-space:normal}
+.ws-acc{flex:0 1 auto} .ws-acc .motivo{flex:1 1 12rem;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+#vista-cartera .ws-cab .ws-acc{flex:0 1 auto;max-width:100%}

@@ -1,5 +1,5 @@
-Ejecución: 2026-11-04 23:07 UTC
-Código: commit fd424f826bedb562d40e2e9cef3c224a7ec51947; árbol de trabajo CON CAMBIOS sin commitear
+Ejecución: 2026-11-04 23:28 UTC
+Código: commit be4dabeb0cbcff14ad6e6a72e491d9079569582c; árbol de trabajo CON CAMBIOS sin commitear
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -33,19 +33,3 @@ RESULTADO: 20 correctas, 0 fallos
 === unit-integridad18 ===
 RESULTADO: 18 correctas, 0 fallos
 === test-zip ===
-RESULTADO: 8 correctas, 0 fallos
-=== testA ===
-page.fill: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testA terminó SIN resultado
-FALLA (ejecutor): testA salió con código 1
-=== testB ===
-FALLA móvil: barra inferior 72–88 px  [120px]
-FALLA orden 390px: resumen breve → posiciones → resumen detallado → gráficos → publicación  [321 < 458 < 877 < 877 < 877]
-FALLA orden 768px: resumen breve → posiciones → resumen detallado → gráficos → publicación  [283 < 393 < 779 < 779 < 779]
-RESULTADO: 48 correctas, 3 fallos
-- móvil: barra inferior 72–88 px → 120px
-- orden 390px: resumen breve → posiciones → resumen detallado → gráficos → publicación → 321 < 458 < 877 < 877 < 877
-- orden 768px: resumen breve → posiciones → resumen detallado → gráficos → publicación → 283 < 393 < 779 < 779 < 779
-FALLA (ejecutor): testB tiene 3 fallos
-=== testC ===

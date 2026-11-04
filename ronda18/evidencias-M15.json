@@ -1,0 +1,51 @@
+[
+ {
+  "id": "M1",
+  "escenario": "Salir con el detalle de la cartera de A todavía en vuelo (llega 2,5 s después)",
+  "esperado": "Al salir se limpia YA; la respuesta tardía no vuelve a asignar el nombre ni los pesos: ni el HTML ni los campos contienen la cartera; se queda en la portada",
+  "observado": "HTML/campos con la cartera: false; hash #inicio; vista inicio",
+  "resultado": "OK"
+ },
+ {
+  "id": "M2",
+  "escenario": "Diálogo de conflicto de A que habría salido DESPUÉS de salir (respuesta tardía)",
+  "esperado": "No se abre ningún diálogo de conflicto ni queda el nombre local ni el de la cartera",
+  "observado": "diálogos abiertos []; nombre local false; cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "M3",
+  "escenario": "Un 401 retrasado de la petición de A llega cuando B ya tiene la sesión",
+  "esperado": "El 401 se compara con el token de la PETICIÓN, no con el actual: B no se desconecta (su token sigue ahí) y no se abre el acceso",
+  "observado": "token de B conservado true; acceso abierto false",
+  "resultado": "OK"
+ },
+ {
+  "id": "M4",
+  "escenario": "Salir con cambios sin guardar: se avisa y se puede volver a guardarlos",
+  "esperado": "Hay una copia local; al pulsar Salir aparece el aviso (nombra el riesgo del dispositivo compartido); «Volver para guardarlos» NO sale y lleva a la cartera",
+  "observado": "copias 1; aviso «Tienes cambios sin guardar Hay cambios sin guardar en 1 cartera en este disposit…»; sigue dentro true; #cartera-6",
+  "resultado": "OK"
+ },
+ {
+  "id": "M5",
+  "escenario": "Salir descartando los cambios locales",
+  "esperado": "No queda ninguna copia local y el texto privado no está en el HTML ni en los campos",
+  "observado": "copias 0; texto false; cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "M6",
+  "escenario": "Caducidad involuntaria y entrada de otra cuenta en el mismo navegador",
+  "esperado": "Al caducar, el texto no queda en pantalla pero la copia se conserva (para recuperarla); al entrar B, la copia de A (que B no puede abrir) se purga",
+  "observado": "copias tras caducar 1; texto en pantalla false; copias tras entrar B 0",
+  "resultado": "OK"
+ },
+ {
+  "id": "M7",
+  "escenario": "Copia local de hace 8 días",
+  "esperado": "Caduca a los 7 días: se borra al cargar la aplicación",
+  "observado": "copias 0",
+  "resultado": "OK"
+ }
+]
