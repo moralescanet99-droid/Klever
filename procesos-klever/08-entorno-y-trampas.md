@@ -116,3 +116,13 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **El mock de la demo se formatea con `%`:** un `%` literal se escribe `%%` (también dentro de los mensajes nuevos).
 - **Rutas de Pages:** `functions/api/portfolios/[id].js` y `functions/api/portfolios/[id]/limite.js` conviven (comprobado en wrangler 3.114); un archivo `_comun.js` sin `onRequest*` no es ruta.
 
+## Ronda 14
+- **No ejecutar nada en paralelo con `run-all.sh`:** una pasada hizo fallar `testF` («sin resultado») mientras yo corría otras pruebas; en solitario pasa. Hay ya dos fallos intermitentes de pruebas antiguas (testE en la ronda 13, testF en la 14) sin diagnosticar.
+- **`checkVisibility()`/`offsetParent` no sirven para el contenido de un `<details>` cerrado** (devuelven «visible»): usar `details.open` y `innerText` (que excluye lo oculto).
+- **Una expresión regular con mayúsculas** (`no es tuya` frente a «No es tuya») hizo fallar una prueba correcta: comparar con `[Nn]` o normalizar.
+- **Fechas de calendario:** `parseF` añade «Z» y falla con «AAAA-MM-DD»: usar `fechaCorta` (de `contenido.js`) para fechas sin hora.
+- **Tablas en `.art` (revista) con `overflow-wrap:anywhere` y las columnas fijas de `.tabla-lab` en móvil parten palabras:** la tabla de la historia las anula.
+- **Árbol de trabajo antiguo para el «antes»:** `git worktree add --detach <ruta> <commit>` + enlace simbólico a `node_modules`; borrar con `git worktree remove --force` y `git worktree prune`.
+- **`SELECT … WHERE (subconsulta) < tope`** dentro de un `INSERT … SELECT` hace el tope atómico; con `ON CONFLICT` el `SELECT` necesita su `WHERE`.
+- **Semilla:** `tests/ronda5/seed.py` incluye `data/ficticios.json` (126 activos; 106 empresas con comprobaciones). Los recuentos «105» de pruebas antiguas pasaron a 106.
+

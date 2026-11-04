@@ -1,0 +1,373 @@
+[
+ {
+  "id": "J1-320",
+  "escenario": "Mis carteras sin carteras: estado vacío con acción clara (320 px)",
+  "esperado": "Formulario visible con título «Crea tu primera cartera», explicación y botón «Crear cartera»; sin botón Cancelar; sin desbordamiento",
+  "observado": "{\"form\":true,\"titulo\":\"Crea tu primera cartera\",\"ayuda\":true,\"crear\":true,\"cancelar\":false} · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2-320",
+  "escenario": "Mis carteras: composición real de cada tarjeta (320 px)",
+  "esperado": "Un tramo por posición con peso, de ancho proporcional al peso guardado (tolerancia 2 puntos por los huecos); tramo libre si no suma 100 %; nombre largo íntegro; estado de asignación escrito; sin desbordamiento",
+  "observado": "Oro: 3 tramos, «✓ Asignada al 100 % · 3 posiciones» | Diez posicione: 10 tramos, «✓ Asignada al 100 % · 10 posiciones» | Cartera de inv: 6 tramos+libre, «Falta asignar 1,5 % · 6 posiciones» · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2b-320",
+  "escenario": "Mis carteras: resumen textual con las tres mayores posiciones (320 px)",
+  "esperado": "Las tres posiciones de mayor peso con su porcentaje y «+N más»; nada inventado",
+  "observado": "AAPL 10 % · AMZN 10 % · GOOGL 10 % · +7 más / NVDA 40 % · MSFT 30 % · AMZN 20 % · +3 más",
+  "resultado": "OK"
+ },
+ {
+  "id": "J3-320",
+  "escenario": "Mis carteras: cambios locales pendientes claramente distinguidos (320 px)",
+  "esperado": "Solo la cartera con cambios locales lleva clase «pendiente», chip de aviso, borde reforzado y la acción «Continuar editando»; las demás dicen «Abrir»",
+  "observado": "[{\"n\":\"Oro\",\"pend\":true,\"cta\":\"Continuar editando\",\"chip\":true,\"borde\":\"5px\"},{\"n\":\"Diez posiciones\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"},{\"n\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J4-320",
+  "escenario": "Editor: el % asignado y su barra no se repiten (320 px)",
+  "esperado": "El % asignado aparece en la composición (información principal); el resumen lateral no lo repite ni repite su barra; sí conserva categorías y ROIC",
+  "observado": "{\"comp\":true,\"resumen\":false,\"barraResumen\":false,\"sectores\":true,\"roic\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J5-320",
+  "escenario": "Editor en móvil: el motivo breve va en la barra inferior, sin duplicar la cabecera (320 px)",
+  "esperado": "La barra inferior dice «Pública: debe sumar 100 %» y la cabecera de escritorio está oculta; sin desbordamiento",
+  "observado": "{\"principal\":\"Falta asignar un 32 % para actualizar la publicación\",\"visible\":false,\"sub\":null,\"det\":false,\"abierto\":false,\"bar\":\"⚠ Pública: debe sumar 100 %\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J6-320",
+  "escenario": "Colores estables por activo con diez posiciones (320 px)",
+  "esperado": "Quitar una posición no cambia el color de ninguna otra; añadir otra tampoco; cada fila lleva su símbolo escrito y la composición lo nombra (el color complementa, no sustituye)",
+  "observado": "quitada GOOGL: estables=true; añadido [\"ABBV\"]: estables=true; etiquetas=true; aria-label con símbolos=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J7-320",
+  "escenario": "Pesos pequeños y nombre largo en el editor (320 px)",
+  "esperado": "Un peso de 0,5 % sigue dibujando un tramo visible (≥ 2 px); solo los tramos anchos llevan etiqueta (el resto, en la lista); el nombre largo se conserva entero; sin desbordamiento",
+  "observado": "{\"n\":6,\"minAncho\":3,\"conTxt\":3,\"nombre\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"desborde\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J8-320",
+  "escenario": "Recorrido Mis carteras → abrir → editar → guardar → volver (320 px)",
+  "esperado": "Tras guardar, la tarjeta ya no está «pendiente», refleja el nuevo reparto (GLD 40 %, asignada al 100 %) y muestra la fecha de modificación",
+  "observado": "Guardar activo antes=true; {\"pend\":false,\"l2\":\"✓ Asignada al 100 % · 3 posiciones\",\"top\":\"GLD 40 % · GDX 35 % · IAU 25 %\",\"mod\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J9-320",
+  "escenario": "Explorar: cada empresa muestra sus cinco comprobaciones con el estado escrito (320 px)",
+  "esperado": "Para TODAS las empresas, superadas/no superadas/sin datos coinciden con los datos del servidor; cada estado lleva texto (no solo color); orden y recuento intactos",
+  "observado": "106/106 filas; discrepancias: ninguna; no superadas totales 108, sin datos 24; textos: no superada / sin datos / superada",
+  "resultado": "OK"
+ },
+ {
+  "id": "J10-320",
+  "escenario": "Ficha: datos principales con periodo y unidades, sin cifras inventadas (320 px)",
+  "esperado": "Ventas y beneficio coinciden con el servidor en miles de millones de USD; periodo del ejercicio en el título de la sección; ROIC en %; el botón Cerrar es visible y táctil (≥ 44 px); sin desbordamiento",
+  "observado": "Adobe: Datos principales · ejercicio FY2024; Ventas 140,3 miles de millones de USD (servidor 140,3); ROIC 13,2 %; Cerrar 44 px",
+  "resultado": "OK"
+ },
+ {
+  "id": "J11-320",
+  "escenario": "Recorrido explorar → buscar → abrir ficha → volver (320 px)",
+  "esperado": "Al cerrar la ficha, la búsqueda sigue escrita, el listado y el recuento son los mismos y el foco vuelve al botón que la abrió",
+  "observado": "{\"n\":6,\"cuenta\":\"1 de 106 empresas\"} → {\"valor\":\"adobe\",\"n\":6,\"cuenta\":\"1 de 106 empresas\",\"foco\":\"Ver ficha de Adobe\",\"abierta\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J12-320",
+  "escenario": "La búsqueda se conserva al cambiar de pantalla y al recargar (320 px)",
+  "esperado": "Tras ir a «Carteras públicas» y volver, y tras recargar la página, el campo conserva «adobe» y el listado sigue filtrado",
+  "observado": "tras volver «adobe»; tras recargar «adobe» (1 de 106 empresas)",
+  "resultado": "OK"
+ },
+ {
+  "id": "J13-320",
+  "escenario": "Explorar sin resultados: mensaje con la búsqueda y acción para borrarla (320 px)",
+  "esperado": "Dice qué se buscó, ofrece «Borrar búsqueda» y, al usarla, vuelve la lista completa; sin desbordamiento",
+  "observado": "«Ninguna empresa coincide con «zzzzzz». Borrar búsqueda» · tras borrar: campo «», 106 empresas",
+  "resultado": "OK"
+ },
+ {
+  "id": "J14-320",
+  "escenario": "Ficha: los datos ausentes se identifican como tales (320 px)",
+  "esperado": "EBITDA y ROIC sin dato aparecen como «No disponible» con la marca de dato ausente; ningún número en su lugar; los demás datos se mantienen",
+  "observado": "[{\"l\":\"Ventas\",\"v\":\"140,3\",\"ausente\":false},{\"l\":\"Beneficio neto\",\"v\":\"22,9\",\"ausente\":false},{\"l\":\"EBITDA\",\"v\":\"No disponible\",\"ausente\":true},{\"l\":\"Caja libre\",\"v\":\"2,8\",\"ausente\":false},{\"l\":\"ROIC\",\"v\":\"No disponible\",\"ausente\":true}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J15-320",
+  "escenario": "Texto ampliado al 200 % (simulado) en ficha y exploración (320 px)",
+  "esperado": "Sin desbordamiento horizontal en la ficha ni en la página de exploración, y «Cerrar» sigue dentro de la pantalla",
+  "observado": "ficha sin desborde=true; Cerrar dentro=true; página sin desborde=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J16-320",
+  "escenario": "Explorar con error de carga: mensaje y reintento (320 px)",
+  "esperado": "Texto claro «No se pudieron cargar las empresas» con botón Reintentar; sin tabla vacía engañosa; sin desbordamiento",
+  "observado": "{\"msg\":\"No se pudieron cargar las empresas. Reintentar\",\"reintento\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J1-390",
+  "escenario": "Mis carteras sin carteras: estado vacío con acción clara (390 px)",
+  "esperado": "Formulario visible con título «Crea tu primera cartera», explicación y botón «Crear cartera»; sin botón Cancelar; sin desbordamiento",
+  "observado": "{\"form\":true,\"titulo\":\"Crea tu primera cartera\",\"ayuda\":true,\"crear\":true,\"cancelar\":false} · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2-390",
+  "escenario": "Mis carteras: composición real de cada tarjeta (390 px)",
+  "esperado": "Un tramo por posición con peso, de ancho proporcional al peso guardado (tolerancia 2 puntos por los huecos); tramo libre si no suma 100 %; nombre largo íntegro; estado de asignación escrito; sin desbordamiento",
+  "observado": "Oro: 3 tramos, «✓ Asignada al 100 % · 3 posiciones» | Diez posicione: 10 tramos, «✓ Asignada al 100 % · 10 posiciones» | Cartera de inv: 6 tramos+libre, «Falta asignar 1,5 % · 6 posiciones» · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2b-390",
+  "escenario": "Mis carteras: resumen textual con las tres mayores posiciones (390 px)",
+  "esperado": "Las tres posiciones de mayor peso con su porcentaje y «+N más»; nada inventado",
+  "observado": "AAPL 10 % · AMZN 10 % · GOOGL 10 % · +7 más / NVDA 40 % · MSFT 30 % · AMZN 20 % · +3 más",
+  "resultado": "OK"
+ },
+ {
+  "id": "J3-390",
+  "escenario": "Mis carteras: cambios locales pendientes claramente distinguidos (390 px)",
+  "esperado": "Solo la cartera con cambios locales lleva clase «pendiente», chip de aviso, borde reforzado y la acción «Continuar editando»; las demás dicen «Abrir»",
+  "observado": "[{\"n\":\"Oro\",\"pend\":true,\"cta\":\"Continuar editando\",\"chip\":true,\"borde\":\"5px\"},{\"n\":\"Diez posiciones\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"},{\"n\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J4-390",
+  "escenario": "Editor: el % asignado y su barra no se repiten (390 px)",
+  "esperado": "El % asignado aparece en la composición (información principal); el resumen lateral no lo repite ni repite su barra; sí conserva categorías y ROIC",
+  "observado": "{\"comp\":true,\"resumen\":false,\"barraResumen\":false,\"sectores\":true,\"roic\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J5-390",
+  "escenario": "Editor en móvil: el motivo breve va en la barra inferior, sin duplicar la cabecera (390 px)",
+  "esperado": "La barra inferior dice «Pública: debe sumar 100 %» y la cabecera de escritorio está oculta; sin desbordamiento",
+  "observado": "{\"principal\":\"Falta asignar un 32 % para actualizar la publicación\",\"visible\":false,\"sub\":null,\"det\":false,\"abierto\":false,\"bar\":\"⚠ Pública: debe sumar 100 %\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J6-390",
+  "escenario": "Colores estables por activo con diez posiciones (390 px)",
+  "esperado": "Quitar una posición no cambia el color de ninguna otra; añadir otra tampoco; cada fila lleva su símbolo escrito y la composición lo nombra (el color complementa, no sustituye)",
+  "observado": "quitada GOOGL: estables=true; añadido [\"ABBV\"]: estables=true; etiquetas=true; aria-label con símbolos=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J7-390",
+  "escenario": "Pesos pequeños y nombre largo en el editor (390 px)",
+  "esperado": "Un peso de 0,5 % sigue dibujando un tramo visible (≥ 2 px); solo los tramos anchos llevan etiqueta (el resto, en la lista); el nombre largo se conserva entero; sin desbordamiento",
+  "observado": "{\"n\":6,\"minAncho\":3,\"conTxt\":3,\"nombre\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"desborde\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J8-390",
+  "escenario": "Recorrido Mis carteras → abrir → editar → guardar → volver (390 px)",
+  "esperado": "Tras guardar, la tarjeta ya no está «pendiente», refleja el nuevo reparto (GLD 40 %, asignada al 100 %) y muestra la fecha de modificación",
+  "observado": "Guardar activo antes=true; {\"pend\":false,\"l2\":\"✓ Asignada al 100 % · 3 posiciones\",\"top\":\"GLD 40 % · GDX 35 % · IAU 25 %\",\"mod\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J9-390",
+  "escenario": "Explorar: cada empresa muestra sus cinco comprobaciones con el estado escrito (390 px)",
+  "esperado": "Para TODAS las empresas, superadas/no superadas/sin datos coinciden con los datos del servidor; cada estado lleva texto (no solo color); orden y recuento intactos",
+  "observado": "106/106 filas; discrepancias: ninguna; no superadas totales 108, sin datos 24; textos: no superada / sin datos / superada",
+  "resultado": "OK"
+ },
+ {
+  "id": "J10-390",
+  "escenario": "Ficha: datos principales con periodo y unidades, sin cifras inventadas (390 px)",
+  "esperado": "Ventas y beneficio coinciden con el servidor en miles de millones de USD; periodo del ejercicio en el título de la sección; ROIC en %; el botón Cerrar es visible y táctil (≥ 44 px); sin desbordamiento",
+  "observado": "Adobe: Datos principales · ejercicio FY2024; Ventas 140,3 miles de millones de USD (servidor 140,3); ROIC 13,2 %; Cerrar 44 px",
+  "resultado": "OK"
+ },
+ {
+  "id": "J11-390",
+  "escenario": "Recorrido explorar → buscar → abrir ficha → volver (390 px)",
+  "esperado": "Al cerrar la ficha, la búsqueda sigue escrita, el listado y el recuento son los mismos y el foco vuelve al botón que la abrió",
+  "observado": "{\"n\":6,\"cuenta\":\"1 de 106 empresas\"} → {\"valor\":\"adobe\",\"n\":6,\"cuenta\":\"1 de 106 empresas\",\"foco\":\"Ver ficha de Adobe\",\"abierta\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J12-390",
+  "escenario": "La búsqueda se conserva al cambiar de pantalla y al recargar (390 px)",
+  "esperado": "Tras ir a «Carteras públicas» y volver, y tras recargar la página, el campo conserva «adobe» y el listado sigue filtrado",
+  "observado": "tras volver «adobe»; tras recargar «adobe» (1 de 106 empresas)",
+  "resultado": "OK"
+ },
+ {
+  "id": "J13-390",
+  "escenario": "Explorar sin resultados: mensaje con la búsqueda y acción para borrarla (390 px)",
+  "esperado": "Dice qué se buscó, ofrece «Borrar búsqueda» y, al usarla, vuelve la lista completa; sin desbordamiento",
+  "observado": "«Ninguna empresa coincide con «zzzzzz». Borrar búsqueda» · tras borrar: campo «», 106 empresas",
+  "resultado": "OK"
+ },
+ {
+  "id": "J14-390",
+  "escenario": "Ficha: los datos ausentes se identifican como tales (390 px)",
+  "esperado": "EBITDA y ROIC sin dato aparecen como «No disponible» con la marca de dato ausente; ningún número en su lugar; los demás datos se mantienen",
+  "observado": "[{\"l\":\"Ventas\",\"v\":\"140,3\",\"ausente\":false},{\"l\":\"Beneficio neto\",\"v\":\"22,9\",\"ausente\":false},{\"l\":\"EBITDA\",\"v\":\"No disponible\",\"ausente\":true},{\"l\":\"Caja libre\",\"v\":\"2,8\",\"ausente\":false},{\"l\":\"ROIC\",\"v\":\"No disponible\",\"ausente\":true}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J15-390",
+  "escenario": "Texto ampliado al 200 % (simulado) en ficha y exploración (390 px)",
+  "esperado": "Sin desbordamiento horizontal en la ficha ni en la página de exploración, y «Cerrar» sigue dentro de la pantalla",
+  "observado": "ficha sin desborde=true; Cerrar dentro=true; página sin desborde=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J16-390",
+  "escenario": "Explorar con error de carga: mensaje y reintento (390 px)",
+  "esperado": "Texto claro «No se pudieron cargar las empresas» con botón Reintentar; sin tabla vacía engañosa; sin desbordamiento",
+  "observado": "{\"msg\":\"No se pudieron cargar las empresas. Reintentar\",\"reintento\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J1-1440",
+  "escenario": "Mis carteras sin carteras: estado vacío con acción clara (1440 px)",
+  "esperado": "Formulario visible con título «Crea tu primera cartera», explicación y botón «Crear cartera»; sin botón Cancelar; sin desbordamiento",
+  "observado": "{\"form\":true,\"titulo\":\"Crea tu primera cartera\",\"ayuda\":true,\"crear\":true,\"cancelar\":false} · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2-1440",
+  "escenario": "Mis carteras: composición real de cada tarjeta (1440 px)",
+  "esperado": "Un tramo por posición con peso, de ancho proporcional al peso guardado (tolerancia 2 puntos por los huecos); tramo libre si no suma 100 %; nombre largo íntegro; estado de asignación escrito; sin desbordamiento",
+  "observado": "Oro: 3 tramos, «✓ Asignada al 100 % · 3 posiciones» | Diez posicione: 10 tramos, «✓ Asignada al 100 % · 10 posiciones» | Cartera de inv: 6 tramos+libre, «Falta asignar 1,5 % · 6 posiciones» · sin desbordamiento=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J2b-1440",
+  "escenario": "Mis carteras: resumen textual con las tres mayores posiciones (1440 px)",
+  "esperado": "Las tres posiciones de mayor peso con su porcentaje y «+N más»; nada inventado",
+  "observado": "AAPL 10 % · AMZN 10 % · GOOGL 10 % · +7 más / NVDA 40 % · MSFT 30 % · AMZN 20 % · +3 más",
+  "resultado": "OK"
+ },
+ {
+  "id": "J3-1440",
+  "escenario": "Mis carteras: cambios locales pendientes claramente distinguidos (1440 px)",
+  "esperado": "Solo la cartera con cambios locales lleva clase «pendiente», chip de aviso, borde reforzado y la acción «Continuar editando»; las demás dicen «Abrir»",
+  "observado": "[{\"n\":\"Oro\",\"pend\":true,\"cta\":\"Continuar editando\",\"chip\":true,\"borde\":\"5px\"},{\"n\":\"Diez posiciones\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"},{\"n\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"pend\":false,\"cta\":\"Abrir\",\"chip\":false,\"borde\":\"1px\"}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J4-1440",
+  "escenario": "Editor: el % asignado y su barra no se repiten (1440 px)",
+  "esperado": "El % asignado aparece en la composición (información principal); el resumen lateral no lo repite ni repite su barra; sí conserva categorías y ROIC",
+  "observado": "{\"comp\":true,\"resumen\":false,\"barraResumen\":false,\"sectores\":true,\"roic\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J5-1440",
+  "escenario": "Editor: cabecera de una cartera pública con cambios inválidos",
+  "esperado": "Mensaje principal «Falta asignar un 32 % para actualizar la publicación» (18+25+25 = 68 %); sigue visible «La versión pública sigue igual.»; detalle en un desplegable cerrado; el motivo largo no es el mensaje principal",
+  "observado": "{\"principal\":\"Falta asignar un 32 % para actualizar la publicación\",\"visible\":true,\"sub\":\"La versión pública sigue igual.\",\"det\":true,\"abierto\":false,\"bar\":\"⚠ Pública: debe sumar 100 %\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J5b-1440",
+  "escenario": "Editor: el detalle abierto no se cierra al teclear y explica la regla",
+  "esperado": "Tras abrir «Detalle» y cambiar un peso sigue abierto, actualizado (33 %) y con la explicación completa",
+  "observado": "{\"abierto\":true,\"txt\":\"Cartera pública: la versión publicada no cambia hasta que el reparto vuelva a sumar el 100 % (pendiente de asignar: 33 %). Tus cambios siguen en este dispositivo. Si prefieres guardar un reparto incompleto, deja de publicarla.\",\"main\":\"Falta asignar un 33 % para actualizar la publicación\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J5c-1440",
+  "escenario": "Editor: jerarquía título → estado → acción",
+  "esperado": "El título está arriba, el estado de guardado debajo y la acción principal a la altura de la cabecera; el motivo no se sale de la pantalla",
+  "observado": "{\"titulo\":-45.578125,\"estado\":41.921875,\"accion\":-9.828125,\"motivoDer\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J6-1440",
+  "escenario": "Colores estables por activo con diez posiciones (1440 px)",
+  "esperado": "Quitar una posición no cambia el color de ninguna otra; añadir otra tampoco; cada fila lleva su símbolo escrito y la composición lo nombra (el color complementa, no sustituye)",
+  "observado": "quitada GOOGL: estables=true; añadido [\"ABBV\"]: estables=true; etiquetas=true; aria-label con símbolos=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J7-1440",
+  "escenario": "Pesos pequeños y nombre largo en el editor (1440 px)",
+  "esperado": "Un peso de 0,5 % sigue dibujando un tramo visible (≥ 2 px); solo los tramos anchos llevan etiqueta (el resto, en la lista); el nombre largo se conserva entero; sin desbordamiento",
+  "observado": "{\"n\":6,\"minAncho\":3.328125,\"conTxt\":3,\"nombre\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"desborde\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J8-1440",
+  "escenario": "Recorrido Mis carteras → abrir → editar → guardar → volver (1440 px)",
+  "esperado": "Tras guardar, la tarjeta ya no está «pendiente», refleja el nuevo reparto (GLD 40 %, asignada al 100 %) y muestra la fecha de modificación",
+  "observado": "Guardar activo antes=true; {\"pend\":false,\"l2\":\"✓ Asignada al 100 % · 3 posiciones\",\"top\":\"GLD 40 % · GDX 35 % · IAU 25 %\",\"mod\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J9-1440",
+  "escenario": "Explorar: cada empresa muestra sus cinco comprobaciones con el estado escrito (1440 px)",
+  "esperado": "Para TODAS las empresas, superadas/no superadas/sin datos coinciden con los datos del servidor; cada estado lleva texto (no solo color); orden y recuento intactos",
+  "observado": "106/106 filas; discrepancias: ninguna; no superadas totales 108, sin datos 24; textos: no superada / sin datos / superada",
+  "resultado": "OK"
+ },
+ {
+  "id": "J10-1440",
+  "escenario": "Ficha: datos principales con periodo y unidades, sin cifras inventadas (1440 px)",
+  "esperado": "Ventas y beneficio coinciden con el servidor en miles de millones de USD; periodo del ejercicio en el título de la sección; ROIC en %; el botón Cerrar es visible y táctil (≥ 44 px); sin desbordamiento",
+  "observado": "Adobe: Datos principales · ejercicio FY2024; Ventas 140,3 miles de millones de USD (servidor 140,3); ROIC 13,2 %; Cerrar 44 px",
+  "resultado": "OK"
+ },
+ {
+  "id": "J11-1440",
+  "escenario": "Recorrido explorar → buscar → abrir ficha → volver (1440 px)",
+  "esperado": "Al cerrar la ficha, la búsqueda sigue escrita, el listado y el recuento son los mismos y el foco vuelve al botón que la abrió",
+  "observado": "{\"n\":1,\"cuenta\":\"1 de 106 empresas\"} → {\"valor\":\"adobe\",\"n\":1,\"cuenta\":\"1 de 106 empresas\",\"foco\":\"Ver ficha de Adobe\",\"abierta\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "J12-1440",
+  "escenario": "La búsqueda se conserva al cambiar de pantalla y al recargar (1440 px)",
+  "esperado": "Tras ir a «Carteras públicas» y volver, y tras recargar la página, el campo conserva «adobe» y el listado sigue filtrado",
+  "observado": "tras volver «adobe»; tras recargar «adobe» (1 de 106 empresas)",
+  "resultado": "OK"
+ },
+ {
+  "id": "J13-1440",
+  "escenario": "Explorar sin resultados: mensaje con la búsqueda y acción para borrarla (1440 px)",
+  "esperado": "Dice qué se buscó, ofrece «Borrar búsqueda» y, al usarla, vuelve la lista completa; sin desbordamiento",
+  "observado": "«Ninguna empresa coincide con «zzzzzz». Borrar búsqueda» · tras borrar: campo «», 106 empresas",
+  "resultado": "OK"
+ },
+ {
+  "id": "J14-1440",
+  "escenario": "Ficha: los datos ausentes se identifican como tales (1440 px)",
+  "esperado": "EBITDA y ROIC sin dato aparecen como «No disponible» con la marca de dato ausente; ningún número en su lugar; los demás datos se mantienen",
+  "observado": "[{\"l\":\"Ventas\",\"v\":\"140,3\",\"ausente\":false},{\"l\":\"Beneficio neto\",\"v\":\"22,9\",\"ausente\":false},{\"l\":\"EBITDA\",\"v\":\"No disponible\",\"ausente\":true},{\"l\":\"Caja libre\",\"v\":\"2,8\",\"ausente\":false},{\"l\":\"ROIC\",\"v\":\"No disponible\",\"ausente\":true}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "J15-1440",
+  "escenario": "Texto ampliado al 200 % (simulado) en ficha y exploración (1440 px)",
+  "esperado": "Sin desbordamiento horizontal en la ficha ni en la página de exploración, y «Cerrar» sigue dentro de la pantalla",
+  "observado": "ficha sin desborde=true; Cerrar dentro=true; página sin desborde=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "J16-1440",
+  "escenario": "Explorar con error de carga: mensaje y reintento (1440 px)",
+  "esperado": "Texto claro «No se pudieron cargar las empresas» con botón Reintentar; sin tabla vacía engañosa; sin desbordamiento",
+  "observado": "{\"msg\":\"No se pudieron cargar las empresas. Reintentar\",\"reintento\":true}",
+  "resultado": "OK"
+ }
+]

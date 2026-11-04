@@ -144,5 +144,15 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Estructura:** `public/js/{calculos,almacen,lab}.js` + `public/style-r13.css` (archivo propio; no pisa reglas antiguas). La demo concatena los módulos en un script clásico (`build_demo.py` quita `import/export`).
 - **Editorial: solo diseño** (`ronda13/EDITORIAL.md`).
 
+## Ronda 14 (confianza primero; una historia legible, probable y retomable)
+- **La procedencia vive en cada fila** (`fundamentales.fuente/actualizado_en`) y en lotes (`cargas`); no hay «origen global». Motivo: una carga vacía declaraba «SEC, hoy». Una empresa fallida o vacía no se toca (conserva su fecha); `/api/datos` se deriva de las filas. «Fuente SEC» significa «la carga lo escribió», no «verificado».
+- **Ausencia ≠ cero:** una métrica derivada exige todos sus insumos (sin amortizaciones no hay EBITDA; sin inversiones, no hay caja libre; sin impuesto, no hay ROIC; sin supuestos silenciosos). Coste asumido: más «sin datos» con datos reales.
+- **Privacidad al salir:** `limpiarPrivado()` + contador de sesión que descarta respuestas en vuelo; la referencia de cartera y el estado del laboratorio se borran. **No** se borran las copias locales de cambios sin guardar (permiten recuperar al volver a entrar); queda anotado como limitación.
+- **Radar de visitante:** escritura y lectura **estrictas** (si falla, error visible; una lectura fallida no es «radar vacío»). El adaptador `store` tiene variantes estrictas.
+- **Escenarios:** una decimal como mucho, propuesta con símbolos únicos y comparada **sin normalizar antes**; tope de 100 escenarios / 200 radar **dentro de la sentencia**; `pregunta` (≤200), `revisar_en` (fecha real) e `historia` (identificador) opcionales, con migración aditiva (los antiguos siguen abriendo). «Marcar como descartado» = PATCH de estado (conserva); «Eliminar definitivamente» = DELETE.
+- **Contenido editorial como datos estáticos en código** (`public/js/contenido.js`), no en base de datos, mientras haya una sola pieza; estructura pensada para pasar a tablas (`ronda13/EDITORIAL.md`). **El caso es FICTICIO desde el título** (empresa «Hidrógeno Norte», autoría, fuentes y desenlace inventados); la empresa ficticia vive en `data/ficticios.json` (semilla y demo), **no** en el universo real. La tesis original nunca se edita: la revisión es otra versión enlazada.
+- **Laboratorio:** sin cartera, se ofrece una **de ejemplo** (KO 60 % · PG 40 %) rotulada «no es tuya»; con cuenta, un botón la crea en la cuenta para poder guardar. Primero «de dónde sale el peso», después tabla y pasos; el redondeo, en un desplegable.
+- **Entrega a Javier:** la demo (artefacto o `demo/index.html`) es lo abrible en un móvil; la versión completa solo se ha ejecutado en local (`ronda14/ABRIR-EN-MOVIL.md`).
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

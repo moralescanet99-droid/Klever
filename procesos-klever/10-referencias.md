@@ -42,3 +42,5 @@ Capturas y zips: `rediseno/antes|despues`, `ronda4/antes|despues`, `ronda4-captu
 Cloudflare (Pages, D1), GitHub Actions (secretos `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`), Brevo (`BREVO_API_KEY`, `MAIL_FROM`). **Nunca guardar claves ni correos personales en el repositorio.**
 
 - Ronda 13: informe `ronda13/LEEME.md`; cálculos `ronda13/CALCULOS.md`; auditoría de datos `ronda13/DATOS.md`; diseño editorial `ronda13/EDITORIAL.md`; plan `ronda13/PLAN-POR-FASES.md`; capturas `ronda13/capturas/`.
+
+- Ronda 14: informe `ronda14/LEEME.md`; antes/después `ronda14/ANTES-Y-DESPUES.md`; procedencia `ronda14/PROCEDENCIA.md`; abrir en móvil `ronda14/ABRIR-EN-MOVIL.md`; capturas `ronda14/capturas/`.

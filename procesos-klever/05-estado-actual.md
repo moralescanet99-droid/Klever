@@ -1,13 +1,13 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 13 (informe `ronda13/LEEME.md`).
+**Última actualización:** 2026-11-03, tras la ronda 14 (informe `ronda14/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
 1. La web está **completa para la beta en código** (portada, editor, empresas, carteras públicas, ficha, acceso por enlace, métricas), pero **todavía no está desplegada**: faltan las cuentas del usuario (Cloudflare, Brevo, secretos de GitHub).
-2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**467 comprobaciones** automáticas en la ejecución de la ronda 13). No se ha probado con servicios reales.
+2. Todo se ha probado **en local** con D1 simulada, datos inventados y un navegador automático (**522 comprobaciones** automáticas en la ejecución de la ronda 14). No se ha probado con servicios reales.
 3. Hay una **demo autónoma** (`demo/index.html`) lista para publicar en Cloudflare Pages y una privada en un artefacto.
-4. La ronda 13 (**radiografía, radar, laboratorio de porcentajes y seguimiento de escenarios**, con el recorrido completo probado; origen de los datos declarado), la 12 (editor, «Mis carteras», «Explorar empresas» y ficha con un mismo lenguaje visual; faltan portada, públicas, acceso, pie y gráficos), la 11 (avisos sin solapes y **editor con identidad propia** como pantalla de referencia; entregas ZIP verificables), la 10 (pulido visual y acceso) , la 9 (API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda11/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
+4. La ronda 14 (**confianza: privacidad al salir, procedencia por dato, radar sin falsos «guardado», escenarios íntegros; y la primera historia editable-de-ejemplo → laboratorio → seguimiento con pregunta**), la 13 (**radiografía, radar, laboratorio de porcentajes y seguimiento de escenarios**, con el recorrido completo probado; origen de los datos declarado), la 12 (editor, «Mis carteras», «Explorar empresas» y ficha con un mismo lenguaje visual; faltan portada, públicas, acceso, pie y gráficos), la 11 (avisos sin solapes y **editor con identidad propia** como pantalla de referencia; entregas ZIP verificables), la 10 (pulido visual y acceso) , la 9 (API pública coherente, demo comprobada en el ejecutor) y la 8 (carreras de lectura y respuesta, ejecutor fiable, migración verificada) están implementadas y probada en local desde una **instalación limpia** (`LEEME-PRUEBAS.md`, commit exacto en `ronda11/resultado-ejecucion.txt`, Node ≥ 22.13); **D1 remoto no probado**; hay una **versión para pruebas de uso** (`PRUEBAS-DE-USO.md`: servidor local completo, demo sin persistencia y artefacto privado). El paquete para ChatGPT de las rondas 6 y 7 está preparado (`revision-chatgpt/ronda-7/`); falta entregarlo y traer su feedback; **ninguna prueba manual real se ha ejecutado**.
 5. Lo siguiente razonable: desplegar la demo pública, crear la cuenta de Brevo, desplegar la web real, revisar términos de TradingView y texto legal.
 
 ## Mapa del código
@@ -27,6 +27,9 @@ tests/ronda7/      testF (guardado fiable, conflicto, E16a, diálogo móvil), un
 tests/ronda8/      unit-carreras (R1–R6), unit-migracion, testG (respuestas tardías), test-ejecutor.sh (18 casos), fixtures, informe8
 tests/ronda9/      verificar-api.mjs (API por HTTP, repetible en remoto), informe9
 tests/ronda10/     testH (avisos, ROIC, móvil; reescrita en la ronda 11), unit-acceso (A8 en modo repositorio/ZIP), seguridad-http, capturas/medir, validar-acceso-real (asistido), informe10
+tests/ronda14/     unit-carga (procedencia), unit-r14 (escenarios y concurrencia), testL (privacidad, radar, primera visita, regreso), antes-despues-*
+public/js/         contenido (caso ficticio), revista (render)
+scripts/lib/       carga.mjs (métricas derivadas y SQL de carga, probado)
 tests/ronda13/     unit-calculos, unit-r13 (servidor, aislamiento), testK (recorrido completo)
 public/js/         calculos (puro, compartido con el servidor), almacen (radar/escenarios), lab (presentación)
 tests/ronda12/     testJ (Mis carteras, Explorar, ficha, detalles del editor), capturas antes/después

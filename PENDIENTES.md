@@ -41,3 +41,9 @@
 - Ejecutar la carga real de la SEC y comprobar que `nightly.yml` funciona (la interfaz solo dirá «SEC» cuando el cargador escriba `origen = sec`): ver `ronda13/DATOS.md` y `ronda10/BLOQUEOS.md`.
 - Aplicar la migración `0008_radar_escenarios.sql` en la D1 real y validar radar, escenarios y aislamiento entre cuentas (M46, M47).
 - Decidir: responsables editoriales y proceso de revisión (`ronda13/EDITORIAL.md`); reparto gratuito/pago.
+
+## Ronda 14 (pendiente de accesos y decisiones)
+- Ejecutar la carga real de la SEC con la lógica nueva (fuente/fecha por fila) y medir cuántas métricas quedan «sin datos»; aplicar migraciones 0008 y 0009 en la D1 real (M56, M57).
+- Sustituir el caso editorial ficticio por contenido real verificado, con responsable editorial (M58).
+- Probar el recorrido en un móvil real (M50, M51) y compartir el artefacto de la demo con Javier (menú «Compartir» del artefacto).
+- Diagnosticar los fallos intermitentes de `testE` (ronda 13) y `testF` (ronda 14) en las pasadas completas.
