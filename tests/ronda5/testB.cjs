@@ -40,11 +40,19 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   ok('móvil: sin desbordamiento y sin errores', (await p.evaluate(() => document.documentElement.scrollWidth)) <= 390 && p.errs.length === 0, p.errs.join('|'));
 
   // ===== ORDEN en una columna (390 y 768) y dos columnas (1440) =====
+  // ronda 18: en una columna el contenido va POR PASOS. Distribución: estado compacto → posiciones → anillo (desplegable). Revisión: resultado → anillo → resumen detallado → gráficos → publicación.
   for (const w of [390, 768]) {
     await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
+    const y = sel => p.evaluate(s => { const e = document.querySelector(s); return Math.round(e.getBoundingClientRect().top + scrollY); }, sel), vis = sel => p.evaluate(s => document.querySelector(s).offsetParent !== null, sel);
+    await p.evaluate(() => document.querySelector('#paso-dist').click()); await p.waitForTimeout(300);
+    const pos = await p.evaluate(() => document.querySelector('#pos-cards').offsetParent ? '#pos-cards' : '.tabla-scroll');
+    const ys2 = [await y('#comp'), await y(pos), await y('#panel-donut')], ocultos2 = [await vis('#nota-panel'), await vis('#res-detalle'), await vis('#det-graficos'), await vis('#det-pub')];
+    ok(`orden ${w}px, paso 2: estado compacto → posiciones → anillo, y la revisión oculta`, ys2.every((v, i) => i === 0 || v > ys2[i - 1]) && ocultos2.every(v => v === false), ys2.join(' < ') + '; visibles ' + ocultos2.join('/'));
+    await p.evaluate(() => { document.querySelector('.js-revisar').click(); }); await p.waitForSelector('#vista-cartera[data-paso="3"]'); await p.waitForTimeout(300);
     await p.evaluate(() => { document.querySelector('#det-pub').open = true; document.querySelector('#det-graficos').open = true; });
-    const ys = await p.evaluate(() => ['#comp', document.querySelector('#pos-cards').offsetParent ? '#pos-cards' : '.tabla-scroll', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
-    ok(`orden ${w}px: resumen breve → posiciones → resumen detallado → gráficos → publicación`, ys.every((y, i) => i === 0 || y > ys[i - 1]), ys.join(' < '));
+    const ys3 = [await y('#nota-panel'), await y('#panel-donut'), await y('#res-detalle'), await y('#det-graficos'), await y('#det-pub')], posVis = await vis(pos);
+    ok(`orden ${w}px, paso 3: resultado → anillo → resumen detallado → gráficos → publicación, sin las posiciones`, ys3.every((v, i) => i === 0 || v > ys3[i - 1]) && posVis === false, ys3.join(' < '));
+    await p.evaluate(() => document.querySelector('#paso-volver').click()); await p.waitForTimeout(300);
   }
   await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(200);
   ok('1440: dos columnas, resumen lateral y resumen breve oculto', await p.evaluate(() => { const m = document.querySelector('.ws-main').getBoundingClientRect(), r = document.querySelector('.ws-resumen').getBoundingClientRect(); return r.left > m.right && getComputedStyle(document.querySelector('#res-breve')).display === 'none'; }));

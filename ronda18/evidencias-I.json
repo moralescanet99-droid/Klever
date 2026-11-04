@@ -107,8 +107,8 @@
   "id": "I4-1440",
   "escenario": "Sin desbordamiento horizontal en pendiente, error y texto ampliado (1440 px; ampliado SIMULADO)",
   "esperado": "La página nunca es más ancha que la ventana",
-  "observado": "pendiente 1440, error 1440, texto al 200 % 1738 (ventana 1440)",
-  "resultado": "FALLA",
+  "observado": "pendiente 1440, error 1440, texto al 200 % 1440 (ventana 1440)",
+  "resultado": "OK",
   "evidencia": ""
  },
  {

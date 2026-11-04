@@ -134,6 +134,8 @@ const EV = EVDIR;
   p = await nuevo(b, 360, 780); await entrar(p, 'dividendos', 'D4'); await peso(p).fill('30'); await p.waitForTimeout(200);
   const m360 = await p.evaluate(() => ({ ancho: document.documentElement.scrollWidth, fuente: getComputedStyle(document.querySelector('#comp-pie')).fontSize, barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().height), rb: document.querySelector('#comp-pie').textContent, bt: document.querySelector('#b-total').textContent, be: document.querySelector('#b-estado').textContent, desborde: [...document.querySelectorAll('#barra-guardar *')].some(e => e.getBoundingClientRect().right > innerWidth + 1) }));
   await p.screenshot({ path: EV + 'E9-exceso-360.png' });
+  // ronda 18: en móvil el resumen detallado vive en el paso «Revisión»: se abre, se lee y se vuelve a «Distribución»
+  await p.evaluate(() => document.querySelector('.js-revisar').click()); await p.waitForSelector('#vista-cartera[data-paso="3"]'); await p.waitForTimeout(300);
   const resumenTxt = await p.evaluate(() => document.querySelector('#vista-cartera').innerText);
   // Ronda 10: la nota de categorías pasó al desplegable «Más sobre las categorías» (menos texto secundario visible): debe seguir existiendo, dentro de ese desplegable accesible
   const notaCat = await p.evaluate(() => { const x = [...document.querySelectorAll('#res-detalle p')].find(e => e.textContent.includes('Los ETF se agrupan por tipo; no se desglosan sus empresas.')); return { existe: !!x, enDesplegable: !!x?.closest('details'), visible: !!x?.offsetParent && x.getBoundingClientRect().height > 0 && !x.closest('details:not([open])') }; });
@@ -141,6 +143,7 @@ const EV = EVDIR;
     m360.ancho <= 360 && parseFloat(m360.fuente) >= 16 && m360.barra <= 88 && !m360.desborde && m360.rb.startsWith('⚠ Exceso de asignación'), 'E9-exceso-360.png');
   ev('E9b', 'Etiquetas del resumen', '«Asignado: 100 %» sin «100,0 % ✓ 100 % asignado»; «No representa la rentabilidad de tu cartera»; categorías con nota breve', `«✓ 100 % asignado» aparece=${/✓ 100 % asignado|100,0 % ✓/.test(resumenTxt)}; nota ROIC=${resumenTxt.includes('No representa la rentabilidad de tu cartera.')}; nota categorías (en el desplegable, plegada)=${notaCat.existe && notaCat.enDesplegable && !notaCat.visible}; antes visible=${resumenTxt.includes('Los ETF se agrupan por tipo; no se desglosan sus empresas.')}`,
     !/✓ 100 % asignado|100,0 % ✓/.test(resumenTxt) && resumenTxt.includes('No representa la rentabilidad de tu cartera.') && notaCat.existe && notaCat.enDesplegable && !notaCat.visible, '');
+  await p.evaluate(() => document.querySelector('#paso-dist').click()); await p.waitForTimeout(300);
   await peso(p).fill('17'); await p.waitForTimeout(150);
   ev('E9c', 'Cobertura: datos ausentes distintos de no aplicable', 'Líneas separadas: «Dato ausente (no disponible)» y «No aplicable»', `«${(await T(p, '#r-cobertura')).replace(/\s+/g, ' ')}»`, (await T(p, '#r-cobertura')).includes('No aplicable') && !(await T(p, '#r-cobertura')).includes('Sin dato:'), '');
   await p.fill('#buscar-activo', 'jpmorgan'); await p.keyboard.press('Enter'); await p.waitForTimeout(150);

@@ -118,6 +118,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   // ===== H4: resumen de ROIC: lo esencial visible, la explicación en un desplegable accesible =====
   for (const w of [320, 390, 1440]) {
     const p = await nuevo(b, w, 800); await entrar(p, 'dividendos', 'H4' + w);
+    await p.evaluate(() => document.querySelector('.js-revisar').click()); await p.waitForSelector('#vista-cartera[data-paso="3"]'); await p.waitForTimeout(300);   // ronda 18: el resumen detallado vive en el paso «Revisión»
     await p.evaluate(() => document.querySelector('#res-detalle').scrollIntoView()); await p.waitForTimeout(200);
     const vis = await p.evaluate(() => { const v = s => { const e = document.querySelector(s); return !!e && e.offsetParent !== null && e.getBoundingClientRect().height > 0; };
       const det = document.querySelector('#roic-det'), summ = det.querySelector('summary');

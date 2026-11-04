@@ -243,8 +243,8 @@
         </div>
       </div>
       <div class="ws-acc">
-        <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
         <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar portafolio <span aria-hidden="true">→</span></button>
+        <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
           <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
@@ -268,7 +268,7 @@
         <section class="panel panel-pos" aria-labelledby="h-pos">
           <h2 id="h-pos">Posiciones</h2>
           <div class="comp" id="comp">
-            <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button id="rb-ver" class="enlace" type="button">Ver detalle</button></span></div>
+            <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button class="btn btn-primario js-revisar js-revisar-comp" type="button">Revisar <span aria-hidden="true">→</span></button></span></div>
             <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
             <p id="comp-pie" class="comp-pie"></p>
           </div>
@@ -385,7 +385,7 @@
     <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
     <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
   </div>
-  <div class="bg-acc"><button class="btn btn-primario js-guardar" type="button">Guardar cartera</button><button class="btn btn-primario js-revisar" type="button">Revisar <span aria-hidden="true">→</span></button></div>
+  <button class="btn btn-primario js-guardar" type="button">Guardar cartera</button>
 </div>
 
 <!-- ===== DIÁLOGOS ===== -->

@@ -800,7 +800,6 @@ function abrirInfoEstado() {
 }
 $('#estado').addEventListener('click', abrirInfoEstado);
 $('#b-estado').addEventListener('click', abrirInfoEstado);
-$('#rb-ver').addEventListener('click', () => { const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); });
 
 // ---------- barra inferior: espacio reservado y teclado virtual ----------
 const barra = $('#barra-guardar');
@@ -825,7 +824,7 @@ function editarPeso(el, fin) {
   if (fin && ok) el.value = nf(pos[i].peso);
   for (const o of $$(`.peso-in[data-i="${i}"]`)) { o.setAttribute('aria-invalid', ok ? 'false' : 'true'); if (o !== el) o.value = el.value; }
   for (const g of $$(`.peso-rng[data-i="${i}"]`)) { if (g !== el) g.value = ok ? pos[i].peso : 0; g.setAttribute('aria-valuetext', `${nf(pos[i].peso)} %`); g.style.setProperty('--f', Math.max(0, Math.min(1, (pos[i].peso || 0) / 100))); }
-  marcarCambio(); renderResumen(); pasoActual(2);
+  marcarCambio(); renderResumen(); if (!fin) pasoActual(2);   // solo al teclear (no en el «change» que provoca el cambio de foco al pasar a la revisión)
 }
 // El deslizador es una ENTRADA MÁS: escribe en el campo numérico y sigue exactamente el mismo camino de validación (también se puede ajustar sin arrastrar).
 $('#vista-cartera').addEventListener('input', e => { if (!e.target.classList.contains('peso-rng')) return; const i = +e.target.dataset.i, v = Math.round(+e.target.value * 10) / 10;

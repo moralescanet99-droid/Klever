@@ -269,8 +269,8 @@
   "id": "J4-1440",
   "escenario": "Editor: el % asignado y su barra no se repiten (1440 px)",
   "esperado": "El % asignado aparece en la composición (información principal); el resumen lateral no lo repite ni repite su barra; sí conserva categorías y ROIC",
-  "observado": "{\"comp\":true,\"resumen\":false,\"barraResumen\":false,\"sectores\":false,\"roic\":true}",
-  "resultado": "FALLA"
+  "observado": "{\"comp\":true,\"resumen\":false,\"barraResumen\":false,\"sectores\":true,\"roic\":true}",
+  "resultado": "OK"
  },
  {
   "id": "J5-1440",
@@ -290,7 +290,7 @@
   "id": "J5c-1440",
   "escenario": "Editor: jerarquía título → estado → acción",
   "esperado": "El título está arriba, el estado de guardado debajo y la acción principal a la altura de la cabecera; el motivo no se sale de la pantalla",
-  "observado": "{\"titulo\":-171.375,\"estado\":-38.875,\"accion\":-106.125,\"motivoDer\":true}",
+  "observado": "{\"titulo\":-212.390625,\"estado\":-162.390625,\"accion\":-76.8125,\"motivoDer\":true}",
   "resultado": "OK"
  },
  {

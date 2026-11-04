@@ -209,3 +209,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 .ws-acc .btn{max-width:100%;white-space:normal}
 .ws-acc{flex:0 1 auto} .ws-acc .motivo{flex:1 1 12rem;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
 #vista-cartera .ws-cab .ws-acc{flex:0 1 auto;max-width:100%}
+
+/* móvil: «Revisar» vive junto al estado compacto del reparto (a la vista en el primer viewport); la barra inferior conserva solo «Guardar» y su altura de siempre */
+.comp .js-revisar-comp{min-height:44px;padding:0 14px}
+@media (min-width:900px){.comp .js-revisar-comp{display:none}}
