@@ -216,9 +216,9 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
   { // navegación: «Mi seguimiento» una sola vez en cada menú y visible también sin cuenta
     for (const w of [390, 1440]) {
       const p = await nuevo(b, w, 800); await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true');
-      const nav = await p.evaluate(() => ({ esc: document.querySelectorAll('.menu-escritorio a[data-nav=seguimiento]').length, mov: document.querySelectorAll('#menu-movil a[data-nav=seguimiento]').length }));
+      const nav = await p.evaluate(() => ({ esc: document.querySelectorAll('.menu-escritorio a[data-nav=cuaderno]').length, mov: document.querySelectorAll('#menu-movil a[data-nav=cuaderno]').length }));
       await p.screenshot({ path: CAP + `R8-explorar-filtros-${w}.png` });
-      ev('K27-' + w, `Menú: «Mi seguimiento» una vez en cada menú (${w} px)`, 'Una vez en el menú de escritorio y una vez en el móvil', JSON.stringify(nav), nav.esc === 1 && nav.mov === 1);
+      ev('K27-' + w, `Menú: «Cuaderno» una vez en cada menú (${w} px)`, 'Una vez en el menú de escritorio y una vez en el móvil', JSON.stringify(nav), nav.esc === 1 && nav.mov === 1);
       await p.ctx.close();
     }
   }

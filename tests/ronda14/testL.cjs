@@ -90,7 +90,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
   for (const w of [320, 390]) {
     const h = 780, p = await nuevo(b, w, h); const errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('dialog', d => d.accept());
     // --- primera visita
-    await p.goto(B); await p.waitForSelector('.hero'); await snap(p, 'S0-portada-con-historia', w); await p.click('#btn-menu'); await p.click('#menu-movil a[data-nav=ideas]'); await p.waitForSelector('.rev-tarjeta');   // ronda 15: la revista se alcanza desde «Ideas»
+    await p.goto(B); await p.waitForSelector('.hero'); await snap(p, 'S0-portada-con-historia', w); await p.click('#btn-menu'); await p.click('#menu-movil a[data-nav=revista]'); await p.waitForSelector('.rev-tarjeta');   // ronda 15: la revista se alcanza desde «Ideas»
     const lista = N(await p.textContent('.rev-tarjeta')); await p.click('.rev-enlaces a >> nth=0'); await p.waitForSelector('.art h1'); await p.waitForTimeout(300);
     const hist = await p.evaluate(() => ({ h1: document.querySelector('.art h1').textContent, aviso: document.querySelector('.art-aviso')?.textContent.replace(/\s+/g, ' '), firma: document.querySelector('.art-firma').textContent.replace(/\s+/g, ' '), fuentes: document.querySelectorAll('.art-fuentes li').length, tabla: !!document.querySelector('.art table'), empresa: !!document.querySelector('button[data-ficha=HNORT]'), probar: !!document.querySelector('[data-probar=HNORT]') }));
     const tab = await p.evaluate(() => { const celdas = [...document.querySelectorAll('.art table th, .art table td')]; return { partidas: celdas.filter(c => c.scrollWidth > c.clientWidth + 1).length, minAncho: Math.min(...celdas.map(c => c.getBoundingClientRect().width)) }; });

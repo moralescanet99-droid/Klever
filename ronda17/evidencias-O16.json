@@ -1,0 +1,128 @@
+[
+ {
+  "id": "O1-320",
+  "escenario": "Ejemplo con la nota CALCULADA (320 px)",
+  "esperado": "EXACTAMENTE «4,4 de 10» (semilla fija), la fecha de los datos (4 nov 2026), un titular con la posición real y el sector («Toda la cartera está en Consumo básico y Coca-Cola concentra el 60 %.») y sin «fecha no disponible» ni «pendiente»",
+  "observado": "4,4 de 10; Toda la cartera está en Consumo básico y Coca-Cola concentra el 60 %.; Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad n",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1b-320",
+  "escenario": "Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)",
+  "esperado": "El resultado queda tras la barra de pesos y antes de «Probar un cambio»; insignia «Ejemplo con datos ficticios»; el ejemplo con nota está seleccionado",
+  "observado": "{\"sel\":true,\"nota\":true,\"pulsado\":\"completa\",\"insignia\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1c-320",
+  "escenario": "Cambiar de ejemplo conserva el foco en el selector y la región se anuncia (320 px)",
+  "esperado": "Tras pulsar «KO + JPM · pendiente»: el foco sigue en ese botón, queda pulsado y la región de la nota es aria-live",
+  "observado": "{\"ae\":\"incompleta\",\"pulsado\":\"incompleta\",\"vivo\":\"polite\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2-320",
+  "escenario": "Ejemplo INCOMPLETO: nota pendiente con su motivo en lenguaje claro (320 px)",
+  "esperado": "«Nota pendiente.» una sola vez, «Podemos medir cómo repartes tu cartera», «La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos» y «Por eso no damos una nota total»; sin «Nota pendiente. Nota pendiente» ni «fecha no disponible»",
+  "observado": "Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total.",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2b-320",
+  "escenario": "Sin errores de JavaScript en los dos ejemplos (320 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1-390",
+  "escenario": "Ejemplo con la nota CALCULADA (390 px)",
+  "esperado": "EXACTAMENTE «4,4 de 10» (semilla fija), la fecha de los datos (4 nov 2026), un titular con la posición real y el sector («Toda la cartera está en Consumo básico y Coca-Cola concentra el 60 %.») y sin «fecha no disponible» ni «pendiente»",
+  "observado": "4,4 de 10; Toda la cartera está en Consumo básico y Coca-Cola concentra el 60 %.; Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad n",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1b-390",
+  "escenario": "Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)",
+  "esperado": "El resultado queda tras la barra de pesos y antes de «Probar un cambio»; insignia «Ejemplo con datos ficticios»; el ejemplo con nota está seleccionado",
+  "observado": "{\"sel\":true,\"nota\":true,\"pulsado\":\"completa\",\"insignia\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O1c-390",
+  "escenario": "Cambiar de ejemplo conserva el foco en el selector y la región se anuncia (390 px)",
+  "esperado": "Tras pulsar «KO + JPM · pendiente»: el foco sigue en ese botón, queda pulsado y la región de la nota es aria-live",
+  "observado": "{\"ae\":\"incompleta\",\"pulsado\":\"incompleta\",\"vivo\":\"polite\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2-390",
+  "escenario": "Ejemplo INCOMPLETO: nota pendiente con su motivo en lenguaje claro (390 px)",
+  "esperado": "«Nota pendiente.» una sola vez, «Podemos medir cómo repartes tu cartera», «La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos» y «Por eso no damos una nota total»; sin «Nota pendiente. Nota pendiente» ni «fecha no disponible»",
+  "observado": "Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total.",
+  "resultado": "OK"
+ },
+ {
+  "id": "O2b-390",
+  "escenario": "Sin errores de JavaScript en los dos ejemplos (390 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "O3",
+  "escenario": "Comparador: deuda neta / EBITDA en veces y qué cantidades se comparan",
+  "esperado": "La fila dice «en veces», explica «deuda neta (deuda menos caja) dividida entre el EBITDA», que por cada euro de EBITDA hay esa cantidad de euros de deuda neta y que NO indica cuándo se devolverá la deuda; AMBAS celdas (una por empresa) acaban en «veces» o son «Caja neta»",
+  "observado": "[\"1,0 veces\",\"2,3 veces\"] · Deuda neta / EBITDADeuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: por cada euro de EBITDA del ejercicio hay esa cantidad de euros de deuda neta. Esta relación no",
+  "resultado": "OK"
+ },
+ {
+  "id": "O4",
+  "escenario": "Laboratorio: quién cede el peso justo al calcular, y el desarrollo debajo",
+  "esperado": "Primero «Cuánto espacio ocuparía», justo después «Quién cede el peso: … KO cede 6 …», después las dos barras (antes/después) y debajo las tablas",
+  "observado": "Quién cede el peso: Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %).; orden true; barras 2",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5a",
+  "escenario": "Guardar desde la historia: la casilla «Sigo la pregunta de la historia» viene marcada y la pregunta propia, con las palabras de la historia",
+  "esperado": "Casilla marcada; el escenario queda vinculado al identificador, no al texto",
+  "observado": "{\"ref\":true,\"preg\":\"¿Se han firmado los dos contratos anunciados?\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5b",
+  "escenario": "Editar la pregunta con otras palabras: se conserva el vínculo y la ficha lo dice",
+  "esperado": "Casilla marcada al editar; tras guardar sigue «responde» y ofrece «Ver revisión de la historia»",
+  "observado": "true; La revisión de la historia responde a la cuestión que sigues: «¿Se han firmado los dos contratos anunciados?».",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5c",
+  "escenario": "Tres casos con la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva",
+  "esperado": "Original → «Tu pregunta tiene respuesta» con el desenlace completo; reformulación → «Tu reformulación tiene respuesta», avisa de que las palabras son distintas y NO repite el desenlace (enlace a la revisión); nueva → «Pregunta pendiente», «Pregunta distinta a la de la historia» y «Ver revisión de la historia», sin «Sin novedades»",
+  "observado": "3 tarjetas; Pregunta pendiente Ejemplo ficticio «¿Y si pierden al cliente principal?»Fecha de revisión: 20 dic 2026. Pregunta distinta a la de la historia. La revisión publicada de esta historia responde a otra c",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5d",
+  "escenario": "Cierro sesión y vuelvo con la misma cuenta",
+  "esperado": "El token ANTIGUO queda revocado (401) y, con la sesión nueva, las tres tarjetas siguen igual (texto, vínculo, fecha y estado)",
+  "observado": "token antiguo 401; 3 tarjetas; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "O5e",
+  "escenario": "Otra cuenta, AUTENTICADA, en otro navegador",
+  "esperado": "Sesión válida (200 en /portfolios), lista de escenarios 200 y VACÍA, 404 al abrir el ID concreto de la primera cuenta y la pantalla dice «Cuando guardes un escenario…» (no un error de carga)",
+  "observado": "portfolios 200; lista 200/0; ID ajeno 404; «Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de rev»",
+  "resultado": "OK"
+ },
+ {
+  "id": "O6",
+  "escenario": "RESPUESTA INTERCEPTADA (no es una fila corrupta real; esa se prueba en unit-escenarios16 P3/P3b y unit-guardada17 G9): el servidor «entrega» la evaluación con marcado en la nota",
+  "esperado": "La interfaz la vuelve a validar: no se crea ninguna etiqueta, no se ejecuta nada y se dice que no supera las comprobaciones de formato",
+  "observado": "interceptadas 1; imgs 0; ejecutado false; no supera las comprobaciones de formato: no se muestra.",
+  "resultado": "OK"
+ }
+]

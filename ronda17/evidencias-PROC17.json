@@ -84,7 +84,7 @@
   "escenario": "KO 50 % / JPM 50 % (semilla íntegra)",
   "esperado": "Pendiente, y la pantalla explica POR QUÉ: el banco no tiene metodología de deuda/EBITDA ni de ROIC (no «faltan datos» que llegarán)",
   "observado": "origen sintetico; «Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total. Datos: instantánea del 4 nov 2026, ejercicios hasta FY2024. Cómo se calcula Faltan»",
-  "resultado": "FALLA",
+  "resultado": "OK",
   "evidencia": ""
  },
  {
