@@ -67,7 +67,7 @@
   "id": "E5",
   "escenario": "Publicar desactivado se ve como Guardar desactivado",
   "esperado": "Mismo tratamiento visual y motivo pegado a cada botón",
-  "observado": "color Guardar rgb(74, 88, 115) / Publicar rgb(74, 88, 115); cursor not-allowed / not-allowed; borde Guardar solid / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=true",
+  "observado": "color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar solid / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=true",
   "resultado": "OK",
   "evidencia": "E4-103-escritorio.png"
  },
@@ -179,7 +179,7 @@
   "id": "E10a",
   "escenario": "Explorar empresas en móvil: dos líneas",
   "esperado": "Línea 1: nombre y resultado; línea 2: símbolo, sector y «Ver ficha»; buscador cerca del título",
-  "observado": "nombre y resultado en la misma línea=true; símbolo/sector/«Ver ficha» en la línea inferior=true; distancia título→buscador 92 px; ancho del nombre 50 px",
+  "observado": "nombre y resultado en la misma línea=true; símbolo/sector/«Ver ficha» en la línea inferior=true; distancia título→buscador 96 px; ancho del nombre 50 px",
   "resultado": "OK",
   "evidencia": "E10-empresas-390.png"
  },
@@ -187,7 +187,7 @@
   "id": "E10b",
   "escenario": "Nombres largos, sectores largos, resultados incompletos",
   "esperado": "Sin desbordamiento a 320/360/390; datos ausentes en neutro y como «N superadas · M sin datos», no como fallo",
-  "observado": "anchos de página 320:320, 360:360, 390:390; nombres largos hallados: Philip Morris International; empresas de «Consumo discrecional»: 11; JPMorgan: «3 superadas 2 sin datos» (color rgb(74, 88, 115), rojo=false)",
+  "observado": "anchos de página 320:320, 360:360, 390:390; nombres largos hallados: Philip Morris International; empresas de «Consumo discrecional»: 11; JPMorgan: «3 superadas 2 sin datos» (color rgb(189, 176, 160), rojo=false)",
   "resultado": "OK",
   "evidencia": "E10-empresas-sin-dato-390.png"
  },
@@ -203,7 +203,7 @@
   "id": "E11b",
   "escenario": "Tabla histórica: desplazamiento horizontal REAL con teclado (flecha derecha) y columna del año fija",
   "esperado": "La tabla se desplaza dentro de su contenedor, la columna del año queda como referencia y se llega a la última columna",
-  "observado": "scrollLeft 0 → 88 de 88; la columna del año sigue a 0 px del borde izquierdo; la última columna termina 0 px respecto al borde; página sin desbordar=true",
+  "observado": "scrollLeft 0 → 89 de 89; la columna del año sigue a 0 px del borde izquierdo; la última columna termina 0 px respecto al borde; página sin desbordar=true",
   "resultado": "OK",
   "evidencia": "E11-ficha-tabla-desplazada-390.png"
  },
@@ -211,8 +211,8 @@
   "id": "E16a",
   "escenario": "Texto ampliado al 200 % en el editor (APROXIMADO: tamaño de texto de la página, no zoom del navegador)",
   "esperado": "Sin desbordamiento horizontal; la barra crece; la última posición, desplazada y enfocada, queda DENTRO de la ventana y por encima de la barra",
-  "observado": "página 390/390 px; barra 100 px; campo enfocado=true, arriba 340, abajo 406 (ventana 844), la barra empieza en 744",
-  "resultado": "OK",
+  "observado": "página 400/390 px; barra 100 px; campo enfocado=true, arriba 339, abajo 405 (ventana 844), la barra empieza en 744",
+  "resultado": "FALLA",
   "evidencia": "E16-texto-200-editor-390.png"
  },
  {

@@ -290,7 +290,7 @@
   "id": "J5c-1440",
   "escenario": "Editor: jerarquía título → estado → acción",
   "esperado": "El título está arriba, el estado de guardado debajo y la acción principal a la altura de la cabecera; el motivo no se sale de la pantalla",
-  "observado": "{\"titulo\":-45.578125,\"estado\":41.921875,\"accion\":-9.828125,\"motivoDer\":true}",
+  "observado": "{\"titulo\":-85.875,\"estado\":1.625,\"accion\":-50.125,\"motivoDer\":true}",
   "resultado": "OK"
  },
  {
@@ -304,7 +304,7 @@
   "id": "J7-1440",
   "escenario": "Pesos pequeños y nombre largo en el editor (1440 px)",
   "esperado": "Un peso de 0,5 % sigue dibujando un tramo visible (≥ 2 px); solo los tramos anchos llevan etiqueta (el resto, en la lista); el nombre largo se conserva entero; sin desbordamiento",
-  "observado": "{\"n\":6,\"minAncho\":3.328125,\"conTxt\":3,\"nombre\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"desborde\":true}",
+  "observado": "{\"n\":6,\"minAncho\":3.25,\"conTxt\":3,\"nombre\":\"Cartera de inversión a largo plazo con un nombre extraordinariamente largo\",\"desborde\":true}",
   "resultado": "OK"
  },
  {

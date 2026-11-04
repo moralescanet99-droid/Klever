@@ -651,6 +651,10 @@ function pintarEstado() {
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
   $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
+  // UNA acción principal según el estado: con cambios pendientes en un portafolio de la cuenta, «Guardar»; en cualquier otro caso, «Revisar portafolio».
+  const principalGuardar = !!id && !!dirty && !razon && !saving;
+  $$('.js-guardar').forEach(b => { b.classList.toggle('btn-primario', principalGuardar); b.classList.toggle('btn-secundario', !principalGuardar); });
+  $('#revisar').classList.toggle('btn-primario', !principalGuardar); $('#revisar').classList.toggle('btn-secundario', principalGuardar);
   $('#pub-pend').hidden = !(current.publico && id && dirty);                                          // lo publicado sigue intacto hasta guardar
   $('#mi-descartar').hidden = !(id && dirty);
   pintarPublicacion(v); pintarRadiografia();

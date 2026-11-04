@@ -8,7 +8,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   const alto = async s => p.evaluate(s => Math.round(document.querySelector(s).getBoundingClientRect().height), s);
   const h = await alto('.cab'); ok('móvil: cabecera global 56–64 px', h >= 56 && h <= 64, h + 'px');
   ok('móvil: navegación secundaria dentro de un menú accesible', !(await p.isVisible('.menu-escritorio')) && await p.isVisible('#btn-menu') && (await p.getAttribute('#btn-menu', 'aria-expanded')) === 'false');
-  await p.click('#btn-menu'); ok('móvil: el menú se abre (aria-expanded) con enlaces y Salir', await p.isVisible('#menu-movil') && (await p.getAttribute('#btn-menu', 'aria-expanded')) === 'true' && (await p.locator('#menu-movil a:visible').count()) === 3 && await p.isVisible('#salir-m'));
+  await p.click('#btn-menu'); ok('móvil: el menú se abre (aria-expanded) con enlaces y Salir', await p.isVisible('#menu-movil') && (await p.getAttribute('#btn-menu', 'aria-expanded')) === 'true' && (await p.locator('#menu-movil a:visible').count()) === 4 && await p.isVisible('#salir-m'));
   await p.keyboard.press('Escape'); ok('móvil: Escape cierra el menú y devuelve el foco', !(await p.isVisible('#menu-movil')) && (await p.evaluate(() => document.activeElement.id)) === 'btn-menu');
   ok('móvil: un solo botón «Guardar cartera» visible (sin duplicado en cabecera)', (await p.locator('.js-guardar:visible').count()) === 1);
   const bh = await alto('#barra-guardar'); ok('móvil: barra inferior 72–88 px', bh >= 72 && bh <= 88, bh + 'px');
@@ -87,7 +87,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== PORTADA =====
   p = await nuevo(b, 1440, 900); await p.goto(B); await p.waitForSelector('#muestra-publicas .tarjeta');
-  ok('portada: titular conservado', (await T(p, 'h1')) === 'Crea y entiende tu cartera simulada');
+  ok('portada: titular conservado', (await T(p, 'h1')) === 'Crea, entiende y sigue tu portafolio');
   ok('portada: explicación acortada (texto pedido)', (await T(p, '.lead')) === 'Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.', await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
   await p.click('#probar'); await p.waitForTimeout(700);

@@ -1,0 +1,90 @@
+[
+ {
+  "id": "U1a",
+  "escenario": "POST con posiciones: una sola operación",
+  "esperado": "Cartera con sus 2 posiciones y revisión 0",
+  "observado": "HTTP 201; {\"nombre\":\"C\",\"tesis\":\"T\",\"publico\":0,\"revision\":0,\"pos\":\"GLD:60,IAU:40\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U1b",
+  "escenario": "POST con un ticker desconocido: no queda una cartera a medias",
+  "esperado": "HTTP 400 y sigue habiendo 1 cartera (la anterior)",
+  "observado": "HTTP 400; carteras=1",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U2a",
+  "escenario": "PUT único guarda posiciones, nombre y tesis y sube la revisión",
+  "esperado": "HTTP 200, revisión 1, todo guardado",
+  "observado": "HTTP 200; {\"nombre\":\"Nuevo\",\"tesis\":\"Tesis\",\"publico\":0,\"revision\":1,\"pos\":\"GDX:70,NEM:30\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U2b",
+  "escenario": "Dos escrituras en el mismo segundo con la misma revisión: la segunda se rechaza",
+  "esperado": "HTTP 409 y nada cambia (con la fecha de un segundo habrían pasado las dos)",
+  "observado": "HTTP 409; sin cambios=true",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U2c",
+  "escenario": "PUT sin revisión: se rechaza",
+  "esperado": "HTTP 400, nada cambia",
+  "observado": "HTTP 400; Falta la revisión de la cartera desde la que editas.",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U2d",
+  "escenario": "PATCH (publicar) también sube la revisión",
+  "esperado": "HTTP 200, publico 1, revisión 2",
+  "observado": "HTTP 200; {\"nombre\":\"Nuevo\",\"tesis\":\"Tesis\",\"publico\":1,\"revision\":2,\"pos\":\"GDX:70,NEM:30\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U2e",
+  "escenario": "PATCH con revisión caducada: 409 y la publicación no cambia",
+  "esperado": "HTTP 409, sigue público",
+  "observado": "HTTP 409; {\"nombre\":\"Nuevo\",\"tesis\":\"Tesis\",\"publico\":1,\"revision\":2,\"pos\":\"GDX:70,NEM:30\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U3",
+  "escenario": "Escritura ajena entre la lectura y la escritura (carrera simulada de forma determinista)",
+  "esperado": "HTTP 409; NO se sobrescribe lo ajeno ni se mezclan posiciones",
+  "observado": "HTTP 409; {\"nombre\":\"AJENO\",\"tesis\":null,\"publico\":0,\"revision\":1,\"pos\":\"NEM:100\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U4",
+  "escenario": "Ticker desconocido con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)",
+  "esperado": "HTTP 400 por validación y no cambia nada: ni nombre, ni tesis, ni posiciones, ni revisión (el rollback ante un error interno es la evidencia R4a)",
+  "observado": "HTTP 400; sin cambios=true",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U5a",
+  "escenario": "Cartera pública: un reparto incompleto no se guarda (ni siquiera el nombre o la tesis)",
+  "esperado": "HTTP 400, sin cambios",
+  "observado": "HTTP 400",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ },
+ {
+  "id": "U5b",
+  "escenario": "Cartera pública: un reparto válido actualiza todo a la vez",
+  "esperado": "HTTP 200; posiciones, nombre y tesis nuevos juntos",
+  "observado": "HTTP 200; {\"nombre\":\"Y\",\"tesis\":\"T2\",\"publico\":1,\"revision\":1,\"pos\":\"GDX:70,NEM:30\"}",
+  "resultado": "OK",
+  "evidencia": "tests/ronda7/unit-servidor.mjs"
+ }
+]

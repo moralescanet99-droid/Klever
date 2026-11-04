@@ -1,0 +1,198 @@
+[
+ {
+  "id": "P1-1440",
+  "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (1440 px)",
+  "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P2-1440",
+  "escenario": "Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (1440 px)",
+  "esperado": "Mover KO a 20 → el campo marca 20,0 y la leyenda «20 % · 2.000 €»; escribir 12,5 → el deslizador pasa a 12,5 con su texto accesible «12,5 %» y la leyenda «12,5 % · 1.250 €»",
+  "observado": "{\"num\":\"20,0\",\"leyenda\":\"Coca-Cola KO20 %2.000 €\",\"estado\":\"Sobran 3,4 %: reduce algún peso para llegar al 100 %.\"}; {\"rng\":\"12.5\",\"vt\":\"12,5 %\",\"leyenda\":\"Coca-Cola KO12,5 %1.250 €\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P3-1440",
+  "escenario": "Reparto no válido: dice cuánto falta o sobra con las reglas existentes (1440 px)",
+  "esperado": "Con KO a 12,5 % el total es 95,9 %: «Faltan 4,1 % por asignar…»; con KO a 40 % sobran: «Sobran 23,4 %: reduce algún peso…» (clase error)",
+  "observado": "Faltan 4,1 % por asignar para llegar al 100 %. | Sobran 23,4 %: reduce algún peso para llegar al 100 %. | donut-estado error",
+  "resultado": "OK"
+ },
+ {
+  "id": "P4-1440",
+  "escenario": "Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (1440 px)",
+  "esperado": "SCHD 20 %, 25 % → «2.000 €… 500 € menos… de 10.000 € a 9.500 €» y la identifica como hipótesis; 50 % → 1.000 €; con SCHD a 10 % → 500 €; 0 % → pide un valor válido",
+  "observado": "Con 10.000 € simulados y 2.000 € en SCHD, una caída hipotética del 25 % en SCHD, con las demás posiciones constantes, supone 500 € menos: el portafolio pasaría de 10.000 € a 9.500 €. Es una  | supone 1.000 € menos | supone 500 € menos | Escribe una caída entre 1 y 100 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "P5-1440",
+  "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (1440 px)",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6-1440",
+  "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (1440 px)",
+  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"revisar\"]; normal true; 200 % true (1440/1440)",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6b-1440",
+  "escenario": "Sin errores de JavaScript en el creador (1440 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "P1-390",
+  "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (390 px)",
+  "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P2-390",
+  "escenario": "Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (390 px)",
+  "esperado": "Mover KO a 20 → el campo marca 20,0 y la leyenda «20 % · 2.000 €»; escribir 12,5 → el deslizador pasa a 12,5 con su texto accesible «12,5 %» y la leyenda «12,5 % · 1.250 €»",
+  "observado": "{\"num\":\"20,0\",\"leyenda\":\"Coca-Cola KO20 %2.000 €\",\"estado\":\"Sobran 3,4 %: reduce algún peso para llegar al 100 %.\"}; {\"rng\":\"12.5\",\"vt\":\"12,5 %\",\"leyenda\":\"Coca-Cola KO12,5 %1.250 €\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P3-390",
+  "escenario": "Reparto no válido: dice cuánto falta o sobra con las reglas existentes (390 px)",
+  "esperado": "Con KO a 12,5 % el total es 95,9 %: «Faltan 4,1 % por asignar…»; con KO a 40 % sobran: «Sobran 23,4 %: reduce algún peso…» (clase error)",
+  "observado": "Faltan 4,1 % por asignar para llegar al 100 %. | Sobran 23,4 %: reduce algún peso para llegar al 100 %. | donut-estado error",
+  "resultado": "OK"
+ },
+ {
+  "id": "P4-390",
+  "escenario": "Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (390 px)",
+  "esperado": "SCHD 20 %, 25 % → «2.000 €… 500 € menos… de 10.000 € a 9.500 €» y la identifica como hipótesis; 50 % → 1.000 €; con SCHD a 10 % → 500 €; 0 % → pide un valor válido",
+  "observado": "Con 10.000 € simulados y 2.000 € en SCHD, una caída hipotética del 25 % en SCHD, con las demás posiciones constantes, supone 500 € menos: el portafolio pasaría de 10.000 € a 9.500 €. Es una  | supone 1.000 € menos | supone 500 € menos | Escribe una caída entre 1 y 100 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "P5-390",
+  "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (390 px)",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6-390",
+  "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (390 px)",
+  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"revisar\"]; normal true; 200 % true (390/390)",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6b-390",
+  "escenario": "Sin errores de JavaScript en el creador (390 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "P1-320",
+  "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (320 px)",
+  "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P2-320",
+  "escenario": "Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (320 px)",
+  "esperado": "Mover KO a 20 → el campo marca 20,0 y la leyenda «20 % · 2.000 €»; escribir 12,5 → el deslizador pasa a 12,5 con su texto accesible «12,5 %» y la leyenda «12,5 % · 1.250 €»",
+  "observado": "{\"num\":\"20,0\",\"leyenda\":\"Coca-Cola KO20 %2.000 €\",\"estado\":\"Sobran 3,4 %: reduce algún peso para llegar al 100 %.\"}; {\"rng\":\"12.5\",\"vt\":\"12,5 %\",\"leyenda\":\"Coca-Cola KO12,5 %1.250 €\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P3-320",
+  "escenario": "Reparto no válido: dice cuánto falta o sobra con las reglas existentes (320 px)",
+  "esperado": "Con KO a 12,5 % el total es 95,9 %: «Faltan 4,1 % por asignar…»; con KO a 40 % sobran: «Sobran 23,4 %: reduce algún peso…» (clase error)",
+  "observado": "Faltan 4,1 % por asignar para llegar al 100 %. | Sobran 23,4 %: reduce algún peso para llegar al 100 %. | donut-estado error",
+  "resultado": "OK"
+ },
+ {
+  "id": "P4-320",
+  "escenario": "Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (320 px)",
+  "esperado": "SCHD 20 %, 25 % → «2.000 €… 500 € menos… de 10.000 € a 9.500 €» y la identifica como hipótesis; 50 % → 1.000 €; con SCHD a 10 % → 500 €; 0 % → pide un valor válido",
+  "observado": "Con 10.000 € simulados y 2.000 € en SCHD, una caída hipotética del 25 % en SCHD, con las demás posiciones constantes, supone 500 € menos: el portafolio pasaría de 10.000 € a 9.500 €. Es una  | supone 1.000 € menos | supone 500 € menos | Escribe una caída entre 1 y 100 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "P5-320",
+  "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (320 px)",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6-320",
+  "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (320 px)",
+  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"revisar\"]; normal true; 200 % true (320/320)",
+  "resultado": "OK"
+ },
+ {
+  "id": "P6b-320",
+  "escenario": "Sin errores de JavaScript en el creador (320 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "P7a",
+  "escenario": "Entrada sin cuenta: crear el primero; con borrador en el dispositivo, retomarlo con los pesos intactos",
+  "esperado": "Sin nada: «Crea tu primer portafolio»; tras editar un borrador y volver a la portada: «Retomar mi borrador», que reabre el creador con KO en 22 %; fuera de la demo no sale el aviso de demo",
+  "observado": "{\"t\":\"Crea tu primer portafolio\",\"demo\":true}; Retomar mi borrador; KO 22,0",
+  "resultado": "OK"
+ },
+ {
+  "id": "P7b",
+  "escenario": "Entrada con sesión: la portada lleva a «Mis portafolios» para elegir uno",
+  "esperado": "Con sesión, #inicio redirige a «Mis portafolios» (#carteras) con su título",
+  "observado": "{\"hash\":\"#inicio\",\"h1\":\"Mis portafolios\",\"actual\":\"Mis portafolios\",\"mis\":\"Mis portafolios\"}",
+  "resultado": "FALLA"
+ },
+ {
+  "id": "P8",
+  "escenario": "Con un portafolio de la cuenta: sin cambios → «Revisar»; con cambios pendientes → «Guardar»; tras guardar → «Revisar»",
+  "esperado": "Una sola acción principal en cada estado; el título pasa a «Tu portafolio»",
+  "observado": "Tu portafolio; limpio [\"revisar\"]; sucio [\"js-guardar\"]; guardado [\"revisar\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "P9",
+  "escenario": "Teclado: el deslizador se ajusta con flechas y sigue al campo numérico; todos los controles tienen nombre accesible; el foco se ve",
+  "esperado": "ArrowRight ×2 sube el peso (0,2 puntos) y el campo numérico lo refleja; el deslizador se llama «Peso de …: deslizador (también puedes escribir el valor)»; sin controles sin nombre; el foco tiene contorno",
+  "observado": "{\"clase\":\"peso-rng\",\"valor\":\"50.2\",\"num\":\"50,2\",\"nombre\":\"Peso de KO: deslizador (también puedes escribir el valor)\",\"outline\":\"solid\",\"sinNombre\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P10",
+  "escenario": "Escritorio: navegación en columna izquierda, fondo carbón con resplandor, Revista como entrada secundaria y Cuaderno con la etiqueta del futuro plan de pago",
+  "esperado": "Cabecera fija de 248 px a toda la altura; contenido desplazado; Mis portafolios · Crear portafolio · Cuaderno · Revista (marcada «nav-sec»); la entrada activa sigue a la vista; fondo #13100E y degradado radial",
+  "observado": "{\"nav\":{\"pos\":\"fixed\",\"ancho\":248,\"alto\":900,\"mainIzq\":254,\"items\":[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"],\"sec\":\"Revista\",\"actual\":\"Crear portafolio\",\"resplandor\":true,\"fondo\":\"#13100E\"},\"rv\":{\"actual\":\"Revista\",\"h1\":\"Revista\"},\"cu\":{\"h1\":\"Cuaderno\",\"actual\":\"Cuaderno\",\"beta\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "P11-390",
+  "escenario": "Móvil: menú con cuatro entradas y acceso a Revista (390 px)",
+  "esperado": "«Mis portafolios», «Crear portafolio», «Cuaderno» y «Revista»; sin desplazamiento horizontal",
+  "observado": "[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"]; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "P11-320",
+  "escenario": "Móvil: menú con cuatro entradas y acceso a Revista (320 px)",
+  "esperado": "«Mis portafolios», «Crear portafolio», «Cuaderno» y «Revista»; sin desplazamiento horizontal",
+  "observado": "[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"]; true",
+  "resultado": "OK"
+ }
+]
