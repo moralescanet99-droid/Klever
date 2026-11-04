@@ -33,3 +33,7 @@ RESULTADO: 20 correctas, 0 fallos
 === unit-integridad18 ===
 RESULTADO: 18 correctas, 0 fallos
 === test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
