@@ -2,13 +2,13 @@
 # Ejecuta TODAS las pruebas con un servidor LIMPIO entre baterías. SALE CON CÓDIGO ≠ 0 si ALGO falla:
 # fallo de arranque, límite de tiempo, batería sin resultado, código de salida ≠ 0 o «N fallos» > 0. Limpia procesos con trap.
 # Requisitos: Node >= 22.13, «npm ci», «npx playwright install chromium»; sistema: bash, curl, git, python3, pgrep (Linux o macOS).
-# Variables: RONDA (carpeta de resultados, ronda14), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
+# Variables: RONDA (carpeta de resultados, ronda15), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
 #            BATERIAS / UNIDAD / DEMO_TEST / DEMO_DIR / DEMO_PORT / DEMO_SERVIDOR (para probar el propio ejecutor), OMITIR_DEMO=1.
 set -uo pipefail
 cd "$(dirname "$0")/.."
-export RONDA="${RONDA:-ronda14}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs}"
-UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs}"
+export RONDA="${RONDA:-ronda15}"; LIMITE="${LIMITE_BATERIA:-900}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs}"
+UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs}"
 PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0

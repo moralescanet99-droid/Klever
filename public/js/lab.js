@@ -51,7 +51,7 @@ export function limpiarSesionLab() {
   LAB.alm.reiniciar();
   Object.assign(LAB, { carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, radarError: null, nota: null, editEsc: false });
   const { $, store } = LAB.ctx;
-  for (const s of ['#fi-radar', '#seg-radar', '#seg-escenarios', '#lab-cuerpo', '#radio-cuerpo']) { const e = $(s); if (e) { e.innerHTML = ''; delete e.dataset.sig; } }
+  for (const s of ['#fi-radar', '#seg-radar', '#seg-escenarios', '#seg-casos', '#lab-cuerpo', '#radio-cuerpo', '#nota-cuerpo']) { const e = $(s); if (e) { e.innerHTML = ''; delete e.dataset.sig; } }
   const pend = $('#seg-radar-n'), pend2 = $('#seg-esc-n'); if (pend) pend.textContent = ''; if (pend2) pend2.textContent = '';
   store.removeItem(CLAVE_REF); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }
   if ($('#dlg-ficha')?.open && LAB.fichaActivo) pintarFichaRadar(LAB.fichaActivo);   // la ficha abierta pasa a verse como visitante
@@ -133,7 +133,7 @@ function frase(r) {
 }
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
-  if (!ed.current) { cont.innerHTML = ''; delete cont.dataset.sig; return; }
+  if (!ed.current) { cont.innerHTML = ''; delete cont.dataset.sig; const n0 = $('#nota-cuerpo'); if (n0) { n0.innerHTML = ''; delete n0.dataset.sig; } return; }
   if (cont.contains(document.activeElement) && document.activeElement.tagName === 'INPUT') return; // no se repinta mientras se escribe el límite
   const id = ed.current.id, guardable = logged() && !!id;
   if (LAB.radioCartera !== id) { LAB.radioCartera = id; LAB.radioModo = null; }
@@ -160,9 +160,9 @@ export function pintarRadiografia() {
       <div><dt>${r.estado === 'exceso' ? 'Exceso' : 'Sin asignar'}</dt><dd>${P(r.estado === 'exceso' ? r.exceso : r.pendiente)}</dd></div></dl>`}
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
-    ${notaHtml}
     <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
     <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
+  const nc = $('#nota-cuerpo'); if (nc && nc.dataset.sig !== notaHtml) { nc.dataset.sig = notaHtml; nc.innerHTML = notaHtml; }   // la nota tiene su propio panel
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
   cont.dataset.sig = html; cont.innerHTML = html;
 }

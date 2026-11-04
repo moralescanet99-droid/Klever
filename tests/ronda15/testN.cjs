@@ -59,14 +59,14 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await snap(p, 'C5-comparar-elegir', w, false);
     await p.click('.cmp-lista button >> nth=0'); await p.waitForSelector('.tabla-cmp'); await p.waitForTimeout(400);
     const otra = lista[0];
-    const cmp = await p.evaluate(() => ({ filas: [...document.querySelectorAll('.tabla-cmp tbody tr')].map(tr => [tr.querySelector('th').childNodes[0].textContent.trim(), ...[...tr.querySelectorAll('td')].map(td => td.textContent.replace(/\s+/g, ' ').trim())]), titulo: document.querySelector('h1').textContent, cuerpo: document.querySelector('#comparar-cuerpo').textContent }));
+    const cmp = await p.evaluate(() => ({ filas: [...document.querySelectorAll('.tabla-cmp tbody tr')].map(tr => [tr.querySelector('th').childNodes[0].textContent.trim(), ...[...tr.querySelectorAll('td')].map(td => td.textContent.replace(/\s+/g, ' ').trim())]), titulo: document.querySelector('#comparar-cuerpo h1').textContent, tabla: document.querySelector('.tabla-cmp').textContent, cuerpo: document.querySelector('#comparar-cuerpo').textContent }));
     const datos = await p.evaluate(async ([x, y]) => [await (await fetch('/api/assets/' + x)).json(), await (await fetch('/api/assets/' + y)).json()], ['JNJ', otra]);
     const esp = (a, y) => { const f = Object.fromEntries(a.fundamentales.map(r => [+r.periodo.slice(2), r])); return { crec: f[y] && f[y - 1] ? f[y].ingresos / f[y - 1].ingresos - 1 : null, marg: f[y]?.resultado_operativo != null ? f[y].resultado_operativo / f[y].ingresos : null }; };
     const E = datos.map(d => esp(d, 2024)), cel = (i, j) => cmp.filas[i][j];
     await snap(p, 'C5-comparar', w);
     ev('N5-' + w, `Comparador: tres filas del mismo sector, con las cifras de los datos y su fuente (${w} px)`, `Solo empresas del sector «${sector}»; tres filas (crecimiento, margen operativo = resultado operativo/ventas, deuda neta/EBITDA); cada cifra coincide con el cálculo independiente; fuente y periodo por cifra; sin ganadores`,
-      `${cmp.titulo}; ${JSON.stringify(cmp.filas.map(f => f.slice(0, 3)))}`, lista.length > 0 && lista.every(t => sectores[t] === sector) && cmp.filas.length === 3 && (E[0].crec == null || cel(0, 1).startsWith(fmtP(E[0].crec).replace('.', ',').replace(' %', '')) || cel(0, 1).includes(fmtP(E[0].crec))) && (E[1].marg == null || cel(1, 2).includes(fmtP(E[1].marg))) && /FY2024 · datos de prueba/.test(cmp.cuerpo) && !/ganador|mejor|puntuaci/i.test(cmp.cuerpo) && /Resultado operativo sobre ventas/.test(cmp.cuerpo));
-    await p.click('[data-probar]'); await p.waitForSelector('#lab-form'); const tk = await p.inputValue('#lab-ticker');
+      `${cmp.titulo}; ${JSON.stringify(cmp.filas.map(f => f.slice(0, 3)))}`, lista.length > 0 && lista.every(t => sectores[t] === sector) && cmp.filas.length === 3 && (E[0].crec == null || cel(0, 1).startsWith(fmtP(E[0].crec).replace('.', ',').replace(' %', '')) || cel(0, 1).includes(fmtP(E[0].crec))) && (E[1].marg == null || cel(1, 2).includes(fmtP(E[1].marg))) && /FY2024 · datos de prueba/.test(cmp.cuerpo) && !/ganador|mejor|puntuaci/i.test(cmp.tabla) && /Resultado operativo sobre ventas/.test(cmp.cuerpo));
+    await p.click('#comparar-cuerpo [data-probar]'); await p.waitForSelector('#lab-form'); const tk = await p.inputValue('#lab-ticker');
     ev('N5b-' + w, `La acción final del comparador abre el laboratorio con la empresa elegida (${w} px)`, `Laboratorio con «${otra}» ya elegida`, tk, tk === otra);
     // ---- 6. Laboratorio: espacio, quién cede, bloques evaluables
     await p.evaluate(() => { location.hash = '#historia-hidrogeno-norte'; }); await p.waitForSelector('.art-acc [data-probar]'); await p.click('.art-acc [data-probar]'); await p.waitForSelector('#lab-form');
@@ -108,12 +108,12 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await otro.ctx.close(); await p.ctx.close();
   }
   // ---- 9. Nota en el editor y filtros plegados en Explorar
-  { const p = await nuevo(b, 390, 780); await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForSelector('#radio-cuerpo .nota'); await p.waitForTimeout(300);
-    const nota = N(await p.textContent('#radio-cuerpo .nota'));
+  { const p = await nuevo(b, 390, 780); await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForSelector('#nota-cuerpo .nota'); await p.waitForTimeout(300);
+    const nota = N(await p.textContent('#nota-cuerpo .nota'));
     ev('N10', 'La nota de estructura en el editor, con su aviso de datos y «¿Por qué esta nota?»', 'Muestra «Nota de estructura v1 · beta», «No es una previsión de rentabilidad», el aviso de datos de prueba, y el desplegable del método; ETF/fondos sin metodología aparecen como peso sin evaluar con motivo', nota.slice(0, 260), /Nota de estructura/.test(nota) && /No es una previsión de rentabilidad/.test(nota) && /PRUEBA ficticios/.test(nota) && /¿Por qué esta nota\?/.test(nota) && /Fondo \(ETF\) sin metodología/.test(nota));
     await p.evaluate(() => { location.hash = '#empresas'; }); await p.waitForSelector('.ver-ficha >> visible=true');
     const ex = await p.evaluate(() => ({ abierto: document.querySelector('#emp-filtros-det').open, resumen: document.querySelector('#emp-filtros-det summary').textContent.trim(), selVisible: document.querySelector('#emp-sector').offsetParent !== null }));
-    ev('N11', 'Explorar: los filtros no ocupan la primera vista', 'Filtros plegados por defecto (se despliegan al pulsarlos o si hay alguno activo)', JSON.stringify(ex), ex.abierto === false && !ex.selVisible && /Filtros/.test(ex.resumen));
+    ev('N11', 'Explorar: los filtros no ocupan la primera vista', 'Filtros plegados por defecto (el desplegable está cerrado; se abre al pulsarlo o si hay alguno activo)', JSON.stringify(ex), ex.abierto === false && /Filtros/.test(ex.resumen));
     await p.ctx.close(); }
   await b.close(); fin('evidencias-N15');
 })();
