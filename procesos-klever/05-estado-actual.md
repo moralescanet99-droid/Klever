@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-03, tras la ronda 15 (informe `ronda15/LEEME.md`).
+**Última actualización:** 2026-11-04, tras la ronda 15 (informe `ronda15/LEEME.md`).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
