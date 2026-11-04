@@ -4,8 +4,8 @@ const UNIVERSE = %s;
 function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
 for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
-  for(const y of [2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
-    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null})}
+  for(const y of [2020,2021,2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null,resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
   DB.fund[a.ticker].reverse();
   const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
   DB.ideas[a.ticker]={periodo:L.periodo,
@@ -13,6 +13,8 @@ for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r
     margen_neto:{ok:L.beneficio_neto/L.ingresos>0.1,valor:L.beneficio_neto/L.ingresos},flujo_caja:{ok:L.flujo_caja_libre>0,valor:L.flujo_caja_libre},
     crecimiento:{ok:L.ingresos>P.ingresos,valor:L.ingresos/P.ingresos-1}}}
 const latest=t=>DB.fund[t]?.[0];
+const ACT={'Tecnología':['Software','Semiconductores','Hardware'],'Salud':['Farmacia','Dispositivos','Servicios sanitarios'],'Finanzas':['Banca','Seguros','Mercados'],'Energía':['Petróleo y gas','Renovables','Servicios petrolíferos'],'Consumo básico':['Alimentación','Bebidas','Distribución'],'Consumo discrecional':['Comercio minorista','Automoción','Ocio'],'Industria':['Maquinaria','Transporte','Defensa'],'Comunicaciones':['Medios','Telecomunicaciones','Plataformas'],'Materiales':['Química','Metales','Envases'],'Inmobiliario':['Oficinas','Logística','Residencial'],'Suministros':['Electricidad','Agua','Gas']};
+DB.mercado={};for(const a of DB.assets){if(a.tipo!=='accion')continue;const r=rng('m'+a.ticker),L=DB.fund[a.ticker][0],ac=ACT[a.sector]||['General'];a.actividad=ac[Math.floor(r()*ac.length)];a.emisor=a.ticker.toLowerCase();const cap=L.ingresos*(1.2+r()*6);DB.mercado[a.ticker]={cap:Math.round(cap),imp:Math.round(cap*(0.002+r()*0.006)),sesiones:60}}
 const ahora=()=>new Date().toISOString().slice(0,19).replace('T',' ');
 function addPort(uid,nombre,plantilla,publico,tesis,posiciones){const id=DB.nextId++;DB.ports.push({id,usuario_id:uid,nombre,plantilla,publico:publico?1:0,tesis,creado_en:ahora(),actualizado_en:null,revision:0});DB.pos[id]=posiciones;return id}
 addPort(0,'Dividendos defensivos','dividendos',1,'Fondos de dividendos y empresas de consumo, salud y energía.',[{ticker:'SCHD',peso:30},{ticker:'KO',peso:20},{ticker:'PG',peso:20},{ticker:'JNJ',peso:15},{ticker:'XOM',peso:15}]);
@@ -37,6 +39,7 @@ window.fetch=async(url,opts={})=>{
   if(path==='/ideas')return J(Object.keys(DB.ideas).map(t=>{const c=DB.ideas[t],k=Object.keys(c).filter(x=>x!=='periodo');return{ticker:t,nombre:A(t).nombre,sector:A(t).sector,periodo:c.periodo,cumplidos:k.filter(x=>c[x].ok===true).length,evaluados:k.filter(x=>c[x].ok!==null).length,total:k.length,criterios:c}}).map(r=>({...r,no_superadas:r.evaluados-r.cumplidos,sin_datos:r.total-r.evaluados})).sort((a,b)=>b.cumplidos-a.cumplidos||a.no_superadas-b.no_superadas||a.ticker.localeCompare(b.ticker)));
   if(path==='/public')return J(DB.ports.filter(p=>p.publico).sort((a,b)=>(a.usuario_id===0?0:1)-(b.usuario_id===0?0:1)||b.id-a.id).map(p=>({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',n_posiciones:(DB.pos[p.id]||[]).length})));
   if((g=path.match(/^\/public\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.publico);if(!p)return J({error:'No encontrado'},404);const v=view(p);return J({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',posiciones:v.posiciones})}
+  if(path==='/universo'){const empresas={};for(const a of DB.assets){const m=DB.mercado[a.ticker]||{};empresas[a.ticker]={nombre:a.nombre,tipo:a.tipo,sector:a.sector,actividad:a.actividad??null,emisor:a.emisor??null,cap:m.cap??null,imp:m.imp??null,sesiones:m.sesiones??null,ej:(DB.fund[a.ticker]||[]).slice().reverse().map(r=>({p:r.periodo,ing:r.ingresos,ni:r.beneficio_neto,op:r.resultado_operativo,ebitda:r.ebitda,deuda:r.deuda_neta,fcf:r.flujo_caja_libre,roic:r.roic,f:r.fuente,d:r.actualizado_en}))}}return J({fecha:null,mercado:Object.keys(DB.mercado).length,empresas})}
   if(path==='/datos')return J({origen:'demo',empresas:Object.keys(DB.fund).length,grupos:[{fuente:'demo',n:Object.keys(DB.fund).length,desde:null,hasta:null}],ultima_carga:null});
   if(path==='/login')return J({ok:true,dev_link:'#'});
   if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
@@ -64,7 +67,7 @@ window.fetch=async(url,opts={})=>{
     const rev=body.revisar_en==null||body.revisar_en===''?null:String(body.revisar_en);if(rev!==null&&!(/^\d{4}-\d{2}-\d{2}$/.test(rev)&&new Date(rev+'T00:00:00Z').toISOString().slice(0,10)===rev))return J({error:'La fecha de revisión no es válida (AAAA-MM-DD).'},400);
     const sim=simular(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion);if(!sim.viable)return J({error:'La simulación no es viable: '+sim.motivo},400);
     const ok=propuestaCoincide(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion,body.propuesta||[]);if(!ok.ok)return J({error:ok.motivo},400);
-    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),estado:'en_estudio',pregunta:preg,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
+    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),estado:'en_estudio',evaluacion:body.evaluacion||null,pregunta:preg,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
   if((g=path.match(/^\/escenarios\/(\d+)$/))){const e=DB.esc.find(x=>x.id==g[1]&&x.uid===uid);if(!e)return J({error:'No encontrado'},404);
     if(m==='GET')return J(escV(e));
     if(m==='DELETE'){DB.esc=DB.esc.filter(x=>x!==e);return J({ok:true})}

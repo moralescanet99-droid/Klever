@@ -818,6 +818,53 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
   .art .tabla-h{overflow-x:auto}
 }
 
+/* ===== ronda 15 · tres destinos, Ideas, ejemplo, nota, comparador, seguimiento que abre con la pregunta ===== */
+.ideas-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 var(--s2)}
+.ideas-tabs a{padding:8px 14px;border:1px solid var(--border-strong);border-radius:999px;text-decoration:none;color:var(--text);font-weight:600;font-size:var(--t-s);min-height:44px;display:inline-flex;align-items:center}
+.ideas-tabs a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-on-soft);border-color:var(--accent)}
+.inicio-seg{font-weight:600;margin:var(--s1) 0}
+.inicio-acc{display:flex;flex-wrap:wrap;gap:8px}
+.chip.beta{background:var(--accent-soft);color:var(--accent-on-soft);font-size:var(--t-xs);font-weight:700;vertical-align:middle;white-space:normal;display:inline-block;line-height:1.3}
+.seg-col{display:grid;gap:var(--s3);max-width:46rem}
+/* ejemplo de cartera */
+.ej-barra{display:flex;height:2.75rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);max-width:46rem;margin:0 0 var(--s2)}
+.ej-barra i{display:flex;align-items:center;justify-content:center;background:var(--c);color:var(--c-txt,#fff);font-style:normal;font-weight:700;font-size:var(--t-s);min-width:0;overflow:hidden;white-space:nowrap}
+.ej-lista{list-style:none;padding:0;margin:0 0 var(--s2);display:grid;gap:var(--s1);max-width:46rem}
+.ej-lista li{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2)} .ej-lista p{margin:0 0 6px} .ej-cab{font-size:1.0625rem}
+.ej-acc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 var(--s2)}
+/* historia: resumen de primera vista y fuentes plegadas */
+.art-resumen{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);margin:0 0 var(--s2)}
+.art-resumen h2{margin:0 0 var(--s1);font-size:1.125rem} .art-resumen dl{display:grid;gap:var(--s1);margin:0}
+.art-resumen dt{font-weight:700;font-size:var(--t-s);color:var(--accent)} .art-resumen dd{margin:2px 0 0}
+details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);margin-top:var(--s3)} details.art-fuentes summary{cursor:pointer;font-weight:700;color:var(--accent);min-height:44px;display:flex;align-items:center}
+/* nota de estructura */
+.nota{border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);background:var(--surface);margin:var(--s2) 0}
+.nota h3{margin:0 0 6px;font-size:1rem} .nota-num{margin:var(--s1) 0;display:flex;align-items:baseline;gap:8px} .nota-num b{font-size:var(--t-num,2.25rem);line-height:1}
+.nota-puntos{margin:0 0 var(--s1);padding-left:1.1rem} .nota-puntos li{margin:2px 0}
+.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:10px 12px;margin:var(--s1) 0}
+.nota-aviso{margin:0 0 var(--s1)}
+/* laboratorio: cuánto espacio ocuparía */
+.lab-espacio{margin:var(--s1) 0 6px}
+.esp{display:grid;gap:6px;margin:0 0 var(--s2);max-width:46rem}
+.esp-fila{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:8px;align-items:center}
+.esp-tit{font-size:var(--t-s);font-weight:600;color:var(--muted)}
+.esp-barra{display:flex;height:1.9rem;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--surface-2)}
+.esp-barra i{display:flex;align-items:center;justify-content:center;background:var(--c);color:var(--c-txt,#fff);font-style:normal;font-size:var(--t-xs);font-weight:700;min-width:2px;overflow:hidden}
+.esp-barra i.dest{outline:3px solid var(--text);outline-offset:-3px}
+/* ficha */
+.fir-acciones{display:grid;gap:8px} .fir-pregunta{margin:0;font-weight:600} .fir-botones{display:flex;flex-wrap:wrap;gap:8px;margin:0} .fir-botones .btn{min-height:44px}
+/* comparador */
+.cmp-lista{list-style:none;padding:0;margin:0;display:grid;gap:8px;max-width:30rem} .cmp-lista .btn{width:100%;justify-content:space-between;text-align:left;min-height:48px}
+.tabla-cmp td,.tabla-cmp th{vertical-align:top} .cmp-valor{font-size:1.25rem;font-weight:700;display:block}
+.cmp-estado{font-weight:700;display:block;color:var(--warn)} .cmp-motivo{display:block;font-size:var(--t-s);color:var(--muted)} .cmp-origen{display:block;font-size:var(--t-xs);color:var(--muted);margin-top:4px} .cmp-def{display:block;font-weight:400;color:var(--muted);font-size:var(--t-xs)}
+/* seguimiento: preguntas */
+.caso{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);margin-bottom:var(--s1);display:grid;gap:6px}
+.caso.caso-pend{border-left:5px solid var(--warn)} .caso header{display:flex;gap:6px;flex-wrap:wrap} .caso h3{margin:0;font-size:1.125rem;line-height:1.3} .caso p,.caso ul{margin:0} .caso ul{padding-left:1.2rem}
+.caso-pesos{background:var(--surface-2);border-radius:8px;padding:8px 10px} .caso-acc{display:flex;flex-wrap:wrap;gap:8px} .caso-acc .btn{min-height:44px}
+/* explorar: filtros plegados */
+.emp-filtros-det{margin:0 0 var(--s1)} .emp-filtros-det summary{cursor:pointer;font-weight:600;color:var(--accent);min-height:44px;display:flex;align-items:center}
+@media (max-width:480px){.esp-fila{grid-template-columns:3.4rem minmax(0,1fr)} .nota-num b{font-size:2rem}}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -828,11 +875,9 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#empresas" data-nav="empresas">Explorar empresas</a>
-      <a href="#publicas" data-nav="publicas">Carteras públicas</a>
-      <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
-      <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
-      <a href="#revista" data-nav="revista">Revista</a>
+      <a href="#inicio" data-nav="cartera">Cartera</a>
+      <a href="#revista" data-nav="ideas">Ideas</a>
+      <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -841,11 +886,9 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#empresas" data-nav="empresas">Explorar empresas</a>
-    <a href="#publicas" data-nav="publicas">Carteras públicas</a>
-    <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
-    <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
-    <a href="#revista" data-nav="revista">Revista</a>
+    <a href="#inicio" data-nav="cartera">Cartera</a>
+    <a href="#revista" data-nav="ideas">Ideas</a>
+    <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -866,10 +909,10 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
     <div class="hero">
       <div class="hero-txt">
         <h1>Crea y entiende tu cartera simulada</h1>
-        <p class="lead">Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.</p>
-        <p><button id="probar" class="btn btn-primario btn-grande" type="button">Probar una cartera</button></p>
+        <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
+        <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primera cartera</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
-        <p class="inicio-revista"><a href="#revista">Lee una historia de ejemplo</a> y pruébala en una cartera, sin cuenta.</p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
@@ -907,6 +950,7 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 
   <!-- ===== EXPLORAR EMPRESAS ===== -->
   <section id="vista-empresas" data-vista="empresas" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
       <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
@@ -918,12 +962,13 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
       <span id="emp-cuenta" class="mut" aria-live="polite"></span>
       <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
     </div>
+    <details class="emp-filtros-det" id="emp-filtros-det"><summary>Filtros <span id="emp-filtros-n" class="mut"></span></summary>
     <div class="emp-filtros" role="group" aria-label="Filtros de la lista">
       <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
       <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
-    </div>
+    </div></details>
     <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
@@ -958,6 +1003,7 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 
   <!-- ===== CARTERAS PÚBLICAS ===== -->
   <section id="vista-publicas" data-vista="publicas" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab">
       <h1>Carteras públicas</h1>
       <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
@@ -992,29 +1038,38 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
   <section id="vista-revista" data-vista="revista" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
     <div id="revista-cuerpo"></div>
   </section>
   <section id="vista-articulo" data-vista="articulo" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div id="articulo-cuerpo"></div>
   </section>
+
+  <section id="vista-ejemplo" data-vista="ejemplo" hidden><div id="ejemplo-cuerpo"></div></section>
+  <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
 
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Mi seguimiento</h1>
+      <h1>Seguimiento <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
       <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
-    <div class="seg-cols">
-      <section class="seg-bloque" aria-labelledby="seg-radar-t">
-        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
-        <div id="seg-radar" aria-live="polite"></div>
+    <div class="seg-col">
+      <section class="seg-bloque" aria-labelledby="seg-casos-t">
+        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
+        <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
         <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-radar-t">
+        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div id="seg-radar" aria-live="polite"></div>
       </section>
     </div>
   </section>
@@ -1225,6 +1280,12 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
   </div>
 </dialog>
 
+<dialog id="dlg-salir" aria-labelledby="salir-t">
+  <h2 id="salir-t">Tienes cambios sin guardar</h2>
+  <p>Hay cambios sin guardar en <b id="salir-n">1 cartera</b> en este dispositivo. Si sales ahora y compartes el dispositivo, la siguiente persona podría llegar a verlos. Puedes volver para guardarlos o descartarlos y salir.</p>
+  <p class="fila"><button id="salir-volver" class="btn btn-primario" type="button">Volver para guardarlos</button><button id="salir-descartar" class="btn btn-secundario peligro" type="button">Descartar los cambios y salir</button></p>
+</dialog>
+
 <dialog id="dlg-ficha" aria-labelledby="fi-titulo">
   <div class="dlg-cab dlg-cab-fijo">
     <div><h2 id="fi-titulo"></h2><p id="fi-sub" class="mut"></p></div>
@@ -1241,8 +1302,8 @@ const UNIVERSE = [{"ticker": "AAPL", "nombre": "Apple", "tipo": "accion", "secto
 function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
 for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
-  for(const y of [2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
-    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null})}
+  for(const y of [2020,2021,2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null,resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
   DB.fund[a.ticker].reverse();
   const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
   DB.ideas[a.ticker]={periodo:L.periodo,
@@ -1250,6 +1311,8 @@ for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r
     margen_neto:{ok:L.beneficio_neto/L.ingresos>0.1,valor:L.beneficio_neto/L.ingresos},flujo_caja:{ok:L.flujo_caja_libre>0,valor:L.flujo_caja_libre},
     crecimiento:{ok:L.ingresos>P.ingresos,valor:L.ingresos/P.ingresos-1}}}
 const latest=t=>DB.fund[t]?.[0];
+const ACT={'Tecnología':['Software','Semiconductores','Hardware'],'Salud':['Farmacia','Dispositivos','Servicios sanitarios'],'Finanzas':['Banca','Seguros','Mercados'],'Energía':['Petróleo y gas','Renovables','Servicios petrolíferos'],'Consumo básico':['Alimentación','Bebidas','Distribución'],'Consumo discrecional':['Comercio minorista','Automoción','Ocio'],'Industria':['Maquinaria','Transporte','Defensa'],'Comunicaciones':['Medios','Telecomunicaciones','Plataformas'],'Materiales':['Química','Metales','Envases'],'Inmobiliario':['Oficinas','Logística','Residencial'],'Suministros':['Electricidad','Agua','Gas']};
+DB.mercado={};for(const a of DB.assets){if(a.tipo!=='accion')continue;const r=rng('m'+a.ticker),L=DB.fund[a.ticker][0],ac=ACT[a.sector]||['General'];a.actividad=ac[Math.floor(r()*ac.length)];a.emisor=a.ticker.toLowerCase();const cap=L.ingresos*(1.2+r()*6);DB.mercado[a.ticker]={cap:Math.round(cap),imp:Math.round(cap*(0.002+r()*0.006)),sesiones:60}}
 const ahora=()=>new Date().toISOString().slice(0,19).replace('T',' ');
 function addPort(uid,nombre,plantilla,publico,tesis,posiciones){const id=DB.nextId++;DB.ports.push({id,usuario_id:uid,nombre,plantilla,publico:publico?1:0,tesis,creado_en:ahora(),actualizado_en:null,revision:0});DB.pos[id]=posiciones;return id}
 addPort(0,'Dividendos defensivos','dividendos',1,'Fondos de dividendos y empresas de consumo, salud y energía.',[{ticker:'SCHD',peso:30},{ticker:'KO',peso:20},{ticker:'PG',peso:20},{ticker:'JNJ',peso:15},{ticker:'XOM',peso:15}]);
@@ -1274,6 +1337,7 @@ window.fetch=async(url,opts={})=>{
   if(path==='/ideas')return J(Object.keys(DB.ideas).map(t=>{const c=DB.ideas[t],k=Object.keys(c).filter(x=>x!=='periodo');return{ticker:t,nombre:A(t).nombre,sector:A(t).sector,periodo:c.periodo,cumplidos:k.filter(x=>c[x].ok===true).length,evaluados:k.filter(x=>c[x].ok!==null).length,total:k.length,criterios:c}}).map(r=>({...r,no_superadas:r.evaluados-r.cumplidos,sin_datos:r.total-r.evaluados})).sort((a,b)=>b.cumplidos-a.cumplidos||a.no_superadas-b.no_superadas||a.ticker.localeCompare(b.ticker)));
   if(path==='/public')return J(DB.ports.filter(p=>p.publico).sort((a,b)=>(a.usuario_id===0?0:1)-(b.usuario_id===0?0:1)||b.id-a.id).map(p=>({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',n_posiciones:(DB.pos[p.id]||[]).length})));
   if((g=path.match(/^\/public\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.publico);if(!p)return J({error:'No encontrado'},404);const v=view(p);return J({id:p.id,nombre:p.nombre,plantilla:p.plantilla,tesis:p.tesis,origen:p.usuario_id===0?'ejemplo':'usuario',posiciones:v.posiciones})}
+  if(path==='/universo'){const empresas={};for(const a of DB.assets){const m=DB.mercado[a.ticker]||{};empresas[a.ticker]={nombre:a.nombre,tipo:a.tipo,sector:a.sector,actividad:a.actividad??null,emisor:a.emisor??null,cap:m.cap??null,imp:m.imp??null,sesiones:m.sesiones??null,ej:(DB.fund[a.ticker]||[]).slice().reverse().map(r=>({p:r.periodo,ing:r.ingresos,ni:r.beneficio_neto,op:r.resultado_operativo,ebitda:r.ebitda,deuda:r.deuda_neta,fcf:r.flujo_caja_libre,roic:r.roic,f:r.fuente,d:r.actualizado_en}))}}return J({fecha:null,mercado:Object.keys(DB.mercado).length,empresas})}
   if(path==='/datos')return J({origen:'demo',empresas:Object.keys(DB.fund).length,grupos:[{fuente:'demo',n:Object.keys(DB.fund).length,desde:null,hasta:null}],ultima_carga:null});
   if(path==='/login')return J({ok:true,dev_link:'#'});
   if(path==='/verify'){const t='s'+Math.random().toString(36).slice(2);DB.sessions[t]=1;return J({token:t,con_borrador:false})}
@@ -1301,7 +1365,7 @@ window.fetch=async(url,opts={})=>{
     const rev=body.revisar_en==null||body.revisar_en===''?null:String(body.revisar_en);if(rev!==null&&!(/^\d{4}-\d{2}-\d{2}$/.test(rev)&&new Date(rev+'T00:00:00Z').toISOString().slice(0,10)===rev))return J({error:'La fecha de revisión no es válida (AAAA-MM-DD).'},400);
     const sim=simular(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion);if(!sim.viable)return J({error:'La simulación no es viable: '+sim.motivo},400);
     const ok=propuestaCoincide(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion,body.propuesta||[]);if(!ok.ok)return J({error:ok.motivo},400);
-    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),estado:'en_estudio',pregunta:preg,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
+    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),estado:'en_estudio',evaluacion:body.evaluacion||null,pregunta:preg,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
   if((g=path.match(/^\/escenarios\/(\d+)$/))){const e=DB.esc.find(x=>x.id==g[1]&&x.uid===uid);if(!e)return J({error:'No encontrado'},404);
     if(m==='GET')return J(escV(e));
     if(m==='DELETE'){DB.esc=DB.esc.filter(x=>x!==e);return J({ok:true})}
@@ -1463,6 +1527,160 @@ function propuestaCoincide(base, op, financiacion, propuesta) {
   return propuesta.length === s.despues.length && a === b ? { ok: true } : { ok: false, motivo: 'La propuesta no coincide con el resultado del método elegido.' };
 }
 
+// NOTA DE ESTRUCTURA Y SOLIDEZ · v1 — módulo PURO y VERSIONADO (sin DOM, sin red, sin reloj), compartido por cartera y laboratorio.
+// Describe la ESTRUCTURA de una cartera de acciones y los FUNDAMENTALES observados en una fecha de evaluación. NO es una previsión de rentabilidad,
+// no mide riesgo de mercado y una nota alta no garantiza rentabilidad ni idoneidad personal. Los umbrales son PROVISIONALES: su activación con datos
+// reales queda pendiente de calibración y verificación; con datos de prueba/sintéticos solo sirve para probar el método.
+// El universo se recibe CONGELADO (instantánea con su fecha): la misma cartera, la misma fecha y los mismos datos dan SIEMPRE la misma nota.
+const VERSION_NOTA = 'estructura-v1';
+const PESOS = { empresas: 20, sectores: 20, tamano: 15, deuda: 25, rentabilidad: 20 };
+const NOMBRES = { empresas: 'Empresas', sectores: 'Sectores y actividades', tamano: 'Tamaño y liquidez', deuda: 'Deuda y caja', rentabilidad: 'Rentabilidad y crecimiento' };
+const PARAMETROS = { minCobertura: 0.9, minComparables: 20, ejercicios: 5, maxEmpresasEfectivas: 15, maxSectoresEfectivos: 6, maxActividadesEfectivas: 10 };
+const SIN_METODOLOGIA = new Set(['Finanzas']);          // bancos y aseguradoras: sin metodología de deuda/EBITDA ni ROIC → peso «sin evaluar» en esos indicadores
+
+const esNum = v => v != null && Number.isFinite(v);
+const escala = (n, max) => 1 + 9 * (Math.min(n, max) - 1) / (max - 1);          // lineal: 1 punto con n = 1 … 10 con n ≥ max
+const frecuencia = (aciertos, periodos) => 1 + 9 * aciertos / periodos;           // 1 + 9 × aciertos / periodos
+const dec = p => Math.round(p * 10);                                               // % → décimas (enteros: sin errores de coma flotante)
+// Percentil por rango medio (los EMPATES reparten: cuentan la mitad). p ∈ [0, 100]: 100·(menores + ½·iguales) / n. La lista incluye el propio valor.
+function percentil(v, lista) { let menores = 0, iguales = 0; for (const x of lista) { if (x < v) menores++; else if (x === v) iguales++; } return 100 * (menores + iguales / 2) / lista.length; }
+const percentilAPuntos = p => 1 + 9 * p / 100;
+const mediana = xs => { const s = [...xs].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+
+// Ventana de los últimos `ejercicios` periodos consecutivos (FYaaaa): hace falta que estén TODOS; si falta alguno, la ventana no existe.
+function ventana(ej, n = PARAMETROS.ejercicios) {
+  const ys = (ej || []).map(x => ({ y: +String(x.p).replace(/\D/g, ''), x })).filter(o => o.y).sort((a, b) => a.y - b.y); if (ys.length < n) return null;
+  const u = ys.slice(-n); for (let i = 1; i < n; i++) if (u[i].y !== u[i - 1].y + 1) return null; return u.map(o => o.x);
+}
+
+// Datos derivados por empresa (una vez por universo): lo que cada bloque necesita y por qué falta.
+const CACHE = new WeakMap();                                   // por referencia de `empresas`: copiar el universo con otras empresas no hereda una preparación ajena
+function preparar(universo) {
+  if (CACHE.has(universo.empresas)) return CACHE.get(universo.empresas);
+  const E = {};
+  for (const [t, e] of Object.entries(universo.empresas)) {
+    if (e.tipo !== 'accion') continue;
+    const w = ventana(e.ej), ult = e.ej?.length ? [...e.ej].sort((a, b) => String(a.p).localeCompare(String(b.p))).at(-1) : null, o = { t, sector: e.sector, actividad: e.actividad, emisor: e.emisor, motivos: {} };
+    // deuda neta / EBITDA del último ejercicio
+    const fin = SIN_METODOLOGIA.has(e.sector);
+    if (fin) o.motivos.deuda = 'Sector sin metodología de deuda/EBITDA (banca y seguros).';
+    else if (!ult) o.motivos.deuda = 'Sin fundamentales.';
+    else {
+      const d = ult.deuda, eb = ult.ebitda;
+      if (esNum(d) && d <= 0 && esNum(eb) && eb > 0) o.deudaCaso = { caso: 'caja neta con EBITDA positivo', puntos: 10 };
+      else if (esNum(d) && d > 0 && (!esNum(eb) || eb <= 0)) o.deudaCaso = { caso: 'deuda con EBITDA nulo o negativo', puntos: 1 };
+      else if (esNum(d) && d > 0 && eb > 0) o.ratio = d / eb;
+      else o.motivos.deuda = (!esNum(d) && !esNum(eb)) || ((!esNum(d) || d <= 0) && (!esNum(eb) || eb <= 0)) ? 'Deuda y EBITDA nulos o negativos: sin evaluar.' : 'Falta la deuda neta o el EBITDA del último ejercicio.';
+    }
+    if (w) { o.fcf = w.every(x => esNum(x.fcf)) ? w.filter(x => x.fcf > 0).length : null; o.ben = w.every(x => esNum(x.ni)) ? w.filter(x => x.ni > 0).length : null;
+      o.crec = w.every(x => esNum(x.ing) && x.ing > 0) ? w.slice(1).filter((x, i) => x.ing > w[i].ing).length : null; o.roicMed = !fin && w.every(x => esNum(x.roic)) ? mediana(w.map(x => x.roic)) : null; }
+    else o.motivos.ventana = `Faltan ejercicios: hacen falta ${PARAMETROS.ejercicios} consecutivos.`;
+    o.cap = esNum(e.cap) && e.cap > 0 ? e.cap : null; o.imp = esNum(e.imp) && e.imp > 0 ? e.imp : null;
+    E[t] = o;
+  }
+  const porSector = {}; for (const o of Object.values(E)) { (porSector[o.sector] ||= { ratios: [], roics: [] }); if (o.ratio != null) porSector[o.sector].ratios.push(o.ratio); if (o.roicMed != null) porSector[o.sector].roics.push(o.roicMed); }
+  const caps = Object.values(E).filter(o => o.cap).map(o => o.cap), imps = Object.values(E).filter(o => o.imp).map(o => o.imp);
+  const prep = { E, porSector, caps, imps }; CACHE.set(universo.empresas, prep); return prep;
+}
+
+// cartera: [{ ticker, peso }] (peso en %). universo: { fecha, empresas: { TICKER: { nombre, tipo, sector, actividad, emisor, cap, imp, ej: [{ p, ing, ni, op, ebitda, deuda, fcf, roic, f, d }] } } }
+function evaluar(cartera, universo) {
+  const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
+  const pos = (cartera || []).filter(p => p?.peso > 0); res.total = pos.reduce((s, p) => s + dec(p.peso), 0) / 10;
+  if (!pos.length) { res.motivo = 'La cartera está vacía: no hay nada que evaluar.'; return res; }
+  if (dec(res.total) !== 1000) { res.motivo = `La cartera suma ${String(res.total).replace('.', ',')} %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).`; return res; }
+  const P = preparar(universo), tot = 1000;
+  const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
+  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
+  const bloques = {};
+  const cierre = (id, evaluables, puntuarEmpresa, extra = {}) => {            // evaluables: [{t, w}] con puntuación por empresa; pondera por peso normalizado
+    const E = evaluables.reduce((s, x) => s + x.w, 0), cob = E / tot;
+    bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: cob, disponible: E >= PARAMETROS.minCobertura * tot, puntuacion: null, ...extra };
+    return E;
+  };
+  const motivoSin = (x, m) => { const e = res.sinEvaluar.find(s => s.ticker === x.t); if (e) { if (!e.motivos.includes(m)) e.motivos.push(m); } else res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [m] }); };
+  // ---- Empresas: número efectivo N = 1 / Σ (peso)²; las clases de una misma compañía cuentan UNA vez
+  { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, 'Sin emisor identificado.'));
+    const E = cierre('empresas', ev); const g = {}; ev.forEach(x => { g[x.o.emisor] = (g[x.o.emisor] || 0) + x.w; });
+    const N = E ? 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0) : null;
+    Object.assign(bloques.empresas, { efectivas: N, puntuacion: N == null ? null : escala(N, PARAMETROS.maxEmpresasEfectivas), detalle: N == null ? '' : `${N.toFixed(2).replace('.', ',')} empresas efectivas (máximo útil: ${PARAMETROS.maxEmpresasEfectivas}).` }); }
+  // ---- Sectores y actividades: mitad sector, mitad actividad (misma fórmula; máximos 6 y 10 efectivos)
+  { const ev = empresas.filter(x => x.o && x.o.sector && x.o.actividad); empresas.filter(x => x.o && !(x.o.sector && x.o.actividad)).forEach(x => motivoSin(x, 'Sin sector o actividad.'));
+    const E = cierre('sectores', ev); const n = k => { const g = {}; ev.forEach(x => { g[x.o[k]] = (g[x.o[k]] || 0) + x.w; }); return 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0); };
+    if (E) { const Ns = n('sector'), Na = n('actividad'); Object.assign(bloques.sectores, { efectivosSector: Ns, efectivasActividad: Na, puntuacion: (escala(Ns, PARAMETROS.maxSectoresEfectivos) + escala(Na, PARAMETROS.maxActividadesEfectivas)) / 2, detalle: `${Ns.toFixed(2).replace('.', ',')} sectores y ${Na.toFixed(2).replace('.', ',')} actividades efectivas.` }); } }
+  // ---- Por empresa (promedio ponderado por su peso): tamaño y liquidez, deuda y caja, rentabilidad y crecimiento
+  const porEmpresa = (id, fn) => { const ev = []; for (const x of empresas.filter(y => y.o)) { const r = fn(x.o); if (r.s == null) motivoSin(x, r.m); else ev.push({ t: x.t, w: x.w, s: r.s }); }
+    const E = cierre(id, ev); if (E) bloques[id].puntuacion = ev.reduce((s, x) => s + x.w * x.s, 0) / E; return ev; };
+  porEmpresa('tamano', o => (o.cap && o.imp && P.caps.length > 1 && P.imps.length > 1) ? { s: (percentilAPuntos(percentil(o.cap, P.caps)) + 2 * percentilAPuntos(percentil(o.imp, P.imps))) / 3 } : { s: null, m: 'Faltan la capitalización o el importe diario negociado (datos de mercado).' });
+  porEmpresa('deuda', o => {
+    if (o.motivos.deuda) return { s: null, m: o.motivos.deuda }; if (o.motivos.ventana) return { s: null, m: o.motivos.ventana };
+    if (o.fcf == null) return { s: null, m: 'Falta algún dato de caja libre en los cinco ejercicios.' };
+    let d; if (o.deudaCaso) d = o.deudaCaso.puntos; else { const l = P.porSector[o.sector].ratios; if (l.length < PARAMETROS.minComparables) return { s: null, m: `Solo hay ${l.length} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de deuda.` }; d = percentilAPuntos(100 - percentil(o.ratio, l)); }
+    return { s: (d + frecuencia(o.fcf, PARAMETROS.ejercicios)) / 2 }; });
+  porEmpresa('rentabilidad', o => {
+    if (o.motivos.ventana) return { s: null, m: o.motivos.ventana }; if (SIN_METODOLOGIA.has(o.sector)) return { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' };
+    if (o.roicMed == null) return { s: null, m: 'Falta algún ROIC en los cinco ejercicios.' }; if (o.ben == null || o.crec == null) return { s: null, m: 'Falta algún dato de beneficio o de ventas en los cinco ejercicios.' };
+    const l = P.porSector[o.sector].roics; if (l.length < PARAMETROS.minComparables) return { s: null, m: `Solo hay ${l.length} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de ROIC.` };
+    return { s: 0.5 * percentilAPuntos(percentil(o.roicMed, l)) + 0.25 * frecuencia(o.ben, PARAMETROS.ejercicios) + 0.25 * frecuencia(o.crec, PARAMETROS.ejercicios - 1) }; });
+  res.bloques = bloques;
+  const lista = Object.values(bloques), faltan = lista.filter(b => !b.disponible || b.puntuacion == null);
+  res.cobertura = { minima: Math.min(...lista.map(b => b.cobertura)), umbral: PARAMETROS.minCobertura };
+  for (const b of lista) if (!b.disponible || b.puntuacion == null) b.puntuacion = null;
+  const ok = lista.filter(b => b.puntuacion != null);
+  if (ok.length) { res.fortaleza = ok.slice().sort((a, b) => b.puntuacion - a.puntuacion || b.peso - a.peso)[0].id; const perd = ok.map(b => ({ id: b.id, perdida: b.peso * (10 - b.puntuacion) })).sort((a, b) => b.perdida - a.perdida)[0]; res.limitacion = { bloque: perd.id, perdida: perd.perdida / 100 }; }
+  if (faltan.length) { res.motivo = `Nota pendiente: ${faltan.map(b => `${b.nombre} (cobertura ${(b.cobertura * 100).toFixed(1).replace('.', ',')} %, hace falta ${Math.round(PARAMETROS.minCobertura * 100)} %)`).join('; ')}.`; return res; }
+  res.nota = Math.round(lista.reduce((s, b) => s + b.peso * b.puntuacion, 0) / 100 * 10) / 10;   // ÚNICO redondeo: el de la nota final, a un decimal
+  res.publicada = true; return res;
+}
+
+// Resumen compacto y estable (lo que se guarda con un escenario: la evaluación FECHADA que vio la persona).
+const resumen = ev => ({ version: ev.version, fecha: ev.fecha, publicada: ev.publicada, nota: ev.nota, motivo: ev.motivo, cobertura: ev.cobertura && Math.round(ev.cobertura.minima * 1000) / 10,
+  bloques: ev.bloques ? Object.fromEntries(Object.values(ev.bloques).map(b => [b.id, b.puntuacion == null ? null : Math.round(b.puntuacion * 100) / 100])) : null, fortaleza: ev.fortaleza, limitacion: ev.limitacion });
+
+// COMPARADOR sencillo entre dos empresas del mismo sector: PURO (sin DOM ni red). Tres filas, una decisión por pantalla, sin clasificación de ganadores.
+//  1. Crecimiento de ventas  = ventas del ejercicio / ventas del ejercicio anterior − 1                       (%)
+//  2. Margen operativo       = resultado operativo / ventas del ejercicio                                     (%)  — NO es el margen neto
+//  3. Deuda neta / EBITDA    = deuda neta / EBITDA del ejercicio                                              (veces)
+//     «Cuántos años de EBITDA haría falta para cubrir la deuda neta». Una cifra baja es menos deuda; negativa = caja neta. Si el EBITDA es ≤ 0 la ratio
+//     no es interpretable: «no comparable». Mucha o poca deuda NO es «mejor» ni «peor» por sí sola: depende del sector y del momento.
+// Los ejercicios se ALINEAN (se compara el último ejercicio que tienen las dos); todo en la misma moneda (USD) y unidades; cada cifra lleva su fuente,
+// su periodo y su fecha de carga. Lo que no se puede comparar se dice con su motivo; nunca se rellena.
+const esNum = v => v != null && Number.isFinite(v);
+const anio = p => +String(p || '').replace(/\D/g, '') || null;
+const MONEDA = 'USD';
+
+function compararEmpresas(a, b) {
+  const res = { ejercicio: null, moneda: MONEDA, mismoSector: !!a?.sector && a.sector === b?.sector, filas: [] };
+  const fa = Object.fromEntries((a?.fundamentales || []).map(x => [anio(x.periodo), x])), fb = Object.fromEntries((b?.fundamentales || []).map(x => [anio(x.periodo), x]));
+  const comunes = Object.keys(fa).filter(y => fb[y]).map(Number).sort((x, y) => y - x), y = comunes[0] ?? null; res.ejercicio = y ? 'FY' + y : null;
+  const origen = f => f ? { periodo: f.periodo, fuente: f.fuente || null, fecha: f.actualizado_en || null } : null;
+  const celda = (valor, texto, f, estado = 'ok', motivo = null) => ({ valor, texto, estado, motivo, origen: origen(f) });
+  const sinComun = 'No comparable: no tienen ningún ejercicio en común.';
+  const pct = v => (v * 100).toFixed(1).replace('.', ',') + ' %';
+  const veces = v => (Math.round(v * 10) / 10).toFixed(1).replace('.', ',') + ' veces';
+  const fila = (id, nombre, definicion, unidad, calc) => ({ id, nombre, definicion, unidad, a: y ? calc(fa, y) : celda(null, null, null, 'no_comparable', sinComun), b: y ? calc(fb, y) : celda(null, null, null, 'no_comparable', sinComun) });
+  res.filas.push(fila('crecimiento', 'Crecimiento de ventas', 'Ventas del ejercicio frente a las del ejercicio anterior', '%', (f, yy) => {
+    const c = f[yy], p = f[yy - 1];
+    if (!esNum(c?.ingresos)) return celda(null, null, c, 'sin_dato', 'Sin dato de ventas del ejercicio.');
+    if (!p) return celda(null, null, c, 'sin_dato', 'Sin el ejercicio anterior para calcular la variación.');
+    if (!esNum(p.ingresos) || p.ingresos <= 0) return celda(null, null, c, 'no_comparable', 'Las ventas del ejercicio anterior no son positivas o faltan.');
+    const v = c.ingresos / p.ingresos - 1; return celda(v, pct(v), c);
+  }));
+  res.filas.push(fila('margen_operativo', 'Margen operativo', 'Resultado operativo sobre ventas (no es el margen neto)', '%', (f, yy) => {
+    const c = f[yy];
+    if (!esNum(c?.resultado_operativo)) return celda(null, null, c, 'sin_dato', 'Sin dato de resultado operativo (no se sustituye por el margen neto).');
+    if (!esNum(c.ingresos) || c.ingresos <= 0) return celda(null, null, c, 'sin_dato', 'Sin ventas positivas para calcular el margen.');
+    const v = c.resultado_operativo / c.ingresos; return celda(v, pct(v), c);
+  }));
+  res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Años de EBITDA que haría falta para cubrir la deuda neta; negativa = caja neta', 'veces', (f, yy) => {
+    const c = f[yy];
+    if (!esNum(c?.deuda_neta) || !esNum(c?.ebitda)) return celda(null, null, c, 'sin_dato', 'Sin dato de deuda neta o de EBITDA.');
+    if (c.ebitda <= 0) return celda(null, null, c, 'no_comparable', 'El EBITDA es nulo o negativo: la ratio no se puede interpretar.');
+    const v = c.deuda_neta / c.ebitda; return celda(v, v < 0 ? `Caja neta (${veces(v)})` : veces(v), c);
+  }));
+  return res;
+}
+
 // Almacenamiento del radar y de los escenarios (sin interfaz).
 // Con sesión: en la cuenta, por la API (la propiedad la comprueba el servidor en cada lectura y escritura).
 // Sin sesión: el radar queda SOLO en este dispositivo (localStorage) y se marca como tal; los escenarios requieren cuenta.
@@ -1475,8 +1693,8 @@ const CLAVE_RADAR_LOCAL = 'klever_radar_local';
 const ERR_LECTURA = 'lectura', ERR_ESCRITURA = 'escritura';
 const fallo = (tipo, msg) => { const e = new Error(msg); e.tipo = tipo; return e; };
 
-function crearAlmacen({ api, logged, store, activos }) {
-  let gen = 0;                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
+function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
+  let gen = 0, mut = 0;                                     // mut: contador de escrituras; una lectura anterior a una escritura NO pisa su resultado                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
   const leerLocal = () => {                                 // {} si no hay nada; LANZA si no se puede leer (≠ vacío)
     let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se ha podido leer el radar guardado en este dispositivo.'); }
     if (crudo == null || crudo === '') return {};
@@ -1484,7 +1702,7 @@ function crearAlmacen({ api, logged, store, activos }) {
     throw fallo(ERR_LECTURA, 'El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
   };
   const escribirLocal = o => {                              // LANZA si el almacenamiento falla o está lleno: nunca cae en silencio a la memoria
-    try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItem(CLAVE_RADAR_LOCAL); }
+    try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItemEstricto(CLAVE_RADAR_LOCAL); }     // el borrado también es estricto: si falla, el dato privado NO queda fingiendo estar borrado
     catch { throw fallo(ERR_ESCRITURA, 'No se ha podido guardar en este dispositivo (almacenamiento lleno o bloqueado). Tu texto sigue en pantalla: puedes reintentar.'); }
   };
   const nuevaClave = () => (crypto.randomUUID ? crypto.randomUUID() : 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
@@ -1497,10 +1715,11 @@ function crearAlmacen({ api, logged, store, activos }) {
     todos: () => [...radar.values()],
     reiniciar() { gen++; radar = new Map(); },
     async cargar() {
-      const g = gen;
+      const g = gen, m0 = mut;
       if (logged()) {
         let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer tu radar.'); }
         if (g !== gen) return [];                           // la sesión cambió: se descarta
+        if (m0 !== mut) return this.todos();                // hubo una escritura mientras llegaba esta lectura: la lectura es anterior y NO se aplica
         radar = new Map(filas.map(f => [f.ticker, f]));
       } else {
         const l = leerLocal(), a = activos();
@@ -1509,7 +1728,7 @@ function crearAlmacen({ api, logged, store, activos }) {
       return this.todos();
     },
     async guardar(ticker, nota) {                           // nota undefined = conservar la que haya
-      const g = gen;
+      const g = gen; mut++;
       if (logged()) {
         const r = await api('/radar/' + encodeURIComponent(ticker), { method: 'PUT', body: nota === undefined ? {} : { nota } });
         if (g !== gen) return { nuevo: r.nuevo, local: false, descartado: true };
@@ -1523,22 +1742,29 @@ function crearAlmacen({ api, logged, store, activos }) {
       await this.cargar(); return { nuevo: !ya, local: true };
     },
     async quitar(ticker) {
-      const g = gen;
+      const g = gen; mut++;
       if (logged()) { await api('/radar/' + encodeURIComponent(ticker), { method: 'DELETE' }); if (g === gen) radar.delete(ticker); }
       else { const l = leerLocal(); delete l[ticker]; escribirLocal(l); radar.delete(ticker); }
     },
     // Al iniciar sesión: lo guardado en este dispositivo pasa a la cuenta (idempotente; no pisa una nota que la cuenta ya tenga).
+    // El intento queda ATADO a la sesión de origen: antes de cada lectura, escritura y del borrado del original se comprueba que la generación y la
+    // identidad de la sesión siguen siendo las mismas; si cambian (salir, otra cuenta), se corta y NO se borra lo local ni se escribe en otra cuenta.
     async migrarLocal() {
       let l; try { l = leerLocal(); } catch { return 0; }
       const ts = Object.keys(l); if (!logged() || !ts.length) return 0;
-      const remoto = new Map((await api('/radar')).map(f => [f.ticker, f]));
+      const g = gen, id0 = idSesion(), mismo = () => g === gen && logged() && idSesion() === id0;
+      const filas = await api('/radar'); if (!mismo()) return 0;
+      const remoto = new Map(filas.map(f => [f.ticker, f]));
       let n = 0;
       for (const t of ts) {
         const ya = remoto.get(t), nota = l[t].nota || '';
-        if (!ya) { await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); n++; }
-        else if (!ya.nota && nota) await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } });
+        if (!ya) { if (!mismo()) return n; await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); n++; }
+        else if (!ya.nota && nota) { if (!mismo()) return n; await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); }
+        if (!mismo()) return n;
       }
-      store.removeItem(CLAVE_RADAR_LOCAL); return n;                // solo se borra lo local cuando TODO se ha guardado
+      if (!mismo()) return n;
+      try { store.removeItemEstricto(CLAVE_RADAR_LOCAL); } catch { /* si no se puede borrar, queda y se repetirá (idempotente) */ }
+      return n;                                                   // solo se borra lo local cuando TODO se ha guardado, en la misma sesión
     },
   };
 
@@ -1570,6 +1796,11 @@ const HISTORIAS = [{
   ticker: 'HNORT',
   empresa: 'Hidrógeno Norte (empresa ficticia)',
   pregunta: '¿Se han firmado los dos contratos anunciados?',
+  resumen: {
+    negocio: 'Hidrógeno Norte (ficticia) quiere producir hidrógeno verde en cuatro plantas y venderlo a clientes industriales con contratos de largo plazo.',
+    estudio: 'Porque enseña la diferencia entre anunciar y firmar: 2 de 4 proyectos (65 de 225 MW) ya tienen contrato y los dos más grandes dependen de una promesa con fecha.',
+    riesgo: 'Que los contratos grandes se retrasen o no lleguen, y que la financiación de la planta C no esté asegurada. Un caso no demuestra nada sobre otras empresas.',
+  },
   fuentes: [
     { n: 1, titulo: 'Comunicado de ejemplo: cartera de cuatro proyectos de hidrógeno verde', fecha: '2026-08-12', tipo: 'Documento de ejemplo (ficticio)' },
     { n: 2, titulo: 'Contrato de ejemplo del proyecto A (40 MW), resumen público', fecha: '2026-09-03', tipo: 'Documento de ejemplo (ficticio)' },
@@ -1617,6 +1848,123 @@ const ultimaTesis = h => h?.tesis[h.tesis.length - 1] || null;
 // Fecha «AAAA-MM-DD» (de calendario, sin hora) → «20 oct 2026». No usa el reloj ni zonas horarias.
 const fechaCorta = iso => { const d = new Date(String(iso) + 'T00:00:00Z'); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d); };
 
+// Cartera de ejemplo para quien aún no tiene ninguna: nombre, peso y una frase sobre por qué la incluye el autor DEL EJEMPLO (didáctica, no una recomendación).
+const CARTERA_EJEMPLO = {
+  nombre: 'Cartera de ejemplo (no es tuya)',
+  aviso: 'Es un ejemplo para aprender: no es una recomendación ni refleja tus preferencias.',
+  posiciones: [
+    { ticker: 'KO', peso: 60, razon: 'Una empresa de bebidas muy conocida. El autor del ejemplo la pone grande para que se vea qué pasa cuando una sola empresa pesa el 60 %.' },
+    { ticker: 'PG', peso: 40, razon: 'Una empresa de productos de higiene y hogar. Se incluye para tener una segunda empresa del mismo tipo con la que comparar cómo se reparte el peso.' },
+  ],
+};
+
+// Preguntas que se pueden seguir con la historia de ejemplo y qué dice la revisión editorial sobre cada una. TODO el desenlace es SIMULADO.
+// `respuesta: null` = la fuente aún no permite responder (se dice qué sigue pendiente). Las fechas son las del caso ficticio.
+const SEGUIMIENTO_CASOS = [
+  { historia: 'hidrogeno-norte', pregunta: '¿Se han firmado los dos contratos anunciados?', tesis: 1,
+    respuesta: { fecha: '2026-11-03', revision: 2, fuente: 'Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio)', simulada: true,
+      porContrato: [{ nombre: 'Proyecto C (100 MW)', estado: 'Firmado el 29 de octubre', documento: '[6]' }, { nombre: 'Proyecto D (60 MW)', estado: 'Aplazado sin fecha; sin documento nuevo', documento: '—' }],
+      resumen: 'Solo se firmó uno de los dos contratos anunciados (desenlace simulado).' }, pendiente: null },
+  { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
+    pendiente: 'Sin novedades: la fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
+];
+const casoSeguimiento = (hid, pregunta) => SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.pregunta === pregunta) || null;
+
+// Presentación de la nota de estructura (el cálculo vive en nota.js). Conclusión primero; el método, en «¿Por qué esta nota?».
+const c = v => String(v).replace('.', ',');
+function aviso_datos(origen) {   // qué decir de los datos según su origen (nunca se atribuye a una fuente sin declararla)
+  if (origen === 'prueba') return 'Datos de PRUEBA ficticios: esta nota solo sirve para probar el método.';
+  if (origen === 'demo') return 'Datos de DEMOSTRACIÓN inventados: esta nota solo sirve para probar el método.';
+  if (origen === 'sec' || origen === 'mixto') return 'Datos con fuente declarada pero sin calibrar: los umbrales son provisionales.';
+  return 'Origen de los datos sin verificar: la nota no está activada con datos reales.';
+}
+function htmlNotaEstructura(esc, ev, origen) {
+  if (!ev) return '';
+  const fecha = ev.fecha ? new Date(ev.fecha + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'fecha no disponible';
+  const bl = ev.bloques ? Object.values(ev.bloques) : [];
+  const cab = `<h3 id="nota-t">Nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>
+    <p class="nota-aviso mut peq">Describe la estructura de la cartera y los fundamentales observados el ${esc(fecha)}. <b>No es una previsión de rentabilidad ni una recomendación</b>, y una nota alta no garantiza rentabilidad ni idoneidad personal. ${esc(aviso_datos(origen))}</p>`;
+  let cuerpo;
+  if (ev.publicada) {
+    cuerpo = `<p class="nota-num"><b>${c(ev.nota.toFixed(1))}</b><span> de 10</span></p>
+      <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${c(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
+      <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${c(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
+      <li><b>Cobertura mínima:</b> ${c((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos.</li></ul>`;
+  } else {
+    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(ev.motivo || '')}</p>` + (bl.some(b => b.puntuacion != null) ? `<p class="mut peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${c(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : '');
+  }
+  const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : c(b.puntuacion.toFixed(2))}</td><td>${c((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
+  const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${c(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
+  const porque = `<details class="mini"><summary>¿Por qué esta nota?</summary>
+    ${bl.length ? `<div class="tabla-h" role="region" aria-label="Bloques de la nota" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Peso</th><th scope="col">Puntos</th><th scope="col">Cobertura</th></tr></thead><tbody>${filas}</tbody></table></div>` : ''}
+    <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
+    <p class="peq">Empresas y sectores: número efectivo de empresas = 1 / suma de los pesos al cuadrado (las clases de una misma compañía cuentan una vez). Tamaño, deuda y rentabilidad: percentiles del universo cubierto o del sector (hacen falta ${PARAMETROS.minComparables} comparables) y frecuencias de los últimos ${PARAMETROS.ejercicios} ejercicios. Los umbrales son provisionales.</p>
+    ${sin}</details>`;
+  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${porque}</section>`;
+}
+
+// Qué cambia en los bloques evaluables al pasar de la cartera base a la propuesta (laboratorio). No recalcula nada: recibe las dos evaluaciones.
+function htmlCambioNota(esc, a, d) {
+  if (!a || !d) return '';
+  const bl = Object.keys(NOMBRES), f = v => v == null ? 'pendiente' : c(v.toFixed(2));
+  const dif = (x, y) => (x == null || y == null) ? '—' : (Math.abs(y - x) < 0.005 ? 'sin cambio' : (y > x ? '+' : '−') + c(Math.abs(y - x).toFixed(2)));
+  const fila = id => `<tr><th scope="row">${esc(NOMBRES[id])}</th><td>${f(a.bloques?.[id]?.puntuacion)}</td><td>${f(d.bloques?.[id]?.puntuacion)}</td><td>${dif(a.bloques?.[id]?.puntuacion, d.bloques?.[id]?.puntuacion)}</td></tr>`;
+  return `<h3>Qué cambia en la nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>
+    <p class="mut peq">Nota: ${a.publicada ? c(a.nota.toFixed(1)) : 'pendiente'} → ${d.publicada ? c(d.nota.toFixed(1)) : 'pendiente'}${(!a.publicada || !d.publicada) ? '. ' + esc(!d.publicada ? d.motivo : a.motivo) : ''} Solo cambian los bloques que se pueden evaluar; no es una previsión de rentabilidad.</p>
+    <div class="tabla-h" role="region" aria-label="Bloques de la nota antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio</th></tr></thead><tbody>${bl.map(fila).join('')}</tbody></table></div>`;
+}
+
+// Vistas de «Cartera de ejemplo» y «Comparar con otra empresa». Presentación; los cálculos están en comparador.js y nota.js.
+
+const ID = { ctx: null };
+const x = () => ID.ctx;
+function iniciarIdeas(ctx) {
+  ID.ctx = ctx;
+  ctx.$('#vista-ejemplo').addEventListener('click', e => {
+    if (e.target.closest('#ej-lab')) ctx.abrirEjemplo(); else if (e.target.closest('#ej-crear')) { ctx.go('#inicio'); setTimeout(() => ctx.$('#plantillas')?.scrollIntoView(), 50); }
+  });
+  ctx.$('#vista-comparar').addEventListener('click', e => {
+    const b = e.target.closest('[data-comparar-con]'); if (b) { ctx.go(`#comparar-${b.dataset.a}-${b.dataset.compararCon}`); return; }
+    const p = e.target.closest('[data-probar]'); if (p) ctx.probar({ ticker: p.dataset.probar });
+    const f = e.target.closest('[data-ficha]'); if (f) ctx.verFicha(f.dataset.ficha);
+  });
+}
+const C = v => String(v).replace('.', ',');
+async function mostrarEjemplo() {
+  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = x().activos(), g = x().gen?.() ;
+  const pos = CARTERA_EJEMPLO.posiciones;
+  cont.innerHTML = `<div class="pag-cab"><h1>${esc(CARTERA_EJEMPLO.nombre)}</h1><p class="mut">${esc(CARTERA_EJEMPLO.aviso)}</p></div>
+    <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
+    <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
+    <p class="ej-acc"><button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> <button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
+    <div id="ej-nota"></div><p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
+  try { const u = await x().universo(); const o = x().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
+}
+
+async function mostrarComparar({ a, b }) {
+  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = x().empresas(), act = x().activos();
+  if (!act[a]) { cont.innerHTML = '<p class="estado-lista">No encontramos esa empresa.</p><p><a class="btn btn-secundario" href="#empresas">Volver a empresas</a></p>'; return; }
+  const sector = act[a].sector;
+  if (!b) {                                                              // paso 1: elegir con quién comparar (mismo sector); una sola decisión
+    const otras = lista.filter(r => r.sector === sector && r.ticker !== a);
+    cont.innerHTML = `<p><button class="enlace" type="button" data-ficha="${esc(a)}">← Ficha de ${esc(act[a].nombre)}</button></p><div class="pag-cab"><h1>Comparar ${esc(act[a].nombre)} (${esc(a)}) con otra empresa</h1><p class="mut">Solo empresas del mismo sector (${esc(sector)}), para que la comparación tenga sentido. Verás tres cifras y de dónde sale cada una; no hay clasificación de ganadores.</p></div>
+      ${otras.length ? `<ul class="cmp-lista">${otras.map(r => `<li><button class="btn btn-secundario" type="button" data-a="${esc(a)}" data-comparar-con="${esc(r.ticker)}">${esc(r.nombre)} <span class="simbolo">${esc(r.ticker)}</span></button></li>`).join('')}</ul>` : '<p class="estado-lista">No hay otras empresas de este sector en el universo.</p>'}`;
+    return;
+  }
+  cont.innerHTML = '<p class="mut">Cargando la comparación…</p>'; const g = x().sesion();
+  let A, B; try { [A, B] = await Promise.all([x().getJson('/assets/' + a), x().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
+  if (g !== x().sesion()) return;
+  const r = compararEmpresas(A, B);
+  const celda = c => `<td>${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
+    ${c.origen ? `<span class="cmp-origen">${esc(c.origen.periodo)} · ${c.origen.fuente === 'sec' ? 'SEC' : c.origen.fuente === 'prueba' ? 'datos de prueba' : c.origen.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${c.origen.fecha ? ' · cargado ' + esc(c.origen.fecha) : ''}</span>` : ''}</td>`;
+  cont.innerHTML = `<p><a class="enlace" href="#comparar-${esc(a)}">← Elegir otra empresa</a></p>
+    <div class="pag-cab"><h1>${esc(A.nombre)} frente a ${esc(B.nombre)}</h1><p class="mut">${r.ejercicio ? `Ejercicio comparado: ${esc(r.ejercicio)} (el último que tienen los dos). ` : ''}Importes en ${esc(r.moneda)}. Una cifra distinta no significa «mejor» ni «peor»: depende del negocio y del momento.${r.mismoSector ? '' : ' Atención: no son del mismo sector.'}</p></div>
+    <div class="tabla-h" role="region" aria-label="Comparación de tres cifras" tabindex="0"><table class="tabla-lab tabla-cmp"><thead><tr><th scope="col">Cifra</th><th scope="col">${esc(A.nombre)} <span class="simbolo">${esc(a)}</span></th><th scope="col">${esc(B.nombre)} <span class="simbolo">${esc(b)}</span></th></tr></thead><tbody>
+      ${r.filas.map(f => `<tr><th scope="row">${esc(f.nombre)}<small class="cmp-def">${esc(f.definicion)} (${esc(f.unidad)})</small></th>${celda(f.a)}${celda(f.b)}</tr>`).join('')}</tbody></table></div>
+    <p class="art-acc"><button class="btn btn-primario" type="button" data-probar="${esc(b)}">Probar ${esc(B.nombre)} en mi cartera</button></p>
+    <p class="mut peq">La acción abre el laboratorio con ${esc(B.nombre)} ya elegida: allí verás cuánto espacio ocuparía y quién cedería ese peso.</p>`;
+}
+
 // Revista (versión interna): listado, historia y tesis con su revisión. Legible sin cuenta. El contenido vive en contenido.js.
 
 const REV = { ctx: null };
@@ -1646,9 +1994,9 @@ function mostrarRevista() {
 }
 
 function fuentes(esc, h) {
-  return `<section class="art-fuentes" aria-labelledby="art-fuentes-t"><h2 id="art-fuentes-t">Fuentes</h2>
+  return `<details class="art-fuentes"><summary>Fuentes (${h.fuentes.length})</summary>
     <ol>${h.fuentes.map(f => `<li>${esc(f.titulo)} · ${esc(fechaCorta(f.fecha))} · <span class="mut">${esc(f.tipo)}</span></li>`).join('')}</ol>
-    ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</section>`;
+    ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</details>`;
 }
 function cta(esc, h) {
   return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Probar en mi cartera</button>
@@ -1664,6 +2012,7 @@ function mostrarArticulo({ tipo, id, n }) {
     cont.innerHTML = `<article class="art"><p><a class="enlace" href="#revista">← Revista</a></p>${aviso}
       <h1>${esc(h.titulo)}</h1><p class="art-bajada">${esc(h.bajada)}</p>
       <p class="art-firma">Por <b>${esc(h.autor)}</b> · <time datetime="${esc(h.fecha)}">${esc(fechaCorta(h.fecha))}</time> · Empresa vinculada: <button class="enlace" type="button" data-ficha="${esc(h.ticker)}">${esc(h.empresa)}</button></p>
+      ${h.resumen ? `<section class="art-resumen" aria-label="En breve"><h2>En breve</h2><dl><div><dt>Qué hace el negocio</dt><dd>${esc(h.resumen.negocio)}</dd></div><div><dt>Por qué merece estudio</dt><dd>${esc(h.resumen.estudio)}</dd></div><div><dt>Qué podría salir mal</dt><dd>${esc(h.resumen.riesgo)}</dd></div></dl><p class="mut peq">Sigue la lectura completa y, al final, las fuentes.</p></section>` : ''}
       ${h.bloques.map(b => b.t === 'h2' ? `<h2>${esc(b.x)}</h2>` : b.t === 'p' ? `<p>${refs(esc, b.x)}</p>` : b.t === 'ul' ? lista(esc, b.x)
         : `<div class="tabla-h" role="region" aria-label="Estado de los proyectos" tabindex="0"><table class="tabla-lab"><thead><tr>${b.cab.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.filas.map(f => `<tr><th scope="row">${esc(f[0])}</th>${f.slice(1).map(c => `<td>${refs(esc, c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`).join('')}
       <p class="art-opinion"><a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión de El Superespeculador</a></p>
@@ -1689,7 +2038,7 @@ function mostrarArticulo({ tipo, id, n }) {
 // app.js le pasa sus utilidades (DOM, API, sesión, ficha…) por un contexto: este módulo no conoce el resto del estado de la aplicación.
 // Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
 
-const LAB = { ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
+const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
 const ESTADOS = { en_estudio: 'En estudio', descartado: 'Descartado', archivado: 'Archivado' };
 const METODOS = { sin_asignar: 'usando el porcentaje sin asignar', proporcional: 'reduciendo proporcionalmente las otras posiciones' };
@@ -1702,8 +2051,9 @@ const hoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.
 
 function iniciarLab(ctx) {
   LAB.ctx = ctx;
-  LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos });
+  LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos, idSesion: ctx.idSesion });
   const $ = ctx.$;
+  ctx.universo().then(u => { LAB.universo = u; pintarRadiografia(); }).catch(() => { LAB.universoError = true; pintarRadiografia(); });   // la nota usa una instantánea congelada del universo
   $('#radio-cuerpo').addEventListener('click', e => {
     const b = e.target.closest('[data-modo]'); if (b) { LAB.radioModo = b.dataset.modo; pintarRadiografia(); return; }
     if (e.target.closest('#radio-lab')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); }
@@ -1711,6 +2061,7 @@ function iniciarLab(ctx) {
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
+  $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#seg-radar').addEventListener('change', e => { if (e.target.id === 'seg-ref') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarSeguimientoRadar(); $('#seg-ref')?.focus(); } });
   $('#seg-filtro').addEventListener('change', pintarSeguimientoEscenarios);
@@ -1775,6 +2126,7 @@ async function cargarRadar() {                              // true = leído bie
   catch (e) { if (vigente(g)) LAB.radarError = e.message; return false; }
 }
 const enRadar = t => LAB.alm.radar.tiene(t);
+const origenCodigo = () => LAB.datos?.origen ?? null;
 const migrarRadarLocal = () => LAB.alm.radar.migrarLocal().catch(() => 0);
 
 // Carteras que sirven de referencia: las guardadas (con sesión) o el borrador de este dispositivo (sin sesión). La de ejemplo va aparte.
@@ -1785,7 +2137,7 @@ async function cargarCarteras() {
   if (!vigente(g)) return [];
   LAB.carteras = lista; return lista;
 }
-const basesLab = () => LAB.carteras.length ? LAB.carteras : [EJEMPLO];
+const basesLab = () => (LAB.carteras.length && LAB.sim?.carteraId !== 'ejemplo') ? LAB.carteras : [...LAB.carteras, EJEMPLO];
 function carteraRef() {
   const id = x().store.getItem(CLAVE_REF), l = LAB.carteras;
   return l.find(c => String(c.id) === id) || l.find(c => c.id === x().editor().current?.id && c.id != null) || l[0] || null;
@@ -1831,6 +2183,7 @@ function pintarRadiografia() {
   const cobertura = [];
   if (r.cobertura.sinCategoria.length) cobertura.push(`${r.cobertura.sinCategoria.length} ${r.cobertura.sinCategoria.length === 1 ? 'posición no tiene' : 'posiciones no tienen'} categoría conocida (${esc(r.cobertura.sinCategoria.join(', '))}).`);
   if (r.cobertura.fondos.length) cobertura.push(`${esc(r.cobertura.fondos.join(', '))}: ${r.cobertura.fondos.length === 1 ? 'es un fondo' : 'son fondos'} y su categoría es la comercial, no su exposición sectorial real.`);
+  const notaHtml = LAB.universo ? htmlNotaEstructura(esc, evaluar(posiciones, LAB.universo), origenCodigo()) : LAB.universoError ? '<p class="mut peq">La nota de estructura no está disponible ahora.</p>' : '<p class="mut peq">Calculando la nota de estructura…</p>';
   const html = `<p class="radio-version">Analizando: <b>${etq}</b>.</p>${conmuta}
     <p class="radio-concl">${esc(frase(r))}</p>
     ${r.estado === 'vacia' ? '' : `<dl class="radio-datos"><div><dt>Mayor posición</dt><dd>${esc(r.mayor.ticker)} · ${P(r.mayor.peso)}</dd></div>
@@ -1838,6 +2191,7 @@ function pintarRadiografia() {
       <div><dt>${r.estado === 'exceso' ? 'Exceso' : 'Sin asignar'}</dt><dd>${P(r.estado === 'exceso' ? r.exceso : r.pendiente)}</dd></div></dl>`}
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
+    ${notaHtml}
     <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
     <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
@@ -1865,9 +2219,12 @@ async function pintarFichaRadar(a) {
     : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
       <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, el radar se guarda solo en este dispositivo.'}</span></div>
       ${dentro ? `<div class="fir-nota" data-nota-zona="ficha">${htmlNota(esc, 'fir-nota', alm.nota(a.ticker), editando, editando ? LAB.nota.texto : '', editando ? LAB.nota.err : '')}</div>` : ''}`;
-  cont.innerHTML = `${radar}
-    <div class="fir-cartera">${LAB.carteras.length ? `<label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select><p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p>` : '<p class="peq mut" id="fir-en">Aún no tienes una cartera: al probarla en el laboratorio te ofrecemos una de ejemplo.</p>'}</div>
-    <p><button class="btn btn-secundario" type="button" id="fir-sim">Probar en mi cartera</button></p>
+  const preg = hist[0]?.pregunta ? `Pregunta que investigas: «${esc(hist[0].pregunta)}»` : '';
+  cont.innerHTML = `<div class="fir-acciones">${preg ? `<p class="fir-pregunta">${preg}</p>` : ''}
+      <p class="fir-botones"><button class="btn btn-primario" type="button" id="fir-sim">Probar en mi cartera</button> <button class="btn btn-secundario" type="button" id="fir-comparar">Comparar con otra empresa</button></p>
+      ${LAB.carteras.length ? '' : '<p class="peq mut" id="fir-en">Si aún no tienes cartera, «Probar en mi cartera» te ofrece una de ejemplo.</p>'}</div>
+    ${radar}
+    ${LAB.carteras.length ? `<div class="fir-cartera"><label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select><p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p></div>` : ''}
     ${hist.length ? `<p class="peq">Historia relacionada: ${hist.map(h => `<a href="#historia-${esc(h.id)}" data-cerrar-ficha>${esc(h.titulo)}</a>`).join(' · ')}</p>` : ''}`;
 }
 async function onFichaClic(e) {
@@ -1875,7 +2232,7 @@ async function onFichaClic(e) {
   const alm = LAB.alm.radar, t = a.ticker;
   const err = m => { const z = $('#fi-radar [data-nota-err]'); if (z) z.textContent = m; const b = $('#fi-radar [data-nota=guardar]'); if (b) b.textContent = 'Reintentar guardado'; };
   try {
-    if (e.target.closest('[data-cerrar-ficha]')) { $('#dlg-ficha').close(); return; }
+    if (e.target.closest('[data-cerrar-ficha]')) { x().cerrarFicha(); return; }
     if (e.target.closest('#fir-reintentar')) { await cargarRadar(); await pintarFichaRadar(a); return; }
     if (e.target.closest('#fir-toggle')) {
       try {
@@ -1896,7 +2253,8 @@ async function onFichaClic(e) {
       }
       return;
     }
-    if (e.target.closest('#fir-sim')) { const ref = carteraRef(); $('#dlg-ficha').close(); abrirLab({ carteraId: ref?.id ?? null, ticker: t }); }
+    if (e.target.closest('#fir-sim')) { const ref = carteraRef(); x().cerrarFicha(); abrirLab({ carteraId: ref?.id ?? null, ticker: t }); }
+    if (e.target.closest('#fir-comparar')) { x().cerrarFicha(); x().go('#comparar-' + t); }
   } catch (er) { toastError(er.message); }
 }
 let marcasPend = false;
@@ -1953,12 +2311,38 @@ async function clicSeguimientoRadar(e) {
   } catch (err) { toastError(err.message); }
 }
 const textoRevision = e => e.revisar_en ? `Revisión prevista: ${fechaCorta(e.revisar_en)}${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : ''}.` : '';
+const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
+function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
+  const caso = c.caso, r = caso?.respuesta, h = c.historia && historia(c.historia);
+  const ocurrido = r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)} ${esc(k.documento)}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
+    : `<p><b>Sin novedades.</b> ${esc(caso?.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta: sigue pendiente. Se revisará cuando haya una actualización verificada.')}</p>`;
+  const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
+    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
+  const rev = h && r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : h ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>` : '';
+  const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
+  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? 'Con novedades' : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
+    <h3>«${esc(c.pregunta)}»</h3>${c.revisarEn ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
+    ${ocurrido}${pesos}<p class="caso-acc">${rev} ${sim}</p></article>`;
+}
+function pintarSeguimientoCasos(lista) {
+  const { $, esc, logged } = x(), cont = $('#seg-casos'); if (!cont) return;
+  if (!logged()) {                                                       // visitante: ejemplo ficticio y rotulado; con cuenta solo salen SUS preguntas y posiciones
+    cont.innerHTML = `<p class="mut peq">Así se verían tus preguntas (ejemplo ficticio). Con cuenta, aquí aparecen solo tus propias preguntas y posiciones.</p>` + SEGUIMIENTO_CASOS.map(c => tarjetaCaso(esc, { caso: c, pregunta: c.pregunta, historia: c.historia, ticker: historia(c.historia).ticker, pesoEsc: 10, ejemplo: true })).join('');
+    return;
+  }
+  const con = (lista || []).filter(e => e.pregunta && e.estado !== 'descartado').sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id);
+  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
+  cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id);
+    return tarjetaCaso(esc, { caso: casoSeguimiento(e.historia, e.pregunta), pregunta: e.pregunta, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
+}
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
+  if (!logged()) { pintarSeguimientoCasos(null); }
   if (!logged()) { $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
   cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
   let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
   if (!vigente(g)) return;
+  LAB.listaEsc = lista; pintarSeguimientoCasos(lista);
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
@@ -2075,6 +2459,11 @@ function limitesHtml(c, limite) {
   if (L.length === 1) L.push('<p>Ninguna posición supera el límite, ni antes ni después.</p>');
   return L.join('');
 }
+function htmlBarras(esc, sim) {                                          // dos barras (antes / después) con los pesos reales; la empresa probada va marcada
+  const tks = [...new Set([...sim.antes.map(p => p.ticker), ...sim.despues.map(p => p.ticker)])], col = t => tks.indexOf(t) % 8;
+  const barra = (lista, tit) => `<div class="esp-fila"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}</span></div>`;
+  return `<div class="esp">${barra(sim.antes, 'Antes')}${barra(sim.despues, 'Después')}</div>`;
+}
 function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
@@ -2082,6 +2471,8 @@ function pintarResultado() {
   const mio = sim.cambios.find(f => f.ticker === sim.ticker);
   const concl = `${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
   const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
+  const evA = LAB.universo ? evaluar(sim.antes, LAB.universo) : null, evD = LAB.universo ? evaluar(sim.despues, LAB.universo) : null;
+  s.evaluacion = evA && evD ? { antes: resumenNota(evA), despues: resumenNota(evD) } : null;
   const guardar = logged() && base.guardada
     ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
@@ -2095,7 +2486,9 @@ function pintarResultado() {
       : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (con una cartera guardada en tu cuenta).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2><p class="lab-concl">${concl}</p>
     <p class="lab-origen"><b>De dónde sale el peso:</b> ${esc(origenPeso(sim))}</p>
+    <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>${htmlBarras(esc, sim)}
     ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
+    ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
 }
 async function guardarEscenario() {
@@ -2105,7 +2498,7 @@ async function guardarEscenario() {
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
     const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null,
-      cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues });
+      cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues, evaluacion: s.evaluacion || undefined });
     if (!vigente(g)) return;
     toast(r.duplicado ? 'Ese escenario ya estaba guardado' : 'Escenario guardado en tu seguimiento'); x().go('#escenario-' + r.id);
   } catch (e) {
@@ -2167,7 +2560,7 @@ function pintarEscenario() {
     </section>
     <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
-    <section class="lab-res"><h2>Comparación guardada</h2>${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
+    <section class="lab-res"><h2>Comparación guardada</h2>${e.evaluacion ? `<p class="mut peq">Evaluación de estructura fechada (${esc(fechaCorta(e.evaluacion.antes.fecha || ''))}, ${esc(e.evaluacion.antes.version)}): nota ${e.evaluacion.antes.publicada ? String(e.evaluacion.antes.nota).replace('.', ',') : 'pendiente'} → ${e.evaluacion.despues.publicada ? String(e.evaluacion.despues.nota).replace('.', ',') : 'pendiente'}. Se guardó con el escenario y no se recalcula, aunque cambien los datos o el método.</p>` : ''}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
 }
 async function aplicarCambios(cambios, mensaje, errId) {
@@ -2198,7 +2591,7 @@ const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('
   setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
   removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } },
   // Variantes ESTRICTAS (radar del visitante): lanzan si el almacenamiento falla, en vez de caer en silencio a la memoria y devolver después el valor anterior.
-  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k) }; })();
+  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k), removeItemEstricto: k => localStorage.removeItem(k) }; })();
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -2222,8 +2615,8 @@ function mostrarAviso(msg, error, ms) {
   $('#toast-x').hidden = !error; const w = $('#avisos'); w.classList.add('on'); w.classList.toggle('fija', error || matchMedia('(min-width:720px)').matches); medirAvisos(); clearTimeout(toastTimer);
   if (!error) toastTimer = setTimeout(cerrarAviso, ms);
 }
-const toast = (msg, ms = 4000) => mostrarAviso(msg, false, ms);
-const toastError = msg => mostrarAviso(msg, true);
+const toast = (msg, ms = 4000) => { if (msg) mostrarAviso(msg, false, ms); };
+const toastError = msg => { if (msg) mostrarAviso(msg, true); };   // un mensaje vacío (respuesta de una sesión anterior) no se muestra
 function cerrarAviso() { clearTimeout(toastTimer); $('#toast').classList.remove('on', 'error'); $('#avisos').classList.remove('on', 'fija'); $('#toast-x').hidden = true; medirAvisos(); }
 // Zona fija de arriba: solo cuenta si el aviso está pegado (.fija). El navegador la respeta al enfocar o desplazar (scroll-padding-top), así ningún campo ni botón queda bajo ella.
 function medirAvisos() { const w = $('#avisos'); document.documentElement.style.setProperty('--avisos-alto', (w.classList.contains('on') && w.classList.contains('fija') ? Math.ceil(w.getBoundingClientRect().height) : 0) + 'px'); }
@@ -2236,16 +2629,17 @@ const tok = () => store.getItem('klever_token');
 const logged = () => !!tok();
 
 async function api(path, opts = {}) {
-  let r;
+  let r; const t0 = tok();                                           // el token con el que SALE la petición: es el único que puede caducar por su respuesta
   try {
     r = await fetch(API + path, {
       ...opts,
-      headers: { 'content-type': 'application/json', ...(tok() ? { authorization: 'Bearer ' + tok() } : {}) },
+      headers: { 'content-type': 'application/json', ...(t0 ? { authorization: 'Bearer ' + t0 } : {}) },
       body: opts.body ? JSON.stringify(opts.body) : undefined,
     });
   } catch { throw new Error('Sin conexión con el servidor. Inténtalo de nuevo.'); }
   const data = await r.json().catch(() => ({}));
-  if (r.status === 401 && tok()) sesionCaducada();
+  if (t0 !== tok()) { const e = new Error(''); e.obsoleta = true; e.status = 0; throw e; }   // la sesión cambió mientras llegaba: la respuesta NO se usa (ni un 401 retrasado desconecta a otra persona)
+  if (r.status === 401 && t0) sesionCaducada();
   if (!r.ok) { const e = new Error(data.error || 'Error ' + r.status); e.status = r.status; e.data = data; throw e; }
   return data;
 }
@@ -2406,14 +2800,41 @@ function limpiarPrivado() {
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
   for (const s of ['#mis-lista', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
+  document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
   limpiarSesionLab();
 }
 function sesionCaducada() {
   store.removeItem('klever_token'); limpiarPrivado(); actualizarCabecera(); route(); abrirAcceso('caducada');
 }
+// Copias locales de cambios sin guardar (recuperación privada): se avisan al salir, se purgan las ajenas al entrar y caducan a los 7 días.
+const COPIA_DIAS = 7;
+function clavesCopias() { const ks = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('klever_edit_')) ks.push(k); } } catch { /* sin almacenamiento */ } return ks; }
+function purgarCopias(idsPropios = null) {                           // idsPropios: ids de las carteras de ESTA cuenta (o null = solo caducidad)
+  let n = 0;
+  for (const k of clavesCopias()) {
+    let c = null; try { c = JSON.parse(store.getItem(k)); } catch { /* dañada: se borra */ }
+    const caducada = !c || !c.t || (Date.now() - new Date(c.t).getTime()) > COPIA_DIAS * 864e5, ajena = idsPropios && !idsPropios.includes(Number(k.slice('klever_edit_'.length)));
+    if (caducada || ajena) { store.removeItem(k); n++; }
+  }
+  return n;
+}
+function confirmarSalidaConCambios() {                                // true = se puede salir (se descartan las copias); false = se queda
+  guardarBorrador();
+  const ks = clavesCopias(); if (!ks.length) return Promise.resolve(true);
+  const d = $('#dlg-salir'); $('#salir-n').textContent = ks.length === 1 ? '1 cartera' : ks.length + ' carteras';
+  return new Promise(res => {
+    const fin = v => { d.close(); res(v); };
+    $('#salir-volver').onclick = () => { fin(false); const id = ks[0].slice('klever_edit_'.length); go('#cartera-' + id); };
+    $('#salir-descartar').onclick = () => { ks.forEach(k => store.removeItem(k)); fin(true); };
+    d.oncancel = e => { e.preventDefault(); fin(false); };
+    d.showModal(); $('#salir-volver').focus();
+  });
+}
 async function cerrarSesion() {
-  try { await api('/logout', { method: 'POST' }); } catch {}
+  if (!(await confirmarSalidaConCambios())) return;
+  const t = tok();                                                    // se limpia YA (sin esperar al servidor): nada privado queda mientras llega la respuesta
   store.removeItem('klever_token'); store.removeItem(AVISO); limpiarPrivado(); actualizarCabecera(); go('#inicio');
+  if (t) fetch(API + '/logout', { method: 'POST', headers: { authorization: 'Bearer ' + t } }).catch(() => {});
 }
 $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
@@ -2431,8 +2852,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo'];
-const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Mi seguimiento', lab: 'Laboratorio', revista: 'Revista', articulo: 'Revista' };
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar'];
+// Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
+const NAV = { inicio: 'cartera', carteras: 'cartera', cartera: 'cartera', lab: 'cartera', ejemplo: 'cartera', comparar: 'ideas', revista: 'ideas', articulo: 'ideas', empresas: 'ideas', publicas: 'ideas', seguimiento: 'seguimiento' };
+const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
+const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Seguimiento', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -2440,24 +2864,26 @@ async function route(primera = false) {
   const seq = ++routeSeq, l = logged();
   const h = location.hash.replace(/^#/, '');
   if (h === 'contenido') { $('#contenido').focus(); return; }
-  const m = h.match(/^cartera-(\d+)$/), me = h.match(/^escenario-(\d+)$/), mh = h.match(/^historia-([a-z0-9-]+)$/), mt = h.match(/^tesis-([a-z0-9-]+)-(\d+)$/);
+  const m = h.match(/^cartera-(\d+)$/), me = h.match(/^escenario-(\d+)$/), mh = h.match(/^historia-([a-z0-9-]+)$/), mt = h.match(/^tesis-([a-z0-9-]+)-(\d+)$/), mc = h.match(/^comparar-([A-Z.]{1,6})(?:-([A-Z.]{1,6}))?$/);
   const articulo = mh ? { tipo: 'historia', id: mh[1] } : mt ? { tipo: 'tesis', id: mt[1], n: +mt[2] } : null;
-  let v = m ? 'cartera' : me || h === 'laboratorio' ? 'lab' : articulo ? 'articulo' : h;
+  let v = m ? 'cartera' : me || h === 'laboratorio' ? 'lab' : articulo ? 'articulo' : mc ? 'comparar' : h;
   if (!VISTAS.includes(v) || v === 'inicio') v = l ? 'carteras' : 'inicio';
   if (v === 'carteras' && !l) v = 'inicio';
   if (v === 'cartera') {
     if (m) {
       if (!l) v = 'inicio';
-      else if (current?.id !== +m[1]) { $$('[data-vista]').forEach(x => x.hidden = true); const ok = await cargarCartera(+m[1]); // sin vista de fondo mientras carga: un diálogo de conflicto no debe salir sobre la portada
+      else if (current?.id !== +m[1]) { $$('[data-vista]').forEach(x => x.hidden = true); const ok = await cargarCartera(+m[1], seq); // sin vista de fondo mientras carga: un diálogo de conflicto no debe salir sobre la portada
  if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
     } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
   }
-  mostrar(v, primera, { escenarioId: me ? +me[1] : null, articulo });
+  mostrar(v, primera, { escenarioId: me ? +me[1] : null, articulo, comparar: mc ? { a: mc[1], b: mc[2] || null } : null });
 }
 function mostrar(v, primera, extra = {}) {
-  const { escenarioId = null, articulo = null } = extra;
+  const { escenarioId = null, articulo = null, comparar = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
-  $$('[data-nav]').forEach(a => a.dataset.nav === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  const nv = v === 'lab' && escenarioId ? 'seguimiento' : NAV[v];
+  $$('[data-nav]').forEach(a => a.dataset.nav === nv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  $$('[data-ideas]').forEach(a => a.dataset.ideas === IDEAS[v] ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
   $('#barra-guardar').hidden = v !== 'cartera'; medirBarra(); menuAbrir(false);
   document.title = 'Klever · ' + TITULOS[v];
@@ -2467,6 +2893,8 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
+  if (v === 'ejemplo') mostrarEjemplo();
+  if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
 }
 window.addEventListener('hashchange', () => route());
@@ -2539,8 +2967,9 @@ $('#form-nueva').addEventListener('submit', async e => {
     e.target.reset(); go('#cartera-' + id);
   } catch (err) { toastError(err.message); } finally { btn.disabled = false; }
 });
-async function cargarCartera(id) {
-  let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
+async function cargarCartera(id, rseq = null) {
+  const s0 = sesionSeq; let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
+  if (s0 !== sesionSeq || (rseq !== null && rseq !== routeSeq)) return false;   // otra sesión u otra navegación: esta respuesta NO toca el estado
   current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); posGuardada = pos.map(p => ({ ...p })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = ''; colores.clear();
@@ -2583,8 +3012,10 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
   let e; try { e = JSON.parse(raw); } catch { store.removeItem(key); return; }
   if (!Array.isArray(e.pos) || (e.nombre === current.nombre && (e.tesis || '') === (current.tesis || '') && JSON.stringify(e.pos) === JSON.stringify(pos))) { store.removeItem(key); return; }
   if (e.base !== current.revision) { // la cartera cambió en la cuenta después de esa copia: nunca se elige en silencio
+    const s1 = sesionSeq, id1 = current?.id; if (!current) return;
     const r = await dialogoConflicto({ nombre: e.nombre, tesis: e.tesis, pos: e.pos, fecha: e.t }, { nombre: current.nombre, tesis: current.tesis, pos: pos, fecha: current.fecha },
       'Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas.');
+    if (s1 !== sesionSeq || current?.id !== id1) return;               // la sesión o la cartera cambiaron mientras tanto
     if (r === 'cuenta') { store.removeItem(key); return; }
     if (r === 'despues') return; // se queda como está: la copia local sigue guardada y se volverá a preguntar
     store.setItem(key, JSON.stringify({ ...e, base: current.revision })); // elegida la local: parte de la revisión actual de la cuenta (la cuenta NO se modifica: hay que pulsar Guardar)
@@ -3107,6 +3538,7 @@ function renderEmpresas() {
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
+  const nf = [filt.sector, filt.estado, filt.radar].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
   $('#emp-borrar').hidden = !bruto && !hayFiltro; $('#emp-borrar').textContent = hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda';
 }
 async function loadEmpresas() {
@@ -3136,8 +3568,8 @@ async function verFicha(t) {
   const seccion = (t, n, l) => n ? `<h3 class="grp">${t} (${n})</h3><ul class="checks">${l.join('')}</ul>` : '';
   const resumenF = [`${ok} ${ok === 1 ? 'superada' : 'superadas'}`, `${no} ${no === 1 ? 'no superada' : 'no superadas'}`, `${nd} sin datos`].filter((_, i) => [ok, no, nd][i] || i === 0).join(' · ');
   const hist = a.fundamentales.map(x => `<tr><th scope="row">${esc(x.periodo)}</th><td>${miles(x.ingresos)}</td><td>${miles(x.beneficio_neto)}</td><td>${miles(x.ebitda)}</td><td>${miles(x.flujo_caja_libre)}</td><td>${pct(x.roic)}</td></tr>`).join('');
-  $('#fi-titulo').textContent = a.nombre;
-  $('#fi-sub').textContent = `${a.ticker} · ${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
+  $('#fi-titulo').textContent = `${a.nombre} (${a.ticker})`;
+  $('#fi-sub').textContent = `${a.sector}${periodo ? ' · Datos del ejercicio ' + periodo : ''}`;
   const f0 = a.fundamentales[0], U = 'miles de millones de USD';
   const dato = (l, v, u) => v == null ? `<div class="ausente"><dt>${l}</dt><dd><span class="v">No disponible</span><span class="u">dato ausente en el informe</span></dd></div>` : `<div><dt>${l}</dt><dd><span class="v num">${v}</span><span class="u">${u}</span></dd></div>`;
   const principal = f0 ? `<section class="ficha-datos" aria-labelledby="fd-t"><h3 id="fd-t">Datos principales · ejercicio ${esc(f0.periodo)}</h3><dl class="fd-grid">${dato('Ventas', f0.ingresos == null ? null : miles(f0.ingresos), U)}${dato('Beneficio neto', f0.beneficio_neto == null ? null : miles(f0.beneficio_neto), U)}${dato('EBITDA', f0.ebitda == null ? null : miles(f0.ebitda), U)}${dato('Caja libre', f0.flujo_caja_libre == null ? null : miles(f0.flujo_caja_libre), U)}${dato('ROIC', f0.roic == null ? null : pct(f0.roic), 'del capital invertido (cálculo aproximado)')}</dl></section>` : '<p class="mut peq">No hay cifras anuales disponibles para esta empresa.</p>';
@@ -3156,7 +3588,7 @@ async function verFicha(t) {
       <p><b>EBITDA:</b> beneficio operativo antes de intereses, impuestos y amortizaciones.</p>
       <p><b>Caja libre:</b> dinero que queda tras pagar las operaciones y las inversiones necesarias.</p>
       <p><b>No disponible:</b> el dato falta en los informes. <b>No aplicable:</b> la medida no tiene sentido para ese activo (por ejemplo, el ROIC de un fondo).</p></div></details>`;
-  const d = $('#dlg-ficha'); if (!d.open) d.showModal(); d.scrollTop = 0;
+  const d = $('#dlg-ficha'); if (!d.open) { d.showModal(); try { history.pushState({ ficha: a.ticker }, ''); } catch { /* sin historial */ } } d.scrollTop = 0;   // «atrás» cierra la ficha y vuelve donde estabas
   pintarFichaRadar(a);
 }
 
@@ -3218,9 +3650,15 @@ document.addEventListener('click', e => {
   ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras })[r]?.();
 });
 
+let universoCache = null;                                            // instantánea del universo (nota y comparador); se pide una vez
+const cargarUniverso = () => universoCache || (universoCache = getJson('/universo').catch(e => { universoCache = null; throw e; }));
+// Cerrar la ficha para NAVEGAR a otra parte: se quita la marca del historial antes, para que el cierre no «vuelva atrás» y deshaga la navegación.
+function cerrarFicha() { try { history.replaceState(null, ''); } catch { /* sin historial */ } const d = $('#dlg-ficha'); if (d.open) d.close(); }
+$('#dlg-ficha').addEventListener('close', () => { if (history.state?.ficha) { try { history.back(); } catch { /* sin historial */ } } });
+window.addEventListener('popstate', () => { const d = $('#dlg-ficha'); if (d.open) d.close(); });
 // ---------- contexto que se entrega a js/lab.js (radiografía, radar, laboratorio, seguimiento) ----------
 function contextoLab() {
-  return { $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
+  return { idSesion: () => tok(), sesion: () => sesionSeq, universo: cargarUniverso, empresas: () => empresas, origen: origenCodigo, cerrarFicha, abrirEjemplo: () => abrirLab({ carteraId: 'ejemplo' }), $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
     activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
@@ -3230,8 +3668,10 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets();
-  const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab);
+  const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
   actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
+  purgarCopias();                                    // las copias locales caducan a los 7 días
+  if (logged()) { try { purgarCopias((await api('/portfolios')).map(c => c.id)); } catch { /* sin conexión: se purgará en la próxima carga */ } }   // y las de OTRA cuenta se borran al entrar esta
   if (logged()) await migrarRadarLocal();            // el radar de este dispositivo pasa a la cuenta (idempotente)
   await cargarRadar(); loadEmpresas();               // el radar se carga antes de pintar la lista (marcas «En tu radar»)
   if (logged()) {

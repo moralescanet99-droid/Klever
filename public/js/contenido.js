@@ -15,6 +15,11 @@ export const HISTORIAS = [{
   ticker: 'HNORT',
   empresa: 'Hidrógeno Norte (empresa ficticia)',
   pregunta: '¿Se han firmado los dos contratos anunciados?',
+  resumen: {
+    negocio: 'Hidrógeno Norte (ficticia) quiere producir hidrógeno verde en cuatro plantas y venderlo a clientes industriales con contratos de largo plazo.',
+    estudio: 'Porque enseña la diferencia entre anunciar y firmar: 2 de 4 proyectos (65 de 225 MW) ya tienen contrato y los dos más grandes dependen de una promesa con fecha.',
+    riesgo: 'Que los contratos grandes se retrasen o no lleguen, y que la financiación de la planta C no esté asegurada. Un caso no demuestra nada sobre otras empresas.',
+  },
   fuentes: [
     { n: 1, titulo: 'Comunicado de ejemplo: cartera de cuatro proyectos de hidrógeno verde', fecha: '2026-08-12', tipo: 'Documento de ejemplo (ficticio)' },
     { n: 2, titulo: 'Contrato de ejemplo del proyecto A (40 MW), resumen público', fecha: '2026-09-03', tipo: 'Documento de ejemplo (ficticio)' },
@@ -61,3 +66,25 @@ export const revisionDe = (h, n) => h?.tesis.find(x => x.revisa === Number(n)) |
 export const ultimaTesis = h => h?.tesis[h.tesis.length - 1] || null;
 // Fecha «AAAA-MM-DD» (de calendario, sin hora) → «20 oct 2026». No usa el reloj ni zonas horarias.
 export const fechaCorta = iso => { const d = new Date(String(iso) + 'T00:00:00Z'); return isNaN(d) ? '' : new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(d); };
+
+// Cartera de ejemplo para quien aún no tiene ninguna: nombre, peso y una frase sobre por qué la incluye el autor DEL EJEMPLO (didáctica, no una recomendación).
+export const CARTERA_EJEMPLO = {
+  nombre: 'Cartera de ejemplo (no es tuya)',
+  aviso: 'Es un ejemplo para aprender: no es una recomendación ni refleja tus preferencias.',
+  posiciones: [
+    { ticker: 'KO', peso: 60, razon: 'Una empresa de bebidas muy conocida. El autor del ejemplo la pone grande para que se vea qué pasa cuando una sola empresa pesa el 60 %.' },
+    { ticker: 'PG', peso: 40, razon: 'Una empresa de productos de higiene y hogar. Se incluye para tener una segunda empresa del mismo tipo con la que comparar cómo se reparte el peso.' },
+  ],
+};
+
+// Preguntas que se pueden seguir con la historia de ejemplo y qué dice la revisión editorial sobre cada una. TODO el desenlace es SIMULADO.
+// `respuesta: null` = la fuente aún no permite responder (se dice qué sigue pendiente). Las fechas son las del caso ficticio.
+export const SEGUIMIENTO_CASOS = [
+  { historia: 'hidrogeno-norte', pregunta: '¿Se han firmado los dos contratos anunciados?', tesis: 1,
+    respuesta: { fecha: '2026-11-03', revision: 2, fuente: 'Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio)', simulada: true,
+      porContrato: [{ nombre: 'Proyecto C (100 MW)', estado: 'Firmado el 29 de octubre', documento: '[6]' }, { nombre: 'Proyecto D (60 MW)', estado: 'Aplazado sin fecha; sin documento nuevo', documento: '—' }],
+      resumen: 'Solo se firmó uno de los dos contratos anunciados (desenlace simulado).' }, pendiente: null },
+  { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
+    pendiente: 'Sin novedades: la fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
+];
+export const casoSeguimiento = (hid, pregunta) => SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.pregunta === pregunta) || null;

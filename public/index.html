@@ -15,11 +15,9 @@
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#empresas" data-nav="empresas">Explorar empresas</a>
-      <a href="#publicas" data-nav="publicas">Carteras públicas</a>
-      <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
-      <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
-      <a href="#revista" data-nav="revista">Revista</a>
+      <a href="#inicio" data-nav="cartera">Cartera</a>
+      <a href="#revista" data-nav="ideas">Ideas</a>
+      <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -28,11 +26,9 @@
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#empresas" data-nav="empresas">Explorar empresas</a>
-    <a href="#publicas" data-nav="publicas">Carteras públicas</a>
-    <a href="#carteras" data-nav="carteras" class="nav-mis" hidden>Mis carteras</a>
-    <a href="#seguimiento" data-nav="seguimiento">Mi seguimiento</a>
-    <a href="#revista" data-nav="revista">Revista</a>
+    <a href="#inicio" data-nav="cartera">Cartera</a>
+    <a href="#revista" data-nav="ideas">Ideas</a>
+    <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -52,10 +48,10 @@
     <div class="hero">
       <div class="hero-txt">
         <h1>Crea y entiende tu cartera simulada</h1>
-        <p class="lead">Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.</p>
-        <p><button id="probar" class="btn btn-primario btn-grande" type="button">Probar una cartera</button></p>
+        <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
+        <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primera cartera</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
-        <p class="inicio-revista"><a href="#revista">Lee una historia de ejemplo</a> y pruébala en una cartera, sin cuenta.</p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
@@ -93,6 +89,7 @@
 
   <!-- ===== EXPLORAR EMPRESAS ===== -->
   <section id="vista-empresas" data-vista="empresas" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
       <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
@@ -104,12 +101,13 @@
       <span id="emp-cuenta" class="mut" aria-live="polite"></span>
       <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
     </div>
+    <details class="emp-filtros-det" id="emp-filtros-det"><summary>Filtros <span id="emp-filtros-n" class="mut"></span></summary>
     <div class="emp-filtros" role="group" aria-label="Filtros de la lista">
       <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
       <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
-    </div>
+    </div></details>
     <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
@@ -144,6 +142,7 @@
 
   <!-- ===== CARTERAS PÚBLICAS ===== -->
   <section id="vista-publicas" data-vista="publicas" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab">
       <h1>Carteras públicas</h1>
       <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
@@ -178,29 +177,38 @@
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
   <section id="vista-revista" data-vista="revista" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
     <div id="revista-cuerpo"></div>
   </section>
   <section id="vista-articulo" data-vista="articulo" hidden>
+    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div id="articulo-cuerpo"></div>
   </section>
+
+  <section id="vista-ejemplo" data-vista="ejemplo" hidden><div id="ejemplo-cuerpo"></div></section>
+  <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
 
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Mi seguimiento</h1>
+      <h1>Seguimiento <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
       <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
-    <div class="seg-cols">
-      <section class="seg-bloque" aria-labelledby="seg-radar-t">
-        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
-        <div id="seg-radar" aria-live="polite"></div>
+    <div class="seg-col">
+      <section class="seg-bloque" aria-labelledby="seg-casos-t">
+        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
+        <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
         <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-radar-t">
+        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div id="seg-radar" aria-live="polite"></div>
       </section>
     </div>
   </section>

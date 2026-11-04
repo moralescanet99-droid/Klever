@@ -28,9 +28,9 @@ export function mostrarRevista() {
 }
 
 function fuentes(esc, h) {
-  return `<section class="art-fuentes" aria-labelledby="art-fuentes-t"><h2 id="art-fuentes-t">Fuentes</h2>
+  return `<details class="art-fuentes"><summary>Fuentes (${h.fuentes.length})</summary>
     <ol>${h.fuentes.map(f => `<li>${esc(f.titulo)} · ${esc(fechaCorta(f.fecha))} · <span class="mut">${esc(f.tipo)}</span></li>`).join('')}</ol>
-    ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</section>`;
+    ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</details>`;
 }
 function cta(esc, h) {
   return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Probar en mi cartera</button>
@@ -46,6 +46,7 @@ export function mostrarArticulo({ tipo, id, n }) {
     cont.innerHTML = `<article class="art"><p><a class="enlace" href="#revista">← Revista</a></p>${aviso}
       <h1>${esc(h.titulo)}</h1><p class="art-bajada">${esc(h.bajada)}</p>
       <p class="art-firma">Por <b>${esc(h.autor)}</b> · <time datetime="${esc(h.fecha)}">${esc(fechaCorta(h.fecha))}</time> · Empresa vinculada: <button class="enlace" type="button" data-ficha="${esc(h.ticker)}">${esc(h.empresa)}</button></p>
+      ${h.resumen ? `<section class="art-resumen" aria-label="En breve"><h2>En breve</h2><dl><div><dt>Qué hace el negocio</dt><dd>${esc(h.resumen.negocio)}</dd></div><div><dt>Por qué merece estudio</dt><dd>${esc(h.resumen.estudio)}</dd></div><div><dt>Qué podría salir mal</dt><dd>${esc(h.resumen.riesgo)}</dd></div></dl><p class="mut peq">Sigue la lectura completa y, al final, las fuentes.</p></section>` : ''}
       ${h.bloques.map(b => b.t === 'h2' ? `<h2>${esc(b.x)}</h2>` : b.t === 'p' ? `<p>${refs(esc, b.x)}</p>` : b.t === 'ul' ? lista(esc, b.x)
         : `<div class="tabla-h" role="region" aria-label="Estado de los proyectos" tabindex="0"><table class="tabla-lab"><thead><tr>${b.cab.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.filas.map(f => `<tr><th scope="row">${esc(f[0])}</th>${f.slice(1).map(c => `<td>${refs(esc, c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`).join('')}
       <p class="art-opinion"><a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión de El Superespeculador</a></p>

@@ -65,7 +65,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await snap(p, 'R2-ficha-radar', w);
     await p.keyboard.press('Escape'); await p.waitForTimeout(300);
     const marca = await p.evaluate(() => [...document.querySelectorAll('.chip.radar')].filter(e => e.offsetParent !== null).length);
-    await p.fill('#emp-buscar', ''); await p.check('#emp-radar'); await p.waitForTimeout(300);
+    await p.fill('#emp-buscar', ''); await p.click('#emp-filtros-det summary'); await p.check('#emp-radar'); await p.waitForTimeout(300);
     const soloRadar = await p.evaluate(() => ({ cuenta: document.querySelector('#emp-cuenta').textContent, filas: [...document.querySelectorAll(window.innerWidth >= 720 ? '#empresas-lista tr' : '#empresas-cards li')].filter(e => e.querySelector('[data-t]')).length }));
     ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 106; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 106/.test(soloRadar.cuenta) && soloRadar.filas === 1);
     await p.uncheck('#emp-radar');
@@ -195,7 +195,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const p = await nuevo(b, 1440, 900); await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true');
     const datos = await p.evaluate(async () => { const r = await (await fetch('/api/ideas')).json(); return r.map(x => ({ t: x.ticker, s: x.sector, roic: x.criterios.roic.ok, orden: x.ticker })); });
     const sector = datos[0].s, esperado = datos.filter(x => x.s === sector && x.roic === false).length;
-    await p.selectOption('#emp-sector', sector); await p.selectOption('#emp-crit', 'roic'); await p.selectOption('#emp-estado', 'no'); await p.waitForTimeout(300);
+    await p.click('#emp-filtros-det summary'); await p.selectOption('#emp-sector', sector); await p.selectOption('#emp-crit', 'roic'); await p.selectOption('#emp-estado', 'no'); await p.waitForTimeout(300);
     const cuenta = N(await p.textContent('#emp-cuenta')), ordenAntes = await p.evaluate(() => [...document.querySelectorAll('#empresas-lista [data-t]')].map(e => e.dataset.t));
     await p.fill('#emp-buscar', ''); await p.locator('.ver-ficha >> visible=true').first().click().catch(() => {}); await p.waitForTimeout(300);
     const abierta = await p.evaluate(() => document.querySelector('#dlg-ficha').open); if (abierta) { await p.keyboard.press('Escape'); await p.waitForTimeout(300); }

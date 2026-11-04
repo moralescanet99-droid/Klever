@@ -3,6 +3,7 @@ export const ESTADOS = ['en_estudio', 'descartado', 'archivado'];
 const colegir = r => ({
   id: r.id, clave: r.clave, nombre: r.nombre, nota: r.nota, estado: r.estado, metodo: r.metodo, ticker: r.ticker, peso_objetivo: r.peso_objetivo,
   cartera_id: r.cartera_id, cartera_nombre: r.cartera_nombre, base_revision: r.base_revision, revision: r.revision,
+  evaluacion: r.nota_json ? JSON.parse(r.nota_json) : null,
   pregunta: r.pregunta || '', revisar_en: r.revisar_en || null, historia: r.historia || null,
   base: JSON.parse(r.base_json), propuesta: JSON.parse(r.propuesta_json), creado_en: r.creado_en, actualizado_en: r.actualizado_en,
   // Aviso de versión posterior: SOLO informa; el escenario conserva su base y nunca se recalcula.

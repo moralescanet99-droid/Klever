@@ -153,3 +153,50 @@
   .art .tabla-lab th,.art .tabla-lab td{overflow-wrap:normal;word-break:normal;padding:8px 6px}
   .art .tabla-h{overflow-x:auto}
 }
+
+/* ===== ronda 15 · tres destinos, Ideas, ejemplo, nota, comparador, seguimiento que abre con la pregunta ===== */
+.ideas-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 var(--s2)}
+.ideas-tabs a{padding:8px 14px;border:1px solid var(--border-strong);border-radius:999px;text-decoration:none;color:var(--text);font-weight:600;font-size:var(--t-s);min-height:44px;display:inline-flex;align-items:center}
+.ideas-tabs a[aria-current="page"]{background:var(--accent-soft);color:var(--accent-on-soft);border-color:var(--accent)}
+.inicio-seg{font-weight:600;margin:var(--s1) 0}
+.inicio-acc{display:flex;flex-wrap:wrap;gap:8px}
+.chip.beta{background:var(--accent-soft);color:var(--accent-on-soft);font-size:var(--t-xs);font-weight:700;vertical-align:middle;white-space:normal;display:inline-block;line-height:1.3}
+.seg-col{display:grid;gap:var(--s3);max-width:46rem}
+/* ejemplo de cartera */
+.ej-barra{display:flex;height:2.75rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);max-width:46rem;margin:0 0 var(--s2)}
+.ej-barra i{display:flex;align-items:center;justify-content:center;background:var(--c);color:var(--c-txt,#fff);font-style:normal;font-weight:700;font-size:var(--t-s);min-width:0;overflow:hidden;white-space:nowrap}
+.ej-lista{list-style:none;padding:0;margin:0 0 var(--s2);display:grid;gap:var(--s1);max-width:46rem}
+.ej-lista li{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2)} .ej-lista p{margin:0 0 6px} .ej-cab{font-size:1.0625rem}
+.ej-acc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 var(--s2)}
+/* historia: resumen de primera vista y fuentes plegadas */
+.art-resumen{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);margin:0 0 var(--s2)}
+.art-resumen h2{margin:0 0 var(--s1);font-size:1.125rem} .art-resumen dl{display:grid;gap:var(--s1);margin:0}
+.art-resumen dt{font-weight:700;font-size:var(--t-s);color:var(--accent)} .art-resumen dd{margin:2px 0 0}
+details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);margin-top:var(--s3)} details.art-fuentes summary{cursor:pointer;font-weight:700;color:var(--accent);min-height:44px;display:flex;align-items:center}
+/* nota de estructura */
+.nota{border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);background:var(--surface);margin:var(--s2) 0}
+.nota h3{margin:0 0 6px;font-size:1rem} .nota-num{margin:var(--s1) 0;display:flex;align-items:baseline;gap:8px} .nota-num b{font-size:var(--t-num,2.25rem);line-height:1}
+.nota-puntos{margin:0 0 var(--s1);padding-left:1.1rem} .nota-puntos li{margin:2px 0}
+.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:10px 12px;margin:var(--s1) 0}
+.nota-aviso{margin:0 0 var(--s1)}
+/* laboratorio: cuánto espacio ocuparía */
+.lab-espacio{margin:var(--s1) 0 6px}
+.esp{display:grid;gap:6px;margin:0 0 var(--s2);max-width:46rem}
+.esp-fila{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:8px;align-items:center}
+.esp-tit{font-size:var(--t-s);font-weight:600;color:var(--muted)}
+.esp-barra{display:flex;height:1.9rem;border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--surface-2)}
+.esp-barra i{display:flex;align-items:center;justify-content:center;background:var(--c);color:var(--c-txt,#fff);font-style:normal;font-size:var(--t-xs);font-weight:700;min-width:2px;overflow:hidden}
+.esp-barra i.dest{outline:3px solid var(--text);outline-offset:-3px}
+/* ficha */
+.fir-acciones{display:grid;gap:8px} .fir-pregunta{margin:0;font-weight:600} .fir-botones{display:flex;flex-wrap:wrap;gap:8px;margin:0} .fir-botones .btn{min-height:44px}
+/* comparador */
+.cmp-lista{list-style:none;padding:0;margin:0;display:grid;gap:8px;max-width:30rem} .cmp-lista .btn{width:100%;justify-content:space-between;text-align:left;min-height:48px}
+.tabla-cmp td,.tabla-cmp th{vertical-align:top} .cmp-valor{font-size:1.25rem;font-weight:700;display:block}
+.cmp-estado{font-weight:700;display:block;color:var(--warn)} .cmp-motivo{display:block;font-size:var(--t-s);color:var(--muted)} .cmp-origen{display:block;font-size:var(--t-xs);color:var(--muted);margin-top:4px} .cmp-def{display:block;font-weight:400;color:var(--muted);font-size:var(--t-xs)}
+/* seguimiento: preguntas */
+.caso{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:var(--s2);margin-bottom:var(--s1);display:grid;gap:6px}
+.caso.caso-pend{border-left:5px solid var(--warn)} .caso header{display:flex;gap:6px;flex-wrap:wrap} .caso h3{margin:0;font-size:1.125rem;line-height:1.3} .caso p,.caso ul{margin:0} .caso ul{padding-left:1.2rem}
+.caso-pesos{background:var(--surface-2);border-radius:8px;padding:8px 10px} .caso-acc{display:flex;flex-wrap:wrap;gap:8px} .caso-acc .btn{min-height:44px}
+/* explorar: filtros plegados */
+.emp-filtros-det{margin:0 0 var(--s1)} .emp-filtros-det summary{cursor:pointer;font-weight:600;color:var(--accent);min-height:44px;display:flex;align-items:center}
+@media (max-width:480px){.esp-fila{grid-template-columns:3.4rem minmax(0,1fr)} .nota-num b{font-size:2rem}}

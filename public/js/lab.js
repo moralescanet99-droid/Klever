@@ -3,9 +3,11 @@
 // Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
 import { radiografia, simular, comparar, origenPeso, FINANCIACIONES } from './calculos.js';
 import { crearAlmacen } from './almacen.js';
-import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta } from './contenido.js';
+import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, casoSeguimiento, SEGUIMIENTO_CASOS } from './contenido.js';
+import { evaluar, resumen as resumenNota } from './nota.js';
+import { htmlNotaEstructura, htmlCambioNota } from './nota-ui.js';
 
-const LAB = { ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
+const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
 const ESTADOS = { en_estudio: 'En estudio', descartado: 'Descartado', archivado: 'Archivado' };
 const METODOS = { sin_asignar: 'usando el porcentaje sin asignar', proporcional: 'reduciendo proporcionalmente las otras posiciones' };
@@ -20,6 +22,7 @@ export function iniciarLab(ctx) {
   LAB.ctx = ctx;
   LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos, idSesion: ctx.idSesion });
   const $ = ctx.$;
+  ctx.universo().then(u => { LAB.universo = u; pintarRadiografia(); }).catch(() => { LAB.universoError = true; pintarRadiografia(); });   // la nota usa una instantánea congelada del universo
   $('#radio-cuerpo').addEventListener('click', e => {
     const b = e.target.closest('[data-modo]'); if (b) { LAB.radioModo = b.dataset.modo; pintarRadiografia(); return; }
     if (e.target.closest('#radio-lab')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); }
@@ -27,6 +30,7 @@ export function iniciarLab(ctx) {
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
+  $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#seg-radar').addEventListener('change', e => { if (e.target.id === 'seg-ref') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarSeguimientoRadar(); $('#seg-ref')?.focus(); } });
   $('#seg-filtro').addEventListener('change', pintarSeguimientoEscenarios);
@@ -91,6 +95,7 @@ export async function cargarRadar() {                              // true = le�
   catch (e) { if (vigente(g)) LAB.radarError = e.message; return false; }
 }
 export const enRadar = t => LAB.alm.radar.tiene(t);
+export const origenCodigo = () => LAB.datos?.origen ?? null;
 export const migrarRadarLocal = () => LAB.alm.radar.migrarLocal().catch(() => 0);
 
 // Carteras que sirven de referencia: las guardadas (con sesión) o el borrador de este dispositivo (sin sesión). La de ejemplo va aparte.
@@ -101,7 +106,7 @@ async function cargarCarteras() {
   if (!vigente(g)) return [];
   LAB.carteras = lista; return lista;
 }
-const basesLab = () => LAB.carteras.length ? LAB.carteras : [EJEMPLO];
+const basesLab = () => (LAB.carteras.length && LAB.sim?.carteraId !== 'ejemplo') ? LAB.carteras : [...LAB.carteras, EJEMPLO];
 function carteraRef() {
   const id = x().store.getItem(CLAVE_REF), l = LAB.carteras;
   return l.find(c => String(c.id) === id) || l.find(c => c.id === x().editor().current?.id && c.id != null) || l[0] || null;
@@ -147,6 +152,7 @@ export function pintarRadiografia() {
   const cobertura = [];
   if (r.cobertura.sinCategoria.length) cobertura.push(`${r.cobertura.sinCategoria.length} ${r.cobertura.sinCategoria.length === 1 ? 'posición no tiene' : 'posiciones no tienen'} categoría conocida (${esc(r.cobertura.sinCategoria.join(', '))}).`);
   if (r.cobertura.fondos.length) cobertura.push(`${esc(r.cobertura.fondos.join(', '))}: ${r.cobertura.fondos.length === 1 ? 'es un fondo' : 'son fondos'} y su categoría es la comercial, no su exposición sectorial real.`);
+  const notaHtml = LAB.universo ? htmlNotaEstructura(esc, evaluar(posiciones, LAB.universo), origenCodigo()) : LAB.universoError ? '<p class="mut peq">La nota de estructura no está disponible ahora.</p>' : '<p class="mut peq">Calculando la nota de estructura…</p>';
   const html = `<p class="radio-version">Analizando: <b>${etq}</b>.</p>${conmuta}
     <p class="radio-concl">${esc(frase(r))}</p>
     ${r.estado === 'vacia' ? '' : `<dl class="radio-datos"><div><dt>Mayor posición</dt><dd>${esc(r.mayor.ticker)} · ${P(r.mayor.peso)}</dd></div>
@@ -154,6 +160,7 @@ export function pintarRadiografia() {
       <div><dt>${r.estado === 'exceso' ? 'Exceso' : 'Sin asignar'}</dt><dd>${P(r.estado === 'exceso' ? r.exceso : r.pendiente)}</dd></div></dl>`}
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
+    ${notaHtml}
     <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
     <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
@@ -181,9 +188,12 @@ export async function pintarFichaRadar(a) {
     : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
       <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, el radar se guarda solo en este dispositivo.'}</span></div>
       ${dentro ? `<div class="fir-nota" data-nota-zona="ficha">${htmlNota(esc, 'fir-nota', alm.nota(a.ticker), editando, editando ? LAB.nota.texto : '', editando ? LAB.nota.err : '')}</div>` : ''}`;
-  cont.innerHTML = `${radar}
-    <div class="fir-cartera">${LAB.carteras.length ? `<label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select><p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p>` : '<p class="peq mut" id="fir-en">Aún no tienes una cartera: al probarla en el laboratorio te ofrecemos una de ejemplo.</p>'}</div>
-    <p><button class="btn btn-secundario" type="button" id="fir-sim">Probar en mi cartera</button></p>
+  const preg = hist[0]?.pregunta ? `Pregunta que investigas: «${esc(hist[0].pregunta)}»` : '';
+  cont.innerHTML = `<div class="fir-acciones">${preg ? `<p class="fir-pregunta">${preg}</p>` : ''}
+      <p class="fir-botones"><button class="btn btn-primario" type="button" id="fir-sim">Probar en mi cartera</button> <button class="btn btn-secundario" type="button" id="fir-comparar">Comparar con otra empresa</button></p>
+      ${LAB.carteras.length ? '' : '<p class="peq mut" id="fir-en">Si aún no tienes cartera, «Probar en mi cartera» te ofrece una de ejemplo.</p>'}</div>
+    ${radar}
+    ${LAB.carteras.length ? `<div class="fir-cartera"><label for="fir-cartera">Cartera de referencia</label><select id="fir-cartera">${opcionesCartera(ref)}</select><p class="peq" id="fir-en">${esc(textoEnCartera(a.ticker, ref))}</p></div>` : ''}
     ${hist.length ? `<p class="peq">Historia relacionada: ${hist.map(h => `<a href="#historia-${esc(h.id)}" data-cerrar-ficha>${esc(h.titulo)}</a>`).join(' · ')}</p>` : ''}`;
 }
 async function onFichaClic(e) {
@@ -191,7 +201,7 @@ async function onFichaClic(e) {
   const alm = LAB.alm.radar, t = a.ticker;
   const err = m => { const z = $('#fi-radar [data-nota-err]'); if (z) z.textContent = m; const b = $('#fi-radar [data-nota=guardar]'); if (b) b.textContent = 'Reintentar guardado'; };
   try {
-    if (e.target.closest('[data-cerrar-ficha]')) { $('#dlg-ficha').close(); return; }
+    if (e.target.closest('[data-cerrar-ficha]')) { x().cerrarFicha(); return; }
     if (e.target.closest('#fir-reintentar')) { await cargarRadar(); await pintarFichaRadar(a); return; }
     if (e.target.closest('#fir-toggle')) {
       try {
@@ -212,7 +222,8 @@ async function onFichaClic(e) {
       }
       return;
     }
-    if (e.target.closest('#fir-sim')) { const ref = carteraRef(); $('#dlg-ficha').close(); abrirLab({ carteraId: ref?.id ?? null, ticker: t }); }
+    if (e.target.closest('#fir-sim')) { const ref = carteraRef(); x().cerrarFicha(); abrirLab({ carteraId: ref?.id ?? null, ticker: t }); }
+    if (e.target.closest('#fir-comparar')) { x().cerrarFicha(); x().go('#comparar-' + t); }
   } catch (er) { toastError(er.message); }
 }
 let marcasPend = false;
@@ -269,12 +280,38 @@ async function clicSeguimientoRadar(e) {
   } catch (err) { toastError(err.message); }
 }
 const textoRevision = e => e.revisar_en ? `Revisión prevista: ${fechaCorta(e.revisar_en)}${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : ''}.` : '';
+const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
+function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
+  const caso = c.caso, r = caso?.respuesta, h = c.historia && historia(c.historia);
+  const ocurrido = r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)} ${esc(k.documento)}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
+    : `<p><b>Sin novedades.</b> ${esc(caso?.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta: sigue pendiente. Se revisará cuando haya una actualización verificada.')}</p>`;
+  const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
+    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
+  const rev = h && r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : h ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>` : '';
+  const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
+  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? 'Con novedades' : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
+    <h3>«${esc(c.pregunta)}»</h3>${c.revisarEn ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
+    ${ocurrido}${pesos}<p class="caso-acc">${rev} ${sim}</p></article>`;
+}
+function pintarSeguimientoCasos(lista) {
+  const { $, esc, logged } = x(), cont = $('#seg-casos'); if (!cont) return;
+  if (!logged()) {                                                       // visitante: ejemplo ficticio y rotulado; con cuenta solo salen SUS preguntas y posiciones
+    cont.innerHTML = `<p class="mut peq">Así se verían tus preguntas (ejemplo ficticio). Con cuenta, aquí aparecen solo tus propias preguntas y posiciones.</p>` + SEGUIMIENTO_CASOS.map(c => tarjetaCaso(esc, { caso: c, pregunta: c.pregunta, historia: c.historia, ticker: historia(c.historia).ticker, pesoEsc: 10, ejemplo: true })).join('');
+    return;
+  }
+  const con = (lista || []).filter(e => e.pregunta && e.estado !== 'descartado').sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id);
+  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
+  cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id);
+    return tarjetaCaso(esc, { caso: casoSeguimiento(e.historia, e.pregunta), pregunta: e.pregunta, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
+}
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
+  if (!logged()) { pintarSeguimientoCasos(null); }
   if (!logged()) { $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
   cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
   let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
   if (!vigente(g)) return;
+  LAB.listaEsc = lista; pintarSeguimientoCasos(lista);
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
@@ -391,6 +428,11 @@ function limitesHtml(c, limite) {
   if (L.length === 1) L.push('<p>Ninguna posición supera el límite, ni antes ni después.</p>');
   return L.join('');
 }
+function htmlBarras(esc, sim) {                                          // dos barras (antes / después) con los pesos reales; la empresa probada va marcada
+  const tks = [...new Set([...sim.antes.map(p => p.ticker), ...sim.despues.map(p => p.ticker)])], col = t => tks.indexOf(t) % 8;
+  const barra = (lista, tit) => `<div class="esp-fila"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}</span></div>`;
+  return `<div class="esp">${barra(sim.antes, 'Antes')}${barra(sim.despues, 'Después')}</div>`;
+}
 function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
@@ -398,6 +440,8 @@ function pintarResultado() {
   const mio = sim.cambios.find(f => f.ticker === sim.ticker);
   const concl = `${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
   const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
+  const evA = LAB.universo ? evaluar(sim.antes, LAB.universo) : null, evD = LAB.universo ? evaluar(sim.despues, LAB.universo) : null;
+  s.evaluacion = evA && evD ? { antes: resumenNota(evA), despues: resumenNota(evD) } : null;
   const guardar = logged() && base.guardada
     ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
@@ -411,7 +455,9 @@ function pintarResultado() {
       : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (con una cartera guardada en tu cuenta).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2><p class="lab-concl">${concl}</p>
     <p class="lab-origen"><b>De dónde sale el peso:</b> ${esc(origenPeso(sim))}</p>
+    <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>${htmlBarras(esc, sim)}
     ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
+    ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
 }
 async function guardarEscenario() {
@@ -421,7 +467,7 @@ async function guardarEscenario() {
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
     const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null,
-      cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues });
+      cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues, evaluacion: s.evaluacion || undefined });
     if (!vigente(g)) return;
     toast(r.duplicado ? 'Ese escenario ya estaba guardado' : 'Escenario guardado en tu seguimiento'); x().go('#escenario-' + r.id);
   } catch (e) {
@@ -483,7 +529,7 @@ function pintarEscenario() {
     </section>
     <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
-    <section class="lab-res"><h2>Comparación guardada</h2>${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
+    <section class="lab-res"><h2>Comparación guardada</h2>${e.evaluacion ? `<p class="mut peq">Evaluación de estructura fechada (${esc(fechaCorta(e.evaluacion.antes.fecha || ''))}, ${esc(e.evaluacion.antes.version)}): nota ${e.evaluacion.antes.publicada ? String(e.evaluacion.antes.nota).replace('.', ',') : 'pendiente'} → ${e.evaluacion.despues.publicada ? String(e.evaluacion.despues.nota).replace('.', ',') : 'pendiente'}. Se guardó con el escenario y no se recalcula, aunque cambien los datos o el método.</p>` : ''}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
 }
 async function aplicarCambios(cambios, mensaje, errId) {

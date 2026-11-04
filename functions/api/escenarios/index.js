@@ -34,6 +34,14 @@ export async function onRequestPost({ request, env }) {
   const pregunta = String(b.pregunta ?? '').trim(), revisar = b.revisar_en == null || b.revisar_en === '' ? null : String(b.revisar_en);
   if (pregunta.length > MAX_PREGUNTA) return json({ error: `La pregunta admite hasta ${MAX_PREGUNTA} caracteres.` }, 400);
   if (revisar !== null && !fechaValida(revisar)) return json({ error: 'La fecha de revisión no es válida (AAAA-MM-DD).' }, 400);
+  // Evaluación de estructura FECHADA que vio la persona (antes/después): se guarda tal cual y NUNCA se recalcula. Es un registro suyo, no un dato autoritativo.
+  let evaluacion = null;
+  if (b.evaluacion != null) {
+    const ok = o => o && typeof o === 'object' && typeof o.version === 'string';
+    if (!ok(b.evaluacion?.antes) || !ok(b.evaluacion?.despues)) return json({ error: 'La evaluación adjunta no es válida.' }, 400);
+    evaluacion = JSON.stringify({ antes: b.evaluacion.antes, despues: b.evaluacion.despues });
+    if (evaluacion.length > 6000) return json({ error: 'La evaluación adjunta es demasiado grande.' }, 400);
+  }
   const historia = b.historia == null || b.historia === '' ? null : String(b.historia);
   if (historia !== null && !ID_HISTORIA.test(historia)) return json({ error: 'La historia vinculada no es válida.' }, 400);
   try {
@@ -55,9 +63,9 @@ export async function onRequestPost({ request, env }) {
     try {
       // El tope se comprueba EN la propia sentencia (no antes): dos guardados simultáneos no pueden superarlo.
       const r = await env.DB.prepare(
-        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, pregunta, revisar_en, historia, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json)
-         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
-        .bind(user.id, clave, nombre, nota, pregunta, revisar, historia, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), user.id, MAX_ESCENARIOS).run();
+        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, pregunta, revisar_en, historia, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
+         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
+        .bind(user.id, clave, nombre, nota, pregunta, revisar, historia, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
       if (!r.meta?.changes) return json({ error: `Puedes guardar hasta ${MAX_ESCENARIOS} escenarios. Elimina alguno para guardar otro.` }, 400);
     } catch (e) {
       const otro = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? AND e.clave = ?`).bind(user.id, clave).first(); // carrera entre dos reintentos
