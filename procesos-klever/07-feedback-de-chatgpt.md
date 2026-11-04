@@ -94,3 +94,5 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 
 
 ## Revisión 10 · paquete de la ronda 12 — **PENDIENTE** (falta preparar el paquete y que el usuario traiga el feedback)
+
+## Revisión 11 · paquete de la ronda 13 — **PENDIENTE** (falta que el usuario traiga el feedback de ChatGPT)
