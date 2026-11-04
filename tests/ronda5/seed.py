@@ -20,14 +20,14 @@ for a in uni:
     for x in antes + rows:
         x['op'] = None if fin or x['ebitda'] is None else x['ebitda'] * (.55 + r2.random()*.3)    # resultado operativo (≈ EBITDA menos amortizaciones): inventado
         v = lambda z: 'NULL' if z is None else repr(float(z))
-        out.append(f"INSERT INTO fundamentales(ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en,resultado_operativo,informe) VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])},'prueba',date('now'),{v(x['op'])},'prueba-{a['ticker']}-FY{x['y']}');")
+        out.append(f"INSERT INTO fundamentales(ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en,resultado_operativo,informe) VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])},'prueba','2026-11-04',{v(x['op'])},'prueba-{a['ticker']}-FY{x['y']}');")
     ACT = {'Tecnología': ['Software', 'Semiconductores', 'Hardware'], 'Salud': ['Farmacia', 'Dispositivos', 'Servicios sanitarios'], 'Finanzas': ['Banca', 'Seguros', 'Mercados'], 'Energía': ['Petróleo y gas', 'Renovables', 'Servicios petrolíferos'],
            'Consumo básico': ['Alimentación', 'Bebidas', 'Distribución'], 'Consumo discrecional': ['Comercio minorista', 'Automoción', 'Ocio'], 'Industria': ['Maquinaria', 'Transporte', 'Defensa'], 'Comunicaciones': ['Medios', 'Telecomunicaciones', 'Plataformas'],
            'Materiales': ['Química', 'Metales', 'Envases'], 'Inmobiliario': ['Oficinas', 'Logística', 'Residencial'], 'Suministros': ['Electricidad', 'Agua', 'Gas']}
     acts = ACT.get(a['sector'], ['General']); act = acts[int(hashlib.md5(('a' + a['ticker']).encode()).hexdigest(), 16) % len(acts)]
     out.append(f"UPDATE activos SET actividad={q(act)}, emisor={q(a['ticker'].lower())} WHERE ticker={q(a['ticker'])};")
     cap = rows[-1]['ing'] * (1.2 + r2.random()*6); imp = cap * (.002 + r2.random()*.006)        # capitalización e importe diario mediano de 60 sesiones: inventados
-    out.append(f"INSERT INTO mercado(ticker,capitalizacion,importe_diario_mediano,sesiones,moneda,fecha,fuente) VALUES({q(a['ticker'])},{cap:.0f},{imp:.0f},60,'USD',date('now'),'prueba');")
+    out.append(f"INSERT INTO mercado(ticker,capitalizacion,importe_diario_mediano,sesiones,moneda,fecha,fuente) VALUES({q(a['ticker'])},{cap:.0f},{imp:.0f},60,'USD','2026-11-04','prueba');")
     L, P = rows[-1], rows[-2]
     ok = lambda c, val: dict(ok=None if val is None else c, valor=val)
     crit = dict(periodo='FY2024',

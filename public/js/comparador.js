@@ -2,7 +2,7 @@
 //  1. Crecimiento de ventas  = ventas del ejercicio / ventas del ejercicio anterior − 1                       (%)
 //  2. Margen operativo       = resultado operativo / ventas del ejercicio                                     (%)  — NO es el margen neto
 //  3. Deuda neta / EBITDA    = deuda neta / EBITDA del ejercicio                                              (veces)
-//     «Deuda neta entre EBITDA, en veces (2,0 veces = la deuda neta equivale a dos años de EBITDA)»; no es un plazo de devolución. Una cifra baja es menos deuda; negativa = caja neta. Si el EBITDA es ≤ 0 la ratio
+//     «Deuda neta entre EBITDA, en veces (por cada euro de EBITDA del ejercicio, tantos euros de deuda neta)»; no indica cuándo se devolverá la deuda. Una cifra baja es menos deuda; negativa = caja neta. Si el EBITDA es ≤ 0 la ratio
 //     no es interpretable: «no comparable». Mucha o poca deuda NO es «mejor» ni «peor» por sí sola: depende del sector y del momento.
 // Los ejercicios se ALINEAN (se compara el último ejercicio que tienen las dos); todo en la misma moneda (USD) y unidades; cada cifra lleva su fuente,
 // su periodo y su fecha de carga. Lo que no se puede comparar se dice con su motivo; nunca se rellena.
@@ -33,7 +33,7 @@ export function compararEmpresas(a, b) {
     if (!hayNum(c.ingresos) || c.ingresos <= 0) return celda(null, null, c, 'sin_dato', 'Sin ventas positivas para calcular el margen.');
     const v = c.resultado_operativo / c.ingresos; return celda(v, pct(v), c);
   }));
-  res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Deuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: 2,0 veces = la deuda neta equivale a dos años de EBITDA. No es un plazo de devolución. Negativa = caja neta', 'veces', (f, yy) => {
+  res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Deuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: por cada euro de EBITDA del ejercicio hay esa cantidad de euros de deuda neta. Esta relación no indica cuándo se devolverá la deuda. Negativa = caja neta', 'veces', (f, yy) => {
     const c = f[yy];
     if (!hayNum(c?.deuda_neta) || !hayNum(c?.ebitda)) return celda(null, null, c, 'sin_dato', 'Sin dato de deuda neta o de EBITDA.');
     if (c.ebitda <= 0) return celda(null, null, c, 'no_comparable', 'El EBITDA es nulo o negativo: la ratio no se puede interpretar.');

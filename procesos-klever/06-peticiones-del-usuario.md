@@ -676,3 +676,134 @@ En el comparador mantén crecimiento de ventas, margen operativo y deuda neta/EB
 Entrega el ZIP, la demo autónoma reconstruida del mismo código y las pruebas antes y después de los fallos. Adjunta cuatro capturas legibles del teléfono: una nota calculada, una pendiente con su motivo, la actualización tras editar una pregunta y la comparación con los pesos antes y después. Ejecuta la batería sobre el código definitivo e identifica por separado lo probado en módulos, navegador y entorno remoto.
 
 La demo autónoma pierde sus datos al recargar. Úsala para observar la primera visita y mostrar el ejemplo de regreso. Para probar con personas «mañana, cierra y vuelve», usa un entorno privado con persistencia ya verificada o declara la tarea pendiente. Registra si cada participante entiende de dónde sale el 10 %, qué mide la nota y cuál de los dos contratos se firmó. La disposición a pagar por el seguimiento sigue siendo una hipótesis.
+
+## C14 · Ronda 17 (2026-11-04) — revisión de la ronda 16 y encargo, literal (la maqueta aprobada está en `ronda17/referencia/maqueta-crea-tu-portafolio.png`)
+
+# Klever · Revisión de la ronda 16 y encargo completo para la ronda 17
+
+## Decisión de producto y veredicto
+
+Claude, trabaja sobre la entrega R16 de Klever. La ronda 17 tiene dos objetivos de aceptación independientes. Primero, que cada resultado de la simulación pueda explicarse y verificarse con los datos que lo originaron. Segundo, que desde el primer vistazo el usuario entienda que puede **crear, entender y seguir su portafolio**. La revista de inversión tiene una sección propia y secundaria. La referencia visual aprobada es la última maqueta de «Crea tu portafolio», con el fondo carbón y cobre y la tipografía refinada.
+
+Se aceptan las tres reparaciones de R16 indicadas en la revisión técnica. Hay cuatro frentes abiertos que condicionan la siguiente entrega. La auditoría anterior repitió 133 comprobaciones de siete baterías. El registro de Claude recoge 659 en treinta baterías. Esta actualización incorpora las decisiones de diseño posteriores a aquella auditoría. La maqueta es una referencia de implementación.
+
+## Encargo ejecutable para Claude
+
+### 1. Cierra primero la integridad del resultado
+
+| Frente | Cambio requerido | Evidencia para aceptar |
+|---|---|---|
+| Procedencia y fechas | Verifica cada fila utilizada antes de clasificar o calcular. Distingue demo sintética, mezcla y datos incompletos. Expón instantánea y periodo efectivo. | Semilla íntegra KO 60 / PG 40 → 4,4. Repite con fuente NULL, fecha imposible, texto «ayer» y origen mixto desde SQL. En cada caso inválido, la interfaz explica por qué queda pendiente. |
+| Nota guardada | Comprueba versión conocida, estructura propia y coherencia entre bloques redondeados y total. Trata las filas antiguas según lo verificable. | Cambiar solo 4,4 por 10 o la versión por «foo» debe detectarse. Prueba también redondeos válidos, límites, entidades escapadas y texto bidireccional. |
+| Seguimiento editorial | Comparte entre cliente y servidor un catálogo de pares historia/pregunta. En la edición muestra la pregunta vinculada y permite desvincularla expresamente. | Rechaza referencias nuevas inexistentes, identifica históricas inválidas y conserva la reformulación legítima. Verifica aislamiento y edición concurrente. |
+| Fiabilidad de las pruebas | Sustituye expresiones abiertas, esperas genéricas y capturas de error que equivalen a éxito por aserciones observables. | Exige 4,4 exacto en la semilla, 200 y lista vacía en la segunda cuenta, 404 sobre el ID ajeno y revocación del token antiguo. Separa respuesta interceptada de fila corrupta real. |
+
+### 2. Implementa el diseño aprobado en los recorridos reales
+
+**Referencia para adjuntar a Claude:** [Interfaz premium de inversión suiza.png](https://chatgpt.com/library?file_id=libfile_5686add816a481919d7da06ff5e8e317&account_id=personal). Usa la imagen como referencia visual. Construye los paneles, controles, textos y gráficos como componentes interactivos. La maqueta representa una distribución de ejemplo. Conserva los activos admitidos, las reglas de cálculo y los estados que ya existen en la aplicación.
+
+| Pantalla | Qué debe poder hacer el usuario | Jerarquía visual |
+|---|---|---|
+| Entrada | Crear el primer portafolio. Con borrador persistido, retomarlo. Con portafolio guardado, abrir «Mis portafolios» y elegirlo. | Una acción principal según el estado. En demo, indica que la sesión se pierde al recargar. |
+| Creador | Entender el objetivo, elegir posiciones y ajustar pesos antes de revisar. Adapta los pasos al flujo existente. | En escritorio, controles a la izquierda y resultado a la derecha. En móvil, una columna con el resumen cerca de los controles. Ofrece entrada numérica además del deslizador. |
+| Revisión y laboratorio | Entender el reparto, qué cambia al añadir una posición y los motivos de una nota calculada o pendiente. | Resultado tras la barra de pesos, antes de las salidas. Una fortaleza y una limitación a la vista. Detalle técnico en «Cómo se calcula». |
+| Cuaderno | Recuperar una decisión, su pregunta original y la revisión vinculada. | Da prioridad al texto del usuario. Si dos preguntas comparten desenlace, conserva sus enlaces y evita repetir el artículo completo. |
+| Revista | Elegir una lectura sobre empresas emergentes, sectores o movimientos de mercado. «El Superespeculador» se identifica como opinión, con hipótesis, motivo para revisarla y fecha. | Entrada secundaria en navegación. Si incorporas una lectura contextual al creador, permite regresar al mismo paso con los pesos intactos. Usa los contenidos disponibles o ejemplos etiquetados. |
+
+**Acabado visual.** Conserva el fondo carbón cálido y el resplandor cobre discreto de la esquina superior derecha. Utiliza marfil para texto principal y un único título con serif de contraste moderado por pantalla. Para controles y tablas, usa una sans legible y cifras tabulares alineadas. Centraliza colores, tipografía, márgenes, bordes y foco en los estilos compartidos. Como punto de partida, prueba Georgia para el título y la sans del sistema para interfaz. Ajusta tamaño y peso frente a la imagen aprobada. Reserva el naranja intenso para la acción principal o el paso activo. Reproduce el anillo fino, las líneas discretas y el espacio alrededor de las cifras. Acompaña cada segmento de nombre, porcentaje o importe. Un control visualmente fino conserva un área táctil amplia.
+
+**Ayuda durante la decisión.** Al mover un peso, actualiza en el mismo paso el importe, la leyenda y el gráfico. Si el reparto aún no es válido, indica cuánto falta o sobra según las reglas existentes. Ejemplo de aceptación para la ayuda contextual: con 10.000 € simulados y 2.000 € en una empresa, una caída hipotética del 25 % en esa posición, manteniendo las demás constantes, supone 500 € menos en la cartera. Identifica la hipótesis y recalcula al editar el peso. La nota global continúa restringida a la demo validada.
+
+### 3. Entrega y revisión independiente
+
+1. **Claude entrega** el código y la demo reproducible, instrucciones de arranque, semillas mínimas, JSON y resultado visible por caso, registro de suites con fallos y reintentos, y lista de pendientes manuales. Identifica cambios técnicos y visuales por separado. Incluye una única guía para abrir el recorrido.
+2. **Capturas comparables** del creador en escritorio y a 390 y 320 px. Incluye las dos notas móviles, el acceso a Revista y el retorno desde el contenido si existe. Verifica teclado, foco visible, nombres accesibles, texto al 200 %, posibilidad de ajustar pesos sin arrastrar y ausencia de desplazamiento horizontal de página. En tablas, limita el desplazamiento a una región identificable.
+3. **ChatGPT revisa** procedencia, nota, vínculo editorial y aislamiento con casos válidos y corruptos. Repite las pruebas endurecidas y compara capturas con la referencia aprobada. Prueba primera visita, borrador, regreso a cartera y cambio de ejemplo. Distingue verificaciones automáticas, inspección visual y pruebas pendientes en dispositivo real.
+4. **Cierre de ronda.** Aceptar por separado la reparación técnica y la aplicación visual. Exigir que KO + PG conserve 4,4 y KO + JPM explique por qué queda pendiente. Registrar cualquier fallo y su reproducción antes de declarar el recorrido completado.
+
+**Alcance futuro ya reservado.** Conexión a Revolut y Trade Republic, artículo diario personalizado y tip diario pertenecen al futuro plan de pago. En esta ronda se prepara la sección editorial. Las integraciones bancarias, la personalización diaria y la activación con datos reales quedan para encargos posteriores.
+
+---
+
+# Evidencia de la revisión independiente de R16
+
+## Veredicto
+Aceptaría las tres reparaciones de la ronda 15. El mismo guion cambia de resultado en las dos versiones entregadas.  
+La cifra se entiende mejor al relacionarla con Coca-Cola y el sector. La explicación pendiente todavía exige saber qué es el EBITDA.  
+Mantendría la nota en demostración. Con fundamentales sin fuente he obtenido el mismo 4,4 y la etiqueta de conjunto sintético.
+
+| Criterio | R15 | R16 | Motivo |
+|---|---:|---:|---|
+| Confianza y privacidad | 6 | 7 | Se rechaza marcado al guardar y al leer. La otra cuenta queda fuera del detalle y la edición en SQLite. |
+| Procedencia de datos | 7 | 6 | Un caso nuevo demuestra que una fila utilizada puede quedar fuera de la clasificación de origen. |
+| Claridad móvil | 7 | 8 | Ambos estados tienen ejemplos legibles a 320 px. El principal impedimento es encontrar el resultado. |
+| Honestidad del contenido | 9 | 9 | Los ejemplos avisan de su carácter ficticio. El texto de fecha común y la causa atribuida a JPM necesitan precisión. |
+| Solidez técnica | 7 | 7 | Mejor cobertura y vínculo estable. Persisten referencias inexistentes y resúmenes numéricamente contradictorios. |
+| Calidad de las pruebas | 7 | 8 | La comparación entre versiones es reproducible. Hay aserciones de navegador que pueden pasar con un resultado incorrecto. |
+
+## Qué he repetido
+Node 24.22.1. Instalación con npm ci. En SQLite local y módulos puros, 78 comprobaciones correctas de 78: nota 35, escenarios 11, migración 14, comparador 9 y almacén 9. El registro entregado suma 659 en 30 baterías y registra aparte la demo correcta. Esa cifra pertenece a la ejecución del autor.
+
+| Mismo guion sobre ambos ZIP | R15 | R16 |
+|---|---|---|
+| Marcado en nota | 201, el GET devuelve el marcador | 400, la lista deja de exponer el marcador de la fila antigua |
+| EBITDA ausente | 3,5 y cobertura del 100 % | Pendiente, con cobertura de deuda del 0 % |
+| Original / espacio añadido / reformulación | Solo responde al original | Responde a los tres conservando la referencia |
+
+Los ZIP carecen de historial Git. Recuperé el ZIP de la ronda 15 y ejecuté el mismo guion sobre sus archivos. Esto compara los módulos y los manejadores incluidos, sin autenticar los hashes ni demostrar comportamiento del DOM.
+
+## Hallazgos y encargo para Claude
+**Críticos.** No identifiqué un fallo crítico en los recorridos locales examinados.
+
+**1 · Importante. El ejemplo puede publicar datos sin procedencia.** En SQLite cargué la semilla y ejecuté `UPDATE fundamentales SET fuente=NULL WHERE ticker='KO'`. Llamé a `/api/universo` mediante su manejador y evalué KO 60 / PG 40. Devolvió origen sintético y 4,4. El esquema admite NULL y `functions/api/universo.js`, líneas 12–21, descarta las fuentes vacías para clasificar, pero conserva las cifras para calcular. Además, sustituir la fecha de mercado de KO por «ayer» en la entrada del evaluador también dejó el 4,4. En `public/js/nota.js`, líneas 35–37 y 56–62, basta una fecha no vacía y las filas sin fecha pueden votar por la fuente de referencia. Validar fecha real y fuente antes de votar o puntuar. Separar procedencia incompleta, mezcla y demo. Probar cada caso desde SQLite hasta el resultado visible. La fecha máxima del universo no garantiza que cada fundamental se observara ese día. Mostrar «instantánea» y el periodo efectivo por dato.
+
+**2 · Importante. Una nota inventada puede parecer coherente.** Cambiar solo el 4,4 por 10 en el resumen, conservando todos los bloques, pasa la validación. También pasa la versión «foo». El filtro sí rechazó marcado en los 16 campos y subcampos ensayados. En `public/js/nota.js`, líneas 140–168, validar versiones conocidas y coherencia del total con un intervalo que considere que los bloques guardados se redondean a dos decimales. Si un registro histórico no permite verificar el cálculo, presentarlo como «valor guardado por el cliente» junto a la cifra. El límite de 6000 se aplica a la copia reconstruida en unidades de cadena JS, no a los bytes recibidos. Aceptable como límite del registro para la forma vigente. Las cadenas numéricas se rechazan. El cero negativo queda fuera de la nota publicada y equivale a cero en campos que lo admiten. Se aceptan controles bidireccionales y propiedades heredadas en llamadas JS directas. Usar propiedades propias y filtrar controles de dirección en texto visible. Una clave JSON propia __proto__ es una clave extra. Una entidad escapada debe permanecer como texto al pintar. Añadir casos DOM para entidades y límites 700/701.
+
+**3 · Importante. La referencia editorial admite números inexistentes.** En `functions/api/escenarios/index.js` línea 52 y `[id].js` líneas 32–33 se controla formato e historia, pero no existencia. En `public/js/contenido.js` líneas 103–114 una referencia desconocida puede caer en «otra pregunta». Resolver el par contra un catálogo compartido de identificadores inmutables. Al cambiar el texto de forma sustancial, hacer visible si se conserva el vínculo. Hoy una pregunta sobre otro asunto seguirá apareciendo respondida si se deja marcada la casilla. Mantener la opción de reformular y el control de revisión concurrente. La migración 0011 vincula dos textos exactos dentro de su historia. Probar también la segunda coincidencia y las referencias inválidas preexistentes. No encontré acceso cruzado en las rutas inspeccionadas, que filtran por usuario; P9 verifica lectura y PATCH ajenos.
+
+**4 · Importante para la siguiente validación. Algunas pruebas pueden dar un verde engañoso.** En `tests/ronda16/testO.cjs`, O1 acepta por expresión regular cualquier cifra con uno o dos enteros y un decimal. Fijar 4,4 para esta semilla. O5e, línea 67, convierte cualquier fallo de carga en lista vacía. Exigir autenticación positiva, respuesta 200 con lista vacía y 404 de la otra cuenta sobre el ID concreto. O6 exige mensaje de rechazo, ausencia de imagen y de ejecución. Es una prueba válida de la interfaz con respuesta interceptada. Contabilizar la intercepción del escenario concreto y conservar aparte la prueba de fila corrupta real. P9 reemplaza sesiones directamente en SQLite y ni siquiera compara la evaluación en su aserción de vuelta. Verificar token antiguo revocado y contenido antes/después en el recorrido HTTP. Para los fallos intermitentes E/F y el historial, registrar orden de navegación, respuestas y contexto por repetición, introducir latencia controlada y esperar una condición observable. Su causa sigue abierta.
+
+**Menores.** La moda por par moneda/fuente y el empate se comportaron como se espera con datos completos. En pruebas propias, 59 sesiones dieron pendiente y 60 dieron 4,4; otra fuente y empate dieron pendiente. Sin EBITDA, tanto deuda negativa como deuda cero quedaron pendientes. La cobertura de cada indicador suma pesos de posiciones evaluables, de modo que comparables sin peso pueden alterar el percentil, pero no cubrir el 90 %. El total se redondea una vez. Las veinte ficticias cambian la distribución de consumo básico y, por tanto, el significado del percentil de KO. Separar las semillas por entorno, marcar la población de comparación y probar que ninguna EJBA–EJBT entra en una importación real. La protección actual es el origen global y la habilitación cerrada, no un filtro de esas empresas por identidad.
+
+**Regresiones y mantenimiento.** Actualizar 106 a 126 no debilita por sí solo la prueba, pero que el total coincida no prueba que sigan las 106 originales. Comparar conjuntos de tickers. La igualdad de columnas de escenarios que desapareció de M1d se vuelve a comprobar después de 0011 en M1e. Los cambios de texto en N7/N8 son razonables si se sigue probando el estado y la acción del usuario. El módulo puro compartido entre servidor y UI evita dos validadores divergentes. Aceptaría por ahora la concatenación de la demo con una prueba de paridad de entradas y salidas y reconstrucción reproducible.
+
+## Qué se entiende al mirar las seis capturas
+**01–02, calculada.** El lector puede asociar el 4,4 con una decisión concreta: KO pesa el 60 % y ambas posiciones están en el mismo sector. El acierto es explicar el reparto. La expresión «1,9 empresas del mismo tamaño» ocupa atención antes de que se entienda por qué la concentración resta. La tarjeta aparece después de las dos descripciones y los botones. A 320 px es fácil salir hacia el laboratorio sin haber visto la nota.
+
+**03–04, pendiente.** El recuadro nombra lo que sí se mide y señala a JPM, que pesa la mitad. Sin embargo, «faltan datos» invita a pensar que una actualización lo resolverá. En este ejemplo falta un método aplicable a bancos. Debajo se repite la explicación con ratios y porcentajes. En ambos ejemplos queda explícito que la cifra no predice rentabilidad. Haría igualmente visible que la cifra solo está habilitada en la demo sintética.
+
+**05, seguimiento.** Se puede deducir que el original y la reformulación comparten respuesta y que la pregunta sobre el cliente sigue abierta. Para hacerlo hay que leer las tarjetas completas. Las dos primeras muestran «Con novedades» y repiten el mismo desenlace. Mejor titularlas «Tu pregunta tiene respuesta» y «Tu reformulación tiene respuesta». La tercera sí diferencia bien el enlace editorial de una respuesta personal. Mantener la etiqueta visible del futuro plan de pago.
+
+**06, laboratorio.** «Quién cede el peso» llega en el orden correcto. KO pasa de 60 a 54 y PG de 40 a 36: eso explica de dónde sale el nuevo 10 % antes de exigir leer la tabla. Las barras muestran proporciones y la tabla permite recuperar valores sin depender del color. A 390 px la tabla de bloques queda bastante más abajo y sus cabeceras se leen pequeñas. A 320 comprobaría desplazamiento dentro de la tabla y conservación de columna y signo con texto ampliado. La captura aportada no prueba ese ancho.
+
+**Comparador.** «Veces» mejora la unidad. «Dos años de EBITDA» reintroduce la interpretación temporal justo antes de desmentirla. Texto propuesto: «Por cada euro de EBITDA del ejercicio hay dos euros de deuda neta. Esta relación no indica cuándo se devolverá la deuda». En O3 comprobar ambas celdas, no una coincidencia en toda la fila.
+
+### Los cinco cambios de mayor impacto en móvil
+1. Colocar el resultado tras la barra de pesos y antes de los botones, con una insignia corta «Ejemplo con datos ficticios».
+2. Anclar la cifra a su principal motivo. «4,4 de 10. Toda la cartera está en consumo básico y Coca-Cola concentra el 60 %.»
+3. Para JPM, explicar el límite directamente: «Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total».
+4. Dejar a la vista una fortaleza, una limitación y la fecha de la instantánea. Mover porcentajes por indicador, umbral, EBITDA y empresas efectivas a «Cómo se calcula».
+5. Juntar ambas salidas bajo un selector con nombres concretos: «KO + PG · con nota» y «KO + JPM · pendiente». Al cambiar, conservar el foco y anunciar el estado. Probar a 320 y 390 px y con texto ampliado.
+
+**Tres cosas que quitaría:** la segunda explicación técnica del pendiente siempre desplegada, la equivalencia «dos años» y el segundo resumen editorial completo cuando dos preguntas enlazan a la misma revisión. Conservar la pregunta personal y un enlace en cada tarjeta.
+
+**Accesibilidad.** La casilla tiene etiqueta asociada (`public/js/lab.js`, líneas 460 y 538). Asociar la ayuda a la casilla y anunciar el cambio de resultado sin mover el foco inesperadamente. Varias tablas tienen cabeceras de columna y región enfocable con nombre. Verificar que al recorrer filas se anuncian posición, antes, después y unidad, y que cada botón repetido identifica su pregunta. Las capturas sirven para juzgar jerarquía y corte visible; no acreditan VoiceOver, TalkBack ni comprensión de principiantes.
+
+## Criterio de entrega para la ronda 17
+Primero cerrar los casos reproducibles de procedencia y coherencia. Después resolver la referencia editorial, compactar ambas notas y reforzar las aserciones. Entregar semilla mínima reproducible, respuesta JSON y resultado visible para cada fallo, dos capturas comparables a 320 y 390 px y registro de las suites. Comprobar que un cambio cosmético conserva el 4,4 del ejemplo intacto y la nota pendiente del banco.
+
+**Ajustes al informe anterior.** Describir las 659 como comprobaciones locales del autor. «Comprobación de formato» es defendible; «evaluación verificada» excedería la evidencia. «Toda fila con fuente es sintética» deja fuera las filas sin fuente que sí cuentan. En ABRIR-EN-MOVIL, paso 6, persiste «sin novedades» aunque el producto cambió esa redacción. El ejemplo de antes/después sustenta módulo y servidor. La calidad predictiva, la comprensión y la ausencia de regresiones generales siguen sin demostrarse.
+
+## Pruebas manuales pendientes
+- **M67 y M72.** iPhone y Android, con y sin lector. Pedir al usuario que explique el 4,4, diga si anticipa ganancias y por qué JPM deja la nota pendiente. Comprobar casilla, cambio de ejemplo, foco, tabla a 320 px y texto al 200 %.
+- **M68.** Dos cuentas, red lenta y reingreso. Crear original, reformulación y pregunta nueva. Comprobar respuesta, orden, pesos y acceso por URL de la otra cuenta.
+- **M69 y M70.** En D1 de prueba, copia y restauración verificables antes de migrar. Leer fila antigua corrupta y contrastar los dos textos exactos y los casos ambiguos tras 0011.
+- **M71.** En un conjunto aislado, comprobar fechas y fuentes de mercado, periodos y comparables. Documentar una calibración separada antes de cualquier activación real.
+- **Históricas.** Mantener el listado M1–M66. Priorizar M50–M57 y M60 antes de abrir cuentas, M58 y M64 antes de contenido real. Siguen pendientes la entrega de correo, carga SEC, migraciones remotas 0008–0011, dispositivos físicos, Safari/Firefox, tema oscuro y prueba con cinco principiantes. La demo pierde los cambios al recargar. No he validado despliegue remoto, datos reales ni el origen de los fallos intermitentes.
+
+## Resultado independiente en navegador
+Chromium 153.0.8010.0, Playwright del proyecto y Wrangler/Miniflare local. O pasó 14 de 14 y N pasó 41 de 41. En total repetí **133 comprobaciones de las siete baterías solicitadas, con cero fallos**, además del antes/después y los casos propios. Usé un binario Chromium alternativo porque la descarga de Playwright llegó truncada, y limité la detección de interfaces de Wrangler a loopback. No repetí las 659. O5e pasó con su espera y captura genérica de errores, por lo que su verde aislado sigue siendo débil.
+
+**Dos precisiones para el siguiente encargo.** N25 solo serializa y deserializa JSON; el guardado por API debe acreditarse con la suite de escenarios. N24 prueba origen ausente y real, pero no construye por sí misma un conjunto mixto desde SQL. El guion con principiantes propone cerrar y volver mañana en una demo que pierde datos al recargar: probar esa tarea en el servidor con persistencia, o medir en la demo únicamente la comprensión durante la misma sesión.
+
+**Caso propio de seguimiento.** POST con hidrogeno-norte:99 devolvió 201 y se mostró como otra pregunta. La pregunta «¿Cuánto sube el alquiler?» enviada con hidrogeno-norte:1 también devolvió 201 y el módulo la clasificó como respondida. El sistema se fía de la asociación elegida.

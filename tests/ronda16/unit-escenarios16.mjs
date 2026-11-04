@@ -16,7 +16,7 @@ const montar = async () => { const env = crearEnv(); await sembrar(env);
 const llama = async (env, f, m, body, params = {}, token = 'token-de-prueba') => { const r = await f({ request: new Request('http://x/api', { method: m, headers: { authorization: 'Bearer ' + token, 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }), env, params }); return { s: r.status, txt: await r.clone().text(), j: await r.json().catch(() => ({})) }; };
 const cuerpo = (o = {}) => ({ clave: 'intento-0001', nombre: 'Añadir C', cartera_id: 1, base_revision: 0, ticker: 'C', peso: 10, financiacion: 'proporcional', propuesta: [{ ticker: 'A', peso: 54 }, { ticker: 'B', peso: 36 }, { ticker: 'C', peso: 10 }], ...o });
 const bl = (v = 6) => ({ empresas: v, sectores: v, tamano: v, deuda: v, rentabilidad: v });
-const res = (o = {}) => ({ version: VERSION_NOTA, fecha: '2026-11-04', publicada: true, nota: 6.4, motivo: null, cobertura: 100, bloques: bl(), fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: 1.2 }, ...o });
+const res = (o = {}) => ({ version: VERSION_NOTA, fecha: '2026-11-04', publicada: true, nota: 6, motivo: null, cobertura: 100, bloques: bl(), fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: 1 }, ...o });
 const ev = (a = {}, d = {}) => ({ evaluacion: { antes: res(a), despues: res(d) } });
 let env = await montar(), n = 0;
 const intentar = async (nombre, extra) => { const r = await llama(env, ES.onRequestPost, 'POST', cuerpo({ clave: 'intento-' + String(++n).padStart(4, '0'), ...extra })); return r; };
@@ -33,7 +33,7 @@ t('P1', `${Object.keys(malos).length} evaluaciones adjuntas MALAS (marcado en mo
 
 // ---- 2. un escenario válido conserva cifra, fecha, cobertura y versión al reabrirlo
 const U = (() => { const emp = {}; for (let i = 0; i < 24; i++) emp['S' + i] = { nombre: 'S' + i, tipo: 'accion', sector: 'S1', actividad: 'A' + (i % 4), emisor: 'e' + i, cap: 1e9 * (i + 1), imp: 1e6 * (i + 1), sesiones: 60, moneda: 'USD', fuenteMercado: 'prueba', fechaMercado: '2026-11-04',
-  ej: [2020, 2021, 2022, 2023, 2024].map((y, k) => ({ p: 'FY' + y, ing: 100 * (1 + k * .1) * (i + 1), ni: 10 * (i + 1), op: 12, ebitda: 20 * (i + 1), deuda: (i + 1) * 20 * (.5 + i / 40), fcf: 5 * (i + 1), roic: .02 + i * .005 })) }; return { fecha: '2026-11-04', origen: 'sintetico', empresas: emp }; })();
+  ej: [2020, 2021, 2022, 2023, 2024].map((y, k) => ({ p: 'FY' + y, f: 'prueba', d: '2026-11-04', ing: 100 * (1 + k * .1) * (i + 1), ni: 10 * (i + 1), op: 12, ebitda: 20 * (i + 1), deuda: (i + 1) * 20 * (.5 + i / 40), fcf: 5 * (i + 1), roic: .02 + i * .005 })) }; return { fecha: '2026-11-04', origen: 'sintetico', empresas: emp }; })();
 const real = resumenNota(evaluar([{ ticker: 'S3', peso: 60 }, { ticker: 'S9', peso: 40 }], U)), pend = resumenNota(evaluar([{ ticker: 'S3', peso: 50 }], U));
 let r = await intentar('válido', { evaluacion: { antes: real, despues: pend } });
 const rid = r.j.id, leer = (id, tok) => llama(env, EI.onRequestGet, 'GET', undefined, { id: String(id) }, tok);

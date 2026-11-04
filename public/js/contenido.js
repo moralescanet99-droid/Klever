@@ -1,3 +1,4 @@
+import { CATALOGO_PREGUNTAS, refExiste } from './catalogo.js';
 // Contenido editorial de la versión interna: UNA historia, UNA opinión firmada y UNA revisión fechada vinculada a la tesis inicial.
 // El caso es FICTICIO y se identifica como tal desde el título: la empresa, las cifras y los documentos están inventados para probar Klever.
 // Nada de este archivo es información real ni una recomendación. Estructura pensada para pasar después a la base de datos (ver ronda13/EDITORIAL.md).
@@ -90,17 +91,17 @@ export const CARTERA_EJEMPLO_INCOMPLETA = {
 // Preguntas que se pueden seguir con la historia de ejemplo y qué dice la revisión editorial sobre cada una. TODO el desenlace es SIMULADO.
 // `respuesta: null` = la fuente aún no permite responder (se dice qué sigue pendiente). Las fechas son las del caso ficticio.
 export const SEGUIMIENTO_CASOS = [
-  { historia: 'hidrogeno-norte', pregunta: '¿Se han firmado los dos contratos anunciados?', tesis: 1,
+  { historia: 'hidrogeno-norte', pregunta: CATALOGO_PREGUNTAS['hidrogeno-norte:1'].texto, tesis: 1,
     respuesta: { fecha: '2026-11-03', revision: 2, fuente: 'Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio)', simulada: true,
       porContrato: [{ nombre: 'Proyecto C (100 MW)', estado: 'Firmado el 29 de octubre', documento: '[6]' }, { nombre: 'Proyecto D (60 MW)', estado: 'Aplazado sin fecha; sin documento nuevo', documento: '—' }],
       resumen: 'Solo se firmó uno de los dos contratos anunciados (desenlace simulado).' }, pendiente: null },
-  { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
+  { historia: 'hidrogeno-norte', pregunta: CATALOGO_PREGUNTAS['hidrogeno-norte:2'].texto, tesis: 2, respuesta: null,
     pendiente: 'La fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
 ];
 // Vínculo ESTABLE entre una pregunta de la persona y la cuestión editorial de la historia: un identificador «historia:n» (n = número de la tesis que la plantea),
 // no el texto. Reescribir la pregunta, añadir un espacio o reformularla NO rompe el vínculo; una pregunta nueva (sin vínculo) no hereda respuestas ajenas.
 export const refPregunta = (hid, n) => `${hid}:${n}`;
-export const casoPorRef = ref => SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
+export const casoPorRef = ref => !refExiste(ref) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
 export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
 // Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
 //  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
@@ -110,6 +111,15 @@ export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/
 export function estadoSeguimiento({ historia: hid, pregunta_ref: ref, pregunta }) {
   const caso = ref ? casoPorRef(ref) : null;
   if (caso) return { tipo: caso.respuesta ? 'responde' : 'pendiente', caso, distinta: normalizaPregunta(pregunta) !== normalizaPregunta(caso.pregunta) };
-  const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta);
-  return hay ? { tipo: 'otra', caso: null, editorial: hay } : { tipo: 'sin', caso: null };
+  const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta), invalida = !!ref;   // con ref pero sin caso: el vínculo guardado no existe en el catálogo
+  return hay ? { tipo: 'otra', caso: null, editorial: hay, refInvalida: invalida } : { tipo: 'sin', caso: null, refInvalida: invalida };
 }
+
+// Parecido entre dos preguntas (0–1): proporción de palabras de más de 3 letras que comparten (índice de Jaccard). Solo sirve para AVISAR de que una reformulación parece
+// tratar otro asunto; nunca decide por la persona (el vínculo lo controla ella con la casilla).
+export function similitudPregunta(a, b) {
+  const pal = t => new Set(normalizaPregunta(t).replace(/[^\p{L}\p{N} ]/gu, ' ').split(' ').filter(w => w.length > 3));
+  const A = pal(a), B = pal(b); if (!A.size || !B.size) return 0;
+  let inter = 0; for (const w of A) if (B.has(w)) inter++; return inter / (A.size + B.size - inter);
+}
+export const UMBRAL_PARECIDO = 0.2;

@@ -1,0 +1,135 @@
+/* Ronda 17 · aplicación del diseño aprobado («Crea tu portafolio»): fondo carbón cálido con un resplandor cobre discreto, marfil para el texto, UN título serif por pantalla,
+   sans del sistema con cifras tabulares para controles y tablas, naranja intenso solo para la acción principal y el paso activo. TODO el color, la tipografía, los márgenes,
+   los bordes y el foco salen de los tokens de este bloque. Se carga la última y no toca la lógica: solo tokens y clases nuevas. */
+
+/* --- tokens (se imponen a style.css y a su tema oscuro) --- */
+html:root:root:root{
+  --bg:#13100E; --surface:#1B1613; --surface-2:#241D18;
+  --text:#F4EDE0; --muted:#BDB0A0;
+  --border:#352B22; --border-strong:#85755F;
+  --accent:#FF7A2F; --on-accent:#1B0E05; --accent-soft:#3A2415; --accent-on-soft:#FFB88A;
+  --ok:#8FD6A4; --ok-bg:#17301F; --warn:#F2C26B; --warn-bg:#3A2D12; --bad:#FF9D93; --bad-bg:#3C1A17;
+  --focus:#FFC49B; --scrim:rgba(0,0,0,.66);
+  /* reparto: naranja, lila, arena, verde azulado, azul, rosa, verde, gris; texto oscuro sobre cada tramo */
+  --c0:#FF7A2F; --c1:#B79AE8; --c2:#E2C285; --c3:#4FC3AE; --c4:#7FA8F0; --c5:#F09AA0; --c6:#8FD6A4; --c7:#B8B0A4; --c-txt:#1B0E05;
+  --shadow:none; --shadow-lg:0 14px 34px rgba(0,0,0,.55);
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,"Times New Roman",serif;
+  --anillo:3.2;
+  color-scheme:dark;
+}
+html{background:var(--bg)}
+body{background:transparent;color:var(--text);font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(52% 34% at 100% 0%,rgba(176,92,52,.34),rgba(176,92,52,0) 70%),var(--bg)}
+.num,input,select,td,th,.peso,.donut-centro b{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* --- títulos: un solo serif con contraste moderado por pantalla --- */
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,5.2vw,2.9rem);line-height:1.08;letter-spacing:-.015em;color:var(--text)}
+h2,h3{font-weight:600}
+.pag-cab h1,.hero h1{margin-bottom:var(--s1)}
+
+/* --- superficies y bordes finos --- */
+.panel,.plantilla,.vacio-util,.tarjeta,.caso,.esc-item,.nota,.lab-res,.prev,.pos-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:none}
+.panel{padding:var(--s3)}
+.cab{background:transparent;border-bottom:1px solid var(--border)}
+.marca{font-family:var(--fuente);font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:var(--text);text-decoration:none;font-size:1.05rem}
+.tag{background:var(--accent-soft);color:var(--accent-on-soft)}
+.chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text)}
+.chip.sim,.chip.aviso{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+hr,.bloque,.radio{border-color:var(--border)}
+table th{color:var(--muted)}
+input,select,textarea{background:var(--surface-2);color:var(--text);border-color:var(--border-strong)}
+::placeholder{color:var(--muted);opacity:.8}
+
+/* --- botones: naranja solo para la acción principal --- */
+.btn{border-radius:12px;font-weight:600;min-height:44px}
+.btn-primario{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}
+.btn-primario:hover{background:#FF8D4D;border-color:#FF8D4D}
+.btn-secundario{background:transparent;color:var(--text);border:1px solid var(--border-strong)}
+.btn-secundario:hover{background:var(--surface-2)}
+.btn-ghost{color:var(--muted)}
+.enlace,a{color:var(--accent-on-soft)}
+.menu a{text-decoration:none}
+
+/* --- navegación: columna izquierda en escritorio; Revista es una entrada secundaria --- */
+.menu a{color:var(--muted);font-weight:500;border-radius:12px}
+.menu a[aria-current="page"]{color:var(--text);background:var(--accent-soft);box-shadow:inset 0 0 0 1px rgba(255,122,47,.35)}
+.nav-sec{opacity:.9}
+.menu-movil a[aria-current="page"]{color:var(--accent-on-soft)}
+@media (min-width:960px){
+  body{padding-left:248px}
+  .cab{position:fixed;inset:0 auto 0 0;width:248px;border-bottom:0;border-right:1px solid var(--border);background:rgba(19,16,14,.86);z-index:30;overflow-y:auto}
+  .cab-in{max-width:none;margin:0;min-height:100%;padding:28px 18px 20px;flex-direction:column;align-items:stretch;gap:20px;flex-wrap:nowrap}
+  .cab .marca{padding-left:6px}
+  .cab .tag{position:absolute;top:30px;right:16px}
+  .menu-escritorio{display:flex!important;flex-direction:column;flex:0 0 auto;margin:0;gap:6px;flex-wrap:nowrap}
+  .menu-escritorio a{display:flex;align-items:center;min-height:46px;padding:0 14px;font-size:1rem}
+  .menu-escritorio .nav-sec{margin-top:10px;border-top:1px solid var(--border);border-radius:0 0 12px 12px}
+  .cab-acc{margin:auto 0 0;flex-direction:column}
+  .cab-acc .btn{width:100%}
+  #contenido{max-width:1180px}
+}
+
+/* --- creador: pasos --- */
+.pasos{display:flex;align-items:center;gap:var(--s2);list-style:none;margin:0 0 var(--s3);padding:0;flex-wrap:wrap}
+.paso{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:var(--t-m)}
+.paso+.paso::before{content:"";width:clamp(18px,6vw,84px);height:1px;background:var(--border-strong);margin-right:var(--s1)}
+.paso a,.paso .paso-b{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:10px;font:inherit;background:none;border:0;padding:0;min-height:44px;cursor:pointer}
+.paso-n{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);font-weight:600;font-size:var(--t-s)}
+.paso[aria-current="step"]{color:var(--accent)}
+.paso[aria-current="step"] .paso-n{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+@media (max-width:479px){.paso{font-size:var(--t-s)}.paso-n{width:30px;height:30px}.paso+.paso::before{width:12px}}
+
+/* --- creador: «Distribución inicial» (controles) y «Tu portafolio» (resultado) --- */
+.panel-donut{order:2} .res-breve{order:1} .panel-pos{order:3} .ws-pie{order:4} .panel-res{order:5} .panel-nota{order:6} .panel-graf{order:7} .panel-pub{order:8}
+.panel-donut h2{margin-bottom:var(--s2)}
+.donut-cuerpo{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
+.donut{position:relative;flex:0 0 auto;width:clamp(150px,34vw,210px);aspect-ratio:1}
+.donut svg{width:100%;height:100%;display:block;transform:none}
+.donut-centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.15}
+.donut-centro b{font-size:clamp(1.15rem,3.4vw,1.55rem);font-weight:600}
+.donut-centro span{color:var(--muted);font-size:var(--t-s)}
+.donut-leyenda{list-style:none;margin:0;padding:0;flex:1 1 220px;min-width:0;display:grid;gap:10px}
+.donut-leyenda li{display:grid;grid-template-columns:14px minmax(0,1fr) auto auto;align-items:center;gap:10px;font-size:var(--t-s)}
+.donut-leyenda .sw{width:14px;height:14px;border-radius:4px;background:var(--c)}
+.donut-leyenda .lg-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .donut-leyenda small{color:var(--muted)}
+.donut-leyenda .lg-p{font-weight:600;text-align:right;min-width:3.4rem} .donut-leyenda .lg-e{color:var(--muted);text-align:right;min-width:4.6rem}
+.donut-estado{margin:var(--s2) 0 0;font-weight:600;min-height:1.4em}
+.donut-estado.ok{color:var(--ok)} .donut-estado.aviso{color:var(--warn)} .donut-estado.error{color:var(--bad)}
+.hipo{margin-top:var(--s2);padding-top:var(--s2);border-top:1px solid var(--border)}
+.hipo[hidden]{display:none}
+.hipo h3{margin:0 0 var(--s1);font-size:var(--t-m)}
+.hipo-fila{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 var(--s1)}
+.hipo select{min-height:44px;border-radius:10px;padding:0 10px;font:inherit}
+.hipo .peso input{width:4.2rem;min-height:44px;text-align:right}
+.hipo-res{margin:0;color:var(--muted);font-size:var(--t-s);line-height:1.5}
+.peso-rng{display:block;width:100%;min-height:44px;margin:4px 0 0;accent-color:var(--c,var(--accent));cursor:pointer;background:transparent}
+.peso-celda .peso-rng{min-width:7rem} .peso-celda .pbar,.pos-card .pbar-movil{display:none}
+.creador-sub{margin:0 0 var(--s2);font-size:1.0625rem}
+.ws-pie{display:flex;justify-content:space-between;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:var(--s1) 0}
+.ws-pie .btn-primario{min-width:12rem}
+.ws-grid .tabla-pos th,.ws-grid .tabla-pos td{border-color:var(--border)}
+.comp-barra i,.ej-barra i,.esp-barra i{color:var(--c-txt)}
+
+/* --- entrada, ejemplos, nota --- */
+.hero-txt .lead{color:var(--muted)}
+.inicio-seg{color:var(--text)}
+.ej-sel{display:flex;gap:var(--s1);flex-wrap:wrap;margin:0 0 var(--s2)}
+.ej-opc[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-on-soft);border-color:var(--accent);font-weight:700}
+.nota{padding:var(--s3)}
+.nota-num{font-family:var(--serif);font-size:3rem;line-height:1;margin:var(--s1) 0;color:var(--text)} .nota-num b{font-weight:400} .nota-num span{font-size:1.1rem;color:var(--muted);font-family:var(--fuente)}
+.nota-expl{font-size:1.125rem;font-weight:600;line-height:1.4}
+.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;line-height:1.5}
+.nota-aviso{color:var(--muted)}
+@media (max-width:719px){.nota-num{font-size:2.5rem}}
+
+/* --- cuaderno --- */
+.caso h3{font-size:1.125rem;font-weight:600;margin:var(--s1) 0}
+.caso-pend{border-left:3px solid var(--warn)}
+.caso-pesos{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.aviso-vinculo{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:10px 12px}
+
+/* --- mostrar los colores sin depender de ellos: las tablas conservan sus cifras; el desplazamiento horizontal de una tabla queda dentro de su región --- */
+.tabla-h,.tabla-scroll,.tabla-emp-wrap{overflow-x:auto;max-width:100%}
+
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}

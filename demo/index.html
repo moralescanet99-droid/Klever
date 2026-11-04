@@ -866,6 +866,141 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 @media (max-width:480px){.esp-fila{grid-template-columns:4.2rem minmax(0,1fr)} .nota-num b{font-size:2rem}}
 .esc-vinculo{margin:.6rem 0;font-size:var(--t-s)}
 
+/* Ronda 17 · aplicación del diseño aprobado («Crea tu portafolio»): fondo carbón cálido con un resplandor cobre discreto, marfil para el texto, UN título serif por pantalla,
+   sans del sistema con cifras tabulares para controles y tablas, naranja intenso solo para la acción principal y el paso activo. TODO el color, la tipografía, los márgenes,
+   los bordes y el foco salen de los tokens de este bloque. Se carga la última y no toca la lógica: solo tokens y clases nuevas. */
+
+/* --- tokens (se imponen a style.css y a su tema oscuro) --- */
+html:root:root:root{
+  --bg:#13100E; --surface:#1B1613; --surface-2:#241D18;
+  --text:#F4EDE0; --muted:#BDB0A0;
+  --border:#352B22; --border-strong:#85755F;
+  --accent:#FF7A2F; --on-accent:#1B0E05; --accent-soft:#3A2415; --accent-on-soft:#FFB88A;
+  --ok:#8FD6A4; --ok-bg:#17301F; --warn:#F2C26B; --warn-bg:#3A2D12; --bad:#FF9D93; --bad-bg:#3C1A17;
+  --focus:#FFC49B; --scrim:rgba(0,0,0,.66);
+  /* reparto: naranja, lila, arena, verde azulado, azul, rosa, verde, gris; texto oscuro sobre cada tramo */
+  --c0:#FF7A2F; --c1:#B79AE8; --c2:#E2C285; --c3:#4FC3AE; --c4:#7FA8F0; --c5:#F09AA0; --c6:#8FD6A4; --c7:#B8B0A4; --c-txt:#1B0E05;
+  --shadow:none; --shadow-lg:0 14px 34px rgba(0,0,0,.55);
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,"Times New Roman",serif;
+  --anillo:3.2;
+  color-scheme:dark;
+}
+html{background:var(--bg)}
+body{background:transparent;color:var(--text);font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(52% 34% at 100% 0%,rgba(176,92,52,.34),rgba(176,92,52,0) 70%),var(--bg)}
+.num,input,select,td,th,.peso,.donut-centro b{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* --- títulos: un solo serif con contraste moderado por pantalla --- */
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,5.2vw,2.9rem);line-height:1.08;letter-spacing:-.015em;color:var(--text)}
+h2,h3{font-weight:600}
+.pag-cab h1,.hero h1{margin-bottom:var(--s1)}
+
+/* --- superficies y bordes finos --- */
+.panel,.plantilla,.vacio-util,.tarjeta,.caso,.esc-item,.nota,.lab-res,.prev,.pos-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:none}
+.panel{padding:var(--s3)}
+.cab{background:transparent;border-bottom:1px solid var(--border)}
+.marca{font-family:var(--fuente);font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:var(--text);text-decoration:none;font-size:1.05rem}
+.tag{background:var(--accent-soft);color:var(--accent-on-soft)}
+.chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text)}
+.chip.sim,.chip.aviso{background:var(--warn-bg);color:var(--warn);border-color:transparent}
+hr,.bloque,.radio{border-color:var(--border)}
+table th{color:var(--muted)}
+input,select,textarea{background:var(--surface-2);color:var(--text);border-color:var(--border-strong)}
+::placeholder{color:var(--muted);opacity:.8}
+
+/* --- botones: naranja solo para la acción principal --- */
+.btn{border-radius:12px;font-weight:600;min-height:44px}
+.btn-primario{background:var(--accent);color:var(--on-accent);border:1px solid var(--accent)}
+.btn-primario:hover{background:#FF8D4D;border-color:#FF8D4D}
+.btn-secundario{background:transparent;color:var(--text);border:1px solid var(--border-strong)}
+.btn-secundario:hover{background:var(--surface-2)}
+.btn-ghost{color:var(--muted)}
+.enlace,a{color:var(--accent-on-soft)}
+.menu a{text-decoration:none}
+
+/* --- navegación: columna izquierda en escritorio; Revista es una entrada secundaria --- */
+.menu a{color:var(--muted);font-weight:500;border-radius:12px}
+.menu a[aria-current="page"]{color:var(--text);background:var(--accent-soft);box-shadow:inset 0 0 0 1px rgba(255,122,47,.35)}
+.nav-sec{opacity:.9}
+.menu-movil a[aria-current="page"]{color:var(--accent-on-soft)}
+@media (min-width:960px){
+  body{padding-left:248px}
+  .cab{position:fixed;inset:0 auto 0 0;width:248px;border-bottom:0;border-right:1px solid var(--border);background:rgba(19,16,14,.86);z-index:30;overflow-y:auto}
+  .cab-in{max-width:none;margin:0;min-height:100%;padding:28px 18px 20px;flex-direction:column;align-items:stretch;gap:20px;flex-wrap:nowrap}
+  .cab .marca{padding-left:6px}
+  .cab .tag{position:absolute;top:30px;right:16px}
+  .menu-escritorio{display:flex!important;flex-direction:column;flex:0 0 auto;margin:0;gap:6px;flex-wrap:nowrap}
+  .menu-escritorio a{display:flex;align-items:center;min-height:46px;padding:0 14px;font-size:1rem}
+  .menu-escritorio .nav-sec{margin-top:10px;border-top:1px solid var(--border);border-radius:0 0 12px 12px}
+  .cab-acc{margin:auto 0 0;flex-direction:column}
+  .cab-acc .btn{width:100%}
+  #contenido{max-width:1180px}
+}
+
+/* --- creador: pasos --- */
+.pasos{display:flex;align-items:center;gap:var(--s2);list-style:none;margin:0 0 var(--s3);padding:0;flex-wrap:wrap}
+.paso{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:var(--t-m)}
+.paso+.paso::before{content:"";width:clamp(18px,6vw,84px);height:1px;background:var(--border-strong);margin-right:var(--s1)}
+.paso a,.paso .paso-b{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:10px;font:inherit;background:none;border:0;padding:0;min-height:44px;cursor:pointer}
+.paso-n{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;border:1px solid var(--border-strong);font-weight:600;font-size:var(--t-s)}
+.paso[aria-current="step"]{color:var(--accent)}
+.paso[aria-current="step"] .paso-n{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+@media (max-width:479px){.paso{font-size:var(--t-s)}.paso-n{width:30px;height:30px}.paso+.paso::before{width:12px}}
+
+/* --- creador: «Distribución inicial» (controles) y «Tu portafolio» (resultado) --- */
+.panel-donut{order:2} .res-breve{order:1} .panel-pos{order:3} .ws-pie{order:4} .panel-res{order:5} .panel-nota{order:6} .panel-graf{order:7} .panel-pub{order:8}
+.panel-donut h2{margin-bottom:var(--s2)}
+.donut-cuerpo{display:flex;gap:var(--s3);align-items:center;flex-wrap:wrap}
+.donut{position:relative;flex:0 0 auto;width:clamp(150px,34vw,210px);aspect-ratio:1}
+.donut svg{width:100%;height:100%;display:block;transform:none}
+.donut-centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.15}
+.donut-centro b{font-size:clamp(1.15rem,3.4vw,1.55rem);font-weight:600}
+.donut-centro span{color:var(--muted);font-size:var(--t-s)}
+.donut-leyenda{list-style:none;margin:0;padding:0;flex:1 1 220px;min-width:0;display:grid;gap:10px}
+.donut-leyenda li{display:grid;grid-template-columns:14px minmax(0,1fr) auto auto;align-items:center;gap:10px;font-size:var(--t-s)}
+.donut-leyenda .sw{width:14px;height:14px;border-radius:4px;background:var(--c)}
+.donut-leyenda .lg-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .donut-leyenda small{color:var(--muted)}
+.donut-leyenda .lg-p{font-weight:600;text-align:right;min-width:3.4rem} .donut-leyenda .lg-e{color:var(--muted);text-align:right;min-width:4.6rem}
+.donut-estado{margin:var(--s2) 0 0;font-weight:600;min-height:1.4em}
+.donut-estado.ok{color:var(--ok)} .donut-estado.aviso{color:var(--warn)} .donut-estado.error{color:var(--bad)}
+.hipo{margin-top:var(--s2);padding-top:var(--s2);border-top:1px solid var(--border)}
+.hipo[hidden]{display:none}
+.hipo h3{margin:0 0 var(--s1);font-size:var(--t-m)}
+.hipo-fila{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 var(--s1)}
+.hipo select{min-height:44px;border-radius:10px;padding:0 10px;font:inherit}
+.hipo .peso input{width:4.2rem;min-height:44px;text-align:right}
+.hipo-res{margin:0;color:var(--muted);font-size:var(--t-s);line-height:1.5}
+.peso-rng{display:block;width:100%;min-height:44px;margin:4px 0 0;accent-color:var(--c,var(--accent));cursor:pointer;background:transparent}
+.peso-celda .peso-rng{min-width:7rem}
+.ws-pie{display:flex;justify-content:space-between;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:var(--s1) 0}
+.ws-pie .btn-primario{min-width:12rem}
+.ws-grid .tabla-pos th,.ws-grid .tabla-pos td{border-color:var(--border)}
+.comp-barra i,.ej-barra i,.esp-barra i{color:var(--c-txt)}
+
+/* --- entrada, ejemplos, nota --- */
+.hero-txt .lead{color:var(--muted)}
+.inicio-seg{color:var(--text)}
+.ej-sel{display:flex;gap:var(--s1);flex-wrap:wrap;margin:0 0 var(--s2)}
+.ej-opc[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-on-soft);border-color:var(--accent);font-weight:700}
+.nota{padding:var(--s3)}
+.nota-num{font-family:var(--serif);font-size:3rem;line-height:1;margin:var(--s1) 0;color:var(--text)} .nota-num b{font-weight:400} .nota-num span{font-size:1.1rem;color:var(--muted);font-family:var(--fuente)}
+.nota-expl{font-size:1.125rem;font-weight:600;line-height:1.4}
+.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;line-height:1.5}
+.nota-aviso{color:var(--muted)}
+@media (max-width:719px){.nota-num{font-size:2.5rem}}
+
+/* --- cuaderno --- */
+.caso h3{font-size:1.125rem;font-weight:600;margin:var(--s1) 0}
+.caso-pend{border-left:3px solid var(--warn)}
+.caso-pesos{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.aviso-vinculo{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:10px 12px}
+
+/* --- mostrar los colores sin depender de ellos: las tablas conservan sus cifras; el desplazamiento horizontal de una tabla queda dentro de su región --- */
+.tabla-h,.tabla-scroll,.tabla-emp-wrap{overflow-x:auto;max-width:100%}
+
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -876,9 +1011,10 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#inicio" data-nav="cartera">Cartera</a>
-      <a href="#revista" data-nav="ideas">Ideas</a>
-      <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
+      <a href="#carteras" data-nav="mis">Mis portafolios</a>
+      <a href="#inicio" data-nav="crear">Crear portafolio</a>
+      <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+      <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -887,9 +1023,10 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#inicio" data-nav="cartera">Cartera</a>
-    <a href="#revista" data-nav="ideas">Ideas</a>
-    <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
+    <a href="#carteras" data-nav="mis">Mis portafolios</a>
+    <a href="#inicio" data-nav="crear">Crear portafolio</a>
+    <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+    <a href="#revista" data-nav="revista">Revista</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -909,10 +1046,11 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Crea y entiende tu cartera simulada</h1>
+        <h1>Crea, entiende y sigue tu portafolio</h1>
         <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
         <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primera cartera</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
+        <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primer portafolio</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
@@ -951,7 +1089,7 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 
   <!-- ===== EXPLORAR EMPRESAS ===== -->
   <section id="vista-empresas" data-vista="empresas" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
       <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
@@ -1004,7 +1142,7 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 
   <!-- ===== CARTERAS PÚBLICAS ===== -->
   <section id="vista-publicas" data-vista="publicas" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab">
       <h1>Carteras públicas</h1>
       <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
@@ -1015,7 +1153,7 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Mis portafolios</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -1039,12 +1177,12 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
   <section id="vista-revista" data-vista="revista" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
     <div id="revista-cuerpo"></div>
   </section>
   <section id="vista-articulo" data-vista="articulo" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div id="articulo-cuerpo"></div>
   </section>
 
@@ -1054,7 +1192,7 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Seguimiento <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
+      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
       <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
@@ -1083,6 +1221,11 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
     <h1 class="sr">Editor de cartera</h1>
+    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
+      <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> Objetivo</a></li>
+      <li class="paso" data-paso="2" aria-current="step"><span class="paso-n" aria-hidden="true">2</span> Distribución</li>
+      <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> Revisión</button></li>
+    </ol>
     <div class="ws-cab">
       <div class="ws-titulo">
         <label class="sr" for="nombre">Nombre de la cartera</label>
@@ -1144,6 +1287,7 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
           </div>
         </section>
 
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario" type="button" id="revisar">Revisar portafolio <span aria-hidden="true">→</span></button></div>
         <details class="panel plegable-panel panel-graf" id="det-graficos">
           <summary><h2>Gráficos de precio</h2></summary>
           <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
@@ -1152,6 +1296,20 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
       </div>
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
+        <section class="panel panel-donut" id="panel-donut" aria-labelledby="donut-t">
+          <h2 id="donut-t">Tu portafolio</h2>
+          <div class="donut-cuerpo">
+            <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
+            <ul class="donut-leyenda" id="donut-leyenda"></ul>
+          </div>
+          <p class="donut-estado" id="donut-estado" role="status" aria-live="polite"></p>
+          <div class="hipo" id="hipo">
+            <h3>Una hipótesis, no una previsión</h3>
+            <p class="hipo-fila"><label for="hipo-pos">Si</label> <select id="hipo-pos"></select> <label for="hipo-pct">cayera un</label> <span class="peso"><input id="hipo-pct" type="number" inputmode="numeric" min="1" max="100" step="1" value="25"><span aria-hidden="true">%</span></span></p>
+            <p class="hipo-res" id="hipo-res" role="status" aria-live="polite"></p>
+          </div>
+          <p class="mut peq" id="donut-pie">Podrás ajustar estos porcentajes antes de guardar.</p>
+        </section>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
           <section id="radio" class="radio" aria-labelledby="radio-t">
@@ -1300,12 +1458,13 @@ details.art-fuentes{border-top:1px solid var(--border);padding-top:var(--s1);mar
 <script>
 
 // ---------- Backend simulado en memoria (solo demo) ----------
+window.__KLEVER_DEMO__=true;
 const UNIVERSE = [{"ticker": "AAPL", "nombre": "Apple", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "MSFT", "nombre": "Microsoft", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "NVDA", "nombre": "NVIDIA", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "AVGO", "nombre": "Broadcom", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "ORCL", "nombre": "Oracle", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "CRM", "nombre": "Salesforce", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "ADBE", "nombre": "Adobe", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "AMD", "nombre": "Advanced Micro Devices", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "INTC", "nombre": "Intel", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "CSCO", "nombre": "Cisco", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "QCOM", "nombre": "Qualcomm", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "TXN", "nombre": "Texas Instruments", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "IBM", "nombre": "IBM", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "NOW", "nombre": "ServiceNow", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "INTU", "nombre": "Intuit", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "AMAT", "nombre": "Applied Materials", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "MU", "nombre": "Micron", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "ACN", "nombre": "Accenture", "tipo": "accion", "sector": "Tecnología"}, {"ticker": "GOOGL", "nombre": "Alphabet", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "META", "nombre": "Meta Platforms", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "NFLX", "nombre": "Netflix", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "DIS", "nombre": "Walt Disney", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "CMCSA", "nombre": "Comcast", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "VZ", "nombre": "Verizon", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "T", "nombre": "AT&T", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "TMUS", "nombre": "T-Mobile US", "tipo": "accion", "sector": "Comunicaciones"}, {"ticker": "AMZN", "nombre": "Amazon", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "TSLA", "nombre": "Tesla", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "HD", "nombre": "Home Depot", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "LOW", "nombre": "Lowe's", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "MCD", "nombre": "McDonald's", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "NKE", "nombre": "Nike", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "SBUX", "nombre": "Starbucks", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "BKNG", "nombre": "Booking Holdings", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "TJX", "nombre": "TJX Companies", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "GM", "nombre": "General Motors", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "F", "nombre": "Ford", "tipo": "accion", "sector": "Consumo discrecional"}, {"ticker": "KO", "nombre": "Coca-Cola", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "PEP", "nombre": "PepsiCo", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "PG", "nombre": "Procter & Gamble", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "WMT", "nombre": "Walmart", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "COST", "nombre": "Costco", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "PM", "nombre": "Philip Morris International", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "MO", "nombre": "Altria", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "MDLZ", "nombre": "Mondelez", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "CL", "nombre": "Colgate-Palmolive", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "KMB", "nombre": "Kimberly-Clark", "tipo": "accion", "sector": "Consumo básico"}, {"ticker": "JNJ", "nombre": "Johnson & Johnson", "tipo": "accion", "sector": "Salud"}, {"ticker": "ABBV", "nombre": "AbbVie", "tipo": "accion", "sector": "Salud"}, {"ticker": "MRK", "nombre": "Merck", "tipo": "accion", "sector": "Salud"}, {"ticker": "LLY", "nombre": "Eli Lilly", "tipo": "accion", "sector": "Salud"}, {"ticker": "PFE", "nombre": "Pfizer", "tipo": "accion", "sector": "Salud"}, {"ticker": "UNH", "nombre": "UnitedHealth", "tipo": "accion", "sector": "Salud"}, {"ticker": "TMO", "nombre": "Thermo Fisher", "tipo": "accion", "sector": "Salud"}, {"ticker": "ABT", "nombre": "Abbott", "tipo": "accion", "sector": "Salud"}, {"ticker": "AMGN", "nombre": "Amgen", "tipo": "accion", "sector": "Salud"}, {"ticker": "BMY", "nombre": "Bristol-Myers Squibb", "tipo": "accion", "sector": "Salud"}, {"ticker": "GILD", "nombre": "Gilead Sciences", "tipo": "accion", "sector": "Salud"}, {"ticker": "MDT", "nombre": "Medtronic", "tipo": "accion", "sector": "Salud"}, {"ticker": "CVS", "nombre": "CVS Health", "tipo": "accion", "sector": "Salud"}, {"ticker": "ISRG", "nombre": "Intuitive Surgical", "tipo": "accion", "sector": "Salud"}, {"ticker": "DHR", "nombre": "Danaher", "tipo": "accion", "sector": "Salud"}, {"ticker": "JPM", "nombre": "JPMorgan Chase", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "BAC", "nombre": "Bank of America", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "WFC", "nombre": "Wells Fargo", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "C", "nombre": "Citigroup", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "GS", "nombre": "Goldman Sachs", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "MS", "nombre": "Morgan Stanley", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "V", "nombre": "Visa", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "MA", "nombre": "Mastercard", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "AXP", "nombre": "American Express", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "BLK", "nombre": "BlackRock", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "SCHW", "nombre": "Charles Schwab", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "USB", "nombre": "U.S. Bancorp", "tipo": "accion", "sector": "Finanzas"}, {"ticker": "CAT", "nombre": "Caterpillar", "tipo": "accion", "sector": "Industria"}, {"ticker": "DE", "nombre": "Deere", "tipo": "accion", "sector": "Industria"}, {"ticker": "HON", "nombre": "Honeywell", "tipo": "accion", "sector": "Industria"}, {"ticker": "UPS", "nombre": "United Parcel Service", "tipo": "accion", "sector": "Industria"}, {"ticker": "UNP", "nombre": "Union Pacific", "tipo": "accion", "sector": "Industria"}, {"ticker": "BA", "nombre": "Boeing", "tipo": "accion", "sector": "Industria"}, {"ticker": "LMT", "nombre": "Lockheed Martin", "tipo": "accion", "sector": "Industria"}, {"ticker": "RTX", "nombre": "RTX", "tipo": "accion", "sector": "Industria"}, {"ticker": "GE", "nombre": "GE Aerospace", "tipo": "accion", "sector": "Industria"}, {"ticker": "MMM", "nombre": "3M", "tipo": "accion", "sector": "Industria"}, {"ticker": "FDX", "nombre": "FedEx", "tipo": "accion", "sector": "Industria"}, {"ticker": "XOM", "nombre": "Exxon Mobil", "tipo": "accion", "sector": "Energía"}, {"ticker": "CVX", "nombre": "Chevron", "tipo": "accion", "sector": "Energía"}, {"ticker": "COP", "nombre": "ConocoPhillips", "tipo": "accion", "sector": "Energía"}, {"ticker": "SLB", "nombre": "Schlumberger", "tipo": "accion", "sector": "Energía"}, {"ticker": "EOG", "nombre": "EOG Resources", "tipo": "accion", "sector": "Energía"}, {"ticker": "OXY", "nombre": "Occidental Petroleum", "tipo": "accion", "sector": "Energía"}, {"ticker": "NEE", "nombre": "NextEra Energy", "tipo": "accion", "sector": "Servicios públicos"}, {"ticker": "DUK", "nombre": "Duke Energy", "tipo": "accion", "sector": "Servicios públicos"}, {"ticker": "SO", "nombre": "Southern Company", "tipo": "accion", "sector": "Servicios públicos"}, {"ticker": "D", "nombre": "Dominion Energy", "tipo": "accion", "sector": "Servicios públicos"}, {"ticker": "AEP", "nombre": "American Electric Power", "tipo": "accion", "sector": "Servicios públicos"}, {"ticker": "LIN", "nombre": "Linde", "tipo": "accion", "sector": "Materiales"}, {"ticker": "APD", "nombre": "Air Products", "tipo": "accion", "sector": "Materiales"}, {"ticker": "SHW", "nombre": "Sherwin-Williams", "tipo": "accion", "sector": "Materiales"}, {"ticker": "FCX", "nombre": "Freeport-McMoRan", "tipo": "accion", "sector": "Materiales"}, {"ticker": "NEM", "nombre": "Newmont", "tipo": "accion", "sector": "Materiales (oro)"}, {"ticker": "AMT", "nombre": "American Tower", "tipo": "accion", "sector": "Inmobiliario"}, {"ticker": "PLD", "nombre": "Prologis", "tipo": "accion", "sector": "Inmobiliario"}, {"ticker": "O", "nombre": "Realty Income", "tipo": "accion", "sector": "Inmobiliario"}, {"ticker": "SPG", "nombre": "Simon Property Group", "tipo": "accion", "sector": "Inmobiliario"}, {"ticker": "SPY", "nombre": "SPDR S&P 500 ETF", "tipo": "etf", "sector": "ETF renta variable"}, {"ticker": "VOO", "nombre": "Vanguard S&P 500 ETF", "tipo": "etf", "sector": "ETF renta variable"}, {"ticker": "VTI", "nombre": "Vanguard Total Stock Market ETF", "tipo": "etf", "sector": "ETF renta variable"}, {"ticker": "QQQ", "nombre": "Invesco QQQ (Nasdaq-100)", "tipo": "etf", "sector": "ETF renta variable"}, {"ticker": "IWM", "nombre": "iShares Russell 2000 ETF", "tipo": "etf", "sector": "ETF renta variable"}, {"ticker": "SCHD", "nombre": "Schwab US Dividend Equity ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "VYM", "nombre": "Vanguard High Dividend Yield ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "VIG", "nombre": "Vanguard Dividend Appreciation ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "DGRO", "nombre": "iShares Core Dividend Growth ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "HDV", "nombre": "iShares Core High Dividend ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "NOBL", "nombre": "ProShares S&P 500 Dividend Aristocrats ETF", "tipo": "etf", "sector": "ETF dividendos"}, {"ticker": "GLD", "nombre": "SPDR Gold Shares", "tipo": "etf", "sector": "ETF oro"}, {"ticker": "IAU", "nombre": "iShares Gold Trust", "tipo": "etf", "sector": "ETF oro"}, {"ticker": "SGOL", "nombre": "abrdn Physical Gold Shares ETF", "tipo": "etf", "sector": "ETF oro"}, {"ticker": "GDX", "nombre": "VanEck Gold Miners ETF", "tipo": "etf", "sector": "ETF oro"}, {"ticker": "GDXJ", "nombre": "VanEck Junior Gold Miners ETF", "tipo": "etf", "sector": "ETF oro"}, {"ticker": "TLT", "nombre": "iShares 20+ Year Treasury Bond ETF", "tipo": "etf", "sector": "ETF renta fija"}, {"ticker": "AGG", "nombre": "iShares Core US Aggregate Bond ETF", "tipo": "etf", "sector": "ETF renta fija"}, {"ticker": "VNQ", "nombre": "Vanguard Real Estate ETF", "tipo": "etf", "sector": "ETF inmobiliario"}, {"ticker": "XLE", "nombre": "Energy Select Sector SPDR Fund", "tipo": "etf", "sector": "ETF sectorial"}, {"ticker": "HNORT", "nombre": "Hidrógeno Norte (empresa ficticia)", "tipo": "accion", "sector": "Energía", "ficticia": true}, {"ticker": "EJBA", "nombre": "Alimentación de ejemplo 01 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBB", "nombre": "Alimentación de ejemplo 02 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBC", "nombre": "Alimentación de ejemplo 03 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBD", "nombre": "Alimentación de ejemplo 04 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBE", "nombre": "Alimentación de ejemplo 05 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBF", "nombre": "Alimentación de ejemplo 06 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBG", "nombre": "Alimentación de ejemplo 07 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBH", "nombre": "Alimentación de ejemplo 08 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBI", "nombre": "Alimentación de ejemplo 09 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBJ", "nombre": "Alimentación de ejemplo 10 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBK", "nombre": "Alimentación de ejemplo 11 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBL", "nombre": "Alimentación de ejemplo 12 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBM", "nombre": "Alimentación de ejemplo 13 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBN", "nombre": "Alimentación de ejemplo 14 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBO", "nombre": "Alimentación de ejemplo 15 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBP", "nombre": "Alimentación de ejemplo 16 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBQ", "nombre": "Alimentación de ejemplo 17 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBR", "nombre": "Alimentación de ejemplo 18 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBS", "nombre": "Alimentación de ejemplo 19 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}, {"ticker": "EJBT", "nombre": "Alimentación de ejemplo 20 (empresa ficticia)", "tipo": "accion", "sector": "Consumo básico", "ficticia": true}];
 function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
 for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
   for(const y of [2020,2021,2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
-    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null,resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:'2026-11-04',resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
   DB.fund[a.ticker].reverse();
   const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
   DB.ideas[a.ticker]={periodo:L.periodo,
@@ -1529,12 +1688,22 @@ function propuestaCoincide(base, op, financiacion, propuesta) {
   return propuesta.length === s.despues.length && a === b ? { ok: true } : { ok: false, motivo: 'La propuesta no coincide con el resultado del método elegido.' };
 }
 
+// Catálogo COMPARTIDO (cliente y servidor) de las cuestiones editoriales que una persona puede seguir. Cada identificador «historia:n» es INMUTABLE: nunca se reutiliza
+// para otra pregunta (si la cuestión cambia de fondo se crea otro identificador). Un vínculo nuevo solo se acepta si el par historia/identificador existe aquí.
+const CATALOGO_PREGUNTAS = Object.freeze({
+  'hidrogeno-norte:1': Object.freeze({ historia: 'hidrogeno-norte', tesis: 1, texto: '¿Se han firmado los dos contratos anunciados?' }),
+  'hidrogeno-norte:2': Object.freeze({ historia: 'hidrogeno-norte', tesis: 2, texto: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?' }),
+});
+const refExiste = ref => typeof ref === 'string' && Object.hasOwn(CATALOGO_PREGUNTAS, ref);
+const refDeHistoria = (ref, historia) => refExiste(ref) && CATALOGO_PREGUNTAS[ref].historia === historia;
+
 // NOTA DE ESTRUCTURA Y SOLIDEZ · v1 — módulo PURO y VERSIONADO (sin DOM, sin red, sin reloj), compartido por cartera y laboratorio.
 // Describe la ESTRUCTURA de una cartera de acciones y los FUNDAMENTALES observados en una fecha de evaluación. NO es una previsión de rentabilidad,
 // no mide riesgo de mercado y una nota alta no garantiza rentabilidad ni idoneidad personal. Los umbrales son PROVISIONALES: su activación con datos
 // reales queda pendiente de calibración y verificación; con datos de prueba/sintéticos solo sirve para probar el método.
 // El universo se recibe CONGELADO (instantánea con su fecha): la misma cartera, la misma fecha y los mismos datos dan SIEMPRE la misma nota.
 const VERSION_NOTA = 'estructura-v1';
+const VERSIONES_CONOCIDAS = Object.freeze(['estructura-v1']);
 const PESOS = { empresas: 20, sectores: 20, tamano: 15, deuda: 25, rentabilidad: 20 };
 const NOMBRES = { empresas: 'Empresas', sectores: 'Sectores y actividades', tamano: 'Tamaño y liquidez', deuda: 'Deuda y caja', rentabilidad: 'Rentabilidad y crecimiento' };
 const PARAMETROS = { minCobertura: 0.9, minComparables: 20, ejercicios: 5, sesiones: 60, maxEmpresasEfectivas: 15, maxSectoresEfectivos: 6, maxActividadesEfectivas: 10 };
@@ -1562,7 +1731,7 @@ const CACHE = new WeakMap();                                   // por referencia
 const claveMk = e => `${e.moneda || ''}|${e.fuenteMercado || ''}`;
 function preparar(universo) {
   if (CACHE.has(universo.empresas)) return CACHE.get(universo.empresas);
-  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => e.tipo === 'accion');
+  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => e.tipo === 'accion' && (!e.ficticia || universo.origen === 'sintetico'));   // una empresa ficticia nunca es comparable fuera de un conjunto sintético
   // moneda y fuente de mercado de REFERENCIA = la más frecuente entre quienes tienen datos de mercado con procedencia (un empate no fija ninguna)
   const cuenta = {}; for (const [, e] of accs) if (((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) && e.moneda && e.fuenteMercado) cuenta[claveMk(e)] = (cuenta[claveMk(e)] || 0) + 1;
   const orden = Object.entries(cuenta).sort((a, b) => b[1] - a[1]), ref = orden.length && (orden.length === 1 || orden[0][1] > orden[1][1]) ? orden[0][0] : null;
@@ -1600,16 +1769,35 @@ function preparar(universo) {
   const prep = { E, porSector, caps, imps }; CACHE.set(universo.empresas, prep); return prep;
 }
 
+// Procedencia de las filas que se USAN: los ejercicios de las empresas de la cartera y los datos de mercado de las empresas con datos. Cada fila necesita fuente y una
+// fecha de calendario REAL; sin ellas no se puede decir de dónde sale la cifra y la nota no se calcula (ni «ayer», ni 2026-02-31, ni NULL).
+const fechaFila = d => typeof d === 'string' && fechaReal(d.slice(0, 10));
+function problemasProcedencia(pos, universo) {
+  const out = [];
+  for (const p of pos) { const e = universo.empresas?.[p.ticker]; if (!e || e.tipo !== 'accion') continue;
+    for (const r of e.ej || []) { if (!r.f) out.push(`${p.ticker} ${r.p}: la fila no tiene fuente`); else if (!fechaFila(r.d)) out.push(`${p.ticker} ${r.p}: la fecha de la fila no es una fecha real`); }
+    if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${p.ticker}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${p.ticker}: la fecha de los datos de mercado no es una fecha real`); } }
+  return out;
+}
+const MOTIVO_ORIGEN = {
+  incompleto: 'Hay filas sin fuente o con una fecha que no es válida: sin procedencia verificable la nota no se calcula.',
+  mixto: 'El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero.',
+  real: 'La nota todavía no está habilitada con datos reales: antes hay que calibrar los umbrales y verificar los datos.',
+};
 // cartera: [{ ticker, peso }] (peso en %). universo: { fecha, empresas: { TICKER: { nombre, tipo, sector, actividad, emisor, cap, imp, ej: [{ p, ing, ni, op, ebitda, deuda, fcf, roic, f, d }] } } }
 function evaluar(cartera, universo) {
-  const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, origenDatos: universo.origen ?? null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
+  const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, origenDatos: universo.origen ?? null, instantanea: universo.fecha ?? null, periodos: null, poblacion: null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
   const pos = (cartera || []).filter(p => p?.peso > 0); res.total = pos.reduce((s, p) => s + dec(p.peso), 0) / 10;
   // Reparto con nombres (para explicar la nota con las posiciones REALES de la cartera: «X pesa el 60 %»)
   res.reparto = pos.map(p => ({ ticker: p.ticker, nombre: universo.empresas?.[p.ticker]?.nombre ?? p.ticker, sector: universo.empresas?.[p.ticker]?.sector ?? null, peso: dec(p.peso) / 10 })).sort((a, b) => b.peso - a.peso || a.ticker.localeCompare(b.ticker));
   if (!pos.length) { res.motivo = 'La cartera está vacía: no hay nada que evaluar.'; return res; }
   if (dec(res.total) !== 1000) { res.motivo = `La cartera suma ${String(res.total).replace('.', ',')} %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).`; return res; }
-  if (universo.origen !== 'sintetico' && universo.habilitada !== true) { res.motivo = 'La nota todavía no está habilitada con datos reales o mezclados: antes hay que calibrar los umbrales y verificar los datos. Solo se calcula con un conjunto sintético identificado.'; return res; }
+  const prob = problemasProcedencia(pos, universo);
+  if (prob.length) { res.procedencia = { problemas: prob }; res.motivo = `Procedencia incompleta: ${prob.slice(0, 3).join('; ')}${prob.length > 3 ? ` (y ${prob.length - 3} más)` : ''}. Sin fuente y fecha verificables no se calcula la nota.`; return res; }
+  if (universo.origen !== 'sintetico' && universo.habilitada !== true) { res.motivo = MOTIVO_ORIGEN[universo.origen] || 'La nota todavía no está habilitada: falta declarar el origen del conjunto de datos (solo se calcula con un conjunto sintético identificado).'; return res; }
   const P = preparar(universo), tot = 1000;
+  res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => ({ ticker: p.ticker, hasta: [...universo.empresas[p.ticker].ej].map(r => r.p).sort().at(-1) }));
+  { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
   for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
   const bloques = {};
@@ -1668,34 +1856,53 @@ const resumenNota = ev => ({ version: ev.version, fecha: ev.fecha, publicada: ev
 // ---- Validación ESTRICTA de una evaluación guardada (la usan el servidor al guardar y al leer, y la interfaz al mostrar). Una evaluación es un REGISTRO de lo que vio la
 // persona: el servidor no puede recalcularla (el universo de entonces ya no existe), así que solo comprueba su FORMA: números finitos en rango, fechas reales,
 // identificadores conocidos y texto sin marcado. Devuelve { ok, motivo } y, si es válida, `limpio`: una copia reconstruida campo a campo (nunca el objeto recibido).
-const IDS = Object.keys(PESOS), CLAVES = ['version', 'fecha', 'publicada', 'nota', 'motivo', 'cobertura', 'bloques', 'fortaleza', 'limitacion'];
-const num = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && v >= lo && v <= hi;
 const fechaReal = v => { if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false; const d = new Date(v + 'T00:00:00Z'); return !isNaN(d) && d.toISOString().slice(0, 10) === v; };
-const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v);
-function validarResumen(r) {
+const IDS = Object.keys(PESOS), CLAVES = ['version', 'fecha', 'publicada', 'nota', 'motivo', 'cobertura', 'bloques', 'fortaleza', 'limitacion'];
+const numEn = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && !Object.is(v, -0) && v >= lo && v <= hi;
+// Texto visible: sin marcado, sin controles y SIN controles de dirección (podrían reordenar lo que se lee: «\u202e»), y de longitud acotada.
+const BIDI = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
+const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v) && !BIDI.test(v);
+const MAX_MOTIVO = 700;
+const TOL_TOTAL = 0.056, TOL_BLOQUE = 0.011;                // los bloques guardados se redondean a 2 decimales (±0,005) y el total a 1 (±0,05)
+const propio = (o, k) => Object.hasOwn(o, k);
+// modo `guardar`: solo se aceptan versiones CONOCIDAS (se puede comprobar la coherencia). Al LEER, una versión desconocida pero bien formada se entrega como
+// «valor guardado por el cliente» (`sinComprobar`): no se puede verificar cómo se calculó, así que no se presenta como comprobado.
+function validarResumen(r, { guardar = false } = {}) {
   const mal = motivo => ({ ok: false, motivo });
   if (!r || typeof r !== 'object' || Array.isArray(r)) return mal('La evaluación no es un objeto.');
   if (Object.keys(r).some(k => !CLAVES.includes(k))) return mal('La evaluación trae campos desconocidos.');
+  if (!CLAVES.every(k => propio(r, k))) return mal('A la evaluación le faltan campos propios (no se aceptan propiedades heredadas).');
   if (typeof r.version !== 'string' || !/^[a-z0-9-]{1,30}$/.test(r.version)) return mal('La versión del método no es válida.');
+  const conocida = VERSIONES_CONOCIDAS.includes(r.version);
+  if (!conocida && guardar) return mal(`La versión del método «${r.version}» no es una versión conocida.`);
   if (typeof r.publicada !== 'boolean') return mal('Falta indicar si la nota está publicada.');
   if (r.fecha != null && !fechaReal(r.fecha)) return mal('La fecha de evaluación no es una fecha real (AAAA-MM-DD).');
   if (r.publicada) {
     if (r.fecha == null) return mal('Una nota publicada necesita su fecha.');
-    if (!num(r.nota, 1, 10) || Math.round(r.nota * 10) / 10 !== r.nota) return mal('La nota debe ser un número de 1 a 10 con un decimal.');
-    if (!num(r.cobertura, 100 * PARAMETROS.minCobertura, 100)) return mal('Una nota publicada necesita una cobertura de al menos el 90 %.');
+    if (!numEn(r.nota, 1, 10) || Math.round(r.nota * 10) / 10 !== r.nota) return mal('La nota debe ser un número de 1 a 10 con un decimal.');
+    if (!numEn(r.cobertura, 100 * PARAMETROS.minCobertura, 100)) return mal('Una nota publicada necesita una cobertura de al menos el 90 %.');
   } else {
     if (r.nota != null) return mal('Una nota pendiente no puede llevar cifra.');
-    if (r.cobertura != null && !num(r.cobertura, 0, 100)) return mal('La cobertura debe estar entre 0 y 100.');
+    if (r.cobertura != null && !numEn(r.cobertura, 0, 100)) return mal('La cobertura debe estar entre 0 y 100.');
   }
-  if (r.motivo != null && !textoLimpio(r.motivo, 700)) return mal('El motivo contiene marcado o es demasiado largo.');
+  if (r.motivo != null && !textoLimpio(r.motivo, MAX_MOTIVO)) return mal('El motivo contiene marcado o caracteres no permitidos, o es demasiado largo.');
   if (r.bloques != null) {
-    if (typeof r.bloques !== 'object' || Array.isArray(r.bloques) || Object.keys(r.bloques).length !== IDS.length || !IDS.every(k => k in r.bloques)) return mal('Los bloques no son los cinco esperados.');
-    for (const k of IDS) { const v = r.bloques[k]; if (!(v === null ? !r.publicada : num(v, 1, 10))) return mal('La puntuación de un bloque no es un número de 1 a 10' + (r.publicada ? '' : ' ni null') + '.'); }
+    if (typeof r.bloques !== 'object' || Array.isArray(r.bloques) || Object.keys(r.bloques).length !== IDS.length || !IDS.every(k => propio(r.bloques, k))) return mal('Los bloques no son los cinco esperados.');
+    for (const k of IDS) { const v = r.bloques[k]; if (!(v === null ? !r.publicada : numEn(v, 1, 10))) return mal('La puntuación de un bloque no es un número de 1 a 10' + (r.publicada ? '' : ' ni null') + '.'); }
   } else if (r.publicada) return mal('Una nota publicada necesita sus bloques.');
   if (r.fortaleza != null && !IDS.includes(r.fortaleza)) return mal('La fortaleza no es un bloque conocido.');
-  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || !IDS.includes(l.bloque) || !num(l.perdida, 0, 10) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k))) return mal('La limitación no es válida.'); }
+  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k)) || !propio(l, 'bloque') || !IDS.includes(l.bloque) || !numEn(l.perdida, 0, 10)) return mal('La limitación no es válida.'); }
   if (r.publicada && (r.fortaleza == null || r.limitacion == null)) return mal('Una nota publicada necesita su fortaleza y su limitación.');
-  return { ok: true, limpio: { version: r.version, fecha: r.fecha ?? null, publicada: r.publicada, nota: r.nota ?? null, motivo: r.motivo ?? null, cobertura: r.cobertura ?? null,
+  // Coherencia (solo con un método conocido): el total sale de los bloques, la fortaleza es el bloque mejor puntuado y la limitación el que más resta
+  if (r.publicada && conocida) {
+    const suma = IDS.reduce((s, k) => s + PESOS[k] * r.bloques[k], 0) / 100;
+    if (Math.abs(r.nota - suma) > TOL_TOTAL) return mal(`La nota (${r.nota}) no cuadra con sus bloques (${(Math.round(suma * 100) / 100).toString().replace('.', ',')}).`);
+    const max = Math.max(...IDS.map(k => r.bloques[k]));
+    if (r.bloques[r.fortaleza] < max - TOL_BLOQUE) return mal('La fortaleza no es el bloque mejor puntuado.');
+    const perd = k => PESOS[k] * (10 - r.bloques[k]) / 100, maxP = Math.max(...IDS.map(perd));
+    if (perd(r.limitacion.bloque) < maxP - TOL_BLOQUE || Math.abs(r.limitacion.perdida - perd(r.limitacion.bloque)) > TOL_BLOQUE) return mal('La limitación no cuadra con los bloques.');
+  }
+  return { ok: true, sinComprobar: !conocida, limpio: { version: r.version, fecha: r.fecha ?? null, publicada: r.publicada, nota: r.nota ?? null, motivo: r.motivo ?? null, cobertura: r.cobertura ?? null,
     bloques: r.bloques == null ? null : Object.fromEntries(IDS.map(k => [k, r.bloques[k]])), fortaleza: r.fortaleza ?? null, limitacion: r.limitacion == null ? null : { bloque: r.limitacion.bloque, perdida: r.limitacion.perdida } } };
 }
 
@@ -1703,7 +1910,7 @@ function validarResumen(r) {
 //  1. Crecimiento de ventas  = ventas del ejercicio / ventas del ejercicio anterior − 1                       (%)
 //  2. Margen operativo       = resultado operativo / ventas del ejercicio                                     (%)  — NO es el margen neto
 //  3. Deuda neta / EBITDA    = deuda neta / EBITDA del ejercicio                                              (veces)
-//     «Deuda neta entre EBITDA, en veces (2,0 veces = la deuda neta equivale a dos años de EBITDA)»; no es un plazo de devolución. Una cifra baja es menos deuda; negativa = caja neta. Si el EBITDA es ≤ 0 la ratio
+//     «Deuda neta entre EBITDA, en veces (por cada euro de EBITDA del ejercicio, tantos euros de deuda neta)»; no indica cuándo se devolverá la deuda. Una cifra baja es menos deuda; negativa = caja neta. Si el EBITDA es ≤ 0 la ratio
 //     no es interpretable: «no comparable». Mucha o poca deuda NO es «mejor» ni «peor» por sí sola: depende del sector y del momento.
 // Los ejercicios se ALINEAN (se compara el último ejercicio que tienen las dos); todo en la misma moneda (USD) y unidades; cada cifra lleva su fuente,
 // su periodo y su fecha de carga. Lo que no se puede comparar se dice con su motivo; nunca se rellena.
@@ -1734,7 +1941,7 @@ function compararEmpresas(a, b) {
     if (!hayNum(c.ingresos) || c.ingresos <= 0) return celda(null, null, c, 'sin_dato', 'Sin ventas positivas para calcular el margen.');
     const v = c.resultado_operativo / c.ingresos; return celda(v, pct(v), c);
   }));
-  res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Deuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: 2,0 veces = la deuda neta equivale a dos años de EBITDA. No es un plazo de devolución. Negativa = caja neta', 'veces', (f, yy) => {
+  res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Deuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: por cada euro de EBITDA del ejercicio hay esa cantidad de euros de deuda neta. Esta relación no indica cuándo se devolverá la deuda. Negativa = caja neta', 'veces', (f, yy) => {
     const c = f[yy];
     if (!hayNum(c?.deuda_neta) || !hayNum(c?.ebitda)) return celda(null, null, c, 'sin_dato', 'Sin dato de deuda neta o de EBITDA.');
     if (c.ebitda <= 0) return celda(null, null, c, 'no_comparable', 'El EBITDA es nulo o negativo: la ratio no se puede interpretar.');
@@ -1933,17 +2140,17 @@ const CARTERA_EJEMPLO_INCOMPLETA = {
 // Preguntas que se pueden seguir con la historia de ejemplo y qué dice la revisión editorial sobre cada una. TODO el desenlace es SIMULADO.
 // `respuesta: null` = la fuente aún no permite responder (se dice qué sigue pendiente). Las fechas son las del caso ficticio.
 const SEGUIMIENTO_CASOS = [
-  { historia: 'hidrogeno-norte', pregunta: '¿Se han firmado los dos contratos anunciados?', tesis: 1,
+  { historia: 'hidrogeno-norte', pregunta: CATALOGO_PREGUNTAS['hidrogeno-norte:1'].texto, tesis: 1,
     respuesta: { fecha: '2026-11-03', revision: 2, fuente: 'Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio)', simulada: true,
       porContrato: [{ nombre: 'Proyecto C (100 MW)', estado: 'Firmado el 29 de octubre', documento: '[6]' }, { nombre: 'Proyecto D (60 MW)', estado: 'Aplazado sin fecha; sin documento nuevo', documento: '—' }],
       resumen: 'Solo se firmó uno de los dos contratos anunciados (desenlace simulado).' }, pendiente: null },
-  { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
+  { historia: 'hidrogeno-norte', pregunta: CATALOGO_PREGUNTAS['hidrogeno-norte:2'].texto, tesis: 2, respuesta: null,
     pendiente: 'La fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
 ];
 // Vínculo ESTABLE entre una pregunta de la persona y la cuestión editorial de la historia: un identificador «historia:n» (n = número de la tesis que la plantea),
 // no el texto. Reescribir la pregunta, añadir un espacio o reformularla NO rompe el vínculo; una pregunta nueva (sin vínculo) no hereda respuestas ajenas.
 const refPregunta = (hid, n) => `${hid}:${n}`;
-const casoPorRef = ref => SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
+const casoPorRef = ref => !refExiste(ref) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
 const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
 // Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
 //  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
@@ -1953,9 +2160,18 @@ const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, 
 function estadoSeguimiento({ historia: hid, pregunta_ref: ref, pregunta }) {
   const caso = ref ? casoPorRef(ref) : null;
   if (caso) return { tipo: caso.respuesta ? 'responde' : 'pendiente', caso, distinta: normalizaPregunta(pregunta) !== normalizaPregunta(caso.pregunta) };
-  const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta);
-  return hay ? { tipo: 'otra', caso: null, editorial: hay } : { tipo: 'sin', caso: null };
+  const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta), invalida = !!ref;   // con ref pero sin caso: el vínculo guardado no existe en el catálogo
+  return hay ? { tipo: 'otra', caso: null, editorial: hay, refInvalida: invalida } : { tipo: 'sin', caso: null, refInvalida: invalida };
 }
+
+// Parecido entre dos preguntas (0–1): proporción de palabras de más de 3 letras que comparten (índice de Jaccard). Solo sirve para AVISAR de que una reformulación parece
+// tratar otro asunto; nunca decide por la persona (el vínculo lo controla ella con la casilla).
+function similitudPregunta(a, b) {
+  const pal = t => new Set(normalizaPregunta(t).replace(/[^\p{L}\p{N} ]/gu, ' ').split(' ').filter(w => w.length > 3));
+  const A = pal(a), B = pal(b); if (!A.size || !B.size) return 0;
+  let inter = 0; for (const w of A) if (B.has(w)) inter++; return inter / (A.size + B.size - inter);
+}
+const UMBRAL_PARECIDO = 0.2;
 
 // Presentación de la nota de estructura (el cálculo vive en nota.js). Conclusión primero; el método, en «¿Por qué esta nota?».
 const cm = v => String(v).replace('.', ',');
@@ -1970,18 +2186,22 @@ const minus = s => s.charAt(0).toLowerCase() + s.slice(1);
 function explicarNota(ev) {
   if (!ev?.reparto?.length) return '';
   const top = ev.reparto[0], bl = ev.bloques ? Object.values(ev.bloques) : [];
-  if (ev.publicada) {
-    const L = ev.limitacion?.bloque, b = ev.bloques?.[L], N = ev.bloques?.empresas?.efectivas;
-    const reparto = `${top.nombre} (${top.ticker}) pesa el ${cm(top.peso)} % de la cartera${N != null ? (N < 1.5 ? ': casi todo depende de una sola empresa' : `: el reparto equivale a ${cm(N.toFixed(1))} empresas del mismo tamaño`) : ''}.`;
-    if (L === 'empresas') return reparto;
-    if (L === 'sectores') { const g = {}; ev.reparto.forEach(r => { g[r.sector] = (g[r.sector] || 0) + r.peso; }); const [sec, p] = Object.entries(g).sort((a, c) => c[1] - a[1])[0]; return `${reparto} Además, el ${cm(Math.round(p * 10) / 10)} % está en ${sec}: el reparto por sectores y actividades es lo que más resta.`; }
-    return `${reparto} Lo que más resta es ${minus(NOMBRES[L])}.`;
+  const lista = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} y ${xs.at(-1)}`;
+  if (ev.publicada) {                                                       // titular: la cifra anclada a su principal motivo, con nombres y porcentajes reales
+    const g = {}; ev.reparto.forEach(r => { g[r.sector] = (g[r.sector] || 0) + r.peso; }); const [sec, p] = Object.entries(g).sort((a, c) => c[1] - a[1])[0];
+    const sector = Math.round(p * 10) === 1000 ? `Toda la cartera está en ${sec}` : `El ${cm(Math.round(p * 10) / 10)} % de la cartera está en ${sec}`;
+    return `${sector} y ${top.nombre} concentra el ${cm(top.peso)} %.`;
   }
-  const lista = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} y ${xs.at(-1)}`, q = b => `«${minus(b.nombre)}»`;
-  const ok = bl.filter(b => b.puntuacion != null).map(q), falta = bl.filter(b => b.puntuacion == null).map(q);
-  const causas = (ev.sinEvaluar || []).slice(0, 2).map(s => `${s.ticker} (${cm(s.peso)} % de la cartera): ${minus(s.motivos[0] || '').replace(/\.$/, '')}`);
+  const ok = bl.filter(b => b.puntuacion != null), falta = bl.filter(b => b.puntuacion == null), q = b => `«${minus(b.nombre)}»`;
   if (!bl.length) return '';
-  return `${ok.length ? `Podemos medir ${lista(ok)}. ` : ''}${falta.length ? `Faltan datos para valorar ${lista(falta)}.` : ''}${causas.length ? ` Causa principal: ${causas.join('; ')}.` : ''}`;
+  // el límite es del MÉTODO (no faltan datos que vayan a llegar): bancos y aseguradoras no tienen deuda/EBITDA ni ROIC comparables
+  const bancos = (ev.sinEvaluar || []).filter(s => (s.motivos || []).some(m => /banca y seguros/.test(m)));
+  if (bancos.length && ev.bloques?.empresas?.puntuacion != null && ev.bloques?.sectores?.puntuacion != null) {
+    const w = Math.round(bancos.reduce((a, s) => a + s.peso, 0) * 10) / 10, parte = w === 50 ? 'La mitad' : `El ${cm(w)} %`, uno = bancos.length === 1;
+    return `Podemos medir cómo repartes tu cartera. ${parte} está en ${uno ? 'un banco' : 'bancos o aseguradoras'} y este método todavía no evalúa bien la deuda y los beneficios de ${uno ? 'los bancos' : 'esas entidades'}. Por eso no damos una nota total.`;
+  }
+  const causas = (ev.sinEvaluar || []).slice(0, 2).map(s => `${s.ticker} (${cm(s.peso)} % de la cartera): ${minus(s.motivos[0] || '').replace(/\.$/, '')}`);
+  return `${ok.length ? `Podemos medir ${lista(ok.map(q))}. ` : ''}${falta.length ? `Faltan datos para valorar ${lista(falta.map(q))}.` : ''}${causas.length ? ` Causa principal: ${causas.join('; ')}.` : ''}`;
 }
 function htmlNotaEstructura(esc, ev, origen) {
   if (!ev) return '';
@@ -1990,18 +2210,21 @@ function htmlNotaEstructura(esc, ev, origen) {
   const cab = `<h3 id="nota-t">Nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>
     <p class="nota-aviso mut peq">Describe la estructura de la cartera y los fundamentales ${fecha ? `observados el ${esc(fecha)}` : '(sin fecha de datos disponible)'}. <b>No es una previsión de rentabilidad ni una recomendación</b>, y una nota alta no garantiza rentabilidad ni idoneidad personal. ${esc(aviso_datos(origen || (ev.origenDatos === 'sintetico' ? 'prueba' : null)))}</p>`;
   let cuerpo;
+  const inst = ev.instantanea ? new Date(ev.instantanea + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : null;
+  const periodos = (ev.periodos || []).length ? [...new Set(ev.periodos.map(p => p.hasta))].join(', ') : null;
   if (ev.publicada) {
     cuerpo = `<p class="nota-num"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
       <p class="nota-expl">${esc(explicarNota(ev))}</p>
       <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
-      <li><b>Cobertura mínima:</b> ${cm((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos.</li></ul>`;
+      ${inst ? `<li><b>Datos:</b> instantánea del ${esc(inst)}${periodos ? `, ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
   } else {
-    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques && ev.motivo ? `<p class="mut peq">${esc(ev.motivo)}</p>` : ''}` + (bl.some(b => b.puntuacion != null) ? `<p class="mut peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${cm(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : '');
+    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${inst ? `<p class="mut peq">Datos: instantánea del ${esc(inst)}${periodos ? `, ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
   const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : cm(b.puntuacion.toFixed(2))}</td><td>${cm((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
   const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${cm(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
-  const porque = `<details class="mini"><summary>¿Por qué esta nota?</summary>
+  const detalleTec = `${ev.publicada ? `<p class="peq"><b>Cobertura mínima:</b> ${cm((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos. ${ev.bloques?.empresas?.detalle ? esc(ev.bloques.empresas.detalle) : ''}</p>` : `${ev.bloques && ev.motivo ? `<p class="peq">${esc(ev.motivo)}</p>` : ''}${bl.some(b => b.puntuacion != null) ? `<p class="peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${cm(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : ''}`}${ev.poblacion?.ficticias ? `<p class="peq">Población de comparación: ${ev.poblacion.empresas} empresas, de ellas ${ev.poblacion.ficticias} ficticias (solo existen en la demo y la semilla).</p>` : ''}`;
+  const porque = `<details class="mini"><summary>Cómo se calcula</summary>${detalleTec}
     ${bl.length ? `<div class="tabla-h" role="region" aria-label="Bloques de la nota" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Peso</th><th scope="col">Puntos</th><th scope="col">Cobertura</th></tr></thead><tbody>${filas}</tbody></table></div>` : ''}
     <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
     <p class="peq">Empresas y sectores: número efectivo de empresas = 1 / suma de los pesos al cuadrado (las clases de una misma compañía cuentan una vez). Tamaño, deuda y rentabilidad: percentiles del universo cubierto o del sector (hacen falta ${PARAMETROS.minComparables} comparables) y frecuencias de los últimos ${PARAMETROS.ejercicios} ejercicios. Los umbrales son provisionales.</p>
@@ -2026,9 +2249,11 @@ function htmlEvaluacionGuardada(esc, e) {
   const nada = '<p class="mut peq">Este escenario trae una evaluación de estructura que no supera las comprobaciones de formato: no se muestra.</p>';
   if (e.evaluacion_invalida) return nada; if (!e.evaluacion) return '';
   const a = validarResumen(e.evaluacion.antes), d = validarResumen(e.evaluacion.despues); if (!a.ok || !d.ok) return nada;
-  const f = r => r.publicada ? `${cm(r.nota.toFixed(1))} de 10` : 'pendiente', A = a.limpio, D = d.limpio;
+  const f = r => r.publicada ? `${cm(r.nota.toFixed(1))} de 10` : 'pendiente', A = a.limpio, D = d.limpio, sin = !!e.evaluacion_sin_comprobar;
   const fecha = A.fecha ? new Date(A.fecha + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'sin fecha';
-  return `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): <b>${esc(f(A))}</b> → <b>${esc(f(D))}</b>${D.publicada || A.publicada ? '' : '. ' + esc(D.motivo || A.motivo || '')}. Se guardó con el escenario tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
+  const cifra = `<b>${esc(f(A))}</b> → <b>${esc(f(D))}</b>${D.publicada || A.publicada ? '' : '. ' + esc(D.motivo || A.motivo || '')}`;
+  return sin ? `<p class="mut peq">Valor guardado por el cliente (${esc(fecha)}, método «${esc(A.version)}», que esta pantalla no sabe comprobar): ${cifra}. No se ha podido verificar cómo se calculó.</p>`
+    : `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): ${cifra}. Se guardó con el escenario tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
 }
 
 // Vistas de «Cartera de ejemplo» y «Comparar con otra empresa». Presentación; los cálculos están en comparador.js y nota.js.
@@ -2038,7 +2263,7 @@ const xi = () => ID.ctx;
 function iniciarIdeas(ctx) {
   ID.ctx = ctx;
   ctx.$('#vista-ejemplo').addEventListener('click', e => {
-    if (e.target.closest('#ej-lab')) ctx.abrirEjemplo(); else if (e.target.closest('#ej-otro')) { ID.incompleto = !ID.incompleto; mostrarEjemplo(); } else if (e.target.closest('#ej-crear')) { ctx.go('#inicio'); setTimeout(() => ctx.$('#plantillas')?.scrollIntoView(), 50); }
+    if (e.target.closest('#ej-lab')) ctx.abrirEjemplo(); else if (e.target.closest('[data-ej]')) { const inc = e.target.closest('[data-ej]').dataset.ej === 'incompleta'; if (inc !== ID.incompleto) { ID.incompleto = inc; mostrarEjemplo().then(() => ctx.$('#ejemplo-cuerpo [data-ej][aria-pressed="true"]')?.focus()); } } else if (e.target.closest('#ej-crear')) { ctx.go('#inicio'); setTimeout(() => ctx.$('#plantillas')?.scrollIntoView(), 50); }
   });
   ctx.$('#vista-comparar').addEventListener('click', e => {
     const b = e.target.closest('[data-comparar-con]'); if (b) { ctx.go(`#comparar-${b.dataset.a}-${b.dataset.compararCon}`); return; }
@@ -2051,11 +2276,14 @@ async function mostrarEjemplo(inicio) {
   if (inicio) ID.incompleto = false;
   const { $, esc } = xi(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
   const EJ = ID.incompleto ? CARTERA_EJEMPLO_INCOMPLETA : CARTERA_EJEMPLO, pos = EJ.posiciones;
-  cont.innerHTML = `<div class="pag-cab"><h1>${esc(EJ.nombre)}</h1><p class="mut">${esc(EJ.aviso)}</p></div>
+  const sel = (id, txt) => `<button class="btn btn-secundario ej-opc" type="button" data-ej="${id}" aria-pressed="${(id === 'incompleta') === ID.incompleto}">${txt}</button>`;
+  cont.innerHTML = `<div class="pag-cab"><h1>${esc(EJ.nombre)}</h1><p class="mut">${esc(EJ.aviso)}</p><p><span class="chip sim">Ejemplo con datos ficticios</span></p></div>
+    <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · pendiente')}</div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
+    <div id="ej-nota" role="region" aria-label="Nota de estructura del ejemplo" aria-live="polite"><p class="mut peq">Calculando la nota de estructura…</p></div>
+    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primer portafolio</button></p>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
-    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button> <button class="enlace" type="button" id="ej-otro">${ID.incompleto ? 'Ver el ejemplo con la nota calculada' : 'Ver un ejemplo con datos incompletos'}</button></p>
-    <div id="ej-nota"></div><p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
+    <p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
   try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
 }
 
@@ -2187,6 +2415,8 @@ function iniciarLab(ctx) {
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
+  const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
+  lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
   lab.addEventListener('click', onLabClic);
   $('#fi-cuerpo').addEventListener('click', onFichaClic);
   $('#fi-cuerpo').addEventListener('input', e => { if (e.target.id === 'fir-nota' && LAB.nota) LAB.nota.texto = e.target.value; });
@@ -2432,20 +2662,35 @@ const textoRevision = e => e.revisar_en ? `Revisión prevista: ${fechaCorta(e.re
 const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
 function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
   const est = c.estado || estadoSeguimiento({ historia: c.historia, pregunta_ref: c.pregunta_ref, pregunta: c.pregunta }), caso = est.caso, r = est.tipo === 'responde' ? caso.respuesta : null, h = c.historia && historia(c.historia);
-  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b> La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta sigue pendiente: todavía no hay una fuente que la responda.</p>`
-    : est.tipo === 'sin' ? '<p><b>Pendiente.</b> Esta pregunta no está vinculada a ninguna historia ni fuente: sigue pendiente hasta que la revises tú.</p>' : '';
+  const inval = est.refInvalida ? ' El vínculo guardado ya no existe en el catálogo de preguntas: se trata como pregunta propia.' : '';
+  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b>${inval} La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta sigue pendiente: todavía no hay una fuente que la responda.</p>`
+    : est.tipo === 'sin' ? `<p><b>Pendiente.</b>${inval} Esta pregunta no está vinculada a ninguna historia ni fuente: sigue pendiente hasta que la revises tú.</p>` : '';
   const formul = (est.tipo === 'responde' || est.tipo === 'pendiente') && est.distinta ? `<p class="mut peq">Tu formulación es distinta de la de la historia, pero sigue la misma cuestión: «${esc(caso.pregunta)}».</p>` : '';
-  const ocurrido = r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
+  const ocurrido = r && c.compacta ? `<p class="mut peq">Misma respuesta que la de otra pregunta tuya vinculada a esta cuestión (más arriba). El desenlace completo no se repite aquí.</p>` : r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
     : est.tipo === 'pendiente' ? `<p><b>Sigue pendiente.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
     : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
   const rev = !h ? '' : r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : est.tipo === 'otra' ? `<a class="btn btn-secundario" href="#historia-${esc(h.id)}">Ver revisión de la historia</a>` : `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>`;
   const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
-  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? 'Con novedades' : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
+  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Tu reformulación tiene respuesta' : 'Tu pregunta tiene respuesta') : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
     <h3>«${esc(c.pregunta)}»</h3>${formul}${c.revisarEn ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
     ${ocurrido}${pesos}<p class="caso-acc">${rev} ${sim}</p></article>`;
 }
 // Resumen del vínculo con la revisión de la historia dentro de un escenario: responde / sigue pendiente / es otra pregunta (con enlace para verla).
+// Edición: muestra la pregunta de la historia a la que está vinculado el escenario y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
+// en el catálogo se identifica y se limpia al guardar. Avisa (sin decidir) si las palabras nuevas parecen tratar otro asunto.
+function htmlVinculoEdicion(esc, e) {
+  if (!e.historia) return '';
+  if (e.pregunta_ref_invalida) return `<p class="aviso-vinculo" id="esc-vinculo-aviso" role="status">El vínculo guardado («${esc(e.pregunta_ref)}») ya no existe en el catálogo de preguntas de la historia. Se tratará como pregunta propia y se quitará al guardar.</p><input type="hidden" id="esc-ref-quitar" value="1">`;
+  const ref = e.pregunta_ref || refPregunta(e.historia, 1), caso = casoPorRef(ref); if (!caso) return '';
+  return `<p class="fila"><input type="checkbox" id="esc-ref" aria-describedby="esc-vinculo-aviso"${e.pregunta_ref ? ' checked' : ''}> <label for="esc-ref">Sigue la pregunta de la historia: «${esc(caso.pregunta)}»</label></p>
+        <p class="mut peq" id="esc-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(caso.pregunta)}">${e.pregunta_ref ? 'Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.' : 'Sin vincular: tu pregunta se tratará como propia.'}</p>`;
+}
+function avisoParecido(entrada, ref, aviso) {
+  if (!entrada || !ref || !aviso) return;
+  const dis = similitudPregunta(entrada.value, aviso.dataset.editorial || '') < UMBRAL_PARECIDO && entrada.value.trim() !== '';
+  aviso.textContent = !ref.checked ? 'Sin vincular: tu pregunta se tratará como propia.' : dis ? 'Atención: tu pregunta parece tratar otro asunto, pero sigue vinculada y se mostraría con la respuesta de la historia. Si es otra pregunta, desmarca la casilla.' : 'Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.';
+}
 function tarjetaVinculo(esc, e) {
   const est = estadoSeguimiento(e), h = historia(e.historia); if (!h) return '';
   const txt = est.tipo === 'responde' ? `La revisión de la historia responde a la cuestión que sigues: «${esc(est.caso.pregunta)}».`
@@ -2462,8 +2707,9 @@ function pintarSeguimientoCasos(lista) {
   }
   const con = (lista || []).filter(e => e.pregunta && e.estado !== 'descartado').sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id);
   if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
-  cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id);
-    return tarjetaCaso(esc, { pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
+  const vistos = new Set();                                                // dos preguntas con el mismo desenlace: el artículo completo una sola vez, cada tarjeta con su enlace
+  cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id), est = estadoSeguimiento(e), clave = est.tipo === 'responde' ? e.pregunta_ref : null, compacta = !!clave && vistos.has(clave); if (clave) vistos.add(clave);
+    return tarjetaCaso(esc, { compacta, pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
 }
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
@@ -2606,7 +2852,7 @@ function pintarResultado() {
   const guardar = logged() && base.guardada
     ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
-        ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq">Con esto, cuando la revisión de la historia responda esa cuestión la verás en tu seguimiento aunque cambies tus palabras. Desmárcalo si tu pregunta es otra.</p>` : ''}
+        ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
         <label for="lab-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
         <label for="lab-revisar">Fecha de revisión <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
         <label for="lab-nota">Nota <span class="mut">(opcional: por qué lo pruebas, qué quieres revisar)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
@@ -2684,7 +2930,7 @@ function pintarEscenario() {
       ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}${e.historia ? tarjetaVinculo(esc, e) : ''}
       <h2>Tu nota</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
       ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
-        ${e.historia && casoPorRef(e.pregunta_ref || refPregunta(e.historia, 1)) ? `<p class="fila"><input type="checkbox" id="esc-ref"${e.pregunta_ref ? ' checked' : ''}> <label for="esc-ref">Sigue la pregunta de la historia: «${esc(casoPorRef(e.pregunta_ref || refPregunta(e.historia, 1)).pregunta)}»</label></p>` : ''}
+        ${htmlVinculoEdicion(esc, e)}
         <label for="esc-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
         <label for="esc-revisar">Fecha de revisión <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
         <label for="esc-nota">Nota</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
@@ -2701,7 +2947,7 @@ async function aplicarCambios(cambios, mensaje, errId) {
   try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
   catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
-function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value }, 'Cambios guardados', '#esc-error'); }
+function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value }, 'Cambios guardados', '#esc-error'); }
 function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
 async function eliminarEscenario() {
   const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;
@@ -2973,7 +3219,7 @@ $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
 function actualizarCabecera() {
   const l = logged();
-  $('#entrar').hidden = l; $('#salir').hidden = !l; $('#salir-m').hidden = !l;
+  $('#entrar').hidden = l; if (typeof pintarEntrada === 'function') pintarEntrada(); $('#salir').hidden = !l; $('#salir-m').hidden = !l;
   $$('.nav-mis').forEach(e => e.hidden = !l);
 }
 
@@ -2987,9 +3233,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil
 // ---------- rutas ----------
 const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'cartera', carteras: 'cartera', cartera: 'cartera', lab: 'cartera', ejemplo: 'cartera', comparar: 'ideas', revista: 'ideas', articulo: 'ideas', empresas: 'ideas', publicas: 'ideas', seguimiento: 'seguimiento' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Seguimiento', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu portafolio', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis portafolios', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -3014,7 +3260,7 @@ async function route(primera = false) {
 function mostrar(v, primera, extra = {}) {
   const { escenarioId = null, articulo = null, comparar = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
-  const nv = v === 'lab' && escenarioId ? 'seguimiento' : NAV[v];
+  const nv = v === 'lab' && escenarioId ? 'cuaderno' : NAV[v];
   $$('[data-nav]').forEach(a => a.dataset.nav === nv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   $$('[data-ideas]').forEach(a => a.dataset.ideas === IDEAS[v] ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
@@ -3026,6 +3272,7 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
+  if (v === 'inicio') pintarEntrada();
   if (v === 'ejemplo') mostrarEjemplo(true);
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
@@ -3239,7 +3486,7 @@ const colorDe = t => colores.get(t) ?? 0;
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
   return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
-    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
+    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %"><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
     <td class="num">${roicTxt(a)}</td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
@@ -3248,6 +3495,7 @@ function tarjetaPos(p, i) {
   return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
     <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
+    <input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %">
     <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
     <div class="pc-det" id="${id}" hidden><dl>
       <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
@@ -3273,8 +3521,33 @@ function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada 
   cab.classList.toggle('error', total > 100); cab.classList.toggle('aviso', total < 100 && r.n > 0);
   $$('.pbar i').forEach(el => { const i = +(el.closest('tr')?.querySelector('.peso-in') || el.closest('li')?.querySelector('.peso-in'))?.dataset.i; if (Number.isInteger(i)) el.style.width = Math.max(0, Math.min(100, pos[i]?.peso || 0)) + '%'; });
 }
+// ---------- «Tu portafolio»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
+const BASE_SIM = 10000;                                                   // importe SIMULADO de referencia (no es dinero real ni se guarda)
+const eur = v => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, useGrouping: 'always' }).format(Math.round(v)).replace(/\u00a0/g, ' ');
+function pintarDonut(r) {
+  asignarColores();
+  const seg = pos.map(p => ({ t: p.ticker, w: Math.max(0, p.peso || 0) })).filter(x => x.w > 0), total = r.total, escala = Math.max(100, total);
+  let acum = 0; const arcos = seg.map(x => { const l = x.w / escala * 100, a = `<circle class="donut-arco" cx="21" cy="21" r="15.9155" fill="none" stroke="var(--c${colorDe(x.t)})" stroke-width="3.2" stroke-dasharray="${l.toFixed(3)} ${(100 - l).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}"/>`; acum += l; return a; }).join('');
+  const libre = total < 100 && seg.length ? `<circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border-strong)" stroke-width="3.2" stroke-dasharray="${((100 - total) / escala * 100).toFixed(3)} ${(100 - (100 - total) / escala * 100).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}" opacity=".45"/>` : '';
+  $('#donut').innerHTML = `<svg viewBox="0 0 42 42" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border)" stroke-width="3.2"/>${arcos}${libre}</svg><div class="donut-centro"><b class="num">${eur(BASE_SIM)}</b><span>simulados</span></div>`;
+  $('#donut').setAttribute('aria-label', 'Reparto del portafolio sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
+  $('#donut-leyenda').innerHTML = seg.length ? seg.map(x => `<li><i class="sw" style="--c:var(--c${colorDe(x.t)})" aria-hidden="true"></i><span class="lg-n">${esc(by[x.t]?.nombre || x.t)} <small>${esc(x.t)}</small></span><span class="num lg-p">${pesoCorto(x.w)}</span><span class="num lg-e">${eur(BASE_SIM * x.w / 100)}</span></li>`).join('') : '<li class="mut">Añade posiciones para ver el reparto.</li>';
+  const est = $('#donut-estado'); est.className = 'donut-estado ' + (!r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok');
+  est.textContent = !r.n ? '' : r.exceso ? `Sobran ${pesoCorto(r.exceso)}: reduce algún peso para llegar al 100 %.` : r.falta ? `Faltan ${pesoCorto(r.falta)} por asignar para llegar al 100 %.` : 'Reparto completo: 100 %.';
+  // hipótesis: la posición elegida (por defecto, la mayor) cae un X %, las demás se quedan igual
+  const sel = $('#hipo-pos'), previa = sel.value, orden = [...seg].sort((a, b) => b.w - a.w);
+  sel.innerHTML = orden.map(x => `<option value="${esc(x.t)}">${esc(x.t)}</option>`).join(''); sel.value = orden.some(x => x.t === previa) ? previa : (orden[0]?.t || '');
+  const pct = parsePeso($('#hipo-pct').value), h = $('#hipo-res'), x = orden.find(o => o.t === sel.value);
+  $('#hipo').hidden = !orden.length;
+  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: el portafolio pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
+}
+$('#hipo').addEventListener('input', () => { if (current) pintarDonut(calcResumen(pos)); });
+// pasos del creador: 2 Distribución mientras se edita; 3 Revisión al pedir la revisión
+function pasoActual(n) { $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }
+function revisarPortafolio() { pasoActual(3); const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); }
+$('#revisar').addEventListener('click', revisarPortafolio); $('#paso-revisar').addEventListener('click', revisarPortafolio);
 function renderResumen() {
-  pintarRadiografia();
+  pintarRadiografia(); pintarDonut(calcResumen(pos));
   const r = calcResumen(pos), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
   pintarComposicion(r);
   const dif = !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '';
@@ -3487,8 +3760,12 @@ function editarPeso(el, fin) {
   pos[i].peso = ok ? r1(v) : 0;
   if (fin && ok) el.value = nf(pos[i].peso);
   for (const o of $$(`.peso-in[data-i="${i}"]`)) { o.setAttribute('aria-invalid', ok ? 'false' : 'true'); if (o !== el) o.value = el.value; }
-  marcarCambio(); renderResumen();
+  for (const g of $$(`.peso-rng[data-i="${i}"]`)) { if (g !== el) g.value = ok ? pos[i].peso : 0; g.setAttribute('aria-valuetext', `${nf(pos[i].peso)} %`); }
+  marcarCambio(); renderResumen(); pasoActual(2);
 }
+// El deslizador es una ENTRADA MÁS: escribe en el campo numérico y sigue exactamente el mismo camino de validación (también se puede ajustar sin arrastrar).
+$('#vista-cartera').addEventListener('input', e => { if (!e.target.classList.contains('peso-rng')) return; const i = +e.target.dataset.i, v = Math.round(+e.target.value * 10) / 10;
+  const num = [...$$(`.peso-in[data-i="${i}"]`)][0]; if (!num) return; for (const o of $$(`.peso-in[data-i="${i}"]`)) o.value = nf(v); editarPeso(num, false); });
 $('#vista-cartera').addEventListener('input', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, false); });
 $('#vista-cartera').addEventListener('change', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, true); });
 $('#vista-cartera').addEventListener('click', e => {
@@ -3762,7 +4039,16 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
   .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
 
 // ---------- portada: acción principal y vista previa real ----------
-$('#probar').addEventListener('click', () => { // destino inequívoco: la elección de plantilla, con el foco allí
+// Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
+function pintarEntrada() {
+  const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
+  b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crea tu primer portafolio';
+  $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
+}
+$('#probar').addEventListener('click', () => { // destino inequívoco según el estado; al crear, la elección de plantilla con el foco allí
+  const modo = $('#probar').dataset.modo;
+  if (modo === 'mis') { go('#carteras'); return; }
+  if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
   const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));

@@ -42,8 +42,8 @@
  {
   "id": "M1e",
   "escenario": "Aplicar 0011 (ronda 16) con escenarios antiguos: solo la coincidencia INEQUÍVOCA se vincula",
-  "esperado": "mig11-igual-01 → hidrogeno-norte:1; el resto NULL; escenarios idéntico a schema.sql",
-  "observado": "{\"antiguo-0001\":null,\"mig11-igual-01\":\"hidrogeno-norte:1\",\"mig11-otra-001\":null,\"mig11-sinhis-01\":null,\"mig11-casi-0001\":null}; escenarios iguales=true",
+  "esperado": "; escenarios idéntico a schema.sql",
+  "observado": "{\"antiguo-0001\":null,\"mig11-igual-01\":\"hidrogeno-norte:1\",\"mig11-otra-001\":null,\"mig11-igual-02\":\"hidrogeno-norte:2\",\"mig11-sinhis-01\":null,\"mig11-casi-0001\":null}; escenarios iguales=true",
   "resultado": "OK",
   "evidencia": ""
  },

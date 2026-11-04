@@ -1,4 +1,5 @@
 import { json, auth, readJson, ERROR_INTERNO } from '../../_lib.js';
+import { refDeHistoria } from '../../../public/js/catalogo.js';
 import { ESTADOS, SELECT_ESCENARIO, formato, fechaValida, MAX_PREGUNTA, REF_PREGUNTA } from './_comun.js';
 
 const esRevision = r => Number.isInteger(r) && r >= 0;
@@ -30,7 +31,7 @@ export async function onRequestPatch({ request, env, params }) {
   if (revisar !== null && !fechaValida(revisar)) return json({ error: 'La fecha de revisión no es válida (AAAA-MM-DD).' }, 400);
   // Vínculo con la cuestión editorial: se puede mantener, quitar (null) o fijar uno de LA MISMA historia del escenario. Reescribir la pregunta no lo toca.
   const ref = b.pregunta_ref !== undefined ? (b.pregunta_ref === null || b.pregunta_ref === '' ? null : String(b.pregunta_ref)) : actual.pregunta_ref;
-  if (ref !== null && (!REF_PREGUNTA.test(ref) || actual.historia == null || ref.split(':')[0] !== actual.historia)) return json({ error: 'La pregunta de la historia vinculada no es válida.' }, 400);
+  if (ref !== null && ref !== actual.pregunta_ref && (!REF_PREGUNTA.test(ref) || actual.historia == null || !refDeHistoria(ref, actual.historia))) return json({ error: 'La pregunta de la historia vinculada no es válida.' }, 400);
   if (!ESTADOS.includes(estado)) return json({ error: 'Estado no válido.' }, 400);
   if (!esRevision(b.revision)) return json({ error: 'Falta la revisión del escenario.' }, 400);
   const conflicto = (r) => json({ error: 'El escenario cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: r.revision }, 409);

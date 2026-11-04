@@ -264,7 +264,7 @@ $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
 function actualizarCabecera() {
   const l = logged();
-  $('#entrar').hidden = l; $('#salir').hidden = !l; $('#salir-m').hidden = !l;
+  $('#entrar').hidden = l; if (typeof pintarEntrada === 'function') pintarEntrada(); $('#salir').hidden = !l; $('#salir-m').hidden = !l;
   $$('.nav-mis').forEach(e => e.hidden = !l);
 }
 
@@ -278,9 +278,9 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil
 // ---------- rutas ----------
 const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'cartera', carteras: 'cartera', cartera: 'cartera', lab: 'cartera', ejemplo: 'cartera', comparar: 'ideas', revista: 'ideas', articulo: 'ideas', empresas: 'ideas', publicas: 'ideas', seguimiento: 'seguimiento' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea y entiende tu cartera simulada', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Seguimiento', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu portafolio', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis portafolios', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -305,7 +305,7 @@ async function route(primera = false) {
 function mostrar(v, primera, extra = {}) {
   const { escenarioId = null, articulo = null, comparar = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
-  const nv = v === 'lab' && escenarioId ? 'seguimiento' : NAV[v];
+  const nv = v === 'lab' && escenarioId ? 'cuaderno' : NAV[v];
   $$('[data-nav]').forEach(a => a.dataset.nav === nv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   $$('[data-ideas]').forEach(a => a.dataset.ideas === IDEAS[v] ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
@@ -317,6 +317,7 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
+  if (v === 'inicio') pintarEntrada();
   if (v === 'ejemplo') mostrarEjemplo(true);
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
@@ -513,6 +514,7 @@ function renderWorkspace() {
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
+  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta los porcentajes, revisa el resultado y guarda los cambios.' : 'Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.';
   $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
@@ -530,7 +532,7 @@ const colorDe = t => colores.get(t) ?? 0;
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
   return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
-    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
+    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %"><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
     <td class="num">${roicTxt(a)}</td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
@@ -539,6 +541,7 @@ function tarjetaPos(p, i) {
   return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
     <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
+    <input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %">
     <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
     <div class="pc-det" id="${id}" hidden><dl>
       <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
@@ -564,8 +567,33 @@ function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada 
   cab.classList.toggle('error', total > 100); cab.classList.toggle('aviso', total < 100 && r.n > 0);
   $$('.pbar i').forEach(el => { const i = +(el.closest('tr')?.querySelector('.peso-in') || el.closest('li')?.querySelector('.peso-in'))?.dataset.i; if (Number.isInteger(i)) el.style.width = Math.max(0, Math.min(100, pos[i]?.peso || 0)) + '%'; });
 }
+// ---------- «Tu portafolio»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
+const BASE_SIM = 10000;                                                   // importe SIMULADO de referencia (no es dinero real ni se guarda)
+const eur = v => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, useGrouping: 'always' }).format(Math.round(v)).replace(/\u00a0/g, ' ');
+function pintarDonut(r) {
+  asignarColores();
+  const seg = pos.map(p => ({ t: p.ticker, w: Math.max(0, p.peso || 0) })).filter(x => x.w > 0), total = r.total, escala = Math.max(100, total);
+  let acum = 0; const arcos = seg.map(x => { const l = x.w / escala * 100, a = `<circle class="donut-arco" cx="21" cy="21" r="15.9155" fill="none" stroke="var(--c${colorDe(x.t)})" stroke-width="3.2" stroke-dasharray="${l.toFixed(3)} ${(100 - l).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}"/>`; acum += l; return a; }).join('');
+  const libre = total < 100 && seg.length ? `<circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border-strong)" stroke-width="3.2" stroke-dasharray="${((100 - total) / escala * 100).toFixed(3)} ${(100 - (100 - total) / escala * 100).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}" opacity=".45"/>` : '';
+  $('#donut').innerHTML = `<svg viewBox="0 0 42 42" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border)" stroke-width="3.2"/>${arcos}${libre}</svg><div class="donut-centro"><b class="num">${eur(BASE_SIM)}</b><span>simulados</span></div>`;
+  $('#donut').setAttribute('aria-label', 'Reparto del portafolio sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
+  $('#donut-leyenda').innerHTML = seg.length ? seg.map(x => `<li><i class="sw" style="--c:var(--c${colorDe(x.t)})" aria-hidden="true"></i><span class="lg-n">${esc(by[x.t]?.nombre || x.t)} <small>${esc(x.t)}</small></span><span class="num lg-p">${pesoCorto(x.w)}</span><span class="num lg-e">${eur(BASE_SIM * x.w / 100)}</span></li>`).join('') : '<li class="mut">Añade posiciones para ver el reparto.</li>';
+  const est = $('#donut-estado'); est.className = 'donut-estado ' + (!r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok');
+  est.textContent = !r.n ? '' : r.exceso ? `Sobran ${pesoCorto(r.exceso)}: reduce algún peso para llegar al 100 %.` : r.falta ? `Faltan ${pesoCorto(r.falta)} por asignar para llegar al 100 %.` : 'Reparto completo: 100 %.';
+  // hipótesis: la posición elegida (por defecto, la mayor) cae un X %, las demás se quedan igual
+  const sel = $('#hipo-pos'), previa = sel.value, orden = [...seg].sort((a, b) => b.w - a.w);
+  sel.innerHTML = orden.map(x => `<option value="${esc(x.t)}">${esc(x.t)}</option>`).join(''); sel.value = orden.some(x => x.t === previa) ? previa : (orden[0]?.t || '');
+  const pct = parsePeso($('#hipo-pct').value), h = $('#hipo-res'), x = orden.find(o => o.t === sel.value);
+  $('#hipo').hidden = !orden.length;
+  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: el portafolio pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
+}
+$('#hipo').addEventListener('input', () => { if (current) pintarDonut(calcResumen(pos)); });
+// pasos del creador: 2 Distribución mientras se edita; 3 Revisión al pedir la revisión
+function pasoActual(n) { $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }
+function revisarPortafolio() { pasoActual(3); const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); }
+$('#revisar').addEventListener('click', revisarPortafolio); $('#paso-revisar').addEventListener('click', revisarPortafolio);
 function renderResumen() {
-  pintarRadiografia();
+  pintarRadiografia(); pintarDonut(calcResumen(pos));
   const r = calcResumen(pos), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
   pintarComposicion(r);
   const dif = !r.n ? 'Sin posiciones todavía' : r.exceso ? `⚠ Exceso de asignación: ${pesoCorto(r.exceso)}` : r.falta ? `Pendiente de asignar: ${pesoCorto(r.falta)}` : '';
@@ -778,8 +806,12 @@ function editarPeso(el, fin) {
   pos[i].peso = ok ? r1(v) : 0;
   if (fin && ok) el.value = nf(pos[i].peso);
   for (const o of $$(`.peso-in[data-i="${i}"]`)) { o.setAttribute('aria-invalid', ok ? 'false' : 'true'); if (o !== el) o.value = el.value; }
-  marcarCambio(); renderResumen();
+  for (const g of $$(`.peso-rng[data-i="${i}"]`)) { if (g !== el) g.value = ok ? pos[i].peso : 0; g.setAttribute('aria-valuetext', `${nf(pos[i].peso)} %`); }
+  marcarCambio(); renderResumen(); pasoActual(2);
 }
+// El deslizador es una ENTRADA MÁS: escribe en el campo numérico y sigue exactamente el mismo camino de validación (también se puede ajustar sin arrastrar).
+$('#vista-cartera').addEventListener('input', e => { if (!e.target.classList.contains('peso-rng')) return; const i = +e.target.dataset.i, v = Math.round(+e.target.value * 10) / 10;
+  const num = [...$$(`.peso-in[data-i="${i}"]`)][0]; if (!num) return; for (const o of $$(`.peso-in[data-i="${i}"]`)) o.value = nf(v); editarPeso(num, false); });
 $('#vista-cartera').addEventListener('input', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, false); });
 $('#vista-cartera').addEventListener('change', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, true); });
 $('#vista-cartera').addEventListener('click', e => {
@@ -1057,7 +1089,16 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
   .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
 
 // ---------- portada: acción principal y vista previa real ----------
-$('#probar').addEventListener('click', () => { // destino inequívoco: la elección de plantilla, con el foco allí
+// Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
+function pintarEntrada() {
+  const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
+  b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crea tu primer portafolio';
+  $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
+}
+$('#probar').addEventListener('click', () => { // destino inequívoco según el estado; al crear, la elección de plantilla con el foco allí
+  const modo = $('#probar').dataset.modo;
+  if (modo === 'mis') { go('#carteras'); return; }
+  if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
   const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));

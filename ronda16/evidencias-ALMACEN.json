@@ -51,7 +51,7 @@
   "id": "A6",
   "escenario": "El borrado de la ÚLTIMA fila falla",
   "esperado": "Lanza error de escritura; el dato sigue en el almacenamiento y en memoria (no se oculta el fallo)",
-  "observado": "escritura; en disco «{\"JNJ\":{\"nota\":\"una sola\",\"t\":\"2026-11-04T18:19:16.726Z\"}}»; memoria 1",
+  "observado": "escritura; en disco «{\"JNJ\":{\"nota\":\"una sola\",\"t\":\"2026-11-04T21:48:05.393Z\"}}»; memoria 1",
   "resultado": "OK",
   "evidencia": ""
  },

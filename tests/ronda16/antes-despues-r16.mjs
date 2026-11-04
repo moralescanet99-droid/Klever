@@ -13,7 +13,7 @@ for (const k of ['A', 'B', 'C']) env.sql.prepare('INSERT INTO activos(ticker,nom
 env.sql.exec(`INSERT INTO portafolios(id,usuario_id,nombre,plantilla,publico,tesis) VALUES (1,1,'Base','oro',0,NULL); INSERT INTO posiciones(portafolio_id,ticker,peso) VALUES (1,'A',60),(1,'B',40)`);
 const llama = async (f, m, body, params = {}) => { const r = await f({ request: new Request('http://x/api', { method: m, headers: { authorization: 'Bearer token-de-prueba', 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }), env, params }); return { s: r.status, txt: await r.text() }; };
 const bl = { empresas: 6, sectores: 6, tamano: 6, deuda: 6, rentabilidad: 6 };
-const res = o => ({ version: 'estructura-v1', fecha: '2026-11-04', publicada: true, nota: 6.4, motivo: null, cobertura: 100, bloques: bl, fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: 1.2 }, ...o });
+const res = o => ({ version: 'estructura-v1', fecha: '2026-11-04', publicada: true, nota: 6, motivo: null, cobertura: 100, bloques: bl, fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: 1 }, ...o });
 const MARCA = '<img src=x onerror=window.__pwn=1>';
 const post = await llama(ES.onRequestPost, 'POST', { clave: 'intento-0001', nombre: 'Añadir C', cartera_id: 1, base_revision: 0, ticker: 'C', peso: 10, financiacion: 'proporcional', propuesta: [{ ticker: 'A', peso: 54 }, { ticker: 'B', peso: 36 }, { ticker: 'C', peso: 10 }], evaluacion: { antes: res({ nota: MARCA }), despues: res({}) } });
 out.marcador = { guardar: post.s, devuelveMarcador: post.txt.includes('onerror') };
@@ -22,7 +22,7 @@ if (post.s === 201) { const id = JSON.parse(post.txt).id; const g = await llama(
 env.sql.prepare("INSERT INTO escenarios(usuario_id,clave,nombre,metodo,cartera_id,cartera_nombre,base_revision,ticker,peso_objetivo,base_json,propuesta_json,nota_json) VALUES (1,'antigua-0001','Antigua','proporcional',1,'X',0,'C',10,'[]','[]',?)").run(JSON.stringify({ antes: res({ nota: MARCA }), despues: res({}) }));
 const l = await llama(ES.onRequestGet, 'GET'); out.marcador.filaAntiguaEnLaLista = l.txt.includes('onerror');
 // 2. EBITDA ausente con una posición al 100 % y una sola sesión de negociación
-const emp = { nombre: 'Z', tipo: 'accion', sector: 'S1', actividad: 'A', emisor: 'z', cap: 1e9, imp: 1e6, sesiones: 1, moneda: 'USD', fuenteMercado: 'prueba', fechaMercado: '2026-11-04', ej: [2020, 2021, 2022, 2023, 2024].map((y, k) => ({ p: 'FY' + y, ing: 100 + k, ni: 10, op: 12, ebitda: null, deuda: 50, fcf: 5, roic: .05 })) };
+const emp = { nombre: 'Z', tipo: 'accion', sector: 'S1', actividad: 'A', emisor: 'z', cap: 1e9, imp: 1e6, sesiones: 1, moneda: 'USD', fuenteMercado: 'prueba', fechaMercado: '2026-11-04', ej: [2020, 2021, 2022, 2023, 2024].map((y, k) => ({ p: 'FY' + y, f: 'prueba', d: '2026-11-04', ing: 100 + k, ni: 10, op: 12, ebitda: null, deuda: 50, fcf: 5, roic: .05 })) };
 const U = { fecha: '2026-11-04', origen: 'sintetico', empresas: {} }; for (let i = 0; i < 24; i++) U.empresas['S' + i] = { ...emp, nombre: 'S' + i, emisor: 'e' + i, cap: 1e9 * (i + 1), imp: 1e6 * (i + 1), ej: emp.ej.map(x => ({ ...x, ebitda: 20 * (i + 1), deuda: 20 * (i + 1) * (.5 + i / 40) })) };
 U.empresas.Z1 = { ...emp };
 const e = N.evaluar([{ ticker: 'Z1', peso: 100 }], U);

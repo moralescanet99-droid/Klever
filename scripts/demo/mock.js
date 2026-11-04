@@ -1,11 +1,12 @@
 
 // ---------- Backend simulado en memoria (solo demo) ----------
+window.__KLEVER_DEMO__=true;
 const UNIVERSE = %s;
 function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}let a=h>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const DB={assets:[],fund:{},ideas:{},users:{},sessions:{},ports:[],pos:{},nextId:1};
 for(const a of UNIVERSE){DB.assets.push(a);if(a.tipo!=='accion')continue;const r=rng(a.ticker);const fin=a.sector==='Finanzas';const base=(20+r()*220)*1e9;let ing=base*0.8;DB.fund[a.ticker]=[];
   for(const y of [2020,2021,2022,2023,2024]){ing*=0.97+r()*0.14;const margen=0.03+r()*0.28;const ebitda=ing*(0.12+r()*0.3);const debt=(r()*3.2-0.3)*ebitda;
-    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:null,resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
+    DB.fund[a.ticker].push({periodo:'FY'+y,ingresos:ing,beneficio_neto:ing*margen,deuda_neta:fin?null:debt,ebitda:fin?null:ebitda,flujo_caja_libre:ing*(r()*0.25-0.03),roic:fin?null:0.02+r()*0.28,fuente:'demo',actualizado_en:'2026-11-04',resultado_operativo:fin?null:ebitda*(0.55+r()*0.3),informe:'demo-'+a.ticker+'-FY'+y})}
   DB.fund[a.ticker].reverse();
   const L=DB.fund[a.ticker][0],P=DB.fund[a.ticker][1];
   DB.ideas[a.ticker]={periodo:L.periodo,

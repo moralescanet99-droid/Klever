@@ -4,6 +4,7 @@
 // reales queda pendiente de calibración y verificación; con datos de prueba/sintéticos solo sirve para probar el método.
 // El universo se recibe CONGELADO (instantánea con su fecha): la misma cartera, la misma fecha y los mismos datos dan SIEMPRE la misma nota.
 export const VERSION_NOTA = 'estructura-v1';
+export const VERSIONES_CONOCIDAS = Object.freeze(['estructura-v1']);
 export const PESOS = { empresas: 20, sectores: 20, tamano: 15, deuda: 25, rentabilidad: 20 };
 export const NOMBRES = { empresas: 'Empresas', sectores: 'Sectores y actividades', tamano: 'Tamaño y liquidez', deuda: 'Deuda y caja', rentabilidad: 'Rentabilidad y crecimiento' };
 export const PARAMETROS = { minCobertura: 0.9, minComparables: 20, ejercicios: 5, sesiones: 60, maxEmpresasEfectivas: 15, maxSectoresEfectivos: 6, maxActividadesEfectivas: 10 };
@@ -31,7 +32,7 @@ const CACHE = new WeakMap();                                   // por referencia
 const claveMk = e => `${e.moneda || ''}|${e.fuenteMercado || ''}`;
 function preparar(universo) {
   if (CACHE.has(universo.empresas)) return CACHE.get(universo.empresas);
-  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => e.tipo === 'accion');
+  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => e.tipo === 'accion' && (!e.ficticia || universo.origen === 'sintetico'));   // una empresa ficticia nunca es comparable fuera de un conjunto sintético
   // moneda y fuente de mercado de REFERENCIA = la más frecuente entre quienes tienen datos de mercado con procedencia (un empate no fija ninguna)
   const cuenta = {}; for (const [, e] of accs) if (((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) && e.moneda && e.fuenteMercado) cuenta[claveMk(e)] = (cuenta[claveMk(e)] || 0) + 1;
   const orden = Object.entries(cuenta).sort((a, b) => b[1] - a[1]), ref = orden.length && (orden.length === 1 || orden[0][1] > orden[1][1]) ? orden[0][0] : null;
@@ -69,16 +70,35 @@ function preparar(universo) {
   const prep = { E, porSector, caps, imps }; CACHE.set(universo.empresas, prep); return prep;
 }
 
+// Procedencia de las filas que se USAN: los ejercicios de las empresas de la cartera y los datos de mercado de las empresas con datos. Cada fila necesita fuente y una
+// fecha de calendario REAL; sin ellas no se puede decir de dónde sale la cifra y la nota no se calcula (ni «ayer», ni 2026-02-31, ni NULL).
+const fechaFila = d => typeof d === 'string' && fechaReal(d.slice(0, 10));
+function problemasProcedencia(pos, universo) {
+  const out = [];
+  for (const p of pos) { const e = universo.empresas?.[p.ticker]; if (!e || e.tipo !== 'accion') continue;
+    for (const r of e.ej || []) { if (!r.f) out.push(`${p.ticker} ${r.p}: la fila no tiene fuente`); else if (!fechaFila(r.d)) out.push(`${p.ticker} ${r.p}: la fecha de la fila no es una fecha real`); }
+    if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${p.ticker}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${p.ticker}: la fecha de los datos de mercado no es una fecha real`); } }
+  return out;
+}
+const MOTIVO_ORIGEN = {
+  incompleto: 'Hay filas sin fuente o con una fecha que no es válida: sin procedencia verificable la nota no se calcula.',
+  mixto: 'El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero.',
+  real: 'La nota todavía no está habilitada con datos reales: antes hay que calibrar los umbrales y verificar los datos.',
+};
 // cartera: [{ ticker, peso }] (peso en %). universo: { fecha, empresas: { TICKER: { nombre, tipo, sector, actividad, emisor, cap, imp, ej: [{ p, ing, ni, op, ebitda, deuda, fcf, roic, f, d }] } } }
 export function evaluar(cartera, universo) {
-  const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, origenDatos: universo.origen ?? null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
+  const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, origenDatos: universo.origen ?? null, instantanea: universo.fecha ?? null, periodos: null, poblacion: null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
   const pos = (cartera || []).filter(p => p?.peso > 0); res.total = pos.reduce((s, p) => s + dec(p.peso), 0) / 10;
   // Reparto con nombres (para explicar la nota con las posiciones REALES de la cartera: «X pesa el 60 %»)
   res.reparto = pos.map(p => ({ ticker: p.ticker, nombre: universo.empresas?.[p.ticker]?.nombre ?? p.ticker, sector: universo.empresas?.[p.ticker]?.sector ?? null, peso: dec(p.peso) / 10 })).sort((a, b) => b.peso - a.peso || a.ticker.localeCompare(b.ticker));
   if (!pos.length) { res.motivo = 'La cartera está vacía: no hay nada que evaluar.'; return res; }
   if (dec(res.total) !== 1000) { res.motivo = `La cartera suma ${String(res.total).replace('.', ',')} %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).`; return res; }
-  if (universo.origen !== 'sintetico' && universo.habilitada !== true) { res.motivo = 'La nota todavía no está habilitada con datos reales o mezclados: antes hay que calibrar los umbrales y verificar los datos. Solo se calcula con un conjunto sintético identificado.'; return res; }
+  const prob = problemasProcedencia(pos, universo);
+  if (prob.length) { res.procedencia = { problemas: prob }; res.motivo = `Procedencia incompleta: ${prob.slice(0, 3).join('; ')}${prob.length > 3 ? ` (y ${prob.length - 3} más)` : ''}. Sin fuente y fecha verificables no se calcula la nota.`; return res; }
+  if (universo.origen !== 'sintetico' && universo.habilitada !== true) { res.motivo = MOTIVO_ORIGEN[universo.origen] || 'La nota todavía no está habilitada: falta declarar el origen del conjunto de datos (solo se calcula con un conjunto sintético identificado).'; return res; }
   const P = preparar(universo), tot = 1000;
+  res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => ({ ticker: p.ticker, hasta: [...universo.empresas[p.ticker].ej].map(r => r.p).sort().at(-1) }));
+  { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
   for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
   const bloques = {};
@@ -137,33 +157,52 @@ export const resumenNota = ev => ({ version: ev.version, fecha: ev.fecha, public
 // ---- Validación ESTRICTA de una evaluación guardada (la usan el servidor al guardar y al leer, y la interfaz al mostrar). Una evaluación es un REGISTRO de lo que vio la
 // persona: el servidor no puede recalcularla (el universo de entonces ya no existe), así que solo comprueba su FORMA: números finitos en rango, fechas reales,
 // identificadores conocidos y texto sin marcado. Devuelve { ok, motivo } y, si es válida, `limpio`: una copia reconstruida campo a campo (nunca el objeto recibido).
+export const fechaReal = v => { if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false; const d = new Date(v + 'T00:00:00Z'); return !isNaN(d) && d.toISOString().slice(0, 10) === v; };
 const IDS = Object.keys(PESOS), CLAVES = ['version', 'fecha', 'publicada', 'nota', 'motivo', 'cobertura', 'bloques', 'fortaleza', 'limitacion'];
-const num = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && v >= lo && v <= hi;
-const fechaReal = v => { if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false; const d = new Date(v + 'T00:00:00Z'); return !isNaN(d) && d.toISOString().slice(0, 10) === v; };
-const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v);
-export function validarResumen(r) {
+const numEn = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && !Object.is(v, -0) && v >= lo && v <= hi;
+// Texto visible: sin marcado, sin controles y SIN controles de dirección (podrían reordenar lo que se lee: «\u202e»), y de longitud acotada.
+const BIDI = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
+const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v) && !BIDI.test(v);
+export const MAX_MOTIVO = 700;
+const TOL_TOTAL = 0.056, TOL_BLOQUE = 0.011;                // los bloques guardados se redondean a 2 decimales (±0,005) y el total a 1 (±0,05)
+const propio = (o, k) => Object.hasOwn(o, k);
+// modo `guardar`: solo se aceptan versiones CONOCIDAS (se puede comprobar la coherencia). Al LEER, una versión desconocida pero bien formada se entrega como
+// «valor guardado por el cliente» (`sinComprobar`): no se puede verificar cómo se calculó, así que no se presenta como comprobado.
+export function validarResumen(r, { guardar = false } = {}) {
   const mal = motivo => ({ ok: false, motivo });
   if (!r || typeof r !== 'object' || Array.isArray(r)) return mal('La evaluación no es un objeto.');
   if (Object.keys(r).some(k => !CLAVES.includes(k))) return mal('La evaluación trae campos desconocidos.');
+  if (!CLAVES.every(k => propio(r, k))) return mal('A la evaluación le faltan campos propios (no se aceptan propiedades heredadas).');
   if (typeof r.version !== 'string' || !/^[a-z0-9-]{1,30}$/.test(r.version)) return mal('La versión del método no es válida.');
+  const conocida = VERSIONES_CONOCIDAS.includes(r.version);
+  if (!conocida && guardar) return mal(`La versión del método «${r.version}» no es una versión conocida.`);
   if (typeof r.publicada !== 'boolean') return mal('Falta indicar si la nota está publicada.');
   if (r.fecha != null && !fechaReal(r.fecha)) return mal('La fecha de evaluación no es una fecha real (AAAA-MM-DD).');
   if (r.publicada) {
     if (r.fecha == null) return mal('Una nota publicada necesita su fecha.');
-    if (!num(r.nota, 1, 10) || Math.round(r.nota * 10) / 10 !== r.nota) return mal('La nota debe ser un número de 1 a 10 con un decimal.');
-    if (!num(r.cobertura, 100 * PARAMETROS.minCobertura, 100)) return mal('Una nota publicada necesita una cobertura de al menos el 90 %.');
+    if (!numEn(r.nota, 1, 10) || Math.round(r.nota * 10) / 10 !== r.nota) return mal('La nota debe ser un número de 1 a 10 con un decimal.');
+    if (!numEn(r.cobertura, 100 * PARAMETROS.minCobertura, 100)) return mal('Una nota publicada necesita una cobertura de al menos el 90 %.');
   } else {
     if (r.nota != null) return mal('Una nota pendiente no puede llevar cifra.');
-    if (r.cobertura != null && !num(r.cobertura, 0, 100)) return mal('La cobertura debe estar entre 0 y 100.');
+    if (r.cobertura != null && !numEn(r.cobertura, 0, 100)) return mal('La cobertura debe estar entre 0 y 100.');
   }
-  if (r.motivo != null && !textoLimpio(r.motivo, 700)) return mal('El motivo contiene marcado o es demasiado largo.');
+  if (r.motivo != null && !textoLimpio(r.motivo, MAX_MOTIVO)) return mal('El motivo contiene marcado o caracteres no permitidos, o es demasiado largo.');
   if (r.bloques != null) {
-    if (typeof r.bloques !== 'object' || Array.isArray(r.bloques) || Object.keys(r.bloques).length !== IDS.length || !IDS.every(k => k in r.bloques)) return mal('Los bloques no son los cinco esperados.');
-    for (const k of IDS) { const v = r.bloques[k]; if (!(v === null ? !r.publicada : num(v, 1, 10))) return mal('La puntuación de un bloque no es un número de 1 a 10' + (r.publicada ? '' : ' ni null') + '.'); }
+    if (typeof r.bloques !== 'object' || Array.isArray(r.bloques) || Object.keys(r.bloques).length !== IDS.length || !IDS.every(k => propio(r.bloques, k))) return mal('Los bloques no son los cinco esperados.');
+    for (const k of IDS) { const v = r.bloques[k]; if (!(v === null ? !r.publicada : numEn(v, 1, 10))) return mal('La puntuación de un bloque no es un número de 1 a 10' + (r.publicada ? '' : ' ni null') + '.'); }
   } else if (r.publicada) return mal('Una nota publicada necesita sus bloques.');
   if (r.fortaleza != null && !IDS.includes(r.fortaleza)) return mal('La fortaleza no es un bloque conocido.');
-  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || !IDS.includes(l.bloque) || !num(l.perdida, 0, 10) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k))) return mal('La limitación no es válida.'); }
+  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k)) || !propio(l, 'bloque') || !IDS.includes(l.bloque) || !numEn(l.perdida, 0, 10)) return mal('La limitación no es válida.'); }
   if (r.publicada && (r.fortaleza == null || r.limitacion == null)) return mal('Una nota publicada necesita su fortaleza y su limitación.');
-  return { ok: true, limpio: { version: r.version, fecha: r.fecha ?? null, publicada: r.publicada, nota: r.nota ?? null, motivo: r.motivo ?? null, cobertura: r.cobertura ?? null,
+  // Coherencia (solo con un método conocido): el total sale de los bloques, la fortaleza es el bloque mejor puntuado y la limitación el que más resta
+  if (r.publicada && conocida) {
+    const suma = IDS.reduce((s, k) => s + PESOS[k] * r.bloques[k], 0) / 100;
+    if (Math.abs(r.nota - suma) > TOL_TOTAL) return mal(`La nota (${r.nota}) no cuadra con sus bloques (${(Math.round(suma * 100) / 100).toString().replace('.', ',')}).`);
+    const max = Math.max(...IDS.map(k => r.bloques[k]));
+    if (r.bloques[r.fortaleza] < max - TOL_BLOQUE) return mal('La fortaleza no es el bloque mejor puntuado.');
+    const perd = k => PESOS[k] * (10 - r.bloques[k]) / 100, maxP = Math.max(...IDS.map(perd));
+    if (perd(r.limitacion.bloque) < maxP - TOL_BLOQUE || Math.abs(r.limitacion.perdida - perd(r.limitacion.bloque)) > TOL_BLOQUE) return mal('La limitación no cuadra con los bloques.');
+  }
+  return { ok: true, sinComprobar: !conocida, limpio: { version: r.version, fecha: r.fecha ?? null, publicada: r.publicada, nota: r.nota ?? null, motivo: r.motivo ?? null, cobertura: r.cobertura ?? null,
     bloques: r.bloques == null ? null : Object.fromEntries(IDS.map(k => [k, r.bloques[k]])), fortaleza: r.fortaleza ?? null, limitacion: r.limitacion == null ? null : { bloque: r.limitacion.bloque, perdida: r.limitacion.perdida } } };
 }

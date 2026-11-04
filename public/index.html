@@ -7,6 +7,7 @@
 <meta name="description" content="Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real. Beta gratuita y educativa.">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="style-r13.css">
+<link rel="stylesheet" href="style-r17.css">
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -15,9 +16,10 @@
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#inicio" data-nav="cartera">Cartera</a>
-      <a href="#revista" data-nav="ideas">Ideas</a>
-      <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
+      <a href="#carteras" data-nav="mis">Mis portafolios</a>
+      <a href="#inicio" data-nav="crear">Crear portafolio</a>
+      <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+      <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
     </nav>
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
@@ -26,9 +28,10 @@
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#inicio" data-nav="cartera">Cartera</a>
-    <a href="#revista" data-nav="ideas">Ideas</a>
-    <a href="#seguimiento" data-nav="seguimiento">Seguimiento</a>
+    <a href="#carteras" data-nav="mis">Mis portafolios</a>
+    <a href="#inicio" data-nav="crear">Crear portafolio</a>
+    <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+    <a href="#revista" data-nav="revista">Revista</a>
     <button id="salir-m" type="button" hidden>Salir</button>
   </nav>
 </header>
@@ -47,10 +50,11 @@
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Crea y entiende tu cartera simulada</h1>
+        <h1>Crea, entiende y sigue tu portafolio</h1>
         <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
         <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primera cartera</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
+        <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primer portafolio</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
@@ -89,7 +93,7 @@
 
   <!-- ===== EXPLORAR EMPRESAS ===== -->
   <section id="vista-empresas" data-vista="empresas" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
       <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
@@ -142,7 +146,7 @@
 
   <!-- ===== CARTERAS PÚBLICAS ===== -->
   <section id="vista-publicas" data-vista="publicas" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab">
       <h1>Carteras públicas</h1>
       <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
@@ -153,7 +157,7 @@
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Mis portafolios</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -177,12 +181,12 @@
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
   <section id="vista-revista" data-vista="revista" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
     <div id="revista-cuerpo"></div>
   </section>
   <section id="vista-articulo" data-vista="articulo" hidden>
-    <nav class="ideas-tabs" aria-label="Ideas"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div id="articulo-cuerpo"></div>
   </section>
 
@@ -192,7 +196,7 @@
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Seguimiento <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
+      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
       <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
@@ -220,7 +224,13 @@
 
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
-    <h1 class="sr">Editor de cartera</h1>
+    <h1 id="creador-titulo">Crea tu portafolio</h1>
+    <p class="mut creador-sub" id="creador-sub">Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.</p>
+    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
+      <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> Objetivo</a></li>
+      <li class="paso" data-paso="2" aria-current="step"><span class="paso-n" aria-hidden="true">2</span> Distribución</li>
+      <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> Revisión</button></li>
+    </ol>
     <div class="ws-cab">
       <div class="ws-titulo">
         <label class="sr" for="nombre">Nombre de la cartera</label>
@@ -282,6 +292,7 @@
           </div>
         </section>
 
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario" type="button" id="revisar">Revisar portafolio <span aria-hidden="true">→</span></button></div>
         <details class="panel plegable-panel panel-graf" id="det-graficos">
           <summary><h2>Gráficos de precio</h2></summary>
           <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
@@ -290,6 +301,20 @@
       </div>
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
+        <section class="panel panel-donut" id="panel-donut" aria-labelledby="donut-t">
+          <h2 id="donut-t">Tu portafolio</h2>
+          <div class="donut-cuerpo">
+            <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
+            <ul class="donut-leyenda" id="donut-leyenda"></ul>
+          </div>
+          <p class="donut-estado" id="donut-estado" role="status" aria-live="polite"></p>
+          <div class="hipo" id="hipo">
+            <h3>Una hipótesis, no una previsión</h3>
+            <p class="hipo-fila"><label for="hipo-pos">Si</label> <select id="hipo-pos"></select> <label for="hipo-pct">cayera un</label> <span class="peso"><input id="hipo-pct" type="number" inputmode="numeric" min="1" max="100" step="1" value="25"><span aria-hidden="true">%</span></span></p>
+            <p class="hipo-res" id="hipo-res" role="status" aria-live="polite"></p>
+          </div>
+          <p class="mut peq" id="donut-pie">Podrás ajustar estos porcentajes antes de guardar.</p>
+        </section>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
           <section id="radio" class="radio" aria-labelledby="radio-t">
