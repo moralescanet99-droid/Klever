@@ -61,7 +61,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   ok('empresas: criterio de orden y empates explicados', (await T(p, '.plegable')).includes('después, por símbolo') && (await T(p, '.plegable')).includes('menos comprobaciones no superadas') && (await T(p, '.plegable')).includes('sin datos no suman ni restan'));
   ok('empresas: «no es una recomendación de compra»', (await T(p, '.pag-cab')).includes('no es una recomendación de compra'));
   ok('empresas: sin paginación ficticia', (await p.locator('[aria-label*="ágina"], .paginacion, [data-page]').count()) === 0 && /^106( de 105)? empresas$/.test(await T(p, '#emp-cuenta')));
-  await p.focus('#empresas-lista tr:first-child .ver-ficha'); await p.keyboard.press('Enter'); await p.waitForSelector('#dlg-ficha[open]'); ok('empresas: «Ver ficha» se abre con teclado', true); await p.keyboard.press('Escape');
+  await p.focus('#empresas-lista tr:first-child .ver-ficha'); await p.keyboard.press('Enter'); await p.waitForSelector('#dlg-ficha[open]'); ok('empresas: «Ver ficha» se abre con teclado', true); await p.keyboard.press('Escape'); await p.waitForTimeout(400);
   await p.focus('#ir-screener'); await p.keyboard.press('Enter'); await p.waitForTimeout(500); ok('empresas: «Ir a los filtros de precio» salta la lista de 106 filas', await p.evaluate(() => document.activeElement.id) === 'filtros-precio' && await p.evaluate(() => document.querySelector('#filtros-precio').getBoundingClientRect().top < innerHeight));
   await p.keyboard.press('Home'); await p.evaluate(() => window.scrollTo(0, 0)); await p.focus('#emp-buscar');
   let tabs = 0; for (let i = 0; i < 12; i++) { await p.keyboard.press('Tab'); tabs++; }

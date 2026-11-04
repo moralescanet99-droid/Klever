@@ -1,0 +1,72 @@
+Ejecución: 2026-11-04 13:10 UTC
+Código: commit 6056a97e7941fd1e5cd4335a97352319c8c4ca17; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-carreras ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-migracion ===
+RESULTADO: 12 correctas, 0 fallos
+=== unit-acceso ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-calculos ===
+RESULTADO: 23 correctas, 0 fallos
+=== unit-r13 ===
+RESULTADO: 30 correctas, 0 fallos
+=== unit-carga ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-r14 ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-nota ===
+RESULTADO: 26 correctas, 0 fallos
+=== unit-comparador ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-almacen ===
+RESULTADO: 9 correctas, 0 fallos
+=== test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+FALLA empresas: «Ir a los filtros de precio» salta la lista de 106 filas
+RESULTADO: 50 correctas, 1 fallos
+- empresas: «Ir a los filtros de precio» salta la lista de 106 filas
+FALLA (ejecutor): testB tiene 1 fallos
+=== testC ===
+page.waitForSelector: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+FALLA (ejecutor): testC terminó SIN resultado
+FALLA (ejecutor): testC salió con código 1
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 9 correctas, 0 fallos
+=== testG ===
+RESULTADO: 3 correctas, 0 fallos
+=== verificar-api ===
+RESULTADO: 8 correctas, 0 fallos
+=== testH ===
+RESULTADO: 25 correctas, 0 fallos
+=== testI ===
+RESULTADO: 16 correctas, 0 fallos
+=== testJ ===
+RESULTADO: 53 correctas, 0 fallos
+=== testK ===
+RESULTADO: 75 correctas, 0 fallos
+=== testL ===
+RESULTADO: 28 correctas, 0 fallos
+=== testM ===
+RESULTADO: 7 correctas, 0 fallos
+=== testN ===
+page.waitForSelector: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+FALLA (ejecutor): testN terminó SIN resultado
+FALLA (ejecutor): testN salió con código 1
+=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
+RESULTADO: 6 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK
+RESUMEN: 5 problema(s) en la ejecución. Código de salida 1.

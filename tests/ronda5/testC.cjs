@@ -96,7 +96,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
   for (const scheme of ['light', 'dark']) for (const w of [320, 360, 390, 720, 768, 1440]) {
     p = await nuevo(b, w, 800, scheme); const sw = []; const chk = async n => { const s = await p.evaluate(() => document.documentElement.scrollWidth); if (s > w) sw.push(n + ':' + s); };
     await p.goto(B); await p.waitForSelector('.plantilla'); await chk('portada');
-    await p.goto(B + '#empresas'); await p.waitForSelector('[data-t] >> visible=true'); await chk('empresas'); await p.locator('[data-t] >> visible=true').nth(1).click(); await p.waitForSelector('#dlg-ficha[open]'); await chk('ficha'); await p.keyboard.press('Escape');
+    await p.goto(B + '#empresas'); await p.waitForSelector('[data-t] >> visible=true'); await chk('empresas'); await p.locator('[data-t] >> visible=true').nth(1).click(); await p.waitForSelector('#dlg-ficha[open]'); await chk('ficha'); await p.keyboard.press('Escape'); await p.waitForTimeout(400);
     await p.goto(B + '#publicas'); await p.waitForSelector('#publicas-lista .tarjeta'); await p.locator('#publicas-lista .tarjeta').first().click(); await p.waitForSelector('#publica-detalle:not([hidden])'); await chk('públicas');
     await p.goto(B); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await chk('editor-válido');
     await peso(p, 0).fill('20'); await p.evaluate(() => { document.querySelector('#det-pub').open = true; document.querySelector('#det-graficos').open = true; }); await p.waitForTimeout(150); await chk('editor-inválido');

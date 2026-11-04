@@ -1082,6 +1082,7 @@ let universoCache = null;                                            // instant�
 const cargarUniverso = () => universoCache || (universoCache = getJson('/universo').catch(e => { universoCache = null; throw e; }));
 // Cerrar la ficha para NAVEGAR a otra parte: se quita la marca del historial antes, para que el cierre no «vuelva atrás» y deshaga la navegación.
 function cerrarFicha() { try { history.replaceState(null, ''); } catch { /* sin historial */ } const d = $('#dlg-ficha'); if (d.open) d.close(); }
+try { history.scrollRestoration = 'manual'; } catch { /* sin historial */ }   // «atrás» desde la ficha no debe mover el scroll: la página sigue donde estabas
 $('#dlg-ficha').addEventListener('close', () => { if (history.state?.ficha) { try { history.back(); } catch { /* sin historial */ } } });
 window.addEventListener('popstate', () => { const d = $('#dlg-ficha'); if (d.open) d.close(); });
 // ---------- contexto que se entrega a js/lab.js (radiografía, radar, laboratorio, seguimiento) ----------

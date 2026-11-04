@@ -19,7 +19,7 @@ export function iniciarIdeas(ctx) {
 }
 const C = v => String(v).replace('.', ',');
 export async function mostrarEjemplo() {
-  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
+  const { $, esc } = xi(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
   const pos = CARTERA_EJEMPLO.posiciones;
   cont.innerHTML = `<div class="pag-cab"><h1>${esc(CARTERA_EJEMPLO.nombre)}</h1><p class="mut">${esc(CARTERA_EJEMPLO.aviso)}</p></div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
@@ -30,7 +30,7 @@ export async function mostrarEjemplo() {
 }
 
 export async function mostrarComparar({ a, b }) {
-  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = xi().empresas(), act = xi().activos();
+  const { $, esc } = xi(), cont = $('#comparar-cuerpo'), lista = xi().empresas(), act = xi().activos();
   if (!act[a]) { cont.innerHTML = '<p class="estado-lista">No encontramos esa empresa.</p><p><a class="btn btn-secundario" href="#empresas">Volver a empresas</a></p>'; return; }
   const sector = act[a].sector;
   if (!b) {                                                              // paso 1: elegir con quién comparar (mismo sector); una sola decisión
