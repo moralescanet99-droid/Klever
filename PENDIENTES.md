@@ -47,3 +47,9 @@
 - Sustituir el caso editorial ficticio por contenido real verificado, con responsable editorial (M58).
 - Probar el recorrido en un móvil real (M50, M51) y compartir el artefacto de la demo con Javier (menú «Compartir» del artefacto).
 - Diagnosticar los fallos intermitentes de `testE` (ronda 13) y `testF` (ronda 14) en las pasadas completas.
+
+## Ronda 15 (pendiente de accesos y decisiones)
+- Prueba con **cinco principiantes** en móvil (`ronda15/PRUEBA-CON-USUARIOS.md`, M59): es la única forma de saber si se entiende.
+- Cargar mercado real (capitalización, importe negociado) y calibrar los umbrales de la nota antes de activarla con datos reales (M64); la carga SEC con la lógica nueva (M63).
+- Probar con dos cuentas reales y red lenta (M60), la D1 real con migraciones 0008–0010 y restauración (M66).
+- Diagnosticar los fallos intermitentes de `testE` (R13), `testF` (R14) y la carrera del historial de la ficha.

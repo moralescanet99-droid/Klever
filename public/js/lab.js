@@ -283,7 +283,7 @@ const textoRevision = e => e.revisar_en ? `Revisión prevista: ${fechaCorta(e.re
 const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
 function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
   const caso = c.caso, r = caso?.respuesta, h = c.historia && historia(c.historia);
-  const ocurrido = r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)} ${esc(k.documento)}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
+  const ocurrido = r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
     : `<p><b>Sin novedades.</b> ${esc(caso?.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta: sigue pendiente. Se revisará cuando haya una actualización verificada.')}</p>`;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
     : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;

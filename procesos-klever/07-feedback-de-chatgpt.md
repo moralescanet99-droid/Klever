@@ -100,3 +100,5 @@ Valoración: «La ronda 5 tiene una base visual suficiente. No hagas otro redise
 ## Revisión 12 · ronda 14 — la revisión de la ronda 13 la trajo el usuario en `Klever_Claude_Ronda_14.md` (guardada literal como C11 en `06-`); ChatGPT repetirá los casos críticos de la ronda 14 (**PENDIENTE**)
 
 ## Revisión 13 · paquete de la ronda 14 — **PENDIENTE** (falta que el usuario traiga el feedback de ChatGPT; esta vez repetirá los casos críticos)
+
+## Revisión 14 · ronda 15 — la revisión de la ronda 14 llegó como `Klever_Revision_14_y_encargo_15_1.md` (guardada literal como C12 en `06-`): 88 comprobaciones repetidas y 12 capturas; notas 6/7/7/9/7/7. ChatGPT revisará cálculos, casos límite y recorridos de la ronda 15 (**PENDIENTE**)

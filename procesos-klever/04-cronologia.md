@@ -60,3 +60,5 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-03 · Ronda 13 (C10): primer recorrido completo (cartera → radar → laboratorio → seguimiento); ver `ronda13/LEEME.md`.
 
 - 2026-11-04 · Ronda 14 (C11): confianza y primera historia legible/probable/retomable; ver `ronda14/LEEME.md`.
+
+- 2026-11-04 · Ronda 15 (C12): privacidad, tres destinos, comparador, nota v1 y seguimiento con preguntas; ver `ronda15/LEEME.md`.

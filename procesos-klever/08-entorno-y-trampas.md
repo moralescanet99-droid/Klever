@@ -126,3 +126,13 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **`SELECT … WHERE (subconsulta) < tope`** dentro de un `INSERT … SELECT` hace el tope atómico; con `ON CONFLICT` el `SELECT` necesita su `WHERE`.
 - **Semilla:** `tests/ronda5/seed.py` incluye `data/ficticios.json` (126 activos; 106 empresas con comprobaciones). Los recuentos «105» de pruebas antiguas pasaron a 106.
 
+## Ronda 15
+- **La demo concatena los módulos en UN script clásico:** (1) los nombres de nivel superior no pueden repetirse entre archivos (`esNum`, `x`, `c` chocaron); (2) **un alias de importación (`import { a as b }`) deja `b` sin definir**: no usar alias; (3) `node --check` del script extraído detecta duplicados pero **no identificadores sin definir**: la prueba de recorrido de la demo sí.
+- **Renombrar con `sed` globales:** `s/x()/xi()/` dejó `x()` sin cambiar en líneas con coma; comprobar con `grep` y volver a ejecutar la prueba que usa ese archivo.
+- **`history.pushState` al abrir la ficha:** un `Escape` seguido de una navegación inmediata de la prueba puede ser deshecho por el `history.back()` del cierre; esperar ~400 ms tras cerrar. `history.scrollRestoration = 'manual'` evita saltos al volver.
+- **Elementos de un `<details>` cerrado:** `offsetParent` es no nulo; comprobar `details.open`.
+- **Tests de privacidad:** inspeccionar `outerHTML` **y los valores** de `input/textarea`; las respuestas lentas se simulan con `page.route` y un retraso.
+- **Un test que mide posiciones tras `scrollTo(bottom)` falla si la página crece de forma asíncrona** (la nota se calcula después): esperar a que termine antes de medir.
+- **Semilla:** los años 2020–2021 salen de otro generador para que 2022–2024 no cambien; 126 activos (106 con comprobaciones) al incluir la empresa ficticia.
+- **Cinco ejercicios** son necesarios para la nota; la carga real ahora los pide (`slice(-5)`).
+

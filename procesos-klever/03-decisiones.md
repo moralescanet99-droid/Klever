@@ -154,5 +154,14 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Laboratorio:** sin cartera, se ofrece una **de ejemplo** (KO 60 % · PG 40 %) rotulada «no es tuya»; con cuenta, un botón la crea en la cuenta para poder guardar. Primero «de dónde sale el peso», después tabla y pasos; el redondeo, en un desplegable.
 - **Entrega a Javier:** la demo (artefacto o `demo/index.html`) es lo abrible en un móvil; la versión completa solo se ha ejecutado en local (`ronda14/ABRIR-EN-MOVIL.md`).
 
+## Ronda 15 (privacidad primero; tres destinos; comparador; nota v1; seguimiento con preguntas)
+- **Navegación de tres destinos** (Cartera · Ideas · Seguimiento); Ideas agrupa Historias, Empresas y Carteras públicas con pestañas. Motivo: el propósito (crear una cartera, investigar por qué darle espacio a una empresa, observar qué cambia) debe entenderse al entrar.
+- **Sesión:** el token de **la petición** decide si un 401 caduca la sesión; `limpiarPrivado()` es síncrono; las respuestas obsoletas lanzan un error silencioso (mensaje vacío). La migración del radar local queda atada a la sesión de origen. Copias locales de cambios sin guardar: aviso al salir, purga de las ajenas al entrar, caducidad de 7 días.
+- **Nota de estructura v1 como módulo puro versionado**, con universo congelado y evaluación fechada guardada en el escenario (no se recalcula). Umbrales del encargo, **provisionales**; con datos reales **no se activa** hasta calibrar y verificar. Se muestra solo con datos sintéticos rotulados. Los fondos y entidades sin metodología cuentan como peso sin evaluar. Cada bloque se calcula por empresa y se pondera por peso (normalizado sobre lo evaluable); un bloque con < 90 % de cobertura deja la nota pendiente con su motivo.
+- **Comparador:** tres filas, mismo sector, ejercicio común alineado, sin ganadores; el margen operativo exige `resultado_operativo` (columna nueva) y **nunca** se sustituye por el margen neto.
+- **Seguimiento abre con la pregunta**; el visitante ve un ejemplo ficticio y rotulado; con cuenta, solo lo propio. El peso de la empresa en el escenario guardado se distingue siempre del de la cartera actual.
+- **Historial de la ficha:** se añade una entrada al abrirla para que «atrás» la cierre; al navegar desde ella se quita la marca para no deshacer la navegación; `scrollRestoration = 'manual'`.
+- **La empresa del caso (ficticia) está en el universo de la semilla y de la demo** y sale en Explorar rotulada «(empresa ficticia)»; **no** está en el universo real.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

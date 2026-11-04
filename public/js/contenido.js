@@ -85,6 +85,6 @@ export const SEGUIMIENTO_CASOS = [
       porContrato: [{ nombre: 'Proyecto C (100 MW)', estado: 'Firmado el 29 de octubre', documento: '[6]' }, { nombre: 'Proyecto D (60 MW)', estado: 'Aplazado sin fecha; sin documento nuevo', documento: '—' }],
       resumen: 'Solo se firmó uno de los dos contratos anunciados (desenlace simulado).' }, pendiente: null },
   { historia: 'hidrogeno-norte', pregunta: '¿Se firmará el contrato de D antes de que acabe el primer trimestre de 2027?', tesis: 2, respuesta: null,
-    pendiente: 'Sin novedades: la fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
+    pendiente: 'La fuente de ejemplo no publica nada nuevo sobre D desde el 3 de noviembre de 2026. Sigue pendiente un contrato firmado de D (con precio y volumen).' },
 ];
 export const casoSeguimiento = (hid, pregunta) => SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.pregunta === pregunta) || null;
