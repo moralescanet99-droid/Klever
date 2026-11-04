@@ -31,7 +31,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
   // ===== 3. el enlace se abre en OTRO navegador/dispositivo =====
   const q = await nuevo(b, 1440, 900); await q.goto(link); await q.waitForSelector('#vista-carteras:not([hidden])'); await q.waitForTimeout(500);
   await q.waitForSelector('#vista-carteras:not([hidden])'); const toastQ = await T(q, '#aviso-cuenta'); const toastCorto = await q.locator('#toast.on').count();
-  ok('otro navegador: se entra en la cuenta pero NO hay borrador', (await q.evaluate(() => localStorage.getItem('klever_borrador'))) === null && await q.isVisible('.menu-escritorio .nav-mis'));
+  ok('otro navegador: se entra en la cuenta pero NO hay borrador', (await q.evaluate(() => localStorage.getItem('klever_borrador'))) === null && await q.isVisible('#salir') && await q.isVisible('.menu-escritorio a[data-nav=seguimiento]'));
   ok('otro navegador: aviso PERSISTENTE en «Mis carteras» («todavía no se ha guardado en la cuenta», borrador no disponible en este navegador), sin toast ni confirmación de guardado', toastQ.includes('todavía no se ha guardado en la cuenta') && toastQ.includes('El borrador no está disponible en este navegador') && !toastQ.includes('Hemos guardado') && toastCorto === 0, toastQ);
   ok('otro navegador: sin carteras (no se inventó ninguna) y crear es la acción principal', (await q.locator('.cartera-item').count()) === 0 && (await T(q, '#nueva-titulo')) === 'Crea tu primera cartera' && await q.isVisible('#form-nueva') && !(await q.isVisible('#btn-nueva')), await T(q, '#nueva-titulo'));
   ok('el borrador original sigue intacto en el primer dispositivo', (await draft(p)).pos[0].peso === 18 && (await draft(p)).pos.length === 6);

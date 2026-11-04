@@ -26,6 +26,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   await p.locator('.pc-toggle').first().click(); ok('móvil: detalles muestran el nombre completo', (await T(p, '#det-0')).includes('Nombre:') && (await T(p, '#det-0')).includes('Schwab US Dividend Equity ETF') && (await p.getAttribute('.pc-toggle', 'aria-expanded')) === 'true', trunc + '');
   await p.locator('.pc-toggle').first().click();
   // reserva de espacio: llegar a la última posición
+  await p.waitForSelector('#nota-cuerpo .nota', { timeout: 8000 }).catch(() => {}); await p.waitForTimeout(300);   // ronda 15: la nota se calcula de forma asíncrona y alarga la página: se espera antes de medir
   await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)); await p.waitForTimeout(200);
   const ult = await p.evaluate(() => { const els = [...document.querySelectorAll('.peso-in')].filter(x => x.offsetParent); const e = els[els.length - 1]; return { b: Math.round(e.getBoundingClientRect().bottom), barra: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().top), enlace: Math.round(document.querySelector('#cookies-link').getBoundingClientRect().bottom), padPie: parseFloat(getComputedStyle(document.querySelector('.pie')).paddingBottom), alto: Math.round(document.querySelector('#barra-guardar').getBoundingClientRect().height) }; });
   // Ronda 10: la reserva de la barra pasó de <main> al pie (lo que de verdad quedaba tapado eran sus enlaces). Se exige MÁS: el último enlace del pie queda sobre la barra y el relleno del pie cubre su altura.
@@ -42,7 +43,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   for (const w of [390, 768]) {
     await p.setViewportSize({ width: w, height: 900 }); await p.waitForTimeout(200);
     await p.evaluate(() => { document.querySelector('#det-pub').open = true; document.querySelector('#det-graficos').open = true; });
-    const ys = await p.evaluate(() => ['#comp', '#pos-cards', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
+    const ys = await p.evaluate(() => ['#comp', document.querySelector('#pos-cards').offsetParent ? '#pos-cards' : '.tabla-scroll', '#res-detalle', '#det-graficos', '#det-pub'].map(s => Math.round(document.querySelector(s).getBoundingClientRect().top + scrollY)));
     ok(`orden ${w}px: resumen breve → posiciones → resumen detallado → gráficos → publicación`, ys.every((y, i) => i === 0 || y > ys[i - 1]), ys.join(' < '));
   }
   await p.setViewportSize({ width: 1440, height: 900 }); await p.waitForTimeout(200);
@@ -87,7 +88,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   // ===== PORTADA =====
   p = await nuevo(b, 1440, 900); await p.goto(B); await p.waitForSelector('#muestra-publicas .tarjeta');
   ok('portada: titular conservado', (await T(p, 'h1')) === 'Crea y entiende tu cartera simulada');
-  ok('portada: explicación acortada (texto pedido)', (await T(p, '.lead')) === 'Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real.', await T(p, '.lead'));
+  ok('portada: explicación acortada (texto pedido)', (await T(p, '.lead')) === 'Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.', await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
   await p.click('#probar'); await p.waitForTimeout(700);
   ok('portada: «Probar una cartera» desplaza a las plantillas y mueve el foco', await p.evaluate(() => document.activeElement.classList.contains('plantilla') && document.activeElement.getBoundingClientRect().top < innerHeight && document.activeElement.getBoundingClientRect().bottom > 0));

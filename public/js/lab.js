@@ -4,7 +4,7 @@
 import { radiografia, simular, comparar, origenPeso, FINANCIACIONES } from './calculos.js';
 import { crearAlmacen } from './almacen.js';
 import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, casoSeguimiento, SEGUIMIENTO_CASOS } from './contenido.js';
-import { evaluar, resumen as resumenNota } from './nota.js';
+import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota } from './nota-ui.js';
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };

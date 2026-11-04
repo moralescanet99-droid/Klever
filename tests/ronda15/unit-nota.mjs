@@ -1,7 +1,7 @@
 // Ronda 15: nota de estructura y solidez v1 (módulo puro) con universos SINTÉTICOS rotulados. Casos del encargo: efectivas (50/50 → 2; 90/10 → ≈1,22),
 // clases del mismo emisor, peso pequeño, ejercicio que falta, 19 y 20 comparables, cobertura 89,9 % y 90 % exacto, ETF sin composición, cartera al 95 %,
 // empates, sin doble redondeo y determinismo cartera = escenario. Uso: node tests/ronda15/unit-nota.mjs
-import { evaluar, percentil, resumen, VERSION_NOTA } from '../../public/js/nota.js';
+import { evaluar, percentil, resumenNota as resumen, VERSION_NOTA } from '../../public/js/nota.js';
 import { registro } from '../lib/d1-sqlite.mjs';
 const { t, fin } = registro('evidencias-NOTA.json');
 const J = JSON.stringify, aprox = (a, b, e = 1e-6) => Math.abs(a - b) < e;

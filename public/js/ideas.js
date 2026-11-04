@@ -5,7 +5,7 @@ import { evaluar } from './nota.js';
 import { htmlNotaEstructura } from './nota-ui.js';
 
 const ID = { ctx: null };
-const x = () => ID.ctx;
+const xi = () => ID.ctx;
 export function iniciarIdeas(ctx) {
   ID.ctx = ctx;
   ctx.$('#vista-ejemplo').addEventListener('click', e => {
@@ -19,18 +19,18 @@ export function iniciarIdeas(ctx) {
 }
 const C = v => String(v).replace('.', ',');
 export async function mostrarEjemplo() {
-  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = x().activos(), g = x().gen?.() ;
+  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
   const pos = CARTERA_EJEMPLO.posiciones;
   cont.innerHTML = `<div class="pag-cab"><h1>${esc(CARTERA_EJEMPLO.nombre)}</h1><p class="mut">${esc(CARTERA_EJEMPLO.aviso)}</p></div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
     <p class="ej-acc"><button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> <button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
     <div id="ej-nota"></div><p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
-  try { const u = await x().universo(); const o = x().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
+  try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
 }
 
 export async function mostrarComparar({ a, b }) {
-  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = x().empresas(), act = x().activos();
+  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = xi().empresas(), act = xi().activos();
   if (!act[a]) { cont.innerHTML = '<p class="estado-lista">No encontramos esa empresa.</p><p><a class="btn btn-secundario" href="#empresas">Volver a empresas</a></p>'; return; }
   const sector = act[a].sector;
   if (!b) {                                                              // paso 1: elegir con quién comparar (mismo sector); una sola decisión
@@ -39,9 +39,9 @@ export async function mostrarComparar({ a, b }) {
       ${otras.length ? `<ul class="cmp-lista">${otras.map(r => `<li><button class="btn btn-secundario" type="button" data-a="${esc(a)}" data-comparar-con="${esc(r.ticker)}">${esc(r.nombre)} <span class="simbolo">${esc(r.ticker)}</span></button></li>`).join('')}</ul>` : '<p class="estado-lista">No hay otras empresas de este sector en el universo.</p>'}`;
     return;
   }
-  cont.innerHTML = '<p class="mut">Cargando la comparación…</p>'; const g = x().sesion();
-  let A, B; try { [A, B] = await Promise.all([x().getJson('/assets/' + a), x().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
-  if (g !== x().sesion()) return;
+  cont.innerHTML = '<p class="mut">Cargando la comparación…</p>'; const g = xi().sesion();
+  let A, B; try { [A, B] = await Promise.all([xi().getJson('/assets/' + a), xi().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
+  if (g !== xi().sesion()) return;
   const r = compararEmpresas(A, B);
   const celda = c => `<td>${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
     ${c.origen ? `<span class="cmp-origen">${esc(c.origen.periodo)} · ${c.origen.fuente === 'sec' ? 'SEC' : c.origen.fuente === 'prueba' ? 'datos de prueba' : c.origen.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${c.origen.fecha ? ' · cargado ' + esc(c.origen.fecha) : ''}</span>` : ''}</td>`;

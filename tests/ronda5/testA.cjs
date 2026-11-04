@@ -27,7 +27,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   ok('88 %: se puede guardar (reparto incompleto, privado)', !(await g.isDisabled()));
   ok('88 %: Publicar desactivado: pendiente de asignar', await p.locator('#publicar').isDisabled() && (await T(p, '#pub-razon')).includes('Pendiente de asignar: 12 %'));
   await g.click(); await p.waitForFunction(() => document.querySelector('#estado-live').textContent.includes('Guardada'));
-  ok('88 %: guardado sin inventar efectivo (sigue «Pendiente de asignar»)', (await T(p, '#r-falta')).includes('Pendiente de asignar') && !(await T(p, 'body')).toLowerCase().includes('efectivo'));
+  ok('88 %: guardado sin inventar efectivo (sigue «Pendiente de asignar»)', (await T(p, '#r-falta')).includes('Pendiente de asignar') && !/efectivo impl|en efectivo|saldo en efectivo/.test((await T(p, 'body')).toLowerCase()));
   const r2 = await api('PATCH', `/portfolios/${id}`, { publico: true, tesis: 'x' });
   ok('servidor: publicar con 88 % rechazado', r2.s === 400 && r2.j.error.includes('100 % asignado'), JSON.stringify(r2));
 

@@ -1635,7 +1635,7 @@ function evaluar(cartera, universo) {
 }
 
 // Resumen compacto y estable (lo que se guarda con un escenario: la evaluación FECHADA que vio la persona).
-const resumen = ev => ({ version: ev.version, fecha: ev.fecha, publicada: ev.publicada, nota: ev.nota, motivo: ev.motivo, cobertura: ev.cobertura && Math.round(ev.cobertura.minima * 1000) / 10,
+const resumenNota = ev => ({ version: ev.version, fecha: ev.fecha, publicada: ev.publicada, nota: ev.nota, motivo: ev.motivo, cobertura: ev.cobertura && Math.round(ev.cobertura.minima * 1000) / 10,
   bloques: ev.bloques ? Object.fromEntries(Object.values(ev.bloques).map(b => [b.id, b.puntuacion == null ? null : Math.round(b.puntuacion * 100) / 100])) : null, fortaleza: ev.fortaleza, limitacion: ev.limitacion });
 
 // COMPARADOR sencillo entre dos empresas del mismo sector: PURO (sin DOM ni red). Tres filas, una decisión por pantalla, sin clasificación de ganadores.
@@ -1646,13 +1646,13 @@ const resumen = ev => ({ version: ev.version, fecha: ev.fecha, publicada: ev.pub
 //     no es interpretable: «no comparable». Mucha o poca deuda NO es «mejor» ni «peor» por sí sola: depende del sector y del momento.
 // Los ejercicios se ALINEAN (se compara el último ejercicio que tienen las dos); todo en la misma moneda (USD) y unidades; cada cifra lleva su fuente,
 // su periodo y su fecha de carga. Lo que no se puede comparar se dice con su motivo; nunca se rellena.
-const esNum = v => v != null && Number.isFinite(v);
-const anio = p => +String(p || '').replace(/\D/g, '') || null;
+const hayNum = v => v != null && Number.isFinite(v);
+const anioDe = p => +String(p || '').replace(/\D/g, '') || null;
 const MONEDA = 'USD';
 
 function compararEmpresas(a, b) {
   const res = { ejercicio: null, moneda: MONEDA, mismoSector: !!a?.sector && a.sector === b?.sector, filas: [] };
-  const fa = Object.fromEntries((a?.fundamentales || []).map(x => [anio(x.periodo), x])), fb = Object.fromEntries((b?.fundamentales || []).map(x => [anio(x.periodo), x]));
+  const fa = Object.fromEntries((a?.fundamentales || []).map(x => [anioDe(x.periodo), x])), fb = Object.fromEntries((b?.fundamentales || []).map(x => [anioDe(x.periodo), x]));
   const comunes = Object.keys(fa).filter(y => fb[y]).map(Number).sort((x, y) => y - x), y = comunes[0] ?? null; res.ejercicio = y ? 'FY' + y : null;
   const origen = f => f ? { periodo: f.periodo, fuente: f.fuente || null, fecha: f.actualizado_en || null } : null;
   const celda = (valor, texto, f, estado = 'ok', motivo = null) => ({ valor, texto, estado, motivo, origen: origen(f) });
@@ -1662,20 +1662,20 @@ function compararEmpresas(a, b) {
   const fila = (id, nombre, definicion, unidad, calc) => ({ id, nombre, definicion, unidad, a: y ? calc(fa, y) : celda(null, null, null, 'no_comparable', sinComun), b: y ? calc(fb, y) : celda(null, null, null, 'no_comparable', sinComun) });
   res.filas.push(fila('crecimiento', 'Crecimiento de ventas', 'Ventas del ejercicio frente a las del ejercicio anterior', '%', (f, yy) => {
     const c = f[yy], p = f[yy - 1];
-    if (!esNum(c?.ingresos)) return celda(null, null, c, 'sin_dato', 'Sin dato de ventas del ejercicio.');
+    if (!hayNum(c?.ingresos)) return celda(null, null, c, 'sin_dato', 'Sin dato de ventas del ejercicio.');
     if (!p) return celda(null, null, c, 'sin_dato', 'Sin el ejercicio anterior para calcular la variación.');
-    if (!esNum(p.ingresos) || p.ingresos <= 0) return celda(null, null, c, 'no_comparable', 'Las ventas del ejercicio anterior no son positivas o faltan.');
+    if (!hayNum(p.ingresos) || p.ingresos <= 0) return celda(null, null, c, 'no_comparable', 'Las ventas del ejercicio anterior no son positivas o faltan.');
     const v = c.ingresos / p.ingresos - 1; return celda(v, pct(v), c);
   }));
   res.filas.push(fila('margen_operativo', 'Margen operativo', 'Resultado operativo sobre ventas (no es el margen neto)', '%', (f, yy) => {
     const c = f[yy];
-    if (!esNum(c?.resultado_operativo)) return celda(null, null, c, 'sin_dato', 'Sin dato de resultado operativo (no se sustituye por el margen neto).');
-    if (!esNum(c.ingresos) || c.ingresos <= 0) return celda(null, null, c, 'sin_dato', 'Sin ventas positivas para calcular el margen.');
+    if (!hayNum(c?.resultado_operativo)) return celda(null, null, c, 'sin_dato', 'Sin dato de resultado operativo (no se sustituye por el margen neto).');
+    if (!hayNum(c.ingresos) || c.ingresos <= 0) return celda(null, null, c, 'sin_dato', 'Sin ventas positivas para calcular el margen.');
     const v = c.resultado_operativo / c.ingresos; return celda(v, pct(v), c);
   }));
   res.filas.push(fila('deuda', 'Deuda neta / EBITDA', 'Años de EBITDA que haría falta para cubrir la deuda neta; negativa = caja neta', 'veces', (f, yy) => {
     const c = f[yy];
-    if (!esNum(c?.deuda_neta) || !esNum(c?.ebitda)) return celda(null, null, c, 'sin_dato', 'Sin dato de deuda neta o de EBITDA.');
+    if (!hayNum(c?.deuda_neta) || !hayNum(c?.ebitda)) return celda(null, null, c, 'sin_dato', 'Sin dato de deuda neta o de EBITDA.');
     if (c.ebitda <= 0) return celda(null, null, c, 'no_comparable', 'El EBITDA es nulo o negativo: la ratio no se puede interpretar.');
     const v = c.deuda_neta / c.ebitda; return celda(v, v < 0 ? `Caja neta (${veces(v)})` : veces(v), c);
   }));
@@ -1872,7 +1872,7 @@ const SEGUIMIENTO_CASOS = [
 const casoSeguimiento = (hid, pregunta) => SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.pregunta === pregunta) || null;
 
 // Presentación de la nota de estructura (el cálculo vive en nota.js). Conclusión primero; el método, en «¿Por qué esta nota?».
-const c = v => String(v).replace('.', ',');
+const cm = v => String(v).replace('.', ',');
 function aviso_datos(origen) {   // qué decir de los datos según su origen (nunca se atribuye a una fuente sin declararla)
   if (origen === 'prueba') return 'Datos de PRUEBA ficticios: esta nota solo sirve para probar el método.';
   if (origen === 'demo') return 'Datos de DEMOSTRACIÓN inventados: esta nota solo sirve para probar el método.';
@@ -1887,15 +1887,15 @@ function htmlNotaEstructura(esc, ev, origen) {
     <p class="nota-aviso mut peq">Describe la estructura de la cartera y los fundamentales observados el ${esc(fecha)}. <b>No es una previsión de rentabilidad ni una recomendación</b>, y una nota alta no garantiza rentabilidad ni idoneidad personal. ${esc(aviso_datos(origen))}</p>`;
   let cuerpo;
   if (ev.publicada) {
-    cuerpo = `<p class="nota-num"><b>${c(ev.nota.toFixed(1))}</b><span> de 10</span></p>
-      <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${c(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
-      <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${c(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
-      <li><b>Cobertura mínima:</b> ${c((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos.</li></ul>`;
+    cuerpo = `<p class="nota-num"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
+      <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
+      <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
+      <li><b>Cobertura mínima:</b> ${cm((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos.</li></ul>`;
   } else {
-    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(ev.motivo || '')}</p>` + (bl.some(b => b.puntuacion != null) ? `<p class="mut peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${c(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : '');
+    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(ev.motivo || '')}</p>` + (bl.some(b => b.puntuacion != null) ? `<p class="mut peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${cm(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : '');
   }
-  const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : c(b.puntuacion.toFixed(2))}</td><td>${c((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
-  const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${c(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
+  const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : cm(b.puntuacion.toFixed(2))}</td><td>${cm((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
+  const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${cm(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
   const porque = `<details class="mini"><summary>¿Por qué esta nota?</summary>
     ${bl.length ? `<div class="tabla-h" role="region" aria-label="Bloques de la nota" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Peso</th><th scope="col">Puntos</th><th scope="col">Cobertura</th></tr></thead><tbody>${filas}</tbody></table></div>` : ''}
     <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
@@ -1907,18 +1907,18 @@ function htmlNotaEstructura(esc, ev, origen) {
 // Qué cambia en los bloques evaluables al pasar de la cartera base a la propuesta (laboratorio). No recalcula nada: recibe las dos evaluaciones.
 function htmlCambioNota(esc, a, d) {
   if (!a || !d) return '';
-  const bl = Object.keys(NOMBRES), f = v => v == null ? 'pendiente' : c(v.toFixed(2));
-  const dif = (x, y) => (x == null || y == null) ? '—' : (Math.abs(y - x) < 0.005 ? 'sin cambio' : (y > x ? '+' : '−') + c(Math.abs(y - x).toFixed(2)));
+  const bl = Object.keys(NOMBRES), f = v => v == null ? 'pendiente' : cm(v.toFixed(2));
+  const dif = (x, y) => (x == null || y == null) ? '—' : (Math.abs(y - x) < 0.005 ? 'sin cambio' : (y > x ? '+' : '−') + cm(Math.abs(y - x).toFixed(2)));
   const fila = id => `<tr><th scope="row">${esc(NOMBRES[id])}</th><td>${f(a.bloques?.[id]?.puntuacion)}</td><td>${f(d.bloques?.[id]?.puntuacion)}</td><td>${dif(a.bloques?.[id]?.puntuacion, d.bloques?.[id]?.puntuacion)}</td></tr>`;
   return `<h3>Qué cambia en la nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>
-    <p class="mut peq">Nota: ${a.publicada ? c(a.nota.toFixed(1)) : 'pendiente'} → ${d.publicada ? c(d.nota.toFixed(1)) : 'pendiente'}${(!a.publicada || !d.publicada) ? '. ' + esc(!d.publicada ? d.motivo : a.motivo) : ''} Solo cambian los bloques que se pueden evaluar; no es una previsión de rentabilidad.</p>
+    <p class="mut peq">Nota: ${a.publicada ? cm(a.nota.toFixed(1)) : 'pendiente'} → ${d.publicada ? cm(d.nota.toFixed(1)) : 'pendiente'}${(!a.publicada || !d.publicada) ? '. ' + esc(!d.publicada ? d.motivo : a.motivo) : ''} Solo cambian los bloques que se pueden evaluar; no es una previsión de rentabilidad.</p>
     <div class="tabla-h" role="region" aria-label="Bloques de la nota antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio</th></tr></thead><tbody>${bl.map(fila).join('')}</tbody></table></div>`;
 }
 
 // Vistas de «Cartera de ejemplo» y «Comparar con otra empresa». Presentación; los cálculos están en comparador.js y nota.js.
 
 const ID = { ctx: null };
-const x = () => ID.ctx;
+const xi = () => ID.ctx;
 function iniciarIdeas(ctx) {
   ID.ctx = ctx;
   ctx.$('#vista-ejemplo').addEventListener('click', e => {
@@ -1932,18 +1932,18 @@ function iniciarIdeas(ctx) {
 }
 const C = v => String(v).replace('.', ',');
 async function mostrarEjemplo() {
-  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = x().activos(), g = x().gen?.() ;
+  const { $, esc } = x(), cont = $('#ejemplo-cuerpo'), act = xi().activos(), g = xi().gen?.() ;
   const pos = CARTERA_EJEMPLO.posiciones;
   cont.innerHTML = `<div class="pag-cab"><h1>${esc(CARTERA_EJEMPLO.nombre)}</h1><p class="mut">${esc(CARTERA_EJEMPLO.aviso)}</p></div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
     <p class="ej-acc"><button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> <button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
     <div id="ej-nota"></div><p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
-  try { const u = await x().universo(); const o = x().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
+  try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
 }
 
 async function mostrarComparar({ a, b }) {
-  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = x().empresas(), act = x().activos();
+  const { $, esc } = x(), cont = $('#comparar-cuerpo'), lista = xi().empresas(), act = xi().activos();
   if (!act[a]) { cont.innerHTML = '<p class="estado-lista">No encontramos esa empresa.</p><p><a class="btn btn-secundario" href="#empresas">Volver a empresas</a></p>'; return; }
   const sector = act[a].sector;
   if (!b) {                                                              // paso 1: elegir con quién comparar (mismo sector); una sola decisión
@@ -1952,9 +1952,9 @@ async function mostrarComparar({ a, b }) {
       ${otras.length ? `<ul class="cmp-lista">${otras.map(r => `<li><button class="btn btn-secundario" type="button" data-a="${esc(a)}" data-comparar-con="${esc(r.ticker)}">${esc(r.nombre)} <span class="simbolo">${esc(r.ticker)}</span></button></li>`).join('')}</ul>` : '<p class="estado-lista">No hay otras empresas de este sector en el universo.</p>'}`;
     return;
   }
-  cont.innerHTML = '<p class="mut">Cargando la comparación…</p>'; const g = x().sesion();
-  let A, B; try { [A, B] = await Promise.all([x().getJson('/assets/' + a), x().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
-  if (g !== x().sesion()) return;
+  cont.innerHTML = '<p class="mut">Cargando la comparación…</p>'; const g = xi().sesion();
+  let A, B; try { [A, B] = await Promise.all([xi().getJson('/assets/' + a), xi().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
+  if (g !== xi().sesion()) return;
   const r = compararEmpresas(A, B);
   const celda = c => `<td>${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
     ${c.origen ? `<span class="cmp-origen">${esc(c.origen.periodo)} · ${c.origen.fuente === 'sec' ? 'SEC' : c.origen.fuente === 'prueba' ? 'datos de prueba' : c.origen.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${c.origen.fecha ? ' · cargado ' + esc(c.origen.fecha) : ''}</span>` : ''}</td>`;
