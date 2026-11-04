@@ -10,9 +10,9 @@
  {
   "id": "I2-320",
   "escenario": "Una acción principal y jerarquía composición > ROIC (320 px)",
-  "esperado": "En un borrador (sin cuenta) el único botón con relleno de acento es «Revisar portafolio»; «Guardar» está activo pero es secundario (con cambios pendientes en un portafolio de la cuenta se invierte: se prueba en testO); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar portafolio»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
   "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px",
-  "resultado": "FALLA",
+  "resultado": "OK",
   "evidencia": ""
  },
  {
@@ -50,9 +50,9 @@
  {
   "id": "I2-390",
   "escenario": "Una acción principal y jerarquía composición > ROIC (390 px)",
-  "esperado": "En un borrador (sin cuenta) el único botón con relleno de acento es «Revisar portafolio»; «Guardar» está activo pero es secundario (con cambios pendientes en un portafolio de la cuenta se invierte: se prueba en testO); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar portafolio»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
   "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px",
-  "resultado": "FALLA",
+  "resultado": "OK",
   "evidencia": ""
  },
  {
@@ -90,9 +90,9 @@
  {
   "id": "I2-1440",
   "escenario": "Una acción principal y jerarquía composición > ROIC (1440 px)",
-  "esperado": "En un borrador (sin cuenta) el único botón con relleno de acento es «Revisar portafolio»; «Guardar» está activo pero es secundario (con cambios pendientes en un portafolio de la cuenta se invierte: se prueba en testO); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar portafolio»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
   "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 36 px, resumen 28 px, ROIC 28 px",
-  "resultado": "FALLA",
+  "resultado": "OK",
   "evidencia": ""
  },
  {

@@ -451,7 +451,7 @@
   "id": "K21-390",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (390 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-04T22:17:07.407Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-04T22:32:16.689Z\"}}",
   "resultado": "OK"
  },
  {
@@ -472,7 +472,7 @@
   "id": "K21-1440",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (1440 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-04T22:17:09.374Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-04T22:32:18.622Z\"}}",
   "resultado": "OK"
  },
  {
@@ -512,16 +512,16 @@
  },
  {
   "id": "K27-390",
-  "escenario": "Menú: «Mi seguimiento» una vez en cada menú (390 px)",
+  "escenario": "Menú: «Cuaderno» una vez en cada menú (390 px)",
   "esperado": "Una vez en el menú de escritorio y una vez en el móvil",
-  "observado": "{\"esc\":0,\"mov\":0}",
-  "resultado": "FALLA"
+  "observado": "{\"esc\":1,\"mov\":1}",
+  "resultado": "OK"
  },
  {
   "id": "K27-1440",
-  "escenario": "Menú: «Mi seguimiento» una vez en cada menú (1440 px)",
+  "escenario": "Menú: «Cuaderno» una vez en cada menú (1440 px)",
   "esperado": "Una vez en el menú de escritorio y una vez en el móvil",
-  "observado": "{\"esc\":0,\"mov\":0}",
-  "resultado": "FALLA"
+  "observado": "{\"esc\":1,\"mov\":1}",
+  "resultado": "OK"
  }
 ]

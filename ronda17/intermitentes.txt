@@ -1,0 +1,4 @@
+== tests/ronda5/testE.cjs repetición 1/3 · 22:36:44Z · 1793831804-1793831781=23 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs repetición 2/3 · 22:37:14Z · 1793831834-1793831811=23 s · código 0
+RESULTADO: 15 correctas, 0 fallos
