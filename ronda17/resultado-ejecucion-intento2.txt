@@ -1,0 +1,13 @@
+FALLA [Q9] KO 50 % / JPM 50 % (semilla íntegra)  [origen sintetico; «Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una not
+FALLA (ejecutor): unit-procedencia17 salió con código 1
+FALLA (ejecutor): unit-procedencia17 tiene 1 fallos
+FALLA [I2-320] Una acción principal y jerarquía composición > ROIC (320 px)  [botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px]
+FALLA [I2-390] Una acción principal y jerarquía composición > ROIC (390 px)  [botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px]
+FALLA [I2-1440] Una acción principal y jerarquía composición > ROIC (1440 px)  [botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 36 px, resumen 28 px, ROIC 28 px]
+FALLA (ejecutor): testI tiene 3 fallos
+FALLA [K27-390] Menú: «Mi seguimiento» una vez en cada menú (390 px)  [{"esc":0,"mov":0}]
+FALLA [K27-1440] Menú: «Mi seguimiento» una vez en cada menú (1440 px)  [{"esc":0,"mov":0}]
+FALLA (ejecutor): testK tiene 2 fallos
+FALLA (ejecutor): testL terminó SIN resultado
+FALLA (ejecutor): testL salió con código 1
+RESUMEN: 6 problema(s) en la ejecución. Código de salida 1.

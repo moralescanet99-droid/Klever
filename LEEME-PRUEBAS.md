@@ -96,3 +96,12 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda15/testN.cjs` (41) | Interfaz y recorridos de la ronda 15 en 320/390/1440 | Navegador |
 | `tests/ronda16/testO.cjs` (14) | Notas en el móvil, comparador, laboratorio, seguimiento con tres casos, nota manipulada | Navegador |
 | `tests/ronda16/antes-despues-r16.mjs <raíz>` | Antes/después de los tres fallos contra un árbol de trabajo anterior | Módulo/servidor |
+
+## Baterías de la ronda 17 (añadidas)
+| Batería | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda17/unit-procedencia17.mjs` (13) | Desde SQLite hasta el texto de la nota: fuente NULL, fecha imposible, «ayer», mixto, real, KO+JPM, 4,4 exacto, conjuntos de tickers | Módulo/servidor (SQLite real) |
+| `tests/ronda17/unit-guardada17.mjs` (20) | Nota guardada (versión, coherencia, límites, texto), catálogo de preguntas, concurrencia, aislamiento y token revocado | Servidor (SQLite real) |
+| `tests/ronda17/testP.cjs` (28) | Creador con el diseño aprobado, entrada según el estado, navegación, acción principal, teclado, sin desplazamiento horizontal | Navegador |
+| `tests/ronda17/antes-despues-r17.mjs <raíz>` | Antes/después de los casos reproducibles contra un árbol anterior | Módulo/servidor |
+| `tests/ronda17/repetir-intermitentes.sh [N]` | Repite testE/testF con servidor limpio y deja el rastro por repetición | Navegador |

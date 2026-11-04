@@ -897,8 +897,7 @@ h2,h3{font-weight:600}
 .pag-cab h1,.hero h1{margin-bottom:var(--s1)}
 
 /* --- superficies y bordes finos --- */
-.panel,.plantilla,.vacio-util,.tarjeta,.caso,.esc-item,.nota,.lab-res,.prev,.pos-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:none}
-.panel{padding:var(--s3)}
+.panel,.plantilla,.vacio-util,.tarjeta,.caso,.esc-item,.nota,.lab-res,.prev,.pos-card{background:var(--surface);border-color:var(--border);border-radius:16px;box-shadow:none}
 .cab{background:transparent;border-bottom:1px solid var(--border)}
 .marca{font-family:var(--fuente);font-weight:300;letter-spacing:.34em;text-transform:uppercase;color:var(--text);text-decoration:none;font-size:1.05rem}
 .tag{background:var(--accent-soft);color:var(--accent-on-soft)}
@@ -972,9 +971,10 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 .hipo .peso input{width:4.2rem;min-height:44px;text-align:right}
 .hipo-res{margin:0;color:var(--muted);font-size:var(--t-s);line-height:1.5}
 .peso-rng{display:block;width:100%;min-height:44px;margin:4px 0 0;accent-color:var(--c,var(--accent));cursor:pointer;background:transparent}
-.peso-celda .peso-rng{min-width:7rem}
+.peso-celda .peso-rng{min-width:7rem} .peso-celda .pbar,.pos-card .pbar-movil{display:none}
+.creador-sub{margin:0 0 var(--s2);font-size:1.0625rem}
 .ws-pie{display:flex;justify-content:space-between;align-items:center;gap:var(--s2);flex-wrap:wrap;padding:var(--s1) 0}
-.ws-pie .btn-primario{min-width:12rem}
+.ws-pie .btn-primario{min-width:min(12rem,100%);max-width:100%;white-space:normal}
 .ws-grid .tabla-pos th,.ws-grid .tabla-pos td{border-color:var(--border)}
 .comp-barra i,.ej-barra i,.esp-barra i{color:var(--c-txt)}
 
@@ -1000,6 +1000,12 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 .tabla-h,.tabla-scroll,.tabla-emp-wrap{overflow-x:auto;max-width:100%}
 
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media (max-width:479px){
+  .donut-leyenda li{grid-template-columns:14px minmax(0,1fr) auto;row-gap:2px}
+  .donut-leyenda .lg-p,.donut-leyenda .lg-e{min-width:0}
+  .donut-leyenda .lg-e{grid-column:2 / -1;text-align:left}
+}
+h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing:0;vertical-align:middle}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
@@ -1220,7 +1226,8 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
-    <h1 class="sr">Editor de cartera</h1>
+    <h1 id="creador-titulo">Crea tu portafolio</h1>
+    <p class="mut creador-sub" id="creador-sub">Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.</p>
     <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
       <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> Objetivo</a></li>
       <li class="paso" data-paso="2" aria-current="step"><span class="paso-n" aria-hidden="true">2</span> Distribución</li>
@@ -3469,6 +3476,7 @@ function renderWorkspace() {
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
+  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta los porcentajes, revisa el resultado y guarda los cambios.' : 'Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.';
   $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
@@ -3605,6 +3613,10 @@ function pintarEstado() {
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
   $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
+  // UNA acción principal según el estado: con cambios pendientes en un portafolio de la cuenta, «Guardar»; en cualquier otro caso, «Revisar portafolio».
+  const principalGuardar = !!id && !!dirty && !razon && !saving;
+  $$('.js-guardar').forEach(b => { b.classList.toggle('btn-primario', principalGuardar); b.classList.toggle('btn-secundario', !principalGuardar); });
+  $('#revisar').classList.toggle('btn-primario', !principalGuardar); $('#revisar').classList.toggle('btn-secundario', principalGuardar);
   $('#pub-pend').hidden = !(current.publico && id && dirty);                                          // lo publicado sigue intacto hasta guardar
   $('#mi-descartar').hidden = !(id && dirty);
   pintarPublicacion(v); pintarRadiografia();

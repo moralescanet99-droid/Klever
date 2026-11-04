@@ -64,3 +64,5 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-04 · Ronda 15 (C12): privacidad, tres destinos, comparador, nota v1 y seguimiento con preguntas; ver `ronda15/LEEME.md`.
 
 - 2026-11-04 · Ronda 16 (C13): notas protegidas, puntuación corregida, seguimiento con vínculo estable y dos notas demostrables; ver `ronda16/LEEME.md`.
+
+- 2026-11-04 · Ronda 17 (C14): integridad del resultado y diseño aprobado aplicado; ver `ronda17/LEEME.md`.

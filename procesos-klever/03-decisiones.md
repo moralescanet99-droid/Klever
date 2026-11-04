@@ -171,5 +171,13 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Vínculo con la pregunta editorial = identificador `historia:n`** (columna `pregunta_ref`), no el texto; `pregunta` es la formulación personal. Solo se migran coincidencias inequívocas. Una pregunta distinta no hereda respuestas ajenas: sigue pendiente y ofrece ver la revisión.
 - **Semilla y demo con 20 empresas ficticias** en «Consumo básico» (`EJBA…EJBT`) para que el ejemplo tenga ≥ 20 comparables sin tocar los umbrales; nunca en el universo real.
 
+## Ronda 17 (integridad del resultado y diseño aprobado)
+- **Se verifica cada fila usada antes de clasificar o calcular:** sin fuente o con fecha que no es de calendario el conjunto es «incompleto» y la nota queda pendiente con la causa. «Sintético» exige que **todas** las filas con fuente sean de prueba/demo y tengan fecha real. La semilla usa una fecha fija para que el 4,4 sea reproducible.
+- **Una nota guardada solo se acepta con versión conocida y total coherente con sus bloques** (tolerancia por redondeo); una fila de versión desconocida pero bien formada se enseña como «valor guardado por el cliente», no como comprobada. Se descartan propiedades heredadas, `__proto__`, `-0` y controles de dirección.
+- **El vínculo editorial se resuelve contra un catálogo compartido de identificadores inmutables** (`catalogo.js`); el sistema sigue fiándose de la casilla de la persona (la reformulación legítima conserva el vínculo) pero **avisa** si el texto parece de otro asunto y permite desvincular expresamente.
+- **El diseño aprobado es la referencia visual, no la funcionalidad:** se conservan los activos, las reglas de cálculo y los estados existentes (empresas y fondos en vez de acciones/bonos/efectivo). Importe de referencia **10.000 € simulados**, no guardado.
+- **Una sola acción principal por estado:** «Revisar portafolio» (borrador o sin cambios) o «Guardar» (cambios pendientes en un portafolio de la cuenta).
+- **Navegación de cuatro entradas** (Mis portafolios · Crear portafolio · Cuaderno · Revista secundaria); «Seguimiento» pasa a «Cuaderno»; el cambio «cartera» → «portafolio» se aplica solo a navegación, portada, creador y «Mis portafolios».
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

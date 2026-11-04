@@ -58,3 +58,10 @@
 - Prueba con cinco principiantes (`ronda16/PRUEBA-CON-USUARIOS.md`) y entorno privado con persistencia para «mañana, cierra y vuelve».
 - D1 real con migraciones 0008–0011 y restauración (M70); datos de mercado reales y calibración antes de habilitar la nota (M71).
 - Exposición entre cuentas de una nota manipulada con una D1 real (M69); móvil físico, lector de pantalla y tema oscuro (M67, M72).
+
+## Ronda 17 (pendiente de accesos y decisiones)
+- Aprobación visual por quien diseñó la maqueta (M77); lectura contextual en el creador con retorno al mismo paso (no hecha).
+- Prueba con cinco principiantes sobre «crear, entender y seguir» (M79) y entorno privado con persistencia para «mañana, cierra y vuelve».
+- D1 de prueba aislada con filas sin fuente, fechas inválidas y mezcla de orígenes (M78); datos de mercado reales y calibración antes de habilitar la nota.
+- Dispositivos reales: texto al 200 %, lector de pantalla y contraste del tema carbón (M73–M76).
+- Extender «portafolio» al resto del texto si se aprueba el cambio de término.

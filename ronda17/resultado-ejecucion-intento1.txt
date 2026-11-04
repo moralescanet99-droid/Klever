@@ -1,0 +1,44 @@
+FALLA móvil: el menú se abre (aria-expanded) con enlaces y Salir
+FALLA móvil: margen exterior de 16 px
+FALLA portada: titular conservado
+FALLA (ejecutor): testB tiene 3 fallos
+FALLA otro navegador: se entra en la cuenta pero NO hay borrador
+FALLA (ejecutor): testC tiene 1 fallos
+FALLA [E16a] Texto ampliado al 200 % en el editor (APROXIMADO: tamaño de texto de la página, no zoom del navegador)  [página 400/390 px; barra 100 px; campo enfocado=true, arriba 339, abajo 405 (ventana 844), la barra empieza en 744]
+FALLA (ejecutor): testD tiene 1 fallos
+FALLA [G6] E16a corregida: última posición, ampliación de texto SIMULADA al 200 % (font-size del documento, no zoom del navegador) a 390 px  [campo enfocado: arriba 339, abajo 405, barra empieza en 744, ventana 390×844, ancho de página 400; tras escribir 
+FALLA (ejecutor): testF tiene 1 fallos
+FALLA [H1a-1440] Aviso de éxito al INICIO de la página (1440 px)  [14 muestras elegibles de 16; solapes: ninguno; bajo la cabecera siempre=false; fija=true]
+FALLA [H2-1440] Aviso sobre «Mis carteras» (1440 px)  [13 muestras elegibles; solapes: ninguno; sobre el título=false, sobre «Nueva cartera»=false; fija=true]
+FALLA (ejecutor): testH tiene 2 fallos
+FALLA [I2-320] Una acción principal y jerarquía composición > ROIC (320 px)  [botones con relleno de acento: [revisar, js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px]
+FALLA [I3-320] Filas de activos comparables y táctiles (320 px)  [6 filas, 0 barras (anchos  % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=false, filas móviles visibles=true; alto mínimo del campo 44 px; ancho 320/320]
+FALLA [I4-320] Sin desbordamiento horizontal en pendiente, error y texto ampliado (320 px; ampliado SIMULADO)  [pendiente 320, error 320, texto al 200 % 400 (ventana 320)]
+FALLA [I2-390] Una acción principal y jerarquía composición > ROIC (390 px)  [botones con relleno de acento: [revisar, js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px]
+FALLA [I3-390] Filas de activos comparables y táctiles (390 px)  [6 filas, 0 barras (anchos  % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=false, filas móviles visibles=true; alto mínimo del campo 44 px; ancho 390/390]
+FALLA [I4-390] Sin desbordamiento horizontal en pendiente, error y texto ampliado (390 px; ampliado SIMULADO)  [pendiente 390, error 390, texto al 200 % 400 (ventana 390)]
+FALLA [I2-1440] Una acción principal y jerarquía composición > ROIC (1440 px)  [botones con relleno de acento: [js-guardar, revisar]; Guardar activo=true y con acento=true; tamaños: asignado 36 px, resumen 28 px, ROIC 28 px]
+FALLA [I3-1440] Filas de activos comparables y táctiles (1440 px)  [6 filas, 0 barras (anchos  % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=true, filas móviles visibles=false; alto mínimo del campo 44 px; ancho 1440/1440]
+FALLA (ejecutor): testI tiene 8 fallos
+FALLA [K16-320] Texto ampliado al 200 % (simulado): laboratorio, seguimiento y radiografía (320 px)  [{"lab":true,"seg":true,"ed":false}]
+FALLA [K16-390] Texto ampliado al 200 % (simulado): laboratorio, seguimiento y radiografía (390 px)  [{"lab":true,"seg":true,"ed":false}]
+FALLA (ejecutor): testK terminó SIN resultado
+FALLA (ejecutor): testK salió con código 1
+FALLA (ejecutor): testL terminó SIN resultado
+FALLA (ejecutor): testL salió con código 1
+FALLA [N1-320] Navegación principal de tres destinos (320 px)  [["Mis portafolios","Crear portafolio","Cuaderno","Revista"]]
+FALLA [N1b-320] Ideas reúne historias, empresas y carteras públicas (320 px)  [[{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"}]]
+FALLA [N2-320] Portada: crear o explorar un ejemplo, y la frase del seguimiento (320 px)  [{"h1":"Crea, entiende y sigue tu portafolio","primaria":"Crea tu primer portafolio","sec":"Explora una cartera de ejemplo","seg":"Crea tu cartera y sigue qué ha cambiad
+FALLA [N1-390] Navegación principal de tres destinos (390 px)  [["Mis portafolios","Crear portafolio","Cuaderno","Revista"]]
+FALLA [N1b-390] Ideas reúne historias, empresas y carteras públicas (390 px)  [[{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"}]]
+FALLA [N2-390] Portada: crear o explorar un ejemplo, y la frase del seguimiento (390 px)  [{"h1":"Crea, entiende y sigue tu portafolio","primaria":"Crea tu primer portafolio","sec":"Explora una cartera de ejemplo","seg":"Crea tu cartera y sigue qué ha cambiad
+FALLA [N1-1440] Navegación principal de tres destinos (1440 px)  [["Mis portafolios","Crear portafolio","Cuaderno","Revista"]]
+FALLA [N1b-1440] Ideas reúne historias, empresas y carteras públicas (1440 px)  [[{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"},{"tabs":1,"actual":true,"nav":"revista"}]]
+FALLA [N2-1440] Portada: crear o explorar un ejemplo, y la frase del seguimiento (1440 px)  [{"h1":"Crea, entiende y sigue tu portafolio","primaria":"Crea tu primer portafolio","sec":"Explora una cartera de ejemplo","seg":"Crea tu cartera y sigue qué ha cambi
+FALLA [N10] La nota de estructura en el editor, con su aviso de datos y «¿Por qué esta nota?»  [Nota de estructura v1 · beta Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad ni una rec
+FALLA (ejecutor): testN tiene 10 fallos
+FALLA [O3] Comparador: deuda neta / EBITDA en veces y qué cantidades se comparan  [["1,0 veces","2,3 veces"] · Deuda neta / EBITDADeuda neta (deuda menos caja) dividida entre el EBITDA del mismo ejercicio, en veces: por cada euro de EBITDA del ejercicio hay 
+FALLA [O5c] Tres casos con la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva  [3 tarjetas; Pregunta pendiente Ejemplo ficticio «¿Y si pierden al cliente principal?»Fecha de revisión: 20 dic 2026. Pregunta distinta a
+FALLA [O5d] Cierro sesión y vuelvo con la misma cuenta  [token antiguo 401; 3 tarjetas; false]
+FALLA (ejecutor): testO tiene 3 fallos
+RESUMEN: 12 problema(s) en la ejecución. Código de salida 1.

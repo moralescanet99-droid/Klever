@@ -2,3 +2,11 @@
 RESULTADO: 15 correctas, 0 fallos
 == tests/ronda5/testE.cjs repetición 2/3 · 22:37:14Z · 1793831834-1793831811=23 s · código 0
 RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs repetición 3/3 · 22:37:45Z · 1793831865-1793831841=24 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda7/testF.cjs repetición 1/3 · 22:38:14Z · 1793831894-1793831872=22 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs repetición 2/3 · 22:38:44Z · 1793831924-1793831902=22 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs repetición 3/3 · 22:39:14Z · 1793831954-1793831932=22 s · código 0
+RESULTADO: 9 correctas, 0 fallos

@@ -3,7 +3,7 @@
   "id": "G1",
   "escenario": "Guardado fallido de una cartera pública (servidor real)",
   "esperado": "Con el guardado único, si falla NO queda nada a medias: ni posiciones, ni nombre, ni tesis, ni la versión pública; la interfaz dice que no se guardó y ofrece reintentar; al reintentar se guarda todo junto",
-  "observado": "antes «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2; tras fallar «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2 (idéntica=true); público antes/después igual=true; interfaz «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.» / botón «Reintentar guardado»; peticiones de escritura enviadas en todo el guardado: PUT,PUT; tras reintentar «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25 · rev 3; público «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25",
+  "observado": "antes «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2; tras fallar «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2 (idéntica=true); público antes/después igual=true; interfaz «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.La versión pública sigue igual.Detalle» / botón «Reintentar guardado»; peticiones de escritura enviadas en todo el guardado: PUT,PUT; tras reintentar «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25 · rev 3; público «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25",
   "resultado": "OK",
   "evidencia": "G1-fallo-sin-parciales-1440.png"
  },
@@ -43,7 +43,7 @@
   "id": "G5",
   "escenario": "Modo sin conexión REAL contra el servidor local",
   "esperado": "Sin conexión el guardado falla de verdad: «No se pudo guardar», cambios en el dispositivo, botón «Reintentar guardado»; la cuenta no cambia; al volver la conexión se guarda",
-  "observado": "sin conexión: «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.» / botón «Reintentar guardado»; cuenta intacta=true; tras reconectar «Guardada en tu cuenta»",
+  "observado": "sin conexión: «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.La versión pública sigue igual.Detalle» / botón «Reintentar guardado»; cuenta intacta=true; tras reconectar «Guardada en tu cuenta»",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -51,7 +51,7 @@
   "id": "G6",
   "escenario": "E16a corregida: última posición, ampliación de texto SIMULADA al 200 % (font-size del documento, no zoom del navegador) a 390 px",
   "esperado": "Tras desplazar y enfocar, el campo queda dentro de la ventana (top ≥ 0, bottom ≤ inicio de la barra fija, sin desbordar a los lados) y permite escribir",
-  "observado": "campo enfocado: arriba 339, abajo 405, barra empieza en 744, ventana 390×844, ancho de página 390; tras escribir «12,5» el total pasó de «Asignado: 100 %» a «Asignado: 95,9 %» y el campo sigue visible (abajo 404 ≤ 704)",
+  "observado": "campo enfocado: arriba 339, abajo 405, barra empieza en 744, ventana 390×844, ancho de página 390; tras escribir «12,5» el total pasó de «Asignado: 100 %» a «Asignado: 95,9 %» y el campo sigue visible (abajo 405 ≤ 704)",
   "resultado": "OK",
   "evidencia": "G6-ultima-posicion-200-390.png"
  },
