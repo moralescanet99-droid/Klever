@@ -33,8 +33,7 @@ export function htmlNotaEstructura(esc, ev, origen) {
   if (!ev) return '';
   const fecha = ev.fecha ? new Date(ev.fecha + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : null;
   const bl = ev.bloques ? Object.values(ev.bloques) : [];
-  const cab = `<h3 id="nota-t">Nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>
-    <p class="nota-aviso mut peq">Describe la estructura de la cartera y los fundamentales ${fecha ? `observados el ${esc(fecha)}` : '(sin fecha de datos disponible)'}. <b>No es una previsión de rentabilidad ni una recomendación</b>, y una nota alta no garantiza rentabilidad ni idoneidad personal. ${esc(aviso_datos(origen || (ev.origenDatos === 'sintetico' ? 'prueba' : null)))}</p>`;
+  const cab = `<h3 id="nota-t">Nota de estructura <span class="chip">${esc(VERSION_NOTA.replace('estructura-', ''))} · beta</span></h3>`;
   let cuerpo;
   const inst = ev.instantanea ? new Date(ev.instantanea + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : null;
   const periodos = (ev.periodos || []).length ? [...new Set(ev.periodos.map(p => p.hasta))].join(', ') : null;
@@ -43,19 +42,22 @@ export function htmlNotaEstructura(esc, ev, origen) {
       <p class="nota-expl">${esc(explicarNota(ev))}</p>
       <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
-      ${inst ? `<li><b>Datos:</b> instantánea del ${esc(inst)}${periodos ? `, ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
+      ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
   } else {
-    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${inst ? `<p class="mut peq">Datos: instantánea del ${esc(inst)}${periodos ? `, ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
+    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
   const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : cm(b.puntuacion.toFixed(2))}</td><td>${cm((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
   const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${cm(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
   const detalleTec = `${ev.publicada ? `<p class="peq"><b>Cobertura mínima:</b> ${cm((ev.cobertura.minima * 100).toFixed(1))} % del peso evaluado en el bloque con menos datos. ${ev.bloques?.empresas?.detalle ? esc(ev.bloques.empresas.detalle) : ''}</p>` : `${ev.bloques && ev.motivo ? `<p class="peq">${esc(ev.motivo)}</p>` : ''}${bl.some(b => b.puntuacion != null) ? `<p class="peq">Bloques que sí se pueden calcular: ${bl.filter(b => b.puntuacion != null).map(b => `${esc(b.nombre)} (${cm(b.puntuacion.toFixed(1))}/10)`).join(', ')}.</p>` : ''}`}${ev.poblacion?.ficticias ? `<p class="peq">Población de comparación: ${ev.poblacion.empresas} empresas, de ellas ${ev.poblacion.ficticias} ficticias (solo existen en la demo y la semilla).</p>` : ''}`;
-  const porque = `<details class="mini"><summary>Cómo se calcula</summary>${detalleTec}
+  const aviso = `<p class="nota-aviso mut peq"><b>No es una previsión de rentabilidad ni una recomendación.</b> ${esc(aviso_datos(origen || (ev.origenDatos === 'sintetico' ? 'prueba' : null)))}</p>`;
+  const porDato = (ev.periodos || []).length ? `<p class="peq"><b>Fechas por dato:</b></p><ul class="peq">${ev.periodos.map(p => `<li>${esc(p.ticker)}: ejercicios hasta ${esc(p.hasta)}${p.carga ? `, cargado el ${esc(p.carga)}` : ''}${p.fuente ? ` (${esc(p.fuente)})` : ''}.</li>`).join('')}</ul>` : '';
+  const largo = `<p class="peq">Describe la estructura de la cartera y los fundamentales de sus empresas${inst ? ` en una instantánea del ${esc(inst)}` : ' (sin fecha de datos disponible)'}. Una nota alta no garantiza rentabilidad ni idoneidad personal.</p>`;
+  const porque = `<details class="mini"><summary>Cómo se calcula</summary>${largo}${porDato}${detalleTec}
     ${bl.length ? `<div class="tabla-h" role="region" aria-label="Bloques de la nota" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Peso</th><th scope="col">Puntos</th><th scope="col">Cobertura</th></tr></thead><tbody>${filas}</tbody></table></div>` : ''}
     <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
     <p class="peq">Empresas y sectores: número efectivo de empresas = 1 / suma de los pesos al cuadrado (las clases de una misma compañía cuentan una vez). Tamaño, deuda y rentabilidad: percentiles del universo cubierto o del sector (hacen falta ${PARAMETROS.minComparables} comparables) y frecuencias de los últimos ${PARAMETROS.ejercicios} ejercicios. Los umbrales son provisionales.</p>
     ${sin}</details>`;
-  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${porque}</section>`;
+  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${aviso}${porque}</section>`;
 }
 
 // Qué cambia en los bloques evaluables al pasar de la cartera base a la propuesta (laboratorio). No recalcula nada: recibe las dos evaluaciones.

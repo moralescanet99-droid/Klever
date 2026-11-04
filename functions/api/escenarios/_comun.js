@@ -1,4 +1,4 @@
-import { refExiste } from '../../../public/js/catalogo.js';
+import { refDeHistoria } from '../../../public/js/catalogo.js';
 import { validarResumen } from '../../../public/js/nota.js';
 // Utilidades de escenarios (privadas del módulo; el prefijo «_» evita que Pages lo enrute).
 export const ESTADOS = ['en_estudio', 'descartado', 'archivado'];
@@ -6,7 +6,7 @@ const colegir = r => ({
   id: r.id, clave: r.clave, nombre: r.nombre, nota: r.nota, estado: r.estado, metodo: r.metodo, ticker: r.ticker, peso_objetivo: r.peso_objetivo,
   cartera_id: r.cartera_id, cartera_nombre: r.cartera_nombre, base_revision: r.base_revision, revision: r.revision,
   ...evaluacionGuardada(r.nota_json),
-  pregunta: r.pregunta || '', pregunta_ref: r.pregunta_ref || null, pregunta_ref_invalida: !!r.pregunta_ref && !refExiste(r.pregunta_ref), revisar_en: r.revisar_en || null, historia: r.historia || null,
+  pregunta: r.pregunta || '', pregunta_ref: r.pregunta_ref || null, pregunta_ref_invalida: !!r.pregunta_ref && !refDeHistoria(r.pregunta_ref, r.historia), revisar_en: r.revisar_en || null, historia: r.historia || null,
   base: JSON.parse(r.base_json), propuesta: JSON.parse(r.propuesta_json), creado_en: r.creado_en, actualizado_en: r.actualizado_en,
   // Aviso de versión posterior: SOLO informa; el escenario conserva su base y nunca se recalcula.
   cartera_existe: r.revision_actual != null, revision_actual: r.revision_actual ?? null,

@@ -1,4 +1,4 @@
-import { CATALOGO_PREGUNTAS, refExiste } from './catalogo.js';
+import { CATALOGO_PREGUNTAS, refExiste, refDeHistoria } from './catalogo.js';
 // Contenido editorial de la versión interna: UNA historia, UNA opinión firmada y UNA revisión fechada vinculada a la tesis inicial.
 // El caso es FICTICIO y se identifica como tal desde el título: la empresa, las cifras y los documentos están inventados para probar Klever.
 // Nada de este archivo es información real ni una recomendación. Estructura pensada para pasar después a la base de datos (ver ronda13/EDITORIAL.md).
@@ -80,8 +80,8 @@ export const CARTERA_EJEMPLO = {
 
 // Segundo ejemplo, INCOMPLETO a propósito: enseña cómo se ve una nota que no se puede calcular y por qué (un banco no tiene deuda/EBITDA comparable).
 export const CARTERA_EJEMPLO_INCOMPLETA = {
-  nombre: 'Ejemplo con datos incompletos (no es tuyo)',
-  aviso: 'Es un ejemplo para aprender cuándo Klever dice «pendiente» y por qué: no es una recomendación.',
+  nombre: 'Ejemplo con evaluación parcial (no es tuyo)',
+  aviso: 'Es un ejemplo para aprender cuándo Klever dice «pendiente» y por qué (aquí, un límite del método con los bancos): no es una recomendación.',
   posiciones: [
     { ticker: 'KO', peso: 50, razon: 'Una empresa de bebidas muy conocida: de ella sí hay todos los datos que necesita la nota.' },
     { ticker: 'JPM', peso: 50, razon: 'Un banco. Los bancos no se miden con deuda neta/EBITDA ni con ROIC, así que la mitad de la cartera queda sin valorar en esos apartados.' },
@@ -101,7 +101,7 @@ export const SEGUIMIENTO_CASOS = [
 // Vínculo ESTABLE entre una pregunta de la persona y la cuestión editorial de la historia: un identificador «historia:n» (n = número de la tesis que la plantea),
 // no el texto. Reescribir la pregunta, añadir un espacio o reformularla NO rompe el vínculo; una pregunta nueva (sin vínculo) no hereda respuestas ajenas.
 export const refPregunta = (hid, n) => `${hid}:${n}`;
-export const casoPorRef = ref => !refExiste(ref) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
+export const casoPorRef = (ref, hid) => !refExiste(ref) || (hid !== undefined && !refDeHistoria(ref, hid)) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
 export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
 // Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
 //  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
@@ -109,7 +109,7 @@ export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/
 //  · «otra»       — la persona hizo una pregunta DISTINTA y la historia tiene revisión publicada de otra: no la responde, sigue pendiente, y se ofrece verla;
 //  · «sin»        — sin historia: nada que responda.
 export function estadoSeguimiento({ historia: hid, pregunta_ref: ref, pregunta }) {
-  const caso = ref ? casoPorRef(ref) : null;
+  const caso = ref ? casoPorRef(ref, hid) : null;                          // el par historia/identificador, no el identificador solo
   if (caso) return { tipo: caso.respuesta ? 'responde' : 'pendiente', caso, distinta: normalizaPregunta(pregunta) !== normalizaPregunta(caso.pregunta) };
   const hay = hid && SEGUIMIENTO_CASOS.find(c => c.historia === hid && c.respuesta), invalida = !!ref;   // con ref pero sin caso: el vínculo guardado no existe en el catálogo
   return hay ? { tipo: 'otra', caso: null, editorial: hay, refInvalida: invalida } : { tipo: 'sin', caso: null, refInvalida: invalida };

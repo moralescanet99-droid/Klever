@@ -34,11 +34,11 @@ t('G0', 'La evaluación REAL calculada por el módulo se acepta', 'HTTP 201 y vu
 const id0 = r.j.id;
 const mut = (o, cambios) => ({ ...JSON.parse(J(o)), ...cambios });
 r = await guardar(mut(real, { nota: 10 }), pend);
-t('G1', 'Cambiar SOLO la nota (de la calculada a 10) conservando todos los bloques', 'HTTP 400: la nota no cuadra con sus bloques', `HTTP ${r.s}: ${r.j.error}`, r.s === 400 && /no cuadra con sus bloques/.test(r.j.error));
+t('G1', 'Cambiar SOLO la nota (de la calculada a 10) conservando todos los bloques', 'HTTP 400: la nota no puede salir de sus bloques', `HTTP ${r.s}: ${r.j.error}`, r.s === 400 && /no puede salir de sus bloques/.test(r.j.error));
 r = await guardar(mut(real, { version: 'foo' }), pend);
 t('G2', 'Cambiar SOLO la versión a «foo»', 'HTTP 400: versión no conocida', `HTTP ${r.s}: ${r.j.error}`, r.s === 400 && /no es una versión conocida/.test(r.j.error));
 const bloques = v => ({ empresas: v, sectores: v, tamano: v, deuda: v, rentabilidad: v });
-const sint = (nota, v, extra = {}) => ({ version: 'estructura-v1', fecha: '2026-11-04', publicada: true, nota, motivo: null, cobertura: 100, bloques: bloques(v), fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: Math.round(25 * (10 - v)) / 100 }, ...extra });
+const sint = (nota, v, extra = {}) => ({ version: 'estructura-v1', fecha: '2026-11-04', publicada: true, nota, motivo: null, cobertura: 100, bloques: bloques(v), fortaleza: 'empresas', limitacion: { bloque: 'deuda', perdida: 25 * (10 - v) / 100 }, ...extra });
 const validos = [['límite inferior (1,0 con todos los bloques a 1)', sint(1, 1)], ['límite superior (10 con todos a 10)', sint(10, 10, { limitacion: { bloque: 'deuda', perdida: 0 } })], ['redondeo: bloques de 2 decimales y total de 1 (5,43 → 5,4)', sint(5.4, 5.43)], ['redondeo hacia arriba (5,45 → 5,5 con bloques 5,45)', sint(5.5, 5.45)], ['cobertura exacta del 90 %', sint(6, 6, { cobertura: 90 })]];
 let todoOk = true, det = [];
 for (const [k, v] of validos) { const x = validarResumen(v, { guardar: true }); if (!x.ok) { todoOk = false; det.push(`${k}: ${x.motivo}`); } }

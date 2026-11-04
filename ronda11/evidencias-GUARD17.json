@@ -10,8 +10,8 @@
  {
   "id": "G1",
   "escenario": "Cambiar SOLO la nota (de la calculada a 10) conservando todos los bloques",
-  "esperado": "HTTP 400: la nota no cuadra con sus bloques",
-  "observado": "HTTP 400: La evaluación adjunta no es válida: La nota (10) no cuadra con sus bloques (4,64).",
+  "esperado": "HTTP 400: la nota no puede salir de sus bloques",
+  "observado": "HTTP 400: La evaluación adjunta no es válida: La nota (10) no puede salir de sus bloques (suma 4,6360).",
   "resultado": "OK",
   "evidencia": ""
  },

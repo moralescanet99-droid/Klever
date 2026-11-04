@@ -28,11 +28,13 @@ function ventana(ej, n = PARAMETROS.ejercicios) {
 
 // Datos derivados por empresa (una vez por universo): lo que cada indicador necesita y por qué falta. Ausente, cero y negativo son TRES entradas distintas:
 // un dato ausente deja el indicador PENDIENTE; un EBITDA observado ≤ 0 con deuda positiva es un hecho (1 punto); nunca se rellena un hueco.
-const CACHE = new WeakMap();                                   // por referencia de `empresas`: copiar el universo con otras empresas no hereda una preparación ajena
+// El UNIVERSO RECIBIDO ES INMUTABLE (instantánea congelada: quien lo cambie debe pasar un objeto `empresas` nuevo). La preparación depende de la referencia de `empresas`
+// y del origen (las ficticias solo cuentan en un conjunto sintético): se guarda una por cada combinación, nunca una ajena.
+const CACHE = new WeakMap();
 const claveMk = e => `${e.moneda || ''}|${e.fuenteMercado || ''}`;
 function preparar(universo) {
-  if (CACHE.has(universo.empresas)) return CACHE.get(universo.empresas);
-  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => e.tipo === 'accion' && (!e.ficticia || universo.origen === 'sintetico'));   // una empresa ficticia nunca es comparable fuera de un conjunto sintético
+  const clave = universo.origen === 'sintetico' ? 's' : 'n', previa = CACHE.get(universo.empresas); if (previa?.[clave]) return previa[clave];
+  const E = {}, accs = Object.entries(universo.empresas).filter(([, e]) => usable(e, universo));   // una empresa ficticia nunca es comparable fuera de un conjunto sintético
   // moneda y fuente de mercado de REFERENCIA = la más frecuente entre quienes tienen datos de mercado con procedencia (un empate no fija ninguna)
   const cuenta = {}; for (const [, e] of accs) if (((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) && e.moneda && e.fuenteMercado) cuenta[claveMk(e)] = (cuenta[claveMk(e)] || 0) + 1;
   const orden = Object.entries(cuenta).sort((a, b) => b[1] - a[1]), ref = orden.length && (orden.length === 1 || orden[0][1] > orden[1][1]) ? orden[0][0] : null;
@@ -67,17 +69,28 @@ function preparar(universo) {
   }
   const porSector = {}; for (const o of Object.values(E)) { (porSector[o.sector] ||= { ratios: [], roics: [] }); if (o.ratio != null) porSector[o.sector].ratios.push(o.ratio); if (o.roicMed != null) porSector[o.sector].roics.push(o.roicMed); }
   const caps = Object.values(E).filter(o => o.cap).map(o => o.cap), imps = Object.values(E).filter(o => o.imp).map(o => o.imp);
-  const prep = { E, porSector, caps, imps }; CACHE.set(universo.empresas, prep); return prep;
+  const prep = { E, porSector, caps, imps }; CACHE.set(universo.empresas, { ...(previa || {}), [clave]: prep }); return prep;
 }
 
 // Procedencia de las filas que se USAN: los ejercicios de las empresas de la cartera y los datos de mercado de las empresas con datos. Cada fila necesita fuente y una
 // fecha de calendario REAL; sin ellas no se puede decir de dónde sale la cifra y la nota no se calcula (ni «ayer», ni 2026-02-31, ni NULL).
-const fechaFila = d => typeof d === 'string' && fechaReal(d.slice(0, 10));
+// Formatos admitidos para la fecha de un dato (las columnas `fundamentales.actualizado_en` y `mercado.fecha` guardan la fecha del día o la marca de SQLite):
+//   · «AAAA-MM-DD»; · «AAAA-MM-DD HH:MM:SS» (marca de SQLite) o con «T»; · con fracción de segundo y «Z» final opcionales.
+// Se valida la cadena ENTERA (día de calendario real, hora 00–23, minutos y segundos 00–59, sin sufijos ni espacios) y se normaliza al día. Devuelve null si no vale.
+export function normalizarFecha(s) {
+  if (typeof s !== 'string') return null;
+  const m = /^(\d{4}-\d{2}-\d{2})(?:[ T]([01]\d|2[0-3]):([0-5]\d):([0-5]\d)(?:\.\d{1,6})?Z?)?$/.exec(s);
+  return m && fechaReal(m[1]) ? m[1] : null;
+}
+const fechaFila = d => normalizarFecha(d) !== null;
+const usable = (e, universo) => e && e.tipo === 'accion' && (!e.ficticia || universo.origen === 'sintetico');   // las ficticias solo cuentan en un conjunto sintético
 function problemasProcedencia(pos, universo) {
-  const out = [];
-  for (const p of pos) { const e = universo.empresas?.[p.ticker]; if (!e || e.tipo !== 'accion') continue;
-    for (const r of e.ej || []) { if (!r.f) out.push(`${p.ticker} ${r.p}: la fila no tiene fuente`); else if (!fechaFila(r.d)) out.push(`${p.ticker} ${r.p}: la fecha de la fila no es una fecha real`); }
-    if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${p.ticker}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${p.ticker}: la fecha de los datos de mercado no es una fecha real`); } }
+  const out = [], enCartera = new Set(pos.map(p => p.ticker));
+  // primero las empresas de la cartera; después, TODAS las demás que forman las poblaciones de comparación (percentiles de sector y de mercado)
+  for (const t of [...enCartera, ...Object.keys(universo.empresas || {}).filter(k => !enCartera.has(k))]) {
+    const e = universo.empresas?.[t]; if (!usable(e, universo)) continue; const ajena = enCartera.has(t) ? '' : ' (comparable)';
+    for (const r of e.ej || []) { if (!r.f) out.push(`${t}${ajena} ${r.p}: la fila no tiene fuente`); else if (!fechaFila(r.d)) out.push(`${t}${ajena} ${r.p}: la fecha de la fila no es una fecha válida`); }
+    if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${t}${ajena}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${t}${ajena}: la fecha de los datos de mercado no es una fecha válida`); } }
   return out;
 }
 const MOTIVO_ORIGEN = {
@@ -97,7 +110,7 @@ export function evaluar(cartera, universo) {
   if (prob.length) { res.procedencia = { problemas: prob }; res.motivo = `Procedencia incompleta: ${prob.slice(0, 3).join('; ')}${prob.length > 3 ? ` (y ${prob.length - 3} más)` : ''}. Sin fuente y fecha verificables no se calcula la nota.`; return res; }
   if (universo.origen !== 'sintetico' && universo.habilitada !== true) { res.motivo = MOTIVO_ORIGEN[universo.origen] || 'La nota todavía no está habilitada: falta declarar el origen del conjunto de datos (solo se calcula con un conjunto sintético identificado).'; return res; }
   const P = preparar(universo), tot = 1000;
-  res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => ({ ticker: p.ticker, hasta: [...universo.empresas[p.ticker].ej].map(r => r.p).sort().at(-1) }));
+  res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => { const ej = [...universo.empresas[p.ticker].ej].sort((a, b) => String(a.p).localeCompare(String(b.p))), u = ej.at(-1); return { ticker: p.ticker, hasta: u.p, carga: normalizarFecha(u.d), fuente: u.f ?? null }; });
   { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
   for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
@@ -161,10 +174,12 @@ export const fechaReal = v => { if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2
 const IDS = Object.keys(PESOS), CLAVES = ['version', 'fecha', 'publicada', 'nota', 'motivo', 'cobertura', 'bloques', 'fortaleza', 'limitacion'];
 const numEn = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && !Object.is(v, -0) && v >= lo && v <= hi;
 // Texto visible: sin marcado, sin controles y SIN controles de dirección (podrían reordenar lo que se lee: «\u202e»), y de longitud acotada.
-const BIDI = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
-const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v) && !BIDI.test(v);
+const BIDI = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/, INVISIBLES = /[\u200b\u2060\ufeff\u180e]/;   // ancho cero que no forma parte de ninguna escritura (sí se admiten U+200C/U+200D: persa, emojis compuestos)
+const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v) && !BIDI.test(v) && !INVISIBLES.test(v);
 export const MAX_MOTIVO = 700;
-const TOL_TOTAL = 0.056, TOL_BLOQUE = 0.011;                // los bloques guardados se redondean a 2 decimales (±0,005) y el total a 1 (±0,05)
+// PRECISIÓN de los bloques guardados: exactamente 2 decimales (`resumenNota` los redondea así). El total es el redondeo a 1 decimal de la suma ponderada de los valores SIN redondear,
+// así que cada bloque guardado puede diferir ±0,005 del real y el total real está en [S − 0,005, S + 0,005] (los pesos suman 100 %). Se trabaja en enteros (décimas de milésima).
+const TOL_BLOQUE = 0.011;
 const propio = (o, k) => Object.hasOwn(o, k);
 // modo `guardar`: solo se aceptan versiones CONOCIDAS (se puede comprobar la coherencia). Al LEER, una versión desconocida pero bien formada se entrega como
 // «valor guardado por el cliente» (`sinComprobar`): no se puede verificar cómo se calculó, así que no se presenta como comprobado.
@@ -192,16 +207,18 @@ export function validarResumen(r, { guardar = false } = {}) {
     for (const k of IDS) { const v = r.bloques[k]; if (!(v === null ? !r.publicada : numEn(v, 1, 10))) return mal('La puntuación de un bloque no es un número de 1 a 10' + (r.publicada ? '' : ' ni null') + '.'); }
   } else if (r.publicada) return mal('Una nota publicada necesita sus bloques.');
   if (r.fortaleza != null && !IDS.includes(r.fortaleza)) return mal('La fortaleza no es un bloque conocido.');
-  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k)) || !propio(l, 'bloque') || !IDS.includes(l.bloque) || !numEn(l.perdida, 0, 10)) return mal('La limitación no es válida.'); }
+  if (r.limitacion != null) { const l = r.limitacion; if (typeof l !== 'object' || Array.isArray(l) || Object.keys(l).some(k => !['bloque', 'perdida'].includes(k)) || !propio(l, 'bloque') || !propio(l, 'perdida') || !IDS.includes(l.bloque) || !numEn(l.perdida, 0, 10)) return mal('La limitación no es válida.'); }
   if (r.publicada && (r.fortaleza == null || r.limitacion == null)) return mal('Una nota publicada necesita su fortaleza y su limitación.');
   // Coherencia (solo con un método conocido): el total sale de los bloques, la fortaleza es el bloque mejor puntuado y la limitación el que más resta
   if (r.publicada && conocida) {
-    const suma = IDS.reduce((s, k) => s + PESOS[k] * r.bloques[k], 0) / 100;
-    if (Math.abs(r.nota - suma) > TOL_TOTAL) return mal(`La nota (${r.nota}) no cuadra con sus bloques (${(Math.round(suma * 100) / 100).toString().replace('.', ',')}).`);
+    const c100 = k => { const x = Math.round(r.bloques[k] * 100); return Math.abs(r.bloques[k] * 100 - x) < 1e-6 ? x : null; };
+    if (IDS.some(k => c100(k) === null)) return mal('Los bloques de una nota publicada deben tener como mucho dos decimales.');
+    const S4 = IDS.reduce((s, k) => s + PESOS[k] * c100(k), 0), n10 = Math.round(r.nota * 10);         // S4 en 1e-4; el intervalo del total real es [S4 − 50, S4 + 50]
+    if (!(S4 + 50 >= n10 * 1000 - 500 && S4 - 50 < n10 * 1000 + 500)) return mal(`La nota (${r.nota}) no puede salir de sus bloques (suma ${(S4 / 10000).toFixed(4).replace('.', ',')}).`);
     const max = Math.max(...IDS.map(k => r.bloques[k]));
     if (r.bloques[r.fortaleza] < max - TOL_BLOQUE) return mal('La fortaleza no es el bloque mejor puntuado.');
-    const perd = k => PESOS[k] * (10 - r.bloques[k]) / 100, maxP = Math.max(...IDS.map(perd));
-    if (perd(r.limitacion.bloque) < maxP - TOL_BLOQUE || Math.abs(r.limitacion.perdida - perd(r.limitacion.bloque)) > TOL_BLOQUE) return mal('La limitación no cuadra con los bloques.');
+    const perd = k => PESOS[k] * (10 - r.bloques[k]) / 100, maxP = Math.max(...IDS.map(perd)), tolP = k => PESOS[k] * 0.005 / 100 + 1e-9;   // la pérdida real difiere ±(peso·0,005/100)
+    if (perd(r.limitacion.bloque) < maxP - 0.0026 || Math.abs(r.limitacion.perdida - perd(r.limitacion.bloque)) > tolP(r.limitacion.bloque)) return mal('La limitación no cuadra con los bloques.');
   }
   return { ok: true, sinComprobar: !conocida, limpio: { version: r.version, fecha: r.fecha ?? null, publicada: r.publicada, nota: r.nota ?? null, motivo: r.motivo ?? null, cobertura: r.cobertura ?? null,
     bloques: r.bloques == null ? null : Object.fromEntries(IDS.map(k => [k, r.bloques[k]])), fortaleza: r.fortaleza ?? null, limitacion: r.limitacion == null ? null : { bloque: r.limitacion.bloque, perdida: r.limitacion.perdida } } };

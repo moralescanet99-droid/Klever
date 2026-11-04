@@ -225,10 +225,10 @@
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
     <h1 id="creador-titulo">Crea tu portafolio</h1>
-    <p class="mut creador-sub" id="creador-sub">Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.</p>
+    <p class="mut creador-sub" id="creador-sub">Elige cómo repartir tu dinero simulado.</p>
     <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
       <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> Objetivo</a></li>
-      <li class="paso" data-paso="2" aria-current="step"><span class="paso-n" aria-hidden="true">2</span> Distribución</li>
+      <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> Distribución</button></li>
       <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> Revisión</button></li>
     </ol>
     <div class="ws-cab">
@@ -244,6 +244,7 @@
       </div>
       <div class="ws-acc">
         <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
+        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar portafolio <span aria-hidden="true">→</span></button>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
           <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
@@ -281,7 +282,7 @@
           <div class="tabla-scroll">
             <table id="pos-tabla" class="tabla-pos">
               <caption class="sr">Posiciones de la cartera</caption>
-              <thead><tr><th scope="col">Activo</th><th scope="col">Categoría</th><th scope="col" class="num">Peso</th><th scope="col" class="num"><abbr title="Rentabilidad sobre el capital invertido (aproximada)">ROIC</abbr></th><th scope="col"><span class="sr">Quitar</span></th></tr></thead>
+              <thead><tr><th scope="col">Activo</th><th scope="col" class="num">Peso</th><th scope="col"><span class="sr">Quitar</span></th></tr></thead>
               <tbody></tbody>
             </table>
           </div>
@@ -292,7 +293,7 @@
           </div>
         </section>
 
-        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario" type="button" id="revisar">Revisar portafolio <span aria-hidden="true">→</span></button></div>
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
         <details class="panel plegable-panel panel-graf" id="det-graficos">
           <summary><h2>Gráficos de precio</h2></summary>
           <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
@@ -301,8 +302,8 @@
       </div>
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
-        <section class="panel panel-donut" id="panel-donut" aria-labelledby="donut-t">
-          <h2 id="donut-t">Tu portafolio</h2>
+        <details class="panel panel-donut" id="panel-donut" open>
+          <summary><h2 id="donut-t">Tu portafolio</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
           <div class="donut-cuerpo">
             <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
             <ul class="donut-leyenda" id="donut-leyenda"></ul>
@@ -314,7 +315,7 @@
             <p class="hipo-res" id="hipo-res" role="status" aria-live="polite"></p>
           </div>
           <p class="mut peq" id="donut-pie">Podrás ajustar estos porcentajes antes de guardar.</p>
-        </section>
+        </details>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
           <section id="radio" class="radio" aria-labelledby="radio-t">
@@ -354,7 +355,7 @@
           </div>
           </div>
         </section>
-        <section class="panel panel-nota" id="nota-panel" aria-live="polite"><div id="nota-cuerpo"></div></section>
+        <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
 
         <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">
           <summary><h2>Publicación</h2><span id="pub-chip" class="chip">Privada</span></summary>
@@ -384,7 +385,7 @@
     <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
     <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
   </div>
-  <button class="btn btn-primario js-guardar" type="button">Guardar cartera</button>
+  <div class="bg-acc"><button class="btn btn-primario js-guardar" type="button">Guardar cartera</button><button class="btn btn-primario js-revisar" type="button">Revisar <span aria-hidden="true">→</span></button></div>
 </div>
 
 <!-- ===== DIÁLOGOS ===== -->

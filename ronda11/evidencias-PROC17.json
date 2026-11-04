@@ -11,7 +11,7 @@
   "id": "Q1b",
   "escenario": "La instantánea y el periodo efectivo se exponen",
   "esperado": "El universo declara instantánea y periodos; la nota lista hasta qué ejercicio llega cada empresa",
-  "observado": "2026-11-04; {\"desde\":\"FY2020\",\"hasta\":\"FY2024\"}; [{\"ticker\":\"KO\",\"hasta\":\"FY2024\"},{\"ticker\":\"PG\",\"hasta\":\"FY2024\"}]",
+  "observado": "2026-11-04; {\"desde\":\"FY2020\",\"hasta\":\"FY2024\"}; [{\"ticker\":\"KO\",\"hasta\":\"FY2024\",\"carga\":\"2026-11-04\",\"fuente\":\"prueba\"},{\"ticker\":\"PG\",\"hasta\":\"FY2024\",\"carga\":\"2026-11-04\",\"fuente\":\"prueba\"}]",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -26,8 +26,8 @@
  {
   "id": "Q3",
   "escenario": "Fecha IMPOSIBLE (2026-02-31) en un ejercicio de KO",
-  "esperado": "Incompleto y pendiente; la pantalla dice que la fecha no es una fecha real",
-  "observado": "origen incompleto; «Nota pendiente. Procedencia incompleta: KO FY2024: la fecha de la fila no es una fecha real. Sin fuente y fecha verificables no se calcula la nota. ¿Por qu»",
+  "esperado": "Incompleto y pendiente; la pantalla dice que la fecha no es una fecha válida",
+  "observado": "origen incompleto; «Nota pendiente. Procedencia incompleta: KO FY2024: la fecha de la fila no es una fecha válida. Sin fuente y fecha verificables no se calcula la nota. Insta»",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -59,7 +59,7 @@
   "id": "Q6",
   "escenario": "Origen MIXTO desde SQL (PG con fuente «sec», el resto de prueba)",
   "esperado": "Origen «mixto»; pendiente con el motivo de la mezcla (distinto de «incompleto» y de «real»)",
-  "observado": "origen mixto; «Nota pendiente. El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero. ¿Por qué esta nota? La nota»",
+  "observado": "origen mixto; «Nota pendiente. El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero. Instantánea del 4 nov 2026.»",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -67,7 +67,7 @@
   "id": "Q7",
   "escenario": "Todo con fuente real (sec / mercado)",
   "esperado": "Origen «real»; sin habilitación explícita la nota NO se publica y se dice que falta habilitarla",
-  "observado": "origen real; «Nota pendiente. La nota todavía no está habilitada con datos reales: antes hay que calibrar los umbrales y verificar los datos. ¿Por qué esta nota? La nota»",
+  "observado": "origen real; «Nota pendiente. La nota todavía no está habilitada con datos reales: antes hay que calibrar los umbrales y verificar los datos. Instantánea del 4 nov 2026.»",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -83,7 +83,7 @@
   "id": "Q9",
   "escenario": "KO 50 % / JPM 50 % (semilla íntegra)",
   "esperado": "Pendiente, y la pantalla explica POR QUÉ: el banco no tiene metodología de deuda/EBITDA ni de ROIC (no «faltan datos» que llegarán)",
-  "observado": "origen sintetico; «Nota pendiente. Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez». Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento». Causa principal: JPM (50 % de la cartera): sector sin metodología de deuda/EBITDA (banca y seguros). Faltan dato»",
+  "observado": "origen sintetico; «Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total. Instantánea del 4 nov 2026; ejercicios hasta FY2024. No es una previsión de rentab»",
   "resultado": "OK",
   "evidencia": ""
  },

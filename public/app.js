@@ -511,10 +511,11 @@ function lineasCobertura(r) { // desplegable: las exclusiones con su nombre comp
 // ---------- espacio de trabajo ----------
 function renderWorkspace() {
   if (!current) return;
+  reiniciarPaso();
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
-  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta los porcentajes, revisa el resultado y guarda los cambios.' : 'Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.';
+  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta, revisa y guarda.' : 'Elige cómo repartir tu dinero simulado.';
   $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
@@ -531,9 +532,7 @@ function asignarColores() {
 const colorDe = t => colores.get(t) ?? 0;
 function filaTabla(p, i) {
   const a = by[p.ticker] || {};
-  return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small></span></div></td><td class="cat">${esc(a.sector || '')}</td>
-    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %"><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
-    <td class="num">${roicTxt(a)}</td>
+  return `<tr><td><div class="id"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><span class="id-txt"><b>${esc(p.ticker)}</b><small>${esc(a.nombre || '')}</small><small class="det-pos">${esc(a.sector || '')} · ROIC: ${roicTxt(a)}</small></span></div></td>    <td class="num"><div class="peso-celda"><span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span><input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)});--f:${Math.max(0, Math.min(1, (p.peso || 0) / 100))}" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %"><span class="pbar" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></span></div></td>
     <td><button class="btn btn-ghost quitar" type="button" data-quitar="${i}" aria-label="Quitar ${esc(p.ticker)}"><span aria-hidden="true">✕</span></button></td></tr>`;
 }
 function tarjetaPos(p, i) {
@@ -541,7 +540,7 @@ function tarjetaPos(p, i) {
   return `<li class="pos-card"><div class="pc-fila"><span class="punto" style="--c:var(--c${colorDe(p.ticker)})" aria-hidden="true"></span><div class="pc-id"><b>${esc(p.ticker)}</b><span>${esc(a.nombre || '')}</span></div>
     <span class="peso"><input class="peso-in" data-i="${i}" inputmode="decimal" autocomplete="off" value="${nf(p.peso)}" aria-invalid="${p.peso > 0 ? 'false' : 'true'}" aria-label="Peso de ${esc(p.ticker)}, en porcentaje"><span aria-hidden="true">%</span></span>
     <button class="btn btn-ghost pc-toggle" type="button" aria-expanded="false" aria-controls="${id}" aria-label="Detalles de ${esc(p.ticker)}"><span aria-hidden="true">⌄</span></button></div>
-    <input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)})" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %">
+    <input class="peso-rng" style="--c:var(--c${colorDe(p.ticker)});--f:${Math.max(0, Math.min(1, (p.peso || 0) / 100))}" type="range" min="0" max="100" step="0.1" data-i="${i}" value="${p.peso > 0 ? p.peso : 0}" aria-label="Peso de ${esc(p.ticker)}: deslizador (también puedes escribir el valor)" aria-valuetext="${nf(p.peso)} %">
     <div class="pbar pbar-movil" aria-hidden="true"><i style="--c:var(--c${colorDe(p.ticker)});width:${Math.max(0, Math.min(100, p.peso))}%"></i></div>
     <div class="pc-det" id="${id}" hidden><dl>
       <div><dt>Nombre:</dt><dd>${esc(a.nombre || p.ticker)}</dd></div>
@@ -578,6 +577,7 @@ function pintarDonut(r) {
   $('#donut').innerHTML = `<svg viewBox="0 0 42 42" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border)" stroke-width="3.2"/>${arcos}${libre}</svg><div class="donut-centro"><b class="num">${eur(BASE_SIM)}</b><span>simulados</span></div>`;
   $('#donut').setAttribute('aria-label', 'Reparto del portafolio sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
   $('#donut-leyenda').innerHTML = seg.length ? seg.map(x => `<li><i class="sw" style="--c:var(--c${colorDe(x.t)})" aria-hidden="true"></i><span class="lg-n">${esc(by[x.t]?.nombre || x.t)} <small>${esc(x.t)}</small></span><span class="num lg-p">${pesoCorto(x.w)}</span><span class="num lg-e">${eur(BASE_SIM * x.w / 100)}</span></li>`).join('') : '<li class="mut">Añade posiciones para ver el reparto.</li>';
+  $('#donut-resumen').textContent = !r.n ? `${eur(BASE_SIM)} simulados` : `${pesoCorto(r.total)} asignado · ${eur(BASE_SIM)} simulados${r.exceso ? ` · sobran ${pesoCorto(r.exceso)}` : r.falta ? ` · faltan ${pesoCorto(r.falta)}` : ''}`;
   const est = $('#donut-estado'); est.className = 'donut-estado ' + (!r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok');
   est.textContent = !r.n ? '' : r.exceso ? `Sobran ${pesoCorto(r.exceso)}: reduce algún peso para llegar al 100 %.` : r.falta ? `Faltan ${pesoCorto(r.falta)} por asignar para llegar al 100 %.` : 'Reparto completo: 100 %.';
   // hipótesis: la posición elegida (por defecto, la mayor) cae un X %, las demás se quedan igual
@@ -588,10 +588,23 @@ function pintarDonut(r) {
   h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: el portafolio pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
 }
 $('#hipo').addEventListener('input', () => { if (current) pintarDonut(calcResumen(pos)); });
-// pasos del creador: 2 Distribución mientras se edita; 3 Revisión al pedir la revisión
-function pasoActual(n) { $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }
-function revisarPortafolio() { pasoActual(3); const d = $('#res-detalle'); d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); }
-$('#revisar').addEventListener('click', revisarPortafolio); $('#paso-revisar').addEventListener('click', revisarPortafolio);
+// pasos del creador: «Distribución» (editar pesos) y «Revisión» (resultado, su motivo, el guardado) son DOS vistas del mismo portafolio: los pesos viven en `pos` y no se pierden al ir y volver.
+let paso = 2;
+function pasoActual(n, foco = false) {
+  const cambia = n !== paso; paso = n; $('#vista-cartera').dataset.paso = String(n);
+  $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
+  if (cambia) { try { current && pintarEstado(); } catch { /* el estado se repinta en la siguiente edición */ } }
+  if (foco && cambia) { const d = n === 3 ? $('#nota-panel') : $('#h-pos'); requestAnimationFrame(() => { d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); }); }
+}
+function reiniciarPaso() { paso = 2; $('#vista-cartera').dataset.paso = '2'; $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === 2) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }
+reiniciarPaso();
+function revisarPortafolio() { pasoActual(3, true); }
+$('#vista-cartera').addEventListener('click', e => { if (e.target.closest('.js-revisar')) revisarPortafolio(); else if (e.target.closest('#paso-volver, #paso-dist')) pasoActual(2, true); else if (e.target.closest('#paso-revisar')) revisarPortafolio(); });
+document.addEventListener('click', e => { if (e.target.closest('.js-revisar') && !$('#vista-cartera').contains(e.target)) revisarPortafolio(); });   // la barra inferior queda fuera de la vista
+// el anillo es un desplegable en móvil (resumen compacto siempre visible) y va abierto y fijo en escritorio
+const ancho = matchMedia('(min-width:900px)'); const abrirAnillo = () => { if (ancho.matches) $('#panel-donut').open = true; };
+ancho.addEventListener('change', abrirAnillo); abrirAnillo(); if (!ancho.matches) $('#panel-donut').open = false;
+$('#panel-donut > summary').addEventListener('click', e => { if (ancho.matches) e.preventDefault(); });
 function renderResumen() {
   pintarRadiografia(); pintarDonut(calcResumen(pos));
   const r = calcResumen(pos), clase = !r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok';
@@ -651,10 +664,11 @@ function pintarEstado() {
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
   $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
-  // UNA acción principal según el estado: con cambios pendientes en un portafolio de la cuenta, «Guardar»; en cualquier otro caso, «Revisar portafolio».
-  const principalGuardar = !!id && !!dirty && !razon && !saving;
+  // UNA acción principal según el estado. Distribución: «Guardar» con cambios pendientes en un portafolio de la cuenta; si no, «Revisar portafolio».
+  // Revisión: «Guardar» si hay algo que guardar (y «Revisar» se oculta); si no, no hay principal.
+  const guardaActivo = !($('.js-guardar').disabled), principalGuardar = paso === 3 ? guardaActivo : (!!id && !!dirty && !razon && !saving);
   $$('.js-guardar').forEach(b => { b.classList.toggle('btn-primario', principalGuardar); b.classList.toggle('btn-secundario', !principalGuardar); });
-  $('#revisar').classList.toggle('btn-primario', !principalGuardar); $('#revisar').classList.toggle('btn-secundario', principalGuardar);
+  $$('.js-revisar').forEach(b => { b.hidden = paso === 3; b.classList.toggle('btn-primario', !principalGuardar); b.classList.toggle('btn-secundario', principalGuardar); });
   $('#pub-pend').hidden = !(current.publico && id && dirty);                                          // lo publicado sigue intacto hasta guardar
   $('#mi-descartar').hidden = !(id && dirty);
   pintarPublicacion(v); pintarRadiografia();
@@ -810,12 +824,12 @@ function editarPeso(el, fin) {
   pos[i].peso = ok ? r1(v) : 0;
   if (fin && ok) el.value = nf(pos[i].peso);
   for (const o of $$(`.peso-in[data-i="${i}"]`)) { o.setAttribute('aria-invalid', ok ? 'false' : 'true'); if (o !== el) o.value = el.value; }
-  for (const g of $$(`.peso-rng[data-i="${i}"]`)) { if (g !== el) g.value = ok ? pos[i].peso : 0; g.setAttribute('aria-valuetext', `${nf(pos[i].peso)} %`); }
+  for (const g of $$(`.peso-rng[data-i="${i}"]`)) { if (g !== el) g.value = ok ? pos[i].peso : 0; g.setAttribute('aria-valuetext', `${nf(pos[i].peso)} %`); g.style.setProperty('--f', Math.max(0, Math.min(1, (pos[i].peso || 0) / 100))); }
   marcarCambio(); renderResumen(); pasoActual(2);
 }
 // El deslizador es una ENTRADA MÁS: escribe en el campo numérico y sigue exactamente el mismo camino de validación (también se puede ajustar sin arrastrar).
 $('#vista-cartera').addEventListener('input', e => { if (!e.target.classList.contains('peso-rng')) return; const i = +e.target.dataset.i, v = Math.round(+e.target.value * 10) / 10;
-  const num = [...$$(`.peso-in[data-i="${i}"]`)][0]; if (!num) return; for (const o of $$(`.peso-in[data-i="${i}"]`)) o.value = nf(v); editarPeso(num, false); });
+  e.target.style.setProperty('--f', Math.max(0, Math.min(1, v / 100))); const num = [...$$(`.peso-in[data-i="${i}"]`)][0]; if (!num) return; for (const o of $$(`.peso-in[data-i="${i}"]`)) o.value = nf(v); editarPeso(num, false); });
 $('#vista-cartera').addEventListener('input', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, false); });
 $('#vista-cartera').addEventListener('change', e => { if (e.target.classList.contains('peso-in')) editarPeso(e.target, true); });
 $('#vista-cartera').addEventListener('click', e => {

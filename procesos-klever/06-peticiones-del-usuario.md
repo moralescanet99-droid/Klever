@@ -807,3 +807,200 @@ Chromium 153.0.8010.0, Playwright del proyecto y Wrangler/Miniflare local. O pas
 **Dos precisiones para el siguiente encargo.** N25 solo serializa y deserializa JSON; el guardado por API debe acreditarse con la suite de escenarios. N24 prueba origen ausente y real, pero no construye por sí misma un conjunto mixto desde SQL. El guion con principiantes propone cerrar y volver mañana en una demo que pierde datos al recargar: probar esa tarea en el servidor con persistencia, o medir en la demo únicamente la comprensión durante la misma sesión.
 
 **Caso propio de seguimiento.** POST con hidrogeno-norte:99 devolvió 201 y se mostró como otra pregunta. La pregunta «¿Cuánto sube el alquiler?» enviada con hidrogeno-norte:1 también devolvió 201 y el módulo la clasificó como respondida. El sistema se fía de la asociación elegida.
+
+## C15 · Ronda 18 (2026-11-04) — revisión de la ronda 17 y encargo, literal
+
+# Klever · Revisión de la ronda 17 y encargo de la ronda 18
+
+Fecha de revisión · 4 de noviembre de 2026
+
+## Veredicto en tres líneas
+
+**Reparación técnica — rechazo el cierre completo.** Acepto las reparaciones principales de R16, pero he reproducido una nota incoherente aceptada por la API y una fecha mal formada que sigue permitiendo publicar.
+**Aplicación visual — rechazo el cierre completo.** El fondo, la tipografía y la navegación siguen la dirección aprobada. El creador móvil necesita una jerarquía más corta y la acción principal visible en el momento de decidir.
+**La ronda 18 debe cerrar estos casos y pulir el recorrido existente.** Las comprobaciones repetidas y sus límites se detallan debajo.
+
+| Criterio | R16 | R17 | Motivo |
+|---|---:|---:|---|
+| Confianza y privacidad | 7 | 8 | Pasan las pruebas repetidas de acceso ajeno, versiones y revocación de token en los manejadores. |
+| Procedencia de datos | 6 | 7 | NULL, fechas imposibles y mezcla quedan pendientes. Persiste la aceptación de sufijos arbitrarios y un límite del evaluador directo. |
+| Claridad del recorrido móvil | 8 | 7 | La nota de ejemplo se entiende mejor. El creador añade un panel extenso antes de los controles y acumula resultados debajo. |
+| Honestidad del contenido | 9 | 9 | Se identifican datos ficticios y simulaciones. «Observados el» sigue atribuyendo una fecha común de forma demasiado amplia. |
+| Solidez técnica | 7 | 7 | Catálogo y validación mejoran. Quedan un caso numérico reproducible, una caché incompleta y validaciones históricas parciales. |
+| Calidad de las pruebas | 8 | 8 | Las aserciones endurecidas aportan valor. La geometría y los límites del redondeo necesitan casos más precisos. |
+
+Las notas son un juicio de revisión sobre esta entrega, con alcance local. El descenso en claridad móvil corresponde al nuevo creador, no a la legibilidad de las dos notas de ejemplo.
+
+## Evidencia y alcance de esta revisión
+
+He leído las instrucciones entregadas, el código relevante, los documentos de R17 y las doce imágenes. La imagen 00 coincide con la referencia aprobada. Las 01–11 muestran la implementación.
+
+Instalación con `npm ci`, Node 24.22.1. Repetí completas estas baterías sobre los archivos del ZIP.
+
+| Batería | Correctas | Fallos |
+|---|---:|---:|
+| unit-procedencia17 | 13 | 0 |
+| unit-guardada17 | 20 | 0 |
+| unit-nota de R15 | 35 | 0 |
+| unit-escenarios16 | 11 | 0 |
+| unit-migracion de R8 | 14 | 0 |
+| testP de R17, navegador | 28 | 0 |
+| testO de R16 actualizado en R17, navegador | 18 | 0 |
+
+Son **139 comprobaciones correctas de siete baterías completas**. Las 724 del informe recibido pertenecen a la ejecución local de Claude.
+
+Los manejadores se ejecutan con Request/Response y SQLite real local. El guion `antes-despues-r17.mjs . DESPUES` dio la semilla 4,4, los cuatro estados esperados de procedencia y los rechazos de nota 10, versión foo, control bidi y referencia inexistente. El ZIP carece de historial Git, por lo que el comando de worktree propuesto no se puede ejecutar con esta entrega. Repetí la mitad DESPUES y consulté el registro entregado de ANTES. Esta revisión no autentica los hashes citados.
+
+La descarga oficial de Chromium llegó truncada. Utilicé Chromium 153 de un paquete alternativo con Playwright 1.63.0 y un ajuste de entorno para que Wrangler enumerase loopback. El primer intento de navegador se cerró al crear otro contexto con el argumento single-process. Lo retiré. Otro intento tuvo errores de arranque de Workerd y un estado sin posiciones. La ejecución completa de P pasó tras un arranque limpio. O pasó sus 18 comprobaciones en una ejecución completa posterior. Un intento intermedio de O quedó interrumpido durante un reinicio del entorno de revisión. Estos intentos se excluyen del recuento de baterías completas y no establecen la causa de los fallos intermitentes anteriores.
+
+### Casos propios adicionales
+
+| Entrada o acción | Resultado observado | Interpretación |
+|---|---|---|
+| Semilla intacta, KO 60 / PG 40 | 4,4 | Conserva el caso de referencia. |
+| Fecha de mercado KO = 2026-11-04 10:00:00 | Sintético, 4,4 | Acepta la marca temporal de SQLite. |
+| Fecha de mercado KO = 2026-11-04basura | Sintético, 4,4 | Valida únicamente los diez primeros caracteres. |
+| Fuente NULL solo en KO FY2020 | Incompleto, pendiente, identifica la fila | La reparación cubre un ejercicio antiguo. |
+| Fuente vacía en fundamentales por SQL | CHECK de SQLite rechaza la escritura | El esquema limita las fuentes a NULL/sec/prueba/demo. |
+| Fuente NULL de mercado en AAPL, fuera de la cartera | Incompleto, pendiente | La API protege el conjunto de comparación. |
+| Fuente de mercado AAPL cambiada de prueba a demo | Sintético, 4,4 | El origen sigue siendo sintético y esa fila queda fuera de la fuente dominante. |
+| Evaluador directo, fecha AAPL = ayer, conservando origen sintético | 4,4 | El módulo no revalida esa fila ajena a la cartera. |
+| Evaluador directo, fundamentales sin fuente en todos los comparables ajenos | 4,4 | La verificación local solo recorre las posiciones. |
+| Mismo objeto empresas, cambiar origen a real y habilitada a true tras evaluar como sintético | Conserva 126 empresas preparadas y 4,4 | La caché reutiliza comparables ficticios. Es un caso de módulo, con habilitación artificial. |
+| Total 5,5 con bloques 5,44 / 5,44 / 5,47 / 5,44 / 5,44 | Validador acepta y POST devuelve 201 | La tolerancia admite un total imposible para esos intervalos de redondeo. |
+| Referencia nueva con mayúsculas o espacios en los extremos | 400 en los tres casos | Identificador tratado de forma estricta. |
+| estadoSeguimiento con historia «otra» y referencia hidrogeno-norte:1 | «responde» | La lectura usa la existencia del ID sin contrastar el par histórico. |
+| limitacion.perdida heredada en objeto JS directo | Aceptada | Falta comprobar propiedad propia en ese nivel. JSON HTTP no transporta herencia. |
+
+## Hallazgos por gravedad
+
+### Críticos
+
+No identifiqué un fallo crítico en los recorridos examinados. Esto describe el alcance de la revisión.
+
+### Importantes
+
+**I1. La nota guardada admite una décima que no puede proceder de los bloques.**
+
+En `public/js/nota.js`, constante TOL_TOTAL y líneas 198–204, la tolerancia es 0,056. Con pesos 20/20/15/25/20 y bloques 5,44 / 5,44 / 5,47 / 5,44 / 5,44, la suma es 5,4445. Aun admitiendo ±0,005 por bloque, el extremo superior es menor que 5,4495. La nota 5,5 exige llegar a 5,45. He construido ese resumen con fortaleza tamaño, limitación deuda y pérdida 1,14. El POST devolvió **201**.
+
+Arreglo requerido. Calcula los intervalos posibles de los valores anteriores al redondeo y comprueba que la nota final es compatible con ellos. Usa una representación decimal o tolerancia numérica pequeña y justificada para el cálculo informático. Define la precisión admitida de los bloques guardados. La compatibilidad con registros antiguos debe tratarse explícitamente. Añade el caso anterior, sus vecinos válidos y extremos 1/10 por POST y lectura de fila histórica. La coherencia aritmética sigue sin acreditar el origen de un cálculo remitido por el cliente.
+
+**I2. La fecha admite cualquier sufijo tras un día válido.**
+
+En `functions/api/universo.js`, clasificación y selección de fechas, y `public/js/nota.js`, fechaFila, se usa `slice(0,10)`. El SQL siguiente deja origen sintético y nota 4,4.
+
+```sql
+UPDATE mercado SET fecha='2026-11-04basura' WHERE ticker='KO';
+```
+
+La marca `2026-11-04 10:00:00` puede ser un formato admitido deliberadamente. Define los formatos aceptados según las columnas actuales y valida toda la cadena, incluido rango de hora y zona cuando proceda. Normaliza después. Prueba fecha sola, marca temporal SQLite, ISO si se admite, hora imposible y sufijo arbitrario. Comparte la misma función entre API y evaluador.
+
+**I3. El creador móvil retrasa demasiado la edición y la revisión.**
+
+Las capturas 02 y 03 miden 390 × 4709 y 320 × 5374 píxeles. Antes del primer activo editable aparecen el encabezado, los pasos, el nombre, la privacidad y el panel completo del anillo con seis filas de leyenda e hipótesis. En mi recorrido de navegador, con viewport de 780 px de alto, el primer deslizador apareció en y=1673 px a 390 de ancho y en y=1853 px a 320. El botón Revisar apareció en y=2385 y y=2641, respectivamente. Son mediciones de mi ejecución, con tipografías del entorno, y explican la distancia entre el inicio y el primer ajuste. El botón naranja de revisión llega tras las seis posiciones. Debajo se acumulan radiografía, ROIC, nota y gráficos.
+
+En `public/style-r17.css`, línea 83, el orden coloca panel-donut antes de panel-pos. La adaptación respeta el color, pero el primer gesto útil queda demasiado abajo. En escritorio 1440 × 900, el botón principal tampoco entra en la captura inicial.
+
+Arreglo requerido. En móvil muestra encabezado breve, estado compacto del reparto, posiciones y acción principal. Permite desplegar anillo completo, leyenda e hipótesis. Lleva la revisión al paso 3 con resultado primero. En escritorio conserva las dos columnas y facilita acceder a revisar mientras se ajustan posiciones. El estado compacto puede mostrar total asignado y saldo simulado. Comprueba la barra fija de guardado y su reserva de espacio con capturas de viewport en varios puntos de scroll. Las capturas largas aportadas muestran esa barra atravesando el panel y no bastan para decidir cómo se comporta durante el desplazamiento real.
+
+**I4. Falta una garantía común del universo que alimenta los comparables.**
+
+En `public/js/nota.js`, líneas 30–37 y 75–80, preparar usa todo el universo, mientras problemasProcedencia recorre solo las posiciones. El origen global enviado por la API protege la ruta habitual contra NULL ajenos a la cartera. El evaluador directo, compartido por demo y laboratorio, acepta comparables alterados si el objeto conserva origen sintético.
+
+Además, CACHE depende solo de la referencia empresas, aunque preparar también depende del origen. Reutilizar el mismo empresas tras cambiar el origen conserva los ficticios preparados. Es un caso de módulo con habilitación artificial, no una activación real observada en la aplicación.
+
+Arreglo requerido. Centraliza la validación de todas las filas que participan en cada población de comparación y documenta si el universo es inmutable. Asegura que la caché depende de todas las entradas relevantes o elimínala si su coste no está justificado. Prueba la ruta de API, la entrada directa, el cambio de origen con mismo objeto y una copia nueva. Mantén explícito el bloqueo de conjuntos incompletos o mixtos.
+
+### Menores que deben quedar registrados
+
+**M1. Par historia/referencia histórico incompleto.** `functions/api/escenarios/_comun.js`, línea 9, marca invalidez usando solo refExiste. `public/js/contenido.js`, líneas 111–115, devuelve la respuesta por ID antes de comprobar historia. POST y cambio a una referencia nueva sí comprueban el par. Usa refDeHistoria en lectura y seguimiento. Una fila antigua discordante debe mostrar vínculo inválido y permitir desvincularlo. Repite también el PATCH que conserva una referencia histórica discordante. La advertencia Jaccard ayuda a revisar un vínculo, pero su similitud de palabras no acredita equivalencia semántica.
+
+**M2. Propiedades propias y texto.** En `nota.js`, línea 195, comprueba también que perdida sea propia. La aceptación de esa propiedad heredada la reproduje únicamente en JS directo. Los caracteres de ancho cero no están cubiertos por el filtro BIDI. Define un tratamiento selectivo y comprueba texto visible, preservando escritura legítima. La afirmación «propiedades propias» necesita ese matiz.
+
+**M3. Fecha en la explicación.** `nota-ui.js`, línea 37, mantiene «fundamentales observados el 4 nov 2026». La API usa la fecha máxima de mercado como instantánea y los ejercicios llegan hasta FY2024. Sustituye por «Instantánea del 4 nov 2026; ejercicios hasta FY2024» y ofrece las fechas efectivas por dato en el detalle.
+
+**M4. Título del ejemplo bancario.** «Ejemplo con datos incompletos» sigue presentando como falta de datos lo que el cuerpo explica como límite del método. Usa «Ejemplo con evaluación parcial». Conserva la explicación sobre banca que ya funciona.
+
+**M5. Cascada CSS.** `html:root:root:root`, tres hojas sucesivas y reglas sobrescritas dificultan la verificación. La pequeña cantidad de !important en R17 no demuestra por sí sola un defecto. Al corregir el creador, consolida sus reglas activas y elimina las anuladas, incluyendo el estado de res-breve. Verifica ambos esquemas de color y foco. La barra lateral fija de escritorio es compatible con el diseño si reserva espacio y permite desplazarse en ventanas bajas.
+
+## Cinco cambios visuales de mayor impacto para R18
+
+1. **Acerca la primera edición al inicio en móvil.** Estado compacto arriba, campos inmediatamente después. En 390 × 780 con la plantilla de seis activos debe aparecer al menos el primer campo de peso en el primer viewport, usando tamaños de texto legibles.
+2. **Haz que los tres pasos organicen el contenido.** Distribución centra los controles. Revisión abre el resumen, la nota o su causa y el guardado. Volver conserva cada peso. Comprueba que la navegación entre pasos y el foco siguen el mismo orden.
+3. **Refina la columna de activos de escritorio.** Da prioridad a ticker/nombre, porcentaje y deslizador. Lleva categoría ampliada y ROIC al detalle de la posición. Usa pistas finas y manejadores discretos con área táctil de 44 px. Conserva etiquetas y campos numéricos.
+4. **Recupera las proporciones de la referencia.** Amplía la presencia del anillo respecto a su panel, alinea sus importes y evita el nombre truncado sin una vía clara para leerlo completo. Ajusta el título y los márgenes para que haya una sola jerarquía fuerte. Mantén el fondo carbón y cobre aprobado, la serif en el encabezado y las cifras tabulares en controles.
+5. **Pon el resultado antes de la explicación larga.** En las capturas 04–07 la tarjeta ya está antes de los botones, pero el aviso ocupa el primer bloque. Presenta cifra o pendiente, motivo específico, una fortaleza, una limitación e instantánea. Conserva una advertencia breve visible y reúne la explicación extensa en «Cómo se calcula».
+
+La Revista ocupa correctamente una entrada secundaria. Su acceso puede nombrar de forma directa «El Superespeculador» en la acción de opinión, manteniendo fecha y carácter ficticio. El contenido existente incluye firma, hipótesis y revisión. La captura 08 permite inspeccionar una respuesta y una pregunta pendiente, pero no muestra en ese viewport la reformulación junto al original. Aporta esa pareja en la próxima evidencia del Cuaderno.
+
+### Tres cosas que quitaría del primer nivel
+
+- La leyenda completa y la hipótesis desplegadas antes de editar pesos en móvil.
+- El ROIC y la categoría extensa como columnas obligatorias del editor.
+- La repetición de explicaciones técnicas y avisos largos antes del resultado.
+
+Conserva el acceso al detalle en su contexto y las advertencias necesarias junto a las simulaciones.
+
+## Pruebas y afirmaciones de la entrega
+
+Las adaptaciones de navegación, títulos y pasos corresponden al rediseño. I3 sustituye una barra estática por un control cuyo valor se compara con el peso, manteniendo verificaciones táctiles y de desbordamiento. I2 conserva la acción principal y la jerarquía frente a ROIC.
+
+H1/H2 asignan cabBottom = 0 cuando la cabecera es fija. Esto sirve para la barra lateral actual, pero liga la condición a position:fixed en vez de a su geometría. Comprueba ocupación real de pantalla y solapes. P6 cuenta botones según un color de fondo exactamente igual al acento. Esa prueba puede pasar si aparece otra acción dominante con un tono ligeramente distinto. Conserva la inspección visual y comprueba qué acciones están visibles y habilitadas en cada estado.
+
+P1 espera cualquier li de la leyenda. El estado vacío también contiene un li. En un intento con fallos del servidor llegó hasta la aserción con «sin posiciones». Espera respuesta válida del universo y las seis posiciones concretas. Mantén el fallo como fallo, registrando consola y respuestas. Sustituye pausas arbitrarias por estados observables en las zonas que presenten intermitencias.
+
+El cambio de font-size al 200 % verifica una aproximación útil. Se mantienen pendientes el zoom real, la ampliación de texto del sistema y los lectores. El anillo con nombre, aria-valuetext, aria-current, aria-live y aria-pressed están contemplados en las pruebas y el código. Esto no acredita que la secuencia completa sea cómoda con VoiceOver o TalkBack. Revisa también el orden DOM cuando CSS cambia el orden visual.
+
+Seis repeticiones correctas de E/F indican que esas ejecuciones pasaron. Su causa histórica permanece abierta. Añade latencia determinista a las respuestas que reconstruyen cartera y sesión, registra orden de navegación, respuesta y estado esperado, y reproduce con y sin borrador. La demo concatenada es aceptable provisionalmente si reconstruirla es reproducible y una prueba compara las mismas entradas/salidas con el módulo compartido.
+
+Ajusta estas afirmaciones del informe siguiente.
+
+| Afirmación | Redacción que respalda la evidencia |
+|---|---|
+| Cada fila usada se verifica | La API comprueba filas de acciones del conjunto; el módulo directo necesita cubrir también comparables. |
+| Fecha real | Se comprueba el día inicial; la validación completa queda pendiente hasta corregir I2. |
+| Nota coherente | Se detectan grandes incoherencias; el caso límite de I1 sigue aceptándose. |
+| Propiedades propias | Se comprueban campos principales y bloques; perdida requiere comprobación adicional. |
+| HTML visible desde SQLite | Se genera y examina texto HTML. El comportamiento del DOM se acredita aparte con navegador. |
+| Diseño aprobado aplicado | Paleta y tipografía aplicadas; la aceptación del recorrido móvil sigue pendiente. |
+| Sin intermitencias | Seis ejecuciones E/F correctas en el entorno del autor; causa anterior abierta. |
+
+## Encargo completo para Claude · ronda 18
+
+Trabaja sobre la entrega R17. El objetivo de producto sigue siendo crear, entender y seguir portafolios simulados. Usa como referencia la imagen 00 entregada con R17 y las decisiones de este documento.
+
+**Orden de trabajo**
+
+1. Cierra I1 e I2 con pruebas de los contraejemplos exactos por API y módulo. Mantén 4,4 para KO + PG y evaluación parcial para KO + JPM.
+2. Cierra I4, M1 y M2 con casos de comparables, caché y filas históricas. Conserva aislamiento de cuentas y control concurrente.
+3. Reorganiza creador y revisión conforme a los cinco cambios visuales. Mantén todos los pesos al navegar, abrir detalle, volver y guardar. Revisa los estados invitado, borrador, cuenta sin cambios y cuenta con cambios.
+4. Corrige fechas y título del caso bancario. Refina la entrada editorial y aporta el original/reformulación juntos en Cuaderno.
+5. Ejecuta las suites pertinentes tras las reparaciones, las regresiones del creador y una pasada completa al cerrar. Registra primer fallo, corrección y última ejecución. Conserva los pendientes manuales.
+
+**Criterios de aceptación**
+
+- El resumen de I1 recibe 400 al guardarse y una fila histórica equivalente se identifica como inválida. Los redondeos legítimos siguen aceptándose.
+- El sufijo basura y horas imposibles quedan pendientes. Fecha sola y formatos temporales expresamente admitidos funcionan.
+- Los comparables usados cumplen procedencia. Cambiar origen con el mismo objeto no reutiliza una población incorrecta.
+- Toda referencia histórica se valida como par. Desvincular una pregunta respondida elimina su asociación editorial, conserva el texto personal y respeta el control de revisión.
+- A 320 y 390 px, editar y revisar forman un recorrido corto. El primer campo aparece en el viewport inicial de 390 × 780 con la plantilla acordada. La acción de continuar está accesible y ninguna barra tapa controles enfocados.
+- El paso 3 muestra el resultado y su motivo antes de detalles técnicos. Volver a distribución conserva valores e identifica el paso correcto.
+- Capturas a 1440 × 900, 390 × 780 y 320 × 780 incluyen inicio, distribución, revisión y guardado, con imágenes de viewport además de página completa. Presenta referencia y resultado en tamaño comparable.
+- Pruebas de teclado, lector pendiente identificado, texto ampliado y navegación conservan foco y estado.
+
+**Entrega**
+
+Un ZIP de código con instrucciones reproducibles, un ZIP de capturas ordenadas y un archivo de instrucciones para esta revisión. Incluye semillas mínimas, entrada y respuesta de los casos propios, registro de pruebas y lista de cambios. Si citas commits para comparar versiones, aporta historial utilizable o dos árboles identificados. Diferencia el número de aserciones del número de entradas agrupadas bajo cada aserción.
+
+**Trabajo de ChatGPT al recibir R18**
+
+Repetir contraejemplos y baterías afectadas, comprobar la aplicación visual frente a 00, recorrer invitado/borrador/cuenta y validar que la nueva jerarquía conserva las funciones. Emitir aceptación técnica y visual por separado, con evidencias y pendientes concretos.
+
+## Verificación manual que sigue pendiente
+
+Mantén M1–M79. Prioriza M73–M76 para pulgar, ampliación real, lector, contraste y foco. Esta revisión aporta una comparación visual a M77 con cambios pendientes. M78 requiere D1 de prueba remota con copia y restauración verificadas. M79 requiere cinco principiantes y un registro de comprensión, especialmente del reparto, de la nota y de la simulación.
+
+Antes de abrir cuentas a terceros siguen priorizadas M50–M57 y M60. Antes de contenido real, M58, M64 y M71. Permanecen sin comprobar dispositivos físicos, Safari/Firefox, correo real, carga SEC real, migraciones D1 remotas y datos reales. La demo pierde cambios al recargar. La tarea de regresar otro día debe probarse en el servidor con persistencia.
+
+

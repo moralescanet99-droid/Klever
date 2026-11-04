@@ -1,0 +1,106 @@
+[
+ {
+  "id": "Q1",
+  "escenario": "Semilla íntegra, KO 60 % / PG 40 %",
+  "esperado": "Origen «sintetico», nota EXACTAMENTE 4,4 (no «una cifra con un decimal»), fecha 2026-11-04 y la pantalla muestra «4,4 de 10»",
+  "observado": "HTTP 200; origen sintetico; nota 4.4; fecha 2026-11-04; «4,4 de 10»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q1b",
+  "escenario": "La instantánea y el periodo efectivo se exponen",
+  "esperado": "El universo declara instantánea y periodos; la nota lista hasta qué ejercicio llega cada empresa",
+  "observado": "2026-11-04; {\"desde\":\"FY2020\",\"hasta\":\"FY2024\"}; [{\"ticker\":\"KO\",\"hasta\":\"FY2024\",\"carga\":\"2026-11-04\",\"fuente\":\"prueba\"},{\"ticker\":\"PG\",\"hasta\":\"FY2024\",\"carga\":\"2026-11-04\",\"fuente\":\"prueba\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q2",
+  "escenario": "KO con la fuente de todas sus filas a NULL",
+  "esperado": "El universo se declara «incompleto»; la nota queda PENDIENTE y la pantalla dice que KO tiene filas sin fuente (el 4,4 ya no sale)",
+  "observado": "origen incompleto; publicada false; «Nota pendiente. Procedencia incompleta: KO FY2020: la fila no tiene fuente; KO FY2021: la fila no tiene fuente; KO FY2022: la fila no tiene fuente (y 2 más). Sin fuente y fech»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q3",
+  "escenario": "Fecha IMPOSIBLE (2026-02-31) en un ejercicio de KO",
+  "esperado": "Incompleto y pendiente; la pantalla dice que la fecha no es una fecha válida",
+  "observado": "origen incompleto; «Nota pendiente. Procedencia incompleta: KO FY2024: la fecha de la fila no es una fecha válida. Sin fuente y fecha verificables no se calcula la nota. Insta»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q4",
+  "escenario": "Texto «ayer» como fecha de un ejercicio",
+  "esperado": "Incompleto y pendiente (no se acepta una fecha que no es de calendario)",
+  "observado": "origen incompleto; publicada false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q4b",
+  "escenario": "«ayer» como fecha de los datos de mercado de KO",
+  "esperado": "Incompleto y pendiente; la instantánea del universo NO adopta «ayer» como fecha máxima",
+  "observado": "origen incompleto; instantánea 2026-11-04; publicada false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q5",
+  "escenario": "Datos de mercado de PG sin fuente",
+  "esperado": "Incompleto y pendiente; la pantalla lo atribuye a PG",
+  "observado": "origen incompleto; «Nota pendiente. Procedencia incompleta: PG: los datos de mercado no tienen fuente. Sin fuente y fecha verificables no se calcula la not»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q6",
+  "escenario": "Origen MIXTO desde SQL (PG con fuente «sec», el resto de prueba)",
+  "esperado": "Origen «mixto»; pendiente con el motivo de la mezcla (distinto de «incompleto» y de «real»)",
+  "observado": "origen mixto; «Nota pendiente. El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero. Instantánea del 4 nov 2026.»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q7",
+  "escenario": "Todo con fuente real (sec / mercado)",
+  "esperado": "Origen «real»; sin habilitación explícita la nota NO se publica y se dice que falta habilitarla",
+  "observado": "origen real; «Nota pendiente. La nota todavía no está habilitada con datos reales: antes hay que calibrar los umbrales y verificar los datos. Instantánea del 4 nov 2026.»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q8",
+  "escenario": "Con datos reales HABILITADOS a mano, las empresas ficticias no son comparables",
+  "esperado": "El sector tiene 30 empresas en la semilla (20 ficticias), pero con origen real solo cuentan las reales (10 < 20): pendiente por falta de comparables",
+  "observado": "origen real; poblacion {\"empresas\":105,\"ficticias\":21}; «Solo hay 10 comparables en su sector (hacen falta 20) para el percentil de deuda. | Solo hay 10 comparables en»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q9",
+  "escenario": "KO 50 % / JPM 50 % (semilla íntegra)",
+  "esperado": "Pendiente, y la pantalla explica POR QUÉ: el banco no tiene metodología de deuda/EBITDA ni de ROIC (no «faltan datos» que llegarán)",
+  "observado": "origen sintetico; «Nota pendiente. Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total. Instantánea del 4 nov 2026; ejercicios hasta FY2024. No es una previsión de rentab»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q10",
+  "escenario": "Cambios cosméticos (renombrar KO; invertir el orden de las posiciones)",
+  "esperado": "La nota sigue siendo EXACTAMENTE 4,4 y la pendiente del banco sigue pendiente",
+  "observado": "renombrar 4.4; orden 4.4",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q11",
+  "escenario": "Conjuntos de tickers (no solo recuentos): las originales siguen y las ficticias están aparte",
+  "esperado": "Todas las empresas de data/universe.json están en la semilla; ninguna ficticia (HNORT, EJBA–EJBT) figura en data/universe.json (la lista de la importación real); el universo marca como ficticias exactamente las de data/ficticios.json",
+  "observado": "originales 125; faltan []; ficticias en la lista real []; marcadas 21/21",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]
