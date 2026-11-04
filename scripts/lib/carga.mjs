@@ -5,6 +5,22 @@
 //  · Una empresa que falla, o que no devuelve ningún año, NO se toca: conserva su fuente y su fecha anteriores.
 //  · Una carga vacía solo deja constancia en `cargas` (estado «vacia»); no declara fuente alguna.
 //  · AUSENCIA ≠ CERO: una métrica derivada exige todos sus insumos; si falta uno, es NULL (sin datos), nunca 0 ni un supuesto.
+// Selección del dato ANUAL de un concepto (pura: se prueba con fixtures). `hechos` = lista de hechos de un concepto (formato de companyfacts).
+//  · Solo informes anuales (10-K y 10-K/A) del ejercicio completo (fp = FY).
+//  · Un FLUJO (ingresos, resultado, flujos de caja, tipo impositivo) debe cubrir ~12 meses (350–380 días): se descartan acumulados parciales y
+//    trimestres con el mismo cierre. Un SALDO (deuda, caja, patrimonio) es un valor a una fecha y no tiene duración.
+//  · Para cada ejercicio gana el cierre más reciente y, a igualdad, la presentación más reciente (revisión).
+//  · Se conserva el identificador del informe (`accn`) para poder trazar la cifra.
+export function seleccionarAnual(hechos, { flujo }) {
+  const dias = (a, b) => (new Date(b) - new Date(a)) / 864e5, porAnio = new Map();
+  for (const x of hechos || []) {
+    if (!['10-K', '10-K/A'].includes(x.form) || x.fp !== 'FY' || !x.fy || !x.end || typeof x.val !== 'number') continue;
+    if (flujo) { if (!x.start) continue; const d = dias(x.start, x.end); if (!(d >= 350 && d <= 380)) continue; }
+    const cur = porAnio.get(x.fy);
+    if (!cur || x.end > cur.end || (x.end === cur.end && (x.filed || '') > (cur.filed || ''))) porAnio.set(x.fy, { val: x.val, end: x.end, filed: x.filed || null, accn: x.accn || null });
+  }
+  return porAnio;
+}
 export const q = s => s == null ? 'NULL' : `'${String(s).replace(/'/g, "''")}'`;
 export const n = v => (v == null || !Number.isFinite(v)) ? 'NULL' : v;
 const hay = v => v != null && Number.isFinite(v);
@@ -18,7 +34,7 @@ export function derivar(d) {
   const invested = hay(d.ltd) && hay(d.eq) && hay(d.cash) ? d.ltd + d.eq - d.cash : null;
   const t = hay(d.tax) ? Math.min(Math.max(d.tax, 0), 0.4) : null;
   const roic = hay(d.op) && t !== null && invested !== null && invested > 0 ? d.op * (1 - t) / invested : null;
-  return { ingresos: hay(d.ingresos) ? d.ingresos : null, ni: hay(d.ni) ? d.ni : null, debt, ebitda, fcf, roic };
+  return { ingresos: hay(d.ingresos) ? d.ingresos : null, ni: hay(d.ni) ? d.ni : null, op: hay(d.op) ? d.op : null, debt, ebitda, fcf, roic };
 }
 
 // L = último año, P = el anterior (o null). «ok: null» = sin datos (no suma ni resta); false = no superada.
@@ -36,7 +52,8 @@ export function criterios(L, P) {
 
 // resultados: [{ activo: {ticker,nombre,tipo,sector}, cik, anios: { 2024: {insumos}, … } | null, error?: string }]
 // fecha: «AAAA-MM-DD» de la carga. Devuelve el SQL completo (una transacción).
-export function sqlCarga(resultados, { fecha, fuente = 'sec' }) {
+export function sqlCarga(resultados, { fecha, fuente }) {
+  if (!['sec', 'prueba', 'demo'].includes(fuente)) throw new Error('La carga exige declarar su fuente (sec | prueba | demo): no hay fuente por defecto.');   // un fixture nunca se confunde con datos reales
   const out = ['BEGIN TRANSACTION;']; let ok = 0, vacias = 0, fallidas = 0;
   for (const r of resultados) {
     const a = r.activo;
@@ -49,10 +66,10 @@ ON CONFLICT(ticker) DO UPDATE SET nombre=excluded.nombre,tipo=excluded.tipo,sect
     ok++; const hist = {};
     for (const y of años) {
       const h = hist[y] = derivar(r.anios[y]);
-      out.push(`INSERT INTO fundamentales (ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en)
-VALUES (${q(a.ticker)},'FY${y}',${n(h.ingresos)},${n(h.ni)},${n(h.debt)},${n(h.ebitda)},${n(h.fcf)},${n(h.roic)},${q(fuente)},${q(fecha)})
+      out.push(`INSERT INTO fundamentales (ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en,resultado_operativo,informe)
+VALUES (${q(a.ticker)},'FY${y}',${n(h.ingresos)},${n(h.ni)},${n(h.debt)},${n(h.ebitda)},${n(h.fcf)},${n(h.roic)},${q(fuente)},${q(fecha)},${n(h.op)},${q(r.anios[y].informe ?? null)})
 ON CONFLICT(ticker,periodo) DO UPDATE SET ingresos=excluded.ingresos,beneficio_neto=excluded.beneficio_neto,deuda_neta=excluded.deuda_neta,ebitda=excluded.ebitda,
-flujo_caja_libre=excluded.flujo_caja_libre,roic=excluded.roic,fuente=excluded.fuente,actualizado_en=excluded.actualizado_en;`);
+flujo_caja_libre=excluded.flujo_caja_libre,roic=excluded.roic,fuente=excluded.fuente,actualizado_en=excluded.actualizado_en,resultado_operativo=excluded.resultado_operativo,informe=excluded.informe;`);
     }
     const L = hist[años.at(-1)], P = años.length > 1 ? hist[años.at(-2)] : null;
     out.push(`INSERT INTO ideas (ticker,criterios_cumplidos,calculado_en) VALUES (${q(a.ticker)},${q(JSON.stringify({ periodo: 'FY' + años.at(-1), ...criterios(L, P) }))},${q(fecha)})

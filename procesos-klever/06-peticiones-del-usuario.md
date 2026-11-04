@@ -525,3 +525,102 @@ ChatGPT revisó las 16 capturas y repitió 88 comprobaciones locales de cálculo
 ## 5. Alcance reservado para después
 
 La ronda 14 cubre una historia, una opinión y una revisión relacionadas. El piloto editorial de tres piezas, la revista con categorías, las publicaciones semanales, los avisos automáticos, la comparación de escenarios y el análisis interno de ETF quedan para fases posteriores. También quedan reservadas las integraciones con Revolut y Trade Republic, el artículo diario personalizado, el tip diario y las suscripciones. La apertura pública se decidirá tras validar privacidad, migración, D1 remoto, correo y procedencia de las cifras reales.
+
+## C12 · Ronda 15: revisión de la ronda 14 y encargo (LITERAL, archivo `Klever_Revision_14_y_encargo_15_1.md`)
+# Klever · Revisión de la ronda 14 y encargo de la ronda 15
+
+## Decisión para Javier
+
+Aceptaría esta entrega como demo interna del recorrido editorial. He abierto la demo en Chromium a 390 px, entrado desde portada en la revista, leído la historia ficticia y simulado la incorporación de Hidrógeno Norte. La tabla devuelve KO 54 %, PG 36 % y HNORT 10 %, total 100 %. La comparación explica los seis y cuatro puntos que financian la incorporación.
+
+Mantendría la historia, la opinión, la revisión y el laboratorio. En la próxima portada, la acción principal será crear o retomar una cartera. Antes de abrir cuentas al público hay que cerrar dos carreras de privacidad. La nota y el comparador son encargos nuevos de la ronda 15.
+
+## Qué se verificó
+
+| Evidencia | Resultado independiente |
+|---|---|
+| Instalación y cinco suites pedidas | npm ci completado en una extracción nueva. Carga 11/11, escenarios R14 14/14, cálculos 23/23, servidor R13 30/30, migración 10/10. Total 88/88. |
+| Fallo de escritura del radar | Ejecuté el mismo experimento contra los módulos de R13 y R14. R13 comunicaba éxito dejando la nota antigua en disco. R14 lanza error y conserva la versión anterior. |
+| Capturas | Revisadas las 12 imágenes entregadas. En 01 la portada ya explica la cartera simulada. En 02–07 el coste principal es recorrer mucho texto hasta tomar una decisión. En 09 y 12 el radar vacío aparece antes del escenario que sí contiene una pregunta pendiente. |
+| Navegador | Recorrido de visitante en la demo autónoma con Chromium y ancho de 390 px. La demo pierde el estado al recargar. El regreso persistente se evaluó mediante capturas y pruebas de servidor. |
+| Pruebas pendientes | Ni testL ni testK se repitieron contra la web completa. Wrangler falló al consultar las interfaces de red del entorno. El ZIP carece de historial Git para crear el worktree pedido. Las 522 comprobaciones completas corresponden al informe de Claude. |
+
+| Dimensión | R14 | Comparación con R13 |
+|---|---:|---|
+| Confianza y privacidad | 6/10 | El radar mejora y persisten carreras relevantes. Confianza anterior 6. |
+| Procedencia | 7/10 | Mejora con fuente por fila y tratamiento de ausencias. Antes se valoró dentro de confianza. |
+| Claridad móvil | 7/10 | El resultado se entiende mejor. La longitud y el orden del regreso siguen pesando. Anterior 7. |
+| Honestidad del contenido | 9/10 | El caso ficticio y su desenlace están identificados. La nota anterior de honestidad del informe era 8 y medía otra dimensión. |
+| Solidez técnica | 7/10 | Mejoran integridad y migraciones. Se mantiene la nota anterior. |
+| Pruebas | 7/10 | Más casos específicos. La cobertura del editor en vuelo y del móvil físico sigue pendiente. Sin nota anterior separada. |
+
+## Hallazgos que Claude debe poder reproducir
+
+| Gravedad | Evidencia | Corrección y condición de aceptación |
+|---|---|---|
+| Crítico antes de beta | public/js/almacen.js, líneas 66–76. Inicié la migración de una nota local bajo A, retrasé la lectura, reinicié el módulo y pasé a B. Al liberar la lectura, el módulo llamó al PUT con la nota bajo B. Experimento del módulo con API simulada. | Vincular el intento a la sesión de origen, cancelar al cambiar, comprobar identidad antes de cada escritura y antes de borrar el original. Prueba con dos cuentas y dos activos, interrupción antes de la primera y entre las dos escrituras. |
+| Crítico antes de beta | public/app.js, líneas 219–232 y 358–365. Con la función real del editor aislada, liberé la respuesta de A después de limpiar el estado. Volvió a asignar el nombre privado a current. La exposición visual completa depende de la navegación. Además un 401 retrasado en api comprueba el token actual, no el que hizo la petición. | Comprobar la generación de sesión y de navegación antes de tocar estado, abrir diálogos o caducar la sesión. Limpiar inmediatamente al pulsar Salir. Probar A → visitante → B con detalle de cartera, conflicto local y 401 retrasados. |
+| Importante | public/app.js, líneas 95–106 y 220–225. Las copias klever_edit_* guardan nombre, tesis y pesos en el dispositivo después de salir. El filtro del servidor no borra el disco local. | En un dispositivo compartido, advertir sobre ediciones pendientes antes de salir voluntariamente y permitir guardarlas o descartarlas. Definir recuperación privada y caducidad. Comprobar que al salir no queda texto privado recuperable por el siguiente usuario. |
+| Importante | public/js/almacen.js, líneas 34–53. Reproduje un GET retrasado que devolvía radar vacío después de guardar una nota correctamente. La copia en memoria quedó vacía. El ensayo no demuestra pérdida en el servidor. La eliminación de la última fila usa un removeItem que puede ocultar errores. | Descartar lecturas anteriores a una mutación. Usar borrado estricto para datos privados. Probar almacenamiento bloqueado desde el inicio, último borrado fallido y recuperación tras recargar. |
+| Importante antes de comparar/puntuar | scripts/fetch_fundamentals.mjs, líneas 19–33 y 58–60. La selección anual sigue basándose en FY y fecha final. Dos hechos con el mismo cierre pueden diferir en duración o revisión. Solo se extraen tres ejercicios. scripts/lib/carga.mjs admite sec como origen por defecto. | Distinguir flujos anuales de saldos puntuales, validar duración y revisión, guardar identificador del informe. Exigir fuente explícita y separar fixtures del conjunto real. Ampliar a cinco ejercicios verificables antes de emitir notas reales. No se puede estimar la cobertura efectiva sin una carga real. |
+| Menor | Capturas 02–12 y prueba L1. Mucha lectura, símbolos sin nombre y aviso vacío antes de la tarea pendiente. outerHTML tampoco inspecciona todas las propiedades value ni prueba que la memoria quedó vacía. | Revisar con contenido realista, campos editados, diálogos, historial y navegación atrás. A 320 px comprobar la acción y sus etiquetas con zoom real, además del ancho total. |
+
+Los topes en la escritura y las comprobaciones de propietario y revisión de escenarios mejoran la integridad. Las pruebas de SQLite pasan. Falta verificar la migración sobre una copia representativa en D1 y restauración. Cambiar los recuentos de 105 a 106 y las etiquetas de edición se ajusta al diseño, pero un recuento por sí solo no garantiza composición del catálogo. Comprobar que la empresa ficticia nunca entra en comparables reales. Una división con denominador cero devuelve valor ausente en los ratios revisados. No atribuir los fallos intermitentes de testE/testF al paralelismo sin un rastro que lo demuestre. Capturar última acción, salida, consola y estado del servidor. La separación de contenido, cálculo y presentación es razonable para una historia. Antes de añadir una base editorial, usar identificadores estables y comprobar la misma ruta en demo y web completa.
+
+**Afirmaciones que ajustaría.** «Se descarta toda respuesta en vuelo» excede las garantías del editor. «Solo una carga real puede marcar SEC» excede lo que valida el generador SQL. «Se entiende en móvil» queda pendiente de una prueba con personas. Los nombres de autora y empresa ficticias, las fuentes de ejemplo y la revisión simulada sí se identifican. Mantener las distinciones entre fecha de carga, periodo financiero y fecha editorial.
+
+## Encargo directo para Claude
+
+Trabaja sobre la última versión funcional. El público inicial tiene entre 20 y 30 años y está aprendiendo a invertir. El propósito de Klever debe entenderse al entrar: crear una cartera, investigar por qué dar espacio a una empresa y observar qué cambia. Implementa en este orden.
+
+### 1. Cerrar privacidad y regresiones
+
+Entrega primero las correcciones de la tabla anterior con evidencia del fallo y del arreglo. Mantén la posibilidad de recuperar trabajo del propietario sin dejar su tesis expuesta tras salir. Repite las pruebas contra la versión completa y demuestra el comportamiento con cuentas A y B. Una dependencia remota pendiente permite avanzar con fixtures identificados en la demo.
+
+### 2. Cinco cambios concretos en la web móvil
+
+1. **Cartera.** Visitante nuevo: «Crea tu primera cartera» y «Explora una cartera de ejemplo». A quien vuelve, enséñale su reparto y cómo retomarlo. En el ejemplo, nombre, peso y una frase sobre por qué el autor incluyó cada posición.
+2. **Ideas.** Revista y El Superespeculador alimentan la investigación. Primera vista con qué hace el negocio, por qué merece estudio y qué podría salir mal. Mantén la lectura extensa y las fuentes desplegables.
+3. **Ficha.** Presenta nombre y símbolo juntos. Ofrece «Comparar con otra empresa» y «Probar en mi cartera» junto a la pregunta investigada. Preserva el contexto al volver atrás.
+4. **Laboratorio.** Muestra cuánto espacio ocuparía la empresa, quién cede ese peso y qué cambia en los bloques evaluables. Usa el mismo ejemplo a lo largo del recorrido. Guárdalo sin tocar la cartera original.
+5. **Seguimiento.** Abre con la pregunta pendiente y la fecha si existen. Después muestra la comparación, la revisión editorial y el resto del radar. Navegación principal de tres destinos: Cartera, Ideas y Seguimiento.
+
+Conserva crema, azul tinta y verde petróleo. La referencia visual es la segunda propuesta centrada en construir carteras. Quita de la primera vista el radar vacío por delante de una tarea, los filtros desplegados por defecto y las explicaciones largas repetidas antes de la acción. El duelo de marcas quedó descartado. La entrega es web móvil y escritorio.
+
+### 3. Comparador sencillo entre dos empresas
+
+Desde una ficha se elige una compañía del mismo sector. Presenta tres filas: crecimiento de ventas, margen operativo y deuda. Define el indicador de deuda, su unidad y su interpretación en ambas columnas. Para margen operativo usa resultado operativo sobre ventas. No sustituirlo por margen neto. Alinear ejercicios, moneda cuando corresponda, unidades y método. Mostrar fuente y periodo por cifra y explicar «sin dato» o «no comparable» cuando proceda. La acción final abre el laboratorio con la compañía elegida. Una sola decisión por pantalla, sin clasificación de ganadores.
+
+### 4. Nota de estructura y solidez · v1
+
+Implementa el método en un módulo puro versionado, compartido por cartera y laboratorio. Congela el universo y los datos disponibles en la fecha de evaluación. Primer ámbito: carteras simuladas de acciones. La pantalla presenta nota de 1 a 10, principal fortaleza, principal limitación, cobertura y «¿Por qué esta nota?». Describe estructura y fundamentales observados. Una nota alta no garantiza rentabilidad ni idoneidad personal.
+
+| Bloque | Peso | Regla |
+|---|---:|---|
+| Empresas | 20 % | Agrupar clases de la misma compañía. Número efectivo N = 1 / suma de pesos al cuadrado. Escala lineal de 1 punto con N=1 a 10 con N≥15. |
+| Sectores y actividades | 20 % | Mitad sector, mitad actividad. Misma fórmula, con máximos a 6 sectores y 10 actividades efectivas. Los índices bursátiles solo se muestran como contexto. |
+| Tamaño y liquidez | 15 % | Un tercio capitalización, dos tercios mediana de importe diario negociado en 60 sesiones. Percentiles del universo cubierto en moneda común. Convertir percentil p de 0–100 a 1 + 9p/100. |
+| Deuda y caja | 25 % | Mitad deuda neta/EBITDA por percentil sectorial inverso, mitad frecuencia de caja libre positiva en cinco ejercicios. Caja neta y EBITDA positivo, 10 en deuda. Deuda positiva con EBITDA nulo o negativo, 1. Si ambos son nulos o negativos, sin evaluar. Documentar casos frontera antes de activarlos. |
+| Rentabilidad y crecimiento | 20 % | Mitad percentil sectorial de la mediana de ROIC a cinco años, un cuarto frecuencia de beneficio positivo en cinco ejercicios y un cuarto frecuencia de crecimiento de ventas en cuatro variaciones anuales. |
+
+Las frecuencias se convierten en 1 + 9 × aciertos/periodos. Para los percentiles sectoriales de deuda y ROIC exige al menos 20 compañías válidas y documenta empates. Dentro de cada indicador empresarial pondera según el peso de cada compañía. Publica la nota solo si la cartera suma 100 % y cada indicador cubre al menos 90 % del peso total. Sobre ese mínimo normaliza los pesos evaluables para ese indicador y presenta la cobertura mínima. Si falta un bloque, muestra los disponibles y el motivo de la nota pendiente. Bancos, aseguradoras y ETF sin metodología o composición válida cuentan como peso sin evaluar en los indicadores afectados.
+
+Redondea solo la nota final a un decimal. Explica la mayor limitación mediante peso del bloque × (10 − puntuación). Conserva fecha, fuente, versión del método y composición. En un escenario anterior, mantén la evaluación fechada que vio el usuario. Los umbrales son provisionales. Usa ejemplos sintéticos rotulados para probar el método y deja su activación con datos reales pendiente de calibración y verificación.
+
+**Casos que deben pasar.** 50/50 da dos empresas efectivas y 90/10 aproximadamente 1,22. Dos clases del mismo emisor cuentan una vez. Una empresa pequeña al 2 % pesa menos en el resultado que al 30 %. Falta un ejercicio, hay 19 comparables, la cobertura es 89,9 %, falta composición de un ETF o la cartera suma 95 %: cada caso debe indicar exactamente qué puede calcularse. Probar 90 % exacto, empates y totales sin doble redondeo. Si la cartera y el escenario tienen igual composición, fecha y datos, la nota debe coincidir.
+
+### 5. Seguimiento de tus decisiones en la primera demo
+
+Incorpora esta propuesta en la portada en una frase breve: «Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar». En Seguimiento, muestra la etiqueta **En beta · Formará parte del futuro plan de pago** junto a la función. Debe poder probarse en la demo sin suscripción.
+
+Reutiliza la pregunta, el escenario y la revisión editorial de Hidrógeno Norte. Una tarjeta debe reunir la pregunta original, qué ha ocurrido desde entonces, la fecha, la fuente y el peso de esa empresa en el escenario guardado. Distingue ese peso del que tiene en la cartera actual. Incluye un enlace a la revisión y otro a la simulación. Si la fuente aún no permite responder, indica qué sigue pendiente.
+
+**Prueba de aceptación.** Un visitante abre el ejemplo identificado como ficticio. Puede pasar de «¿Se han firmado los dos contratos anunciados?» a la revisión simulada, ver qué pasó con cada contrato según la historia y entender por qué le interesa si había probado dedicar un 10 % a esa empresa. Añade un caso sin novedades. Con cuenta, usa solo las preguntas y posiciones del propietario. Comprueba a 390 px que se leen tanto la etiqueta de beta como la referencia al futuro plan de pago. El contenido de ejemplo llevará su propia indicación de datos simulados. Entrega una captura de esta tarjeta en el regreso. Si la ronda 15 ya está en marcha, incorpora este apartado sobre los cambios existentes.
+
+### 6. Entrega y aceptación
+
+Envía ZIP, demo autónoma e instrucciones de apertura. Añade cuatro capturas consecutivas del mismo caso: empiezo la cartera, descubro la empresa, entiendo qué aportaría y pruebo su peso. Incluye una captura de regreso y otra de nota pendiente con el motivo. Aporta pruebas antes/después de privacidad y una tabla de entradas y salidas esperadas del comparador y la puntuación.
+
+ChatGPT revisará cálculos, casos límite y recorridos. Para probar con usuarios, observar a cinco principiantes con un móvil: si construyen una cartera sin ayuda, explican de dónde sale el 10 % y distinguen una nota de estructura de una previsión de rentabilidad. Registrar dificultades reales por separado de las pruebas automáticas.
+
+**Verificación pendiente.** TestL/K contra el servidor completo, batería completa en clon limpio, correo y D1 remotos, carga SEC real, recuperación tras recarga en dos dispositivos, Safari/Firefox, móvil físico, tema oscuro y lector de pantalla. Priorizar M50–M57 antes de abrir cuentas a terceros y M58 antes de publicar contenido real. Para accesibilidad comprobar lectura por fila, orden del foco, recuperación tras confirmar o cancelar y anuncio de resultados, además de la presencia de atributos.

@@ -13,9 +13,21 @@ for a in uni:
     for y in (2022, 2023, 2024):
         ing *= .97 + r.random()*.14; m = .03 + r.random()*.28; e = ing*(.12 + r.random()*.3); d = (r.random()*3.2 - .3)*e
         rows.append(dict(y=y, ing=ing, ni=ing*m, debt=None if fin else d, ebitda=None if fin else e, fcf=ing*(r.random()*.25 - .03), roic=None if fin else .02 + r.random()*.28))
-    for x in rows:
+    r2 = random.Random(int(hashlib.md5(('x' + a['ticker']).encode()).hexdigest(), 16) % 10**8); ing0 = rows[0]['ing']; antes = []
+    for y in (2021, 2020):                      # ronda 15: cinco ejercicios. Los dos anteriores salen de OTRO generador: 2022-2024 no cambian
+        ing0 = ing0 / (.97 + r2.random()*.14); m = .03 + r2.random()*.28; e = ing0*(.12 + r2.random()*.3); d = (r2.random()*3.2 - .3)*e
+        antes.insert(0, dict(y=y, ing=ing0, ni=ing0*m, debt=None if fin else d, ebitda=None if fin else e, fcf=ing0*(r2.random()*.25 - .03), roic=None if fin else .02 + r2.random()*.28))
+    for x in antes + rows:
+        x['op'] = None if fin or x['ebitda'] is None else x['ebitda'] * (.55 + r2.random()*.3)    # resultado operativo (≈ EBITDA menos amortizaciones): inventado
         v = lambda z: 'NULL' if z is None else repr(float(z))
-        out.append(f"INSERT INTO fundamentales(ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en) VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])},'prueba',date('now'));")
+        out.append(f"INSERT INTO fundamentales(ticker,periodo,ingresos,beneficio_neto,deuda_neta,ebitda,flujo_caja_libre,roic,fuente,actualizado_en,resultado_operativo,informe) VALUES({q(a['ticker'])},'FY{x['y']}',{v(x['ing'])},{v(x['ni'])},{v(x['debt'])},{v(x['ebitda'])},{v(x['fcf'])},{v(x['roic'])},'prueba',date('now'),{v(x['op'])},'prueba-{a['ticker']}-FY{x['y']}');")
+    ACT = {'Tecnología': ['Software', 'Semiconductores', 'Hardware'], 'Salud': ['Farmacia', 'Dispositivos', 'Servicios sanitarios'], 'Finanzas': ['Banca', 'Seguros', 'Mercados'], 'Energía': ['Petróleo y gas', 'Renovables', 'Servicios petrolíferos'],
+           'Consumo básico': ['Alimentación', 'Bebidas', 'Distribución'], 'Consumo discrecional': ['Comercio minorista', 'Automoción', 'Ocio'], 'Industria': ['Maquinaria', 'Transporte', 'Defensa'], 'Comunicaciones': ['Medios', 'Telecomunicaciones', 'Plataformas'],
+           'Materiales': ['Química', 'Metales', 'Envases'], 'Inmobiliario': ['Oficinas', 'Logística', 'Residencial'], 'Suministros': ['Electricidad', 'Agua', 'Gas']}
+    acts = ACT.get(a['sector'], ['General']); act = acts[int(hashlib.md5(('a' + a['ticker']).encode()).hexdigest(), 16) % len(acts)]
+    out.append(f"UPDATE activos SET actividad={q(act)}, emisor={q(a['ticker'].lower())} WHERE ticker={q(a['ticker'])};")
+    cap = rows[-1]['ing'] * (1.2 + r2.random()*6); imp = cap * (.002 + r2.random()*.006)        # capitalización e importe diario mediano de 60 sesiones: inventados
+    out.append(f"INSERT INTO mercado(ticker,capitalizacion,importe_diario_mediano,sesiones,moneda,fecha,fuente) VALUES({q(a['ticker'])},{cap:.0f},{imp:.0f},60,'USD',date('now'),'prueba');")
     L, P = rows[-1], rows[-2]
     ok = lambda c, val: dict(ok=None if val is None else c, valor=val)
     crit = dict(periodo='FY2024',

@@ -10,8 +10,8 @@ const CLAVE_RADAR_LOCAL = 'klever_radar_local';
 export const ERR_LECTURA = 'lectura', ERR_ESCRITURA = 'escritura';
 const fallo = (tipo, msg) => { const e = new Error(msg); e.tipo = tipo; return e; };
 
-export function crearAlmacen({ api, logged, store, activos }) {
-  let gen = 0;                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
+export function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
+  let gen = 0, mut = 0;                                     // mut: contador de escrituras; una lectura anterior a una escritura NO pisa su resultado                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
   const leerLocal = () => {                                 // {} si no hay nada; LANZA si no se puede leer (≠ vacío)
     let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se ha podido leer el radar guardado en este dispositivo.'); }
     if (crudo == null || crudo === '') return {};
@@ -19,7 +19,7 @@ export function crearAlmacen({ api, logged, store, activos }) {
     throw fallo(ERR_LECTURA, 'El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
   };
   const escribirLocal = o => {                              // LANZA si el almacenamiento falla o está lleno: nunca cae en silencio a la memoria
-    try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItem(CLAVE_RADAR_LOCAL); }
+    try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItemEstricto(CLAVE_RADAR_LOCAL); }     // el borrado también es estricto: si falla, el dato privado NO queda fingiendo estar borrado
     catch { throw fallo(ERR_ESCRITURA, 'No se ha podido guardar en este dispositivo (almacenamiento lleno o bloqueado). Tu texto sigue en pantalla: puedes reintentar.'); }
   };
   const nuevaClave = () => (crypto.randomUUID ? crypto.randomUUID() : 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
@@ -32,10 +32,11 @@ export function crearAlmacen({ api, logged, store, activos }) {
     todos: () => [...radar.values()],
     reiniciar() { gen++; radar = new Map(); },
     async cargar() {
-      const g = gen;
+      const g = gen, m0 = mut;
       if (logged()) {
         let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer tu radar.'); }
         if (g !== gen) return [];                           // la sesión cambió: se descarta
+        if (m0 !== mut) return this.todos();                // hubo una escritura mientras llegaba esta lectura: la lectura es anterior y NO se aplica
         radar = new Map(filas.map(f => [f.ticker, f]));
       } else {
         const l = leerLocal(), a = activos();
@@ -44,7 +45,7 @@ export function crearAlmacen({ api, logged, store, activos }) {
       return this.todos();
     },
     async guardar(ticker, nota) {                           // nota undefined = conservar la que haya
-      const g = gen;
+      const g = gen; mut++;
       if (logged()) {
         const r = await api('/radar/' + encodeURIComponent(ticker), { method: 'PUT', body: nota === undefined ? {} : { nota } });
         if (g !== gen) return { nuevo: r.nuevo, local: false, descartado: true };
@@ -58,22 +59,29 @@ export function crearAlmacen({ api, logged, store, activos }) {
       await this.cargar(); return { nuevo: !ya, local: true };
     },
     async quitar(ticker) {
-      const g = gen;
+      const g = gen; mut++;
       if (logged()) { await api('/radar/' + encodeURIComponent(ticker), { method: 'DELETE' }); if (g === gen) radar.delete(ticker); }
       else { const l = leerLocal(); delete l[ticker]; escribirLocal(l); radar.delete(ticker); }
     },
     // Al iniciar sesión: lo guardado en este dispositivo pasa a la cuenta (idempotente; no pisa una nota que la cuenta ya tenga).
+    // El intento queda ATADO a la sesión de origen: antes de cada lectura, escritura y del borrado del original se comprueba que la generación y la
+    // identidad de la sesión siguen siendo las mismas; si cambian (salir, otra cuenta), se corta y NO se borra lo local ni se escribe en otra cuenta.
     async migrarLocal() {
       let l; try { l = leerLocal(); } catch { return 0; }
       const ts = Object.keys(l); if (!logged() || !ts.length) return 0;
-      const remoto = new Map((await api('/radar')).map(f => [f.ticker, f]));
+      const g = gen, id0 = idSesion(), mismo = () => g === gen && logged() && idSesion() === id0;
+      const filas = await api('/radar'); if (!mismo()) return 0;
+      const remoto = new Map(filas.map(f => [f.ticker, f]));
       let n = 0;
       for (const t of ts) {
         const ya = remoto.get(t), nota = l[t].nota || '';
-        if (!ya) { await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); n++; }
-        else if (!ya.nota && nota) await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } });
+        if (!ya) { if (!mismo()) return n; await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); n++; }
+        else if (!ya.nota && nota) { if (!mismo()) return n; await api('/radar/' + encodeURIComponent(t), { method: 'PUT', body: { nota } }); }
+        if (!mismo()) return n;
       }
-      store.removeItem(CLAVE_RADAR_LOCAL); return n;                // solo se borra lo local cuando TODO se ha guardado
+      if (!mismo()) return n;
+      try { store.removeItemEstricto(CLAVE_RADAR_LOCAL); } catch { /* si no se puede borrar, queda y se repetirá (idempotente) */ }
+      return n;                                                   // solo se borra lo local cuando TODO se ha guardado, en la misma sesión
     },
   };
 

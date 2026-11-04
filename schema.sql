@@ -27,7 +27,9 @@ CREATE TABLE IF NOT EXISTS activos (
   tipo TEXT NOT NULL CHECK (tipo IN ('accion','etf')),
   sector TEXT NOT NULL,
   cik TEXT,
-  exchange TEXT
+  exchange TEXT,
+  actividad TEXT,                -- ronda 15: actividad (más fina que el sector)
+  emisor TEXT                    -- ronda 15: compañía emisora (agrupa clases de acciones)
 );
 CREATE TABLE IF NOT EXISTS fundamentales (
   ticker TEXT NOT NULL REFERENCES activos(ticker),
@@ -36,6 +38,8 @@ CREATE TABLE IF NOT EXISTS fundamentales (
   ebitda REAL, flujo_caja_libre REAL, roic REAL,
   fuente TEXT CHECK (fuente IS NULL OR fuente IN ('sec','prueba','demo')),   -- procedencia de ESTA fila (NULL = sin fuente verificada)
   actualizado_en TEXT,                                                        -- fecha de la carga que la escribió
+  resultado_operativo REAL,                                                   -- para el margen operativo (≠ margen neto)
+  informe TEXT,                                                               -- identificador del informe de origen
   PRIMARY KEY (ticker, periodo)
 );
 CREATE TABLE IF NOT EXISTS portafolios (
@@ -91,6 +95,7 @@ CREATE TABLE IF NOT EXISTS escenarios (
   pregunta TEXT NOT NULL DEFAULT '' CHECK (length(pregunta) <= 200),     -- ronda 14: qué quiere averiguar la persona (opcional)
   revisar_en TEXT CHECK (revisar_en IS NULL OR revisar_en GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
   historia TEXT CHECK (historia IS NULL OR length(historia) BETWEEN 1 AND 60),   -- identificador de la historia editorial de origen
+  nota_json TEXT,                                                       -- ronda 15: evaluación de estructura fechada (antes/después)
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE (usuario_id, clave)
@@ -108,4 +113,14 @@ CREATE TABLE IF NOT EXISTS cargas (
   n_ok INTEGER NOT NULL, n_vacias INTEGER NOT NULL, n_fallidas INTEGER NOT NULL,
   estado TEXT NOT NULL CHECK (estado IN ('correcta','parcial','vacia')),
   creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+);
+-- Ronda 15 (migración 0010): mercado para la nota de estructura
+CREATE TABLE IF NOT EXISTS mercado (
+  ticker TEXT PRIMARY KEY REFERENCES activos(ticker),
+  capitalizacion REAL,
+  importe_diario_mediano REAL,
+  sesiones INTEGER,
+  moneda TEXT NOT NULL DEFAULT 'USD',
+  fecha TEXT,
+  fuente TEXT CHECK (fuente IS NULL OR fuente IN ('sec','mercado','prueba','demo'))
 );

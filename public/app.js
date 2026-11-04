@@ -15,7 +15,7 @@ const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('
   setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
   removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } },
   // Variantes ESTRICTAS (radar del visitante): lanzan si el almacenamiento falla, en vez de caer en silencio a la memoria y devolver después el valor anterior.
-  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k) }; })();
+  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k), removeItemEstricto: k => localStorage.removeItem(k) }; })();
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -39,8 +39,8 @@ function mostrarAviso(msg, error, ms) {
   $('#toast-x').hidden = !error; const w = $('#avisos'); w.classList.add('on'); w.classList.toggle('fija', error || matchMedia('(min-width:720px)').matches); medirAvisos(); clearTimeout(toastTimer);
   if (!error) toastTimer = setTimeout(cerrarAviso, ms);
 }
-const toast = (msg, ms = 4000) => mostrarAviso(msg, false, ms);
-const toastError = msg => mostrarAviso(msg, true);
+const toast = (msg, ms = 4000) => { if (msg) mostrarAviso(msg, false, ms); };
+const toastError = msg => { if (msg) mostrarAviso(msg, true); };   // un mensaje vacío (respuesta de una sesión anterior) no se muestra
 function cerrarAviso() { clearTimeout(toastTimer); $('#toast').classList.remove('on', 'error'); $('#avisos').classList.remove('on', 'fija'); $('#toast-x').hidden = true; medirAvisos(); }
 // Zona fija de arriba: solo cuenta si el aviso está pegado (.fija). El navegador la respeta al enfocar o desplazar (scroll-padding-top), así ningún campo ni botón queda bajo ella.
 function medirAvisos() { const w = $('#avisos'); document.documentElement.style.setProperty('--avisos-alto', (w.classList.contains('on') && w.classList.contains('fija') ? Math.ceil(w.getBoundingClientRect().height) : 0) + 'px'); }
@@ -53,16 +53,17 @@ const tok = () => store.getItem('klever_token');
 const logged = () => !!tok();
 
 async function api(path, opts = {}) {
-  let r;
+  let r; const t0 = tok();                                           // el token con el que SALE la petición: es el único que puede caducar por su respuesta
   try {
     r = await fetch(API + path, {
       ...opts,
-      headers: { 'content-type': 'application/json', ...(tok() ? { authorization: 'Bearer ' + tok() } : {}) },
+      headers: { 'content-type': 'application/json', ...(t0 ? { authorization: 'Bearer ' + t0 } : {}) },
       body: opts.body ? JSON.stringify(opts.body) : undefined,
     });
   } catch { throw new Error('Sin conexión con el servidor. Inténtalo de nuevo.'); }
   const data = await r.json().catch(() => ({}));
-  if (r.status === 401 && tok()) sesionCaducada();
+  if (t0 !== tok()) { const e = new Error(''); e.obsoleta = true; e.status = 0; throw e; }   // la sesión cambió mientras llegaba: la respuesta NO se usa (ni un 401 retrasado desconecta a otra persona)
+  if (r.status === 401 && t0) sesionCaducada();
   if (!r.ok) { const e = new Error(data.error || 'Error ' + r.status); e.status = r.status; e.data = data; throw e; }
   return data;
 }
@@ -222,14 +223,41 @@ function limpiarPrivado() {
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
   for (const s of ['#mis-lista', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
+  document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
   limpiarSesionLab();
 }
 function sesionCaducada() {
   store.removeItem('klever_token'); limpiarPrivado(); actualizarCabecera(); route(); abrirAcceso('caducada');
 }
+// Copias locales de cambios sin guardar (recuperación privada): se avisan al salir, se purgan las ajenas al entrar y caducan a los 7 días.
+const COPIA_DIAS = 7;
+function clavesCopias() { const ks = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('klever_edit_')) ks.push(k); } } catch { /* sin almacenamiento */ } return ks; }
+function purgarCopias(idsPropios = null) {                           // idsPropios: ids de las carteras de ESTA cuenta (o null = solo caducidad)
+  let n = 0;
+  for (const k of clavesCopias()) {
+    let c = null; try { c = JSON.parse(store.getItem(k)); } catch { /* dañada: se borra */ }
+    const caducada = !c || !c.t || (Date.now() - new Date(c.t).getTime()) > COPIA_DIAS * 864e5, ajena = idsPropios && !idsPropios.includes(Number(k.slice('klever_edit_'.length)));
+    if (caducada || ajena) { store.removeItem(k); n++; }
+  }
+  return n;
+}
+function confirmarSalidaConCambios() {                                // true = se puede salir (se descartan las copias); false = se queda
+  guardarBorrador();
+  const ks = clavesCopias(); if (!ks.length) return Promise.resolve(true);
+  const d = $('#dlg-salir'); $('#salir-n').textContent = ks.length === 1 ? '1 cartera' : ks.length + ' carteras';
+  return new Promise(res => {
+    const fin = v => { d.close(); res(v); };
+    $('#salir-volver').onclick = () => { fin(false); const id = ks[0].slice('klever_edit_'.length); go('#cartera-' + id); };
+    $('#salir-descartar').onclick = () => { ks.forEach(k => store.removeItem(k)); fin(true); };
+    d.oncancel = e => { e.preventDefault(); fin(false); };
+    d.showModal(); $('#salir-volver').focus();
+  });
+}
 async function cerrarSesion() {
-  try { await api('/logout', { method: 'POST' }); } catch {}
+  if (!(await confirmarSalidaConCambios())) return;
+  const t = tok();                                                    // se limpia YA (sin esperar al servidor): nada privado queda mientras llega la respuesta
   store.removeItem('klever_token'); store.removeItem(AVISO); limpiarPrivado(); actualizarCabecera(); go('#inicio');
+  if (t) fetch(API + '/logout', { method: 'POST', headers: { authorization: 'Bearer ' + t } }).catch(() => {});
 }
 $('#salir').addEventListener('click', cerrarSesion);
 $('#salir-m').addEventListener('click', cerrarSesion);
@@ -264,7 +292,7 @@ async function route(primera = false) {
   if (v === 'cartera') {
     if (m) {
       if (!l) v = 'inicio';
-      else if (current?.id !== +m[1]) { $$('[data-vista]').forEach(x => x.hidden = true); const ok = await cargarCartera(+m[1]); // sin vista de fondo mientras carga: un diálogo de conflicto no debe salir sobre la portada
+      else if (current?.id !== +m[1]) { $$('[data-vista]').forEach(x => x.hidden = true); const ok = await cargarCartera(+m[1], seq); // sin vista de fondo mientras carga: un diálogo de conflicto no debe salir sobre la portada
  if (seq !== routeSeq) return; if (!ok) v = 'carteras'; }
     } else if (!current) { const d = leerBorrador(); if (d?.pos?.length) restaurarBorrador(d); else v = l ? 'carteras' : 'inicio'; }
   }
@@ -355,8 +383,9 @@ $('#form-nueva').addEventListener('submit', async e => {
     e.target.reset(); go('#cartera-' + id);
   } catch (err) { toastError(err.message); } finally { btn.disabled = false; }
 });
-async function cargarCartera(id) {
-  let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
+async function cargarCartera(id, rseq = null) {
+  const s0 = sesionSeq; let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
+  if (s0 !== sesionSeq || (rseq !== null && rseq !== routeSeq)) return false;   // otra sesión u otra navegación: esta respuesta NO toca el estado
   current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); posGuardada = pos.map(p => ({ ...p })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = ''; colores.clear();
@@ -399,8 +428,10 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
   let e; try { e = JSON.parse(raw); } catch { store.removeItem(key); return; }
   if (!Array.isArray(e.pos) || (e.nombre === current.nombre && (e.tesis || '') === (current.tesis || '') && JSON.stringify(e.pos) === JSON.stringify(pos))) { store.removeItem(key); return; }
   if (e.base !== current.revision) { // la cartera cambió en la cuenta después de esa copia: nunca se elige en silencio
+    const s1 = sesionSeq, id1 = current?.id; if (!current) return;
     const r = await dialogoConflicto({ nombre: e.nombre, tesis: e.tesis, pos: e.pos, fecha: e.t }, { nombre: current.nombre, tesis: current.tesis, pos: pos, fecha: current.fecha },
       'Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas.');
+    if (s1 !== sesionSeq || current?.id !== id1) return;               // la sesión o la cartera cambiaron mientras tanto
     if (r === 'cuenta') { store.removeItem(key); return; }
     if (r === 'despues') return; // se queda como está: la copia local sigue guardada y se volverá a preguntar
     store.setItem(key, JSON.stringify({ ...e, base: current.revision })); // elegida la local: parte de la revisión actual de la cuenta (la cuenta NO se modifica: hay que pulsar Guardar)
@@ -1040,7 +1071,7 @@ document.addEventListener('click', e => {
 
 // ---------- contexto que se entrega a js/lab.js (radiografía, radar, laboratorio, seguimiento) ----------
 function contextoLab() {
-  return { $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
+  return { idSesion: () => tok(), $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
     activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
@@ -1052,6 +1083,8 @@ function contextoLab() {
   await loadAssets();
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab);
   actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
+  purgarCopias();                                    // las copias locales caducan a los 7 días
+  if (logged()) { try { purgarCopias((await api('/portfolios')).map(c => c.id)); } catch { /* sin conexión: se purgará en la próxima carga */ } }   // y las de OTRA cuenta se borran al entrar esta
   if (logged()) await migrarRadarLocal();            // el radar de este dispositivo pasa a la cuenta (idempotente)
   await cargarRadar(); loadEmpresas();               // el radar se carga antes de pintar la lista (marcas «En tu radar»)
   if (logged()) {

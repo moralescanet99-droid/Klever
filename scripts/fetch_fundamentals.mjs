@@ -2,7 +2,8 @@
 // Uso: node scripts/fetch_fundamentals.mjs > build/seed.sql
 // Obligatorio: SEC_USER_AGENT="Klever tu@correo.com". Límite SEC: 10 req/s (aquí ~5/s).
 import { readFileSync } from 'node:fs';
-import { sqlCarga } from './lib/carga.mjs';
+import { sqlCarga, seleccionarAnual } from './lib/carga.mjs';
+const annual = (facts, conceptos, unit = 'USD', flujo = true) => { for (const c of conceptos) { const arr = facts['us-gaap']?.[c]?.units?.[unit]; if (!arr) continue; const m = seleccionarAnual(arr, { flujo }); if (m.size) return m; } return new Map(); };
 
 const UA = process.env.SEC_USER_AGENT;
 if (!UA || !UA.includes('@')) { console.error('Define SEC_USER_AGENT="App correo@dominio"'); process.exit(1); }
@@ -14,23 +15,6 @@ async function get(url) {
   const r = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
   if (!r.ok) throw new Error(`${r.status} ${url}`);
   return r.json();
-}
-
-// Último valor anual (10-K, ejercicio completo) de los primeros conceptos disponibles.
-function annual(facts, concepts, unit = 'USD') {
-  for (const c of concepts) {
-    const arr = facts['us-gaap']?.[c]?.units?.[unit];
-    if (!arr) continue;
-    const fy = arr.filter(x => x.form === '10-K' && x.fp === 'FY' && x.fy);
-    if (!fy.length) continue;
-    const byYear = new Map();
-    for (const x of fy) { // por año fiscal, el dato con fecha de cierre más reciente
-      const cur = byYear.get(x.fy);
-      if (!cur || x.end > cur.end) byYear.set(x.fy, x);
-    }
-    return byYear;
-  }
-  return new Map();
 }
 
 const universe = JSON.parse(readFileSync(new URL('../data/universe.json', import.meta.url)));
@@ -51,12 +35,12 @@ for (const a of universe) {
     const da = annual(facts, ['DepreciationDepletionAndAmortization', 'DepreciationAndAmortization']);
     const ocf = annual(facts, ['NetCashProvidedByUsedInOperatingActivities']);
     const capex = annual(facts, ['PaymentsToAcquirePropertyPlantAndEquipment']);
-    const ltd = annual(facts, ['LongTermDebt', 'LongTermDebtNoncurrent']);
-    const cash = annual(facts, ['CashAndCashEquivalentsAtCarryingValue']);
-    const eq = annual(facts, ['StockholdersEquity']);
+    const ltd = annual(facts, ['LongTermDebt', 'LongTermDebtNoncurrent'], 'USD', false);          // saldos: sin duración
+    const cash = annual(facts, ['CashAndCashEquivalentsAtCarryingValue'], 'USD', false);
+    const eq = annual(facts, ['StockholdersEquity'], 'USD', false);
     const tax = annual(facts, ['EffectiveIncomeTaxRateContinuingOperations'], 'pure');
-    const years = [...rev.keys()].sort().slice(-3), anios = {};
-    for (const y of years) { const g = m => m.get(y)?.val; anios[y] = { ingresos: g(rev), ni: g(ni), op: g(op), da: g(da), ocf: g(ocf), capex: g(capex), ltd: g(ltd), cash: g(cash), eq: g(eq), tax: g(tax) }; }
+    const years = [...rev.keys()].sort().slice(-5), anios = {};   // cinco ejercicios (la nota exige ventanas de cinco)
+    for (const y of years) { const g = m => m.get(y)?.val; anios[y] = { informe: rev.get(y)?.accn ?? null, ingresos: g(rev), ni: g(ni), op: g(op), da: g(da), ocf: g(ocf), capex: g(capex), ltd: g(ltd), cash: g(cash), eq: g(eq), tax: g(tax) }; }
     resultados.push({ activo: a, cik, anios });
     console.error(`ok ${a.ticker} (${years.length} años)`);
   } catch (e) { resultados.push({ activo: a, cik, anios: null, error: e.message }); console.error(`fallo ${a.ticker}: ${e.message}`); }

@@ -18,7 +18,7 @@ const hoy = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.
 
 export function iniciarLab(ctx) {
   LAB.ctx = ctx;
-  LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos });
+  LAB.alm = crearAlmacen({ api: ctx.api, logged: ctx.logged, store: ctx.store, activos: ctx.activos, idSesion: ctx.idSesion });
   const $ = ctx.$;
   $('#radio-cuerpo').addEventListener('click', e => {
     const b = e.target.closest('[data-modo]'); if (b) { LAB.radioModo = b.dataset.modo; pintarRadiografia(); return; }
