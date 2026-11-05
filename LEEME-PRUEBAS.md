@@ -149,6 +149,6 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | Archivo | Qué comprueba | Entorno |
 |---|---|---|
 | `tests/ronda22/unit-cliente-revision22.mjs` (8) | El cliente del registro de revisiones (`revisiones.js`) contra el servidor real con cortes inyectados; réplica de la lógica de la R21 (C8) | Módulo/servidor |
-| `tests/ronda22/testT.cjs` (24) | Cuaderno y recuperación en el navegador a 1440/390/320: «Para revisar» primero, respuesta perdida, relectura fallida, texto modificado, dos pestañas, archivar/descartar, seguimiento personal vs editorial, Mis portafolios con cuenta | Navegador |
+| `tests/ronda22/testT.cjs` (27) | Cuaderno y recuperación en el navegador a 1440/390/320: «Para revisar» primero, respuesta perdida, relectura fallida, texto modificado, dos pestañas, archivar/descartar, seguimiento personal vs editorial, Mis portafolios con cuenta | Navegador |
 | `tests/ronda22/testDemo22.cjs` (12) | Registrar una revisión en la demo y que no persista tras recargar | Navegador (demo) |
 Adaptadas por el diseño nuevo: `testO`, `testQ`, `testN`, `testP`, `testL`, `testB` (ver `ronda22/LEEME.md` §7).

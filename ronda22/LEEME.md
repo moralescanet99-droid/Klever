@@ -42,11 +42,11 @@ Se recorrió el producto en 390 y 1440 px (portada, ejemplo explicado, Revista, 
 | K9 (envíos simultáneos con la misma clave) | `unit-cuaderno21` K9 | el servidor cumple (una inserción, ningún 500); **un cliente puede recibir 409**: el cliente lo trata como `conflicto` con el texto conservado, **no se prueba con dos clientes reales simultáneos** |
 
 # 6. Pruebas realmente ejecutadas (por entorno)
-**Pasada completa definitiva** (`bash tests/run-all.sh`, commit `c1e8448`, árbol limpio): **933 comprobaciones correctas, 0 fallos, código 0** (47 baterías con resultado + `demotest`), **locales del autor**. Registro íntegro de cada batería **y de `demotest`** en `ronda22/logs/`; ninguno contiene `CIERRE FORZADO` ni `CIERRE ANÓMALO`: **no hubo cierre forzado**. *Aserciones ≠ entradas.*
+**Pasada completa definitiva** (`bash tests/run-all.sh`, commit `33b77ea`, árbol limpio): **936 comprobaciones correctas, 0 fallos, código 0** (47 baterías con resultado + `demotest`), **locales del autor**. Registro íntegro de cada batería **y de `demotest`** en `ronda22/logs/`; ninguno contiene `CIERRE FORZADO` ni `CIERRE ANÓMALO`: **no hubo cierre forzado**. *Aserciones ≠ entradas.*
 - **Módulo / servidor (SQLite real) y subprocesos:** `unit-cliente-revision22` **8** (nuevo), `unit-cuaderno21` 20, `unit-registro21` 10, `unit-migracion` 15, `unit-cierre20` 10, `unit-causas20` 10, `unit-nota` 35 y las anteriores.
-- **Navegador (Chromium, servidor local con SQLite):** `testT` **24** (nuevo: Cuaderno y recuperación a 1440/390/320), `testS` 30, `testR` 16, `testQ` 25, `testO` 19, `testN` 41, `testP` 28, `testL` 28, `testB` 53 y las anteriores; **demo autónoma:** `demotest` y `testDemo22` **12** (nuevo; el registro de revisión funciona y no persiste tras recargar).
+- **Navegador (Chromium, servidor local con SQLite):** `testT` **27** (nuevo: Cuaderno y recuperación a 1440/390/320, formulario de revisión, Mis portafolios con cuenta), `testS` 30, `testR` 16, `testQ` 25, `testO` 19, `testN` 41, `testP` 28, `testL` 28, `testB` 53 y las anteriores; **demo autónoma:** `demotest` y `testDemo22` **12** (nuevo; el registro de revisión funciona y no persiste tras recargar).
 - **Repeticiones** de `testE`, `testF` y `testC` con latencia 0 y 300 ms (`ronda22/intermitentes.txt`): **12/12 con código 0**.
-- **Pasada fallida conservada:** `logs-pasada1-fallo-ejecutor/` (933 correctas, 1 problema del ejecutor, §8).
+- **Pasadas conservadas:** `logs-pasada1-fallo-ejecutor/` (933 correctas, 1 problema del ejecutor, §8) y `logs-pasada2-verde-previa-al-ultimo-pulido/` (933, todo correcto, sobre `c1e8448`: antes de los dos últimos pulidos, §8).
 - **Entorno remoto:** nada ejecutado. **Móvil físico, lector de pantalla, zoom real, Safari/Firefox, correo real, D1 remota, el piloto con personas y el regreso al día siguiente: no probados.** La inspección visual de las capturas es mía y no sustituye a pruebas de interacción ni de accesibilidad real.
 
 # 7. Cambios en pruebas antiguas (para revisarlos, no se certifica «sin rebajar»)
@@ -55,6 +55,8 @@ Por el diseño nuevo se adaptaron: `testO` O5b/O5c/O5e (las tarjetas editoriales
 # 8. Incidencias de la ronda
 - **Pasada 1 (`logs-pasada1-fallo-ejecutor/`, 933 correctas):** un único problema, **del ejecutor**, no del producto: al añadir la segunda prueba de la demo, `run-all.sh` comprobaba el «DEMO OK» sobre la salida de la segunda. Corregido el orden.
 - **`testK`:** la causa del `goto` abortado (cerrar la ficha con Escape ejecuta `history.back()`, asíncrono) es la **hipótesis principal; aún no demostrada**. **`testP` (sin resultado una vez en la ronda 21): no se declara cerrada**; no se ha reproducido.
+
+- **Dos últimos pulidos tras la pasada de `c1e8448` (cubiertos por la pasada final):** los botones de opción del formulario de revisión heredaban el campo de 44 px y salían como un círculo enorme (corregido, `testT` T2b); una idea archivada o descartada ya no dice «Próxima revisión» (`testT` T6).
 
 # 9. Qué queda fuera (capacidades nuevas, para después)
 Cobros, bancos/brókeres, datos reales, noticias o artículos automáticos, tips diarios, notificaciones/correos, recomendaciones, publicación, ampliaciones del laboratorio, ideas generales sin escenario, asistente IA y un sistema global de puntuación. **Sin probar:** la prueba con cinco personas (el protocolo está en `PRUEBA-CON-USUARIOS.md`, todo «pendiente»), el regreso al día siguiente, móvil físico, lector de pantalla, zoom real, Safari/Firefox, correo real y D1 remota. **Con 4 de 5 en la prueba solo se decide qué reparar.**

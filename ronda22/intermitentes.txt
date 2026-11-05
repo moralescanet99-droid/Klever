@@ -1,0 +1,25 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 21:22:10Z · 43 s · código 1
+page.goto: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 21:22:43Z · 26 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 21:23:42Z · 52 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 21:24:42Z · 52 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 21:25:13Z · 24 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 21:25:44Z · 24 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 21:26:44Z · 53 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 21:27:45Z · 52 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 21:28:25Z · 33 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 21:29:07Z · 34 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 21:30:31Z · 77 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 21:31:54Z · 75 s · código 0
+RESULTADO: 50 correctas, 0 fallos
