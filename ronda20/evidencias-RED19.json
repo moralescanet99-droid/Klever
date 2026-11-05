@@ -42,7 +42,7 @@
  {
   "id": "R6",
   "escenario": "Barrida de carteras calculadas por el EVALUADOR (12 universos aleatorios × 400 carteras de 2 a 5 posiciones, semilla fija)",
-  "esperado": "Toda nota publicada por el evaluador se acepta con el contrato estricto: 0 rechazos (no hace falta tolerar empates binarios)",
+  "esperado": "Toda nota publicada por el evaluador se acepta con el contrato estricto: 0 rechazos en las muestras; no se afirma nada sobre empates binarios (el contador de muestras a ≤ 0,001 de la frontera se publica y no se exige)",
   "observado": "4800 notas publicadas; 0 a ≤ 0,001 de la frontera; rechazadas 0",
   "resultado": "OK",
   "evidencia": ""
