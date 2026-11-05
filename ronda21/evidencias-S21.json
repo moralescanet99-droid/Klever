@@ -10,7 +10,7 @@
   "id": "S2-1440",
   "escenario": "Crear desde cero (1440 px): cartera vacía con su aviso, primer activo, reparto al 100 %",
   "esperado": "Empieza sin posiciones y con el aviso de «cartera vacía»; tras añadir KO y PG y repartir 60/40 el editor muestra 100 % asignado y el aviso desaparece",
-  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía: añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
+  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía · añade un activo. MásAñade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
   "resultado": "OK"
  },
  {
@@ -87,7 +87,7 @@
   "id": "S2-390",
   "escenario": "Crear desde cero (390 px): cartera vacía con su aviso, primer activo, reparto al 100 %",
   "esperado": "Empieza sin posiciones y con el aviso de «cartera vacía»; tras añadir KO y PG y repartir 60/40 el editor muestra 100 % asignado y el aviso desaparece",
-  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía: añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
+  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía · añade un activo. MásAñade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
   "resultado": "OK"
  },
  {
@@ -157,14 +157,14 @@
   "id": "S10-1440",
   "escenario": "Explorar un ejemplo (1440 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
   "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
-  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Esto es un ejemplo simulado: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Ejemplo simulado · datos de prueba. MásEs una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
   "resultado": "OK"
  },
  {
   "id": "S11-1440",
   "escenario": "Recrear mi cartera (1440 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
   "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
-  "observado": "{\"manual\":\"Estás recreando tu cartera a mano: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. S\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "observado": "{\"manual\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no en\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
   "resultado": "OK"
  },
  {
@@ -185,14 +185,14 @@
   "id": "S10-390",
   "escenario": "Explorar un ejemplo (390 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
   "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
-  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Esto es un ejemplo simulado: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Ejemplo simulado · datos de prueba. MásEs una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
   "resultado": "OK"
  },
  {
   "id": "S11-390",
   "escenario": "Recrear mi cartera (390 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
   "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
-  "observado": "{\"manual\":\"Estás recreando tu cartera a mano: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. S\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "observado": "{\"manual\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no en\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
   "resultado": "OK"
  },
  {

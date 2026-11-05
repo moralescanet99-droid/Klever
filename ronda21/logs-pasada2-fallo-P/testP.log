@@ -1,0 +1,33 @@
+# comando: node tests/ronda17/testP.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 15:59:32 UTC
+# código de salida: 1 · tiempo agotado: 0
+
+OK    [P1-1440] Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (1440 px)
+OK    [P2-1440] Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (1440 px)
+OK    [P3-1440] Reparto no válido: dice cuánto falta o sobra con las reglas existentes (1440 px)
+OK    [P4-1440] Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (1440 px)
+OK    [P5-1440] «Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (1440 px)
+OK    [P6-1440] Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (1440 px)
+OK    [P6b-1440] Sin errores de JavaScript en el creador (1440 px)
+OK    [P1-390] Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (390 px)
+OK    [P2-390] Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (390 px)
+OK    [P3-390] Reparto no válido: dice cuánto falta o sobra con las reglas existentes (390 px)
+OK    [P4-390] Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (390 px)
+OK    [P5-390] «Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (390 px)
+OK    [P6-390] Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (390 px)
+OK    [P6b-390] Sin errores de JavaScript en el creador (390 px)
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.waitForSelector: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('[data-plantilla]') to be visible[22m
+
+    at abrirCreador (/home/user/Klever/tests/ronda17/testP.cjs:17:90)
+    at async /home/user/Klever/tests/ronda17/testP.cjs:23:5 {
+  log: [ "  - waiting for locator('[data-plantilla]') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.4

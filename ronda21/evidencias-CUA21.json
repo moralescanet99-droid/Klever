@@ -67,7 +67,7 @@
   "id": "K9",
   "escenario": "Dos envíos SIMULTÁNEOS con la misma clave",
   "esperado": "Un solo registro; la revisión sube una vez; ninguno falla con 500",
-  "observado": "HTTP 200/201; registros 1; revisión 0→1",
+  "observado": "HTTP 201/200; registros 1; revisión 0→1",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -148,6 +148,14 @@
   "escenario": "Tope de 200 revisiones por escenario",
   "esperado": "Se aceptan 200 y la 201 devuelve 400 con mensaje",
   "observado": "aceptadas 200; última HTTP 400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K20",
+  "escenario": "Carteras públicas: los ejemplos de Klever van primero aunque `portafolios` tenga ahora una columna `origen`",
+  "esperado": "La primera es la del usuario de ejemplo (origen «ejemplo») y la segunda la de la persona, aunque su id sea MENOR (sin el orden por origen saldría la de la persona, id 51, primero)",
+  "observado": "[[50,\"ejemplo\"],[51,\"usuario\"]]",
   "resultado": "OK",
   "evidencia": ""
  }
