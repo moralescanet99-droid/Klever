@@ -98,8 +98,8 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   ok('portada: titular con la promesa de producto (ronda 21)', (await T(p, 'h1')) === 'Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir');
   ok('portada: explicación breve con la transparencia de simulación (ronda 21)', /sin dinero real/.test(await T(p, '.lead')) && /datos de prueba/.test(await T(p, '.lead')) && (await T(p, '.lead')).length < 220, await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
-  await p.click('#probar'); await p.waitForTimeout(700);
-  ok('portada: «Probar una cartera» desplaza a las plantillas y mueve el foco', await p.evaluate(() => document.activeElement.classList.contains('plantilla') && document.activeElement.getBoundingClientRect().top < innerHeight && document.activeElement.getBoundingClientRect().bottom > 0));
+  await p.click('#entrada-ejemplo'); await p.waitForTimeout(700);   // ronda 22: quien llega por primera vez usa las tres entradas (el botón superior solo aparece a quien vuelve)
+  ok('portada: «Explorar un ejemplo» desplaza a las plantillas y mueve el foco', await p.evaluate(() => document.activeElement.classList.contains('plantilla') && document.activeElement.getBoundingClientRect().top < innerHeight && document.activeElement.getBoundingClientRect().bottom > 0));
   const prev = await T(p, '#prev');
   ok('portada: vista previa abreviada (3 posiciones + «+3 posiciones») con totales completos', (await p.locator('#prev .prev-fila:not(.prev-th)').count()) === 3 && prev.includes('+3 posiciones') && prev.includes('abreviada') && prev.includes('100,0 %') && prev.includes('6 posiciones'));
   const ph = await p.evaluate(() => Math.round(document.querySelector('#prev .prev').getBoundingClientRect().height)); ok('portada: vista previa más baja (< 460 px)', ph < 460, ph + 'px');

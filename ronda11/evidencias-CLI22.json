@@ -1,0 +1,66 @@
+[
+ {
+  "id": "C1",
+  "escenario": "Camino normal: el POST confirma y trae el escenario actualizado",
+  "esperado": "tipo «confirmada», vista «actualizada» SIN lectura adicional; el historial del escenario devuelto tiene la revisión; 1 fila",
+  "observado": "confirmada/actualizada; revisiones 1; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "POST confirmado y lectura posterior FALLIDA (la ronda 21 decía «no se ha registrado nada»)",
+  "esperado": "tipo «confirmada» con vista «pendiente»; recuperar la vista lee y NO escribe (1 solo envío en total); sigue habiendo 1 fila; la clave del intento no cambia; tras recuperar, el escenario trae la revisión",
+  "observado": "confirmada/pendiente; envíos 1; filas 1; vista ok true; revisiones 1; claves nuevas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3",
+  "escenario": "POST persistido con la respuesta PERDIDA; se reintenta el mismo intento",
+  "esperado": "Primer resultado «incierto» (no se afirma «no guardado»); el reintento con la MISMA clave devuelve «confirmada» (duplicado) y queda UNA fila; las dos peticiones llevan la misma clave y el mismo contenido",
+  "observado": "incierto → confirmada (duplicado); filas tras el 1.º 1, final 1; mismas peticiones true; mensaje «No hemos podido confirmar si la revisión se registró (sin co»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4",
+  "escenario": "El texto se modifica con un intento incierto pendiente",
+  "esperado": "Se detecta que el borrador es distinto; el reintento envía EL INTENTO (texto A), no el formulario; en el servidor solo existe el texto A; el texto B no se da por guardado",
+  "observado": "incierto incierto; distinto true; mismo true; guardado [\"Texto A (el del intento)\"]; envíos Texto A (el del intento) | Texto A (el del intento)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5",
+  "escenario": "Dos pestañas: la segunda lleva una versión antigua",
+  "esperado": "La 1.ª confirmada; la 2.ª «conflicto» (no se registró NADA de la 2.ª); se recupera la versión actual y el mismo texto se envía de nuevo con la revisión nueva: quedan las DOS revisiones, ninguna pisada",
+  "observado": "confirmada / conflicto / confirmada; filas [\"Pestaña 1\",\"Pestaña 2\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C6",
+  "escenario": "Validación rechazada (400) y fallo de infraestructura (500)",
+  "esperado": "El 400 es «rechazada» (certeza de que no se guardó, con el motivo del servidor); el 500 es «incierto» y, reintentado, una sola fila",
+  "observado": "rechazada: «Indica la fecha de la próxima revisión.»; 500 → incierto; reintento confirmada; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C7",
+  "escenario": "Registrar revisiones no modifica la cartera base",
+  "esperado": "La revisión de la cartera sigue en 0 y las posiciones en 60/40",
+  "observado": "revisión 0; [{\"ticker\":\"A\",\"peso\":60},{\"ticker\":\"B\",\"peso\":40}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8",
+  "escenario": "Réplica de la lógica de la ronda 21: se reproduce el defecto (el mensaje falso) y la nueva lógica no lo produce",
+  "esperado": "Con la lógica antigua, tras guardar y fallar la lectura el reintento da 409 y afirma «no se ha registrado nada» aunque hay filas; con la nueva (C2) eso no ocurre",
+  "observado": "antigua: «Sin conexión con el servidor. Inténtalo de nuevo.» → «no se ha registrado nada»; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

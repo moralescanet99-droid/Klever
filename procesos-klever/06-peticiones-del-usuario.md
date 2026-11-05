@@ -1639,3 +1639,186 @@ Las tres entradas no son asesoramiento personalizado ni una certificación de pe
 No he comprobado los 827 casos completos, las doce repeticiones de latencia, interacción propia en navegador, móviles físicos, lector de pantalla, zoom real, Safari/Firefox, D1 remota, correo real, fuentes reales ni comprensión por usuarios. Los dos casos X5/X10 no quedan aprobados. No he certificado el commit desde el ZIP ni realizado una auditoría completa de seguridad.
 
 La siguiente revisión de ChatGPT comprobará la corrección residual y el recorrido de producto autorizado. Se concentrará en que los datos se conserven, las explicaciones sean honestas y una persona pueda volver a su decisión. Los retoques menores de estilo no deben mantener el proyecto indefinidamente en revisión técnica.
+
+## C19 · Ronda 22 (2026-11-05) — revisión de la ronda 21 y encargo, literal
+
+# Klever — revisión R21 y encargo R22
+
+5 de noviembre de 2026 · Revisión para Javier y Claude Code
+
+## Veredicto en tres líneas
+
+**Acepto el cierre técnico residual de R20:** el ejecutor ya no convierte el error previo en éxito y la regresión de ordenación tiene una corrección y una prueba específicas.
+**No acepto todavía el cierre completo del recorrido de producto:** hay un fallo reproducible en la recuperación del guardado y una incoherencia entre el historial personal y las tarjetas del Cuaderno.
+**La dirección de producto y la estética se mantienen:** corregir estos puntos, mejorar la prioridad de «Para revisar» y pasar a una prueba con cinco principiantes, sin añadir otro bloque de funcionalidades.
+
+Aceptar el defecto residual no equivale a declarar toda la aplicación libre de errores, ni lista para publicar o cobrar.
+
+## 1. Qué funciona y debemos conservar
+
+La portada sitúa bien el producto: crear una cartera simulada, entenderla y explorar cambios. La Revista queda como complemento. Las tres entradas tienen sentido: empezar vacío, aprender con un ejemplo editable y representar manualmente una cartera. La captura móvil identifica expresamente los datos de prueba y la ausencia de conexión con un bróker.
+
+«Tu cartera de un vistazo» da una explicación antes de la nota global. Ese es el orden adecuado. Mantener las métricas compartidas con la radiografía evita dos interpretaciones distintas del mismo reparto. Una cartera sin nota debe seguir ofreciendo información útil, como ya plantea R21.
+
+La comparación identifica la base, la alternativa y quién cede el peso. Guardar un escenario conserva una copia histórica; cambiar o borrar la cartera original no destruye esa comparación. El historial de revisiones, la condición que haría cambiar de opinión y la próxima fecha convierten el Cuaderno en una herramienta con una razón concreta para volver.
+
+Mantendría el fondo cálido oscuro, el naranja, las cabeceras serif y la tipografía funcional del resto. La mejora visual ahora depende de la jerarquía, la legibilidad y la reducción de duplicaciones. No necesita otra identidad gráfica.
+
+## 2. Evidencia y pruebas
+
+He revisado código de interfaz, manejadores del Cuaderno, migración, pruebas, documentación y capturas suministradas. Los archivos principales de aplicación, laboratorio, esquema y pruebas nuevas coinciden entre la copia revisada y el ZIP de ChatGPT adjunto. Las imágenes adjuntas coinciden byte a byte con las inspeccionadas. Esto no significa que todos los ZIP sean idénticos: hay diferencias en archivos de entrega y documentación.
+
+### Ejecutado durante esta revisión
+
+| Batería | Correctas | Fallos |
+|---|---:|---:|
+| `unit-cuaderno21.mjs` | 20 | 0 |
+| `unit-registro21.mjs` | 10 | 0 |
+| `unit-migracion.mjs` | 15 | 0 |
+| `unit-causas20.mjs` | 10 | 0 |
+| `unit-nota.mjs` | 35 | 0 |
+| **Total** | **90** | **0** |
+
+Además, he ejecutado un reproductor aislado de la función real `registrarRevision()`, con respuestas controladas de almacenamiento y elementos mínimos de interfaz. Confirma el fallo descrito en I1. Es una prueba de lógica del cliente, no una sesión de navegador ni una prueba contra D1 remota.
+
+`unit-registro21` comprueba subprocesos y el ejecutor mínimo, incluido el caso de código previo 2 con aserciones aprobadas. La garantía queda limitada al alcance declarado de los ayudantes: no protege frente a cualquier `process.exit(0)` añadido arbitrariamente en otro lugar.
+
+Las **888 comprobaciones y las repeticiones 12/12 pertenecen a la ejecución local declarada por el autor**. No las presento como repetidas por mí. Intenté iniciar Chromium: el navegador de Playwright no estaba instalado y el Chromium del sistema tampoco llegó a iniciarse. Por ello no ejecuté `testS` ni validé interacciones reales en navegador. Las capturas son evidencia visual aportada, no capturas de una navegación mía.
+
+### Valoración comparada
+
+Notas orientativas de revisión, no certificaciones ni métricas de usuarios. La referencia R20 es la indicada en el encargo recibido.
+
+| Dimensión | R20 | R21 | Motivo |
+|---|---:|---:|---|
+| Confianza y privacidad | 7 | 7,5 | Aislamiento y propiedad probados localmente; recuperación de guardado aún confusa. |
+| Procedencia de datos | 8 | 8,5 | Ejemplo, simulación y comentario personal mejor diferenciados. |
+| Claridad del recorrido móvil | 8,5 | 8 | Mejor entrada; el nuevo Cuaderno duplica información y esconde la revisión pendiente. |
+| Honestidad del contenido | 8 | 8 | Buenas limitaciones; mensajes de guardado y estados pendientes contradictorios. |
+| Solidez técnica | 8 | 8 | Mejora del servidor y ejecutor; queda un fallo nuevo en el cliente. |
+| Calidad de las pruebas | 8 | 8,5 | Buenas pruebas de persistencia y errores; falta el caso POST correcto + GET fallido. |
+
+## 3. Problemas por gravedad
+
+### Críticos
+
+No he identificado un defecto crítico dentro del alcance inspeccionado. No es una garantía de seguridad de toda la aplicación.
+
+### I1 — Importante: se puede afirmar que no se guardó algo que sí quedó guardado
+
+**Ubicación:** `public/js/lab.js:613`, especialmente líneas 619–626, `registrarRevision()`.
+
+Secuencia reproducida:
+
+1. El POST registra la revisión correctamente.
+2. El cliente borra `LAB.revClave` antes de terminar la lectura posterior.
+3. Esa lectura falla. La pantalla mantiene la revisión antigua del escenario y ofrece reintentar.
+4. El reintento genera otra clave, envía la versión antigua y recibe 409.
+5. La interfaz dice «no se ha registrado nada», aunque el registro anterior existe.
+
+En el reproductor quedó una revisión guardada, se generaron dos claves y apareció exactamente ese mensaje. No se demostró pérdida en la base de datos: el problema es la representación del resultado y la recuperación del cliente.
+
+**Arreglo:** distinguir escritura confirmada de actualización visual pendiente. Tras confirmar el POST, informar «Revisión guardada; no hemos podido actualizar la vista» si falla el GET. Ofrecer recuperar la vista, sin volver a enviar una escritura nueva. Utilizar los datos confirmados devueltos por el servidor cuando proceda. Si se desconoce si el POST llegó, conservar la clave y el contenido de aquel intento hasta reconciliarlo.
+
+El mismo intento no debe reenviarse con un texto modificado y dar por guardado ese texto nuevo cuando el servidor devuelve el resultado anterior. Conservar por separado el borrador y la carga del intento pendiente; resolver primero el resultado, sin sobrescribir ni desechar lo que la persona haya escrito después.
+
+### I2 — Importante: el Cuaderno no representa de forma coherente lo que ya has hecho
+
+**Ubicación:** `public/js/lab.js:302–352`, `tarjetaCaso()` y `pintarSeguimientoCasos()`; `public/js/contenido.js:112`, `estadoSeguimiento()`.
+
+La tarjeta de «Tus preguntas» decide su estado según el vínculo editorial. No incorpora el historial personal ni su contador. Por eso una pregunta propia continúa diciendo «sigue pendiente hasta que la revises tú» incluso después de registrar una revisión personal. La función editorial puede ser correcta para su cometido; el error es usarla como representación suficiente del seguimiento personal.
+
+Además, el filtro de esta sección excluye `descartado` pero **no `archivado`**. Una idea archivada puede seguir apareciendo entre las preguntas pendientes. Esto contradice la afirmación del LEEME de que lo archivado no se presenta como pendiente.
+
+**Arreglo:** separar dos datos: «Tu seguimiento» y «Respuesta editorial». Registrar una revisión personal no demuestra que la pregunta esté resuelta ni que exista una fuente. Mostrar, por ejemplo, «1 revisión personal registrada · próxima revisión: …» y, cuando corresponda, «Sin respuesta editorial». Las ideas archivadas deben quedar fuera de las pendientes y accesibles mediante su filtro. El contador `n_revisiones` ya existe: aprovecharlo; no cargar todo el historial para cada tarjeta.
+
+### I3 — Importante para usabilidad: la tarea de volver queda debajo de una tarjeta repetida
+
+**Evidencia:** captura `11-S7-para-revisar-390.png`; secciones de seguimiento en `lab.js`.
+
+En móvil, «Tus preguntas» ocupa casi toda la pantalla. Al final apenas empieza «Mis escenarios»; «Para revisar» queda más abajo. Son dos representaciones del mismo objeto que compiten por la atención. Las etiquetas nuevas existen, pero la jerarquía visual no les da prioridad.
+
+**Arreglo:** colocar primero «Para revisar», con pregunta, fecha, un resumen breve y la acción «Registrar revisión». Dejar composición, contexto editorial e historial en la ficha. Después, próximas revisiones y sin fecha. El radar puede mantenerse como sección secundaria. Evitar renderizar dos tarjetas completas del mismo escenario.
+
+### Menores — ajustar sin abrir una ronda de rediseño
+
+- **Comparación móvil:** en `08-S5-comparacion-390.png`, «Alternativa simulada» se parte en varias líneas estrechas y queda incluso una «a» aislada. Colocar las etiquetas encima de las barras en móvil o ampliar su espacio. Mantener pesos numéricos accesibles para segmentos pequeños.
+- **Portada:** los dos botones superiores y las tarjetas inferiores repiten vías de entrada. No bloquea el uso; simplificar a una presentación coherente de tres opciones si las pruebas muestran dudas. No cambiarla por intuición antes de observar a las personas.
+- **Plan de pago:** «Formará parte del futuro plan de pago» aparece como compromiso en el Cuaderno. Para esta beta bastaría «En beta». La monetización sigue pendiente de validación.
+- **Informe:** sustituir «su causa queda explicada» sobre `testK` por «hipótesis principal; aún no demostrada». El propio LEEME reconoce esa incertidumbre. No declarar cerrada la causa de `testP` por no reproducirse.
+- **Datos de las capturas:** la próxima fecha 2099 sirve como fixture estable, pero para una demostración a usuarios usar fechas comprensibles relativas a la sesión y relatos expresamente ficticios.
+
+## 4. Servidor, migración, acceso y límites
+
+Las pruebas del Cuaderno cubren propiedad, sesión inválida, fechas imposibles, límites, duplicación de intentos, conflictos, rollback del lote, conservación de la comparación y borrado en cascada. El código inspeccionado escapa el texto al mostrar el historial. No vi una fuga entre cuentas en los caminos revisados.
+
+La transacción local reproduce el contrato esperado de `DB.batch`; pasar esa prueba no demuestra el comportamiento de una D1 remota. La prueba de envíos simultáneos K9 exige ausencia de 500 y una sola inserción, pero permite un 409: no prueba que los dos clientes reciban una confirmación satisfactoria. R22 debe comprobar la reconciliación del cliente ante ese resultado.
+
+La corrección de `ORDER BY` usa una condición explícita sobre el usuario de ejemplo y K20 detecta la regresión. La búsqueda de usos de `origen` en las consultas públicas no mostró otro `ORDER BY` ambiguo. Mantener diferenciados el origen de creación de la cartera y el origen público de su autor.
+
+La migración 0012 pasó con datos previos. Su documentación advierte que los ALTER pueden quedar aplicados parcialmente y que no se debe ejecutar sobre un esquema nuevo que ya los contiene. No autorizar despliegue por esta revisión. Antes de cualquier migración real: copia verificable y comprobación de versión/columnas; no repetir a ciegas todo el archivo tras un fallo.
+
+La aplicación guarda en sesión los parámetros de simulación, no un borrador completo de todos los formularios. En el flujo normal sin cuenta, el formulario de guardar escenario todavía no está disponible, así que no afirmo haber demostrado pérdida de texto en esa entrada. Sí queda pendiente comprobar sesión caducada y regreso del acceso con un formulario ya escrito. Para el piloto privado puede usarse el acceso local de pruebas, explicado al facilitador; no hace falta enviar correos reales ni publicar.
+
+No he comprobado contra la versión exacta anterior todas las modificaciones de aserciones en `testB`, `testN` y `testP`. Por tanto no certifico la frase «no se rebajó ninguna aserción». Los nuevos criterios deben evaluar comportamiento, no exigir conservar una frase antigua.
+
+## 5. Encargo listo para Claude Code — R22
+
+Trabaja sobre R21. Conserva la identidad visual, el creador como producto central, la Revista secundaria y el modelo de simulación existente. Implementa este alcance en orden; no añadas nuevas grandes funcionalidades.
+
+### A. Reparar la recuperación de registrar revisión
+
+Separa los estados de borrador, envío con resultado incierto, guardado confirmado y actualización de vista pendiente. Corrige I1. Conserva claves y cargas del intento cuando el resultado sea incierto; no conviertas una lectura fallida posterior en un nuevo envío. No afirmes «no se ha registrado nada» cuando no puedas saberlo. Conserva el texto y permite recuperarse de un 409 sin copiarlo manualmente antes de recargar.
+
+### B. Unificar el seguimiento personal del Cuaderno
+
+Corrige I2: excluir archivadas de pendientes, reflejar revisiones personales, separar respuesta editorial y decisión personal. Usa los datos que ya devuelve la API; evita una consulta adicional por cada tarjeta. La revisión personal nunca debe producir por sí sola la etiqueta «pregunta resuelta» ni una respuesta editorial inventada.
+
+### C. Hacer visible el motivo para volver
+
+Corrige I3: «Para revisar» primero, una representación principal por escenario y una acción clara. Dar acceso directo a registrar revisión en su ficha, conservar próximas/sin fecha y filtros de archivadas/descartadas. Ajustar etiquetas de las barras móviles y retirar la promesa de pago de la beta. No cambiar fondo, paleta ni tipografías aprobadas.
+
+### D. Verificación centrada en los fallos
+
+| Caso | Criterio de aceptación |
+|---|---|
+| POST confirmado, GET posterior falla | Una revisión persistida; se informa guardado confirmado; recuperar vista no genera otro POST. |
+| POST persistido, respuesta perdida | Reconciliar/reintentar el mismo intento produce una sola revisión y un estado visible correcto. |
+| La persona modifica texto con un intento incierto | Ningún texto nuevo se presenta como guardado por recibir la respuesta del intento anterior; el borrador se conserva. |
+| Dos pestañas y versión antigua | No se pisa otra revisión; se recupera el escenario y el texto local sin una afirmación falsa de no guardado. |
+| Revisar y volver al Cuaderno | Se muestra el seguimiento personal, con fecha/contador correcto; no dice que nunca se revisó. |
+| Archivar y descartar | Desaparecen de pendientes; siguen accesibles en sus filtros; no cambian la cartera. |
+| Revisión personal con historia editorial | Los dos estados son independientes; no se atribuye verificación externa a un comentario personal. |
+| Móvil 320/390 y escritorio | Prioridad visible de revisión; sin duplicación de tarjeta; rótulos legibles, teclado y foco coherentes. |
+| Base y alternativa | Guardar o registrar revisión no modifica composición ni versión de la cartera base. |
+
+Añade pruebas que fallen con R21 y pasen con la corrección, incluyendo el cliente y no solo el endpoint. Ejecuta las baterías afectadas y una pasada completa final. Si falla, informa qué falla y por qué; no sustituir una interacción por una prueba de existencia de texto para obtener verde. Verifica también un registro de revisión en la demo, indicando que no persiste tras recargar.
+
+### E. Entrega y cierre
+
+Entrega código, informe breve de cambios, resultados con entorno y fallos, y capturas de Cuaderno pendiente/revisado/archivado, comparación móvil y recuperación de error. Conserva un registro preciso de lo no probado. Elimina contradicciones del LEEME. No hace falta otra memoria extensa ni nuevas puntuaciones de producto.
+
+**Fuera de alcance:** cobros, bancos/brókeres, datos reales, noticias o artículos automáticos, tips diarios, notificaciones/correos, recomendaciones de compra/venta, publicación y ampliaciones del laboratorio. No introducir un asistente IA ni un nuevo sistema global de puntuación.
+
+**Puerta de salida:** cerrados I1 e I2 y aplicada la jerarquía de I3, la siguiente actividad es el piloto con personas. Evitar encadenar rondas de pulido sin aprendizaje real.
+
+## 6. Prueba con cinco principiantes
+
+El protocolo aportado es una buena base, pero todavía no constituye evidencia de utilidad. Mantener tareas 1–5 y dividirlo expresamente en dos contactos: sesión inicial de 20–30 minutos y regreso al día siguiente. Usar persistencia comprobada, nunca la demo que se reinicia.
+
+Registrar por tarea: completada sin ayuda, con ayuda, fallida o no evaluable; anotar la intervención del facilitador y el punto exacto de duda. Separar ejecución mecánica de comprensión: que una persona pulse guardar no prueba que entienda qué guardó.
+
+Después de comparar, preguntar «¿Qué ha cambiado en tu cartera?» sin anticipar la respuesta. Al volver, observar si encuentra su pregunta y comprende qué falta revisar. Pedir que explique qué conclusión permite la simulación y qué no permite. No juzgar como mala decisión que decida mantener la composición inicial.
+
+El regreso al día siguiente es una tarea concertada: demuestra recuperación y comprensión, **no retención espontánea**. El objetivo 4/5 sirve como señal diagnóstica, no como estimación estadística. No medir todavía conversión a pago, rentabilidad de las carteras, eficacia de inversión ni encaje de mercado con estos datos ficticios.
+
+Antes del piloto: comprobar I1/I2, acceso y persistencia en el dispositivo usado, y legibilidad de «Para revisar». M94, M95, M97–M100 siguen siendo útiles; M96 con correo/D1 reales queda para una fase autorizada posterior. Añadir sesión caducada conservando texto y el caso POST confirmado/GET fallido.
+
+## 7. Qué queda sin comprobar
+
+No se ha realizado aquí la prueba con cinco personas, retorno real al día siguiente, navegador interactivo, móvil físico, lector de pantalla, zoom real al 200 %, Safari/Firefox, acceso por correo real, D1 remota, publicación ni carga concurrente de producción. Tampoco una auditoría integral de seguridad o del catálogo editorial completo. La evaluación visual se apoya en capturas aportadas; no acredita estados que no muestran.
+
+**Reparto del siguiente trabajo:** Claude implementa y prueba R22; Javier organiza el piloto cuando estén cerrados los bloqueos; yo reviso las correcciones con su evidencia y ayudo a convertir los resultados reales del piloto en prioridades. No se han modificado ni publicado aquí los archivos de producto.
+
+
+**Instrucción adicional del usuario (literal):** «Mantén un nivel alto de calidad funcional, visual y de experiencia. El límite de alcance no justifica dejar textos confusos, interacciones torpes, incoherencias visuales o funciones incompletas dentro del recorrido principal. Antes de entregar, recorre el producto completo como usuario y corrige los defectos que comprometan su claridad, confianza o utilidad. Separa los defectos de lo existente —que debemos resolver— de las nuevas capacidades —que quedan para después—.»
