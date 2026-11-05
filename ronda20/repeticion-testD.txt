@@ -1,0 +1,12 @@
+rep 1: RESULTADO: 29 correctas, 0 fallos 
+rep 2: RESULTADO: 29 correctas, 0 fallos 
+rep 3: RESULTADO: 29 correctas, 0 fallos 
+rep 4: RESULTADO: 29 correctas, 0 fallos 
+rep 5: RESULTADO: 29 correctas, 0 fallos 
+rep 6: RESULTADO: 29 correctas, 0 fallos 
+rep 7: RESULTADO: 29 correctas, 0 fallos 
+rep 8: RESULTADO: 29 correctas, 0 fallos 
+rep 9: RESULTADO: 29 correctas, 0 fallos 
+rep 10: RESULTADO: 29 correctas, 0 fallos 
+rep 11: RESULTADO: 29 correctas, 0 fallos 
+rep 12: RESULTADO: 29 correctas, 0 fallos 

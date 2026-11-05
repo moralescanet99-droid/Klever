@@ -17,7 +17,7 @@
  },
  {
   "id": "H1c-320",
-  "escenario": "Aviso fijo tras desplazarse (320 px, desplazado 957 px)",
+  "escenario": "Aviso fijo tras desplazarse (320 px, desplazado 952 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
   "observado": "14 muestras elegibles; pegado arriba=true; contraste real mín. 7.8:1; elementos que pasan por debajo en este instante (normal): 0; acciones enfocadas → en zona libre=true, sin tapar=true (356–408 dentro de 102–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720)",
   "resultado": "OK",
@@ -57,7 +57,7 @@
  },
  {
   "id": "H1c-390",
-  "escenario": "Aviso fijo tras desplazarse (390 px, desplazado 942 px)",
+  "escenario": "Aviso fijo tras desplazarse (390 px, desplazado 952 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
   "observado": "14 muestras elegibles; pegado arriba=true; contraste real mín. 7.8:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (323–375 dentro de 120–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (360–404 dentro de 97–720)",
   "resultado": "OK",
@@ -83,7 +83,7 @@
   "id": "H1a-1440",
   "escenario": "Aviso de éxito al INICIO de la página (1440 px)",
   "esperado": "Al menos 6 muestras elegibles; el aviso queda bajo la cabecera y no solapa NINGUNA acción en ninguna muestra",
-  "observado": "14 muestras elegibles de 16; solapes: ninguno; bajo la cabecera siempre=true; fija=true",
+  "observado": "15 muestras elegibles de 16; solapes: ninguno; bajo la cabecera siempre=true; fija=true",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -91,13 +91,13 @@
   "id": "H1b-1440",
   "escenario": "Legibilidad del aviso durante toda la animación (1440 px), con la opacidad real",
   "esperado": "Opacidad efectiva 1 en cada muestra (solo se anima la altura) y contraste ≥ 4,5:1 calculado con esa opacidad, en al menos 6 muestras",
-  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 25→38→40 px",
+  "observado": "15 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 5→25→38→40 px",
   "resultado": "OK",
   "evidencia": ""
  },
  {
   "id": "H1c-1440",
-  "escenario": "Aviso fijo tras desplazarse (1440 px, desplazado 284 px)",
+  "escenario": "Aviso fijo tras desplazarse (1440 px, desplazado 286 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
   "observado": "14 muestras elegibles; pegado arriba=true; contraste real mín. 7.8:1; elementos que pasan por debajo en este instante (normal): 3; acciones enfocadas → en zona libre=true, sin tapar=true (254–306 dentro de 59–900) | en zona libre=true, sin tapar=true (840–884 dentro de 59–900) | en zona libre=true, sin tapar=true (250–274 dentro de 59–900)",
   "resultado": "OK",

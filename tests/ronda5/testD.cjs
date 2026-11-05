@@ -53,7 +53,7 @@ const EV = EVDIR;
   await p.screenshot({ path: EV + 'E4-100-escritorio.png' });
   ev('E4b', 'Cartera privada al 100 %', 'Se guarda y puede publicarse (con tesis)', `${est100.asignado}; Publicar activo=${est100.publicar}; ${await T(p, '#estado')}`, est100.publicar && est100.asignado === 'Asignado: 100 %', 'E4-100-escritorio.png');
   // 103 %
-  await peso(p).fill('20'); await p.waitForTimeout(200);
+  await peso(p).fill('20'); await p.waitForTimeout(700);   // ronda 20: 700 ms (antes 200): el campo activo se centra con un desplazamiento diferido de 300 ms (app.js, focusin); medir las cajas durante ese desplazamiento daba E5 intermitente (motivo en y=2 y Guardar en y=184)
   const gDis = await G(p).isDisabled(), pDis = await p.locator('#publicar').isDisabled();
   const estilo = async sel => p.evaluate(s => { const e = document.querySelector(s), c = getComputedStyle(e); return { color: c.color, cursor: c.cursor, borde: c.borderTopStyle, fondo: c.backgroundColor }; }, sel);
   const eG = await estilo('.ws-acc .js-guardar'), eP = await estilo('#publicar');
@@ -65,7 +65,7 @@ const EV = EVDIR;
   await p.screenshot({ path: EV + 'E4-103-escritorio.png' });
   ev('E4c', 'Cartera privada al 103 %', 'No se guarda ni se publica; motivo junto a cada acción; cambios conservados en el dispositivo', `Guardar desactivado=${gDis}; Publicar desactivado=${pDis}; ${await T(p, '#motivo')}; publicar: «${await T(p, '#pub-razon')}»; servidor PUT 103 %: HTTP ${s103.s}; copia local=${await p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id)}`,
     gDis && pDis && (await T(p, '#motivo')).includes('Exceso de asignación: 3 %') && s103.s === 400 && await p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id), 'E4-103-escritorio.png');
-  ev('E5', 'Publicar desactivado se ve como Guardar desactivado', 'Mismo tratamiento visual y motivo pegado a cada botón', `color Guardar ${eG.color} / Publicar ${eP.color}; cursor ${eG.cursor} / ${eP.cursor}; borde Guardar ${eG.borde} / Publicar ${eP.borde}; motivo junto a Publicar=${cercaP}; motivo junto a Guardar=${cercaG}`, mismoColor && eP.borde === 'dashed' && cercaP && cercaG, 'E4-103-escritorio.png');
+  ev('E5', 'Publicar desactivado se ve como Guardar desactivado', 'Mismo tratamiento visual y motivo pegado a cada botón', `color Guardar ${eG.color} / Publicar ${eP.color}; cursor ${eG.cursor} / ${eP.cursor}; borde Guardar ${eG.borde} / Publicar ${eP.borde}; motivo junto a Publicar=${cercaP}; motivo junto a Guardar=${cercaG} (motivo x ${Math.round(mG.x)} ancho ${Math.round(mG.width)} y ${Math.round(mG.y)}; Guardar x ${Math.round(rG.x)} y ${Math.round(rG.y)})`, mismoColor && eP.borde === 'dashed' && cercaP && cercaG, 'E4-103-escritorio.png');
   // persistencia visible + validez
   const per = await T(p, '#estado'), mot = await T(p, '#motivo');
   ev('E7', 'Con error de asignación, la persistencia sigue visible', 'Texto explícito de persistencia + motivo del bloqueo + privacidad, por separado', `persistencia «${per}»; validez «${mot}»; privacidad «${await T(p, '#chip')}»; el ⓘ solo amplía`, per.startsWith('Cambios locales pendientes de guardar en tu cuenta') && mot.includes('Exceso') && mot.includes('Reduce los pesos hasta sumar 100 %') && (await T(p, '#chip')) === 'Privada', 'E4-103-escritorio.png');

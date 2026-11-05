@@ -17,8 +17,8 @@
   "id": "Q3-1440",
   "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)",
   "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en escritorio las dos columnas siguen enteras",
-  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":true,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":false,\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
-  "resultado": "FALLA"
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":true,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":400,\"bottom\":500,\"panelTop\":286,\"alto\":900,\"scrollY\":0,\"docAlto\":2822},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "OK"
  },
  {
   "id": "Q4-1440",
@@ -59,7 +59,7 @@
   "id": "Q3-390",
   "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (390 px)",
   "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en móvil las posiciones se ocultan, el orden DOM es anillo (una línea de resumen) → nota → radiografía y hay un botón «Volver a la distribución»",
-  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":155,\"bottom\":303,\"panelTop\":8,\"alto\":780,\"scrollY\":389,\"docAlto\":2627},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
   "resultado": "OK"
  },
  {
@@ -101,7 +101,7 @@
   "id": "Q3-320",
   "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (320 px)",
   "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en móvil las posiciones se ocultan, el orden DOM es anillo (una línea de resumen) → nota → radiografía y hay un botón «Volver a la distribución»",
-  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":155,\"bottom\":351,\"panelTop\":8,\"alto\":780,\"scrollY\":555,\"docAlto\":3098},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
   "resultado": "OK"
  },
  {
