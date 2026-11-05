@@ -1,7 +1,7 @@
 // Ronda 19 · frontera del redondeo de la nota guardada. Contrato decimal (intervalos SEMIABIERTOS): bloques de dos decimales con el extremo superior excluido y nota = redondeo half-up a un decimal.
 // 1) el contraejemplo EXACTO de la revisión de la ronda 18 y sus vecinos a ambos lados de la frontera (por validador, por POST y por lectura de una fila histórica);
 // 2) un ORÁCULO independiente (fuerza bruta en millonésimas) contra el validador en miles de resúmenes cerca de la frontera;
-// 3) una barrida de carteras calculadas por el EVALUADOR: ninguna salida legítima puede rechazarse (no se tolera ningún empate binario). Uso: node tests/ronda19/unit-redondeo19.mjs
+// 3) una barrida de carteras calculadas por el EVALUADOR: ninguna salida legítima de ESAS muestras se rechaza. Ronda 20: la barrida NO demuestra nada sobre empates binarios (su registro dice «0 a ≤ 0,001 de la frontera»): solo compatibilidad en las muestras. Uso: node tests/ronda19/unit-redondeo19.mjs
 import * as ES from '../../functions/api/escenarios/index.js';
 import * as EI from '../../functions/api/escenarios/[id].js';
 import { crearEnv, sembrar, registro } from '../lib/d1-sqlite.mjs';
@@ -46,7 +46,7 @@ for (let i = 0; i < 6000; i++) { const b = IDS.map(() => Math.round((5.40 + alea
   for (const nota of [5.4, 5.5]) { total++; const r = resumen(nota, b), a = ok(r), o = oraculo(nota, b); if (Math.abs(S4 - (nota * 10000 - 500 - 50)) <= 5 || Math.abs(S4 - (nota * 10000 + 500 + 50)) <= 5) enFrontera++; if (a !== o) difs.push(`${J(b)} ${nota}: validador ${a} oráculo ${o}`); } }
 t('R5', 'Oráculo de fuerza bruta frente al validador en 12 000 resúmenes (6 000 combinaciones de bloques entre 5,40 y 5,50, con notas 5,4 y 5,5)', 'Ninguna discrepancia, y entre ellos hay casos EN la frontera exacta', `${total} resúmenes; ${enFrontera} en la frontera (±0,0005); discrepancias ${difs.length}${difs.length ? ' p. ej. ' + difs[0] : ''}`, difs.length === 0 && enFrontera > 50);
 
-// ---- 3. salidas LEGÍTIMAS del evaluador: ninguna se rechaza (no se tolera un empate binario)
+// ---- 3. salidas LEGÍTIMAS del evaluador: ninguna de las muestras se rechaza (no se afirma nada sobre empates binarios: ninguna muestra cae en la franja de la frontera)
 const emp = (i, r) => ({ nombre: 'S' + i, tipo: 'accion', sector: 'S1', actividad: 'A' + (i % 4), emisor: 'e' + i, cap: 1e9 * (1 + r() * 30), imp: 1e6 * (1 + r() * 30), sesiones: 60, moneda: 'USD', fuenteMercado: 'prueba', fechaMercado: '2026-11-04',
   ej: [2020, 2021, 2022, 2023, 2024].map((y, k) => ({ p: 'FY' + y, f: 'prueba', d: '2026-11-04', ing: 100 * (1 + k * .1 * r()) * (1 + r() * 9), ni: 10 * (r() * 3 - .5) * (i + 1), op: 12, ebitda: 20 * (1 + r() * 9), deuda: (r() * 3 - .3) * 20 * (1 + r() * 9), fcf: (r() * 4 - 1) * 5, roic: .02 + r() * 0.25 })) });
 let probadas = 0, rechazadas = [], cerca = 0;
@@ -55,5 +55,5 @@ for (let u = 0; u < 12; u++) { const emps = Object.fromEntries(Array.from({ leng
     const ev = evaluar(lista.map((x, i) => ({ ticker: x, peso: pesos[i] / 10 })), U); if (!ev.publicada) continue; probadas++;
     const r = JSON.parse(J(resumenNota(ev))), v = validarResumen(r, { guardar: true }); if (!v.ok) rechazadas.push(`${J(r.bloques)} ${r.nota}: ${v.motivo}`);
     const S4 = IDS.reduce((s, k) => s + PESOS[k] * Math.round(r.bloques[k] * 100), 0), d = Math.min(Math.abs(S4 + 50 - (Math.round(r.nota * 10) * 1000 - 500)), Math.abs(S4 - 50 - (Math.round(r.nota * 10) * 1000 + 500))); if (d <= 10) cerca++; } }
-t('R6', 'Barrida de carteras calculadas por el EVALUADOR (12 universos aleatorios × 400 carteras de 2 a 5 posiciones, semilla fija)', 'Toda nota publicada por el evaluador se acepta con el contrato estricto: 0 rechazos (no hace falta tolerar empates binarios)', `${probadas} notas publicadas; ${cerca} a ≤ 0,001 de la frontera; rechazadas ${rechazadas.length}${rechazadas.length ? ' p. ej. ' + rechazadas[0] : ''}`, probadas > 1500 && rechazadas.length === 0);
+t('R6', 'Barrida de carteras calculadas por el EVALUADOR (12 universos aleatorios × 400 carteras de 2 a 5 posiciones, semilla fija)', 'Toda nota publicada por el evaluador se acepta con el contrato estricto: 0 rechazos en las muestras; no se afirma nada sobre empates binarios (el contador de muestras a ≤ 0,001 de la frontera se publica y no se exige)', `${probadas} notas publicadas; ${cerca} a ≤ 0,001 de la frontera; rechazadas ${rechazadas.length}${rechazadas.length ? ' p. ej. ' + rechazadas[0] : ''}`, probadas > 1500 && rechazadas.length === 0);
 await fin();
