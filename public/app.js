@@ -600,7 +600,11 @@ function pasoActual(n, foco = false) {
   const cambia = n !== paso; paso = n; $('#vista-cartera').dataset.paso = String(n);
   $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); });
   if (cambia) { try { current && pintarEstado(); } catch { /* el estado se repinta en la siguiente edición */ } }
-  if (foco && cambia) { const d = n === 3 ? $('#nota-panel') : ($('#h-pos').offsetParent ? $('#h-pos') : $('#comp')); requestAnimationFrame(() => { d.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth', block: 'start' }); d.focus({ preventScroll: true }); }); }
+  // El desplazamiento es INSTANTÁNEO y se calcula tras dos fotogramas (cuando el paso ya está pintado): así el resultado queda siempre en la zona útil y las capturas no dependen de una animación.
+  if (foco && cambia) requestAnimationFrame(() => requestAnimationFrame(() => {
+    const d = n === 3 ? $('#nota-panel') : ($('#h-pos').offsetParent ? $('#h-pos') : $('#comp'));
+    window.scrollTo({ top: n === 3 ? Math.max(0, d.getBoundingClientRect().top + scrollY - 8) : 0, behavior: 'auto' }); d.focus({ preventScroll: true });
+  }));
 }
 function reiniciarPaso() { paso = 2; $('#vista-cartera').dataset.paso = '2'; $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === 2) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }
 reiniciarPaso();

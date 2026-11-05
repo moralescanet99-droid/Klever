@@ -20,14 +20,31 @@ export function explicarNota(ev) {
   }
   const ok = bl.filter(b => b.puntuacion != null), falta = bl.filter(b => b.puntuacion == null), q = b => `«${minus(b.nombre)}»`;
   if (!bl.length) return '';
-  // el límite es del MÉTODO (no faltan datos que vayan a llegar): bancos y aseguradoras no tienen deuda/EBITDA ni ROIC comparables
-  const bancos = (ev.sinEvaluar || []).filter(s => (s.motivos || []).some(m => /banca y seguros/.test(m)));
-  if (bancos.length && ev.bloques?.empresas?.puntuacion != null && ev.bloques?.sectores?.puntuacion != null) {
-    const w = Math.round(bancos.reduce((a, s) => a + s.peso, 0) * 10) / 10, parte = w === 50 ? 'La mitad' : `El ${cm(w)} %`, uno = bancos.length === 1;
+  // TRES motivos distintos de que no haya nota global (se explican por separado y sin repetir un párrafo por activo; el detalle por activo sigue en «Cómo se calcula»):
+  //   · instrumento SIN MÉTODO aplicable (ETF/fondos; bancos y aseguradoras): no faltan datos que vayan a llegar, el método actual no los evalúa;
+  //   · datos AUSENTES o inválidos en las empresas evaluables; · COBERTURA insuficiente para publicar la nota global (cada indicador necesita el 90 % del peso).
+  const sm = (ev.sinEvaluar || []).filter(s => s.causa === 'sin_metodo'), tipoDe = t => ev.reparto.find(r => r.ticker === t)?.tipo;
+  const etf = sm.filter(s => tipoDe(s.ticker) !== 'accion'), bancos = sm.filter(s => tipoDe(s.ticker) === 'accion'), datos = (ev.sinEvaluar || []).filter(s => s.causa === 'datos');
+  const suma = xs => Math.round(xs.reduce((a, s) => a + s.peso, 0) * 10) / 10;
+  if (etf.length) {
+    const quien = bancos.length ? `Los ETF representan el ${cm(suma(etf))} % y ${bancos.length === 1 ? 'el banco' : 'los bancos'} el ${cm(suma(bancos))} %: el método actual no evalúa la composición de los ETF ni la deuda y los beneficios de los bancos` : (suma(etf) >= 99.95 ? 'Todo el peso son ETF y el método actual no evalúa su composición' : `Los ETF representan el ${cm(suma(etf))} % y el método actual no evalúa su composición`);
+    return `Esta cartera no tiene nota global. ${quien}. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis.${datos.length ? ` Además faltan datos de ${lista(datos.map(d => d.ticker))}: el detalle dice cuáles.` : ''}`;
+  }
+  if (bancos.length && !datos.length && ev.bloques?.empresas?.puntuacion != null && ev.bloques?.sectores?.puntuacion != null) {
+    const w = suma(bancos), parte = w === 50 ? 'La mitad' : `El ${cm(w)} %`, uno = bancos.length === 1;
     return `Podemos medir cómo repartes tu cartera. ${parte} está en ${uno ? 'un banco' : 'bancos o aseguradoras'} y este método todavía no evalúa bien la deuda y los beneficios de ${uno ? 'los bancos' : 'esas entidades'}. Por eso no damos una nota total.`;
   }
-  const causas = (ev.sinEvaluar || []).slice(0, 2).map(s => `${s.ticker} (${cm(s.peso)} % de la cartera): ${minus(s.motivos[0] || '').replace(/\.$/, '')}`);
+  const grupos = new Map(); for (const d of (datos.length ? datos : ev.sinEvaluar || [])) { const m = minus((d.motivos[0] || '').replace(/\.$/, '')); if (!grupos.has(m)) grupos.set(m, []); grupos.get(m).push(d); }
+  const causas = [...grupos].slice(0, 2).map(([m, l]) => `${lista(l.map(x => x.ticker))} (${cm(suma(l))} % de la cartera): ${m}`);
   return `${ok.length ? `Podemos medir ${lista(ok.map(q))}. ` : ''}${falta.length ? `Faltan datos para valorar ${lista(falta.map(q))}.` : ''}${causas.length ? ` Causa principal: ${causas.join('; ')}.` : ''}`;
+}
+
+// Lo que SÍ existe aunque no haya nota global: asignación, número de posiciones, mayor posición y reparto por tipo de instrumento (concentración por posición ≠ exposición subyacente).
+export function datosExistentes(esc, ev) {
+  if (!ev?.reparto?.length) return '';
+  const top = ev.reparto[0], n = ev.reparto.length, por = {}; for (const r of ev.reparto) por[r.tipo === 'accion' ? 'acciones' : r.tipo ? 'ETF' : 'otros'] = (por[r.tipo === 'accion' ? 'acciones' : r.tipo ? 'ETF' : 'otros'] || 0) + r.peso;
+  const tipos = Object.entries(por).filter(([, v]) => v > 0).map(([k, v]) => `${k} ${cm(Math.round(v * 10) / 10)} %`);
+  return `<ul class="nota-existe"><li><b>Lo que sí podemos decirte:</b> asignado ${cm(ev.total)} % en ${n} ${n === 1 ? 'posición' : 'posiciones'}; la mayor es ${esc(top.nombre)} (${esc(top.ticker)}) con el ${cm(top.peso)} %.</li>${tipos.length > 1 ? `<li>Por instrumento: ${tipos.join(' · ')}.</li>` : ''}${por.ETF ? '<li class="mut">Dos ETF no equivalen a dos empresas: sin conocer su composición no se puede decir si hay diversificación por sectores.</li>' : ''}</ul>`;
 }
 export function htmlNotaEstructura(esc, ev, origen) {
   if (!ev) return '';
@@ -44,7 +61,7 @@ export function htmlNotaEstructura(esc, ev, origen) {
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
       ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
   } else {
-    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
+    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques ? datosExistentes(esc, ev) : ''}${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
   const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : cm(b.puntuacion.toFixed(2))}</td><td>${cm((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
   const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${cm(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';

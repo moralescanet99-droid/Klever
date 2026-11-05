@@ -1004,3 +1004,163 @@ Mantén M1–M79. Prioriza M73–M76 para pulgar, ampliación real, lector, cont
 Antes de abrir cuentas a terceros siguen priorizadas M50–M57 y M60. Antes de contenido real, M58, M64 y M71. Permanecen sin comprobar dispositivos físicos, Safari/Firefox, correo real, carga SEC real, migraciones D1 remotas y datos reales. La demo pierde cambios al recargar. La tarea de regresar otro día debe probarse en el servidor con persistencia.
 
 
+
+## C16 · Ronda 19 (2026-11-05) — revisión de la ronda 18 y encargo, literal
+
+# Klever · Revisión de la ronda 18 y encargo de la ronda 19
+
+Revisión independiente · 5 de noviembre de 2026
+
+## Dictamen
+
+La ronda 18 mejora de forma importante el creador: separar Distribución y Revisión permite empezar a editar sin atravesar un anillo, una leyenda y explicaciones largas. La dirección visual se conserva: fondo oscuro cálido, acento naranja/cobre, títulos con serif y controles más sobrios. No propongo otro rediseño.
+
+La reparación técnica supera las 111 comprobaciones de módulo/servidor que he repetido. Los contraejemplos concretos de la ronda 17 están cubiertos. Quedan un borde aritmético, una deficiencia visible en la revisión de 320 px y una explicación poco útil cuando la propia plantilla incluye ETF. La ronda 19 debe cerrar esos puntos y preparar una prueba de uso honesta; no añadir otra gran funcionalidad.
+
+Esta revisión corresponde al ZIP `klever_ronda18.zip`. El identificador de commit `3ae4183` y el total de 774 comprobaciones proceden del informe del autor; no son una certificación independiente de toda esa ejecución.
+
+## 1. Alcance y evidencia
+
+| Comprobación repetida | Resultado propio |
+|---|---:|
+| `tests/ronda18/unit-integridad18.mjs` | 18 correctas |
+| `tests/ronda17/unit-procedencia17.mjs` | 13 correctas |
+| `tests/ronda17/unit-guardada17.mjs` | 20 correctas |
+| `tests/ronda15/unit-nota.mjs` | 35 correctas |
+| `tests/ronda16/unit-escenarios16.mjs` | 11 correctas |
+| `tests/ronda8/unit-migracion.mjs` | 14 correctas |
+| **Total de estas seis baterías** | **111 correctas, 0 fallos** |
+
+También ejecuté un contraejemplo adicional, fuera de esas baterías: el validador lo admite y el manejador POST con SQLite devuelve 201. Se explica en el apartado 3.
+
+Intenté repetir Q, P, O y la paridad de demo. Chromium abortó al arrancar con `socket() failed: Operation not permitted`. Por tanto, esas baterías de navegador **no quedan verificadas por mí**. La reconstrucción de demo PD1 sí informó OK antes del aborto; eso no demuestra la paridad visual ni funcional completa.
+
+La revisión visual se basa en las capturas aportadas, no en una sesión interactiva propia. Inspeccioné Distribución a 1440, 390 y 320 px; Revisión a 390 y 320; Guardado a 390; y Cuaderno a 390. La inspección permite señalar problemas visibles, pero no certificar interacción, accesibilidad o comportamiento en dispositivos físicos.
+
+## 2. Qué conservar y qué considero resuelto
+
+| Área | Valoración |
+|---|---|
+| Portafolios como centro | Mantener. Revista y El Superespeculador siguen siendo apoyos secundarios. |
+| Fondo, tipografía y composición | Mantener la dirección actual. Los ajustes pendientes son de jerarquía y espacio útil. |
+| Distribución móvil | Mejora clara: primer campo, deslizador y Revisar visibles a 320 y 390 px en las capturas. |
+| Revisión con nota disponible | La captura de guardado a 390 presenta 4,4, interpretación, fortaleza y limitación de forma comprensible. |
+| Fecha con sufijo | El caso exacto de R17 y las horas imposibles quedan cubiertos por las pruebas repetidas. |
+| Procedencia y comparables | Las pruebas cubren comparables ajenos a la cartera y el cambio de origen con la misma referencia del universo. |
+| Historia/referencia, propiedad propia y texto invisible | Las correcciones pasan en la batería de integridad. |
+| Fecha de instantánea y ejemplo bancario | Mejor formulación y pruebas aprobadas. |
+| Red lenta y demo | Correcciones plausibles y documentadas; falta mi repetición en navegador. No afirmar que cada intermitencia histórica tenga la misma causa. |
+
+No reabrir estas decisiones sin una regresión reproducible. Mantener explícita la naturaleza ficticia de los datos actuales y la diferencia entre una evaluación coherente y una evaluación acreditada por el servidor.
+
+## 3. Hallazgo técnico: queda una frontera de redondeo
+
+**Prioridad: media; corrección pequeña y acotada.** No invalida el avance general ni demuestra pérdida de datos.
+
+En `public/js/nota.js`, el contraste de intervalos usa:
+
+```js
+S4 + 50 >= n10 * 1000 - 500 && S4 - 50 < n10 * 1000 + 500
+```
+
+El límite superior de los valores compatibles con un redondeo decimal a centésimas es abierto. La igualdad del primer término admite un contacto entre intervalos que, con ese contrato decimal, no contiene ningún valor válido.
+
+Contraejemplo reproducido:
+
+```json
+{
+  "version": "estructura-v1",
+  "fecha": "2026-11-04",
+  "publicada": true,
+  "nota": 5.5,
+  "motivo": null,
+  "cobertura": 100,
+  "bloques": {
+    "empresas": 5.44,
+    "sectores": 5.44,
+    "tamano": 5.44,
+    "deuda": 5.46,
+    "rentabilidad": 5.44
+  },
+  "fortaleza": "deuda",
+  "limitacion": { "bloque": "deuda", "perdida": 1.135 }
+}
+```
+
+Con pesos 20/20/15/25/20, la suma de los bloques mostrados es 5,445. Su intervalo decimal agregado tiene extremo superior 5,450 **excluido**; la nota 5,5 necesita alcanzar 5,450. Resultado observado: `validarResumen(..., {guardar:true}).ok === true`; el POST de escenario con este resumen como `antes` y un resumen pendiente válido como `despues` devuelve **201**.
+
+Para reproducir el POST se puede reutilizar `montar`, `post` y `guardar` de `unit-integridad18.mjs`, sustituyendo solamente el resumen por el anterior. El caso original de R17, cuya suma era 5,4445, sí queda rechazado ahora: este es un vecino distinto.
+
+**Encargo:** definir explícitamente la regla de redondeo y sus extremos; corregir el contacto de intervalos y el comentario que lo presenta como cerrado. No cambiar una desigualdad a ciegas: contrastar también las salidas reales del evaluador, porque los números binarios de JavaScript pueden introducir diferencias en empates. Añadir frontera, vecinos a ambos lados, extremos 1/10, lectura histórica y resúmenes legítimos producidos por el módulo. Si el contrato pretende tolerar un empate binario, documentarlo y demostrarlo con un caso generado por el evaluador; no llamarlo compatibilidad decimal exacta.
+
+No recalcular silenciosamente notas históricas. Mantener el tratamiento explícito de evaluación inválida cuando corresponda.
+
+## 4. Hallazgo de uso: a 320 px no basta con que entre el panel
+
+**Prioridad: alta para aceptar el recorrido móvil.**
+
+En `Q3-revision-320-viewport.png`, la cabecera, los pasos y el resumen del portafolio ocupan gran parte de la pantalla. El bloque de Revisión comienza aproximadamente en y=561; el aviso de nota pendiente empieza alrededor de y=676; la barra fija empieza alrededor de y=708. Apenas se ve el inicio del resultado antes de quedar oculto por la barra. Además, el paso activo aparece como un «3» naranja sin su etiqueta visible.
+
+En cambio, a 390 px la captura sí empieza directamente en la nota. Hace falta resolver esa diferencia, no declarar que todo el móvil falla.
+
+La prueba Q3 comprueba `top(notaPanel) < innerHeight`. Eso permite aprobar un contenedor cuyo resultado útil está por debajo o tapado. La captura demuestra que ese criterio es insuficiente.
+
+**Encargo:** al entrar en Revisión, situar dentro de la zona visible útil el estado o cifra y una explicación breve. Mantener Volver accesible y el foco coherente. Revisar el desplazamiento programado, su momento respecto al renderizado y la altura real de la barra inferior. No atribuir la causa a la animación sin reproducirla.
+
+En pantallas estrechas, mostrar por ejemplo «Paso 3 de 3 · Revisión», o una variante que conserve la etiqueta activa sin recorte. Evitar resolverlo reduciendo excesivamente el texto.
+
+**Aceptación:** a 320×780 y 390×780, después de pulsar Revisar, el rectángulo completo del resultado breve debe quedar entre la parte superior útil y el inicio de la barra fija. El test debe medir el resultado, no solamente su panel. Repetir con nota disponible y sin nota, movimiento reducido activado/desactivado y navegación por teclado. Guardar capturas estables después de la transición, sin desplazamiento manual para preparar la evidencia.
+
+## 5. Hallazgo de producto: una plantilla con ETF necesita una revisión útil
+
+**Prioridad: alta para comprensión; sin ampliar ahora la metodología financiera.**
+
+La plantilla de dividendos incluye SCHD al 17 % y VYM al 16,6 %. En la captura de 390 px, la revisión dedica un gran bloque ámbar a enumerar los cinco componentes de la nota y repetir la misma limitación para ambos ETF. El mensaje empieza por «Faltan datos», aunque también existe una limitación del método. La persona puede interpretar que debe esperar, o que ha construido mal su cartera.
+
+La consecuencia práctica es que una de las primeras experiencias del producto termina en un aviso largo. No se arregla publicando una nota ficticia ni quitando los ETF para mejorar una puntuación.
+
+**Encargo:** separar tres motivos: datos ausentes o inválidos, instrumento sin método aplicable y cobertura insuficiente para publicar la nota global. Conservar el detalle técnico desplegable y mostrar primero una explicación breve y específica.
+
+Texto orientativo para esta plantilla:
+
+> Esta cartera no tiene nota global. Los ETF representan el 33,6 % y el método actual no evalúa su composición. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis.
+
+Adaptar el texto a los datos reales del caso. No convertir automáticamente el 66,4 % restante en «cobertura evaluada» si otros indicadores también tienen carencias.
+
+Mostrar el valor que sí existe: asignación total, número de posiciones, peso máximo y reparto por instrumento. Distinguir concentración por posición de exposición subyacente: dos ETF no equivalen a dos empresas y no permiten inferir diversificación sectorial sin conocer su composición.
+
+**Aceptación:** probar la plantilla mixta actual, una cartera solo de acciones evaluables, una con datos inválidos y una solo de ETF. Cada caso debe explicar su causa sin repetir párrafos por activo; detalles y fuentes permanecen disponibles. Ningún cambio de interfaz debe modificar las posiciones o los pesos.
+
+## 6. Encargo completo para Claude · Ronda 19
+
+Trabaja sobre R18. El objetivo es terminar una versión más comprensible y verificable, conservando lo que ya funciona.
+
+1. **Cerrar la frontera de redondeo.** Entregar el caso exacto anterior, resultado antes/después y pruebas de compatibilidad. Cambio aislado y fácil de revisar.
+2. **Corregir la revisión a 320 px y la etiqueta del paso.** Usar geometría de la zona libre y el elemento útil; conservar foco, pesos y navegación de vuelta. Mantener fondo, paleta y tipografía aprobados.
+3. **Reescribir la revisión sin nota.** Resumen útil, causa específica y detalle desplegable. La plantilla con ETF debe servir para aprender y revisar aunque no tenga nota global.
+4. **Cerrar la evidencia de regresión.** Ejecutar las baterías afectadas de módulo y navegador, Q/P/O y paridad de demo; repetir los recorridos afectados por las dos carreras con latencia 0/300 ms. Conservar logs de intentos fallidos y exitosos. No reemplazar aserciones exigentes por comprobaciones de mera existencia.
+5. **Preparar la prueba de uso.** Mantener el guion de cinco principiantes, añadiendo la interpretación de una cartera con ETF y la distinción entre datos ficticios, evaluación parcial y nota global. No dar por hecha la prueba ni simular respuestas. La tarea de cerrar y volver exige persistencia verificada; la demo que pierde datos al recargar no sirve para certificarla.
+6. **Entregar una ronda auditable.** ZIP, instrucciones únicas para abrirla, antes/después breve, resultados exactos por entorno y capturas de viewport. Enumerar lo pendiente sin mezclarlo con lo aprobado.
+
+### Entregables mínimos
+
+- Código y pruebas de los tres cambios principales, separados de refactorizaciones no necesarias.
+- `ronda19/LEEME.md`: versión revisada, cambios, instrucciones y limitaciones.
+- `ronda19/ANTES-Y-DESPUES.md`: contraejemplo de redondeo, resultado útil a 320 y mensaje de ETF.
+- Logs íntegros de las pruebas ejecutadas, con comando, entorno, resultado y salida de error cuando exista.
+- Capturas de Distribución y Revisión a 1440×900, 390×780 y 320×780. Para móvil, variantes con nota y sin nota; no sustituir viewport por página completa.
+- Registro de prueba con personas marcado «pendiente» si no se ha realizado.
+
+### Fuera de esta ronda
+
+No cambiar la identidad visual, añadir otro tema, transformar la portada en una revista, rehacer todo el CSS, ampliar instrumentos evaluables, incorporar datos reales de mercado, añadir pagos o presentar recomendaciones de compra/venta. No sustituir la cartera por un asistente conversacional. No desplegar ni enviar comunicaciones como parte de este encargo.
+
+Mantener creador, edición, revisión, guardado, escenarios y Cuaderno como recorrido principal; Revista y El Superespeculador como contenido conectado a ese recorrido. El contenido debe facilitar entender y contrastar una idea, sin sugerir que una opinión mejora automáticamente la cartera.
+
+## 7. Mi siguiente revisión
+
+Cuando llegue R19, repetiré las pruebas relevantes y el contraejemplo nuevo; comprobaré las regresiones que afecten al guardado y las evaluaciones históricas. Intentaré ejecutar el recorrido real en navegador y separaré cualquier limitación del entorno de un fallo del código.
+
+Revisaré especialmente que a 320 px se pueda leer el resultado sin quedar tapado, que Volver conserve el trabajo y que la plantilla con ETF dé una explicación útil. Contrastaré los logs y capturas sin convertir los resultados declarados por Claude en pruebas propias.
+
+La siguiente decisión de producto debe apoyarse en observar a personas construir, revisar y recuperar una cartera. La disposición a pagar y el retorno semanal siguen siendo hipótesis: las pruebas técnicas y el acabado visual, por sí solos, no las validan.

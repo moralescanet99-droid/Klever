@@ -103,7 +103,7 @@ export function evaluar(cartera, universo) {
   const res = { version: VERSION_NOTA, fecha: universo.fecha ?? null, origenDatos: universo.origen ?? null, instantanea: universo.fecha ?? null, periodos: null, poblacion: null, publicada: false, nota: null, motivo: null, cobertura: null, bloques: null, fortaleza: null, limitacion: null, sinEvaluar: [], total: 0, avisoMetodo: 'Estructura y fundamentales observados; no es una previsión de rentabilidad ni una recomendación.' };
   const pos = (cartera || []).filter(p => p?.peso > 0); res.total = pos.reduce((s, p) => s + dec(p.peso), 0) / 10;
   // Reparto con nombres (para explicar la nota con las posiciones REALES de la cartera: «X pesa el 60 %»)
-  res.reparto = pos.map(p => ({ ticker: p.ticker, nombre: universo.empresas?.[p.ticker]?.nombre ?? p.ticker, sector: universo.empresas?.[p.ticker]?.sector ?? null, peso: dec(p.peso) / 10 })).sort((a, b) => b.peso - a.peso || a.ticker.localeCompare(b.ticker));
+  res.reparto = pos.map(p => ({ ticker: p.ticker, nombre: universo.empresas?.[p.ticker]?.nombre ?? p.ticker, sector: universo.empresas?.[p.ticker]?.sector ?? null, tipo: universo.empresas?.[p.ticker]?.tipo ?? null, peso: dec(p.peso) / 10 })).sort((a, b) => b.peso - a.peso || a.ticker.localeCompare(b.ticker));
   if (!pos.length) { res.motivo = 'La cartera está vacía: no hay nada que evaluar.'; return res; }
   if (dec(res.total) !== 1000) { res.motivo = `La cartera suma ${String(res.total).replace('.', ',')} %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).`; return res; }
   const prob = problemasProcedencia(pos, universo);
@@ -113,14 +113,15 @@ export function evaluar(cartera, universo) {
   res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => { const ej = [...universo.empresas[p.ticker].ej].sort((a, b) => String(a.p).localeCompare(String(b.p))), u = ej.at(-1); return { ticker: p.ticker, hasta: u.p, carga: normalizarFecha(u.d), fuente: u.f ?? null }; });
   { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
-  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
+  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: universo.empresas[x.t] ? 'sin_metodo' : 'datos', motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
   const bloques = {};
   const cierre = (id, evaluables, puntuarEmpresa, extra = {}) => {            // evaluables: [{t, w}] con puntuación por empresa; pondera por peso normalizado
     const E = evaluables.reduce((s, x) => s + x.w, 0), cob = E / tot;
     bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: cob, disponible: E >= PARAMETROS.minCobertura * tot, puntuacion: null, ...extra };
     return E;
   };
-  const motivoSin = (x, m) => { const e = res.sinEvaluar.find(s => s.ticker === x.t); if (e) { if (!e.motivos.includes(m)) e.motivos.push(m); } else res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [m] }); };
+  const causaDe = m => /banca y seguros|sin metodolog/i.test(m) ? 'sin_metodo' : 'datos';
+  const motivoSin = (x, m) => { const e = res.sinEvaluar.find(s => s.ticker === x.t); if (e) { if (!e.motivos.includes(m)) e.motivos.push(m); if (e.causa === 'datos' && causaDe(m) === 'sin_metodo') e.causa = 'sin_metodo'; } else res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: causaDe(m), motivos: [m] }); };
   // ---- Empresas: número efectivo N = 1 / Σ (peso)²; las clases de una misma compañía cuentan UNA vez
   { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, 'Sin emisor identificado.'));
     const E = cierre('empresas', ev); const g = {}; ev.forEach(x => { g[x.o.emisor] = (g[x.o.emisor] || 0) + x.w; });
@@ -177,8 +178,13 @@ const numEn = (v, lo, hi) => typeof v === 'number' && Number.isFinite(v) && !Obj
 const BIDI = /[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/, INVISIBLES = /[\u200b\u2060\ufeff\u180e]/;   // ancho cero que no forma parte de ninguna escritura (sí se admiten U+200C/U+200D: persa, emojis compuestos)
 const textoLimpio = (v, max) => typeof v === 'string' && v.length <= max && !/[<>\u0000-\u001f\u007f]/.test(v) && !BIDI.test(v) && !INVISIBLES.test(v);
 export const MAX_MOTIVO = 700;
-// PRECISIÓN de los bloques guardados: exactamente 2 decimales (`resumenNota` los redondea así). El total es el redondeo a 1 decimal de la suma ponderada de los valores SIN redondear,
-// así que cada bloque guardado puede diferir ±0,005 del real y el total real está en [S − 0,005, S + 0,005] (los pesos suman 100 %). Se trabaja en enteros (décimas de milésima).
+// REGLA DE REDONDEO (contrato decimal, intervalos SEMIABIERTOS). `resumenNota` guarda cada bloque como Math.round(x·100)/100 (redondeo «half-up» a 2 decimales): el valor real x
+// de un bloque guardado como b está en [b − 0,005; b + 0,005), con el extremo SUPERIOR EXCLUIDO. Como los pesos son positivos y suman 100 %, el total real T está en
+// [S − 0,005; S + 0,005), con S la suma ponderada de los bloques guardados (también abierto por arriba). La nota publicada n es Math.round(T·10)/10 (half-up a 1 decimal):
+// T está en [n − 0,05; n + 0,05). Son compatibles si los dos intervalos semiabiertos se solapan, es decir, si ambas desigualdades son ESTRICTAS:
+//     S − 0,005 < n + 0,05      y      n − 0,05 < S + 0,005
+// (un contacto exacto, p. ej. S + 0,005 = n − 0,05, no contiene ningún valor posible). Se trabaja en enteros (décimas de milésima) y se exige que los bloques tengan
+// exactamente dos decimales. No se tolera ningún «empate binario»: una barrida de carteras generadas por el evaluador (ver unit-redondeo19) comprueba que ninguna salida legítima cae en la frontera.
 const TOL_BLOQUE = 0.011;
 const propio = (o, k) => Object.hasOwn(o, k);
 // modo `guardar`: solo se aceptan versiones CONOCIDAS (se puede comprobar la coherencia). Al LEER, una versión desconocida pero bien formada se entrega como
@@ -213,8 +219,8 @@ export function validarResumen(r, { guardar = false } = {}) {
   if (r.publicada && conocida) {
     const c100 = k => { const x = Math.round(r.bloques[k] * 100); return Math.abs(r.bloques[k] * 100 - x) < 1e-6 ? x : null; };
     if (IDS.some(k => c100(k) === null)) return mal('Los bloques de una nota publicada deben tener como mucho dos decimales.');
-    const S4 = IDS.reduce((s, k) => s + PESOS[k] * c100(k), 0), n10 = Math.round(r.nota * 10);         // S4 en 1e-4; el intervalo del total real es [S4 − 50, S4 + 50]
-    if (!(S4 + 50 >= n10 * 1000 - 500 && S4 - 50 < n10 * 1000 + 500)) return mal(`La nota (${r.nota}) no puede salir de sus bloques (suma ${(S4 / 10000).toFixed(4).replace('.', ',')}).`);
+    const S4 = IDS.reduce((s, k) => s + PESOS[k] * c100(k), 0), n10 = Math.round(r.nota * 10);         // S4 en 1e-4; el total real está en [S4 − 50, S4 + 50) y la nota en [n10·1000 − 500, n10·1000 + 500)
+    if (!(S4 + 50 > n10 * 1000 - 500 && S4 - 50 < n10 * 1000 + 500)) return mal(`La nota (${r.nota}) no puede salir de sus bloques (suma ${(S4 / 10000).toFixed(4).replace('.', ',')}).`);
     const max = Math.max(...IDS.map(k => r.bloques[k]));
     if (r.bloques[r.fortaleza] < max - TOL_BLOQUE) return mal('La fortaleza no es el bloque mejor puntuado.');
     const perd = k => PESOS[k] * (10 - r.bloques[k]) / 100, maxP = Math.max(...IDS.map(perd)), tolP = k => PESOS[k] * 0.005 / 100 + 1e-9;   // la pérdida real difiere ±(peso·0,005/100)
