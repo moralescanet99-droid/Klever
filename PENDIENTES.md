@@ -82,3 +82,9 @@
 - ⬜ **Prueba con cinco principiantes** (`ronda20/PRUEBA-CON-USUARIOS.md`, ajustada): no realizada; es la siguiente evidencia relevante.
 - ⬜ M85–M93 (`ronda20/pruebas-manuales.md`; M86 reformulada).
 - ⬜ Causa de `testK` (goto abortado) y `testO` (sin salir): no reproducidas, sin demostrar.
+
+## Tras la ronda 21
+- ⬜ **Prueba con cinco principiantes** (`ronda21/PRUEBA-CON-USUARIOS.md`): no realizada; «cerrar y volver al día siguiente» exige persistencia verificada.
+- ⬜ M94–M100 (`ronda21/pruebas-manuales.md`) y las anteriores M85–M93.
+- ⬜ Probar el registro de una revisión en la demo; comprobar la migración 0012 en una D1 remota con copia.
+- ⬜ Ideas generales sin escenario (el modelo exige ticker y propuesta); estados «guardando» y «error» de guardado a fondo.

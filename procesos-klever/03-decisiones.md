@@ -204,5 +204,13 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **El centrado diferido del campo activo se cancela si el campo ya no tiene el foco** · motivo: arrastraba la página tras cambiar de paso (fallo real hallado al repetir).
 - **Ciclo técnico/visual a cerrar; la siguiente evidencia relevante es la prueba con personas** (encargo C17).
 
+## Ronda 21 (de las correcciones al producto)
+- **Promesa de producto:** «Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir» (decisión de Javier tras la ronda 19). El creador es el centro; el Cuaderno conserva el razonamiento; la Revista es secundaria.
+- **Tres entradas, un solo editor** (desde cero, ejemplo editable rotulado, recrear a mano) · motivo: no duplicar editores; el origen se guarda (`portafolios.origen`) para no confundir ejemplos con carteras personales. `plantilla` queda como valor técnico heredado (el CHECK impide un cuarto valor sin reconstruir la tabla).
+- **Una revisión se AÑADE al historial; nunca sustituye la hipótesis original** · motivo: encargo C18; operación atómica con clave de intento (idempotente) y control de revisión (conflicto entre pestañas).
+- **El campo de invalidación es una columna propia (`invalidacion`), no texto opaco empaquetado.**
+- **Un ejemplo no es una recomendación:** rótulo «Ejemplo simulado» visible; no se vende como cartera óptima.
+- **Las pruebas comprueban comportamiento y persistencia, no frases literales largas** (los textos de la portada se actualizaron en `testB`/`testN`/`testP` sin rebajar lo que comprueban).
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

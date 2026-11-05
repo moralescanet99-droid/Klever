@@ -134,3 +134,13 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda19/testR.cjs` (16) | Ampliada: contexto de escritorio, cambios sin guardar, teclado real, estabilización exigida, diálogos acotados, regresión R4 | Navegador |
 | `tests/ronda20/antes-despues-r20.mjs <raíz>` | Antes/después corto contra un árbol de la ronda 19 | Módulo/subprocesos |
 `tests/run-all.sh` guarda además el log de `demotest` y rechaza `CIERRE FORZADO/ANÓMALO`.
+
+## Baterías de la ronda 21 (añadidas o cambiadas)
+| Archivo | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda21/unit-registro21.mjs` (10) | Código de salida de las pruebas de módulo (`registro()`), en subprocesos, y rechazo por `run-all.sh` | Subprocesos |
+| `tests/ronda21/unit-cuaderno21.mjs` (20) | Invalidación, revisiones atómicas e idempotentes, conflicto, aislamiento, cartera cambiada/borrada, cascada, tope y la regresión del `ORDER BY` público (K20) | Módulo/servidor |
+| `tests/ronda21/testS.cjs` (30) | Recorrido completo con cuenta y persistencia (1440 y 390 px): tres entradas, vistazo, comparación, Cuaderno, cerrar/volver, revisión, aislamiento, teclado | Navegador |
+| `tests/ronda21/fixture-registro.mjs` | Fixture (no es batería) gobernada por `MODO_REGISTRO` | — |
+| `tests/ronda8/unit-migracion.mjs` (15) | Ampliada con M1f (migración 0012 con datos previos) | Módulo |
+`tests/lib/d1-sqlite.mjs` `registro()` ya no sale con `process.exit(0)`.
