@@ -6,7 +6,7 @@
 // Distribución y Revisión a 1440×900, 390×780 y 320×780; en móvil, con nota y sin nota. Datos FICTICIOS. Uso: node tests/ronda19/testR.cjs
 const { chromium, B, ev, nuevo, mail, fin } = require('../ronda5/h.cjs');
 const path = require('path'), fs = require('fs');
-const CAP = path.resolve(__dirname, '..', '..', 'ronda19', 'capturas') + path.sep; fs.mkdirSync(CAP, { recursive: true });
+const CAP = path.resolve(__dirname, '..', '..', process.env.RONDA || 'ronda20', 'capturas') + path.sep; fs.mkdirSync(CAP, { recursive: true });
 const J = JSON.stringify;
 (async () => {
   const b = await chromium.launch();

@@ -1,0 +1,19 @@
+# comando: RONDA=ronda20 node tests/ronda19/testR.cjs (repetición solo para generar las capturas en ronda20/capturas)
+OK    [R0-320-no-preference] Sin errores de JavaScript en las revisiones (320 px, movimiento no-preference)
+OK    [R0-320-reduce] Sin errores de JavaScript en las revisiones (320 px, movimiento reduce)
+OK    [R1-con-nota-320] Revisión con nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R1-sin-nota-320] Revisión sin nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R1-con-nota-y-cambios-sin-guardar-320] Revisión con nota y cambios sin guardar a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R0-390-no-preference] Sin errores de JavaScript en las revisiones (390 px, movimiento no-preference)
+OK    [R0-390-reduce] Sin errores de JavaScript en las revisiones (390 px, movimiento reduce)
+OK    [R1-con-nota-390] Revisión con nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R1-sin-nota-390] Revisión sin nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R1-con-nota-y-cambios-sin-guardar-390] Revisión con nota y cambios sin guardar a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)
+OK    [R2-1440] Escritorio 1440×900: tras «Revisar portafolio», el resultado (con nota, sin nota y con cambios sin guardar) queda entero en el viewport y con el foco en la nota
+OK    [R3-1440] Escritorio 1440×900: en la Revisión siguen a la vista el NOMBRE de la cartera, los pasos, «Volver a la distribución», la acción de guardado (activa si hay cambios sin guardar) y el estado de guardado; al volver, los pesos son idénticos
+OK    [R0e] Estabilización del desplazamiento: ninguna medición ni captura se hizo a medias
+OK    [R0t] Teclado REAL: se llegó a «Revisar» solo con Tab desde el nombre de la cartera
+OK    [R0d] Diálogos: solo el aviso esperado de «cambios sin guardar» (beforeunload) y ningún otro
+
+RESULTADO: 15 correctas, 0 fallos
+# código de salida: 0

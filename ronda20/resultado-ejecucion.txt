@@ -41,3 +41,51 @@ RESULTADO: 10 correctas, 0 fallos
 === unit-cierre20 ===
 RESULTADO: 10 correctas, 0 fallos
 === test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+RESULTADO: 53 correctas, 0 fallos
+=== testC ===
+RESULTADO: 50 correctas, 0 fallos
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 10 correctas, 0 fallos
+=== testG ===
+RESULTADO: 3 correctas, 0 fallos
+=== verificar-api ===
+RESULTADO: 8 correctas, 0 fallos
+=== testH ===
+RESULTADO: 25 correctas, 0 fallos
+=== testI ===
+RESULTADO: 16 correctas, 0 fallos
+=== testJ ===
+RESULTADO: 53 correctas, 0 fallos
+=== testK ===
+RESULTADO: 75 correctas, 0 fallos
+=== testL ===
+RESULTADO: 28 correctas, 0 fallos
+=== testM ===
+RESULTADO: 7 correctas, 0 fallos
+=== testN ===
+RESULTADO: 41 correctas, 0 fallos
+=== testO ===
+OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
+OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
+RESULTADO: 18 correctas, 0 fallos
+=== testP ===
+RESULTADO: 28 correctas, 0 fallos
+=== testQ ===
+RESULTADO: 25 correctas, 0 fallos
+=== testR ===
+RESULTADO: 15 correctas, 0 fallos
+=== paridad-demo ===
+RESULTADO: 5 correctas, 0 fallos
+=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
+RESULTADO: 6 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK
+RESUMEN: todo correcto. Código de salida 0.

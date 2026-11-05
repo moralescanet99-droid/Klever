@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Ronda 18: repite las baterías que han fallado de forma intermitente (testE de la ronda 13 y testF de la ronda 14, más la del historial de la ficha, testC) N veces con un servidor
 # LIMPIO, SIN latencia y CON latencia determinista (LATENCIA_MS, por defecto 300 ms en las respuestas que reconstruyen cartera y sesión), con TRAZA=1: orden de navegación,
-# respuestas y errores por repetición en ronda19/trazas/. Registra hora, duración, código y líneas FALLA por repetición en ronda19/intermitentes.txt.
+# respuestas y errores por repetición en <ronda>/trazas/. Registra hora, duración, código y líneas FALLA por repetición en <ronda>/intermitentes.txt.
 # Uso: bash tests/ronda19/repetir-intermitentes.sh [N=2] [LATENCIA_MS=300]
-cd "$(dirname "$0")/../.."; N="${1:-2}"; LAT="${2:-300}"; export RONDA=ronda19 TRAZA=1; SAL="ronda19/intermitentes.txt"; mkdir -p ronda19; : > "$SAL"
+cd "$(dirname "$0")/../.."; N="${1:-2}"; LAT="${2:-300}"; export RONDA="${RONDA:-ronda20}" TRAZA=1; SAL="$RONDA/intermitentes.txt"; mkdir -p "$RONDA"; : > "$SAL"
 for b in tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda5/testC.cjs; do for l in 0 "$LAT"; do for i in $(seq 1 "$N"); do
   bash scripts/local/servidor.sh stop >/dev/null 2>&1; bash scripts/local/servidor.sh start >/dev/null 2>&1
   t0=$(date +%s); out="$(LATENCIA_MS=$l node "$b" 2>&1)"; cod=$?; t1=$(date +%s)
