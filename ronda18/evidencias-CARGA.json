@@ -11,7 +11,7 @@
   "id": "L2",
   "escenario": "Carga donde TODAS fallan o vienen sin años",
   "esperado": "No se toca ninguna fila; lote «vacia» con 2 fallidas y 1 vacía",
-  "observado": "intactas; {\"id\":1,\"origen\":\"sec\",\"fecha\":\"2026-11-04\",\"n_ok\":0,\"n_vacias\":1,\"n_fallidas\":2,\"estado\":\"vacia\",\"creado_en\":\"2026-11-05 00:54:57\"}",
+  "observado": "intactas; {\"id\":1,\"origen\":\"sec\",\"fecha\":\"2026-11-04\",\"n_ok\":0,\"n_vacias\":1,\"n_fallidas\":2,\"estado\":\"vacia\",\"creado_en\":\"2026-11-05 01:31:28\"}",
   "resultado": "OK",
   "evidencia": ""
  },
