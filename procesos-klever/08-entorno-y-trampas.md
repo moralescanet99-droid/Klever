@@ -177,3 +177,7 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Dos tarjetas del mismo objeto compiten por la atención:** una compacta en la lista y el detalle en la ficha; el orden del DOM debe ser el visual (el Cuaderno reordena sus bloques según haya cuenta o no).
 - **`run-all.sh`: al encadenar dos pruebas con la misma variable `SALIDA_T`, las comprobaciones de la primera deben ir antes de lanzar la segunda** (mi bloque de la demo pisaba el «DEMO OK»).
 - **Recorrer el producto con capturas encuentra defectos que las pruebas no ven** (una entrada vieja en «Mis portafolios», un texto que ofrecía una acción inexistente, avisos ámbar por condiciones normales).
+- **Un comentario `//` a mitad de línea anula TODO el resto de la línea:** me pasó tres veces (el calentamiento del servidor, el reintento lento de `testU`); comentar siempre en su propia línea.
+- **Iterar `localStorage.key(i)` mientras se borra se salta claves** (el orden cambia): listar primero, borrar después (`clavesRev`).
+- **Probar la lógica del formulario, no solo el módulo de envío:** el borrado del borrador ocurría en la integración con la pantalla; una prueba solo del módulo no lo ve. Contrastar siempre la prueba nueva contra el código anterior (6/24).
+- **`git push` puede fallar del lado del remoto («fatal error in commit_refs») aun siendo fast-forward:** probar a empujar commit a commit (`git push origin <hash>:refs/heads/<rama>`).

@@ -2,3 +2,23 @@
 RESULTADO: 15 correctas, 0 fallos
 == tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 23:44:49Z · 24 s · código 0
 RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 23:45:46Z · 50 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 23:46:43Z · 50 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 23:47:12Z · 23 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 23:47:41Z · 23 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 23:48:38Z · 51 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 23:49:35Z · 51 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 23:50:12Z · 30 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 23:50:49Z · 31 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 23:52:09Z · 74 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 23:53:28Z · 73 s · código 0
+RESULTADO: 50 correctas, 0 fallos

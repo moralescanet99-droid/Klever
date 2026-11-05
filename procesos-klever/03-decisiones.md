@@ -220,5 +220,12 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Un aviso de condición normal no es una alarma** (superficie neutra, no ámbar).
 - **No se certifica «sin rebajar aserciones»:** se listan los cambios en pruebas antiguas para que se contrasten con el historial.
 
+## Ronda 23 (corrección final acotada)
+- **El contenido del formulario se compara con el intento al RESOLVERSE la petición, no antes:** lo escrito durante la espera nunca se borra ni se presenta como guardado · motivo: B1.
+- **Tras un conflicto con lectura fallida solo se reintenta la LECTURA (cero POST), sin recomendar recargar** · motivo: B2.
+- **El borrador de una revisión persiste en el dispositivo** (clave por escenario, 7 días; se purga si la cuenta no es la dueña; cerrar sesión a propósito lo borra) · motivo: M102 (la sesión caducada lo perdía); no es un sistema general de borradores.
+- **Las decisiones visuales aceptadas en la ronda 22 quedan cerradas** (tabla del apartado 4 de la revisión); no se añaden capacidades ni rediseño.
+- **No se certifica «sin rebajar aserciones»**; se adjunta el diff concreto de las pruebas antiguas adaptadas.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

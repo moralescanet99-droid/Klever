@@ -33,7 +33,11 @@ Parte de la revisión de la ronda 22 (`procesos-klever/06-`, C20): **I2 e I3 ace
 **Un error mío al escribir U2:** un comentario a mitad de línea anuló la edición durante el reintento y el caso fallaba también con el código nuevo; lo detecté al comparar, lo corregí y entonces U2 distingue de verdad las dos versiones.
 
 # 5. Pruebas realmente ejecutadas (por entorno)
-@@PASADA@@
+**Pasada completa final** (`bash tests/run-all.sh`, commit `5de75d8`, árbol limpio): **960 comprobaciones correctas, 0 fallos, código 0** (48 baterías con resultado + `demotest`), **locales del autor**; logs íntegros de cada batería y de `demotest` en `ronda23/logs/`; sin `CIERRE FORZADO` ni `CIERRE ANÓMALO`. *Aserciones ≠ entradas.*
+- **Nuevo:** `testU` **24** (formulario real en el navegador a 1440/390/320 px). **Afectadas y en verde:** `testT` 27, `testS` 30, `testQ` 25, `testO` 19, `unit-cliente-revision22` 8, `unit-cuaderno21` 20, `unit-registro21` 10, `unit-migracion` 15, `unit-nota` 35, `testDemo22` 12 y las anteriores.
+- **Repeticiones** de `testE`, `testF` y `testC` con latencia 0 y 300 ms (`ronda23/intermitentes.txt`): **12/12 con código 0**.
+- **Contraste con la ronda 22:** `testU` contra `lab.js`/`app.js` de `b7ae443` → **6 correctas, 18 fallos** (`evidencia-testU-con-R22.txt`).
+- **Entorno remoto:** nada ejecutado. Sin comprobar: lo de §8. La inspección visual de las capturas es mía.
 
 # 6. Decisiones cerradas de la revisión (apartado 4) y límites del encargo
 Se conservan sin tocar: tipografía, espaciados y radios; Cuaderno con una tarjeta por escenario y «Para revisar» primero; «Registrar revisión» como acción principal donde toca; estados vacíos útiles; confirmaciones precisas; fechas con texto («hoy», fecha pasada; «en tres días» puede esperar); accesibilidad (foco visible, texto de estado, reducción de movimiento; **no se certifica** contraste, lector de pantalla ni zonas de toque reales); comparación con las dos barras; distinción cuenta/demo/borrador local; serif en títulos, sans en la interfaz, nota global secundaria, fondo oscuro cálido y naranja. **No se añade** radial protagonista, gamificación, calendario, modo claro, histórico, benchmark ni exportación gráfica.

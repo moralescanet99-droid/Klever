@@ -152,3 +152,8 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda22/testT.cjs` (27) | Cuaderno y recuperación en el navegador a 1440/390/320: «Para revisar» primero, respuesta perdida, relectura fallida, texto modificado, dos pestañas, archivar/descartar, seguimiento personal vs editorial, Mis portafolios con cuenta | Navegador |
 | `tests/ronda22/testDemo22.cjs` (12) | Registrar una revisión en la demo y que no persista tras recargar | Navegador (demo) |
 Adaptadas por el diseño nuevo: `testO`, `testQ`, `testN`, `testP`, `testL`, `testB` (ver `ronda22/LEEME.md` §7).
+
+## Baterías de la ronda 23 (añadidas)
+| Archivo | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda23/testU.cjs` (24) | Protección del borrador de una revisión en el navegador (1440/390/320): edición durante un envío o un reintento lentos, conflicto con lectura fallida, sesión caducada y regreso, otra cuenta, cierre de sesión; falla con el código de la ronda 22 (6/24) | Navegador |

@@ -95,3 +95,9 @@
 - ⬜ Probar K9 con dos clientes reales simultáneos; sesión caducada con el formulario de guardar en el Cuaderno ya escrito.
 - ⬜ Causa de `testK` (hipótesis principal, no demostrada) y de `testP` (no cerrada).
 - **Capacidades nuevas, para después:** ideas generales sin escenario, ampliaciones del laboratorio, cobros, integraciones, datos reales.
+
+## Tras la ronda 23
+- ⬜ **Piloto con cinco principiantes en dos contactos** (`ronda23/PRUEBA-CON-USUARIOS.md`, con dos preguntas abiertas al cierre): no realizado; es lo siguiente.
+- ⬜ M102 con una caducidad real y en un dispositivo, M106 y M107 (`ronda23/pruebas-manuales.md`) y las anteriores.
+- ⬜ El formulario de «guardar en el Cuaderno» no persiste su borrador (solo el de revisión); un envío incierto pendiente se pierde si caduca la sesión.
+- ⬜ K9 con dos clientes reales simultáneos; causa de `testP`/primera carga lenta (mitigada, no demostrada).
