@@ -1362,3 +1362,280 @@ Fuera de alcance: Revolut/Trade Republic, pagos, suscripciones, artículos o con
 No he repetido las 800 comprobaciones ni las doce ejecuciones con latencia. No he probado interacción propia en navegador, móvil físico, lector de pantalla, ampliación real al 200 %, Safari/Firefox, persistencia remota D1, correo real, datos reales, despliegue ni comprensión por cinco principiantes. Tampoco he certificado la identidad del commit desde el ZIP ni investigado toda la seguridad o privacidad de la aplicación.
 
 Mi siguiente intervención será verificar los tres bloques de cierre, no ampliar el alcance. El proyecto ya tiene una base suficientemente definida para que la siguiente evidencia importante, una vez corregidos estos puntos, venga de personas utilizándolo.
+
+## C18 · Ronda 21 (2026-11-05) — revisión de la ronda 20 y encargo de producto, literal
+
+# Klever · Revisión R20 y encargo R21: de las correcciones al producto
+
+5 de noviembre de 2026 · Documento para Javier y Claude Code
+
+## Veredicto en tres líneas
+
+R20 corrige los casos de causas mezcladas y las capturas muestran una Revisión de escritorio completa, con contexto, resultado y acciones visibles.
+La mejora del ejecutor de navegador está comprobada en los casos sin navegador; queda un escape concreto en el ayudante de pruebas de módulos, descrito más abajo.
+Podemos preparar la siguiente fase de producto: crear → entender → probar un cambio → guardar una pregunta → volver a revisarla, conservando la identidad visual.
+
+## 1. Decisiones de cierre
+
+**Cierre visual: ACEPTAR para las pantallas y tamaños inspeccionados.** Las imágenes de escritorio con cambios, escritorio sin nota y móvil a 320 px resuelven los defectos señalados. Esto no certifica interacción, accesibilidad, zoom real ni todos los dispositivos. No pido otro rediseño.
+
+**Cierre técnico: NO COMPLETO, por una corrección puntual en `registro()` de las pruebas de módulo.** Los casos concretos I1 de causas y el fallo original de `h.cjs` están corregidos. La corrección residual debe hacerse al principio de R21 y verificarse en un subproceso. No justifica otra ronda dedicada exclusivamente a ajustes técnicos.
+
+El nuevo alcance de producto está autorizado por Javier después de R19. Por eso este documento añade el plan aprobado, además de la revisión acotada que solicita el paquete de R20. No confundir propuestas nuevas con funciones que ya existan.
+
+### Valoración comparada
+
+Notas subjetivas sobre el alcance revisado, no certificaciones de producción.
+
+| Dimensión | R19 | R20 | Motivo |
+|---|---:|---:|---|
+| Confianza y privacidad | 7 | 7 | No se ha hecho una auditoría nueva completa de seguridad o privacidad. |
+| Procedencia de datos | 8 | 8 | Se conserva la transparencia sobre los datos ficticios; no hay datos reales verificados. |
+| Claridad del recorrido móvil | 8 | 8,5 | El aviso ocupa menos protagonismo y el resultado sigue visible en las capturas. |
+| Honestidad del contenido | 7 | 8 | Se distinguen método no aplicable, carencias y comparables; se corrige lo dicho de JNJ/XOM. |
+| Solidez técnica | 7,5 | 8 | Los contraejemplos principales se cierran; queda la propagación de error en módulos. |
+| Calidad de las pruebas | 7 | 8 | Mejores códigos, registros y regresiones; limitaciones de navegador propias y un escape residual. |
+
+## 2. Qué he comprobado realmente
+
+| Ejecución propia | Resultado |
+|---|---|
+| `tests/ronda20/unit-causas20.mjs` | 10 correctas, 0 fallos |
+| `tests/ronda19/unit-revision19.mjs` | 10 correctas, 0 fallos |
+| `tests/ronda19/unit-redondeo19.mjs` | 6 correctas, 0 fallos |
+| `tests/ronda15/unit-nota.mjs` | 35 correctas, 0 fallos |
+| `tests/ronda20/unit-cierre20.mjs` | 8 correctas; X5 y X10 fallan al no poder ejecutar su caso de navegador |
+
+**Balance: 61 comprobaciones de módulo aprobadas y 8 comprobaciones de cierre aprobadas; dos casos dependientes de navegador no validados.** No describir la batería de cierre como totalmente aprobada: su salida literal es 8 correctas y 2 fallos, y la limitación de entorno debe acompañar ese dato.
+
+El Chromium del sistema también aborta al arrancar por `socket() failed: Operation not permitted`. No he sustituido el caso de navegador por una simulación para declararlo aprobado. No repetí `testR`, la pasada de 827 comprobaciones ni las doce repeticiones de latencia.
+
+Ejecuté además el antes/después contra los árboles locales de R19 y R20. Las explicaciones de los casos previos cambian como se esperaba y el fallo intencionado de `h.cjs` pasa de código 0 a código 1. Los árboles ZIP no acreditan por sí solos los commits declarados.
+
+Comprobación documental: el resumen entregado suma 827 comprobaciones en 41 baterías, y ahora existe el log separado de `demotest`. Es consistencia de lo entregado, no una repetición independiente.
+
+Inspeccioné las capturas 03, 04, 06 y 08: escritorio con cambios sin guardar, escritorio sin nota y móvil a 320 px con y sin nota. La composición ya mantiene el contexto en escritorio y el resultado breve queda libre de la barra en móvil. La referencia visual aprobada se conserva en sus rasgos principales.
+
+## 3. Hallazgos y alcance de su gravedad
+
+### Críticos
+
+No he encontrado un defecto crítico dentro del alcance de esta revisión. No equivale a certificar el producto en producción.
+
+### Importante y acotado: el ayudante de módulos borra un error previo
+
+Archivo: `tests/lib/d1-sqlite.mjs`, función `registro()`, última instrucción de `fin()`:
+
+```js
+process.exit(fallos.length ? 1 : 0);
+```
+
+Reproducción ejecutada desde la raíz del proyecto:
+
+```bash
+node --input-type=module -e "import {registro} from './tests/lib/d1-sqlite.mjs'; process.exitCode=2; const r=registro('revision-preexit.json'); r.t('x','x','x','x',true); await r.fin();"
+```
+
+**Resultado observado: código 0**, pese a que el código previo era 2. El fallo original del ayudante de navegador sí está corregido; este es otro camino que la afirmación general sobre códigos de salida no cubre. Un `process.exit(0)` explícito tampoco permite detectar recursos abiertos al finalizar.
+
+Corrección: preservar cualquier código previo no cero, combinarlo con el resultado de las aserciones y preferir terminación natural tras cerrar los recursos propios. Usar un plazo explícito si queda un recurso que impide salir, registrándolo como error. No copiar una infraestructura de navegador entera a las pruebas de módulo: basta un ciclo de vida coherente y probado.
+
+Añadir subprocesos para éxito, aserción fallida, error previo con aserciones aprobadas y error previo más aserción fallida. Comprobar también el comportamiento dentro del ejecutor general. No afirmar protección frente a cualquier `process.exit(0)` arbitrario en cualquier archivo: acotar la garantía a los caminos controlados y a resultados finales válidos.
+
+### Puntos aceptados, sin abrir nuevos bloqueos
+
+- **Causas coexistentes:** los tres contraejemplos de R19 y la combinación de ETF, banco y dato ausente pasan. La nueva estructura conserva varias causas y los porcentajes por familia. La selección de relevancia es una regla de presentación, no una recomendación sobre qué activo quitar.
+- **JNJ/XOM:** el cambio a «comparables insuficientes» corrige la anterior atribución de datos ausentes. Mantener esta precisión.
+- **Código de `h.cjs`:** el fallo intencionado sale con 1; el error previo con aserciones correctas y el recurso abierto quedan cubiertos por los casos propios aprobados. Los casos de cierre real del navegador siguen sin validación independiente aquí.
+- **Desplazamiento de 300 ms:** comprobar que el elemento conserva foco y visibilidad antes de desplazar aborda la causa documentada. No he repetido la regresión visual. No he visto otro desplazamiento diferido equivalente en el fragmento revisado que justifique bloquear esta fase.
+- **Espera de E5:** aumentar la espera no rebaja por sí mismo la aserción geométrica. Es preferible esperar estabilidad observable; no llamar al tiempo fijo garantía universal de estabilidad.
+- **Registros:** los fallos conservados, la distinción entre causa demostrada y no reproducida, y el log de la demo mejoran la auditabilidad. K/O siguen sin causa demostrada; no presentarlos como investigados hasta el final.
+- **Estados sin nota:** el bloque neutro y los encabezados mejoran la lectura. No se debe interpretar que una procedencia inválida se resolverá esperando: «pendiente» solo debería implicar espera cuando exista una carga o acción real que la resuelva. Es una precisión de lenguaje para la nueva revisión de producto, no otro ciclo de rediseño.
+- **Guion de personas:** ya evita inducir a quitar fondos para obtener una nota, aclara el contraste KO/PG y admite lectura mediante desplazamiento con texto grande. Corregir el enlace de M89, que todavía apunta al guion de R19 en vez del de R20.
+
+## 4. Decisión de producto aprobada por Javier
+
+La promesa central de Klever será:
+
+> **Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir.**
+
+El resultado buscado es que una persona pueda decir: «Sé qué he construido, qué puedo concluir, qué desconozco y qué quiero revisar después».
+
+El creador sigue siendo el centro. La comparación aporta utilidad inmediata y el Cuaderno conserva el razonamiento para volver. La revista ayuda a investigar; no ocupa el papel de portada principal ni sustituye al producto.
+
+### Mapa de lo acordado
+
+| Área | Dirección aprobada | Cuándo |
+|---|---|---|
+| Propuesta de valor | Construir, entender y probar decisiones | R21 |
+| Inicio | Desde cero, explorar un ejemplo y recrear una cartera manualmente | R21, reutilizando el creador |
+| Análisis | Utilidad visible aunque no haya nota global | R21 |
+| Comparación | Base frente a alternativa, cambios y límites | R21 con el laboratorio actual |
+| Cuaderno | Pregunta, motivo, condición para cambiar de opinión y fecha; revisión posterior | R21, alcance mínimo |
+| Revista | Artículo → pregunta o simulación → Cuaderno | R21 conectar el contenido existente; ampliar después |
+| El Superespeculador | Opinión fechada, tesis, argumento contrario e invalidación | Plantilla editorial; sin señales de compra/venta |
+| Diseño | Mantener fondo, tipografía y paleta; mejorar jerarquía y estados | En cada pantalla modificada |
+| Confianza | Separar simulación, dato aportado y dato verificado; guardado inequívoco | R21 |
+| Pago | Hipótesis: seguimiento, comparación e historial de decisiones | Validar después, no implementar cobros |
+| Integraciones y personalización | Revolut, Trade Republic, artículo y tip diario | Pendiente, fuera de R21 |
+
+No introducir todas las ideas como módulos nuevos. Primero conectar las piezas existentes en un recorrido completo.
+
+## 5. Encargo ejecutable para Claude Code · R21
+
+Trabaja sobre R20. Completa primero la corrección de pruebas descrita arriba; después implementa el recorrido siguiente. No pidas confirmación para decisiones rutinarias dentro de este alcance. No publiques, conectes servicios de pago ni envíes mensajes.
+
+### Paso 0 · Base verificable
+
+Corrige la propagación de errores de `registro()` y añade las pruebas de subproceso. Mantén el cálculo de notas y las correcciones de R20. Antes de modificar modelos, identifica los archivos y endpoints existentes que se reutilizarán y las migraciones necesarias. Conserva los datos previos.
+
+### Paso 1 · Entrar y construir
+
+Actualizar el mensaje principal con la promesa aprobada. Presentar tres caminos claros:
+
+1. **Crear desde cero.** Abrir una cartera vacía y guiar para añadir el primer activo, repartir y revisar. Ayuda breve contextual; sin cuestionario largo ni recomendación automática de idoneidad.
+2. **Explorar un ejemplo.** Abrir una copia editable rotulada como ejemplo simulado. Explicar qué ilustra; no venderla como cartera óptima o recomendada.
+3. **Recrear mi cartera.** Entrada manual de activos y porcentajes dentro del universo disponible. Aclarar que es una representación introducida por la persona; no hay conexión bancaria, custodia ni órdenes reales. Si un activo no está soportado, decirlo sin sustituirlo en silencio.
+
+Reutilizar un solo editor. Mantener el trabajo al navegar hacia atrás. Para un usuario recurrente, priorizar continuar su cartera y acceder a revisiones pendientes frente a repetir la bienvenida.
+
+**Aceptación:** se puede llegar a una cartera al 100 % por cualquiera de las tres entradas; sin nota global, el recorrido sigue siendo útil. Los ejemplos y carteras personales no se confunden ni se sobrescriben.
+
+### Paso 2 · Entender antes de puntuar
+
+La revisión empieza por «Tu cartera de un vistazo»: reparto, número de posiciones, mayor posición y concentración por posición. A continuación, qué permite analizar la información disponible y qué queda sin evaluar. La nota de estructura es un indicador dentro del análisis, no el resultado único ni una nota de la persona.
+
+Usar los datos ya calculados por `calculos.js`, `nota.js` y la radiografía. No crear una segunda implementación de las mismas métricas. Mostrar cantidades monetarias solo con su base explícita: capital simulado o importe introducido, nunca saldo bancario supuesto.
+
+Mantener estas distinciones:
+
+- Concentración por posición no equivale a exposición subyacente ni a pérdida esperada.
+- Un ETF no equivale a una empresa; no inferir sectores sin composición.
+- Una limitación de datos no convierte una cartera en mala.
+- Datos de ejemplo, cálculos sobre esos datos y desconocimiento del método son estados distintos.
+
+La acción siguiente será **«Probar un cambio»**. Guardar la cartera sigue disponible, con estado inequívoco: sin guardar, guardando, guardada o error. No llamar «guardada» a una escritura pendiente de confirmar.
+
+**Aceptación:** quien no tiene nota global ve información útil y puede seguir a la comparación; un error de datos no se representa como cero ni como lista vacía.
+
+### Paso 3 · Comparar una alternativa sin tocar la base
+
+Reutilizar `public/js/lab.js` y los escenarios existentes. Para R21 basta el cambio que ya admite el laboratorio —un activo y un peso objetivo, con financiación explícita—; no construir todavía un editor arbitrario de múltiples alternativas.
+
+Mostrar «Cartera base» y «Alternativa simulada», con el origen del peso añadido, posiciones afectadas, cambio en concentración y límites del análisis. En móvil apilar las secciones conservando la correspondencia. Una frase breve debe explicar la consecuencia principal sin afirmar que la alternativa es mejor.
+
+Conservar la cartera base. **Guardar la comparación no aplica el cambio a la cartera.** Si existe una revisión posterior de la base, mostrarlo; no actualizar silenciosamente la copia histórica ni recalcular la comparación guardada.
+
+Al salir, acción **«Guardar en mi Cuaderno»**. Mantener la autenticación existente para conservar escenarios en cuenta. Si se solicita acceso, explicar qué se conserva y no perder la propuesta durante ese paso.
+
+**Aceptación:** porcentajes y cantidades suman conforme al método, base intacta, comparación reabrible e identificación de versión posterior de la cartera.
+
+### Paso 4 · Un Cuaderno para revisar decisiones
+
+El Cuaderno ya contiene radar, escenarios, preguntas y vínculos editoriales. Evolucionarlo; no crear un diario paralelo desconectado.
+
+Al guardar una comparación, mostrar un formulario ligero:
+
+| Campo visible | Reutilización o cambio |
+|---|---|
+| Qué quiero averiguar | `pregunta`, máximo actual 200 caracteres |
+| Por qué lo estoy estudiando | `nota`, máximo actual 600; conservar las notas antiguas |
+| Qué me haría cambiar de opinión | Campo nuevo opcional, límite explícito, por ejemplo 600 caracteres |
+| Cuándo quiero revisarlo | `revisar_en`, opcional, fecha de calendario |
+
+No exigir rellenar todo para guardar. Mantener el vínculo editorial y su mecanismo de desvinculación explícita; una pregunta personal no adquiere una respuesta por parecerse al texto de una historia.
+
+Al volver al Cuaderno, ordenar las ideas activas con fecha vencida o de hoy en **«Para revisar»**, después próximas revisiones y finalmente sin fecha. Los escenarios descartados o archivados no se presentan como pendientes activos. Sin preguntas guardadas, ofrecer una entrada concreta al laboratorio, no falsas novedades.
+
+Añadir **«Registrar revisión»**: fecha, observación de la persona, qué aprendió y si mantiene la idea, la descarta o programa otra revisión. Distinguir comentario personal de hecho verificado. No generar automáticamente lo que ocurrió en el mercado.
+
+La revisión se añade al historial; no sustituye la hipótesis original ni las composiciones base/propuesta. Si se reprograma, conservar la revisión que explica el cambio. Archivar no equivale a borrar.
+
+**Aceptación:** guardar comparación → cerrar sesión → entrar con la misma cuenta → encontrar pregunta y fecha → registrar revisión → ver la entrada original y la nueva. Otra cuenta no puede leer ni cambiar esos datos. Un reintento de red no duplica la revisión.
+
+### Paso 5 · Conectar revista y producto
+
+Reutilizar la historia y el laboratorio actuales como ejemplo de recorrido editorial completo. Cada artículo debe dejar claro tema, fecha, carácter ficticio si corresponde, fuentes disponibles y qué se desconoce.
+
+Acciones: «Explorar esta idea en una simulación» y, dentro de la comparación, guardar una pregunta en el Cuaderno. Conservar el contexto y el paso al volver a la lectura. No obligar a seleccionar una empresa cuando el contenido no trate de una posición concreta: en ese caso basta enlazar a una exploración relevante, sin crear escenarios ficticios para rellenar el modelo.
+
+Plantilla editorial para artículos futuros: qué ocurre; explicación; argumentos favorables y contrarios; qué evidencia falta; qué pregunta merece seguimiento. Para El Superespeculador, añadir una tesis explícita, condiciones de invalidación y fecha de revisión. No inventar citas, acontecimientos recientes ni fuentes para llenar las pantallas.
+
+R21 no necesita una fábrica de artículos, recomendaciones diarias ni seguimiento automático de noticias. El contenido existente debe demostrar la conexión con el producto.
+
+## 6. Directrices de implementación
+
+### Reutilización y datos
+
+`schema.sql` ya contiene en `escenarios`: copia base/propuesta, `base_revision`, control `revision`, `pregunta`, `nota`, `revisar_en`, `historia`, `pregunta_ref` y evaluación fechada. La API PATCH ya protege nombre, pregunta, nota, fecha y estado mediante control de versión. Mantener esos contratos.
+
+Para el nuevo campo de invalidación y el historial, usar la siguiente migración disponible, compatible con las bases anteriores. No empaquetar campos nuevos dentro de un texto opaco que la interfaz tenga que interpretar.
+
+Modelo orientativo mínimo del historial: escenario, propietario verificado, identificador idempotente del intento, fecha efectiva, observación, aprendizaje, decisión y fecha próxima. Conservar fecha de creación del registro. Validar límites en servidor, escapar texto al mostrarlo y comprobar propiedad del escenario en cada operación.
+
+Añadir una revisión y actualizar estado/fecha del escenario debe ser una operación atómica, con conflicto de revisión gestionado sin pisar la edición de otra pestaña. Reutilizar la estrategia de idempotencia y concurrencia existente. Las fechas personales se comparan como días en la zona del usuario; evitar que una conversión UTC cambie el día elegido.
+
+El historial es mínimo, no un sistema completo de auditoría empresarial. No permitir que una edición de la cartera reescriba retroactivamente una decisión guardada. Las ideas generales sin escenario pueden quedar para una ampliación posterior: el modelo actual exige ticker y propuesta, y no conviene crear valores ficticios para saltarse esa restricción.
+
+### Diseño y lenguaje
+
+Conservar fondo cálido oscuro, naranja/cobre y serif de títulos. Una acción principal por momento. Revisar estados de carga, vacío, error, desconexión, sesión caducada y conflicto en cada pantalla tocada. Preferir «cartera» dentro de las explicaciones y mantener los rótulos de navegación existentes de forma consistente; no hacer una sustitución masiva de términos sin revisar el contexto.
+
+Números alineados, porcentajes con el mismo criterio de precisión y diferencias con signo legible. El color complementa al texto, no es el único indicador. Evitar nuevas alertas ámbar para condiciones normales. En móvil, revelar el detalle progresivamente sin ocultar lo necesario para decidir el siguiente paso.
+
+La transparencia sobre simulación debe estar visible desde la entrada y acompañar las cifras relevantes. No depender de un aviso situado al final de una página larga.
+
+### Calidad y rendimiento
+
+Mantener las pruebas matemáticas aceptadas. Añadir pruebas sobre comportamiento y persistencia, no sobre frases literales completas que impidan mejorar el texto. Evitar nuevas dependencias o servicios si el código actual cubre el trabajo. Revisar que enlazar pasos no duplique cargas del universo ni bloquee toda la página por una sección secundaria.
+
+Pruebas mínimas nuevas: los tres caminos de entrada; cartera sin nota que llega a comparación; base intacta; acceso durante guardado; fecha vencida/hoy/futura; revisión idempotente; conflicto entre pestañas; aislamiento entre cuentas; migración con datos previos; cambio o borrado de la cartera original sin perder la comparación histórica según el comportamiento existente; recorrido móvil y teclado.
+
+No afirmar «todo funciona» basándose solo en número de aserciones. Entregar evidencias del recorrido completo con cuenta y persistencia.
+
+## 7. Plan de trabajo y entregas
+
+| Hito | Responsable | Resultado verificable |
+|---|---|---|
+| 0 · Corrección residual | Claude Code | Error previo conservado y ejecutor sin falsos éxitos |
+| 1 · Entrada y revisión | Claude Code | Tres entradas al mismo editor y revisión útil sin depender de la nota |
+| 2 · Comparación y Cuaderno | Claude Code | Flujo completo persistente, invalidación e historial mínimo |
+| 3 · Conexión editorial y comprobación | Claude Code | Artículo existente conectado, recorrido móvil/teclado y paquete R21 |
+| Revisión de entrega | ChatGPT | Verificación de cambios relevantes, regresiones y cumplimiento del recorrido |
+| Prueba de uso | Javier con participantes | Observaciones reales, dificultades y recuperación al volver |
+
+Son hitos internos de ejecución, no solicitudes de aprobación entre cada paso. Si no cabe todo en una entrega, terminar primero un recorrido funcional de principio a fin y declarar explícitamente lo pendiente; no sustituir persistencia por pantallas decorativas.
+
+Entregar ZIP, resumen antes/después, instrucciones únicas, migraciones, resultados por entorno y capturas de los momentos principales. Separar funcionalidades implementadas, verificadas, no verificadas y futuras. No es necesario duplicar todas las capturas históricas ni generar otra maqueta con una estética distinta.
+
+## 8. Protocolo mínimo con personas
+
+Se puede probar R20 para obtener una base mientras se implementa R21; las funciones nuevas solo se evalúan cuando existan. Cinco principiantes del público previsto, sesiones de unos 20–30 minutos, dispositivos propios cuando sea posible. Informar de que hay datos ficticios, observar sin enseñar el recorrido y registrar citas literales con consentimiento si se graba.
+
+Tareas de R21:
+
+1. Crear una cartera y explicar cómo ha repartido el capital simulado.
+2. Explicar qué sabe y qué desconoce tras la revisión, con o sin nota.
+3. Probar un cambio y señalar de dónde sale el peso; comprobar si cree que ya cambió su cartera.
+4. Guardar una pregunta y una fecha de revisión.
+5. Cerrar y volver al día siguiente, recuperar el contexto y registrar una revisión.
+
+La última tarea requiere persistencia verificada. La demo que pierde datos al recargar no sirve para aprobarla. No simular resultados ni rellenar tablas con participantes inventados.
+
+Medir llegada sin ayuda, errores que impiden continuar, comprensión de simulación, conservación de la base, recuperación del trabajo y utilidad percibida del Cuaderno. Un objetivo inicial como 4 de 5 completando el recorrido sirve para decidir qué reparar, no para demostrar estadísticamente ajuste de mercado. Cualquier pérdida de datos o confusión recurrente entre simulación y orden real merece prioridad aunque la mayoría termine.
+
+No deducir retención semanal de una sesión ni disposición a pagar de un elogio. Preguntar qué usan hoy, qué les cuesta hacer y qué volverían a consultar. La monetización requerirá después una prueba comercial propia.
+
+## 9. Lo que queda fuera, pero se conserva en la hoja de ruta
+
+No implementar ahora cobros, integraciones con Revolut/Trade Republic, movimientos reales de dinero, datos de mercado reales, noticias automáticas, envío de correos o notificaciones, artículo o tip diario personalizado, recomendaciones de compra/venta, ni publicación pública.
+
+La hipótesis de pago aprobada es el valor recurrente de seguimiento, comparación e historial de decisiones. No se fija un precio ni se promete que las personas pagarán. Primero verificar que construyen, entienden y vuelven; después estudiar una oferta y costes reales.
+
+Las tres entradas no son asesoramiento personalizado ni una certificación de perfil inversor. No añadir un cuestionario que dé esa impresión si el producto todavía no respalda esa capacidad.
+
+## 10. Límites de esta revisión y siguiente intervención
+
+No he comprobado los 827 casos completos, las doce repeticiones de latencia, interacción propia en navegador, móviles físicos, lector de pantalla, zoom real, Safari/Firefox, D1 remota, correo real, fuentes reales ni comprensión por usuarios. Los dos casos X5/X10 no quedan aprobados. No he certificado el commit desde el ZIP ni realizado una auditoría completa de seguridad.
+
+La siguiente revisión de ChatGPT comprobará la corrección residual y el recorrido de producto autorizado. Se concentrará en que los datos se conserven, las explicaciones sean honestas y una persona pueda volver a su decisión. Los retoques menores de estilo no deben mantener el proyecto indefinidamente en revisión técnica.

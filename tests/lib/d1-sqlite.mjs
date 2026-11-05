@@ -43,5 +43,8 @@ export const estado = env => { const c = env.sql.prepare('SELECT nombre, tesis, 
 export function registro(salida) { let ok = 0; const fallos = [], ev = [];
   const t = (id, esc, esperado, obs, cond) => { cond ? ok++ : fallos.push(`${id} ${esc} → ${obs}`); console.log((cond ? 'OK   ' : 'FALLA') + ` [${id}] ${esc}${cond ? '' : '  [' + obs + ']'}`); ev.push({ id, escenario: esc, esperado, observado: obs, resultado: cond ? 'OK' : 'FALLA', evidencia: '' }); };
   const fin = async () => { const fs = await import('node:fs'); console.log(`\nRESULTADO: ${ok} correctas, ${fallos.length} fallos` + (fallos.length ? '\nFALLOS:\n- ' + fallos.join('\n- ') : ''));
-    fs.mkdirSync(path.resolve(RAIZ, process.env.RONDA || 'ronda11'), { recursive: true }); fs.writeFileSync(path.resolve(RAIZ, process.env.RONDA || 'ronda11', salida), JSON.stringify(ev, null, 1)); process.exit(fallos.length ? 1 : 0); };
+    fs.mkdirSync(path.resolve(RAIZ, process.env.RONDA || 'ronda11'), { recursive: true }); fs.writeFileSync(path.resolve(RAIZ, process.env.RONDA || 'ronda11', salida), JSON.stringify(ev, null, 1)); // Ronda 21: ya NO se llama a process.exit(0). El código refleja el resultado Y conserva cualquier código distinto de cero fijado antes (error previo): fallo → 1; error previo → se mantiene.
+    // El proceso termina solo; si algún recurso lo mantiene vivo 10 s después del resultado se registra «CIERRE FORZADO» y se sale con código 3 (nunca con éxito silencioso).
+    if (fallos.length) process.exitCode = 1;
+    setTimeout(() => { console.log(`CIERRE FORZADO: el proceso no terminó solo 10 s después del resultado (${ok} correctas, ${fallos.length} fallos).`); process.exit(process.exitCode || 3); }, 10000).unref(); };
   return { t, fin }; }
