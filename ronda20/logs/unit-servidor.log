@@ -1,0 +1,17 @@
+# comando: node tests/ronda7/unit-servidor.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 13:12:06 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [U1a] POST con posiciones: una sola operación
+OK    [U1b] POST con un ticker desconocido: no queda una cartera a medias
+OK    [U2a] PUT único guarda posiciones, nombre y tesis y sube la revisión
+OK    [U2b] Dos escrituras en el mismo segundo con la misma revisión: la segunda se rechaza
+OK    [U2c] PUT sin revisión: se rechaza
+OK    [U2d] PATCH (publicar) también sube la revisión
+OK    [U2e] PATCH con revisión caducada: 409 y la publicación no cambia
+OK    [U3] Escritura ajena entre la lectura y la escritura (carrera simulada de forma determinista)
+OK    [U4] Ticker desconocido con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)
+OK    [U5a] Cartera pública: un reparto incompleto no se guarda (ni siquiera el nombre o la tesis)
+OK    [U5b] Cartera pública: un reparto válido actualiza todo a la vez
+
+RESULTADO: 11 correctas, 0 fallos

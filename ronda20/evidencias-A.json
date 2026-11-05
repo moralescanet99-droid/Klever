@@ -59,7 +59,7 @@
   "id": "A8",
   "escenario": "La configuración desplegable no activa el enlace en pantalla ni guarda secretos (modo repositorio)",
   "esperado": "wrangler.toml sin [vars] ni DEV_RETURN_LINK; .dev.vars ignorado y ausente del contenido; DEV_RETURN_LINK solo en el manejador de acceso (y en scripts/pruebas/documentación); marcador de database_id; el HISTORIAL solo se declara verificado si hay repositorio con historial real",
-  "observado": "[vars]=false; DEV_RETURN_LINK en wrangler.toml=false; .dev.vars ignorado=true; presente en el contenido=false; código con DEV_RETURN_LINK: functions/api/login.js; marcador de database_id=true; historial: VERIFICADO en el repositorio (114 commits): .dev.vars nunca se versionó=true; wrangler.toml nunca tuvo un database_id distinto del marcador=true",
+  "observado": "[vars]=false; DEV_RETURN_LINK en wrangler.toml=false; .dev.vars ignorado=true; presente en el contenido=false; código con DEV_RETURN_LINK: functions/api/login.js; marcador de database_id=true; historial: VERIFICADO en el repositorio (116 commits): .dev.vars nunca se versionó=true; wrangler.toml nunca tuvo un database_id distinto del marcador=true",
   "resultado": "OK",
   "evidencia": ""
  }
