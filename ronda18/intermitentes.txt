@@ -1,0 +1,7 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 01:08:59Z · 24 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 01:09:28Z · 23 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 01:10:06Z · 32 s · código 1
+page.waitForFunction: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
