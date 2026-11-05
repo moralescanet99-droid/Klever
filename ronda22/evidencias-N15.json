@@ -262,7 +262,7 @@
   "id": "N9",
   "escenario": "Seguimiento con cuenta (ronda 22): la tarjeta compacta (pregunta, fecha, seguimiento personal, aviso de versión posterior) y, en la ficha, qué ha ocurrido y los pesos distinguidos",
   "esperado": "La tarjeta tiene la pregunta, «15 dic 2026» y el aviso de versión posterior; la ficha tiene qué ha ocurrido (C firmado), el peso en el ESCENARIO (10 %, base 0 %) distinto del de la CARTERA ACTUAL (20 %) y el enlace a la revisión editorial",
-  "observado": "«¿Se han firmado los dos contratos anunciados?» Simulación En estudio Próxima revisión: 15 dic 2026.Tu seguimiento: sin revisiones personales todavía.Respuesta editorial: la revisión de la historia re || ← Mi seguimientoHNORT al 10 % (proporcional) Simulación En estudio HNORT al 10 % reduciendo proporcionalmente las otras posiciones. Cartera «Mi cartera N». Creado el 5 nov 2026, 21",
+  "observado": "«¿Se han firmado los dos contratos anunciados?» Simulación En estudio Próxima revisión: 15 dic 2026.Tu seguimiento: sin revisiones personales todavía.Respuesta editorial: la revisión de la historia re || ← Mi seguimientoHNORT al 10 % (proporcional) Simulación En estudio HNORT al 10 % reduciendo proporcionalmente las otras posiciones. Cartera «Mi cartera N». Creado el 5 nov 2026, 22",
   "resultado": "OK"
  },
  {
