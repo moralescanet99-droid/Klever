@@ -1822,3 +1822,163 @@ No se ha realizado aquí la prueba con cinco personas, retorno real al día sigu
 
 
 **Instrucción adicional del usuario (literal):** «Mantén un nivel alto de calidad funcional, visual y de experiencia. El límite de alcance no justifica dejar textos confusos, interacciones torpes, incoherencias visuales o funciones incompletas dentro del recorrido principal. Antes de entregar, recorre el producto completo como usuario y corrige los defectos que comprometan su claridad, confianza o utilidad. Separa los defectos de lo existente —que debemos resolver— de las nuevas capacidades —que quedan para después—.»
+
+## C20 · Ronda 23 (2026-11-05) — revisión de la ronda 22 y corrección final acotada, literal
+
+# Klever — revisión R22 y corrección final acotada
+
+5 de noviembre de 2026 · Para Javier y Claude Code
+
+## Veredicto en tres líneas
+
+**El caso original de I1 está corregido; I2 e I3 quedan aceptados con la evidencia disponible.** La conservación del borrador todavía tiene un fallo reproducible durante un envío.
+**No doy aún el visto bueno al piloto completo:** falta cerrar esa protección del texto y completar la comprobación previa del entorno prevista en el propio protocolo.
+**Acepto la dirección visual y la organización del recorrido para el piloto.** El siguiente encargo es una corrección localizada del guardado, no otra ronda general de diseño o funcionalidades.
+
+## 1. Qué ha quedado bien
+
+- El Cuaderno muestra primero lo que toca revisar, con una tarjeta por escenario y una acción visible. A 320 px, la captura 03 permite ver «Registrar revisión» dentro de la primera pantalla.
+- Las tarjetas distinguen el seguimiento personal de la respuesta editorial. La captura 08 muestra una revisión personal registrada sin confundirla con una conclusión verificada por la Revista.
+- Las ideas archivadas tienen su filtro, una fecha expresada como pasada y ninguna acción de registrar revisión en la tarjeta. La captura 09 y el filtrado del código respaldan la corrección.
+- Las etiquetas de las barras están encima en móvil y ambas composiciones se ven simultáneamente. La captura 10 resuelve el problema de «Alternativa simulada» partida en líneas estrechas.
+- Se conserva la identidad oscura cálida y naranja. El foco del formulario es visible; los botones de opción ya tienen un tamaño visual razonable. El aviso de futuro pago ha desaparecido.
+- La recuperación distingue una escritura confirmada de una lectura pendiente. La captura 06 comunica que la revisión sí está guardada y ofrece actualizar la vista, no repetir el registro.
+
+La ficha sigue siendo larga, pero ordena pregunta, motivo, condición, revisión e información guardada de forma comprensible. El acceso directo al formulario evita obligar a recorrerla entera. No pediría reestructurarla otra vez antes de observar a usuarios.
+
+## 2. Qué he comprobado yo
+
+Revisión del código del cliente de revisiones, integración con el formulario, limpieza de sesión, organización del Cuaderno, estilos, pruebas nuevas y documentación. Inspección de capturas aportadas, especialmente 03, 04, 06, 08, 09, 10 y 12. No he modificado el producto.
+
+| Prueba ejecutada | Correctas | Fallos | Salida |
+|---|---:|---:|---:|
+| `unit-cliente-revision22.mjs` | 8 | 0 | 0 |
+| `unit-cuaderno21.mjs` | 20 | 0 | 0 |
+| `unit-registro21.mjs` | 10 | 0 | 0 |
+| `unit-migracion.mjs` | 15 | 0 | 0 |
+| `unit-nota.mjs` | 35 | 0 | 0 |
+| **Total** | **88** | **0** | |
+
+La prueba del cliente usa los manejadores del servidor sobre SQLite local, con fallos inyectados; no es una prueba de red o D1 remota. C8 representa suficientemente el defecto antiguo: guarda, pierde la lectura y reintenta con otra clave y una versión obsoleta. Es una réplica de esa lógica, no la ejecución íntegra de R21.
+
+Además ejecuté la función real `registrarRevision()` extraída de `lab.js` en un entorno mínimo de JavaScript con elementos de formulario controlados y una respuesta diferida. Así reproduje el defecto B1. Esta comprobación incluye la lógica que limpia el borrador; no se limita a `revisiones.js`.
+
+Intenté iniciar Chromium del sistema y falló con `socket() failed: Operation not permitted`. No ejecuté personalmente `testT`, `testS`, la demo ni la batería completa de navegador. Las **936 comprobaciones** y las repeticiones de latencia son resultados locales declarados por el autor, no repetidos por mí.
+
+## 3. Defecto que impide cerrar: protección del borrador
+
+### B1 — Importante: se borra lo escrito mientras llega la confirmación
+
+**Archivo:** `public/js/lab.js`, función `registrarRevision()`, líneas 668–678 aproximadamente.
+
+Solo se desactiva el botón de envío. Los campos permanecen editables. `textoNuevo` se calcula antes de esperar la respuesta y solo se considera si ya había un intento pendiente. Después de la respuesta, ese valor antiguo decide si se vacía `LAB.revBorrador`.
+
+**Reproducción ejecutada:**
+
+1. Escribir «Texto A» y pulsar registrar.
+2. Mantener pendiente la respuesta de `enviarIntento`.
+3. Cambiar el campo a «Texto B escrito mientras se guarda» y disparar el guardado del borrador, como hace el evento `input` real.
+4. Resolver la respuesta como confirmada y con la vista actualizada.
+5. La función establece `LAB.revBorrador = null` y repinta con «Revisión registrada».
+
+Salida observada: antes de la respuesta el borrador contiene Texto B; al repintar, el borrador es `null`. La rama de pintado reconstruye el formulario y restaura únicamente el borrador conservado. Se pierde el texto nuevo de la interfaz. El envío confirmado corresponde a Texto A: no se ha demostrado pérdida de un registro ya persistido.
+
+**Por qué las pruebas actuales no lo detectan:** C4 y T3 modifican texto entre un resultado incierto y el siguiente envío. No cubren una edición mientras una petición está todavía en curso. Probar el módulo de envío no basta para validar cuándo la pantalla descarta el borrador.
+
+**Corrección válida:** comparar el contenido actual del formulario con el intento confirmado al resolver la petición, tanto en el primer envío como en los reintentos. Si difiere, conservarlo y explicar que lo añadido no se ha enviado. Mantener congelada la carga de cada intento. Alternativamente, hacer los campos no editables durante la petición, con recuperación correcta al terminar; no basta con desactivar el botón.
+
+### B2 — Mismo ámbito: no recomendar recargar si el texto solo vive en memoria
+
+**Archivo:** `public/js/lab.js:681`, rama de conflicto con fallo al recuperar la versión actual.
+
+La rama recomienda «recarga la página; tu texto sigue aquí». El borrador de revisión se conserva en `LAB.revBorrador`, en memoria, y no hay persistencia de ese borrador que sobreviva a una recarga. La inspección del código no respalda prometer conservación al seguir esa instrucción.
+
+**Corrección mínima:** ofrecer reintentar únicamente la lectura, manteniendo el borrador en la pantalla, y permitir un nuevo registro solo cuando se haya recuperado la versión actual. No hace falta crear un sistema nuevo de borradores persistentes para resolverlo. No debe haber otro POST ni cambio de clave mientras se está recuperando esa lectura.
+
+B1 y B2 forman el único bloque de corrección solicitado: conservar el texto durante el ciclo de envío y recuperación. No requieren cambios de esquema, nuevas capacidades ni rediseño.
+
+### Críticos y menores
+
+No he identificado un defecto crítico en el alcance examinado; esto no sustituye una auditoría integral de seguridad.
+
+Como detalle menor de presentación de evidencias, la captura 09 muestra el filtro Archivados mientras sigue visible un aviso de una acción anterior de descarte. El test hizo ambas acciones: no demuestra que se haya archivado como descartado. Para una demostración, dejar desaparecer ese aviso evita confusión. No es un motivo para bloquear el piloto.
+
+## 4. La crítica visual que Javier pidió conservar
+
+He recuperado la nota aprobada y la he contrastado con R22. Se comunica aquí a Claude como criterio de aceptación de lo existente, no como una lista de funciones nuevas.
+
+| Punto aprobado | Decisión tras revisar R22 |
+|---|---|
+| Consistencia tipográfica, espaciados, radios e iconos | La base CSS ya contiene escalas y las capturas muestran coherencia suficiente para el piloto. No imponer otro sistema visual. |
+| Menos tarjetas y avisos repetidos | La duplicación principal del Cuaderno queda resuelta. Conservar esta organización. |
+| Una acción principal clara | «Registrar revisión» gana prioridad donde toca. Aceptado para observar con personas. |
+| Estados vacíos útiles | Hay explicación y acceso al registro. No encargar ilustraciones adicionales. |
+| Confirmaciones precisas | Mejora clara. Cerrar B1 y B2 para que el mensaje coincida con el contenido realmente conservado. |
+| Fechas comprensibles y estados con texto | Ya hay fecha, «hoy» y avisos de fecha pasada. «En tres días» puede esperar; no bloquea. |
+| Accesibilidad | Foco visible, texto de estado, estilos de controles y reducción de movimiento son buenas bases. No certifico contraste efectivo, lector de pantalla o zonas de toque reales sin verificación de interacción. |
+| Comparación simultánea y legible | Aceptada visualmente en la captura móvil. Mantener las dos barras. |
+| Distinguir cuenta, demo y borrador local | Conservar el backend actual y la explicación de límites. La demo sigue sin servir para volver al día siguiente. |
+
+Mantener serif en títulos y sans en la interfaz densa, nota global secundaria, fondo oscuro cálido y naranja. No añadir radial protagonista, gamificación, calendario, modo claro, histórico, benchmark ni exportación gráfica para cerrar esta versión.
+
+## 5. Honestidad, pruebas y limitaciones
+
+La documentación mejora: conserva las ejecuciones fallidas, reconoce el error del ejecutor, diferencia mitigación de causa demostrada y no presenta el piloto como realizado. El calentamiento del servidor no prueba que se haya resuelto la primera carga lenta. Antes de la sesión, comprobar que el servidor está listo; si hay un fallo de arranque, anotarlo como incidencia de entorno, sin atribuirlo al participante.
+
+El texto habla de «tres tandas» pero enumera cuatro resultados: 12/12, 11/12, 0/12 y 12/12. Es un detalle editorial fácil de corregir; no invalida por sí mismo las evidencias.
+
+No certifico que ninguna aserción antigua haya perdido exigencia: esta entrega no incluye un historial Git utilizable y la copia local anterior ya no estaba disponible para comparar. He leído las pruebas nuevas y su alcance. Para justificar adaptaciones antiguas basta adjuntar el diff concreto cuando se entregue la corrección, sin reconstruir toda la documentación.
+
+La sesión caducada con formulario escrito sigue marcada como pendiente (M102). El manejo real de 401 implica limpieza de sesión y navegación, por lo que no queda validado por una prueba aislada que clasifique una respuesta HTTP. Verificar la recuperación entrando en la misma cuenta y que al cambiar de cuenta no aparezca texto ajeno. No afirmar que está resuelto sin esa comprobación.
+
+Tampoco he comprobado dos clientes reales simultáneos con la misma clave. El caso K9 exige una inserción y ausencia de 500, pero permite 409; no demuestra que ambos clientes reciban confirmación. Mantener esa limitación expresa y conservar el intento hasta resolver su resultado cuando corresponda.
+
+## 6. Encargo final para Claude Code
+
+**Objetivo:** cerrar la conservación del borrador en R22. No abrir otra ronda general de mejoras.
+
+1. Corregir B1 en la integración del formulario: ningún texto escrito durante la petición puede borrarse ni presentarse como guardado si no estaba en el intento confirmado.
+2. Corregir B2: ante conflicto y lectura fallida, reintentar lectura conservando texto; no recomendar una recarga que lo elimine.
+3. Añadir pruebas de regresión que fallen con R22 y pasen con la corrección. Deben probar la lógica del formulario además del módulo de envío.
+4. Verificar M102 antes del piloto. Si falla, arreglar únicamente la recuperación de sesión y la separación entre cuentas; no ampliarlo a un sistema general nuevo de almacenamiento.
+5. Mantener todo lo aceptado de I2, I3 y el pulido visual. Incorporar la tabla del apartado 4 como decisiones cerradas y límites del encargo.
+
+### Evidencia necesaria para aceptar
+
+| Caso | Resultado exigido |
+|---|---|
+| Primer envío lento y edición durante la espera | Solo se registra el intento original; el texto posterior permanece como borrador, o se impide editar durante ese envío de manera explícita. |
+| Reintento lento y edición durante la espera | Mismo resultado; misma clave y contenido del intento pendiente. |
+| Conflicto y lectura posterior fallida | Texto intacto; recuperar solo lee; no hay POST accidental ni instrucción engañosa de recargar. |
+| Lectura recuperada | Se muestra versión actual y se puede decidir registrar el borrador sin pisar otra revisión. |
+| Sesión caducada y regreso | Recuperación comprobada en la misma cuenta; ningún borrador aparece en otra cuenta. |
+| Recorrido principal | Crear, comprender, comparar, guardar y revisar siguen funcionando; base inalterada. |
+
+Entregar el diff, resultados de las pruebas afectadas, una pasada de regresión final y la evidencia de conservación del texto. No hace falta producir otra colección extensa de pantallas ni reescribir todo el informe. Corregir las afirmaciones de «conservación» para que describan los casos realmente probados.
+
+## 7. Puerta de salida y piloto
+
+**Con B1/B2 corregidos y la lista previa del facilitador comprobada, se pasa al piloto.** Mi siguiente revisión se limitará a esos puntos y a posibles regresiones del recorrido. No añadiré requisitos visuales nuevos para aceptarlo.
+
+El protocolo de dos contactos es adecuado: sesión inicial y regreso concertado al día siguiente, con persistencia real local, sin usar la demo. Registrar ayuda, dudas y fallos por tarea. Añadir al cierre dos preguntas abiertas: «¿Qué te ha aportado?» y «¿En qué situación volverías a usarlo?». No sugerir respuestas.
+
+Cuatro de cinco personas completando el recorrido sin ayuda sustancial es un criterio orientativo de usabilidad; además deben comprender qué se guardó y que la simulación no cambia la cartera. Todas deben poder recuperar lo guardado. Una pérdida de datos se investiga aunque la mayoría termine.
+
+No medir todavía conversión a pago, rentabilidad, retención espontánea o encaje de mercado. No deducirlos de una visita concertada ni de opiniones favorables.
+
+## 8. Notas comparadas y alcance de la aceptación
+
+Notas orientativas de revisión, no métricas de usuarios ni certificaciones.
+
+| Dimensión | R21 | R22 | Motivo |
+|---|---:|---:|---|
+| Confianza y privacidad | 7,5 | 7,5 | Mejores mensajes; conservación de borrador y sesión aún requieren cierre. |
+| Procedencia de datos | 8,5 | 8,5 | Se mantienen simulación y comentarios personales diferenciados. |
+| Claridad móvil | 8 | 8,5 | Prioridad de revisión, una tarjeta y etiquetas de barras legibles. |
+| Honestidad del contenido | 8 | 8,5 | Mejor separación editorial/personal y límites de pruebas explícitos. |
+| Solidez técnica | 8 | 8 | Mejor recuperación; persiste el fallo de edición durante envío. |
+| Calidad de pruebas | 8,5 | 8,5 | Buen avance de cliente/servidor, pero falta el caso de interfaz identificado. |
+
+Sin comprobar personalmente: navegador interactivo, móvil físico, lector de pantalla, zoom real, Safari/Firefox, correo real, D1 remota, sesión caducada de extremo a extremo, piloto y regreso real al día siguiente, carga de producción y auditoría integral de seguridad. La inspección de capturas no sustituye esas verificaciones.
+
+**Cierre propuesto: conservar el producto y el diseño actuales, reparar el borrador y empezar a aprender de personas reales.**

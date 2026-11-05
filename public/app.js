@@ -8,7 +8,7 @@
 // =====================================================================
 
 // ---------- utilidades ----------
-import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, abrirLab, origenCodigo } from './js/lab.js';
+import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo } from './js/lab.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
@@ -257,7 +257,7 @@ function confirmarSalidaConCambios() {                                // true = 
 async function cerrarSesion() {
   if (!(await confirmarSalidaConCambios())) return;
   const t = tok();                                                    // se limpia YA (sin esperar al servidor): nada privado queda mientras llega la respuesta
-  store.removeItem('klever_token'); store.removeItem(AVISO); limpiarPrivado(); actualizarCabecera(); go('#inicio');
+  store.removeItem('klever_token'); store.removeItem(AVISO); borrarBorradoresRev(); limpiarPrivado(); actualizarCabecera(); go('#inicio');   // al cerrar sesión a propósito se borran también los borradores de revisión (dispositivo compartido)
   if (t) fetch(API + '/logout', { method: 'POST', headers: { authorization: 'Bearer ' + t } }).catch(() => {});
 }
 $('#salir').addEventListener('click', cerrarSesion);
