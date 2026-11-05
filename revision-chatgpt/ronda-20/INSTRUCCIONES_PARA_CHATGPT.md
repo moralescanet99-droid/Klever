@@ -38,7 +38,7 @@ Sin navegador (Node ≥ 22.13, tras `npm ci`): `node tests/ronda20/unit-causas20
 4. **El fallo real del punto 6:** ¿la corrección y su regresión son suficientes? ¿Quedan otros desplazamientos diferidos que puedan actuar tras un cambio de paso?
 ### Aplicación visual (aceptar o rechazar su CIERRE)
 5. **Revisión de escritorio** (02–04 frente a 00 y 01): ¿se ven contexto, resultado, «Volver» y guardado? ¿El orden del resultado a la derecha y las posiciones a la izquierda se entiende?
-6. **Aviso sin nota** (03 y 07–08): ¿ha dejado de dominar? ¿Los encabezados «Evaluación parcial» / «Sin nota global» son claros?
+6. **Aviso sin nota** (04 y 07–08): ¿ha dejado de dominar? ¿Los encabezados «Evaluación parcial» / «Sin nota global» son claros?
 7. **Móvil** (05–08): resultado breve y «Volver» libres de la barra.
 8. **Honestidad del informe** (`ronda20/LEEME.md`, `ANTES-Y-DESPUES.md`) y del guion de personas.
 9. Lo que debería probar yo a mano (`ronda20/pruebas-manuales.md`, M85–M93).
