@@ -1,0 +1,4 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 23:44:19Z · 25 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 23:44:49Z · 24 s · código 0
+RESULTADO: 15 correctas, 0 fallos

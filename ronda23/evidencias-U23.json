@@ -10,7 +10,7 @@
   "id": "U2-1440",
   "escenario": "Reintento lento y edición durante la espera (1440 px)",
   "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
-  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"79a54837-c2e2-48b7-b97b-7aec99c5d432\",\"Texto A2 (el intento)\"],[\"79a54837-c2e2-48b7-b97b-7aec99c5d432\",\"Texto A2 (el intento)\"]]}",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"168abffb-bf6b-4815-9832-81ae7a321aed\",\"Texto A2 (el intento)\"],[\"168abffb-bf6b-4815-9832-81ae7a321aed\",\"Texto A2 (el intento)\"]]}",
   "resultado": "OK"
  },
  {
@@ -66,7 +66,7 @@
   "id": "U2-390",
   "escenario": "Reintento lento y edición durante la espera (390 px)",
   "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
-  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"1c549c68-9897-4231-9ae4-3db12ba1703d\",\"Texto A2 (el intento)\"],[\"1c549c68-9897-4231-9ae4-3db12ba1703d\",\"Texto A2 (el intento)\"]]}",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"52aa76f6-47d8-45c4-aaec-d1992ab85523\",\"Texto A2 (el intento)\"],[\"52aa76f6-47d8-45c4-aaec-d1992ab85523\",\"Texto A2 (el intento)\"]]}",
   "resultado": "OK"
  },
  {
@@ -122,7 +122,7 @@
   "id": "U2-320",
   "escenario": "Reintento lento y edición durante la espera (320 px)",
   "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
-  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"f50d9646-c573-480e-90ae-c5f1d7dbf946\",\"Texto A2 (el intento)\"],[\"f50d9646-c573-480e-90ae-c5f1d7dbf946\",\"Texto A2 (el intento)\"]]}",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"c073b37e-cac0-4316-b6c9-1365f0f08cfb\",\"Texto A2 (el intento)\"],[\"c073b37e-cac0-4316-b6c9-1365f0f08cfb\",\"Texto A2 (el intento)\"]]}",
   "resultado": "OK"
  },
  {

@@ -1,0 +1,527 @@
+[
+ {
+  "id": "K1-320",
+  "escenario": "Radiografía de la versión guardada (320 px)",
+  "esperado": "Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide",
+  "observado": "Analizando: la versión guardada en tu cuenta. La mayor posición es KO (60 %). Solo hay 2 posiciones: suman el 100 %. Mayor posiciónKO · 60 % Mayores posiciones100 % (solo hay 2) Sin asignar0 % Límite personal por posición (opcional) % Definir Una referencia tuya, no un consejo: Klever no impone ningún umbral. Sin límite definido",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2-320",
+  "escenario": "Límite personal definido por la persona (320 px)",
+  "esperado": "Con un límite del 50 %: «KO: esta posición supera el límite del 50 % que has definido»; se guarda en la cuenta sin subir la revisión; sin límite no hay umbral",
+  "observado": "KO: esta posición supera el límite del 50 % que has definido (tiene el 60 %, 10 % por encima).; límite 50; revisión 0 (antes 0)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2b-320",
+  "escenario": "El límite persiste tras recargar (320 px)",
+  "esperado": "El campo vuelve con 50",
+  "observado": "50",
+  "resultado": "OK"
+ },
+ {
+  "id": "K3-320",
+  "escenario": "Versión guardada frente a cambios locales (320 px)",
+  "esperado": "Con cambios sin guardar analiza «tus cambios» (KO 50, PG 30, JNJ 10 = 90 %, falta asignar 10 %: NO se reescala); un botón cambia a «la versión guardada» (100 %)",
+  "observado": "Con mis cambios:true | Versión guardada:false; local: true; guardada: true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K4-320",
+  "escenario": "La ficha dice si el activo ya figura DIRECTAMENTE en la cartera elegida (320 px)",
+  "esperado": "En «Base dividendos» no figura directamente (y avisa de que no se miran los fondos por dentro); en «Para cambios locales» figura con el 20 % guardado",
+  "observado": "En «Base dividendos» no figura directamente. (No se analizan las posiciones internas de los fondos: un fondo podría cont | En «Para cambios locales» ya figura directamente con el 20 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K5-320",
+  "escenario": "Guardar en el radar con teclado y con nota privada (320 px)",
+  "esperado": "Intro sobre el botón guarda; el foco se queda en el botón; la nota se guarda en la cuenta (comprobado en la API) y el estado dice «Guardada en tu cuenta»",
+  "observado": "foco fir-toggle; API [[\"JNJ\",\"Revisar deuda y caja libre\"]]; Guardada en tu cuenta.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K6-320",
+  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (320 px)",
+  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K7-320",
+  "escenario": "Mi seguimiento conserva la nota y la cartera de referencia (320 px)",
+  "esperado": "La nota guardada reaparece; dice que en «Base dividendos» no figura directamente; sin desbordamiento",
+  "observado": "«Revisar deuda y caja libre»; En «Base dividendos» no figura directamente. (No se analizan las posic",
+  "resultado": "OK"
+ },
+ {
+  "id": "K8-320",
+  "escenario": "Laboratorio: base y activo llegan elegidos; el método se explica antes de calcular (320 px)",
+  "esperado": "Activo JNJ y cartera «Base dividendos» preseleccionados; título con «Simulación»; el método menciona que cada posición se multiplica y que se redondea por mayor resto; aún no hay resultado",
+  "observado": "JNJ / Base dividendos; Laboratorio Simulación; método: Cómo se calcula: Las demás posiciones bajan todas en la misma proporción para liberar el p…",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9-320",
+  "escenario": "Simulación del ejemplo verificable: KO 60 / PG 40 + JNJ 10 reduciendo proporcionalmente (320 px)",
+  "esperado": "KO 54, PG 36, JNJ 10; total 100; tabla con antes, después y cambio (con texto); sin asignar 0 %; ninguna cifra negativa",
+  "observado": "{\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"JNJ\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Total asignado100 %100 %sin cambio; En la alternativa simulada, JNJ pasaría del 0 % al 10 % reduciendo proporcionalmente las otras posiciones. 3 posiciones cambian; sin asignar: 0 % → 0 %. La mayor posición pasa de KO (60 %) a KO (54 %). Es una comparación: no dice que la alternativa sea mejor.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9b-320",
+  "escenario": "La tabla de pesos antes/después se lee entera sin desplazar (320 px)",
+  "esperado": "El ancho de la tabla cabe en su contenedor: las cuatro columnas son visibles a la vez",
+  "observado": "{\"tabla\":288,\"caja\":288}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10-320",
+  "escenario": "La comparación cubre pesos, concentración, categorías, límites y pasos (320 px)",
+  "esperado": "Secciones: pesos, concentración, categorías, límite personal; los pasos del cálculo se pueden desplegar; etiqueta «Simulación»",
+  "observado": "Pesos por posición | Concentración | Categorías disponibles (comerciales; no son la exposición real de los fondos) | Tu límite personal | Qué cambia en la nota de estructura v1 · beta | Guardar en mi Cuaderno; 4 pasos",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10b-320",
+  "escenario": "Límites personales afectados (320 px)",
+  "esperado": "Con el límite del 50 %: KO dejaría de superarlo (antes 60 %, ahora 54 % sigue por encima: «sigue superando»)",
+  "observado": "Resultado Simulación Cuánto espacio ocuparía: JNJ ocuparía el 10 % de la cartera (ahora no figura). Quién cede el peso: Los 10 puntos de JNJ salen de reducir las otras posiciones en proporción: KO ced",
+  "resultado": "OK"
+ },
+ {
+  "id": "K11-320",
+  "escenario": "Guardar el escenario no modifica la cartera base (320 px)",
+  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
+  "resultado": "OK"
+ },
+ {
+  "id": "K12-320",
+  "escenario": "Reabrir un escenario tras cambiar la cartera original (320 px)",
+  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K13-320",
+  "escenario": "Estado y nota del escenario; el seguimiento los distingue (320 px)",
+  "esperado": "Tras archivarlo, deja «En estudio» (0) y aparece en «Archivados» con la marca «Simulación» y el aviso de versión posterior; la API guarda estado y nota",
+  "observado": "API archivado/«Archivado: ya no me interesa»; en estudio 0; archivados: Añadir JNJ al 10 % Simulación Archivado Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Base dividendos» Hay una versión posterior de la cartera Archivado: ya no me interesa Abrir Añadir JNJ al 10 %",
+  "resultado": "OK"
+ },
+ {
+  "id": "K14-320",
+  "escenario": "Descartar un escenario no toca la cartera (320 px)",
+  "esperado": "Tras descartarlo no queda ninguno; la cartera conserva su estado (50/50)",
+  "observado": "escenarios 0; [{\"ticker\":\"KO\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Coca-Cola\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.17788519467142547},{\"ticker\":\"PG\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Procter & Gamble\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.2598370680917842}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K15-320",
+  "escenario": "Operación inviable: se explica el motivo y no se ofrece guardar (320 px)",
+  "esperado": "Con la cartera al 100 % y financiación con lo sin asignar: «No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %»; sin formulario de guardado",
+  "observado": "No se puede simularNo hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K16-320",
+  "escenario": "Texto ampliado al 200 % (simulado): laboratorio, seguimiento y radiografía (320 px)",
+  "esperado": "Sin desbordamiento horizontal en las tres pantallas",
+  "observado": "{\"lab\":true,\"seg\":true,\"ed\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K17-320",
+  "escenario": "Sin errores de JavaScript en todo el recorrido (320 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K1-390",
+  "escenario": "Radiografía de la versión guardada (390 px)",
+  "esperado": "Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide",
+  "observado": "Analizando: la versión guardada en tu cuenta. La mayor posición es KO (60 %). Solo hay 2 posiciones: suman el 100 %. Mayor posiciónKO · 60 % Mayores posiciones100 % (solo hay 2) Sin asignar0 % Límite personal por posición (opcional) % Definir Una referencia tuya, no un consejo: Klever no impone ningún umbral. Sin límite definido",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2-390",
+  "escenario": "Límite personal definido por la persona (390 px)",
+  "esperado": "Con un límite del 50 %: «KO: esta posición supera el límite del 50 % que has definido»; se guarda en la cuenta sin subir la revisión; sin límite no hay umbral",
+  "observado": "KO: esta posición supera el límite del 50 % que has definido (tiene el 60 %, 10 % por encima).; límite 50; revisión 0 (antes 0)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2b-390",
+  "escenario": "El límite persiste tras recargar (390 px)",
+  "esperado": "El campo vuelve con 50",
+  "observado": "50",
+  "resultado": "OK"
+ },
+ {
+  "id": "K3-390",
+  "escenario": "Versión guardada frente a cambios locales (390 px)",
+  "esperado": "Con cambios sin guardar analiza «tus cambios» (KO 50, PG 30, JNJ 10 = 90 %, falta asignar 10 %: NO se reescala); un botón cambia a «la versión guardada» (100 %)",
+  "observado": "Con mis cambios:true | Versión guardada:false; local: true; guardada: true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K4-390",
+  "escenario": "La ficha dice si el activo ya figura DIRECTAMENTE en la cartera elegida (390 px)",
+  "esperado": "En «Base dividendos» no figura directamente (y avisa de que no se miran los fondos por dentro); en «Para cambios locales» figura con el 20 % guardado",
+  "observado": "En «Base dividendos» no figura directamente. (No se analizan las posiciones internas de los fondos: un fondo podría cont | En «Para cambios locales» ya figura directamente con el 20 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K5-390",
+  "escenario": "Guardar en el radar con teclado y con nota privada (390 px)",
+  "esperado": "Intro sobre el botón guarda; el foco se queda en el botón; la nota se guarda en la cuenta (comprobado en la API) y el estado dice «Guardada en tu cuenta»",
+  "observado": "foco fir-toggle; API [[\"JNJ\",\"Revisar deuda y caja libre\"]]; Guardada en tu cuenta.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K6-390",
+  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (390 px)",
+  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K7-390",
+  "escenario": "Mi seguimiento conserva la nota y la cartera de referencia (390 px)",
+  "esperado": "La nota guardada reaparece; dice que en «Base dividendos» no figura directamente; sin desbordamiento",
+  "observado": "«Revisar deuda y caja libre»; En «Base dividendos» no figura directamente. (No se analizan las posic",
+  "resultado": "OK"
+ },
+ {
+  "id": "K8-390",
+  "escenario": "Laboratorio: base y activo llegan elegidos; el método se explica antes de calcular (390 px)",
+  "esperado": "Activo JNJ y cartera «Base dividendos» preseleccionados; título con «Simulación»; el método menciona que cada posición se multiplica y que se redondea por mayor resto; aún no hay resultado",
+  "observado": "JNJ / Base dividendos; Laboratorio Simulación; método: Cómo se calcula: Las demás posiciones bajan todas en la misma proporción para liberar el p…",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9-390",
+  "escenario": "Simulación del ejemplo verificable: KO 60 / PG 40 + JNJ 10 reduciendo proporcionalmente (390 px)",
+  "esperado": "KO 54, PG 36, JNJ 10; total 100; tabla con antes, después y cambio (con texto); sin asignar 0 %; ninguna cifra negativa",
+  "observado": "{\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"JNJ\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Total asignado100 %100 %sin cambio; En la alternativa simulada, JNJ pasaría del 0 % al 10 % reduciendo proporcionalmente las otras posiciones. 3 posiciones cambian; sin asignar: 0 % → 0 %. La mayor posición pasa de KO (60 %) a KO (54 %). Es una comparación: no dice que la alternativa sea mejor.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9b-390",
+  "escenario": "La tabla de pesos antes/después se lee entera sin desplazar (390 px)",
+  "esperado": "El ancho de la tabla cabe en su contenedor: las cuatro columnas son visibles a la vez",
+  "observado": "{\"tabla\":358,\"caja\":358}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10-390",
+  "escenario": "La comparación cubre pesos, concentración, categorías, límites y pasos (390 px)",
+  "esperado": "Secciones: pesos, concentración, categorías, límite personal; los pasos del cálculo se pueden desplegar; etiqueta «Simulación»",
+  "observado": "Pesos por posición | Concentración | Categorías disponibles (comerciales; no son la exposición real de los fondos) | Tu límite personal | Qué cambia en la nota de estructura v1 · beta | Guardar en mi Cuaderno; 4 pasos",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10b-390",
+  "escenario": "Límites personales afectados (390 px)",
+  "esperado": "Con el límite del 50 %: KO dejaría de superarlo (antes 60 %, ahora 54 % sigue por encima: «sigue superando»)",
+  "observado": "Resultado Simulación Cuánto espacio ocuparía: JNJ ocuparía el 10 % de la cartera (ahora no figura). Quién cede el peso: Los 10 puntos de JNJ salen de reducir las otras posiciones en proporción: KO ced",
+  "resultado": "OK"
+ },
+ {
+  "id": "K11-390",
+  "escenario": "Guardar el escenario no modifica la cartera base (390 px)",
+  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
+  "resultado": "OK"
+ },
+ {
+  "id": "K12-390",
+  "escenario": "Reabrir un escenario tras cambiar la cartera original (390 px)",
+  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K13-390",
+  "escenario": "Estado y nota del escenario; el seguimiento los distingue (390 px)",
+  "esperado": "Tras archivarlo, deja «En estudio» (0) y aparece en «Archivados» con la marca «Simulación» y el aviso de versión posterior; la API guarda estado y nota",
+  "observado": "API archivado/«Archivado: ya no me interesa»; en estudio 0; archivados: Añadir JNJ al 10 % Simulación Archivado Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Base dividendos» Hay una versión posterior de la cartera Archivado: ya no me interesa Abrir Añadir JNJ al 10 %",
+  "resultado": "OK"
+ },
+ {
+  "id": "K14-390",
+  "escenario": "Descartar un escenario no toca la cartera (390 px)",
+  "esperado": "Tras descartarlo no queda ninguno; la cartera conserva su estado (50/50)",
+  "observado": "escenarios 0; [{\"ticker\":\"KO\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Coca-Cola\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.17788519467142547},{\"ticker\":\"PG\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Procter & Gamble\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.2598370680917842}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K15-390",
+  "escenario": "Operación inviable: se explica el motivo y no se ofrece guardar (390 px)",
+  "esperado": "Con la cartera al 100 % y financiación con lo sin asignar: «No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %»; sin formulario de guardado",
+  "observado": "No se puede simularNo hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K16-390",
+  "escenario": "Texto ampliado al 200 % (simulado): laboratorio, seguimiento y radiografía (390 px)",
+  "esperado": "Sin desbordamiento horizontal en las tres pantallas",
+  "observado": "{\"lab\":true,\"seg\":true,\"ed\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K17-390",
+  "escenario": "Sin errores de JavaScript en todo el recorrido (390 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K1-1440",
+  "escenario": "Radiografía de la versión guardada (1440 px)",
+  "esperado": "Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide",
+  "observado": "Analizando: la versión guardada en tu cuenta. La mayor posición es KO (60 %). Solo hay 2 posiciones: suman el 100 %. Mayor posiciónKO · 60 % Mayores posiciones100 % (solo hay 2) Sin asignar0 % Límite personal por posición (opcional) % Definir Una referencia tuya, no un consejo: Klever no impone ningún umbral. Sin límite definido",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2-1440",
+  "escenario": "Límite personal definido por la persona (1440 px)",
+  "esperado": "Con un límite del 50 %: «KO: esta posición supera el límite del 50 % que has definido»; se guarda en la cuenta sin subir la revisión; sin límite no hay umbral",
+  "observado": "KO: esta posición supera el límite del 50 % que has definido (tiene el 60 %, 10 % por encima).; límite 50; revisión 0 (antes 0)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K2b-1440",
+  "escenario": "El límite persiste tras recargar (1440 px)",
+  "esperado": "El campo vuelve con 50",
+  "observado": "50",
+  "resultado": "OK"
+ },
+ {
+  "id": "K3-1440",
+  "escenario": "Versión guardada frente a cambios locales (1440 px)",
+  "esperado": "Con cambios sin guardar analiza «tus cambios» (KO 50, PG 30, JNJ 10 = 90 %, falta asignar 10 %: NO se reescala); un botón cambia a «la versión guardada» (100 %)",
+  "observado": "Con mis cambios:true | Versión guardada:false; local: true; guardada: true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K4-1440",
+  "escenario": "La ficha dice si el activo ya figura DIRECTAMENTE en la cartera elegida (1440 px)",
+  "esperado": "En «Base dividendos» no figura directamente (y avisa de que no se miran los fondos por dentro); en «Para cambios locales» figura con el 20 % guardado",
+  "observado": "En «Base dividendos» no figura directamente. (No se analizan las posiciones internas de los fondos: un fondo podría cont | En «Para cambios locales» ya figura directamente con el 20 %.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K5-1440",
+  "escenario": "Guardar en el radar con teclado y con nota privada (1440 px)",
+  "esperado": "Intro sobre el botón guarda; el foco se queda en el botón; la nota se guarda en la cuenta (comprobado en la API) y el estado dice «Guardada en tu cuenta»",
+  "observado": "foco fir-toggle; API [[\"JNJ\",\"Revisar deuda y caja libre\"]]; Guardada en tu cuenta.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K6-1440",
+  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (1440 px)",
+  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
+  "resultado": "OK"
+ },
+ {
+  "id": "K7-1440",
+  "escenario": "Mi seguimiento conserva la nota y la cartera de referencia (1440 px)",
+  "esperado": "La nota guardada reaparece; dice que en «Base dividendos» no figura directamente; sin desbordamiento",
+  "observado": "«Revisar deuda y caja libre»; En «Base dividendos» no figura directamente. (No se analizan las posic",
+  "resultado": "OK"
+ },
+ {
+  "id": "K8-1440",
+  "escenario": "Laboratorio: base y activo llegan elegidos; el método se explica antes de calcular (1440 px)",
+  "esperado": "Activo JNJ y cartera «Base dividendos» preseleccionados; título con «Simulación»; el método menciona que cada posición se multiplica y que se redondea por mayor resto; aún no hay resultado",
+  "observado": "JNJ / Base dividendos; Laboratorio Simulación; método: Cómo se calcula: Las demás posiciones bajan todas en la misma proporción para liberar el p…",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9-1440",
+  "escenario": "Simulación del ejemplo verificable: KO 60 / PG 40 + JNJ 10 reduciendo proporcionalmente (1440 px)",
+  "esperado": "KO 54, PG 36, JNJ 10; total 100; tabla con antes, después y cambio (con texto); sin asignar 0 %; ninguna cifra negativa",
+  "observado": "{\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"JNJ\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Total asignado100 %100 %sin cambio; En la alternativa simulada, JNJ pasaría del 0 % al 10 % reduciendo proporcionalmente las otras posiciones. 3 posiciones cambian; sin asignar: 0 % → 0 %. La mayor posición pasa de KO (60 %) a KO (54 %). Es una comparación: no dice que la alternativa sea mejor.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K9b-1440",
+  "escenario": "La tabla de pesos antes/después se lee entera sin desplazar (1440 px)",
+  "esperado": "El ancho de la tabla cabe en su contenedor: las cuatro columnas son visibles a la vez",
+  "observado": "{\"tabla\":896,\"caja\":896}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10-1440",
+  "escenario": "La comparación cubre pesos, concentración, categorías, límites y pasos (1440 px)",
+  "esperado": "Secciones: pesos, concentración, categorías, límite personal; los pasos del cálculo se pueden desplegar; etiqueta «Simulación»",
+  "observado": "Pesos por posición | Concentración | Categorías disponibles (comerciales; no son la exposición real de los fondos) | Tu límite personal | Qué cambia en la nota de estructura v1 · beta | Guardar en mi Cuaderno; 4 pasos",
+  "resultado": "OK"
+ },
+ {
+  "id": "K10b-1440",
+  "escenario": "Límites personales afectados (1440 px)",
+  "esperado": "Con el límite del 50 %: KO dejaría de superarlo (antes 60 %, ahora 54 % sigue por encima: «sigue superando»)",
+  "observado": "Resultado Simulación Cuánto espacio ocuparía: JNJ ocuparía el 10 % de la cartera (ahora no figura). Quién cede el peso: Los 10 puntos de JNJ salen de reducir las otras posiciones en proporción: KO ced",
+  "resultado": "OK"
+ },
+ {
+  "id": "K11-1440",
+  "escenario": "Guardar el escenario no modifica la cartera base (1440 px)",
+  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
+  "resultado": "OK"
+ },
+ {
+  "id": "K12-1440",
+  "escenario": "Reabrir un escenario tras cambiar la cartera original (1440 px)",
+  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K13-1440",
+  "escenario": "Estado y nota del escenario; el seguimiento los distingue (1440 px)",
+  "esperado": "Tras archivarlo, deja «En estudio» (0) y aparece en «Archivados» con la marca «Simulación» y el aviso de versión posterior; la API guarda estado y nota",
+  "observado": "API archivado/«Archivado: ya no me interesa»; en estudio 0; archivados: Añadir JNJ al 10 % Simulación Archivado Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Base dividendos» Hay una versión posterior de la cartera Archivado: ya no me interesa Abrir Añadir JNJ al 10 %",
+  "resultado": "OK"
+ },
+ {
+  "id": "K14-1440",
+  "escenario": "Descartar un escenario no toca la cartera (1440 px)",
+  "esperado": "Tras descartarlo no queda ninguno; la cartera conserva su estado (50/50)",
+  "observado": "escenarios 0; [{\"ticker\":\"KO\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Coca-Cola\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.17788519467142547},{\"ticker\":\"PG\",\"peso\":50,\"fecha_entrada\":\"2026-11-05\",\"nombre\":\"Procter & Gamble\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.2598370680917842}]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K15-1440",
+  "escenario": "Operación inviable: se explica el motivo y no se ofrece guardar (1440 px)",
+  "esperado": "Con la cartera al 100 % y financiación con lo sin asignar: «No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %»; sin formulario de guardado",
+  "observado": "No se puede simularNo hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK"
+ },
+ {
+  "id": "K16-1440",
+  "escenario": "Texto ampliado al 200 % (simulado): laboratorio, seguimiento y radiografía (1440 px)",
+  "esperado": "Sin desbordamiento horizontal en las tres pantallas",
+  "observado": "{\"lab\":true,\"seg\":true,\"ed\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K17-1440",
+  "escenario": "Sin errores de JavaScript en todo el recorrido (1440 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "K18",
+  "escenario": "Fallo de red al guardar un escenario y reintento",
+  "esperado": "El fallo no guarda nada y conserva el formulario con un mensaje; el reintento usa la MISMA clave y guarda exactamente uno",
+  "observado": "fallo: 0 escenarios, formulario true; reintento: 1; claves iguales true",
+  "resultado": "OK"
+ },
+ {
+  "id": "K19",
+  "escenario": "Aislamiento entre dos usuarios (servidor real por HTTP)",
+  "esperado": "Otro usuario recibe 404 al leer, editar, borrar o poner límite; su lista de escenarios y su radar están vacíos; el escenario del primero sigue intacto",
+  "observado": "GET 404, PATCH 404, DELETE 404, lista 0, límite 404, radar 0; original 200",
+  "resultado": "OK"
+ },
+ {
+  "id": "K19b",
+  "escenario": "Sin sesión, las rutas nuevas devuelven 401",
+  "esperado": "401 en escenarios y radar",
+  "observado": "401/401",
+  "resultado": "OK"
+ },
+ {
+  "id": "K20",
+  "escenario": "Escenario inexistente: mensaje claro y salida",
+  "esperado": "Texto «No encontramos ese escenario» y enlace a Mi seguimiento",
+  "observado": "Laboratorio SimulaciónCompara cómo cambiaría el reparto de una cartera antes de tocarla. Nada de lo que hagas aquí cambi",
+  "resultado": "OK"
+ },
+ {
+  "id": "K21-390",
+  "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (390 px)",
+  "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-05T23:34:45.633Z\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K22-390",
+  "escenario": "Visitante: la radiografía analiza el borrador y no ofrece guardar el límite (390 px)",
+  "esperado": "Dice que analiza «tu borrador, que aún no está guardado en tu cuenta» y que el límite se podrá definir al guardar",
+  "observado": "Analizando: tu borrador, que aún no está guardado en tu cuenta. La mayor posición es SCHD (17 %). Las tres mayores suman el 50,2 %. Mayor posiciónSCHD",
+  "resultado": "OK"
+ },
+ {
+  "id": "K23-390",
+  "escenario": "Visitante: la simulación es temporal y no se dice «guardado» (390 px)",
+  "esperado": "El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»",
+  "observado": "Guardar este escenarioEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guar",
+  "resultado": "OK"
+ },
+ {
+  "id": "K21-1440",
+  "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (1440 px)",
+  "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-05T23:34:47.934Z\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K22-1440",
+  "escenario": "Visitante: la radiografía analiza el borrador y no ofrece guardar el límite (1440 px)",
+  "esperado": "Dice que analiza «tu borrador, que aún no está guardado en tu cuenta» y que el límite se podrá definir al guardar",
+  "observado": "Analizando: tu borrador, que aún no está guardado en tu cuenta. La mayor posición es SCHD (17 %). Las tres mayores suman el 50,2 %. Mayor posiciónSCHD",
+  "resultado": "OK"
+ },
+ {
+  "id": "K23-1440",
+  "escenario": "Visitante: la simulación es temporal y no se dice «guardado» (1440 px)",
+  "esperado": "El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»",
+  "observado": "Guardar este escenarioEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guar",
+  "resultado": "OK"
+ },
+ {
+  "id": "K24",
+  "escenario": "Al iniciar sesión, el radar del visitante pasa a la cuenta",
+  "esperado": "La API devuelve JNJ con su nota; lo local se borra solo tras guardar todo",
+  "observado": "[[\"JNJ\",\"Desde el visitante\"]]; local null",
+  "resultado": "OK"
+ },
+ {
+  "id": "K25",
+  "escenario": "Filtros explícitos: sector + comprobación + resultado",
+  "esperado": "Sector «Tecnología» con ROIC «no superada»: 6 empresa(s) según el servidor; los filtros sobreviven a abrir la ficha y a recargar; «Borrar» devuelve las 126; no se crea ningún ranking nuevo",
+  "observado": "6 de 126 empresas; tras ficha Tecnología/roic/no; recarga Tecnología/no; borrar 126 empresas",
+  "resultado": "OK"
+ },
+ {
+  "id": "K26",
+  "escenario": "Datos de prueba identificados como ficticios; nada se atribuye a la SEC",
+  "esperado": "El aviso de Explorar y la ficha dicen «PRUEBA ficticios»; ni la interfaz ni la ficha afirman «SEC EDGAR» ni «cada noche»",
+  "observado": "Datos de PRUEBA ficticios: no son cifras reales de ninguna empresa ni proceden de la SEC.; ficha con «SEC EDGAR»: false",
+  "resultado": "OK"
+ },
+ {
+  "id": "K27-390",
+  "escenario": "Menú: «Cuaderno» una vez en cada menú (390 px)",
+  "esperado": "Una vez en el menú de escritorio y una vez en el móvil",
+  "observado": "{\"esc\":1,\"mov\":1}",
+  "resultado": "OK"
+ },
+ {
+  "id": "K27-1440",
+  "escenario": "Menú: «Cuaderno» una vez en cada menú (1440 px)",
+  "esperado": "Una vez en el menú de escritorio y una vez en el móvil",
+  "observado": "{\"esc\":1,\"mov\":1}",
+  "resultado": "OK"
+ }
+]
