@@ -3,7 +3,7 @@
   "id": "P1-1440",
   "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (1440 px)",
   "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
-  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo repartir tu dinero simulado.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
   "resultado": "OK"
  },
  {
@@ -30,15 +30,15 @@
  {
   "id": "P5-1440",
   "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (1440 px)",
-  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
-  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en la nota (#nota-panel); tras volver y editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"nota-panel\"},\"vuelta\":\"2\"}",
   "resultado": "OK"
  },
  {
   "id": "P6-1440",
   "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (1440 px)",
-  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
-  "observado": "[\"revisar\"]; normal true; 200 % true (1440/1440)",
+  "esperado": "Solo «Revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"js-revisar\"]; normal true; 200 % true (1440/1440)",
   "resultado": "OK"
  },
  {
@@ -52,7 +52,7 @@
   "id": "P1-390",
   "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (390 px)",
   "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
-  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo repartir tu dinero simulado.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
   "resultado": "OK"
  },
  {
@@ -79,15 +79,15 @@
  {
   "id": "P5-390",
   "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (390 px)",
-  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
-  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en la nota (#nota-panel); tras volver y editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"nota-panel\"},\"vuelta\":\"2\"}",
   "resultado": "OK"
  },
  {
   "id": "P6-390",
   "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (390 px)",
-  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
-  "observado": "[\"revisar\"]; normal true; 200 % true (390/390)",
+  "esperado": "Solo «Revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"js-revisar\"]; normal true; 200 % true (390/390)",
   "resultado": "OK"
  },
  {
@@ -101,7 +101,7 @@
   "id": "P1-320",
   "escenario": "Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar portafolio» (320 px)",
   "esperado": "h1 «Crea tu portafolio» en serif, subtítulo, pasos Objetivo · Distribución · Revisión con el 2 actual, anillo con nombre accesible que lista los importes, enlace Volver y botón «Revisar portafolio»",
-  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo quieres repartir tu dinero simulado. Podrás ajustar los porcentajes antes de guardar.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
+  "observado": "{\"h1\":\"Crea tu portafolio\",\"sub\":\"Elige cómo repartir tu dinero simulado.\",\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"actual\":\"2\",\"serif\":\"Georgia, \\\"Iowan Old \",\"donut\":\"Reparto del portafolio sobre 10.000 € simulados: SCHD 17 % (1.700 €), \",\"volver\":true,\"revisar\":\"Revisar portafolio →\"}",
   "resultado": "OK"
  },
  {
@@ -128,15 +128,15 @@
  {
   "id": "P5-320",
   "escenario": "«Revisar portafolio» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (320 px)",
-  "esperado": "Tras pulsar Revisar: paso 3 y foco en #res-detalle; tras editar un peso: paso 2",
-  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"res-detalle\"},\"vuelta\":\"2\"}",
+  "esperado": "Tras pulsar Revisar: paso 3 y foco en la nota (#nota-panel); tras volver y editar un peso: paso 2",
+  "observado": "{\"rv\":{\"actual\":\"3\",\"foco\":\"nota-panel\"},\"vuelta\":\"2\"}",
   "resultado": "OK"
  },
  {
   "id": "P6-320",
   "escenario": "Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (320 px)",
-  "esperado": "Solo «revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
-  "observado": "[\"revisar\"]; normal true; 200 % true (320/320)",
+  "esperado": "Solo «Revisar» tiene relleno de acento; la página no se desplaza en horizontal ni al 200 % de texto (simulado)",
+  "observado": "[\"js-revisar\"]; normal true; 200 % true (320/320)",
   "resultado": "OK"
  },
  {
@@ -156,15 +156,15 @@
  {
   "id": "P7b",
   "escenario": "Entrada con sesión: la portada lleva a «Mis portafolios» para elegir uno",
-  "esperado": "Con sesión, #inicio redirige a «Mis portafolios» (#carteras) con su título",
+  "esperado": "Con sesión, #inicio muestra «Mis portafolios» con su título y la entrada del menú marcada",
   "observado": "{\"hash\":\"#inicio\",\"h1\":\"Mis portafolios\",\"actual\":\"Mis portafolios\",\"mis\":\"Mis portafolios\"}",
-  "resultado": "FALLA"
+  "resultado": "OK"
  },
  {
   "id": "P8",
   "escenario": "Con un portafolio de la cuenta: sin cambios → «Revisar»; con cambios pendientes → «Guardar»; tras guardar → «Revisar»",
   "esperado": "Una sola acción principal en cada estado; el título pasa a «Tu portafolio»",
-  "observado": "Tu portafolio; limpio [\"revisar\"]; sucio [\"js-guardar\"]; guardado [\"revisar\"]",
+  "observado": "Tu portafolio; limpio [\"js-revisar\"]; sucio [\"js-guardar\"]; guardado [\"js-revisar\"]",
   "resultado": "OK"
  },
  {

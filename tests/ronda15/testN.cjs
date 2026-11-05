@@ -108,7 +108,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await otro.ctx.close(); await p.ctx.close();
   }
   // ---- 9. Nota en el editor y filtros plegados en Explorar
-  { const p = await nuevo(b, 390, 780); await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForSelector('#nota-cuerpo .nota'); await p.waitForTimeout(300);
+  { const p = await nuevo(b, 390, 780); await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.evaluate(() => document.querySelector('.js-revisar').click()); await p.waitForSelector('#nota-cuerpo .nota'); await p.waitForTimeout(300);
     const nota = N(await p.textContent('#nota-cuerpo .nota'));
     ev('N10', 'La nota de estructura en el editor, con su aviso de datos y «Cómo se calcula»', 'Muestra «Nota de estructura v1 · beta», «No es una previsión de rentabilidad», el aviso de datos de prueba, y el desplegable del método; ETF/fondos sin metodología aparecen como peso sin evaluar con motivo', nota.slice(0, 260), /Nota de estructura/.test(nota) && /No es una previsión de rentabilidad/.test(nota) && /PRUEBA ficticios/.test(nota) && /Cómo se calcula/.test(nota) && /Fondo \(ETF\) sin metodología/.test(nota));
     await p.screenshot({ path: CAP + 'C9-nota-pendiente-390.png', fullPage: true });

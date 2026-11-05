@@ -266,17 +266,11 @@
         </div>
 
         <section class="panel panel-pos" aria-labelledby="h-pos">
-          <h2 id="h-pos">Posiciones</h2>
-          <div class="comp" id="comp">
+          <h2 id="h-pos" tabindex="-1">Posiciones</h2>
+          <div class="comp" id="comp" tabindex="-1">
             <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button class="btn btn-primario js-revisar js-revisar-comp" type="button">Revisar <span aria-hidden="true">→</span></button></span></div>
             <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
             <p id="comp-pie" class="comp-pie"></p>
-          </div>
-          <div class="combo">
-            <label for="buscar-activo">Añadir un activo</label>
-            <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
-            <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
-            <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
           </div>
           <p id="pos-error" class="msg-error" role="status"></p>
           <div class="tabla-scroll">
@@ -289,16 +283,16 @@
           <ul id="pos-cards" class="pos-cards"></ul>
           <div id="pos-vacio" class="vacio" hidden>
             <p><b>Aún no hay posiciones.</b></p>
-            <p class="mut">Busca un activo arriba o usa «Más acciones» para cargar el reparto de una plantilla.</p>
+            <p class="mut">Busca un activo abajo o usa «Más acciones» para cargar el reparto de una plantilla.</p>
+          </div>
+          <div class="combo">
+            <label for="buscar-activo">Añadir un activo</label>
+            <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
+            <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
+            <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
           </div>
         </section>
 
-        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
-        <details class="panel plegable-panel panel-graf" id="det-graficos">
-          <summary><h2>Gráficos de precio</h2></summary>
-          <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
-          <div id="graficos" class="grid-graf"></div>
-        </details>
       </div>
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
@@ -316,6 +310,7 @@
           </div>
           <p class="mut peq" id="donut-pie">Podrás ajustar estos porcentajes antes de guardar.</p>
         </details>
+        <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
           <section id="radio" class="radio" aria-labelledby="radio-t">
@@ -355,7 +350,6 @@
           </div>
           </div>
         </section>
-        <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
 
         <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">
           <summary><h2>Publicación</h2><span id="pub-chip" class="chip">Privada</span></summary>
@@ -370,6 +364,12 @@
           <p id="pub-error" class="msg-error" role="alert"></p>
         </details>
       </aside>
+        <details class="panel plegable-panel panel-graf" id="det-graficos">
+          <summary><h2>Gráficos de precio</h2></summary>
+          <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
+          <div id="graficos" class="grid-graf"></div>
+        </details>
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
     </div>
   </section>
 </main>

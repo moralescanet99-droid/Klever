@@ -1,30 +1,30 @@
 [
  {
   "id": "N1-320",
-  "escenario": "Navegación principal de tres destinos (320 px)",
-  "esperado": "Solo «Cartera», «Ideas» y «Seguimiento»",
-  "observado": "[\"Cartera\",\"Ideas\",\"Seguimiento\"]",
+  "escenario": "Navegación principal de cuatro entradas (320 px)",
+  "esperado": "«Mis portafolios», «Crear portafolio», «Cuaderno» y «Revista» (secundaria)",
+  "observado": "[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"]",
   "resultado": "OK"
  },
  {
   "id": "N1b-320",
-  "escenario": "Ideas reúne historias, empresas y carteras públicas (320 px)",
-  "esperado": "En las tres vistas hay pestañas de Ideas con la actual marcada y el destino «Ideas» activo",
-  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"}]",
+  "escenario": "Revista reúne historias, empresas y carteras públicas (320 px)",
+  "esperado": "En las tres vistas hay pestañas con la actual marcada y la entrada «Revista» activa",
+  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"}]",
   "resultado": "OK"
  },
  {
   "id": "N2-320",
   "escenario": "Portada: crear o explorar un ejemplo, y la frase del seguimiento (320 px)",
-  "esperado": "Acción principal «Crea tu primera cartera», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
-  "observado": "{\"h1\":\"Crea y entiende tu cartera simulada\",\"primaria\":\"Crea tu primera cartera\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
+  "esperado": "Acción principal «Crea tu primer portafolio», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
+  "observado": "{\"h1\":\"Crea, entiende y sigue tu portafolio\",\"primaria\":\"Crea tu primer portafolio\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
   "resultado": "OK"
  },
  {
   "id": "N2b-320",
   "escenario": "Cartera de ejemplo: nombre, peso y por qué está cada posición (320 px)",
   "esperado": "Dos posiciones con nombre, símbolo, peso (60 % y 40 %) y una frase de razón; aviso de que es un ejemplo; la nota de estructura aparece (con su aviso de datos)",
-  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta Describe la estructura de la ca",
+  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta4,4 de 10 Toda la cartera está e",
   "resultado": "OK"
  },
  {
@@ -73,7 +73,7 @@
   "id": "N7-320",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (320 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta · Formará parte del futuro plan de pago» completa y visible; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sigue pendiente» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Con novedades Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyecto C (100 M…",
+  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Tu pregunta tiene respuesta Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Pro…",
   "resultado": "OK"
  },
  {
@@ -85,30 +85,30 @@
  },
  {
   "id": "N1-390",
-  "escenario": "Navegación principal de tres destinos (390 px)",
-  "esperado": "Solo «Cartera», «Ideas» y «Seguimiento»",
-  "observado": "[\"Cartera\",\"Ideas\",\"Seguimiento\"]",
+  "escenario": "Navegación principal de cuatro entradas (390 px)",
+  "esperado": "«Mis portafolios», «Crear portafolio», «Cuaderno» y «Revista» (secundaria)",
+  "observado": "[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"]",
   "resultado": "OK"
  },
  {
   "id": "N1b-390",
-  "escenario": "Ideas reúne historias, empresas y carteras públicas (390 px)",
-  "esperado": "En las tres vistas hay pestañas de Ideas con la actual marcada y el destino «Ideas» activo",
-  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"}]",
+  "escenario": "Revista reúne historias, empresas y carteras públicas (390 px)",
+  "esperado": "En las tres vistas hay pestañas con la actual marcada y la entrada «Revista» activa",
+  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"}]",
   "resultado": "OK"
  },
  {
   "id": "N2-390",
   "escenario": "Portada: crear o explorar un ejemplo, y la frase del seguimiento (390 px)",
-  "esperado": "Acción principal «Crea tu primera cartera», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
-  "observado": "{\"h1\":\"Crea y entiende tu cartera simulada\",\"primaria\":\"Crea tu primera cartera\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
+  "esperado": "Acción principal «Crea tu primer portafolio», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
+  "observado": "{\"h1\":\"Crea, entiende y sigue tu portafolio\",\"primaria\":\"Crea tu primer portafolio\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
   "resultado": "OK"
  },
  {
   "id": "N2b-390",
   "escenario": "Cartera de ejemplo: nombre, peso y por qué está cada posición (390 px)",
   "esperado": "Dos posiciones con nombre, símbolo, peso (60 % y 40 %) y una frase de razón; aviso de que es un ejemplo; la nota de estructura aparece (con su aviso de datos)",
-  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta Describe la estructura de la ca",
+  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta4,4 de 10 Toda la cartera está e",
   "resultado": "OK"
  },
  {
@@ -157,7 +157,7 @@
   "id": "N7-390",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (390 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta · Formará parte del futuro plan de pago» completa y visible; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sigue pendiente» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Con novedades Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyecto C (100 M…",
+  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Tu pregunta tiene respuesta Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Pro…",
   "resultado": "OK"
  },
  {
@@ -169,30 +169,30 @@
  },
  {
   "id": "N1-1440",
-  "escenario": "Navegación principal de tres destinos (1440 px)",
-  "esperado": "Solo «Cartera», «Ideas» y «Seguimiento»",
-  "observado": "[\"Cartera\",\"Ideas\",\"Seguimiento\"]",
+  "escenario": "Navegación principal de cuatro entradas (1440 px)",
+  "esperado": "«Mis portafolios», «Crear portafolio», «Cuaderno» y «Revista» (secundaria)",
+  "observado": "[\"Mis portafolios\",\"Crear portafolio\",\"Cuaderno\",\"Revista\"]",
   "resultado": "OK"
  },
  {
   "id": "N1b-1440",
-  "escenario": "Ideas reúne historias, empresas y carteras públicas (1440 px)",
-  "esperado": "En las tres vistas hay pestañas de Ideas con la actual marcada y el destino «Ideas» activo",
-  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"},{\"tabs\":1,\"actual\":true,\"nav\":\"ideas\"}]",
+  "escenario": "Revista reúne historias, empresas y carteras públicas (1440 px)",
+  "esperado": "En las tres vistas hay pestañas con la actual marcada y la entrada «Revista» activa",
+  "observado": "[{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"},{\"tabs\":1,\"actual\":true,\"nav\":\"revista\"}]",
   "resultado": "OK"
  },
  {
   "id": "N2-1440",
   "escenario": "Portada: crear o explorar un ejemplo, y la frase del seguimiento (1440 px)",
-  "esperado": "Acción principal «Crea tu primera cartera», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
-  "observado": "{\"h1\":\"Crea y entiende tu cartera simulada\",\"primaria\":\"Crea tu primera cartera\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
+  "esperado": "Acción principal «Crea tu primer portafolio», secundaria «Explora una cartera de ejemplo» y la frase «Crea tu cartera y sigue qué ha cambiado…»; sin radar vacío",
+  "observado": "{\"h1\":\"Crea, entiende y sigue tu portafolio\",\"primaria\":\"Crea tu primer portafolio\",\"sec\":\"Explora una cartera de ejemplo\",\"seg\":\"Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.\",\"vacio\":false}",
   "resultado": "OK"
  },
  {
   "id": "N2b-1440",
   "escenario": "Cartera de ejemplo: nombre, peso y por qué está cada posición (1440 px)",
   "esperado": "Dos posiciones con nombre, símbolo, peso (60 % y 40 %) y una frase de razón; aviso de que es un ejemplo; la nota de estructura aparece (con su aviso de datos)",
-  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta Describe la estructura de la ca",
+  "observado": "Coca-Cola KO · 60 %Una empresa de bebidas muy conocida. El autor del e | Procter & Gamble PG · 40 %Una empresa de productos de higiene y hogar.; Nota de estructura v1 · beta4,4 de 10 Toda la cartera está e",
   "resultado": "OK"
  },
  {
@@ -241,7 +241,7 @@
   "id": "N7-1440",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (1440 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta · Formará parte del futuro plan de pago» completa y visible; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sigue pendiente» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Con novedades Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyecto C (100 M…",
+  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta · Formará parte del futuro plan de pago»; Tu pregunta tiene respuesta Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Pro…",
   "resultado": "OK"
  },
  {
@@ -262,7 +262,7 @@
   "id": "N9",
   "escenario": "Seguimiento con cuenta: la pregunta, qué ha ocurrido, la fecha y los pesos distinguidos",
   "esperado": "La tarjeta tiene la pregunta, «15 dic 2026», qué ha ocurrido (C firmado, D aplazado, fuente), el peso en el ESCENARIO (10 %, base 0 %) distinto del de la CARTERA ACTUAL (20 %) y los enlaces a la revisión y a la simulación",
-  "observado": "Con novedades Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?»Fecha de revisión: 15 dic 2026. Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyecto C (100 MW): Firmado el 29 de octubre [6]Proyecto D (60 MW): Aplazado sin fecha; sin documento nuevoFuente: Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio). Solo se firmó uno",
+  "observado": "Tu pregunta tiene respuesta Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?»Fecha de revisión: 15 dic 2026. Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyecto C (100 MW): Firmado el 29 de octubre [6]Proyecto D (60 MW): Aplazado sin fecha; sin documento nuevoFuente: Resumen de ejemplo del contrato del proyecto C [6] (documento ficticio). Sol",
   "resultado": "OK"
  },
  {
@@ -274,9 +274,9 @@
  },
  {
   "id": "N10",
-  "escenario": "La nota de estructura en el editor, con su aviso de datos y «¿Por qué esta nota?»",
+  "escenario": "La nota de estructura en el editor, con su aviso de datos y «Cómo se calcula»",
   "esperado": "Muestra «Nota de estructura v1 · beta», «No es una previsión de rentabilidad», el aviso de datos de prueba, y el desplegable del método; ETF/fondos sin metodología aparecen como peso sin evaluar con motivo",
-  "observado": "Nota de estructura v1 · beta Describe la estructura de la cartera y los fundamentales observados el 4 nov 2026. No es una previsión de rentabilidad ni una recomendación, y una nota alta no garantiza rentabilidad ni idoneidad personal. Datos de PRUEBA ficticios",
+  "observado": "Nota de estructura v1 · betaNota pendiente. Faltan datos para valorar «empresas», «sectores y actividades», «tamaño y liquidez», «deuda y caja» y «rentabilidad y crecimiento». Causa principal: SCHD (17 % de la cartera): fondo (ETF) sin metodología ni composici",
   "resultado": "OK"
  },
  {

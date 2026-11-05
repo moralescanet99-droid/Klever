@@ -1,6 +1,6 @@
 // Batería K (ronda 13): recorrido completo de cartera → radiografía → explorar → radar → laboratorio → escenario → seguimiento, en 320/390/1440 px.
 // Datos de la semilla (ficticios). El texto ampliado es una SIMULACIÓN (font-size del documento). Uso: node tests/ronda13/testK.cjs
-const { chromium, B, ev, nuevo, mail, peso, fin } = require('../ronda5/h.cjs');
+const { chromium, B, ev, nuevo, mail, peso, fin , revision, distribucion } = require('../ronda5/h.cjs');
 const path = require('path'), fs = require('fs');
 const CAP = path.resolve(__dirname, '..', '..', 'ronda13', 'capturas') + path.sep; fs.mkdirSync(CAP, { recursive: true });
 const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
@@ -25,6 +25,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const idBase = cb.j.id, revBase = cb.j.revision;
     // ---------- 1. Radiografía de la versión guardada
     await p.reload(); await abrir(p, 'Base dividendos');
+    await revision(p);   // ronda 18: la radiografía vive en el paso «Revisión»
     const rad = await p.evaluate(() => ({ t: document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '), vis: document.querySelector('#radio-cuerpo').offsetParent !== null }));
     ev('K1-' + w, `Radiografía de la versión guardada (${w} px)`, 'Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide',
       rad.t.slice(0, 330), rad.vis && /Analizando: la versión guardada en tu cuenta/.test(rad.t) && /La mayor posición es KO \(60 %\)/.test(rad.t) && /Solo hay 2 posiciones: suman el 100 %/.test(rad.t) && /Concentración no es riesgo/.test(rad.t) && /Mayores posiciones/.test(rad.t));

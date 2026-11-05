@@ -1,5 +1,5 @@
-Ejecución: 2026-11-04 23:28 UTC
-Código: commit be4dabeb0cbcff14ad6e6a72e491d9079569582c; árbol de trabajo CON CAMBIOS sin commitear
+Ejecución: 2026-11-05 00:01 UTC
+Código: commit 811d5df39ec2b6c0897e00b2d3b05d6f6597f0a6; árbol de trabajo CON CAMBIOS sin commitear
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -33,73 +33,3 @@ RESULTADO: 20 correctas, 0 fallos
 === unit-integridad18 ===
 RESULTADO: 18 correctas, 0 fallos
 === test-zip ===
-RESULTADO: 8 correctas, 0 fallos
-=== testA ===
-RESULTADO: 31 correctas, 0 fallos
-=== testB ===
-FALLA móvil: barra inferior 72–88 px  [120px]
-FALLA orden 390px: resumen breve → posiciones → resumen detallado → gráficos → publicación  [373 < 510 < 929 < 929 < 929]
-FALLA orden 768px: resumen breve → posiciones → resumen detallado → gráficos → publicación  [283 < 393 < 779 < 779 < 779]
-RESULTADO: 48 correctas, 3 fallos
-- móvil: barra inferior 72–88 px → 120px
-- orden 390px: resumen breve → posiciones → resumen detallado → gráficos → publicación → 373 < 510 < 929 < 929 < 929
-- orden 768px: resumen breve → posiciones → resumen detallado → gráficos → publicación → 283 < 393 < 779 < 779 < 779
-FALLA (ejecutor): testB tiene 3 fallos
-=== testC ===
-RESULTADO: 50 correctas, 0 fallos
-=== testD ===
-FALLA [E5] Publicar desactivado se ve como Guardar desactivado  [color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=false]
-FALLA [E9a] Exceso de asignación a 360 px  [página 360/360 px; texto del exceso a 16px; barra 120 px; resumen «⚠ Exceso de asignación: 13 %»; barra «⚠ Asignado: 113 %» · «⚠ Exceso: 13 %»; contenido de la barra fuera de pantalla=false]
-FALLA [E9b] Etiquetas del resumen  [«✓ 100 % asignado» aparece=false; nota ROIC=false; nota categorías (en el desplegable, plegada)=true; antes visible=false]
-RESULTADO: 26 correctas, 3 fallos
-- [E5] Publicar desactivado se ve como Guardar desactivado → color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=false
-- [E9a] Exceso de asignación a 360 px → página 360/360 px; texto del exceso a 16px; barra 120 px; resumen «⚠ Exceso de asignación: 13 %»; barra «⚠ Asignado: 113 %» · «⚠ Exceso: 13 %»; contenido de la barra fuera de pantalla=false
-- [E9b] Etiquetas del resumen → «✓ 100 % asignado» aparece=false; nota ROIC=false; nota categorías (en el desplegable, plegada)=true; antes visible=false
-FALLA (ejecutor): testD tiene 3 fallos
-=== testE ===
-RESULTADO: 15 correctas, 0 fallos
-=== testF ===
-RESULTADO: 9 correctas, 0 fallos
-=== testG ===
-RESULTADO: 3 correctas, 0 fallos
-=== verificar-api ===
-RESULTADO: 8 correctas, 0 fallos
-=== testH ===
-FALLA [H7-320] 320×568, texto ampliado al 200 % (SIMULADO): espacio útil con aviso de error y barra, sin cerrar el aviso  [zona libre 164 px de 568 (29 %); aviso 161 px, barra 137 px; mensaje 236 px de 320; último peso entre aviso y barra=true (263–329 en 161–431); Guardar alcanzable=true; el aviso sigue abierto=true]
-FALLA [H4-320] Resumen de ROIC (320 px): composición primero, ROIC secundario con cobertura y advertencia; explicación en desplegable  [ROIC «15,6 %» visible=false; orden correcto=false; tamaños total/ROIC 28/24 px; cobertura «Con dato: 4 de 6 posiciones (66 % del peso asignado).Fuera del cálculo: 2 fondos (no aplicable).»; advertencia «No representa la rentabilidad de tu cartera.» visible=false; desplegable «Cómo se calcula y qué se excluye» cerrado=true, fórmula oculta=true; con Enter se abre=false, fórmula visible=false; desplegables 2 (≤ 2), paneles anidados 0, h2 1; con JPMorgan: «Con dato: 4 de 7 posiciones (63 % del peso asignado).Fuera del cálculo: 1 empresa sin dato (no cuenta como 0) · 2 fondos (no aplicable).» · detalle «Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.» · ROIC 15,6 %; ancho 320/320]
-FALLA [H4-390] Resumen de ROIC (390 px): composición primero, ROIC secundario con cobertura y advertencia; explicación en desplegable  [ROIC «15,6 %» visible=false; orden correcto=false; tamaños total/ROIC 28/24 px; cobertura «Con dato: 4 de 6 posiciones (66 % del peso asignado).Fuera del cálculo: 2 fondos (no aplicable).»; advertencia «No representa la rentabilidad de tu cartera.» visible=false; desplegable «Cómo se calcula y qué se excluye» cerrado=true, fórmula oculta=true; con Enter se abre=false, fórmula visible=false; desplegables 2 (≤ 2), paneles anidados 0, h2 1; con JPMorgan: «Con dato: 4 de 7 posiciones (63 % del peso asignado).Fuera del cálculo: 1 empresa sin dato (no cuenta como 0) · 2 fondos (no aplicable).» · detalle «Dato ausente (no disponible): 1 empresa.No aplicable: 2 fondos; los ETF no tienen ROIC.» · ROIC 15,6 %; ancho 390/390]
-page.fill: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testH terminó SIN resultado
-FALLA (ejecutor): testH salió con código 1
-=== testI ===
-RESULTADO: 16 correctas, 0 fallos
-=== testJ ===
-RESULTADO: 53 correctas, 0 fallos
-=== testK ===
-FALLA [K1-320] Radiografía de la versión guardada (320 px)  [Analizando: la versión guardada en tu cuenta. La mayor posición es KO (60 %). Solo hay 2 posiciones: suman el 100 %. Mayor posiciónKO · 60 % Mayores posiciones100 % (solo hay 2) Sin asignar0 % Límite personal por posición (opcional) % Definir Una referencia tuya, no un consejo: Klever no impone ningún umbral. Sin límite definido]
-page.fill: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testK terminó SIN resultado
-FALLA (ejecutor): testK salió con código 1
-=== testL ===
-RESULTADO: 28 correctas, 0 fallos
-=== testM ===
-RESULTADO: 7 correctas, 0 fallos
-=== testN ===
-page.waitForSelector: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testN terminó SIN resultado
-FALLA (ejecutor): testN salió con código 1
-=== testO ===
-OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
-OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
-RESULTADO: 18 correctas, 0 fallos
-=== testP ===
-FALLA (ejecutor): testP terminó SIN resultado
-FALLA (ejecutor): testP salió con código 1
-=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
-RESULTADO: 6 correctas, 0 fallos
-=== demo (demotest) ===
-DEMO OK
-RESUMEN: 10 problema(s) en la ejecución. Código de salida 1.

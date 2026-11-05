@@ -3,7 +3,8 @@
    los bordes y el foco salen de los tokens de este bloque. Se carga la última y no toca la lógica: solo tokens y clases nuevas. */
 
 /* --- tokens (se imponen a style.css y a su tema oscuro) --- */
-html:root:root:root{
+/* único esquema vigente; style.css ya no define tema oscuro ni data-theme */
+:root{
   --bg:#13100E; --surface:#1B1613; --surface-2:#241D18;
   --text:#F4EDE0; --muted:#BDB0A0;
   --border:#352B22; --border-strong:#85755F;
@@ -80,6 +81,7 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 @media (max-width:479px){.paso{font-size:var(--t-s)}.paso-n{width:30px;height:30px}.paso+.paso::before{width:12px}}
 
 /* --- creador por pasos: «Distribución» (controles + resumen) y «Revisión» (resultado primero, motivo, guardado) --- */
+/* el «resumen breve» antiguo queda oculto: el estado compacto es la tarjeta de composición (con «Revisar») y el resumen del anillo */
 .res-breve{display:none!important}
 .res-breve{display:none!important}
 .paso3-volver{display:none;margin:0 0 var(--s2)}
@@ -92,7 +94,8 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
   #vista-cartera[data-paso="3"] .ws-main,#vista-cartera[data-paso="3"] .ws-resumen{display:contents}
 }
 .panel-pos{order:1} .panel-donut{order:2} .ws-pie{order:3}
-@media (max-width:899px){#vista-cartera[data-paso="3"] .panel-nota{order:1} #vista-cartera[data-paso="3"] .panel-donut{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-graf{order:4} #vista-cartera[data-paso="3"] .panel-pub{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}}
+.panel-nota{order:3} .panel-res{order:4} .panel-pub{order:5} .panel-graf{order:6}
+@media (max-width:899px){#vista-cartera[data-paso="3"] .panel-donut{order:1} #vista-cartera[data-paso="3"] .panel-nota{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-pub{order:4} #vista-cartera[data-paso="3"] .panel-graf{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}}
 .paso-b:disabled{opacity:.6}
 .nombre{font-size:1.25rem;font-weight:600}
 
@@ -195,7 +198,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 
 /* fila de peso: [deslizador ———— campo %] y columnas de la tabla de escritorio con el peso como protagonista */
 .peso-celda{display:flex;align-items:center;gap:12px;justify-content:flex-end}
-.peso-celda .peso-rng{order:-1;flex:1 1 auto;min-width:120px;width:auto}
+.peso-celda .peso-rng{flex:1 1 auto;min-width:120px;width:auto}   /* el DOM ya sigue el orden visual: deslizador y luego campo */
 .tabla-pos th.num,.tabla-pos td.num{width:52%}
 @media (max-width:899px){
   .paso+.paso::before{width:10px;margin-right:6px} .paso{gap:6px;font-size:var(--t-s)} .paso a,.paso .paso-b{gap:6px} .paso-n{width:30px;height:30px}
@@ -213,3 +216,11 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 /* móvil: «Revisar» vive junto al estado compacto del reparto (a la vista en el primer viewport); la barra inferior conserva solo «Guardar» y su altura de siempre */
 .comp .js-revisar-comp{min-height:44px;padding:0 14px}
 @media (min-width:900px){.comp .js-revisar-comp{display:none}}
+
+/* escritorio: controles a la izquierda; resumen (anillo, resultado, radiografía, publicación) a la derecha de todas las filas; gráficos y pie bajo los controles */
+@media (min-width:900px){
+  .ws-main{grid-column:1;grid-row:1} .ws-resumen{grid-column:2;grid-row:1 / span 3} .panel-graf{grid-column:1;grid-row:2} .ws-pie{grid-column:1;grid-row:3}
+}
+
+/* la nota va dentro de su panel: sin segundo marco */
+.panel-nota .nota{border:0;padding:0;background:transparent}

@@ -7,7 +7,7 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 export RONDA="${RONDA:-ronda18}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs tests/ronda16/testO.cjs tests/ronda17/testP.cjs}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs tests/ronda16/testO.cjs tests/ronda17/testP.cjs tests/ronda18/testQ.cjs tests/ronda18/paridad-demo.cjs}"
 UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs}"
 PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)

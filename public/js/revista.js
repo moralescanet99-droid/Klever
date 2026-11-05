@@ -22,7 +22,7 @@ export function mostrarRevista() {
     return `<article class="rev-tarjeta"><p class="rev-chips"><span class="chip sim">Caso ficticio</span> <span class="chip">Historia · ${esc(fechaCorta(h.fecha))}</span> ${h.tesis.length > 1 ? '<span class="chip">Opinión con revisión</span>' : '<span class="chip">Opinión</span>'}</p>
       <h2><a href="#historia-${esc(h.id)}">${esc(h.titulo)}</a></h2><p>${esc(h.bajada)}</p>
       <p class="mut peq">Por ${esc(h.autor)} · Empresa vinculada: ${esc(h.empresa)}</p>
-      <p class="rev-enlaces"><a class="btn btn-primario" href="#historia-${esc(h.id)}">Leer la historia</a> <a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión</a>
+      <p class="rev-enlaces"><a class="btn btn-primario" href="#historia-${esc(h.id)}">Leer la historia</a> <a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión de «El Superespeculador» (ejemplo)</a>
       ${ult.n > 1 ? `<a class="btn btn-ghost" href="#tesis-${esc(h.id)}-${ult.n}">Ver la revisión (${esc(fechaCorta(ult.fecha))})</a>` : ''}</p></article>`;
   }).join('');
 }

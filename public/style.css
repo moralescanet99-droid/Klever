@@ -21,30 +21,7 @@
   --ancho:1200px; --gutter:16px;
   --fuente:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#0D1524; --surface:#142033; --surface-2:#1B2A40;
-    --text:#E8EEF8; --muted:#A9B7CC;
-    --border:#2A3B55; --border-strong:#6F83A0;
-    --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#12383C; --accent-on-soft:#7FE8D8;
-    --c0:#2DD4BF; --c1:#7DA7F0; --c2:#F0B35A; --c3:#C39BE0; --c4:#7CD6A8; --c5:#F0968D; --c6:#9FB0D4; --c7:#D9C25E; --c-txt:#0B1219;
-    --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
-    --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
-    --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0D1524; --surface:#142033; --surface-2:#1B2A40;
-  --text:#E8EEF8; --muted:#A9B7CC;
-  --border:#2A3B55; --border-strong:#6F83A0;
-  --accent:#2DD4BF; --on-accent:#04201C; --accent-soft:#12383C; --accent-on-soft:#7FE8D8;
-  --c0:#2DD4BF; --c1:#7DA7F0; --c2:#F0B35A; --c3:#C39BE0; --c4:#7CD6A8; --c5:#F0968D; --c6:#9FB0D4; --c7:#D9C25E; --c-txt:#0B1219;
-  --ok:#7CE2A4; --ok-bg:#12301F; --warn:#F8C666; --warn-bg:#33270E; --bad:#FF9D93; --bad-bg:#3C1A17;
-  --focus:#5EEAD4; --scrim:rgba(0,0,0,.65);
-  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-lg:0 12px 28px rgba(0,0,0,.5);
-  color-scheme:dark;
-}
+/* ronda 18: el tema oscuro y el selector data-theme se retiran; el único esquema vigente (carbón y cobre) vive en style-r17.css */
 @media (min-width:720px){:root{--gutter:24px}}
 @media (min-width:1100px){:root{--gutter:32px}}
 
@@ -218,16 +195,11 @@ main{max-width:var(--ancho);margin:0 auto;padding:var(--s3) var(--gutter) var(--
 .ws-grid{display:flex;flex-direction:column;gap:var(--s2)}
 .ws-grid>*,.ws-main>*,.ws-resumen>*{min-width:0}
 .ws-main,.ws-resumen{display:contents}
-.res-breve{order:1;display:flex;flex-direction:column;gap:2px;padding:12px var(--s2);background:var(--surface);border:1px solid var(--border);border-radius:var(--r)}
-.res-breve b{font-size:1.125rem} .rb-estado{margin:0;font-weight:600} .rb-estado[hidden]{display:none}
-.rb-pie{display:flex;justify-content:space-between;align-items:center;gap:var(--s1)} .rb-pie .enlace{min-height:44px;margin-block:-6px}
-.panel-pos{order:2} .panel-res{order:3} .panel-graf{order:4} .panel-pub{order:5}
 @media (min-width:900px){
   .ws-cab{margin-bottom:var(--s3)} .ws-meta{margin-top:6px}
   .ws-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:var(--s3);align-items:start}
   .ws-main{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s3);min-width:0}
   .ws-resumen{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s2);min-width:0;position:sticky;top:var(--s2)}
-  .res-breve{display:none}
 }
 
 .combo{position:relative;margin-bottom:var(--s2)} .combo input{width:100%}
@@ -344,7 +316,6 @@ html{scroll-padding-bottom:calc(var(--barra-alto,0px) + 16px)}
 @media (max-width:899px){body.en-cartera main{padding-bottom:var(--s2)} body.en-cartera .pie{padding-bottom:calc(var(--barra-alto,88px) + 16px)}} /* la barra inferior fija nunca tapa el pie ni sus enlaces */
 .prev-mas{color:var(--muted);font-size:.875rem;padding:10px 0;border-bottom:1px solid var(--border)}
 #b-falta.ok,#rb-estado.ok{color:var(--ok)} #b-falta.aviso,#rb-estado.aviso{color:var(--warn)} #b-falta.error,#rb-estado.error{color:var(--bad)}
-.res-breve #rb-estado{font-weight:600}
 .prev-fila .nd{font-size:.8125rem}
 .solo-escritorio[hidden],.solo-movil[hidden],.menu a[hidden],.menu-movil a[hidden],.menu-movil button[hidden]{display:none!important}
 .tabla-emp{table-layout:fixed}
@@ -458,7 +429,6 @@ html{scroll-padding-top:var(--avisos-alto,0px)}
   @container (max-width:15rem){.barra-guardar .js-guardar{order:-1;flex:1 1 100%;margin-left:0}.barra-guardar .bg-info{flex:1 1 100%}}   /* si no cabe (texto muy ampliado), el botón baja a su propia fila en vez de recortarse */
   .barra-guardar .js-guardar{flex:0 1 auto;min-width:8.5rem;max-width:100%;margin-left:auto;white-space:normal;line-height:1.15;padding:6px 12px}
   .barra-guardar .bg-info{flex:1 1 6rem;min-width:0}
-  .res-breve{padding:10px var(--s2)}
 }
 
 /* =========================================================
@@ -530,8 +500,6 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 .datos-roic div:last-child dd{font-size:var(--t-m);font-weight:600;color:var(--muted)}
 .roic-bloque .nota-roic{font-size:var(--t-s);color:var(--text)}
 /* resumen breve (móvil): una línea, sin tarjeta */
-.res-breve{background:transparent;border:0;border-bottom:1px solid var(--border);border-radius:0;padding:0 0 10px;flex-direction:row;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px var(--s2)}
-.res-breve b{font-size:var(--t-m)} .rb-pie{margin-left:auto}
 .rb-estado{flex:1 1 100%}
 /* barra inferior (móvil): plana, con el botón principal en acento */
 .barra-guardar{box-shadow:none;border-top:1px solid var(--border);background:var(--surface)}
@@ -562,7 +530,6 @@ input,select,textarea{border-radius:var(--radio-campo);border-color:var(--border
 .plegable-panel>:not(summary){margin-left:0;margin-right:0}
 .plegable-panel textarea{width:100%}
 /* el resumen breve (móvil) se integra en la composición: su texto sigue en el DOM, pero la información se ve una sola vez */
-.res-breve{display:none!important}
 .comp-der{display:flex;align-items:baseline;gap:var(--s1);flex-wrap:wrap;justify-content:flex-end} #rb-ver{min-height:32px;margin-block:-6px}
 @media (min-width:900px){#rb-ver{display:none}}
 @media (max-width:719px){.comp-pie{font-size:1rem}}

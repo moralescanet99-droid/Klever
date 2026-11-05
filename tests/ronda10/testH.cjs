@@ -4,7 +4,7 @@
 //    (tras enfocarla/desplazarla queda tapada o fuera de la zona libre);
 //  · el contraste se calcula con la opacidad REAL (la del aviso y la de sus ancestros) mezclada sobre el fondo, en cada fotograma de la animación.
 // «Texto ampliado» (font-size del documento) y «teclado» (ventana reducida) son SIMULACIONES: no equivalen a zoom ni a teclado reales.
-const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../ronda5/h.cjs');
+const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin , revision, distribucion } = require('../ronda5/h.cjs');
 (async () => {
   const b = await chromium.launch();
   const G = p => p.locator('.js-guardar >> visible=true');
@@ -22,7 +22,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
     const vis = { left: r.left, right: r.right, top: Math.max(r.top, a.top), bottom: Math.min(r.bottom, a.bottom) };
     const area = Math.max(0, vis.bottom - vis.top);
     const solapa = area > 0 ? [...document.querySelectorAll('a,button,input,select,textarea,.cab')].filter(e => !e.closest('#avisos') && e.offsetParent !== null).filter(e => { const q = e.getBoundingClientRect(); return q.width && q.height && q.left < vis.right && q.right > vis.left && q.top < vis.bottom && q.bottom > vis.top; }).map(e => (e.id || e.className || e.tagName).toString().slice(0, 24)) : [];
-    return { area: Math.round(area), top: Math.round(a.top), bottom: Math.round(a.bottom), cabBottom: getComputedStyle(document.querySelector('.cab')).position === 'fixed' ? 0 : Math.round(cab.bottom), op, fg: cs.color, bg: cs.backgroundColor, page: getComputedStyle(document.body).backgroundColor, fija: av.classList.contains('fija'), solapa, h: Math.round(r.height), texto: t.textContent.trim(), vh: innerHeight, scrollY: Math.round(scrollY) };
+    return { area: Math.round(area), top: Math.round(a.top), bottom: Math.round(a.bottom), lateral: cab.width < innerWidth * 0.5 && cab.height > innerHeight * 0.8, cabBottom: (cab.width < innerWidth * 0.5 && cab.height > innerHeight * 0.8) ? 0 : Math.round(cab.bottom), op, fg: cs.color, bg: cs.backgroundColor, page: getComputedStyle(document.body).backgroundColor, fija: av.classList.contains('fija'), solapa, h: Math.round(r.height), texto: t.textContent.trim(), vh: innerHeight, scrollY: Math.round(scrollY) };
   });
   const contrasteReal = m => { const page = num(m.page).slice(0, 3), bg = num(m.bg); bg[3] *= m.op; const fondo = mezcla(bg, page), fg = num(m.fg); fg[3] *= m.op; return contr(mezcla(fg, fondo), fondo); };
   const muestrear = async (p, n = 16, ms = 35) => { const s = []; for (let i = 0; i < n; i++) { s.push(await muestra(p)); await p.waitForTimeout(ms); } return s; };
@@ -145,8 +145,8 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
     const p = await nuevo(b, w, h); await entrar(p, 'oro', 'H5' + w); await p.waitForTimeout(4600);
     const sCuenta = (await T(p, '#estado')) + ' | ' + (await T(p, '#b-estado'));
     await peso(p).fill('20'); await p.waitForTimeout(150); const sPend = (await T(p, '#estado')) + ' | ' + (await T(p, '#b-estado'));
-    await peso(p).fill('25'); await p.evaluate(() => { document.querySelector('#det-pub').open = true; }); await p.fill('#tesis', 'Tesis'); await p.click('#publicar'); await p.waitForFunction(() => document.querySelector('#chip').textContent === 'Pública'); await p.waitForTimeout(300);
-    await peso(p).fill('20'); await p.waitForTimeout(150); const sPub = (await T(p, '#chip')) + ' | ' + (await T(p, '#estado')) + ' | ' + (await T(p, '#pub-pend'));
+    await peso(p).fill('25'); await revision(p); await p.evaluate(() => { document.querySelector('#det-pub').open = true; }); await p.fill('#tesis', 'Tesis'); await p.click('#publicar'); await p.waitForFunction(() => document.querySelector('#chip').textContent === 'Pública'); await p.waitForTimeout(300);
+    await distribucion(p); await peso(p).fill('20'); await p.waitForTimeout(150); const sPub = (await T(p, '#chip')) + ' | ' + (await T(p, '#estado')) + ' | ' + (await T(p, '#pub-pend'));
     await p.screenshot({ path: EVDIR + `H5-estado-publica-pendiente-${w}.png` });
     await p.fill('#nombre', 'Un título de cartera especialmente largo para comprobar cómo se comporta con dos líneas y un error'); await peso(p).fill('25'); await p.waitForTimeout(150);
     await p.evaluate(() => { document.documentElement.style.fontSize = '200%'; }); await p.waitForTimeout(300);
