@@ -1,0 +1,14 @@
+# comando: node tests/ronda8/unit-carreras.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 12:42:08 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [R1] PUT: una escritura ajena llega entre el commit y la respuesta
+OK    [R2] PATCH: una escritura ajena llega entre el commit y la respuesta
+OK    [R3] GET: una escritura ajena llega entre la lectura de la cartera y la de sus posiciones
+OK    [R4a] Rollback ante un error interno de infraestructura a mitad del lote (PUT)
+OK    [R4b] Ticker desconocido (validación)
+OK    [R5] POST: error interno a mitad del lote
+OK    [R6a] GET público: la cartera se despublica y cambian sus posiciones entre las lecturas originales
+OK    [R6b] GET público de una cartera ya privada
+
+RESULTADO: 8 correctas, 0 fallos
