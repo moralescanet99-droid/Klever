@@ -179,5 +179,14 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Una sola acción principal por estado:** «Revisar portafolio» (borrador o sin cambios) o «Guardar» (cambios pendientes en un portafolio de la cuenta).
 - **Navegación de cuatro entradas** (Mis portafolios · Crear portafolio · Cuaderno · Revista secundaria); «Seguimiento» pasa a «Cuaderno»; el cambio «cartera» → «portafolio» se aplica solo a navegación, portada, creador y «Mis portafolios».
 
+## Ronda 18 (contraejemplos exactos y creador por pasos)
+- **La nota guardada se valida con el intervalo exacto del redondeo** (bloques de dos decimales, total real en ±0,005 de la suma ponderada, nota = redondeo a un decimal). Un registro que solo cabía en la tolerancia anterior se trata como inválido: un cliente legítimo nunca lo produce. La coherencia aritmética **no acredita el origen** del cálculo.
+- **Una sola función de fecha** (`normalizarFecha`) para la API y el evaluador: fecha sola, marca de SQLite o ISO con `T`/fracción/`Z`; la cadena entera, sin sufijos.
+- **La procedencia se verifica en TODAS las empresas que forman las poblaciones de comparación**, no solo en las de la cartera; el universo recibido es inmutable y la preparación depende de `empresas` y del origen.
+- **El creador va por pasos solo en móvil** (Distribución: controles; Revisión: resultado, motivo y guardado); en escritorio las dos columnas siguen enteras. «Revisar» vive junto al estado compacto (móvil) y arriba (escritorio); la barra inferior conserva solo «Guardar». El **orden DOM coincide con el visual** (se movieron «Añadir un activo», los gráficos y el pie).
+- **Un único esquema de color** (carbón y cobre); se retiran el tema oscuro y `data-theme`.
+- **La demo usa los números de la semilla** (KO + PG = 4,4 también en la demo) y se reconstruye con la misma huella.
+- **Las pruebas tienen latencia determinista y traza:** la latencia destapó dos carreras reales de la aplicación con la red lenta, que se corrigieron.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

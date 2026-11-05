@@ -153,3 +153,12 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **La semilla (`seed.py`) usa fecha fija 2026-11-04:** cualquier prueba con la fecha de hoy fallará; no volver a `date('now')`.
 - **Las pruebas que cuentan empresas (126) deben comprobar también el conjunto de tickers**, no solo el recuento.
 
+## Ronda 18
+- **Una regla CSS truncada (por un `printf` con `%`) deja un `{` sin cerrar y anula todo lo que viene después:** no añadir CSS con `printf`; comprobar siempre el equilibrio de llaves (script de profundidad) tras editar `style-r17.css`.
+- **El evento `change` de un campo se dispara al perder el foco** (p. ej. al pasar a la revisión y enfocar la nota): no cambiar de paso desde `change`, solo desde `input`.
+- **Con latencia determinista (`LATENCIA_MS`) aparecen carreras que sin ella no se ven:** elegir plantilla antes de que carguen los activos y un `hashchange` antes del arranque. Cualquier arranque asíncrono nuevo debe esperar a `activosListos`/`arrancado`.
+- **Los servidores locales acumulan publicaciones entre ejecuciones de una misma batería:** reiniciar el servidor (`servidor.sh stop/start`) entre repeticiones; si no, los selectores «estrictos» fallan por duplicados.
+- **`page.goto` con solo un cambio de `#hash` no recarga:** para esperar una respuesta de red hay que `reload()` o esperar una condición de pantalla.
+- **La demo concatenada debe incluir `catalogo.js` antes de `contenido.js`** y sus datos salen de la semilla (`scripts/demo/exportar-semilla.mjs`): si cambia la semilla hay que reconstruir.
+- **Un `git worktree` temporal (`/tmp/klever-r17`) se borra con `git worktree remove --force` al terminar.**
+

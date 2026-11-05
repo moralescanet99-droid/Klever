@@ -65,3 +65,10 @@
 - D1 de prueba aislada con filas sin fuente, fechas inválidas y mezcla de orígenes (M78); datos de mercado reales y calibración antes de habilitar la nota.
 - Dispositivos reales: texto al 200 %, lector de pantalla y contraste del tema carbón (M73–M76).
 - Extender «portafolio» al resto del texto si se aprueba el cambio de término.
+
+## Ronda 18 (pendiente de accesos y decisiones)
+- Aprobación visual por quien diseñó la maqueta (M77) y la lectura contextual con retorno al mismo paso (no hecha).
+- Prueba con cinco principiantes sobre «crear, entender y seguir» (M79) y entorno privado con persistencia para «mañana, cierra y vuelve».
+- Dispositivos reales: pulgar, texto al 200 % real, lector de pantalla, contraste y foco (M73–M76); D1 de prueba aislada (M78).
+- Confirmar con tráfico real que las dos carreras corregidas eran la causa de los intermitentes antiguos.
+- Extender «portafolio» al resto del texto si se aprueba el cambio de término.

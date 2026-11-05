@@ -105,3 +105,12 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda17/testP.cjs` (28) | Creador con el diseño aprobado, entrada según el estado, navegación, acción principal, teclado, sin desplazamiento horizontal | Navegador |
 | `tests/ronda17/antes-despues-r17.mjs <raíz>` | Antes/después de los casos reproducibles contra un árbol anterior | Módulo/servidor |
 | `tests/ronda17/repetir-intermitentes.sh [N]` | Repite testE/testF con servidor limpio y deja el rastro por repetición | Navegador |
+
+## Baterías de la ronda 18 (añadidas)
+| Batería | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda18/unit-integridad18.mjs` (18) | Los contraejemplos exactos de la revisión: nota guardada (intervalo del redondeo), fechas con sufijo, comparables ajenos y caché, par historia/referencia, propiedad propia y ancho cero | Módulo/servidor (SQLite real) |
+| `tests/ronda18/testQ.cjs` (25) | Creador por pasos medido en el viewport (primer campo, acción dominante, barra, revisión, volver, teclado, cuenta con y sin cambios, Cuaderno) y capturas | Navegador |
+| `tests/ronda18/paridad-demo.cjs` (5) | La demo y los módulos dan las mismas salidas; reconstrucción reproducible | Navegador (demo) |
+| `tests/ronda18/antes-despues-r18.mjs <raíz>` | Antes/después de los contraejemplos contra un árbol anterior | Módulo/servidor |
+| `tests/ronda18/repetir-intermitentes.sh [N] [ms]` | Repite testE/testF/testC con servidor limpio, sin y con latencia determinista, con traza | Navegador |
