@@ -1,0 +1,24 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 21:36:26Z · 26 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 21:36:59Z · 25 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 21:37:59Z · 52 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 21:39:01Z · 53 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 21:39:35Z · 25 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 21:40:08Z · 24 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 21:41:09Z · 53 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 21:42:09Z · 53 s · código 0
+RESULTADO: 10 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 21:42:52Z · 34 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 21:43:33Z · 33 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 21:44:58Z · 77 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 21:46:21Z · 76 s · código 0
+RESULTADO: 50 correctas, 0 fallos
