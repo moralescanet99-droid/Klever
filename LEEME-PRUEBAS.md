@@ -113,4 +113,14 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda18/testQ.cjs` (25) | Creador por pasos medido en el viewport (primer campo, acción dominante, barra, revisión, volver, teclado, cuenta con y sin cambios, Cuaderno) y capturas | Navegador |
 | `tests/ronda18/paridad-demo.cjs` (5) | La demo y los módulos dan las mismas salidas; reconstrucción reproducible | Navegador (demo) |
 | `tests/ronda18/antes-despues-r18.mjs <raíz>` | Antes/después de los contraejemplos contra un árbol anterior | Módulo/servidor |
-| `tests/ronda18/repetir-intermitentes.sh [N] [ms]` | Repite testE/testF/testC con servidor limpio, sin y con latencia determinista, con traza | Navegador |
+| `tests/ronda19/repetir-intermitentes.sh [N] [ms]` | Repite testE/testF/testC con servidor limpio, sin y con latencia determinista, con traza | Navegador |
+
+## Baterías de la ronda 19 (añadidas)
+| Archivo | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda19/unit-redondeo19.mjs` (6) | Frontera del redondeo (caso exacto, vecinos, oráculo por fuerza bruta, barrida del evaluador) | Módulo/servidor |
+| `tests/ronda19/unit-revision19.mjs` (10) | Revisión sin nota: ETF, datos ausentes/inválidos, cobertura; lo que sí existe; sin cambiar pesos | Módulo |
+| `tests/ronda19/testR.cjs` (9) | Rectángulo del resultado entre la zona útil y la barra a 320/390/1440, con y sin nota, ratón/teclado, movimiento reducido; capturas de viewport | Navegador |
+| `tests/ronda19/antes-despues-r19.mjs <raíz>` | Antes/después del redondeo y del texto con ETF | Módulo/servidor |
+| `tests/ronda19/repetir-intermitentes.sh [N] [ms]` | Repite testE/testF/testC con y sin latencia | Navegador |
+`tests/run-all.sh` guarda ahora un registro íntegro por batería en `<ronda>/logs/` (`LOGS_DIR` para cambiarlo).

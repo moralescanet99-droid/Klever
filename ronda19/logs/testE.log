@@ -1,0 +1,21 @@
+# comando: node tests/ronda5/testE.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 08:15:16 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [F1] Crear, editar, guardar, cerrar, reabrir y recargar
+OK    [F3] Cambios locales pendientes de guardar: tarjeta y recuperación
+OK    [F5a] Conflicto al abrir: versión local frente a versión de la cuenta
+OK    [F5b] Conflicto al guardar: elegir la versión de este dispositivo NO escribe; Guardar sí
+OK    [F5c] Conflicto al guardar y «Decidir después»
+OK    [F4] Fallo de guardado y recuperación
+OK    [F2] Enlace de acceso abierto en otro navegador
+OK    [F6a] Editar una cartera pública con un reparto inválido
+OK    [F6b] Dejar de publicar con cambios locales inválidos
+OK    [F6c] Guardar una cartera pública con un reparto válido
+OK    [F7a] Resultados con datos ausentes en la lista
+OK    [F7b] Regla real de orden
+OK    [F7c] Ficha con datos ausentes
+OK    [F8] Título largo de la cartera en móvil
+OK    [F9] Sin errores de JavaScript en la batería E
+
+RESULTADO: 15 correctas, 0 fallos

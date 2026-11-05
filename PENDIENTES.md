@@ -72,3 +72,8 @@
 - Dispositivos reales: pulgar, texto al 200 % real, lector de pantalla, contraste y foco (M73–M76); D1 de prueba aislada (M78).
 - Confirmar con tráfico real que las dos carreras corregidas eran la causa de los intermitentes antiguos.
 - Extender «portafolio» al resto del texto si se aprueba el cambio de término.
+
+## Tras la ronda 19
+- ⬜ **Prueba con cinco principiantes** (`ronda19/PRUEBA-CON-USUARIOS.md`): no realizada; «cerrar y volver» exige persistencia verificada.
+- ⬜ Comprobaciones manuales M85–M90 (`ronda19/pruebas-manuales.md`): móvil físico a 320 px, lector de pantalla, movimiento reducido.
+- ⬜ Investigar la causa de dos fallos intermitentes no demostrados (`testK` goto abortado; `testO` sin salir del proceso).

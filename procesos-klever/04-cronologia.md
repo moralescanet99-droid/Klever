@@ -68,3 +68,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-04 · Ronda 17 (C14): integridad del resultado y diseño aprobado aplicado; ver `ronda17/LEEME.md`.
 
 - 2026-11-05 · Ronda 18 (C15): contraejemplos cerrados, creador por pasos y dos carreras reales con la red lenta; ver `ronda18/LEEME.md`.
+- 2026-11-05 · Ronda 19 (C16): frontera del redondeo, revisión a 320 px medida por el resultado y revisión sin nota explicada; ver `ronda19/LEEME.md`.

@@ -101,8 +101,8 @@
   "id": "Q3-320",
   "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (320 px)",
   "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en móvil las posiciones se ocultan, el orden DOM es anillo (una línea de resumen) → nota → radiografía y hay un botón «Volver a la distribución»",
-  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":false,\"resultado\":\"Nota pendiente. Esta cartera no tiene nota global. Los ETF representan el 33,6 % y el méto\",\"volver\":true,\"revisarOculto\":true}",
-  "resultado": "FALLA"
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"resultado\":\"Nota pendiente. Esta cartera no tiene nota global. Los ETF representan el 33,6 % y el méto\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "OK"
  },
  {
   "id": "Q4-320",

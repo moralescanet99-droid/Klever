@@ -161,4 +161,7 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **`page.goto` con solo un cambio de `#hash` no recarga:** para esperar una respuesta de red hay que `reload()` o esperar una condición de pantalla.
 - **La demo concatenada debe incluir `catalogo.js` antes de `contenido.js`** y sus datos salen de la semilla (`scripts/demo/exportar-semilla.mjs`): si cambia la semilla hay que reconstruir.
 - **Un `git worktree` temporal (`/tmp/klever-r17`) se borra con `git worktree remove --force` al terminar.**
-
+- **`page.reload()` con el editor sucio abre un diálogo `beforeunload` (la app lo registra con cambios sin guardar):** si la prueba no tiene un manejador `dialog` que lo acepte, `reload` no termina y la batería cae sin resultado (causa del fallo de `testF` en la ronda 19). Registrar y aceptar el diálogo al crear la página.
+- **Medir o capturar tras un cambio de paso exige esperar a que `scrollY` se estabilice** (cinco fotogramas sin cambio); un `waitForTimeout` fijo dio un falso fallo en `testQ` a 320 px.
+- **Fallos intermitentes sin causa demostrada (ronda 19):** `testK` con `page.goto: net::ERR_ABORTED` y `testO` que no salía del proceso tras imprimir 18/0. No se reprodujeron; `h.cjs` ya fuerza la salida a los 10 s. Si reaparecen, conservar el log íntegro (`LOGS_DIR`).
+- **`run-all.sh` sobrescribe `resultado-ejecucion.txt` y `logs/`:** antes de una pasada nueva, mover los de la anterior a `logs-intentoN/` si se quieren conservar los intentos fallidos. Una pasada deja modificadas las capturas de rondas anteriores: `git checkout -- ronda1*` antes de commitear.

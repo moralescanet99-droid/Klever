@@ -188,5 +188,12 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **La demo usa los números de la semilla** (KO + PG = 4,4 también en la demo) y se reconstruye con la misma huella.
 - **Las pruebas tienen latencia determinista y traza:** la latencia destapó dos carreras reales de la aplicación con la red lenta, que se corrigieron.
 
+## Ronda 19 (frontera, medición del resultado y revisión sin nota)
+- **Redondeo estricto por ambos lados** (`S4 + 50 > n10·1000 − 500` y `S4 − 50 < n10·1000 + 500`): los intervalos son semiabiertos [b − 0,005; b + 0,005); un empate binario no debe aceptarse ni rechazar una salida legítima · motivo: contraejemplo exacto de la revisión 18 · `public/js/nota.js`, `tests/ronda19/unit-redondeo19.mjs`.
+- **Se mide el rectángulo del resultado, no el panel**, y siempre tras estabilizarse el desplazamiento · motivo: la medición del panel daba por buena una pantalla que ocultaba la cifra · `tests/ronda19/testR.cjs`.
+- **La revisión sin nota separa tres causas y enseña lo que sí existe** (explicación breve; detalle desplegable) · motivo: un párrafo por activo no se entiende en móvil y esconde la información útil · `public/js/nota-ui.js`.
+- **Cada batería deja registro íntegro (comando, entorno, código, tiempo agotado y salida), también al fallar**, y los intentos fallidos se conservan · motivo: la revisión exige logs completos · `tests/run-all.sh`.
+- **Las pruebas aceptan el diálogo `beforeunload`** cuando recargan con cambios sin guardar; el aviso de la app NO se retira · motivo: protege al usuario de perder cambios.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).
