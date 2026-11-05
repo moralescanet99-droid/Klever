@@ -3355,7 +3355,9 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
 }
-window.addEventListener('hashchange', () => route());
+// Hasta que el arranque termina (sesión, activos, módulos) el hash puede cambiar —p. ej. al canjear el enlace de acceso con la red lenta—: ese cambio lo atiende la ruta final del arranque.
+let arrancado = false;
+window.addEventListener('hashchange', () => { if (arrancado) route(); });
 
 // ---------- carteras del usuario ----------
 const parseF = iso => { const t = String(iso); return new Date(/[zZ]$|[+-]\d\d:?\d\d$/.test(t) ? t : t.replace(' ', 'T') + 'Z'); }; // sello del servidor (UTC, «AAAA-MM-DD HH:MM:SS») o ISO
@@ -3480,7 +3482,11 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
   }
   current.nombre = e.nombre; current.tesis = e.tesis || ''; pos = e.pos; rev = 1; savedRev = 0; copiaLocal = store.ok; recuperado = true;
 }
-function abrirInvitado(plantilla) {
+// Con la red lenta la persona puede pulsar una plantilla ANTES de que lleguen los activos: `repartoPlantilla` devolvía [] y el borrador quedaba vacío (y se perdía al entrar).
+// Se espera a los activos antes de armar el reparto.
+let activosListos; const esperaActivos = new Promise(r => { activosListos = r; });
+async function abrirInvitado(plantilla) {
+  await esperaActivos;
   current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
   pos = repartoPlantilla(plantilla); posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
   guardarBorrador(); go('#cartera');
@@ -4183,7 +4189,7 @@ function contextoLab() {
 // ---------- arranque ----------
 (async () => {
   await redeem();
-  await loadAssets();
+  await loadAssets(); activosListos();
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
   actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
   purgarCopias();                                    // las copias locales caducan a los 7 días
@@ -4193,7 +4199,7 @@ function contextoLab() {
   if (logged()) {
     await migrarBorrador();
   }
-  route(true);
+  arrancado = true; route(true);
 })();
 
 </script>
