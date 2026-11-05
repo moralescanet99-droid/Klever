@@ -36,11 +36,33 @@ Las tablas de la ronda 19 (`unit-revision19` V1, V7–V10) se actualizaron al nu
 # 4. Lo que NO cambia
 Metodología numérica, pesos, posiciones y notas calculadas (KO 60 % / PG 40 % = 4,4 antes y después; `unit-nota` 35/35 y `unit-calculos` 23/23). Identidad visual, navegación, Revista y El Superespeculador.
 
-# 5. Incidencias de la propia ronda
-- **Mi error de la prueba de cierre:** el primer `unit-cierre20` lanzó el `run-all.sh` real y no solo la fixture, porque una variable de entorno vacía recupera su valor por defecto en el script; detenido, corregido (valor «un espacio») y repetido. Sin efecto sobre el código entregado; los ficheros que ensució se restauraron.
-- **Falso fallo de `testR`** («pesos conservados false» con cambios sin guardar): comparaba «50» con «50,0»; corregido comparando el valor numérico.
-- **`testR` escribía las capturas en `ronda19/`:** se detectó al restaurar el árbol, se parametrizó con `RONDA` y se repitió solo `testR` para generarlas (`logs-testR-capturas.log`).
+# 5. Incidencias de la propia ronda (todas conservadas con su log)
+1. **Mi error en `unit-cierre20`:** el primer intento lanzó el `run-all.sh` real y no solo la fixture (una variable de entorno vacía recupera su valor por defecto); detenido, corregido y repetido. Los ficheros que ensució se restauraron; sin efecto sobre lo entregado.
+2. **Falso fallo de `testR`** («pesos conservados false»): comparaba el texto «50» con «50,0»; ahora compara el valor.
+3. **`testR` escribía sus capturas en `ronda19/`:** se parametrizó con `RONDA` y se repitió solo `testR` para generarlas (`logs-testR-capturas.log`).
+4. **Pasada 1 (`logs-pasada1/`, 826/0, todo correcto)** sobre un árbol con cambios sin commitear.
+5. **Pasada 2 (`logs-pasada2-fallo-Q3/`, 825, 1 fallo):** `testQ` Q3-1440, intermitente (≈ 1 de cada 4-8 ejecuciones). **Causa demostrada con registro de `scrollTo/scrollBy`: era un fallo REAL de la aplicación.** `app.js` (`focusin`) centraba el campo de peso activo con un `scrollBy` diferido 300 ms; si se pulsaba «Revisar» dentro de ese plazo, el desplazamiento llegaba **después** de `pasoActual` y arrastraba la página a 527 px. Corrección: el desplazamiento diferido se cancela si el campo ya no tiene el foco o está oculto. Mi primera hipótesis (que la prueba midiera antes de empezar el desplazamiento) era **incorrecta**: el cambio que hice entonces (esperar al foco en la nota) no lo arregló y se mantiene solo como robustez. Regresión determinista nueva (`testR` R4-1440: pulsar «Revisar» a < 300 ms de editar un peso, 6 veces): **falla con la corrección quitada (scrollY = 516 ×6) y pasa con ella**.
+6. **Pasada 3 (`logs-pasada3-fallo-E5/`, 826, 1 fallo):** `testD` E5, intermitente (1 de 9 repeticiones). **Causa demostrada con las cajas medidas:** la prueba leía las posiciones del motivo y de «Guardar» mientras ese mismo desplazamiento diferido de 300 ms estaba en curso (motivo en y = 2, «Guardar» en y = 184). Es una carrera de la **prueba**, no de la aplicación; espera ahora 700 ms (antes 200) y la observación publica las coordenadas. 12/12 repeticiones limpias después (`repeticion-testD.txt`). No se rebaja ninguna aserción.
+7. **Pasada 4 (definitiva, `logs/`):** todo correcto.
 
 # 6. Pruebas realmente ejecutadas (separadas por entorno)
-Se rellena al cierre (pasada completa definitiva y repeticiones): ver abajo.
+**Módulo / servidor (SQLite real, sin navegador) y subprocesos de Node:** `unit-causas20` **10** y `unit-cierre20` **10** (nuevos), `unit-revision19` 10 (actualizada), `unit-redondeo19` 6, `unit-integridad18` 18, `unit-guardada17` 20, `unit-procedencia17` 13, `unit-nota` 35, `unit-calculos` 23 y las anteriores.
+**Navegador (Chromium, servidor local):** `testR` **16** (ampliado: escritorio con contexto, cambios sin guardar, teclado real, estabilización, regresión R4), `testQ` 25, `testF` 10, `testD` 29, `testK` 75, `testO` 18, `paridad-demo` 5 y las anteriores; demo autónoma (`demotest`) con su log íntegro.
+**Pasada completa definitiva (commit `9c1eda3`, árbol limpio): 827 comprobaciones correctas, 0 fallos, código 0** (41 baterías + demo). Ningún log contiene `CIERRE FORZADO` ni `CIERRE ANÓMALO`: **no hubo cierre forzado en esta pasada.** *Aserciones ≠ entradas.*
+**Repeticiones** (`tests/ronda19/repetir-intermitentes.sh 2 300`, `ronda20/intermitentes.txt`): `testE` 15/0, `testF` 10/0 y `testC` 50/0, con latencia 0 y 300 ms, dos veces cada una.
 **Entorno remoto:** nada ejecutado. **Móvil físico, lector de pantalla, Safari/Firefox, D1 remota, correo real, datos reales y comprensión por personas: no probados.** Mi inspección visual de las capturas no sustituye a las pruebas de interacción ni de accesibilidad real.
+
+# 7. Afirmaciones ajustadas (según la revisión)
+| Antes | Ahora |
+|---|---|
+| «Las tres causas están separadas» | Las causas coexisten con código estable y las combinaciones de los casos probados se explican; no se afirma cobertura de toda combinación posible. |
+| «No hace falta tolerar empates binarios» | Las 4.800 salidas de la barrida se aceptan; ninguna cae en la franja de la frontera. |
+| «Probado con teclado» | Recorrido real con Tab desde el nombre hasta «Revisar» y Enter (R0t). No es lector de pantalla. |
+| «Cierre correcto» | Aserciones terminadas **y** proceso cerrado sin forzar; si no, código 3 y registro. En esta pasada no hubo cierre forzado. |
+| «Todo el registro es íntegro» | Logs íntegros de las 41 baterías **y de `demotest`**, más los de los intentos fallidos. |
+
+# 8. Limitaciones y pendientes
+- **Prueba con personas: no realizada** (guion en `PRUEBA-CON-USUARIOS.md`, todo «pendiente»). Siguiente evidencia relevante, según la revisión.
+- `testK` (goto abortado) y `testO` (sin salir) **no se reprodujeron** en esta ronda; su causa sigue sin demostrar y el cierre forzado no la explica.
+- No hay medición «antes» de la geometría de escritorio con el criterio nuevo (la ronda 19 medía solo la nota).
+- El mismo desplazamiento diferido de 300 ms puede afectar a otras pruebas que midan cajas justo después de editar un peso; se corrigió donde falló.

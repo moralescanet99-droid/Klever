@@ -70,3 +70,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-05 · Ronda 18 (C15): contraejemplos cerrados, creador por pasos y dos carreras reales con la red lenta; ver `ronda18/LEEME.md`.
 - 2026-11-05 · Ronda 19 (C16): frontera del redondeo, revisión a 320 px medida por el resultado y revisión sin nota explicada; ver `ronda19/LEEME.md`.
 - 2026-11-05 · Paquete para ChatGPT de la ronda 19 (`revision-chatgpt/ronda-19/INSTRUCCIONES_PARA_CHATGPT.md` + 10 imágenes de viewport; ZIPs e imágenes fuera del repositorio).
+- 2026-11-05 · Ronda 20 (C17): cierre técnico y visual (causas con código, código de salida de las pruebas, Revisión de escritorio y corrección del desplazamiento diferido); ver `ronda20/LEEME.md`.

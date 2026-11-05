@@ -195,5 +195,14 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Cada batería deja registro íntegro (comando, entorno, código, tiempo agotado y salida), también al fallar**, y los intentos fallidos se conservan · motivo: la revisión exige logs completos · `tests/run-all.sh`.
 - **Las pruebas aceptan el diálogo `beforeunload`** cuando recargan con cambios sin guardar; el aviso de la app NO se retira · motivo: protege al usuario de perder cambios.
 
+## Ronda 20 (cierre técnico y visual)
+- **Las causas llevan código estable asignado en el origen; nunca se deducen del texto** y coexisten en una misma posición · motivo: una sola `causa` sustituía a otra y ocultaba limitaciones (I1) · `public/js/nota.js`.
+- **La explicación nombra primero las familias que, resueltas solas, arreglarían un indicador; el resto va con «Además»** · motivo: no culpar a un ETF del 1 % de un umbral de cobertura que incumple otra cosa.
+- **«Pendiente» solo para una espera real**; sin método o con evaluación a medias: «Sin nota global» / «Evaluación parcial» y sin bloque ámbar dominante · motivo: M1.
+- **Una prueba que falla o cierra de forma anómala nunca sale con código 0** (fallo → 1; cierre forzado/anómalo → 3) · motivo: I2; el cierre forzado no es una explicación de la causa.
+- **En escritorio, «Revisar» no desplaza la página a la nota:** resultado primero en su columna, contexto (nombre, pasos, Volver, guardado) a la vista · motivo: I3.
+- **El centrado diferido del campo activo se cancela si el campo ya no tiene el foco** · motivo: arrastraba la página tras cambiar de paso (fallo real hallado al repetir).
+- **Ciclo técnico/visual a cerrar; la siguiente evidencia relevante es la prueba con personas** (encargo C17).
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).

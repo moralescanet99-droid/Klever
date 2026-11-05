@@ -77,3 +77,8 @@
 - ⬜ **Prueba con cinco principiantes** (`ronda19/PRUEBA-CON-USUARIOS.md`): no realizada; «cerrar y volver» exige persistencia verificada.
 - ⬜ Comprobaciones manuales M85–M90 (`ronda19/pruebas-manuales.md`): móvil físico a 320 px, lector de pantalla, movimiento reducido.
 - ⬜ Investigar la causa de dos fallos intermitentes no demostrados (`testK` goto abortado; `testO` sin salir del proceso).
+
+## Tras la ronda 20
+- ⬜ **Prueba con cinco principiantes** (`ronda20/PRUEBA-CON-USUARIOS.md`, ajustada): no realizada; es la siguiente evidencia relevante.
+- ⬜ M85–M93 (`ronda20/pruebas-manuales.md`; M86 reformulada).
+- ⬜ Causa de `testK` (goto abortado) y `testO` (sin salir): no reproducidas, sin demostrar.

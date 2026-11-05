@@ -124,3 +124,13 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda19/antes-despues-r19.mjs <raíz>` | Antes/después del redondeo y del texto con ETF | Módulo/servidor |
 | `tests/ronda19/repetir-intermitentes.sh [N] [ms]` | Repite testE/testF/testC con y sin latencia | Navegador |
 `tests/run-all.sh` guarda ahora un registro íntegro por batería en `<ronda>/logs/` (`LOGS_DIR` para cambiarlo).
+
+## Baterías de la ronda 20 (añadidas o cambiadas)
+| Archivo | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda20/unit-causas20.mjs` (10) | Causas coexistentes con código, los tres casos de la revisión, caso conjunto, plantilla, solo ETF, con nota, espera real | Módulo/servidor |
+| `tests/ronda20/unit-cierre20.mjs` (10) | Código de salida y cierre de las pruebas en subprocesos reales; `run-all.sh` rechaza cada caso | Subprocesos |
+| `tests/ronda20/fixture-cierre.cjs` | Fixture (no es batería) gobernada por `MODO_CIERRE` | — |
+| `tests/ronda19/testR.cjs` (16) | Ampliada: contexto de escritorio, cambios sin guardar, teclado real, estabilización exigida, diálogos acotados, regresión R4 | Navegador |
+| `tests/ronda20/antes-despues-r20.mjs <raíz>` | Antes/después corto contra un árbol de la ronda 19 | Módulo/subprocesos |
+`tests/run-all.sh` guarda además el log de `demotest` y rechaza `CIERRE FORZADO/ANÓMALO`.
