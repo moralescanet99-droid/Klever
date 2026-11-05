@@ -92,6 +92,7 @@ export function crearAlmacen({ api, logged, store, activos, idSesion = () => nul
     crear: cuerpo => api('/escenarios', { method: 'POST', body: cuerpo }),
     actualizar: (id, cambios) => api('/escenarios/' + id, { method: 'PATCH', body: cambios }),
     borrar: id => api('/escenarios/' + id, { method: 'DELETE' }),
+    revisar: (id, cuerpo) => api('/escenarios/' + id + '/revisiones', { method: 'POST', body: cuerpo }),   // ronda 21: añade una revisión (clave de intento; control de revisión)
   };
   return { radar: radarAlmacen, escenarios: escenariosAlmacen, reiniciar: () => radarAlmacen.reiniciar() };
 }

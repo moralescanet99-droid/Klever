@@ -37,6 +37,7 @@ export function iniciarLab(ctx) {
   const lab = $('#lab-cuerpo');
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
+  lab.addEventListener('change', e => { if (e.target.name === 'rev-dec') { const p = $('#rev-prox'); p.disabled = e.target.value !== 'reprogramar'; if (p.disabled) p.value = ''; else p.focus(); } });
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
@@ -346,13 +347,18 @@ async function pintarSeguimientoEscenarios() {
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
   if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
-  cont.innerHTML = vistos.length ? vistos.map(e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
+  const tarjetaEsc = e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
       ${e.pregunta ? `<p class="esc-preg"><span class="sr">Pregunta: </span>«${esc(e.pregunta)}»</p>` : ''}${textoRevision(e) ? `<p class="peq">${esc(textoRevision(e))}</p>` : ''}
-      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>
+      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>${e.revisar_en ? `<p class="peq">Revisar el <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}${e.n_revisiones ? `<p class="peq mut">${e.n_revisiones} ${e.n_revisiones === 1 ? 'revisión registrada' : 'revisiones registradas'}.</p>` : ''}
       <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(x().fmtFecha(e.creado_en))}</p>
       ${!e.cartera_existe ? '<p class="chip aviso">La cartera original ya no existe</p>' : e.hay_version_posterior ? '<p class="chip aviso">Hay una versión posterior de la cartera</p>' : ''}
       ${e.nota ? `<p class="esc-nota">${esc(e.nota.length > 140 ? e.nota.slice(0, 140) + '…' : e.nota)}</p>` : ''}
-      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
+      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+  // Ronda 21: «En estudio» se ordena para volver a decidir: primero lo que toca revisar (fecha de hoy o ya pasada), después las próximas revisiones y, al final, lo que no tiene fecha. Lo descartado o archivado no se presenta como pendiente.
+  const h0 = hoy(), grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
+  if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
+    cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
+  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
 }
 
 // =============== laboratorio ===============
@@ -423,6 +429,7 @@ function onLabSubmit(e) {
   if (e.target.id === 'lab-form') { e.preventDefault(); simularAhora(); }
   else if (e.target.id === 'lab-guardar') { e.preventDefault(); guardarEscenario(); }
   else if (e.target.id === 'esc-form') { e.preventDefault(); guardarCambiosEscenario(); }
+  else if (e.target.id === 'rev-form') { e.preventDefault(); registrarRevision(); }
 }
 function simularAhora() {
   const { $ } = x(), f = leerFormulario(), base = baseLab(), err = $('#lab-error'); err.textContent = '';
@@ -437,14 +444,14 @@ const dpts = d => d === 0 ? 'sin cambio' : (d > 0 ? '+' : '−') + String(Math.a
 function htmlComparacion(c, cambios, limiteTxt) {
   const { esc } = x(), A = c.antes, D = c.despues, a = x().activos();
   const fila = (n, va, vd) => `<tr><th scope="row">${n}</th><td>${va}</td><td>${vd}</td></tr>`;
-  return `<h3>Pesos por posición</h3><div class="tabla-h" role="region" aria-label="Pesos antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Posición</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio <small class="mut">(puntos)</small></th></tr></thead><tbody>
+  return `<h3>Pesos por posición</h3><div class="tabla-h" role="region" aria-label="Pesos antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Posición</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th><th scope="col">Cambio <small class="mut">(puntos)</small></th></tr></thead><tbody>
       ${cambios.map(f => `<tr><th scope="row"><b>${esc(f.ticker)}</b> <small>${esc(a[f.ticker]?.nombre || '')}</small>${f.nueva ? ' <span class="chip">nueva</span>' : ''}</th><td>${P(f.antes)}</td><td>${P(f.despues)}</td><td>${dpts(f.delta)}</td></tr>`).join('')}
       <tr class="tot"><th scope="row">Total asignado</th><td>${P(A.total)}</td><td>${P(D.total)}</td><td>${dpts(Math.round((D.total - A.total) * 10) / 10)}</td></tr></tbody></table></div>
-    <h3>Concentración</h3><div class="tabla-h" role="region" aria-label="Concentración antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Medida</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody>
+    <h3>Concentración</h3><div class="tabla-h" role="region" aria-label="Concentración antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Medida</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th></tr></thead><tbody>
       ${fila('Mayor posición', A.mayor ? `${esc(A.mayor.ticker)} · ${P(A.mayor.peso)}` : '—', D.mayor ? `${esc(D.mayor.ticker)} · ${P(D.mayor.peso)}` : '—')}
       ${fila(A.top3.completo && D.top3.completo ? 'Tres mayores' : 'Mayores posiciones (hasta tres)', P(A.top3.peso) + (A.top3.completo ? '' : ` (hay ${A.top3.n})`), P(D.top3.peso) + (D.top3.completo ? '' : ` (hay ${D.top3.n})`))}
       ${fila('Sin asignar', P(A.pendiente), P(D.pendiente))}${A.exceso || D.exceso ? fila('Exceso', P(A.exceso), P(D.exceso)) : ''}</tbody></table></div>
-    <h3>Categorías disponibles <small class="mut">(comerciales; no son la exposición real de los fondos)</small></h3><div class="tabla-h" role="region" aria-label="Categorías antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Categoría</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody>
+    <h3>Categorías disponibles <small class="mut">(comerciales; no son la exposición real de los fondos)</small></h3><div class="tabla-h" role="region" aria-label="Categorías antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Categoría</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th></tr></thead><tbody>
       ${c.categorias.map(k => fila(esc(k.categoria), P(k.antes), P(k.despues))).join('')}</tbody></table></div>
     <h3>Tu límite personal</h3>${limiteTxt}`;
 }
@@ -461,33 +468,35 @@ function limitesHtml(c, limite) {
 function htmlBarras(esc, sim) {                                          // dos barras (antes / después) con los pesos reales; la empresa probada va marcada
   const tks = [...new Set([...sim.antes.map(p => p.ticker), ...sim.despues.map(p => p.ticker)])], col = t => tks.indexOf(t) % 8;
   const barra = (lista, tit) => `<div class="esp-fila"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}</span></div>`;
-  return `<div class="esp">${barra(sim.antes, 'Antes')}${barra(sim.despues, 'Después')}</div>`;
+  return `<div class="esp">${barra(sim.antes, 'Cartera base')}${barra(sim.despues, 'Alternativa simulada')}</div>`;
 }
 function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
   const activos = x().activos(), c = comparar(sim.antes, sim.despues, activos, base.limite), n = sim.cambios.filter(f => f.delta !== 0).length;
   const mio = sim.cambios.find(f => f.ticker === sim.ticker);
-  const concl = `${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
+  const mayorTxt = !c.antes.mayor || !c.despues.mayor ? '' : c.antes.mayor.ticker === c.despues.mayor.ticker && c.antes.mayor.peso === c.despues.mayor.peso ? ` La mayor posición sigue siendo ${esc(c.despues.mayor.ticker)} (${P(c.despues.mayor.peso)}).` : ` La mayor posición pasa de ${esc(c.antes.mayor.ticker)} (${P(c.antes.mayor.peso)}) a ${esc(c.despues.mayor.ticker)} (${P(c.despues.mayor.peso)}).`;
+  const concl = `En la alternativa simulada, ${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.${mayorTxt} Es una comparación: no dice que la alternativa sea mejor.`;
   const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
   const evA = LAB.universo ? evaluar(sim.antes, LAB.universo) : null, evD = LAB.universo ? evaluar(sim.despues, LAB.universo) : null;
   s.evaluacion = evA && evD ? { antes: resumenNota(evA), despues: resumenNota(evD) } : null;
   const guardar = logged() && base.guardada
-    ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
+    ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar en mi Cuaderno</h3><p class="mut peq"><b>Guardar la comparación no aplica el cambio a tu cartera.</b> Tu cartera base sigue igual; esto se guarda como simulación privada, con la base y la alternativa tal como las ves ahora.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
         ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
-        <label for="lab-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
-        <label for="lab-revisar">Fecha de revisión <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
-        <label for="lab-nota">Nota <span class="mut">(opcional: por qué lo pruebas, qué quieres revisar)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        <label for="lab-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
+        <label for="lab-nota">Por qué lo estoy estudiando <span class="mut">(opcional)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        <label for="lab-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional; hasta 600 caracteres)</span></label><textarea id="lab-invalidacion" rows="2" maxlength="600" placeholder="Por ejemplo: si la empresa pierde a su principal cliente"></textarea>
+        <label for="lab-revisar">Cuándo quiero revisarlo <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
         ${h ? `<p class="peq mut">Se vincula a la historia «${esc(h.titulo)}»${rev && rev.n > 1 ? ' y a su revisión editorial' : ''}.</p>` : ''}
-        <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar escenario</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
+        <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar en mi Cuaderno</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
     : base.ejemplo && logged()
       ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
-      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (con una cartera guardada en tu cuenta).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
+      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
     <p class="lab-origen"><b>Quién cede el peso:</b> ${esc(origenPeso(sim))}</p>${htmlBarras(esc, sim)}
-    <p class="lab-concl">${concl}</p>
+    <p class="lab-concl">${concl}</p><p class="mut peq"><b>Tu cartera base no cambia.</b> Aquí solo se compara con una alternativa simulada.</p>
     ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
     ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
@@ -498,15 +507,15 @@ async function guardarEscenario() {
   s.clave = s.clave || LAB.alm.escenarios.nuevaClave();                 // el mismo intento reutiliza la clave: un reintento no duplica
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
-    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null, pregunta_ref: ($('#lab-ref')?.checked && s.historia) ? refPregunta(s.historia, 1) : null,
+    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, invalidacion: $('#lab-invalidacion').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null, pregunta_ref: ($('#lab-ref')?.checked && s.historia) ? refPregunta(s.historia, 1) : null,
       cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues, evaluacion: s.evaluacion || undefined });
     if (!vigente(g)) return;
-    toast(r.duplicado ? 'Ese escenario ya estaba guardado' : 'Escenario guardado en tu seguimiento'); x().go('#escenario-' + r.id);
+    toast(r.duplicado ? 'Esa comparación ya estaba guardada en tu Cuaderno' : 'Comparación guardada en tu Cuaderno'); x().go('#escenario-' + r.id);
   } catch (e) {
     if (!vigente(g)) return;
     if (e.status === 409) { err.textContent = 'La cartera cambió después de la versión que simulaste. Se ha actualizado la base: vuelve a simular.'; await cargarCarteras(); s.res = null; s.clave = null; pintarLabForm(); return; }
     err.textContent = e.message + ' Tus datos siguen aquí: puedes reintentar.'; toastError(e.message);
-  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Guardar escenario'; } }
+  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Guardar en mi Cuaderno'; } }
 }
 async function crearEjemploEnCuenta() {
   const { $, api, toastError } = x(), g = LAB.gen, btn = $('#lab-crear-ejemplo'); btn.disabled = true;
@@ -535,7 +544,7 @@ async function mostrarEscenario(id) {
   if (!logged()) { go('#seguimiento'); return; }
   let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
-  LAB.esc = e; LAB.editEsc = false; pintarEscenario();
+  LAB.esc = e; LAB.editEsc = false; LAB.revClave = null; pintarEscenario();
 }
 function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
@@ -551,26 +560,63 @@ function pintarEscenario() {
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
       ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
       ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}${e.historia ? tarjetaVinculo(esc, e) : ''}
-      <h2>Tu nota</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
+      <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
+      ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
       ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
         ${htmlVinculoEdicion(esc, e)}
-        <label for="esc-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
-        <label for="esc-revisar">Fecha de revisión <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
-        <label for="esc-nota">Nota</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
+        <label for="esc-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
+        <label for="esc-nota">Por qué lo estoy estudiando</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
+        <label for="esc-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional)</span></label><textarea id="esc-invalidacion" rows="2" maxlength="600">${esc(e.invalidacion || '')}</textarea>
+        <label for="esc-revisar">Cuándo quiero revisarlo <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
         <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost" type="button" id="esc-cancelar">Cancelar</button></p><p class="error" id="esc-error" role="alert"></p></form>`
-        : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar nota y pregunta</button></p>'}
+        : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
+    ${htmlRevisiones(esc, e)}
     <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
+}
+// Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
+const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };
+function htmlRevisiones(esc, e) {
+  const l = e.revisiones || [], mk = r => `<li><p><b>${esc(fechaCorta(r.fecha))}</b> · ${DECIS[r.decision] || esc(r.decision)}${r.proxima_fecha ? ` (próxima revisión: ${esc(fechaCorta(r.proxima_fecha))})` : ''}</p>${r.observacion ? `<p><span class="mut">Tu observación:</span> ${esc(r.observacion)}</p>` : ''}${r.aprendizaje ? `<p><span class="mut">Lo que aprendiste:</span> ${esc(r.aprendizaje)}</p>` : ''}</li>`;
+  return `<section class="esc-revisiones" aria-labelledby="esc-rev-t"><h2 id="esc-rev-t">Revisiones <span class="mut">(${l.length})</span></h2>
+    <p class="mut peq">Anota aquí lo que has observado al volver sobre esta idea. Es <b>tu comentario personal</b>, no un dato verificado: Klever no añade lo que haya ocurrido en el mercado. Cada revisión se suma al historial; no cambia la hipótesis original ni las composiciones guardadas.</p>
+    ${l.length ? `<ol class="esc-rev-lista">${l.map(mk).join('')}</ol>` : '<p class="mut">Todavía no has registrado ninguna revisión.</p>'}
+    <details class="mini" id="rev-det"${e.revisar_en && e.revisar_en <= hoy() ? ' open' : ''}><summary>Registrar revisión</summary>
+      <form id="rev-form" class="lab-guardar"><label for="rev-fecha">Fecha de la revisión</label><input id="rev-fecha" type="date" required value="${hoy()}">
+        <label for="rev-obs">Tu observación <span class="mut">(comentario personal; opcional)</span></label><textarea id="rev-obs" rows="3" maxlength="600"></textarea>
+        <label for="rev-apr">Qué has aprendido <span class="mut">(opcional)</span></label><textarea id="rev-apr" rows="2" maxlength="600"></textarea>
+        <fieldset class="rev-decision"><legend>¿Qué haces con esta idea?</legend>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-m" value="mantener" checked> <label for="rev-dec-m">La mantengo (sin nueva fecha)</label></p>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-r" value="reprogramar"> <label for="rev-dec-r">Programo otra revisión</label> <input id="rev-prox" type="date" min="${hoy()}" aria-label="Fecha de la próxima revisión" disabled></p>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-d" value="descartar"> <label for="rev-dec-d">La descarto (se conserva en el Cuaderno como descartada)</label></p></fieldset>
+        <p><button class="btn btn-primario" type="submit" id="rev-btn">Registrar revisión</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
+}
+async function registrarRevision() {
+  const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
+  const dec = document.querySelector('input[name="rev-dec"]:checked')?.value, prox = $('#rev-prox').value || null;
+  if (dec === 'reprogramar' && !prox) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
+  LAB.revClave = LAB.revClave || LAB.alm.escenarios.nuevaClave();      // el mismo intento reutiliza la clave: un reintento no duplica la revisión
+  btn.disabled = true; btn.textContent = 'Registrando…';
+  try {
+    const r = await LAB.alm.escenarios.revisar(e.id, { clave: LAB.revClave, revision: e.revision, fecha: $('#rev-fecha').value, observacion: $('#rev-obs').value, aprendizaje: $('#rev-apr').value, decision: dec, proxima_fecha: dec === 'descartar' ? null : prox });
+    if (!vigente(g)) return;
+    LAB.revClave = null; LAB.esc = await LAB.alm.escenarios.leer(e.id); if (!vigente(g)) return;
+    toast(r.duplicado ? 'Esa revisión ya estaba registrada' : 'Revisión registrada'); pintarEscenario(); $('#esc-rev-t')?.scrollIntoView({ block: 'start' });
+  } catch (er) {
+    if (!vigente(g)) return;
+    const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; tu texto sigue aquí y no se ha registrado nada.' : er.message + ' Tu texto sigue aquí: puedes reintentar.';
+    err.textContent = m; toastError(m);
+  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Registrar revisión'; } }
 }
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
   try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
   catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
-function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value }, 'Cambios guardados', '#esc-error'); }
+function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value, invalidacion: $('#esc-invalidacion').value }, 'Cambios guardados', '#esc-error'); }
 function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
 async function eliminarEscenario() {
   const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;

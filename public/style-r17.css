@@ -238,3 +238,8 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 
 /* lo que sí existe (revisión sin nota): lista compacta */
 .nota-existe{margin:12px 0;padding-left:1.1rem;font-size:var(--t-s);line-height:1.5} .nota-existe li{margin:0 0 6px} .nota-existe .mut{color:var(--muted)}
+
+/* ronda 21 · Cuaderno: grupos «Para revisar», historial de revisiones y formulario */
+.seg-grupo{margin:0 0 var(--s3)} .seg-grupo>h3{font-size:1.125rem;margin:0 0 6px} .seg-grupo .esc-item{margin-top:var(--s2)}
+.esc-revisiones{margin:var(--s3) 0} .esc-rev-lista{list-style:none;margin:var(--s2) 0;padding:0} .esc-rev-lista>li{border-left:3px solid var(--border-strong,var(--muted));padding:2px 0 2px 12px;margin:0 0 var(--s2)} .esc-rev-lista p{margin:0 0 4px}
+.rev-decision{border:0;margin:var(--s2) 0;padding:0} .rev-decision legend{font-weight:600;margin-bottom:4px} .esc-invalidacion{margin:0 0 var(--s2)}
