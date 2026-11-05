@@ -42,7 +42,12 @@ Se recorrió el producto en 390 y 1440 px (portada, ejemplo explicado, Revista, 
 | K9 (envíos simultáneos con la misma clave) | `unit-cuaderno21` K9 | el servidor cumple (una inserción, ningún 500); **un cliente puede recibir 409**: el cliente lo trata como `conflicto` con el texto conservado, **no se prueba con dos clientes reales simultáneos** |
 
 # 6. Pruebas realmente ejecutadas (por entorno)
-@@PASADA@@
+**Pasada completa definitiva** (`bash tests/run-all.sh`, commit `c1e8448`, árbol limpio): **933 comprobaciones correctas, 0 fallos, código 0** (47 baterías con resultado + `demotest`), **locales del autor**. Registro íntegro de cada batería **y de `demotest`** en `ronda22/logs/`; ninguno contiene `CIERRE FORZADO` ni `CIERRE ANÓMALO`: **no hubo cierre forzado**. *Aserciones ≠ entradas.*
+- **Módulo / servidor (SQLite real) y subprocesos:** `unit-cliente-revision22` **8** (nuevo), `unit-cuaderno21` 20, `unit-registro21` 10, `unit-migracion` 15, `unit-cierre20` 10, `unit-causas20` 10, `unit-nota` 35 y las anteriores.
+- **Navegador (Chromium, servidor local con SQLite):** `testT` **24** (nuevo: Cuaderno y recuperación a 1440/390/320), `testS` 30, `testR` 16, `testQ` 25, `testO` 19, `testN` 41, `testP` 28, `testL` 28, `testB` 53 y las anteriores; **demo autónoma:** `demotest` y `testDemo22` **12** (nuevo; el registro de revisión funciona y no persiste tras recargar).
+- **Repeticiones** de `testE`, `testF` y `testC` con latencia 0 y 300 ms (`ronda22/intermitentes.txt`): **12/12 con código 0**.
+- **Pasada fallida conservada:** `logs-pasada1-fallo-ejecutor/` (933 correctas, 1 problema del ejecutor, §8).
+- **Entorno remoto:** nada ejecutado. **Móvil físico, lector de pantalla, zoom real, Safari/Firefox, correo real, D1 remota, el piloto con personas y el regreso al día siguiente: no probados.** La inspección visual de las capturas es mía y no sustituye a pruebas de interacción ni de accesibilidad real.
 
 # 7. Cambios en pruebas antiguas (para revisarlos, no se certifica «sin rebajar»)
 Por el diseño nuevo se adaptaron: `testO` O5b/O5c/O5e (las tarjetas editoriales pasan a la ficha; se comprueba una tarjeta por escenario con «Tu seguimiento» y «Respuesta editorial» separados, y la ficha con la respuesta completa), `testQ` Q8 (Cuaderno con cuenta), `testN` N7/N9/N9b y `testP` P10 (etiqueta «En beta»; ya no se promete un plan de pago), `testL` L10 (fecha en la tarjeta compacta), `testB` (la primera entrada de la portada es ahora `#entrada-ejemplo`). **No he comparado línea a línea con la versión anterior para certificar que ninguna aserción se rebajó**; se ha intentado mantener lo que cada una comprueba, y la revisión puede contrastarlo con el historial Git.
