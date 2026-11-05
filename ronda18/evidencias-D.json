@@ -27,7 +27,7 @@
   "id": "E3",
   "escenario": "Datos de cada cartera",
   "esperado": "Nombre, privada/pública, posiciones, total asignado y última modificación SOLO si existe",
-  "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada PG 48 % · KO 40 % Falta asignar 12 % · 2 posicionesModificada el 4 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 4 nov 2026 Abrir»",
+  "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada PG 48 % · KO 40 % Falta asignar 12 % · 2 posicionesModificada el 5 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 5 nov 2026 Abrir»",
   "resultado": "OK",
   "evidencia": "E1-mis-carteras-390.png"
  },
@@ -35,7 +35,7 @@
   "id": "E3b",
   "escenario": "Fechas no inventadas",
   "esperado": "Una cartera nunca modificada muestra «Creada el», no «Modificada»",
-  "observado": "actualizado_en de «Solo creada» = null; texto: Creada el 4 nov 2026",
+  "observado": "actualizado_en de «Solo creada» = null; texto: Creada el 5 nov 2026",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -67,8 +67,8 @@
   "id": "E5",
   "escenario": "Publicar desactivado se ve como Guardar desactivado",
   "esperado": "Mismo tratamiento visual y motivo pegado a cada botón",
-  "observado": "color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=false",
-  "resultado": "FALLA",
+  "observado": "color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=true",
+  "resultado": "OK",
   "evidencia": "E4-103-escritorio.png"
  },
  {
@@ -123,7 +123,7 @@
   "id": "E15",
   "escenario": "Teclado móvil abierto al editar la última posición (EMULADO: ventana de 390×420)",
   "esperado": "El campo queda visible, por encima de la barra, y acepta el valor",
-  "observado": "campo 128–172 px; barra desde 300; ventana 420; valor 12,5",
+  "observado": "campo 152–196 px; barra desde 348; ventana 420; valor 12,5",
   "resultado": "OK",
   "evidencia": "E15-teclado-emulado-390x420.png"
  },
@@ -147,16 +147,16 @@
   "id": "E9a",
   "escenario": "Exceso de asignación a 360 px",
   "esperado": "Se lee bien sin reducir la letra; sin desbordamiento; barra ≤ 88 px",
-  "observado": "página 360/360 px; texto del exceso a 16px; barra 120 px; resumen «⚠ Exceso de asignación: 13 %»; barra «⚠ Asignado: 113 %» · «⚠ Exceso: 13 %»; contenido de la barra fuera de pantalla=false",
-  "resultado": "FALLA",
+  "observado": "página 360/360 px; texto del exceso a 16px; barra 72 px; resumen «⚠ Exceso de asignación: 13 %»; barra «⚠ Asignado: 113 %» · «⚠ Exceso: 13 %»; contenido de la barra fuera de pantalla=false",
+  "resultado": "OK",
   "evidencia": "E9-exceso-360.png"
  },
  {
   "id": "E9b",
   "escenario": "Etiquetas del resumen",
   "esperado": "«Asignado: 100 %» sin «100,0 % ✓ 100 % asignado»; «No representa la rentabilidad de tu cartera»; categorías con nota breve",
-  "observado": "«✓ 100 % asignado» aparece=false; nota ROIC=false; nota categorías (en el desplegable, plegada)=true; antes visible=false",
-  "resultado": "FALLA",
+  "observado": "«✓ 100 % asignado» aparece=false; nota ROIC=true; nota categorías (en el desplegable, plegada)=true; antes visible=false",
+  "resultado": "OK",
   "evidencia": ""
  },
  {
@@ -211,7 +211,7 @@
   "id": "E16a",
   "escenario": "Texto ampliado al 200 % en el editor (APROXIMADO: tamaño de texto de la página, no zoom del navegador)",
   "esperado": "Sin desbordamiento horizontal; la barra crece; la última posición, desplazada y enfocada, queda DENTRO de la ventana y por encima de la barra",
-  "observado": "página 390/390 px; barra 137 px; campo enfocado=true, arriba 320, abajo 386 (ventana 844), la barra empieza en 707",
+  "observado": "página 390/390 px; barra 100 px; campo enfocado=true, arriba 339, abajo 405 (ventana 844), la barra empieza en 744",
   "resultado": "OK",
   "evidencia": "E16-texto-200-editor-390.png"
  },

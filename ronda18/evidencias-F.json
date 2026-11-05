@@ -51,7 +51,7 @@
   "id": "G6",
   "escenario": "E16a corregida: última posición, ampliación de texto SIMULADA al 200 % (font-size del documento, no zoom del navegador) a 390 px",
   "esperado": "Tras desplazar y enfocar, el campo queda dentro de la ventana (top ≥ 0, bottom ≤ inicio de la barra fija, sin desbordar a los lados) y permite escribir",
-  "observado": "campo enfocado: arriba 320, abajo 386, barra empieza en 707, ventana 390×844, ancho de página 390; tras escribir «12,5» el total pasó de «Asignado: 100 %» a «Asignado: 95,9 %» y el campo sigue visible (abajo 386 ≤ 667)",
+  "observado": "campo enfocado: arriba 339, abajo 405, barra empieza en 744, ventana 390×844, ancho de página 390; tras escribir «12,5» el total pasó de «Asignado: 100 %» a «Asignado: 95,9 %» y el campo sigue visible (abajo 406 ≤ 704)",
   "resultado": "OK",
   "evidencia": "G6-ultima-posicion-200-390.png"
  },
