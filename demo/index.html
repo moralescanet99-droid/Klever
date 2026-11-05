@@ -1090,6 +1090,13 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 @media (max-width:719px){#origen-aviso{display:none!important}} @media (min-width:720px){#origen-aviso-pie{display:none!important}} .origen-pie{margin:var(--s2) 0}
 .origen-pie{order:1}
 
+/* ronda 22 · comparación en móvil: la etiqueta («Cartera base», «Alternativa simulada») va ENCIMA de la barra, no en una columna estrecha que la parte en trozos */
+@media (max-width:719px){.esp-fila{grid-template-columns:minmax(0,1fr);gap:2px} .esp-tit{white-space:nowrap}}
+/* Cuaderno: una tarjeta por idea; lo que toca revisar se distingue sin ámbar (borde y texto normales) */
+.esc-item .esc-t{font-size:1.0625rem;line-height:1.35} .esc-fecha{margin:4px 0} .esc-fecha.vence{font-weight:600} .esc-toca{border-left:3px solid var(--accent)} .esc-acc{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+.esc-editorial{margin:var(--s3) 0} .rev-estado p{margin:6px 0 0;padding:8px 10px;border-left:3px solid var(--muted);border-radius:0 8px 8px 0;background:var(--surface);line-height:1.45} .rev-estado .rev-ok{border-left-color:var(--ok)} .rev-estado .rev-aviso{border-left-color:var(--accent)}
+.lab-origen{background:var(--surface);color:var(--text);border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1287,19 +1294,19 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
-      <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
+      <p class="mut">Tus ideas: lo que quieres volver a revisar —preguntas, escenarios simulados y empresas de tu radar—. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
     <div class="seg-col">
-      <section class="seg-bloque" aria-labelledby="seg-casos-t">
-        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
-        <div id="seg-casos" aria-live="polite"></div>
-      </section>
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
         <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-casos-t">
+        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
+        <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-radar-t">
         <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
@@ -2569,6 +2576,54 @@ function mostrarArticulo({ tipo, id, n }) {
     ${desconocido(esc, h)}${cta(esc, h)}${fuentes(esc, h)}</article>`;
 }
 
+// Registro de una revisión del Cuaderno: la lógica del CLIENTE, separada de la pantalla para poder probarla sin navegador (ronda 22).
+// Distingue cuatro cosas que la ronda 21 mezclaba: el BORRADOR (lo que la persona escribe), el INTENTO de envío (clave + contenido congelados), el resultado CONFIRMADO por el servidor y la ACTUALIZACIÓN DE LA VISTA.
+//   · Un intento se envía SIEMPRE con su propia clave y su propio contenido: si el resultado es incierto (corte de red, respuesta perdida, 5xx) se reintenta ESE intento —nunca uno nuevo ni con otro texto—;
+//     el servidor es idempotente por clave y devuelve el registro ya guardado.
+//   · Una lectura posterior fallida NO es una escritura fallida: el servidor ya confirmó, así que se informa «guardada» y solo se ofrece recuperar la vista (sin reenviar).
+//   · Un 409 de conflicto de revisión significa que la clave NO existía (el servidor comprueba la clave antes que la revisión): no se registró nada y el texto de la persona se conserva.
+// No toca el DOM. `alm` es el almacén de escenarios (`revisar(id, cuerpo)`, `leer(id)`, `nuevaClave()`).
+
+const CAMPOS_REVISION = ['fecha', 'observacion', 'aprendizaje', 'decision', 'proxima_fecha'];
+const copiaCongelada = o => Object.freeze({ ...o });
+const esIncierto = e => !e || e.obsoleta || e.status == null || e.status === 0 || e.status >= 500;   // sin respuesta del servidor o error de infraestructura: NO se sabe si llegó
+
+// intento = { escId, clave, revision, cuerpo }  (todo congelado al enviar; `revision` es la versión del escenario que vio la persona)
+function nuevoIntento(alm, esc, borrador) {
+  return Object.freeze({ escId: esc.id, clave: alm.nuevaClave(), revision: esc.revision, cuerpo: copiaCongelada(borrador) });
+}
+
+// ¿El borrador actual es el mismo contenido que el del intento pendiente? (si no, hay texto nuevo que NO se ha enviado)
+const mismoContenido = (intento, borrador) => !!intento && CAMPOS_REVISION.every(k => (intento.cuerpo[k] ?? '') === (borrador[k] ?? ''));
+
+// Envía el intento. Resultados:
+//   { tipo: 'confirmada', revision, escenario, vista: 'actualizada' | 'pendiente' }  el servidor confirmó; `vista: 'pendiente'` = no se pudo releer el escenario (solo recuperar la vista)
+//   { tipo: 'rechazada', mensaje }  el servidor respondió que NO lo registra (validación, otra clave…): con certeza no se guardó
+//   { tipo: 'conflicto', mensaje }  el escenario cambió desde otra pestaña: con certeza no se registró este intento
+//   { tipo: 'incierto', mensaje }   no se sabe si se registró: conservar el intento y reintentar el MISMO
+async function enviarIntento(alm, intento, escActual) {
+  let r;
+  try { r = await alm.revisar(intento.escId, { clave: intento.clave, revision: intento.revision, ...intento.cuerpo }); }
+  catch (e) {
+    if (esIncierto(e)) return { tipo: 'incierto', mensaje: 'No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor).' };
+    if (e.status === 409 && e.data?.conflicto) return { tipo: 'conflicto', mensaje: 'Este escenario cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí.' };
+    return { tipo: 'rechazada', mensaje: e.message || 'No se pudo registrar la revisión.' };
+  }
+  // el servidor confirmó (201 con el escenario actualizado, o 200 «duplicado» si ese mismo intento ya estaba guardado)
+  const fila = { id: r.id, fecha: r.fecha, observacion: r.observacion, aprendizaje: r.aprendizaje, decision: r.decision, proxima_fecha: r.proxima_fecha, creado_en: r.creado_en };
+  if (r.escenario) {                                                    // datos confirmados por el propio POST: no hace falta otra lectura
+    const previas = (escActual?.revisiones || []).filter(x => x.id !== fila.id);
+    return { tipo: 'confirmada', revision: fila, escenario: { ...r.escenario, revisiones: [fila, ...previas].sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)) || b.id - a.id) }, vista: 'actualizada', duplicado: false };
+  }
+  const v = await actualizarVista(alm, intento.escId);                  // duplicado: la respuesta no trae el escenario; se relee
+  return v.ok ? { tipo: 'confirmada', revision: fila, escenario: v.escenario, vista: 'actualizada', duplicado: true } : { tipo: 'confirmada', revision: fila, escenario: null, vista: 'pendiente', duplicado: true };
+}
+
+// Recuperar la vista NUNCA escribe: solo lee.
+async function actualizarVista(alm, escId) {
+  try { return { ok: true, escenario: await alm.leer(escId) }; } catch (e) { return { ok: false, mensaje: e?.message || 'No se pudo leer el escenario.' }; }
+}
+
 // Presentación de «Mi cartera» (radiografía), «Mi radar», «Mi laboratorio» y «Mi seguimiento». Los cálculos viven en calculos.js; el almacenamiento, en almacen.js.
 // app.js le pasa sus utilidades (DOM, API, sesión, ficha…) por un contexto: este módulo no conoce el resto del estado de la aplicación.
 // Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
@@ -2597,6 +2652,7 @@ function iniciarLab(ctx) {
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
   $('#nota-cuerpo').addEventListener('click', e => { if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
+  $('#seg-escenarios').addEventListener('click', e => { const b = e.target.closest('[data-registrar]'); if (b) { LAB.abrirRev = Number(b.dataset.registrar); ctx.go('#escenario-' + b.dataset.registrar); } });
   $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#seg-radar').addEventListener('change', e => { if (e.target.id === 'seg-ref') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarSeguimientoRadar(); $('#seg-ref')?.focus(); } });
@@ -2604,6 +2660,8 @@ function iniciarLab(ctx) {
   const lab = $('#lab-cuerpo');
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
+  lab.addEventListener('input', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
+  lab.addEventListener('change', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
   lab.addEventListener('change', e => { if (e.target.name === 'rev-dec') { const p = $('#rev-prox'); p.disabled = e.target.value !== 'reprogramar'; if (p.disabled) p.value = ''; else p.focus(); } });
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
@@ -2868,18 +2926,18 @@ const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
 function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
   const est = c.estado || estadoSeguimiento({ historia: c.historia, pregunta_ref: c.pregunta_ref, pregunta: c.pregunta }), caso = est.caso, r = est.tipo === 'responde' ? caso.respuesta : null, h = c.historia && historia(c.historia);
   const inval = est.refInvalida ? ' El vínculo guardado ya no existe en el catálogo de preguntas: se trata como pregunta propia.' : '';
-  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b>${inval} La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta sigue pendiente: todavía no hay una fuente que la responda.</p>`
-    : est.tipo === 'sin' ? `<p><b>Pendiente.</b>${inval} Esta pregunta no está vinculada a ninguna historia ni fuente: sigue pendiente hasta que la revises tú.</p>` : '';
+  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b>${inval} La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta no tiene respuesta editorial: todavía no hay una fuente que la responda.</p>`
+    : est.tipo === 'sin' ? `<p><b>Sin respuesta editorial.</b>${inval} Esta pregunta no está vinculada a ninguna historia ni fuente. Tu seguimiento son tus revisiones personales.</p>` : '';
   const formul = (est.tipo === 'responde' || est.tipo === 'pendiente') && est.distinta ? `<p class="mut peq">Tu formulación es distinta de la de la historia, pero sigue la misma cuestión: «${esc(caso.pregunta)}».</p>` : '';
   const ocurrido = r && c.compacta ? `<p class="mut peq">Misma respuesta que la de otra pregunta tuya vinculada a esta cuestión (más arriba). El desenlace completo no se repite aquí.</p>` : r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
-    : est.tipo === 'pendiente' ? `<p><b>Sigue pendiente.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
+    : est.tipo === 'pendiente' ? `<p><b>Sin respuesta editorial todavía.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
     : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
   const rev = !h ? '' : r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : est.tipo === 'otra' ? `<a class="btn btn-secundario" href="#historia-${esc(h.id)}">Ver revisión de la historia</a>` : `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>`;
   const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
-  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Tu reformulación tiene respuesta' : 'Tu pregunta tiene respuesta') : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
-    <h3>«${esc(c.pregunta)}»</h3>${formul}${c.revisarEn ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
-    ${ocurrido}${pesos}<p class="caso-acc">${rev} ${sim}</p></article>`;
+  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Reformulación con respuesta editorial' : 'Con respuesta editorial') : 'Sin respuesta editorial aún'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
+    ${c.enFicha ? '' : `<h3>«${esc(c.pregunta)}»</h3>`}${formul}${c.revisarEn && !c.enFicha ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
+    ${ocurrido}${pesos}<p class="caso-acc">${rev} ${c.enFicha ? '' : sim}</p></article>`;
 }
 // Resumen del vínculo con la revisión de la historia dentro de un escenario: responde / sigue pendiente / es otra pregunta (con enlace para verla).
 // Edición: muestra la pregunta de la historia a la que está vinculado el escenario y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
@@ -2904,8 +2962,24 @@ function tarjetaVinculo(esc, e) {
   const rev = est.tipo === 'responde' && est.caso.respuesta.revision ? `#tesis-${esc(h.id)}-${est.caso.respuesta.revision}` : `#historia-${esc(h.id)}`;
   return txt ? `<p class="esc-vinculo">${txt} <a href="${rev}">Ver revisión de la historia</a></p>` : '';
 }
+// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (los escenarios) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
+// de visitante, el ejemplo ficticio de «Tus preguntas» primero y después la invitación a entrar.
+function ordenarSeguimiento(conCuenta) {
+  const col = document.querySelector('.seg-col'), casos = document.querySelector('#seg-casos')?.closest('.seg-bloque'), escB = document.querySelector('#seg-escenarios')?.closest('.seg-bloque'); if (!col || !casos || !escB) return;
+  casos.hidden = conCuenta; if (conCuenta) col.insertBefore(escB, col.firstElementChild); else col.insertBefore(casos, col.firstElementChild);
+}
+// Respuesta editorial EN UNA FRASE (para la tarjeta compacta del Cuaderno). Independiente del seguimiento personal: una revisión personal no demuestra que haya una fuente ni que la pregunta esté resuelta.
+function lineaEditorial(esc, e) {
+  if (!e.historia) return '';
+  const est = estadoSeguimiento(e), h = historia(e.historia); if (!h) return '';
+  const txt = est.tipo === 'responde' ? 'la revisión de la historia responde a la cuestión que sigues.' : est.tipo === 'pendiente' ? 'sin respuesta todavía: la fuente aún no permite responder esa cuestión.'
+    : est.tipo === 'otra' ? 'la revisión de la historia responde a otra cuestión; tu pregunta no tiene respuesta editorial.' : 'tu pregunta no está vinculada a la cuestión de la historia.';
+  return `<p class="peq mut"><b>Respuesta editorial:</b> ${txt}</p>`;
+}
 function pintarSeguimientoCasos(lista) {
   const { $, esc, logged } = x(), cont = $('#seg-casos'); if (!cont) return;
+  ordenarSeguimiento(logged());
+  if (logged()) { cont.innerHTML = ''; return; }
   if (!logged()) {                                                       // visitante: ejemplo ficticio y rotulado; con cuenta solo salen SUS preguntas y posiciones
     cont.innerHTML = `<p class="mut peq">Así se verían tus preguntas (ejemplo ficticio). Con cuenta, aquí aparecen solo tus propias preguntas y posiciones.</p>` + SEGUIMIENTO_CASOS.map(c => tarjetaCaso(esc, { pregunta_ref: refPregunta(c.historia, c.tesis), pregunta: c.pregunta, historia: c.historia, ticker: historia(c.historia).ticker, pesoEsc: 10, ejemplo: true })).join('');
     return;
@@ -2928,15 +3002,19 @@ async function pintarSeguimientoEscenarios() {
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
   if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
-  const tarjetaEsc = e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
-      ${e.pregunta ? `<p class="esc-preg"><span class="sr">Pregunta: </span>«${esc(e.pregunta)}»</p>` : ''}${textoRevision(e) ? `<p class="peq">${esc(textoRevision(e))}</p>` : ''}
-      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>${e.revisar_en ? `<p class="peq">Revisar el <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}${e.n_revisiones ? `<p class="peq mut">${e.n_revisiones} ${e.n_revisiones === 1 ? 'revisión registrada' : 'revisiones registradas'}.</p>` : ''}
-      <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(x().fmtFecha(e.creado_en))}</p>
+  // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
+  const h0 = hoy(), tarjetaEsc = e => {
+    const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
+    const fecha = f ? `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>` : '';
+    return `<article class="esc-item${vence ? ' esc-toca' : ''}"><header><b class="esc-t">${e.pregunta ? `«${esc(e.pregunta)}»` : esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
+      ${fecha}<p class="peq"><b>Tu seguimiento:</b> ${n ? `${n} ${n === 1 ? 'revisión personal registrada' : 'revisiones personales registradas'}` : 'sin revisiones personales todavía'}.</p>${lineaEditorial(esc, e)}
+      <p class="mut peq">${esc(e.ticker)} al ${P(e.peso_objetivo)} en la alternativa · cartera «${esc(e.cartera_nombre)}»</p>
       ${!e.cartera_existe ? '<p class="chip aviso">La cartera original ya no existe</p>' : e.hay_version_posterior ? '<p class="chip aviso">Hay una versión posterior de la cartera</p>' : ''}
-      ${e.nota ? `<p class="esc-nota">${esc(e.nota.length > 140 ? e.nota.slice(0, 140) + '…' : e.nota)}</p>` : ''}
-      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+      ${e.nota ? `<p class="esc-nota peq">${esc(e.nota.length > 110 ? e.nota.slice(0, 110) + '…' : e.nota)}</p>` : ''}
+      <p class="esc-acc">${pend ? `<button class="btn ${vence ? 'btn-primario' : 'btn-secundario'}" type="button" data-registrar="${e.id}">Registrar revisión<span class="sr"> de ${esc(e.nombre)}</span></button> ` : ''}<a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+  };
   // Ronda 21: «En estudio» se ordena para volver a decidir: primero lo que toca revisar (fecha de hoy o ya pasada), después las próximas revisiones y, al final, lo que no tiene fecha. Lo descartado o archivado no se presenta como pendiente.
-  const h0 = hoy(), grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
+  const grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
   if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
     cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
   else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
@@ -3125,7 +3203,11 @@ async function mostrarEscenario(id) {
   if (!logged()) { go('#seguimiento'); return; }
   let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
-  LAB.esc = e; LAB.editEsc = false; LAB.revClave = null; pintarEscenario();
+  LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } pintarEscenario();
+}
+function htmlEditorialFicha(esc, e, viva) {      // el contexto editorial completo, UNA vez y en su sitio: la ficha. Es independiente de las revisiones personales.
+  return `<section class="esc-editorial" aria-label="Respuesta editorial"><h2>Respuesta editorial</h2><p class="mut peq">Lo que dice la Revista sobre la cuestión que sigues. Tus revisiones personales (más abajo) son aparte: no cambian esta respuesta ni demuestran que exista una fuente.</p>
+    ${tarjetaCaso(esc, { enFicha: true, pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), idEsc: e.id, revisarEn: e.revisar_en, pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null })}</section>`;
 }
 function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
@@ -3137,10 +3219,10 @@ function pintarEscenario() {
   const enlHist = h ? `<p class="esc-historia"><b>Historia de origen:</b> <a href="#historia-${esc(h.id)}">${esc(h.titulo)}</a> · <a href="#tesis-${esc(h.id)}-1">Opinión original (${esc(fechaCorta(h.tesis[0].fecha))})</a>${rev && rev.n > 1 ? ` · <a href="#tesis-${esc(h.id)}-${rev.n}">Revisión editorial (${esc(fechaCorta(rev.fecha))}${rev.simulada ? ', desenlace simulado' : ''})</a>` : ''}</p>` : '';
   const estados = Object.keys(ESTADOS).filter(k => k !== e.estado).map(k => k === 'descartado' ? '<button class="btn btn-secundario" type="button" data-estado="descartado">Marcar como descartado</button>' : k === 'archivado' ? '<button class="btn btn-secundario" type="button" data-estado="archivado">Archivar</button>' : '<button class="btn btn-secundario" type="button" data-estado="en_estudio">Volver a «en estudio»</button>').join(' ');
   $('#lab-cuerpo').innerHTML = `<div class="pag-cab"><p><a class="enlace" href="#seguimiento">← Mi seguimiento</a></p><h1 tabindex="-1">${esc(e.nombre)} <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></h1>
-      <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}», revisión ${e.base_revision}. Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
+      <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}». Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
       ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
-      ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}${e.historia ? tarjetaVinculo(esc, e) : ''}
+      ${enlHist}${e.historia ? htmlEditorialFicha(esc, e, viva) : ''}
       <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
       ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
       ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
@@ -3157,6 +3239,8 @@ function pintarEscenario() {
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
+  restaurarFormRev();
+  if (LAB.abrirRev === e.id) { LAB.abrirRev = null; const d = $('#rev-det'); if (d) { d.open = true; $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); $('#rev-obs')?.focus({ preventScroll: true }); } }   // «Registrar revisión» desde el Cuaderno lleva directamente al formulario
 }
 // Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
 const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };
@@ -3173,24 +3257,51 @@ function htmlRevisiones(esc, e) {
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-m" value="mantener" checked> <label for="rev-dec-m">La mantengo (sin nueva fecha)</label></p>
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-r" value="reprogramar"> <label for="rev-dec-r">Programo otra revisión</label> <input id="rev-prox" type="date" min="${hoy()}" aria-label="Fecha de la próxima revisión" disabled></p>
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-d" value="descartar"> <label for="rev-dec-d">La descarto (se conserva en el Cuaderno como descartada)</label></p></fieldset>
-        <p><button class="btn btn-primario" type="submit" id="rev-btn">Registrar revisión</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
+        <div id="rev-estado" class="rev-estado" role="status" aria-live="polite"></div>
+        <p><button class="btn btn-primario" type="submit" id="rev-btn">${rotuloBotonRev()}</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
 }
+// Estado del registro de una revisión (ronda 22). LAB.revIntento = { intento, fase }: fase «incierto» (no se sabe si el servidor lo registró: se reintenta EL MISMO intento) o «vista» (el servidor ya lo confirmó y solo falta
+// releer el escenario: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
+const rotuloBotonRev = () => LAB.revIntento?.fase === 'vista' ? 'Actualizar la vista' : LAB.revIntento?.fase === 'incierto' ? 'Reintentar el mismo envío' : 'Registrar revisión';
+const leerBorradorRev = () => { const q = s => document.querySelector(s), dec = document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener';
+  return { fecha: q('#rev-fecha').value, observacion: q('#rev-obs').value.trim(), aprendizaje: q('#rev-apr').value.trim(), decision: dec, proxima_fecha: dec === 'reprogramar' ? (q('#rev-prox').value || null) : null }; };
+function guardarBorradorRev() { if (document.querySelector('#rev-form')) LAB.revBorrador = { esc: LAB.esc?.id, fecha: document.querySelector('#rev-fecha').value, obs: document.querySelector('#rev-obs').value, apr: document.querySelector('#rev-apr').value, dec: document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener', prox: document.querySelector('#rev-prox').value }; }
+function restaurarFormRev() {
+  const b = LAB.revBorrador, q = s => document.querySelector(s); if (!q('#rev-form')) return;
+  if (b && b.esc === LAB.esc?.id) { q('#rev-fecha').value = b.fecha || hoy(); q('#rev-obs').value = b.obs; q('#rev-apr').value = b.apr; const r = q(`input[name="rev-dec"][value="${b.dec}"]`); if (r) r.checked = true; q('#rev-prox').value = b.prox || ''; q('#rev-prox').disabled = b.dec !== 'reprogramar'; if (b.obs || b.apr) q('#rev-det').open = true; }
+  const m = LAB.revMsg; if (m && m.esc === LAB.esc?.id) { q('#rev-estado').innerHTML = `<p class="${m.tipo === 'ok' ? 'rev-ok' : 'rev-aviso'}">${x().esc(m.texto)}</p>`; q('#rev-det').open = true; }
+}
+const avisarRev = (tipo, texto) => { LAB.revMsg = { esc: LAB.esc?.id, tipo, texto }; };
 async function registrarRevision() {
-  const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
-  const dec = document.querySelector('input[name="rev-dec"]:checked')?.value, prox = $('#rev-prox').value || null;
-  if (dec === 'reprogramar' && !prox) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
-  LAB.revClave = LAB.revClave || LAB.alm.escenarios.nuevaClave();      // el mismo intento reutiliza la clave: un reintento no duplica la revisión
-  btn.disabled = true; btn.textContent = 'Registrando…';
+  const { $, toast } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
+  const pend = LAB.revIntento && LAB.revIntento.intento.escId === e.id ? LAB.revIntento : null;
+  const refrescar = async () => { const v = await actualizarVista(LAB.alm.escenarios, e.id); return v.ok ? v.escenario : null; };
+  btn.disabled = true;
   try {
-    const r = await LAB.alm.escenarios.revisar(e.id, { clave: LAB.revClave, revision: e.revision, fecha: $('#rev-fecha').value, observacion: $('#rev-obs').value, aprendizaje: $('#rev-apr').value, decision: dec, proxima_fecha: dec === 'descartar' ? null : prox });
-    if (!vigente(g)) return;
-    LAB.revClave = null; LAB.esc = await LAB.alm.escenarios.leer(e.id); if (!vigente(g)) return;
-    toast(r.duplicado ? 'Esa revisión ya estaba registrada' : 'Revisión registrada'); pintarEscenario(); $('#esc-rev-t')?.scrollIntoView({ block: 'start' });
-  } catch (er) {
-    if (!vigente(g)) return;
-    const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; tu texto sigue aquí y no se ha registrado nada.' : er.message + ' Tu texto sigue aquí: puedes reintentar.';
-    err.textContent = m; toastError(m);
-  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Registrar revisión'; } }
+    // 1) la revisión ya está CONFIRMADA y solo falta la vista: leer, nunca reenviar (lo que haya escrito después NO se envía)
+    if (pend?.fase === 'vista') {
+      btn.textContent = 'Actualizando…'; const n = await refrescar(); if (!vigente(g)) return;
+      if (n) { LAB.esc = n; LAB.revIntento = null; avisarRev('ok', 'Vista actualizada: tu revisión aparece en el historial.'); } else avisarRev('aviso', 'Tu revisión SÍ está guardada. Todavía no hemos podido actualizar la vista: pulsa «Actualizar la vista» cuando tengas conexión. No hace falta volver a escribirla.');
+      guardarBorradorRev(); pintarEscenario(); return;
+    }
+    // 2) intento pendiente de resultado incierto: se reintenta EL MISMO (clave y contenido congelados), aunque el formulario tenga ahora otro texto
+    const borr = leerBorradorRev();
+    if (!pend && borr.decision === 'reprogramar' && !borr.proxima_fecha) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
+    const intento = pend ? pend.intento : nuevoIntento(LAB.alm.escenarios, e, borr), textoNuevo = !!pend && !mismoContenido(pend.intento, borr);
+    btn.textContent = pend ? 'Comprobando…' : 'Registrando…'; guardarBorradorRev();
+    const r = await enviarIntento(LAB.alm.escenarios, intento, e); if (!vigente(g)) return;
+    if (r.tipo === 'confirmada') {
+      const conservar = textoNuevo;                                   // si hay texto nuevo, queda en el formulario SIN enviar
+      if (r.vista === 'actualizada') { LAB.esc = r.escenario; LAB.revIntento = null; } else LAB.revIntento = { intento, fase: 'vista' };
+      if (!conservar) LAB.revBorrador = null; else guardarBorradorRev();
+      avisarRev(r.vista === 'actualizada' ? 'ok' : 'aviso', r.vista === 'pendiente' ? 'Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.' : (conservar ? 'Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.' : (r.duplicado ? 'Esa revisión ya estaba registrada.' : 'Revisión registrada.')));
+      toast(r.vista === 'pendiente' ? 'Revisión guardada' : 'Revisión registrada'); pintarEscenario(); if (!conservar) $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); return;
+    }
+    if (r.tipo === 'incierto') { LAB.revIntento = { intento, fase: 'incierto' }; avisarRev('aviso', r.mensaje + ' Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.'); }
+    else if (r.tipo === 'conflicto') { LAB.revIntento = null; const n = await refrescar(); if (!vigente(g)) return; if (n) LAB.esc = n; avisarRev('aviso', r.mensaje + (n ? ' Hemos cargado la versión actual: pulsa «Registrar revisión» para añadirla.' : ' No hemos podido cargar la versión actual: recarga la página; tu texto sigue aquí.')); }
+    else { LAB.revIntento = null; avisarRev('aviso', r.mensaje + ' No se ha registrado nada; tu texto sigue aquí.'); }
+    guardarBorradorRev(); pintarEscenario();
+  } finally { const b2 = document.querySelector('#rev-btn'); if (b2) { b2.disabled = false; b2.textContent = rotuloBotonRev(); } }
 }
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
@@ -4344,7 +4455,8 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
 // Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
-  b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
+  b.dataset.modo = modo; b.hidden = modo === 'crear';   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis portafolios» o «Retomar mi borrador»
+  b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }
