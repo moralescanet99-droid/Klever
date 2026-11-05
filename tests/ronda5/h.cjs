@@ -36,5 +36,7 @@ const evid = []; // evidencias: escenario, esperado, observado (medido en la eje
 const ev = (id, escenario, esperado, observado, cond, evidencia) => { ok(`[${id}] ${escenario}`, cond, observado); evid.push({ id, escenario, esperado, observado, resultado: cond ? 'OK' : 'FALLA', evidencia }); };
 const fin = (nombre) => { if (TRAZA && traza.length) { fs.mkdirSync(path.resolve(ROOT, RONDA, 'trazas'), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, 'trazas', `${path.basename(process.argv[1] || 'bateria', '.cjs')}${LAT ? '-lat' + LAT : ''}.txt`), traza.join('\n') + '\n'); }
   console.log(`\nRESULTADO: ${pass} correctas, ${fail} fallos` + (fail ? '\nFALLOS:\n- ' + fails.join('\n- ') : ''));
-  if (nombre && evid.length) { fs.mkdirSync(path.resolve(ROOT, RONDA), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, `${nombre}.json`), JSON.stringify(evid, null, 1)); } };
+  if (nombre && evid.length) { fs.mkdirSync(path.resolve(ROOT, RONDA), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, `${nombre}.json`), JSON.stringify(evid, null, 1)); }
+  // Ronda 19: si tras el resultado quedara algún manejador abierto (un navegador que no cierra), el proceso termina solo a los 10 s con su código y no agota el límite de la batería (ocurrió con testO: 18/0 y 900 s colgado)
+  setTimeout(() => process.exit(process.exitCode || 0), 10000).unref(); };
 module.exports = { chromium, B, ROOT, EVDIR, ok, ev, T, nuevo, entrar, peso, fin, mail, revision, distribucion };

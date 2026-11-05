@@ -11,7 +11,7 @@
   "id": "H1b-320",
   "escenario": "Legibilidad del aviso durante toda la animación (320 px), con la opacidad real",
   "esperado": "Opacidad efectiva 1 en cada muestra (solo se anima la altura) y contraste ≥ 4,5:1 calculado con esa opacidad, en al menos 6 muestras",
-  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 16→38→40 px",
+  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 5→33→40 px",
   "resultado": "OK",
   "evidencia": ""
  },
@@ -57,9 +57,9 @@
  },
  {
   "id": "H1c-390",
-  "escenario": "Aviso fijo tras desplazarse (390 px, desplazado 925 px)",
+  "escenario": "Aviso fijo tras desplazarse (390 px, desplazado 959 px)",
   "esperado": "Al menos 6 muestras elegibles con el aviso pegado arriba (top 0, entero y legible); el contenido que pasa por debajo es normal; NINGUNA acción queda inaccesible: enfocada, queda en la zona libre y sin nada encima",
-  "observado": "13 muestras elegibles; pegado arriba=true; contraste real mín. 7.8:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (323–375 dentro de 120–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (360–404 dentro de 97–720)",
+  "observado": "14 muestras elegibles; pegado arriba=true; contraste real mín. 7.8:1; elementos que pasan por debajo en este instante (normal): 1; acciones enfocadas → en zona libre=true, sin tapar=true (323–375 dentro de 120–720) | en zona libre=true, sin tapar=true (360–404 dentro de 59–720) | en zona libre=true, sin tapar=true (360–404 dentro de 97–720)",
   "resultado": "OK",
   "evidencia": "H1c-desplazado-390.png"
  },
@@ -91,7 +91,7 @@
   "id": "H1b-1440",
   "escenario": "Legibilidad del aviso durante toda la animación (1440 px), con la opacidad real",
   "esperado": "Opacidad efectiva 1 en cada muestra (solo se anima la altura) y contraste ≥ 4,5:1 calculado con esa opacidad, en al menos 6 muestras",
-  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 5→33→40 px",
+  "observado": "14 muestras; opacidad efectiva mínima 1.00; contraste real mínimo 16.3:1; alturas visibles 16→33→40 px",
   "resultado": "OK",
   "evidencia": ""
  },
