@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS portafolios (
   revision INTEGER NOT NULL DEFAULT 0,   -- sube en cada escritura: control de versión atómico (la fecha, de un segundo, solo se muestra)
   token_escritura TEXT,                  -- marca de la escritura en curso (interno)
   limite_peso REAL CHECK (limite_peso IS NULL OR (limite_peso > 0 AND limite_peso <= 100)),  -- límite personal por posición (opcional; preferencia privada, no sube la revisión)
+  origen TEXT NOT NULL DEFAULT 'plantilla' CHECK (origen IN ('plantilla','vacia','ejemplo','manual')),   -- ronda 21 (migración 0012): cómo nació la cartera; `plantilla` queda como valor técnico heredado cuando no es «plantilla»
   creado_en TEXT NOT NULL DEFAULT (datetime('now'))
 );
 CREATE TABLE IF NOT EXISTS posiciones (
@@ -97,11 +98,27 @@ CREATE TABLE IF NOT EXISTS escenarios (
   historia TEXT CHECK (historia IS NULL OR length(historia) BETWEEN 1 AND 60),   -- identificador de la historia editorial de origen
   nota_json TEXT,                                                       -- ronda 15: evaluación de estructura fechada (antes/después)
   pregunta_ref TEXT CHECK (pregunta_ref IS NULL OR (length(pregunta_ref) BETWEEN 3 AND 70 AND pregunta_ref GLOB '*:[0-9]*')),   -- ronda 16 (migración 0011): cuestión editorial estable («historia:n»)
+  invalidacion TEXT NOT NULL DEFAULT '' CHECK (length(invalidacion) <= 600),   -- ronda 21 (migración 0012): qué haría cambiar de opinión a la persona (opcional)
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE (usuario_id, clave)
 );
 CREATE INDEX IF NOT EXISTS idx_escenarios_usuario ON escenarios (usuario_id, id DESC);
+-- Ronda 21 (migración 0012): historial mínimo de revisiones de un escenario (solo se AÑADE; no sustituye la hipótesis original ni las composiciones)
+CREATE TABLE IF NOT EXISTS revisiones_escenario (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  escenario_id INTEGER NOT NULL REFERENCES escenarios(id) ON DELETE CASCADE,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+  clave TEXT NOT NULL CHECK (length(clave) BETWEEN 8 AND 64),          -- identifica el intento: un reintento no duplica la revisión
+  fecha TEXT NOT NULL CHECK (fecha GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),   -- día de calendario elegido por la persona (sin zona horaria)
+  observacion TEXT NOT NULL DEFAULT '' CHECK (length(observacion) <= 600),   -- comentario PERSONAL (no un hecho verificado)
+  aprendizaje TEXT NOT NULL DEFAULT '' CHECK (length(aprendizaje) <= 600),
+  decision TEXT NOT NULL CHECK (decision IN ('mantener','descartar','reprogramar')),
+  proxima_fecha TEXT CHECK (proxima_fecha IS NULL OR proxima_fecha GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),
+  creado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE (usuario_id, clave)
+);
+CREATE INDEX IF NOT EXISTS idx_revisiones_escenario ON revisiones_escenario (escenario_id, id DESC);
 CREATE TABLE IF NOT EXISTS datos_meta (
   clave TEXT PRIMARY KEY,
   valor TEXT NOT NULL

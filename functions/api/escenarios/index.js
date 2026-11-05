@@ -2,7 +2,7 @@ import { json, auth, readJson, tickersDesconocidos, ERROR_INTERNO } from '../../
 import { refDeHistoria } from '../../../public/js/catalogo.js';
 import { validarResumen } from '../../../public/js/nota.js';
 import { propuestaCoincide, simular, esDecima } from '../../../public/js/calculos.js';
-import { SELECT_ESCENARIO, formato, fechaValida, MAX_PREGUNTA, ID_HISTORIA, REF_PREGUNTA } from './_comun.js';
+import { SELECT_ESCENARIO, formato, fechaValida, MAX_INVALIDACION, MAX_PREGUNTA, ID_HISTORIA, REF_PREGUNTA } from './_comun.js';
 
 const MAX_ESCENARIOS = 100;
 
@@ -33,6 +33,8 @@ export async function onRequestPost({ request, env }) {
   const ticker = String(b.ticker ?? '').toUpperCase(), peso = Number(b.peso);
   if (!/^[A-Z.]{1,6}$/.test(ticker) || !(peso > 0 && peso <= 100)) return json({ error: 'Activo o peso no válidos.' }, 400);
   if (!esDecima(b.peso)) return json({ error: 'El peso admite como mucho un decimal (por ejemplo 10 o 10,5 %).' }, 400);
+  const invalidacion = String(b.invalidacion ?? '').trim();
+  if (invalidacion.length > MAX_INVALIDACION) return json({ error: `«Qué me haría cambiar de opinión» admite hasta ${MAX_INVALIDACION} caracteres.` }, 400);
   const pregunta = String(b.pregunta ?? '').trim(), revisar = b.revisar_en == null || b.revisar_en === '' ? null : String(b.revisar_en);
   if (pregunta.length > MAX_PREGUNTA) return json({ error: `La pregunta admite hasta ${MAX_PREGUNTA} caracteres.` }, 400);
   if (revisar !== null && !fechaValida(revisar)) return json({ error: 'La fecha de revisión no es válida (AAAA-MM-DD).' }, 400);
@@ -70,9 +72,9 @@ export async function onRequestPost({ request, env }) {
     try {
       // El tope se comprueba EN la propia sentencia (no antes): dos guardados simultáneos no pueden superarlo.
       const r = await env.DB.prepare(
-        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, pregunta, revisar_en, historia, pregunta_ref, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
-         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
-        .bind(user.id, clave, nombre, nota, pregunta, revisar, historia, ref, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
+        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, invalidacion, pregunta, revisar_en, historia, pregunta_ref, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
+         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
+        .bind(user.id, clave, nombre, nota, invalidacion, pregunta, revisar, historia, ref, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
       if (!r.meta?.changes) return json({ error: `Puedes guardar hasta ${MAX_ESCENARIOS} escenarios. Elimina alguno para guardar otro.` }, 400);
     } catch (e) {
       const otro = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? AND e.clave = ?`).bind(user.id, clave).first(); // carrera entre dos reintentos

@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env }) {
   try {
     [rl, rp] = await env.DB.batch([
       env.DB.prepare(
-        `SELECT p.id, p.nombre, p.plantilla, p.publico, p.creado_en, p.actualizado_en, p.revision, p.limite_peso,
+        `SELECT p.id, p.nombre, p.plantilla, p.origen, p.publico, p.creado_en, p.actualizado_en, p.revision, p.limite_peso,
                 COUNT(po.ticker) AS n_posiciones, COALESCE(SUM(po.peso), 0) AS total
          FROM portafolios p LEFT JOIN posiciones po ON po.portafolio_id = p.id
          WHERE p.usuario_id = ? GROUP BY p.id
@@ -31,13 +31,15 @@ export async function onRequestPost({ request, env }) {
   const b = await readJson(request);
   const nombre = String(b?.nombre || '').trim().slice(0, 80);
   if (!nombre || !PLANTILLAS.includes(b?.plantilla)) return json({ error: 'Nombre o plantilla no válidos' }, 400);
+  const origen = b.origen === undefined ? 'plantilla' : b.origen;       // ronda 21: cómo nació la cartera (plantilla, vacía, ejemplo editable o introducida a mano)
+  if (!['plantilla', 'vacia', 'ejemplo', 'manual'].includes(origen)) return json({ error: 'Origen de la cartera no válido' }, 400);
   // Creación atómica: la cartera y sus posiciones (si vienen) se escriben en un solo lote; no queda una cartera vacía a medias.
   const pos = b.posiciones === undefined ? [] : b.posiciones;
   const v = validarComposicion(pos); if (!v.ok) return json({ error: v.error }, 400);
   const tesis = b.tesis === undefined ? null : String(b.tesis).trim().slice(0, 600) || null;
   if ((await tickersDesconocidos(env, pos)).length) return json({ error: 'Algún ticker no está en el universo' }, 400);
   const token = crypto.randomUUID();
-  const stmts = [env.DB.prepare('INSERT INTO portafolios (usuario_id, nombre, plantilla, publico, tesis, token_escritura) VALUES (?,?,?,0,?,?)').bind(user.id, nombre, b.plantilla, tesis, token)];
+  const stmts = [env.DB.prepare('INSERT INTO portafolios (usuario_id, nombre, plantilla, origen, publico, tesis, token_escritura) VALUES (?,?,?,?,0,?,?)').bind(user.id, nombre, b.plantilla, origen, tesis, token)];
   for (const x of pos)
     stmts.push(env.DB.prepare('INSERT INTO posiciones (portafolio_id, ticker, peso) SELECT id, ?, ? FROM portafolios WHERE token_escritura = ?').bind(x.ticker, Number(x.peso), token));
   stmts.push(env.DB.prepare('SELECT id, revision, actualizado_en FROM portafolios WHERE token_escritura = ?').bind(token)); // dentro del mismo lote

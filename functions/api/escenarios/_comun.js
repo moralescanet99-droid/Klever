@@ -4,6 +4,7 @@ import { validarResumen } from '../../../public/js/nota.js';
 export const ESTADOS = ['en_estudio', 'descartado', 'archivado'];
 const colegir = r => ({
   id: r.id, clave: r.clave, nombre: r.nombre, nota: r.nota, estado: r.estado, metodo: r.metodo, ticker: r.ticker, peso_objetivo: r.peso_objetivo,
+  invalidacion: r.invalidacion || '', n_revisiones: r.n_revisiones ?? 0,
   cartera_id: r.cartera_id, cartera_nombre: r.cartera_nombre, base_revision: r.base_revision, revision: r.revision,
   ...evaluacionGuardada(r.nota_json),
   pregunta: r.pregunta || '', pregunta_ref: r.pregunta_ref || null, pregunta_ref_invalida: !!r.pregunta_ref && !refDeHistoria(r.pregunta_ref, r.historia), revisar_en: r.revisar_en || null, historia: r.historia || null,
@@ -21,11 +22,11 @@ function evaluacionGuardada(texto) {
   } catch { /* texto corrupto */ }
   return { evaluacion: null, evaluacion_invalida: true, evaluacion_verificada: false };
 }
-export const SELECT_ESCENARIO = `SELECT e.*, p.revision AS revision_actual FROM escenarios e LEFT JOIN portafolios p ON p.id = e.cartera_id AND p.usuario_id = e.usuario_id`;
+export const SELECT_ESCENARIO = `SELECT e.*, p.revision AS revision_actual, (SELECT COUNT(*) FROM revisiones_escenario r WHERE r.escenario_id = e.id) AS n_revisiones FROM escenarios e LEFT JOIN portafolios p ON p.id = e.cartera_id AND p.usuario_id = e.usuario_id`;
 export const formato = colegir;
 
 // Fecha de calendario real «AAAA-MM-DD» (no basta el formato: 2026-02-31 no existe).
 export const fechaValida = v => { if (!/^\d{4}-\d{2}-\d{2}$/.test(v || '')) return false; const d = new Date(v + 'T00:00:00Z'); return !isNaN(d) && d.toISOString().slice(0, 10) === v; };
-export const MAX_PREGUNTA = 200, ID_HISTORIA = /^[a-z0-9][a-z0-9-]{0,59}$/;
+export const MAX_INVALIDACION = 600, MAX_REVISIONES = 200, DECISIONES = ['mantener', 'descartar', 'reprogramar'], MAX_PREGUNTA = 200, ID_HISTORIA = /^[a-z0-9][a-z0-9-]{0,59}$/;
 // Identificador estable de una cuestión editorial: «<historia>:<n>». Debe pertenecer a la historia vinculada del escenario.
 export const REF_PREGUNTA = /^([a-z0-9][a-z0-9-]{0,59}):([0-9]{1,2})$/;
