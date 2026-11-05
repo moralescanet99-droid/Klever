@@ -89,6 +89,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.evaluate(id => { location.hash = '#escenario-' + id; }, Cq.id); await p.waitForSelector('[data-estado=descartado]'); await p.click('[data-estado=descartado]'); await p.waitForTimeout(500);
     await abrirCuaderno(p); const pend = await p.evaluate(() => [...document.querySelectorAll('#seg-escenarios .esc-item')].map(e => e.textContent.replace(/\s+/g, ' ').trim()));
     await p.selectOption('#seg-filtro', 'archivado'); await p.waitForTimeout(400); const arch = await p.evaluate(() => [...document.querySelectorAll('#seg-escenarios .esc-item')].map(e => ({ t: e.textContent.replace(/\s+/g, ' ').trim(), reg: !!e.querySelector('[data-registrar]') })));
+    await p.waitForFunction(() => !document.querySelector('#toast')?.classList.contains('on'), null, { timeout: 12000 }).catch(() => {});   // ronda 23: la captura no arrastra el aviso de la acción anterior (descartar)
     await p.screenshot({ path: CAP + `T6-cuaderno-archivado-${w}-viewport.png` });
     await p.selectOption('#seg-filtro', 'descartado'); await p.waitForTimeout(400); const desc = await p.evaluate(() => [...document.querySelectorAll('#seg-escenarios .esc-item')].map(e => e.textContent.replace(/\s+/g, ' ').trim()));
     const baseDespues = J((await api(p, 'GET', '/portfolios/' + c.id)).j.posiciones.map(x => [x.ticker, x.peso])), revBase = (await api(p, 'GET', '/portfolios/' + c.id)).j.revision;
