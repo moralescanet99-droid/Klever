@@ -18,9 +18,9 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
   const pesos = (p, vals) => p.evaluate(v => [...document.querySelectorAll('.peso-in')].filter(e => e.offsetParent !== null).length, vals);
   const fijar = async (p, t, v) => { const l = p.locator(`.peso-in[aria-label^="Peso de ${t},"] >> visible=true`).first(); await l.fill(String(v)); await l.press('Tab'); await p.waitForTimeout(250); };
   const esperaPortada = async p => { await p.goto(B); await p.waitForSelector('#entrada-vacia'); };
-  const entrarCon = async (p, email) => { await p.click('#entrar'); await p.fill('#acc-email', email); await p.check('#acc-acepto'); await p.click('#form-acceso button');
-    await p.waitForSelector('#acc-paso2:not([hidden])'); await p.goto(await p.getAttribute('#acc-dev a', 'href')); await p.waitForSelector('#vista-carteras:not([hidden])'); await p.waitForTimeout(800); };
-  const salir = async p => { await p.evaluate(() => { const b = [...document.querySelectorAll('#salir, #salir-m')].find(e => e.offsetParent !== null); b.click(); }); await p.waitForTimeout(500); const d = p.locator('#salir-descartar'); if (await d.isVisible().catch(() => false)) await d.click(); await p.waitForSelector('#entrar', { state: 'visible' }); };
+  const entrarCon = async (p, email, abierto = false) => { if (!abierto) await p.click('#entrar'); await p.fill('#acc-email', email); await p.check('#acc-acepto'); await p.click('#form-acceso button');
+    await p.waitForSelector('#acc-paso2:not([hidden])'); await p.goto(await p.getAttribute('#acc-dev a', 'href')); await p.waitForSelector('#vista-carteras:not([hidden]), #vista-cartera:not([hidden])'); await p.waitForTimeout(900); };
+  const salir = async p => { if (await p.locator('#salir').isVisible().catch(() => false)) await p.click('#salir'); else { await p.click('#btn-menu, #menu-btn, .btn-menu, [aria-controls=menu-movil]'); await p.click('#salir-m'); } await p.waitForTimeout(500); const d = p.locator('#salir-descartar'); if (await d.isVisible().catch(() => false)) await d.click(); await p.waitForSelector('#entrar', { state: 'visible' }); };
 
   for (const [w, h] of [[1440, 900], [390, 780]]) {
     const p = await nuevo(b, w, h), errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('dialog', dialogo);
@@ -41,8 +41,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     // ---- S3. acceso DURANTE el guardado: el trabajo no se pierde y llega a la cuenta
     await p.locator('.js-guardar:visible').first().click(); await p.waitForTimeout(400);
     const dialogoAcceso = await p.evaluate(() => !!document.querySelector('#dlg-acceso[open], dialog[open]'));
-    await entrarCon(p, correo);
-    await p.waitForFunction(() => document.querySelectorAll('#vista-carteras .tarjeta, #vista-carteras article, #vista-carteras li').length > 0, null, { timeout: 15000 }).catch(() => {});
+    await entrarCon(p, correo, true);
     const lista = (await api(p, 'GET', '/portfolios')).j;
     const mia = lista.find(c => (c.posiciones || []).length === 2);
     ev('S3-' + w, `Guardar pidiendo acceso (${w} px): el borrador no se pierde`, 'Se pidió acceso; tras entrar, la cartera existe en la cuenta con KO 60 % y PG 40 %, origen «vacia» y sin duplicados', J({ dialogoAcceso, n: lista.length, origen: mia?.origen, pos: mia?.posiciones }),
@@ -82,7 +81,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.screenshot({ path: CAP + `S7-para-revisar-${w}-viewport.png` });
     ev('S7-' + w, `Cerrar sesión y volver con la misma cuenta (${w} px): la idea reaparece en «Para revisar»`, 'El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»', J({ revocado, grupos }), revocado === 401 && grupos.length >= 1 && /Para revisar/.test(grupos[0].t) && grupos[0].n === 1);
     // ---- S8. registrar revisión: se añade al historial, la hipótesis original sigue
-    await p.locator('#seg-escenarios .esc-item a.btn').first().click(); await p.waitForSelector('#rev-form', { state: 'attached' }); await p.locator('#rev-det > summary').click(); await p.waitForSelector('#rev-form', { state: 'visible' });
+    await p.locator('#seg-escenarios .esc-item a.btn').first().click(); await p.waitForSelector('#rev-form', { state: 'attached' }); const abierto = await p.evaluate(() => document.querySelector('#rev-det').open); if (!abierto) await p.locator('#rev-det > summary').click(); await p.waitForSelector('#rev-form', { state: 'visible' });   // con la fecha de hoy o vencida el formulario ya viene abierto
     await p.fill('#rev-obs', 'JNJ mantuvo su dividendo'); await p.fill('#rev-apr', 'Mi condición no se cumplió'); await p.check('#rev-dec-r'); await p.fill('#rev-prox', '2099-01-15'); await p.click('#rev-btn'); await p.waitForFunction(() => document.querySelectorAll('.esc-rev-lista > li').length === 1, null, { timeout: 15000 });
     const hist = await p.evaluate(() => ({ items: [...document.querySelectorAll('.esc-rev-lista > li')].map(l => l.textContent.replace(/\s+/g, ' ').trim()), preg: document.querySelector('.esc-preg')?.textContent.trim(), inval: document.querySelector('.esc-invalidacion')?.textContent.trim() }));
     await p.screenshot({ path: CAP + `S8-revision-registrada-${w}-viewport.png` });
