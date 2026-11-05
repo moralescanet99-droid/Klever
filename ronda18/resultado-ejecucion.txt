@@ -1,5 +1,5 @@
-Ejecución: 2026-11-05 01:31 UTC
-Código: commit 489ddb052054bfd209234b849c3f5ae37c94e617; árbol de trabajo limpio
+Ejecución: 2026-11-05 01:50 UTC
+Código: commit 3ae4183ac09303eaa36a373b78fba02290a7bf90; árbol de trabajo limpio
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -33,52 +33,3 @@ RESULTADO: 20 correctas, 0 fallos
 === unit-integridad18 ===
 RESULTADO: 18 correctas, 0 fallos
 === test-zip ===
-RESULTADO: 8 correctas, 0 fallos
-=== testA ===
-RESULTADO: 31 correctas, 0 fallos
-=== testB ===
-RESULTADO: 53 correctas, 0 fallos
-=== testC ===
-page.waitForResponse: Timeout 30000ms exceeded while waiting for event "response"
-  name: 'TimeoutError'
-FALLA (ejecutor): testC terminó SIN resultado
-FALLA (ejecutor): testC salió con código 1
-=== testD ===
-RESULTADO: 29 correctas, 0 fallos
-=== testE ===
-RESULTADO: 15 correctas, 0 fallos
-=== testF ===
-RESULTADO: 9 correctas, 0 fallos
-=== testG ===
-RESULTADO: 3 correctas, 0 fallos
-=== verificar-api ===
-RESULTADO: 8 correctas, 0 fallos
-=== testH ===
-RESULTADO: 25 correctas, 0 fallos
-=== testI ===
-RESULTADO: 16 correctas, 0 fallos
-=== testJ ===
-RESULTADO: 53 correctas, 0 fallos
-=== testK ===
-RESULTADO: 75 correctas, 0 fallos
-=== testL ===
-RESULTADO: 28 correctas, 0 fallos
-=== testM ===
-RESULTADO: 7 correctas, 0 fallos
-=== testN ===
-RESULTADO: 41 correctas, 0 fallos
-=== testO ===
-OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
-OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
-RESULTADO: 18 correctas, 0 fallos
-=== testP ===
-RESULTADO: 28 correctas, 0 fallos
-=== testQ ===
-RESULTADO: 25 correctas, 0 fallos
-=== paridad-demo ===
-RESULTADO: 5 correctas, 0 fallos
-=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
-RESULTADO: 6 correctas, 0 fallos
-=== demo (demotest) ===
-DEMO OK
-RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.
