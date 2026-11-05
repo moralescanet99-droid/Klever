@@ -3,15 +3,15 @@
   "id": "PD1",
   "escenario": "Reconstruir la demo dos veces",
   "esperado": "Mismas huellas (la construcción es reproducible)",
-  "observado": "2265469c96ee8418 / 2265469c96ee8418",
+  "observado": "553c73e8a704c0b8 / 553c73e8a704c0b8",
   "resultado": "OK"
  },
  {
   "id": "PD2",
   "escenario": "evaluar(): la demo y el módulo con las mismas cinco carteras sobre el mismo universo",
   "esperado": "Salidas idénticas (nota, motivo, resumen, población); KO + PG = 4,4 en ambos",
-  "observado": "5 carteras; KO+PG demo 4.9 / módulo 4.9",
-  "resultado": "FALLA"
+  "observado": "5 carteras; KO+PG demo 4.4 / módulo 4.4",
+  "resultado": "OK"
  },
  {
   "id": "PD3",
