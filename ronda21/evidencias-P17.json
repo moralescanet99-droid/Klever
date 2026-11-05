@@ -149,8 +149,8 @@
  {
   "id": "P7a",
   "escenario": "Entrada sin cuenta: crear el primero; con borrador en el dispositivo, retomarlo con los pesos intactos",
-  "esperado": "Sin nada: «Crea tu primer portafolio»; tras editar un borrador y volver a la portada: «Retomar mi borrador», que reabre el creador con KO en 22 %; fuera de la demo no sale el aviso de demo",
-  "observado": "{\"t\":\"Crea tu primer portafolio\",\"demo\":true}; Retomar mi borrador; KO 22,0",
+  "esperado": "Sin nada: «Crear desde cero» (texto actualizado en la ronda 21); tras editar un borrador y volver a la portada: «Retomar mi borrador», que reabre el creador con KO en 22 %; fuera de la demo no sale el aviso de demo",
+  "observado": "{\"t\":\"Crear desde cero\",\"demo\":true}; Retomar mi borrador; KO 22,0",
   "resultado": "OK"
  },
  {

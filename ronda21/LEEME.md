@@ -40,7 +40,12 @@ La pasada completa **encontró regresiones reales que ninguna prueba nueva habr�
 5. **`testP` sin resultado en una pasada** (`waitForSelector('[data-plantilla]')` agotado en la primera apertura): **no reproducido** en 6 repeticiones; causa **sin demostrar**.
 
 # 8. Pruebas realmente ejecutadas (por entorno)
-@@PASADA@@
+**Pasada completa definitiva** (`bash tests/run-all.sh`, commit `0e9bc0a`, árbol limpio): **888 comprobaciones correctas, 0 fallos, código 0** (44 baterías + demo), **locales del autor**. Registro íntegro de cada batería **y de `demotest`** en `ronda21/logs/`; ninguno contiene `CIERRE FORZADO` ni `CIERRE ANÓMALO`: **no hubo cierre forzado**. *Aserciones ≠ entradas.*
+- **Módulo / servidor (SQLite real, sin navegador) y subprocesos:** `unit-registro21` **10** y `unit-cuaderno21` **20** (nuevos), `unit-migracion` 15 (con la 0012), `unit-cierre20` 10, `unit-causas20` 10, `unit-revision19` 10, `unit-redondeo19` 6, `unit-nota` 35, `unit-calculos` 23 y las anteriores.
+- **Navegador (Chromium, servidor local con SQLite):** `testS` **30** (nuevo: recorrido completo con cuenta y persistencia a 1440 y 390 px, las tres entradas, una cartera sin nota hasta la comparación, teclado real, aislamiento entre cuentas), `testR` 16, `testQ` 25, `testB` 53, `testC` 50, `testK` 75, `testN` 41, `testP` 28 y las anteriores; demo autónoma con su log.
+- **Repeticiones** de `testE`, `testF` y `testC` con latencia 0 y 300 ms (`ronda21/intermitentes.txt`): ver el resultado literal más abajo.
+- **Pasadas fallidas conservadas con su log íntegro:** `logs-pasada1-fallos/` (767 correctas; 10 problemas: regresión del `ORDER BY` público, aviso de origen en móvil, textos de la portada en `testB`/`testN`/`testP`/`testC`, y `testK`) y `logs-pasada2-fallo-P/` (860; `testP`). Cada una **no se rebajó ninguna aserción**.
+- **Entorno remoto:** nada ejecutado. **Móvil físico, lector de pantalla, texto al 200 % real, Safari/Firefox, D1 remota, correo real, datos reales y comprensión por personas: no probados.** No se aprueba ninguna comprobación por simulación de un caso de navegador.
 
 # 9. Qué está implementado, verificado, no verificado y futuro
 | | |
