@@ -1,0 +1,95 @@
+Ejecución: 2026-11-05 12:08 UTC
+Código: commit 19d8f293709c339711d3b1c8d82dfefe34141c7d; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-carreras ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-migracion ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-acceso ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-calculos ===
+RESULTADO: 23 correctas, 0 fallos
+=== unit-r13 ===
+RESULTADO: 30 correctas, 0 fallos
+=== unit-carga ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-r14 ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-nota ===
+RESULTADO: 35 correctas, 0 fallos
+=== unit-comparador ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-almacen ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-escenarios16 ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-procedencia17 ===
+RESULTADO: 13 correctas, 0 fallos
+=== unit-guardada17 ===
+RESULTADO: 20 correctas, 0 fallos
+=== unit-integridad18 ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-redondeo19 ===
+RESULTADO: 6 correctas, 0 fallos
+=== unit-revision19 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-causas20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cierre20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+RESULTADO: 53 correctas, 0 fallos
+=== testC ===
+RESULTADO: 50 correctas, 0 fallos
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 10 correctas, 0 fallos
+=== testG ===
+RESULTADO: 3 correctas, 0 fallos
+=== verificar-api ===
+RESULTADO: 8 correctas, 0 fallos
+=== testH ===
+RESULTADO: 25 correctas, 0 fallos
+=== testI ===
+RESULTADO: 16 correctas, 0 fallos
+=== testJ ===
+RESULTADO: 53 correctas, 0 fallos
+=== testK ===
+RESULTADO: 75 correctas, 0 fallos
+=== testL ===
+RESULTADO: 28 correctas, 0 fallos
+=== testM ===
+RESULTADO: 7 correctas, 0 fallos
+=== testN ===
+RESULTADO: 41 correctas, 0 fallos
+=== testO ===
+OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
+OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
+RESULTADO: 18 correctas, 0 fallos
+=== testP ===
+RESULTADO: 28 correctas, 0 fallos
+=== testQ ===
+FALLA [Q3-1440] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)  [{"paso":"3","foco":"nota-panel","posVisible":true,"notaVisible":true,"orden":true,"resultadoAntesDeAviso":true,"avisoAntesDeDetalle":true,"notaEnViewport":false,"resultado":"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab","volver":true,"revisarOculto":true}]
+RESULTADO: 24 correctas, 1 fallos
+- [Q3-1440] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px) → {"paso":"3","foco":"nota-panel","posVisible":true,"notaVisible":true,"orden":true,"resultadoAntesDeAviso":true,"avisoAntesDeDetalle":true,"notaEnViewport":false,"resultado":"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab","volver":true,"revisarOculto":true}
+FALLA (ejecutor): testQ salió con código 1
+FALLA (ejecutor): testQ tiene 1 fallos
+=== testR ===
+RESULTADO: 15 correctas, 0 fallos
+=== paridad-demo ===
+RESULTADO: 5 correctas, 0 fallos
+=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
+RESULTADO: 6 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK
+RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.

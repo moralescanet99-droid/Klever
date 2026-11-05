@@ -84,6 +84,13 @@
   "resultado": "OK"
  },
  {
+  "id": "R4-1440",
+  "escenario": "Revisar a menos de 300 ms de editar un peso NO deja la página desplazada (escritorio): el centrado diferido del campo activo se cancela si el campo ya no tiene el foco",
+  "esperado": "scrollY = 0 tras 900 ms en las 6 repeticiones",
+  "observado": "[0,0,0,0,0,0]",
+  "resultado": "OK"
+ },
+ {
   "id": "R0e",
   "escenario": "Estabilización del desplazamiento: ninguna medición ni captura se hizo a medias",
   "esperado": "Cada espera de «quieto» terminó con cinco fotogramas sin cambio de scrollY (si no, se lista aquí)",

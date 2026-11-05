@@ -823,6 +823,8 @@ if (window.visualViewport) window.visualViewport.addEventListener('resize', () =
 document.addEventListener('focusin', e => { // el campo activo queda a la vista: centrado entre la zona de avisos (arriba) y la barra inferior (abajo), nunca tapado
   if (!e.target.classList?.contains('peso-in')) return;
   const el = e.target; setTimeout(() => {
+    // ronda 20: si en esos 300 ms el campo ya perdió el foco o se ocultó (p. ej. se pulsó «Revisar» y cambió el paso), NO se desplaza: arrastraba la página tras el cambio de paso (fallo intermitente real de Q3-1440)
+    if (document.activeElement !== el || el.offsetParent === null) return;
     const r = el.getBoundingClientRect(), a = $('#avisos').getBoundingClientRect(), bar = $('#barra-guardar'), visibleBarra = !bar.hidden && getComputedStyle(bar).display !== 'none';
     const arriba = Math.max(a.bottom, 0), abajo = visibleBarra ? bar.getBoundingClientRect().top : innerHeight;
     window.scrollBy({ top: r.top + r.height / 2 - (arriba + abajo) / 2, behavior: 'auto' });

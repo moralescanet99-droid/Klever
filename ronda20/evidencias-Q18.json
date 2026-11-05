@@ -17,8 +17,8 @@
   "id": "Q3-1440",
   "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)",
   "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en escritorio las dos columnas siguen enteras",
-  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":true,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
-  "resultado": "OK"
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":true,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":false,\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "FALLA"
  },
  {
   "id": "Q4-1440",

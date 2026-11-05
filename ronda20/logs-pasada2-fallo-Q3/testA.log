@@ -1,5 +1,5 @@
 # comando: node tests/ronda5/testA.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 11:39:11 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 12:09:55 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    estado: tres conceptos separados (cuenta · sin cambios · privada)

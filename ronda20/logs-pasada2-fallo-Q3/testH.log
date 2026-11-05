@@ -1,5 +1,5 @@
 # comando: node tests/ronda10/testH.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 11:46:01 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 12:16:41 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [H1a-320] Aviso de éxito al INICIO de la página (320 px)
@@ -9,12 +9,12 @@ OK    [H2-320] Aviso sobre «Mis carteras» (320 px)
 OK    [H3-320] Errores accesibles y avisos de éxito fugaces (320 px, título largo)
 OK    [H1a-390] Aviso de éxito al INICIO de la página (390 px)
 OK    [H1b-390] Legibilidad del aviso durante toda la animación (390 px), con la opacidad real
-OK    [H1c-390] Aviso fijo tras desplazarse (390 px, desplazado 957 px)
+OK    [H1c-390] Aviso fijo tras desplazarse (390 px, desplazado 942 px)
 OK    [H2-390] Aviso sobre «Mis carteras» (390 px)
 OK    [H3-390] Errores accesibles y avisos de éxito fugaces (390 px, título largo)
 OK    [H1a-1440] Aviso de éxito al INICIO de la página (1440 px)
 OK    [H1b-1440] Legibilidad del aviso durante toda la animación (1440 px), con la opacidad real
-OK    [H1c-1440] Aviso fijo tras desplazarse (1440 px, desplazado 285 px)
+OK    [H1c-1440] Aviso fijo tras desplazarse (1440 px, desplazado 284 px)
 OK    [H2-1440] Aviso sobre «Mis carteras» (1440 px)
 OK    [H3-1440] Errores accesibles y avisos de éxito fugaces (1440 px, título largo)
 OK    [H7-320] 320×568, texto ampliado al 200 % (SIMULADO): espacio útil con aviso de error y barra, sin cerrar el aviso
