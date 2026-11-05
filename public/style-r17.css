@@ -243,3 +243,10 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 .seg-grupo{margin:0 0 var(--s3)} .seg-grupo>h3{font-size:1.125rem;margin:0 0 6px} .seg-grupo .esc-item{margin-top:var(--s2)}
 .esc-revisiones{margin:var(--s3) 0} .esc-rev-lista{list-style:none;margin:var(--s2) 0;padding:0} .esc-rev-lista>li{border-left:3px solid var(--border-strong,var(--muted));padding:2px 0 2px 12px;margin:0 0 var(--s2)} .esc-rev-lista p{margin:0 0 4px}
 .rev-decision{border:0;margin:var(--s2) 0;padding:0} .rev-decision legend{font-weight:600;margin-bottom:4px} .esc-invalidacion{margin:0 0 var(--s2)}
+
+/* ronda 21 · portada con tres entradas, aviso de origen y «Tu cartera de un vistazo» */
+.entradas{margin:var(--s3) 0 var(--s2)} .entradas-t{font-size:1rem;font-weight:600;margin:0 0 8px;color:var(--muted)} .entradas ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.entrada{display:flex;flex-direction:column;gap:4px;width:100%;height:100%;text-align:left;padding:12px 14px;min-height:44px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font:inherit;cursor:pointer} .entrada:hover{border-color:var(--accent)} .entrada b{font-size:1rem} .entrada span{color:var(--muted);font-size:var(--t-s);line-height:1.4}
+@media (max-width:719px){.entradas ul{grid-template-columns:1fr}}
+.origen-aviso{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:10px 12px;margin:0 0 var(--s2);font-size:var(--t-s);line-height:1.5}
+.vistazo{margin:0 0 var(--s2);padding:0 0 var(--s2);border-bottom:1px solid var(--border)} .vistazo h3{font-size:1.0625rem;margin:0 0 6px} .vistazo p{margin:0 0 6px} .vistazo-acc{margin:8px 0 0}

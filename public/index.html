@@ -50,11 +50,16 @@
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Crea, entiende y sigue tu portafolio</h1>
-        <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
-        <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
+        <h1>Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir</h1>
+        <p class="lead">Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.</p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primer portafolio</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Ver un ejemplo explicado</a></p>
+        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
+          <ul>
+            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Una cartera vacía: añade tu primer activo y reparte.</span></button></li>
+            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Una copia editable, rotulada como ejemplo simulado.</span></button></li>
+            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Introduce a mano tus activos y porcentajes. Sin conexión con ningún bróker.</span></button></li>
+          </ul></div>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
@@ -62,7 +67,7 @@
     </div>
 
     <div class="bloque" id="plantillas">
-      <h2>Elige una plantilla para empezar</h2>
+      <h2>Ejemplos simulados para explorar</h2><p class="mut">Cada uno se abre como una copia editable y rotulada como ejemplo simulado; no es una cartera recomendada.</p>
       <div class="plantillas">
         <button class="plantilla" type="button" data-plantilla="oro">
           <span class="pl-cuerpo"><span class="pl-tit">Oro</span>
@@ -231,6 +236,7 @@
       <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> <span class="paso-t">Distribución</span></button></li>
       <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> <span class="paso-t">Revisión</span></button></li>
     </ol>
+    <p id="origen-aviso" class="origen-aviso" role="note" hidden></p>
     <div class="ws-cab">
       <div class="ws-titulo">
         <label class="sr" for="nombre">Nombre de la cartera</label>

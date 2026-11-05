@@ -29,6 +29,7 @@ export function iniciarLab(ctx) {
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
+  $('#nota-cuerpo').addEventListener('click', e => { if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
   $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
@@ -134,6 +135,19 @@ function frase(r) {
   if (r.estado === 'exceso') partes.push(`Los pesos suman el ${P(r.total)}: hay un exceso del ${P(r.exceso)}.`);
   return partes.join(' ');
 }
+// «Tu cartera de un vistazo» (ronda 21): lo que SÍ se sabe aunque no haya nota global. Usa los mismos datos de la radiografía (mayor posición, tres mayores) y el tipo de instrumento del universo;
+// no calcula nada nuevo. Concentración por posición ≠ exposición subyacente ni pérdida esperada; un ETF no es una empresa; una limitación de datos no convierte una cartera en mala.
+function htmlVistazo(esc, r, posiciones, activos, ev) {
+  const vivas = posiciones.filter(p => p.peso > 0), n = vivas.length;
+  if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
+  const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
+  const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
+  const parcial = ev && !ev.publicada;
+  return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
+    <p>${n} ${n === 1 ? 'posición' : 'posiciones'}, asignado ${P(r.total ?? 0)}. Mayor posición: <b>${esc(r.mayor.ticker)}</b> ${P(r.mayor.peso)}${r.top3.completo ? `; las tres mayores suman ${P(r.top3.peso)}` : ''}. Por tipo: ${esc(tipos)}.</p>
+    <p class="mut peq">Es la concentración <b>por posición</b>: no es la exposición real de los fondos ni una pérdida esperada.${parcial ? ' Debajo, qué se ha podido analizar y qué queda sin evaluar.' : ''}</p>
+    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Probar un cambio</button></p></section>`;
+}
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
   if (!ed.current) { cont.innerHTML = ''; delete cont.dataset.sig; const n0 = $('#nota-cuerpo'); if (n0) { n0.innerHTML = ''; delete n0.dataset.sig; } return; }
@@ -156,6 +170,7 @@ export function pintarRadiografia() {
   if (r.cobertura.sinCategoria.length) cobertura.push(`${r.cobertura.sinCategoria.length} ${r.cobertura.sinCategoria.length === 1 ? 'posición no tiene' : 'posiciones no tienen'} categoría conocida (${esc(r.cobertura.sinCategoria.join(', '))}).`);
   if (r.cobertura.fondos.length) cobertura.push(`${esc(r.cobertura.fondos.join(', '))}: ${r.cobertura.fondos.length === 1 ? 'es un fondo' : 'son fondos'} y su categoría es la comercial, no su exposición sectorial real.`);
   const notaHtml = LAB.universo ? htmlNotaEstructura(esc, evaluar(posiciones, LAB.universo), origenCodigo()) : LAB.universoError ? '<p class="mut peq">La nota de estructura no está disponible ahora.</p>' : '<p class="mut peq">Calculando la nota de estructura…</p>';
+  const evNota = LAB.universo ? evaluar(posiciones, LAB.universo) : null, vista = r.estado === 'vacia' ? '' : htmlVistazo(esc, r, posiciones, x().activos(), evNota);
   const html = `<p class="radio-version">Analizando: <b>${etq}</b>.</p>${conmuta}
     <p class="radio-concl">${esc(frase(r))}</p>
     ${r.estado === 'vacia' ? '' : `<dl class="radio-datos"><div><dt>Mayor posición</dt><dd>${esc(r.mayor.ticker)} · ${P(r.mayor.peso)}</dd></div>
@@ -164,8 +179,8 @@ export function pintarRadiografia() {
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
     <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
-    <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
-  const nc = $('#nota-cuerpo'); if (nc && nc.dataset.sig !== notaHtml) { nc.dataset.sig = notaHtml; nc.innerHTML = notaHtml; }   // la nota tiene su propio panel
+    <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Probar un cambio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
+  const nc = $('#nota-cuerpo'), notaCompleta = vista + notaHtml; if (nc && nc.dataset.sig !== notaCompleta) { nc.dataset.sig = notaCompleta; nc.innerHTML = notaCompleta; }   // la nota tiene su propio panel
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
   cont.dataset.sig = html; cont.innerHTML = html;
 }

@@ -99,7 +99,7 @@ const leerCopia = id => { try { return JSON.parse(store.getItem('klever_edit_' +
 function guardarBorrador(conservarFecha = false) { // conservarFecha: se reescribe la copia (p. ej. nueva versión base) sin cambiar cuándo se editó
   if (!current) return;
   if (!current.id) { // aún no está en la cuenta: borrador del dispositivo
-    store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
+    store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, origen: current.origen || 'plantilla', nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
   }
   const key = 'klever_edit_' + current.id; // cartera de la cuenta: copia de los cambios sin guardar
   if (rev !== savedRev) {
@@ -397,7 +397,7 @@ $('#form-nueva').addEventListener('submit', async e => {
 async function cargarCartera(id, rseq = null) {
   const s0 = sesionSeq; let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
   if (s0 !== sesionSeq || (rseq !== null && rseq !== routeSeq)) return false;   // otra sesión u otra navegación: esta respuesta NO toca el estado
-  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
+  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, origen: c.origen || 'plantilla', tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); posGuardada = pos.map(p => ({ ...p })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = ''; colores.clear();
   await recuperarCambiosLocales(); return true;
@@ -452,14 +452,22 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
 // Con la red lenta la persona puede pulsar una plantilla ANTES de que lleguen los activos: `repartoPlantilla` devolvía [] y el borrador quedaba vacío (y se perdía al entrar).
 // Se espera a los activos antes de armar el reparto.
 let activosListos; const esperaActivos = new Promise(r => { activosListos = r; });
-async function abrirInvitado(plantilla) {
+// Ronda 21: UN solo editor y cuatro orígenes. «plantilla» (heredado), «ejemplo» (copia EDITABLE y rotulada como ejemplo simulado), «vacia» (desde cero) y «manual» (la persona introduce su cartera).
+// Para «vacia» y «manual» `plantilla` es solo un valor técnico heredado de la base de datos (no significa nada y no se muestra).
+async function abrirInvitado(plantilla, origen = 'ejemplo') {
   await esperaActivos;
-  current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
+  current = { id: null, nombre: (origen === 'ejemplo' ? 'Ejemplo simulado: ' : 'Mi cartera de ') + nombrePlantilla(plantilla), plantilla, origen, tesis: '', publico: 0 };
   pos = repartoPlantilla(plantilla); posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
   guardarBorrador(); go('#cartera');
 }
+async function abrirNueva(origen) {                          // «Crear desde cero» y «Recrear mi cartera»: el mismo editor, sin posiciones
+  await esperaActivos;
+  current = { id: null, nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, tesis: '', publico: 0 };
+  pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
+  guardarBorrador(); go('#cartera');
+}
 function restaurarBorrador(d) {
-  current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
+  current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', tesis: '', publico: 0 };
   pos = d.pos; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = store.ok;
 }
 async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
@@ -471,7 +479,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     location.hash = '#cartera'; return;
   }
   try {
-    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, posiciones: d.pos } }); // una sola operación: todo o nada
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', posiciones: d.pos } }); // una sola operación: todo o nada
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
@@ -663,8 +671,19 @@ function pintarMotivo(v, razon) { // jerarquía: título · estado · acción; e
   const hayDetalle = !!razon && !saveErr && razon !== principal;
   $('#mv-det').hidden = !hayDetalle; $('#mv-txt').textContent = hayDetalle ? razon : '';
 }
+const AVISO_ORIGEN = {
+  ejemplo: 'Esto es un <b>ejemplo simulado</b>: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.',
+  manual: 'Estás <b>recreando tu cartera a mano</b>: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.',
+  vacia: 'Cartera <b>vacía</b>: añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.',
+};
+function pintarOrigen() {
+  const o = current?.origen || 'plantilla', a = $('#origen-aviso'); if (!a) return;
+  a.hidden = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0); if (!a.hidden) a.innerHTML = AVISO_ORIGEN[o];
+  $('#mi-plantilla').hidden = o === 'vacia' || o === 'manual';       // «Reemplazar por la plantilla» solo tiene sentido en las que nacieron de una
+}
 function pintarEstado() {
   if (!current) return;
+  pintarOrigen();
   const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
   const [largo, breve, cls] = textoPersistencia(id, dirty);
   const est = $('#estado'); est.textContent = largo; est.className = 'estado-btn ' + cls;           // persistencia, siempre explícita
@@ -721,7 +740,7 @@ async function guardar() {
     // UNA sola operación en el servidor (posiciones + nombre + tesis, con la revisión desde la que se edita): todo o nada
     u = cur.id
       ? await api('/portfolios/' + cur.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: cur.revision } })
-      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, tesis: $('#tesis').value, posiciones: pos } });
+      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, origen: cur.origen || 'plantilla', tesis: $('#tesis').value, posiciones: pos } });
   } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else fallo = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
   const vigente = current === cur;           // ¿sigue abierta la misma cartera?
   if (vigente) saving = false;
@@ -880,7 +899,7 @@ function cbPintar() {
   cbList.innerHTML = cbOpts.length ? cbOpts.map((a, i) => {
     const ya = pos.some(p => p.ticker === a.ticker);
     return `<li role="option" id="opt-${i}" data-t="${esc(a.ticker)}" aria-selected="false"${ya ? ' aria-disabled="true"' : ''}><span><b>${esc(a.ticker)}</b> ${esc(a.nombre)}</span><small>${ya ? 'Ya en la cartera' : esc(a.sector)}</small></li>`;
-  }).join('') : `<li class="sin" role="option" aria-disabled="true">Ningún activo coincide con «${esc(q)}»</li>`;
+  }).join('') : `<li class="sin" role="option" aria-disabled="true">Ningún activo coincide con «${esc(q)}». Si no está en el universo disponible, no lo sustituimos por otro.</li>`;
   cbList.hidden = false; cbIn.setAttribute('aria-expanded', 'true'); cbMarcar(cbOpts.length ? 0 : -1);
   avisar(cbOpts.length ? `${cbOpts.length} resultados` : 'Sin resultados');
 }
@@ -1132,7 +1151,11 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
   const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
 });
-$$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));
+$$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
+// las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)
+$('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
+$('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
+$('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
   const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
   const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
