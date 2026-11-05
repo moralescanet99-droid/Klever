@@ -17,7 +17,10 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   const abrirPub = p => p.evaluate(() => { document.querySelector('#det-pub').open = true; });
 
   // ===== G1: un guardado que falla no deja NADA a medias (cartera pública) =====
-  let p = await nuevo(b, 1440, 900); await entrar(p, 'oro', 'F1'); const id1 = await idDe(p);
+  // Ronda 19: recargar con cambios sin guardar abre un diálogo «beforeunload»; si el ejecutor lo DESCARTA (comportamiento por defecto sin escuchador), `reload` no termina y la batería se cae sin resultado
+  // (la causa del fallo «testF terminó SIN resultado»: se reprodujo con tests/ronda19/beforeunload.cjs). Aquí se aceptan y se deja constancia.
+  const DIALOGOS = [];
+  let p = await nuevo(b, 1440, 900); p.on('dialog', d => { DIALOGOS.push(d.type()); d.accept().catch(() => {}); }); await entrar(p, 'oro', 'F1'); const id1 = await idDe(p);
   await abrirPub(p); await p.fill('#tesis', 'Tesis original'); await p.click('#publicar'); await p.waitForFunction(() => document.querySelector('#chip').textContent === 'Pública'); await p.waitForTimeout(300);
   const antes = await cartera(p, id1), pubAntes = await pub(p, id1);
   const metodos = []; p.on('request', r => { if (r.url().includes('/api/portfolios/') && r.method() !== 'GET') metodos.push(r.method()); });
@@ -52,7 +55,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   await p.ctx.close();
 
   // ===== G4: conflicto: coherencia al ABRIR y al GUARDAR =====
-  p = await nuevo(b, 1440, 900); await entrar(p, 'oro', 'F4'); const id4 = await idDe(p);
+  p = await nuevo(b, 1440, 900); p.on('dialog', d => { DIALOGOS.push(d.type()); d.accept().catch(() => {}); }); await entrar(p, 'oro', 'F4'); const id4 = await idDe(p);
   await peso(p).fill('30'); await peso(p, 1).fill('20'); await G(p).click(); await guardado(p);
   const copia = id => p.evaluate(id => !!localStorage.getItem('klever_edit_' + id), id);
   const vals = async () => (await p.locator('.peso-in >> visible=true').evaluateAll(es => es.map(e => e.value))).sort().join(' ');
@@ -88,7 +91,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   await p.ctx.close();
 
   // ===== G5: desconexión REAL contra el servidor (el guion de uso) =====
-  p = await nuevo(b, 1440, 900); await entrar(p, 'oro', 'F5'); const id5 = await idDe(p); const c5 = await cartera(p, id5);
+  p = await nuevo(b, 1440, 900); p.on('dialog', d => { DIALOGOS.push(d.type()); d.accept().catch(() => {}); }); await entrar(p, 'oro', 'F5'); const id5 = await idDe(p); const c5 = await cartera(p, id5);
   await peso(p).fill('30'); await peso(p, 1).fill('20'); await p.waitForTimeout(150);
   await p.context().setOffline(true); await G(p).click(); await p.waitForTimeout(700);
   const off = { estado: await T(p, '#estado'), motivo: await T(p, '#motivo'), etq: await T(G(p), 'xpath=.') };
@@ -99,7 +102,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   await p.ctx.close();
 
   // ===== G6: E16a corregida: la última posición es VISIBLE y editable (texto ampliado SIMULADO, 390 px) =====
-  p = await nuevo(b, 390, 844); await entrar(p, 'dividendos', 'F6'); await p.evaluate(() => { document.documentElement.style.fontSize = '200%'; }); await p.waitForTimeout(400);
+  p = await nuevo(b, 390, 844); p.on('dialog', d => { DIALOGOS.push(d.type()); d.accept().catch(() => {}); }); await entrar(p, 'dividendos', 'F6'); await p.evaluate(() => { document.documentElement.style.fontSize = '200%'; }); await p.waitForTimeout(400);
   const ultimo = p.locator('.peso-in >> visible=true').last(); await ultimo.scrollIntoViewIfNeeded(); await ultimo.focus(); await p.waitForTimeout(700);
   const med = async () => p.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(), bar = document.querySelector('#barra-guardar').getBoundingClientRect(); return { enfocado: e.classList.contains('peso-in'), top: Math.round(r.top), bottom: Math.round(r.bottom), left: Math.round(r.left), right: Math.round(r.right), barraTop: Math.round(bar.top), vw: innerWidth, vh: innerHeight, ancho: document.documentElement.scrollWidth }; });
   const m1 = await med(); await p.screenshot({ path: EVDIR + 'G6-ultima-posicion-200-390.png' });
@@ -111,7 +114,7 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
   await p.ctx.close();
 
   // ===== G7: diálogo móvil: «Decidir después» accesible con texto grande y muchas diferencias =====
-  p = await nuevo(b, 320, 568); await entrar(p, 'dividendos', 'F7'); const id7 = await idDe(p);
+  p = await nuevo(b, 320, 568); p.on('dialog', d => { DIALOGOS.push(d.type()); d.accept().catch(() => {}); }); await entrar(p, 'dividendos', 'F7'); const id7 = await idDe(p);
   const n = await p.locator('.peso-in >> visible=true').count(); const nuevos = [];
   for (let i = 0; i < n; i++) { await peso(p, i).fill(String(10 + i)); } await p.fill('#nombre', 'Nombre local distinto'); await p.waitForTimeout(250);
   const c7 = await cartera(p, id7); await externo(p, id7, c7.posiciones.slice(0, 5).map((x, i) => ({ ticker: x.ticker, peso: 20 }))); const ajena7 = await cartera(p, id7);
@@ -130,5 +133,6 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin } = require('../rond
     `«Decidir después» visible sin desplazar=${vis(d1.despues)} (arriba ${d1.despues.top}); decisiones visibles: «Usar la de la cuenta» ${vis(d1.cuenta)}, «Conservar la local» ${vis(d1.local)} (abajo ${d1.local.bottom}/${d1.vh}); el cuerpo se desplaza=${d1.cuerpoScroll} (scrollTop tras rueda ${scrolled}); tras desplazar siguen visibles: ${vis(d2.despues) && vis(d2.local) && vis(d2.cuenta)}; diferencias listadas ${d1.nDif}; foco inicial «${d1.foco}»; 8 Tab sin salir del diálogo=${focoDentro.every(Boolean)}; ancho de página ${d1.ancho}/${d1.vw}; tras «Decidir después»: diálogo abierto=${post.dialogo}, copia local=${post.copia}, cuenta intacta=${post.cuenta === resumen(ajena7)}`,
     vis(d1.despues) && vis(d1.cuenta) && vis(d1.local) && d1.cuerpoScroll && scrolled > 0 && vis(d2.despues) && vis(d2.local) && d1.foco === 'cn-titulo' && focoDentro.every(Boolean) && d1.ancho <= d1.vw && post.dialogo === 0 && post.copia && post.cuenta === resumen(ajena7), 'G7-dialogo-320-texto200.png');
   ev('G8', 'Sin errores de JavaScript en la batería F', 'Ninguno', p.errs.length ? p.errs.join('|') : 'ninguno', p.errs.length === 0, '');
+  ev('F9', 'Diálogos «beforeunload» al recargar con cambios sin guardar', 'Se aceptan (el navegador avisa antes de perder cambios) y quedan registrados', `${DIALOGOS.length} diálogos: ${JSON.stringify([...new Set(DIALOGOS)])}`, DIALOGOS.every(x => x === 'beforeunload'));
   await p.ctx.close(); await b.close(); fin('evidencias-F');
 })();

@@ -1,5 +1,5 @@
-Ejecución: 2026-11-05 07:32 UTC
-Código: commit 9c4aefabe4851c53900a6233ba35606048390599; árbol de trabajo CON CAMBIOS sin commitear
+Ejecución: 2026-11-05 07:51 UTC
+Código: commit 3d0eb2280ce0ef030cd03605c5ad1295b076e0b4; árbol de trabajo CON CAMBIOS sin commitear
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===

@@ -1,0 +1,15 @@
+# comando: node tests/ronda19/testR.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 07:47:56 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [R0-320-no-preference] Sin errores de JavaScript en las revisiones (320 px, movimiento no-preference)
+OK    [R0-320-reduce] Sin errores de JavaScript en las revisiones (320 px, movimiento reduce)
+OK    [R1-con-nota-320] Revisión con nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y teclado, con y sin movimiento reducido)
+OK    [R1-sin-nota-320] Revisión sin nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y teclado, con y sin movimiento reducido)
+OK    [R0-390-no-preference] Sin errores de JavaScript en las revisiones (390 px, movimiento no-preference)
+OK    [R0-390-reduce] Sin errores de JavaScript en las revisiones (390 px, movimiento reduce)
+OK    [R1-con-nota-390] Revisión con nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y teclado, con y sin movimiento reducido)
+OK    [R1-sin-nota-390] Revisión sin nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y teclado, con y sin movimiento reducido)
+OK    [R2-1440] Escritorio 1440×900: tras «Revisar portafolio», el resultado (con nota y sin nota) queda entero en el viewport y con el foco en la nota
+
+RESULTADO: 9 correctas, 0 fallos
