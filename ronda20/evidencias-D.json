@@ -67,8 +67,8 @@
   "id": "E5",
   "escenario": "Publicar desactivado se ve como Guardar desactivado",
   "esperado": "Mismo tratamiento visual y motivo pegado a cada botón",
-  "observado": "color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=false",
-  "resultado": "FALLA",
+  "observado": "color Guardar rgb(189, 176, 160) / Publicar rgb(189, 176, 160); cursor not-allowed / not-allowed; borde Guardar dashed / Publicar dashed; motivo junto a Publicar=true; motivo junto a Guardar=true (motivo x 994 ancho 244 y 2; Guardar x 1246 y 2)",
+  "resultado": "OK",
   "evidencia": "E4-103-escritorio.png"
  },
  {
