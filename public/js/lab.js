@@ -385,7 +385,7 @@ async function pintarSeguimientoEscenarios() {
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
-    const fecha = f ? `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>` : '';
+    const fecha = !f ? '' : !pend ? `<p class="esc-fecha mut peq">Tenía prevista una revisión el ${esc(fechaCorta(f))}.</p>` : `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>`;   // una idea archivada o descartada no promete una revisión
     return `<article class="esc-item${vence ? ' esc-toca' : ''}"><header><b class="esc-t">${e.pregunta ? `«${esc(e.pregunta)}»` : esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
       ${fecha}<p class="peq"><b>Tu seguimiento:</b> ${n ? `${n} ${n === 1 ? 'revisión personal registrada' : 'revisiones personales registradas'}` : 'sin revisiones personales todavía'}.</p>${lineaEditorial(esc, e)}
       <p class="mut peq">${esc(e.ticker)} al ${P(e.peso_objetivo)} en la alternativa · cartera «${esc(e.cartera_nombre)}»</p>

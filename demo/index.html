@@ -1102,6 +1102,10 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 #seg-aviso b,.lab-ejemplo b{color:var(--text)} .nueva-otras{margin:0 0 var(--s2);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 @media (max-width:719px){#origen-aviso.vacio{display:flex!important} .origen-pie.vacio{display:none!important}}
 
+/* ronda 22 · botones de opción (radio) con el mismo tratamiento que las casillas: antes heredaban el campo de 44 px y salían como un círculo enorme en el formulario de revisión */
+input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var(--accent);flex:none}
+.rev-decision label{font-weight:400} .rev-decision .fila{align-items:center;gap:8px} .rev-decision input[type=date]{max-width:11rem}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -3011,7 +3015,7 @@ async function pintarSeguimientoEscenarios() {
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
-    const fecha = f ? `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>` : '';
+    const fecha = !f ? '' : !pend ? `<p class="esc-fecha mut peq">Tenía prevista una revisión el ${esc(fechaCorta(f))}.</p>` : `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>`;   // una idea archivada o descartada no promete una revisión
     return `<article class="esc-item${vence ? ' esc-toca' : ''}"><header><b class="esc-t">${e.pregunta ? `«${esc(e.pregunta)}»` : esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
       ${fecha}<p class="peq"><b>Tu seguimiento:</b> ${n ? `${n} ${n === 1 ? 'revisión personal registrada' : 'revisiones personales registradas'}` : 'sin revisiones personales todavía'}.</p>${lineaEditorial(esc, e)}
       <p class="mut peq">${esc(e.ticker)} al ${P(e.peso_objetivo)} en la alternativa · cartera «${esc(e.cartera_nombre)}»</p>

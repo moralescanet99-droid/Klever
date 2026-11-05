@@ -7,6 +7,13 @@
   "resultado": "OK"
  },
  {
+  "id": "T2b-1440",
+  "escenario": "Formulario de revisión (1440 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
   "id": "T2-1440",
   "escenario": "Registrar desde el Cuaderno (1440 px)",
   "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
@@ -17,7 +24,7 @@
   "id": "T3-1440",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (1440 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:45:50\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:45:50\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:00:43\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:00:43\"}]}}",
   "resultado": "OK"
  },
  {
@@ -63,6 +70,13 @@
   "resultado": "OK"
  },
  {
+  "id": "T2b-390",
+  "escenario": "Formulario de revisión (390 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
   "id": "T2-390",
   "escenario": "Registrar desde el Cuaderno (390 px)",
   "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
@@ -73,7 +87,7 @@
   "id": "T3-390",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (390 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:46:01\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:46:01\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:00:54\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:00:54\"}]}}",
   "resultado": "OK"
  },
  {
@@ -119,6 +133,13 @@
   "resultado": "OK"
  },
  {
+  "id": "T2b-320",
+  "escenario": "Formulario de revisión (320 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
   "id": "T2-320",
   "escenario": "Registrar desde el Cuaderno (320 px)",
   "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
@@ -129,7 +150,7 @@
   "id": "T3-320",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (320 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:46:12\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:46:12\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:01:04\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 21:01:04\"}]}}",
   "resultado": "OK"
  },
  {

@@ -266,3 +266,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 #seg-aviso,.lab-ejemplo{background:var(--surface);color:var(--text);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 12px 12px 0}
 #seg-aviso b,.lab-ejemplo b{color:var(--text)} .nueva-otras{margin:0 0 var(--s2);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 @media (max-width:719px){#origen-aviso.vacio{display:flex!important} .origen-pie.vacio{display:none!important}}
+
+/* ronda 22 · botones de opción (radio) con el mismo tratamiento que las casillas: antes heredaban el campo de 44 px y salían como un círculo enorme en el formulario de revisión */
+input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var(--accent);flex:none}
+.rev-decision label{font-weight:400} .rev-decision .fila{align-items:center;gap:8px} .rev-decision input[type=date]{max-width:11rem}
