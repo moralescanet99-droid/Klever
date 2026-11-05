@@ -39,7 +39,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const persiste = await p.evaluate(() => document.querySelector('#radio-lim').value);
     ev('K2b-' + w, `El límite persiste tras recargar (${w} px)`, 'El campo vuelve con 50', persiste, persiste === '50');
     // ---------- 3. Guardada frente a cambios locales; cartera incompleta sin normalizar
-    await abrir(p, 'Para cambios locales'); await peso(p, 2).fill('10'); await p.waitForTimeout(400);
+    await abrir(p, 'Para cambios locales'); await peso(p, 2).fill('10'); await p.waitForTimeout(400); await revision(p);   // la radiografía vive en el paso «Revisión»
     const loc = await p.evaluate(() => ({ t: document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '), btns: [...document.querySelectorAll('#radio-cuerpo [data-modo]')].map(e => e.textContent + ':' + e.getAttribute('aria-pressed')) }));
     await p.locator('#radio-cuerpo [data-modo=guardada]').click(); await p.waitForTimeout(200);
     const gua = await p.evaluate(() => document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '));
