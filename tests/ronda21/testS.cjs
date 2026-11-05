@@ -79,6 +79,10 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#vista-seguimiento:not([hidden])'); await p.waitForSelector('#seg-escenarios .seg-grupo', { timeout: 15000 });
     const grupos = await p.evaluate(() => [...document.querySelectorAll('#seg-escenarios .seg-grupo')].map(g => ({ t: g.querySelector('h3').textContent.replace(/\s+/g, ' ').trim(), n: g.querySelectorAll('.esc-item').length })));
     await p.screenshot({ path: CAP + `S7-para-revisar-${w}-viewport.png` });
+    await p.evaluate(() => { location.hash = '#inicio'; }); await p.waitForSelector('#inicio-revisar:not([hidden])', { timeout: 10000 }).catch(() => {});
+    const aviso7 = await p.evaluate(() => { const e = document.querySelector('#inicio-revisar'); return e && !e.hidden ? e.textContent.trim() : null; });
+    ev('S7b-' + w, `Usuario recurrente (${w} px): la portada le lleva a lo que toca revisar`, 'Con una idea con fecha de hoy aparece «Tienes 1 idea para revisar en tu Cuaderno» con enlace al Cuaderno', J(aviso7), /1 idea/.test(aviso7 || ''));
+    await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#seg-escenarios .seg-grupo');
     ev('S7-' + w, `Cerrar sesión y volver con la misma cuenta (${w} px): la idea reaparece en «Para revisar»`, 'El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»', J({ revocado, grupos }), revocado === 401 && grupos.length >= 1 && /Para revisar/.test(grupos[0].t) && grupos[0].n === 1);
     // ---- S8. registrar revisión: se añade al historial, la hipótesis original sigue
     await p.locator('#seg-escenarios .esc-item a.btn').first().click(); await p.waitForSelector('#rev-form', { state: 'attached' }); const abierto = await p.evaluate(() => document.querySelector('#rev-det').open); if (!abierto) await p.locator('#rev-det > summary').click(); await p.waitForSelector('#rev-form', { state: 'visible' });   // con la fecha de hoy o vencida el formulario ya viene abierto
@@ -100,6 +104,33 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       !grupos2.some(g => /Para revisar/.test(g)) && grupos2.some(g => /Próximas revisiones/.test(g)) && ajena.every(s => s === 404) && listaAjena === 0 && intacto.revisiones.length === 1);
     ev('S0-' + w, `Sin errores de JavaScript ni diálogos inesperados en el recorrido (${w} px)`, 'Ningún pageerror; los avisos de «cambios sin guardar» se aceptan y se cuentan', `errores ${J(errs)}; beforeunload ${DLG.length}; inesperados ${J(DLGMAL)}`, errs.length === 0 && DLGMAL.length === 0 && await sinDesborde(p));
     await otra.ctx.close(); await p.ctx.close();
+  }
+  // ---- las OTRAS DOS entradas (explorar un ejemplo y recrear mi cartera) y el acceso por TECLADO; sin cuenta, para comprobar que una cartera SIN NOTA llega igualmente a la comparación
+  for (const [w, h] of [[1440, 900], [390, 780]]) {
+    const p = await nuevo(b, w, h), errs = []; p.on('pageerror', e => errs.push(e.message)); p.on('dialog', dialogo);
+    await esperaPortada(p); await p.click('#entrada-ejemplo'); await p.waitForSelector('[data-plantilla=dividendos]'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForFunction(() => document.querySelectorAll('.peso-in').length >= 6); await p.waitForTimeout(500);
+    const ejemplo = await p.evaluate(() => ({ nombre: document.querySelector('#nombre').value, aviso: document.querySelector('#origen-aviso')?.hidden === false ? document.querySelector('#origen-aviso').textContent : null }));
+    await p.locator('.js-revisar:visible').first().click(); await p.waitForSelector('#vista-cartera[data-paso="3"]'); await p.waitForFunction(() => document.activeElement?.id === 'nota-panel'); await p.waitForSelector('#nota-cuerpo .vistazo'); await quieto(p);
+    const sinNota = await p.evaluate(() => ({ vz: !!document.querySelector('#nota-cuerpo .vistazo'), probar: !!document.querySelector('#vz-probar'), nota: !!document.querySelector('#nota-cuerpo .nota-num'), estado: document.querySelector('#nota-cuerpo .nota-pend b')?.textContent }));
+    await p.screenshot({ path: CAP + `S10-ejemplo-sin-nota-${w}-viewport.png` });
+    await p.click('#vz-probar'); await p.waitForSelector('#lab-form'); await p.fill('#lab-ticker', 'KO'); await p.fill('#lab-peso', '10'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab');
+    const cmp = await p.evaluate(() => [...document.querySelectorAll('#lab-res table.tabla-lab thead th')].map(t => t.textContent.trim()));
+    ev('S10-' + w, `Explorar un ejemplo (${w} px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación`, 'El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula', J({ ejemplo, sinNota, cmp }),
+      /Ejemplo simulado/.test(ejemplo.nombre) && /ejemplo simulado/i.test(ejemplo.aviso || '') && sinNota.vz && sinNota.probar && !sinNota.nota && /Sin nota global|Evaluación parcial/.test(sinNota.estado || '') && cmp.includes('Cartera base') && cmp.includes('Alternativa simulada'));
+    await esperaPortada(p); await p.click('#entrada-manual'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(400);
+    const manual = await p.evaluate(() => document.querySelector('#origen-aviso')?.textContent || '');
+    await p.fill('#buscar-activo', 'ZZZZQ'); await p.waitForSelector('#lista-activos li.sin'); const noSoportado = N(await p.textContent('#lista-activos li.sin')); await p.fill('#buscar-activo', '');
+    const enGuardado = await p.evaluate(() => document.querySelectorAll('.peso-in').length);
+    await anadir(p, 'KO'); await fijar(p, 'KO', 100);
+    const traer = await p.evaluate(() => ({ filas: [...document.querySelectorAll('.peso-in')].filter(e => e.offsetParent !== null).map(e => e.getAttribute('aria-label')).join('|'), aviso: document.querySelector('#origen-aviso')?.hidden === false }));
+    ev('S11-' + w, `Recrear mi cartera (${w} px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio`, 'El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %', J({ manual: manual.slice(0, 160), noSoportado, enGuardado, traer }),
+      /no se conecta a ningún banco ni bróker/.test(manual) && /no (lo )?sustituimos/.test(noSoportado) && enGuardado === 0 && /KO/.test(traer.filas) && traer.aviso);
+    await esperaPortada(p); await p.evaluate(() => document.activeElement?.blur()); let pulsaciones = 0;
+    while (pulsaciones < 60) { await p.keyboard.press('Tab'); pulsaciones++; if (await p.evaluate(() => document.activeElement?.id === 'entrada-vacia')) break; }
+    await p.keyboard.press('Enter'); await p.waitForSelector('#vista-cartera:not([hidden])'); const origenTeclado = await p.evaluate(() => document.querySelector('#origen-aviso')?.hidden === false);
+    ev('S12-' + w, `Teclado real (${w} px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío`, 'El foco alcanza la entrada (≤ 60 pulsaciones) y Enter abre la cartera vacía con su aviso', `Tab ×${pulsaciones}; aviso ${origenTeclado}`, pulsaciones < 60 && origenTeclado);
+    ev('S13-' + w, `Sin errores de JavaScript ni desbordes en las otras entradas (${w} px)`, 'Ningún pageerror; sin desbordamiento horizontal', J(errs), errs.length === 0 && await sinDesborde(p));
+    await p.ctx.close();
   }
   await b.close(); fin('evidencias-S21');
 })();

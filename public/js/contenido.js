@@ -21,6 +21,7 @@ export const HISTORIAS = [{
     estudio: 'Porque enseña la diferencia entre anunciar y firmar: 2 de 4 proyectos (65 de 225 MW) ya tienen contrato y los dos más grandes dependen de una promesa con fecha.',
     riesgo: 'Que los contratos grandes se retrasen o no lleguen, y que la financiación de la planta C no esté asegurada. Un caso no demuestra nada sobre otras empresas.',
   },
+  desconocido: ['Si la financiación de la planta C está asegurada: no hay ningún documento que lo diga.', 'Qué ocurrirá con el contrato de D: no hay documento ni precio.', 'Cómo se comportaría el negocio con contratos firmados: es un caso inventado y no permite concluirlo.'],
   fuentes: [
     { n: 1, titulo: 'Comunicado de ejemplo: cartera de cuatro proyectos de hidrógeno verde', fecha: '2026-08-12', tipo: 'Documento de ejemplo (ficticio)' },
     { n: 2, titulo: 'Contrato de ejemplo del proyecto A (40 MW), resumen público', fecha: '2026-09-03', tipo: 'Documento de ejemplo (ficticio)' },
@@ -49,7 +50,7 @@ export const HISTORIAS = [{
       hecho: ['Dos de cuatro proyectos (A y B, 65 de 225 MW) tienen contrato publicado [2][3].', 'C tiene un memorando no vinculante [4] y D no tiene documento.', 'La empresa prometió firmar C y D antes del 31 de octubre [5].'],
       interpretacion: ['Los proyectos pequeños se cierran rápido; los grandes dependen de financiación que todavía no se ha publicado.', 'Mi lectura: C llegará a contrato antes que D, porque ya hay un memorando; D no tiene ni documento. Lo más probable es que se firme uno y el otro se aplace.'],
       cambiaria: ['Un contrato firmado para D, con precio y volumen, antes del 31 de octubre.', 'La publicación de financiación comprometida para C: reforzaría que C se firma.', 'Que el memorando de C se retire o caduque.'],
-      pregunta: '¿Se han firmado los dos contratos anunciados?' },
+      pregunta: '¿Se han firmado los dos contratos anunciados?', revisionPrevista: '2026-11-01' },
     { n: 2, fecha: '2026-11-03', firma: 'El Superespeculador (personaje de ejemplo)', revisa: 1, simulada: true,
       titulo: 'Revisión: se firmó C, D se aplazó (desenlace simulado)',
       resultado: 'DESENLACE SIMULADO en esta demo: el 29 de octubre se firmó el contrato de C [6] y el de D se aplazó sin fecha. Es un final inventado para probar la revisión, no un hecho.',

@@ -1144,6 +1144,18 @@ function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
   b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crea tu primer portafolio';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
+  pintarPendientes();
+}
+// Usuario recurrente (ronda 21): lo primero es continuar y revisar, no repetir la bienvenida. Si hay ideas del Cuaderno con fecha de revisión de hoy o vencida, se avisa con un enlace; si no se pueden leer, no se dice nada (no se inventa un «0»).
+let pendSeq = 0;
+async function pintarPendientes() {
+  const el = $('#inicio-revisar'), n = ++pendSeq; el.hidden = true; if (!logged()) return;
+  try {
+    const l = await api('/escenarios'); if (n !== pendSeq || !logged()) return;
+    const d = new Date(), hoy = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const k = l.filter(e => e.estado === 'en_estudio' && e.revisar_en && e.revisar_en <= hoy).length;
+    if (k) { el.firstElementChild.textContent = `Tienes ${k} ${k === 1 ? 'idea' : 'ideas'} para revisar en tu Cuaderno`; el.hidden = false; }
+  } catch { /* sin datos fiables no se muestra nada */ }
 }
 $('#probar').addEventListener('click', () => { // destino inequívoco según el estado; al crear, la elección de plantilla con el foco allí
   const modo = $('#probar').dataset.modo;

@@ -33,9 +33,13 @@ function fuentes(esc, h) {
     ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</details>`;
 }
 function cta(esc, h) {
-  return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Probar en mi cartera</button>
+  if (!h.ticker) return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><a class="btn btn-primario" href="#empresas">Explorar empresas relacionadas</a></p><p class="mut peq">Este contenido no trata de una posición concreta, así que no se elige ninguna empresa por ti.</p></section>`;
+  return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Explorar esta idea en una simulación</button>
     <button class="btn btn-secundario" type="button" data-ficha="${esc(h.ticker)}">Ver la ficha de ${esc(h.empresa)}</button></p>
-    <p class="mut peq">«Probar en mi cartera» abre el laboratorio con ${esc(h.empresa)} ya elegida. Si no tienes cartera, te ofrece una de ejemplo; es una simulación y no cambia nada.</p></section>`;
+    <p class="mut peq">«Explorar esta idea en una simulación» abre el laboratorio con ${esc(h.empresa)} ya elegida; allí puedes comparar con tu cartera y <b>guardar tu pregunta en el Cuaderno</b>. Si no tienes cartera, te ofrece una de ejemplo; es una simulación y no cambia nada.</p></section>`;
+}
+function desconocido(esc, h) {
+  return h.desconocido?.length ? `<section class="art-desconocido" aria-label="Qué se desconoce"><h2>Qué no sabemos</h2>${lista(esc, h.desconocido)}</section>` : '';
 }
 
 export function mostrarArticulo({ tipo, id, n }) {
@@ -50,7 +54,7 @@ export function mostrarArticulo({ tipo, id, n }) {
       ${h.bloques.map(b => b.t === 'h2' ? `<h2>${esc(b.x)}</h2>` : b.t === 'p' ? `<p>${refs(esc, b.x)}</p>` : b.t === 'ul' ? lista(esc, b.x)
         : `<div class="tabla-h" role="region" aria-label="Estado de los proyectos" tabindex="0"><table class="tabla-lab"><thead><tr>${b.cab.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.filas.map(f => `<tr><th scope="row">${esc(f[0])}</th>${f.slice(1).map(c => `<td>${refs(esc, c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`).join('')}
       <p class="art-opinion"><a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión de El Superespeculador</a></p>
-      ${cta(esc, h)}${fuentes(esc, h)}</article>`;
+      ${desconocido(esc, h)}${cta(esc, h)}${fuentes(esc, h)}</article>`;
     return;
   }
   const t = tesisDe(h, n), posterior = revisionDe(h, t.n);
@@ -64,6 +68,6 @@ export function mostrarArticulo({ tipo, id, n }) {
     <h2>Hecho observado</h2>${lista(esc, t.hecho)}
     <h2>Interpretación del autor</h2>${lista(esc, t.interpretacion)}
     <h2>Qué me haría cambiar de opinión</h2>${lista(esc, t.cambiaria)}
-    <h2>Pregunta para seguir</h2><p><b>${esc(t.pregunta)}</b></p>
-    ${cta(esc, h)}${fuentes(esc, h)}</article>`;
+    <h2>Pregunta para seguir</h2><p><b>${esc(t.pregunta)}</b></p>${t.revisionPrevista ? `<p class="mut">Fecha prevista para revisar esta opinión: <b>${esc(fechaCorta(t.revisionPrevista))}</b>.</p>` : ''}
+    ${desconocido(esc, h)}${cta(esc, h)}${fuentes(esc, h)}</article>`;
 }

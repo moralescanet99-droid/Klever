@@ -406,7 +406,7 @@ function pintarLabForm() {
   const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
   const radar = alm.todos().map(f => `<option value="${esc(f.ticker)}">${esc(f.nombre)}</option>`).join('');
   const h = s.historia && historia(s.historia);
-  $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». ` : '')}
+  $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». <a href="#historia-${esc(h.id)}">Volver a la lectura</a>. ` : '')}
     <form id="lab-form" class="lab-form" novalidate>
       <fieldset><legend>1 · Cartera base</legend>
         ${base.ejemplo ? '<p class="lab-ejemplo" role="note"><b>No tienes ninguna cartera, así que usamos una de ejemplo</b> (KO 60 % · PG 40 %) para que puedas probar. No es tuya y la simulación es temporal.</p>' : ''}

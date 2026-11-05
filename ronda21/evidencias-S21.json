@@ -42,6 +42,13 @@
   "resultado": "OK"
  },
  {
+  "id": "S7b-1440",
+  "escenario": "Usuario recurrente (1440 px): la portada le lleva a lo que toca revisar",
+  "esperado": "Con una idea con fecha de hoy aparece «Tienes 1 idea para revisar en tu Cuaderno» con enlace al Cuaderno",
+  "observado": "\"Tienes 1 idea para revisar en tu Cuaderno\"",
+  "resultado": "OK"
+ },
+ {
   "id": "S7-1440",
   "escenario": "Cerrar sesión y volver con la misma cuenta (1440 px): la idea reaparece en «Para revisar»",
   "esperado": "El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»",
@@ -112,6 +119,13 @@
   "resultado": "OK"
  },
  {
+  "id": "S7b-390",
+  "escenario": "Usuario recurrente (390 px): la portada le lleva a lo que toca revisar",
+  "esperado": "Con una idea con fecha de hoy aparece «Tienes 1 idea para revisar en tu Cuaderno» con enlace al Cuaderno",
+  "observado": "\"Tienes 1 idea para revisar en tu Cuaderno\"",
+  "resultado": "OK"
+ },
+ {
   "id": "S7-390",
   "escenario": "Cerrar sesión y volver con la misma cuenta (390 px): la idea reaparece en «Para revisar»",
   "esperado": "El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»",
@@ -137,6 +151,62 @@
   "escenario": "Sin errores de JavaScript ni diálogos inesperados en el recorrido (390 px)",
   "esperado": "Ningún pageerror; los avisos de «cambios sin guardar» se aceptan y se cuentan",
   "observado": "errores []; beforeunload 0; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "S10-1440",
+  "escenario": "Explorar un ejemplo (1440 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
+  "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Esto es un ejemplo simulado: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S11-1440",
+  "escenario": "Recrear mi cartera (1440 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
+  "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
+  "observado": "{\"manual\":\"Estás recreando tu cartera a mano: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. S\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S12-1440",
+  "escenario": "Teclado real (1440 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío",
+  "esperado": "El foco alcanza la entrada (≤ 60 pulsaciones) y Enter abre la cartera vacía con su aviso",
+  "observado": "Tab ×10; aviso true",
+  "resultado": "OK"
+ },
+ {
+  "id": "S13-1440",
+  "escenario": "Sin errores de JavaScript ni desbordes en las otras entradas (1440 px)",
+  "esperado": "Ningún pageerror; sin desbordamiento horizontal",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "S10-390",
+  "escenario": "Explorar un ejemplo (390 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
+  "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Esto es un ejemplo simulado: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S11-390",
+  "escenario": "Recrear mi cartera (390 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
+  "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
+  "observado": "{\"manual\":\"Estás recreando tu cartera a mano: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. S\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S12-390",
+  "escenario": "Teclado real (390 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío",
+  "esperado": "El foco alcanza la entrada (≤ 60 pulsaciones) y Enter abre la cartera vacía con su aviso",
+  "observado": "Tab ×7; aviso true",
+  "resultado": "OK"
+ },
+ {
+  "id": "S13-390",
+  "escenario": "Sin errores de JavaScript ni desbordes en las otras entradas (390 px)",
+  "esperado": "Ningún pageerror; sin desbordamiento horizontal",
+  "observado": "[]",
   "resultado": "OK"
  }
 ]
