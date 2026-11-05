@@ -74,3 +74,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-05 · Paquete para ChatGPT de la ronda 20 (`revision-chatgpt/ronda-20/INSTRUCCIONES_PARA_CHATGPT.md` + 9 imágenes de viewport; ZIPs e imágenes fuera del repositorio).
 - 2026-11-05 · Ronda 21 (C18): del conjunto de correcciones al producto (tres entradas, revisión útil, comparación, Cuaderno con revisiones, Revista conectada); ver `ronda21/LEEME.md`.
 - 2026-11-05 · Paquete para ChatGPT de la ronda 21 (`revision-chatgpt/ronda-21/INSTRUCCIONES_PARA_CHATGPT.md` + 13 imágenes de viewport; ZIPs e imágenes fuera del repositorio).
+- 2026-11-05 · Ronda 22 (C19): cierre de lo existente (recuperación del registro de revisiones, Cuaderno coherente, recorrido pulido); ver `ronda22/LEEME.md`.

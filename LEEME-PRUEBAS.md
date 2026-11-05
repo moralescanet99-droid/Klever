@@ -144,3 +144,11 @@ Termina con código 0 solo si todo lo verificable pasa, y **siempre** imprime lo
 | `tests/ronda21/fixture-registro.mjs` | Fixture (no es batería) gobernada por `MODO_REGISTRO` | — |
 | `tests/ronda8/unit-migracion.mjs` (15) | Ampliada con M1f (migración 0012 con datos previos) | Módulo |
 `tests/lib/d1-sqlite.mjs` `registro()` ya no sale con `process.exit(0)`.
+
+## Baterías de la ronda 22 (añadidas o cambiadas)
+| Archivo | Qué comprueba | Entorno |
+|---|---|---|
+| `tests/ronda22/unit-cliente-revision22.mjs` (8) | El cliente del registro de revisiones (`revisiones.js`) contra el servidor real con cortes inyectados; réplica de la lógica de la R21 (C8) | Módulo/servidor |
+| `tests/ronda22/testT.cjs` (24) | Cuaderno y recuperación en el navegador a 1440/390/320: «Para revisar» primero, respuesta perdida, relectura fallida, texto modificado, dos pestañas, archivar/descartar, seguimiento personal vs editorial, Mis portafolios con cuenta | Navegador |
+| `tests/ronda22/testDemo22.cjs` (12) | Registrar una revisión en la demo y que no persista tras recargar | Navegador (demo) |
+Adaptadas por el diseño nuevo: `testO`, `testQ`, `testN`, `testP`, `testL`, `testB` (ver `ronda22/LEEME.md` §7).

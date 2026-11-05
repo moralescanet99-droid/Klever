@@ -88,3 +88,10 @@
 - ⬜ M94–M100 (`ronda21/pruebas-manuales.md`) y las anteriores M85–M93.
 - ⬜ Probar el registro de una revisión en la demo; comprobar la migración 0012 en una D1 remota con copia.
 - ⬜ Ideas generales sin escenario (el modelo exige ticker y propuesta); estados «guardando» y «error» de guardado a fondo.
+
+## Tras la ronda 22
+- ⬜ **Piloto con cinco principiantes en dos contactos** (`ronda22/PRUEBA-CON-USUARIOS.md`): no realizado; es lo siguiente.
+- ⬜ M101–M105 (`ronda22/pruebas-manuales.md`) y las anteriores; M96 (correo y D1 reales) queda para una fase autorizada posterior.
+- ⬜ Probar K9 con dos clientes reales simultáneos; sesión caducada con el formulario de guardar en el Cuaderno ya escrito.
+- ⬜ Causa de `testK` (hipótesis principal, no demostrada) y de `testP` (no cerrada).
+- **Capacidades nuevas, para después:** ideas generales sin escenario, ampliaciones del laboratorio, cobros, integraciones, datos reales.

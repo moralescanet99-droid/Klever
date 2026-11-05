@@ -212,5 +212,13 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **Un ejemplo no es una recomendación:** rótulo «Ejemplo simulado» visible; no se vende como cartera óptima.
 - **Las pruebas comprueban comportamiento y persistencia, no frases literales largas** (los textos de la portada se actualizaron en `testB`/`testN`/`testP` sin rebajar lo que comprueban).
 
+## Ronda 22 (cierre de lo existente)
+- **Una escritura confirmada no se trata como fallo por una relectura fallida:** el intento (clave y contenido) se congela y se reintenta SIEMPRE el mismo; recuperar la vista solo lee · motivo: I1.
+- **Seguimiento personal y respuesta editorial son datos distintos:** una revisión personal nunca resuelve una pregunta ni crea respuesta editorial · motivo: I2.
+- **Una tarjeta por escenario; «Para revisar» primero; el detalle editorial vive en la ficha** · motivo: I3 (dos tarjetas del mismo objeto compiten por la atención).
+- **Separar defectos de lo existente (se resuelven) de capacidades nuevas (después)**, y recorrer el producto como usuario antes de entregar (instrucción de Javier).
+- **Un aviso de condición normal no es una alarma** (superficie neutra, no ámbar).
+- **No se certifica «sin rebajar aserciones»:** se listan los cambios en pruebas antiguas para que se contrasten con el historial.
+
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).
