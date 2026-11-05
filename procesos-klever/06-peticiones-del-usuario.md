@@ -1164,3 +1164,201 @@ Cuando llegue R19, repetiré las pruebas relevantes y el contraejemplo nuevo; co
 Revisaré especialmente que a 320 px se pueda leer el resultado sin quedar tapado, que Volver conserve el trabajo y que la plantilla con ETF dé una explicación útil. Contrastaré los logs y capturas sin convertir los resultados declarados por Claude en pruebas propias.
 
 La siguiente decisión de producto debe apoyarse en observar a personas construir, revisar y recuperar una cartera. La disposición a pagar y el retorno semanal siguen siendo hipótesis: las pruebas técnicas y el acabado visual, por sí solos, no las validan.
+
+## C17 · Ronda 20 (2026-11-05) — revisión de la ronda 19 y encargo, literal
+
+# Klever · Revisión de la ronda 19 y encargo de la ronda 20
+
+Revisión independiente · 5 de noviembre de 2026
+
+## Veredicto en tres líneas
+
+R19 resuelve el contraejemplo de redondeo y las capturas acreditan una mejora clara de la revisión móvil a 320 px.
+No doy por cerrada toda la reparación técnica: las causas de una evaluación incompleta aún se mezclan y el ejecutor individual puede devolver éxito tras un fallo.
+Mantendría la identidad visual; falta terminar la composición de Revisión en escritorio y reducir el protagonismo del aviso sin nota.
+
+## Dos decisiones separadas
+
+**Reparación técnica completa: RECHAZAR su cierre, con aceptación del arreglo de redondeo.** Hay dos correcciones acotadas pendientes, descritas como I1 e I2. No hay motivo para rehacer el algoritmo ni reabrir las reparaciones ya verificadas.
+
+**Aplicación visual completa: RECHAZAR su cierre, con aceptación de la mejora móvil observada.** El resultado y el paso ya se leen a 320 px; en escritorio el salto a la nota deja la pantalla desequilibrada y sin los controles de contexto a la vista. Es un problema de distribución y navegación, no una petición de otra estética.
+
+Estas decisiones no equivalen a una auditoría de producción. La revisión de navegador propia quedó bloqueada al iniciar Chromium; las conclusiones visuales proceden de las imágenes entregadas.
+
+## Valoración comparada
+
+En mi informe R18 no fijé puntuaciones numéricas para estas seis dimensiones. No voy a inventarlas retrospectivamente: comparo cualitativamente y establezco ahora una referencia subjetiva, sobre el alcance revisado.
+
+| Dimensión | R19 / 10 | Respecto a R18 |
+|---|---:|---|
+| Confianza y privacidad | 7 | Sin cambio relevante demostrado; el aislamiento y guardado cubiertos por la batería repetida pasan. No es una auditoría completa de seguridad. |
+| Procedencia de datos | 8 | Se conserva la mejora anterior; siguen claramente declarados los datos ficticios. |
+| Claridad del recorrido móvil | 8 | Mejora: resultado visible, etiqueta del paso completa y retorno explícito. |
+| Honestidad del contenido | 7 | Mejor para la plantilla principal; las combinaciones de causas todavía generan explicaciones incompletas. |
+| Solidez técnica | 7,5 | Mejora aritmética confirmada; quedan clasificación de causas y cierre del ejecutor. |
+| Calidad de las pruebas | 7 | Mejores medidas y registros; límites en el código de salida, la cobertura de empates y el acceso real por teclado. |
+
+## 1. Qué he repetido
+
+| Batería | Resultado propio |
+|---|---:|
+| `tests/ronda19/unit-redondeo19.mjs` | 6 correctas |
+| `tests/ronda19/unit-revision19.mjs` | 10 correctas |
+| `tests/ronda18/unit-integridad18.mjs` | 18 correctas |
+| `tests/ronda15/unit-nota.mjs` | 35 correctas |
+| `tests/ronda17/unit-guardada17.mjs` | 20 correctas |
+| **Total** | **89 correctas, 0 fallos** |
+
+Además:
+
+- Ejecuté `antes-despues-r19.mjs` contra los árboles locales de R18 y R19. El contraejemplo pasa de aceptado a rechazado; se conservan los dos vecinos compatibles. Los ZIP no permiten acreditar por sí mismos su identidad Git.
+- Probé bloques 0, -0 y 10 en un resumen publicado: 0 y -0 se rechazan; 10 se acepta. La escala declarada es 1–10, por lo que rechazar los dos ceros es correcto. Esto no implica que una pérdida de limitación igual a cero sea inválida.
+- Probé cuatro combinaciones de instrumentos y carencias. El caso ETF + banco + EBITDA ausente en otra empresa conserva las dos familias de causas; los casos que se detallan en I1 presentan problemas.
+- Ejecuté un fallo intencionado del ayudante de pruebas, tanto con salida natural como con un manejador abierto: ambos terminan con código 0 pese a informar de un fallo.
+- Comprobé que el resumen aportado suma 800 comprobaciones en 39 baterías y que hay 39 logs de batería. Es consistencia documental, no repetición independiente de esas 800.
+
+Intenté arrancar Chromium local con Playwright. El navegador abortó antes de abrir una página, por restricciones del entorno. No ejecuté R, Q, P, O, la paridad de demo ni las repeticiones de latencia en un navegador propio. No atribuyo ese bloqueo a Klever.
+
+Inspección visual: referencia 00, Distribución de escritorio 01, Revisión de escritorio 02 y 09, revisión móvil con nota 05 y sin nota 07–08. No he utilizado esas imágenes como prueba de interacción o de accesibilidad real.
+
+## 2. Redondeo: aceptar la corrección, acotar la afirmación
+
+La intersección estricta es correcta para el contrato decimal de intervalos semiabiertos que se ha definido. La igualdad anterior admitía un contacto sin valores compatibles. El caso 5,44 / 5,44 / 5,44 / 5,46 / 5,44 con nota 5,5 se rechaza por validador y POST; el histórico inválido se identifica sin recalcularlo silenciosamente.
+
+El oráculo R5 **no pasa en vacío**: he obtenido 12.000 resúmenes, 556 casos en la franja declarada alrededor de la frontera y ninguna discrepancia. Es una verificación independiente de la condición de intersección, aunque comparte con el validador el cálculo de la suma ponderada y la hipótesis del intervalo. No certifica por sí solo todo el algoritmo de evaluación.
+
+La barrida R6 publica y acepta 4.800 evaluaciones. Sin embargo, su propio registro dice **«0 a ≤ 0,001 de la frontera»**. Demuestra compatibilidad en esas muestras; no demuestra que haya ejercitado los empates binarios relevantes. No he encontrado un rechazo de una salida legítima y no pido volver a cambiar la desigualdad. Pido sustituir «no hace falta tolerar empates binarios» por la conclusión realmente demostrada y, si se mantiene una afirmación sobre empates, añadir casos dirigidos y un contador exigido por la aserción.
+
+## 3. Problemas por gravedad
+
+### Críticos
+
+No he encontrado un problema crítico dentro del alcance revisado. Esto no certifica el despliegue, la seguridad completa ni datos reales.
+
+### I1 · Importante: las causas siguen perdiéndose o cambiando de significado
+
+Referencias: `public/js/nota.js:123` y `:124`; `public/js/nota-ui.js:26`, `:31`, `:33` y la agrupación posterior.
+
+El cálculo conserva varios textos de motivo por activo, pero asigna una sola `causa`. Si aparece falta de método, esta sustituye la categoría de datos; en la presentación, cuando hay datos ausentes se filtran otras causas. Los comparables insuficientes también se agrupan como `datos`.
+
+Reproducciones con una semilla nueva por caso:
+
+| Entrada y cambio | Resultado observado | Problema |
+|---|---|---|
+| JPM 50 % + KO 50 %; `UPDATE fundamentales SET ebitda=NULL WHERE ticker='KO'` | El resumen explica que falta EBITDA de KO y que faltan datos para deuda y rentabilidad. | Omite la limitación metodológica de JPM, que afecta a la mitad de la cartera. Añadir EBITDA no resolvería toda la evaluación. |
+| SCHD 1 % + AAPL 99 %; sin modificar la semilla | Abre con el ETF al 1 % y añade «faltan datos de AAPL». | Los motivos de AAPL son 16 comparables para deuda y 18 para ROIC, frente a 20 exigidos. No es lo mismo que un dato ausente de AAPL; el 1 % de ETF no explica por sí solo incumplir un umbral de cobertura del 90 %. |
+| JPM 50 % + PG 50 %; `UPDATE mercado SET capitalizacion=NULL WHERE ticker='JPM'` | El resumen menciona solo el método bancario. | La falta de capitalización queda relegada al detalle porque la categoría única se sobrescribe. |
+
+El caso SCHD 20 % + JPM 40 % + KO 40 %, con EBITDA de KO ausente, sí produce una explicación conjunta razonable. No está roto todo el recorrido: faltan combinaciones que la actual batería V1–V10 no cubre.
+
+**Arreglo:** representar motivos coexistentes con códigos estables, instrumento e indicador. Distinguir ausencia o invalidez del dato, método no aplicable y población de comparables insuficiente. Separar estas causas del efecto agregado «no se alcanza la cobertura mínima». No deducir categorías mediante expresiones regulares sobre textos ni reemplazar una causa por otra.
+
+El resumen debe priorizar las limitaciones que bloquean la nota global y mencionar las otras de forma breve. Conservar los porcentajes sin sumar dos veces una posición con varias carencias. Mantener el cálculo numérico y los pesos de la cartera.
+
+### I2 · Importante: una prueba individual puede fallar y salir con éxito
+
+Referencia: `tests/ronda5/h.cjs:37`–`:41`.
+
+Reproducción desde la raíz del proyecto:
+
+```bash
+node -e "const h=require('./tests/ronda5/h.cjs'); h.ok('fallo intencionado',false); h.fin();"
+```
+
+Resultado observado: `RESULTADO: 0 correctas, 1 fallos`, pero **código de salida 0**. Al añadir `setInterval(()=>{},1000)` antes de `fin()`, el temporizador nuevo fuerza la salida a los diez segundos, también con código 0.
+
+Matiz importante: `tests/run-all.sh` analiza el texto y detectaría ese fallo. **No concluyo que las 800 comprobaciones sean falsas.** El defecto afecta al uso individual del ayudante y a dar por sano un cierre forzado. El código 0 con fallos ya era posible antes; la nueva salida forzada no lo corrige y añade una forma de ocultar recursos sin cerrar.
+
+**Arreglo:** fijar código no cero si hubo aserciones fallidas, preservar errores anteriores y tratar un cierre forzado como incidencia explícita. Cerrar recursos en `finally`; si se agota el plazo de cierre, registrar ese hecho y terminar con error, no con éxito silencioso. Un informe debe distinguir «aserciones aprobadas» de «proceso cerrado correctamente».
+
+### I3 · Importante para acabado visual: Revisión de escritorio pierde su estructura
+
+Evidencia: imágenes 02 y 09; `public/app.js:603`–`:606`.
+
+La misma orden de desplazamiento sitúa la nota en la parte superior tanto en móvil como en escritorio. En 02, con dos posiciones, queda una gran zona vacía a la izquierda, con «Gráficos de precio» aislado; en 09 aparece la última fila de posiciones cortada arriba. El nombre, los pasos y las acciones de guardar o volver no están a la vista. El test de escritorio comprueba la nota visible, pero no el contexto ni el siguiente paso.
+
+La maqueta 00 muestra una composición equilibrada. La Distribución 01 conserva su espíritu, aunque el anillo es más grueso y la leyenda queda debajo. Esas diferencias menores no justifican rehacer la web. El problema es el estado al que se llega después de Revisar.
+
+**Arreglo:** dar al paso Revisión una composición de escritorio coherente: cabecera compacta con nombre/estado, Volver, resultado y acción de guardado; resumen de posiciones al lado. Alternativamente, ajustar el desplazamiento conservando esos elementos visibles. No rellenar el hueco con contenido decorativo. Medir contexto, resultado y acción, no solo la nota.
+
+### M1 · Menor: el aviso aún ocupa demasiado y «pendiente» confunde
+
+En 08, a 320 px, el aviso completo ya cabe sobre la barra: el defecto concreto de R18 queda resuelto visualmente. Pero ocupa aproximadamente y=155–491, y el contenido útil empieza después. El color ámbar sigue dominando una situación que puede ser una limitación estable del método, no un proceso pendiente de terminar.
+
+Cambiar el encabezado según el estado: «Sin nota global» o «Evaluación parcial» cuando no existe método aplicable; reservar «pendiente» para una espera real. Propuesta breve para la plantilla: «Sin nota global. El método no analiza la composición de los ETF (33,6 %) y faltan datos de JNJ y XOM». Debajo, reparto, mayor posición y tipo de instrumento, con límites y detalles disponibles. No fijar este texto como una cadena obligatoria para todos los casos.
+
+### M2 · Menor: algunas pruebas prueban menos de lo que su título sugiere
+
+- `tests/ronda19/testR.cjs`: la variante «teclado» enfoca Revisar mediante JavaScript y pulsa Enter. Prueba la activación, no que una persona llegue con Tab. Añadir un recorrido real de tabulación desde un punto conocido.
+- `tests/ronda7/testF.cjs:136`: `DIALOGOS.every(...)` pasa con una lista vacía. Aceptar el `beforeunload` esperado es correcto y no rebaja las comprobaciones de persistencia anteriores. Pero la prueba específica del aviso necesita exigir su aparición en el caso que lo provoca y rechazar diálogos inesperados; el escuchador actual acepta cualquier diálogo antes de comprobar su tipo.
+- La espera `quieto` de R no declara fallo si agota los seis segundos sin estabilizarse. Hacer que devuelva un estado verificable y fallar si no se estabiliza.
+
+## 4. Honestidad de los registros y del guion
+
+Los registros conservados son un avance: el total de 800 y las 39 baterías cuadran, los intentos fallidos no se ocultan y K/O siguen declarados como causas no demostradas. No puedo acreditar desde un ZIP la autenticidad del commit ni la ejecución completa. Las doce repeticiones constan en el informe; no las he repetido.
+
+Hay 39 logs de batería, pero no un log separado íntegro de `demotest` dentro de `ronda19/logs/`; el ejecutor trata esa última ejecución por una rama distinta. «Registro íntegro de todas las ejecuciones incluida la demo» sería una afirmación excesiva. Conservar también su comando, salida completa, código y posible agotamiento.
+
+El guion con personas distingue mejor datos ficticios, análisis parcial y nota. Mantiene correctamente pendiente la tarea de volver cuando no hay persistencia verificada. Ajustaría:
+
+- Tarea 3: preguntar primero «¿De dónde salen estas cifras y qué significan?». La formulación actual revela parte de la respuesta. Informar del carácter simulado sigue siendo necesario; medir después si lo recuerdan espontáneamente.
+- Tarea 4: especificar al observador la preparación KO 60 % / PG 40 %, suma 100 %, retirando también JNJ/XOM. No basta con «quitar los dos fondos», ni retirar activos garantiza que la suma restante sea 100 %. Si se quiere observar la edición libre, registrar cómo reajusta la persona sin prometer de antemano que aparecerá 4,4.
+- No enseñar que debe eliminar fondos para «mejorar» la cartera: es un contraste de capacidad del método, no una recomendación de composición.
+- Tarea 6: sustituir la respuesta obligatoria «no se puede decir» por pedir qué puede y qué no puede concluir de la comparación. Una persona puede comparar una métrica observada sin poder concluir cuál inversión será mejor.
+- El rango 20–30 años es una elección de reclutamiento, no una exigencia demostrada del producto. Reclutar principiantes del público previsto sin excluir otras edades por defecto.
+
+M85–M90 son útiles. M86 no debe exigir que todo el resultado quepa simultáneamente al 200 % y con teclado abierto: puede ser físicamente imposible. Exigir lectura mediante desplazamiento, ausencia de solapamiento persistente, foco visible y controles alcanzables; no reducir la letra para aprobar.
+
+## 5. Los cinco cambios con más impacto
+
+1. Explicar correctamente todas las causas relevantes, sin culpar a un ETF pequeño de una carencia de comparables.
+2. Convertir Revisión de escritorio en un paso completo con contexto y salida clara.
+3. Sustituir el bloque ámbar dominante por un estado breve seguido de información útil.
+4. Asegurar que fallo o cierre anómalo de una prueba produzca un resultado inequívoco.
+5. Realizar una prueba pequeña con principiantes una vez cerrados los puntos anteriores, observando comprensión y recuperación de la cartera.
+
+Tres cosas que quitaría: la frase repetida «el detalle explica/dice…»; la palabra «pendiente» en estados sin método; el cierre forzado silencioso con código de éxito. No quitaría las advertencias sobre datos ficticios ni los límites del análisis.
+
+## 6. Encargo para Claude · Ronda 20 de cierre
+
+Mantén fondo, color, tipografía, navegación y protagonismo del creador. Revista y El Superespeculador siguen siendo secundarios. No añadas funcionalidades ni cambies la metodología numérica.
+
+### Bloque A · Causas y explicación
+
+Corrige I1 con causas coexistentes y estructuradas. Prueba los tres casos exactos de la tabla, el caso conjunto ETF/banco/dato, la plantilla actual, solo ETF y una cartera con nota. Distingue causa de cobertura y evita doble cómputo de pesos. Simplifica el aviso y cambia su encabezado según el estado. Las posiciones, los pesos y las notas calculadas deben conservarse.
+
+### Bloque B · Pruebas y cierre
+
+Corrige I2. Verifica en subprocesos: éxito real → 0; aserción fallida → no cero; error previo → no cero; recurso que obliga a forzar cierre → no cero con registro explícito. Comprueba que `run-all.sh` sigue rechazando cada fallo. Acota el escuchador de `beforeunload` y evita la aprobación con cero diálogos en el caso específico. Conserva log de la demo. Rebaja la afirmación sobre empates o aporta casos dirigidos que realmente los ejerciten.
+
+No es necesario resolver por conjetura las antiguas incidencias K/O. Si vuelven a ocurrir, registrar y diagnosticar; si no se reproducen, mantenerlo explícito. El mecanismo de cierre no cuenta como demostración de su causa.
+
+### Bloque C · Revisión visual y guía
+
+Termina I3 y M1 con una sola propuesta coherente. A 1440×900, tras Revisar, deben verse nombre o contexto, resultado, Volver y acción de guardado o estado guardado. A 320×780 y 390×780, conservar el resultado breve y Volver libres de la barra. Probar con nota, sin nota, guardado y cambios sin guardar. El regreso conserva exactamente los pesos.
+
+Añade tabulación real y una aserción de estabilización. Ajusta el guion de personas y los criterios de M86. No afirmar que se ha probado con usuarios si solo se preparó el documento.
+
+### Entrega y criterio de cierre
+
+Entregar ZIP, instrucciones únicas, antes/después corto, logs de pruebas relevantes y capturas de viewport sin desplazamiento manual preparatorio. Separar resultados propios, declarados y pendientes; indicar si hubo cierre forzado. Conservar las capturas de referencia, sin rediseñarlas.
+
+La siguiente revisión se limitará a estos tres bloques y sus regresiones. Si están resueltos, dar por cerrado este ciclo técnico/visual y pasar a la prueba de uso. No abrir otra ronda de retoques menores como sustituto de validar el producto.
+
+Fuera de alcance: Revolut/Trade Republic, pagos, suscripciones, artículos o consejos diarios personalizados, datos de mercado reales, recomendaciones de compra/venta y despliegue público. No enviar comunicaciones ni publicar como parte de este encargo.
+
+## 7. Afirmaciones que deben ajustarse
+
+| Afirmación amplia | Redacción respaldada |
+|---|---|
+| «Las tres causas están separadas» | «La plantilla principal distingue método y datos; faltan combinaciones y comparables por resolver». |
+| «No hace falta tolerar empates binarios» | «Las 4.800 salidas de la barrida se aceptan; ninguna quedó en la franja de frontera medida». |
+| «Probado con teclado» | «Probada la activación con Enter tras foco programático; falta navegación completa con Tab». |
+| «Cierre correcto» tras terminación forzada | «Aserciones terminadas; cierre anómalo registrado», con resultado de error. |
+| «Todo el registro es íntegro» | «Logs de las 39 baterías; pendiente conservar la salida íntegra separada de demotest». |
+
+## 8. Lo que no he podido comprobar
+
+No he repetido las 800 comprobaciones ni las doce ejecuciones con latencia. No he probado interacción propia en navegador, móvil físico, lector de pantalla, ampliación real al 200 %, Safari/Firefox, persistencia remota D1, correo real, datos reales, despliegue ni comprensión por cinco principiantes. Tampoco he certificado la identidad del commit desde el ZIP ni investigado toda la seguridad o privacidad de la aplicación.
+
+Mi siguiente intervención será verificar los tres bloques de cierre, no ampliar el alcance. El proyecto ya tiene una base suficientemente definida para que la siguiente evidencia importante, una vez corregidos estos puntos, venga de personas utilizándolo.

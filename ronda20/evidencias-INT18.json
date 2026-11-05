@@ -1,0 +1,146 @@
+[
+ {
+  "id": "I1a",
+  "escenario": "Contraejemplo exacto de la revisión: bloques 5,44 / 5,44 / 5,47 / 5,44 / 5,44 (suma 5,4445) con nota 5,5",
+  "esperado": "POST → 400 («no puede salir de sus bloques»): para llegar a 5,5 habría que alcanzar 5,45 y el máximo posible es 5,4495",
+  "observado": "HTTP 400: La evaluación adjunta no es válida: La nota (5.5) no puede salir de sus bloques (suma 5,4445).; fortaleza tamano, limitación deuda 1.14",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1b",
+  "escenario": "Vecinos válidos y extremos por POST",
+  "esperado": "Los compatibles se aceptan (201): 5,4 con esos bloques; 5,45 → 5,5; 5,44 → 5,4; los extremos 1 y 10",
+  "observado": "mismo bloques con nota 5,4 (compatible): 201 | bloques 5,45 con nota 5,5 (extremo inferior del intervalo): 201 | bloques 5,44 con nota 5,4: 201 | bloques 5,44/5,44/5,47/5,44/5,45 con nota 5,5 (suma 5,4465: compatible solo con 5,4): 201 | extremo 1,0: 201 | extremo 10: 201",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1c",
+  "escenario": "Vecinos inválidos",
+  "esperado": "Nota fuera del intervalo, bloques con más de dos decimales y nota de dos decimales → 400",
+  "observado": "nota 5,5 con bloques 5,44 (suma 5,44 → máximo 5,445): 400 | nota 5,3 con bloques 5,44: 400 | un bloque con tres decimales (5,443): 400 | nota con dos decimales (5,45): 400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1d",
+  "escenario": "Fila HISTÓRICA equivalente (el resumen de I1 ya guardado en la base)",
+  "esperado": "La lectura la identifica como inválida (`evaluacion_invalida`) y no entrega la cifra; las filas legítimas siguen abriéndose",
+  "observado": "invalida true; evaluacion null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1e",
+  "escenario": "Compatibilidad: toda nota que calcula el propio módulo cumple la regla exacta",
+  "esperado": "78 carteras calculadas por el módulo se aceptan con la validación estricta (no se rechaza nada legítimo)",
+  "observado": "78 probadas; todas aceptadas",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2a",
+  "escenario": "normalizarFecha: fecha sola, marca de SQLite, ISO con Z y fracción sí; sufijo, hora imposible, espacios, zona con desfase y texto no",
+  "esperado": "15 entradas",
+  "observado": "todas correctas",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2b",
+  "escenario": "Desde SQLite: el sufijo basura y la hora imposible dejan la nota pendiente; la fecha sola y las marcas admitidas conservan el 4,4",
+  "esperado": "Mercado y ejercicio: «2026-11-04basura» y «2026-11-04 25:00:00» → incompleto y la pantalla dice que la fecha no es válida; «2026-11-04», «… 10:00:00» y «…T10:00:00Z» → 4,4",
+  "observado": "mercado «2026-11-04» → sintetico/4.4; ejercicio «2026-11-04» → sintetico/4.4; mercado «2026-11-04 10:00:00» → sintetico/4.4; ejercicio «2026-11-04 10:00:00» → sintetico/4.4; mercado «2026-11-04T10:00:00Z» → sintetico/4.4; ejercicio «2026-11-04T10:00:00Z» → sintetico/4.4; mercado «2026-11-04basura» → incompleto/null; ejercicio «2026-11-04basura» → incompleto/null; mercado «2026-11-04 25:00:00» → incompleto/null; ejercicio «2026-11-04 25:00:00» → incompleto/null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2c",
+  "escenario": "La instantánea del universo no adopta una fecha con sufijo",
+  "esperado": "Con «2026-11-04basura» solo en AAPL, el universo es incompleto y la instantánea sigue siendo 2026-11-04",
+  "observado": "incompleto; 2026-11-04",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4a",
+  "escenario": "Evaluador DIRECTO con origen sintético: un comparable ajeno a la cartera (PEP) con fecha «ayer», sin fuente de mercado, o todos los de su sector sin fuente en los ejercicios",
+  "esperado": "Pendiente en los tres casos y la causa nombra al comparable; antes la verificación solo recorría las posiciones y daba 4,4",
+  "observado": "false/false/false; «Procedencia incompleta: PEP (comparable): la fecha de los datos de mercado no es una fecha válida. Sin fuente y fecha ve»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4b",
+  "escenario": "Ruta de API: un comparable ajeno con la fuente de mercado a NULL o una fecha imposible en un ejercicio",
+  "esperado": "Origen «incompleto» y nota pendiente (la API protege el conjunto de comparación)",
+  "observado": "incompleto/false; incompleto/false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4c",
+  "escenario": "Caché: el MISMO objeto `empresas` evaluado como sintético, luego como real habilitado, luego otra vez como sintético, y una copia nueva",
+  "esperado": "Sintético: 126 empresas de comparación (21 ficticias) y 4,4; real con el mismo objeto: solo las 105 reales (pendiente: 10 comparables en el sector); de nuevo sintético: otra vez 4,4; la copia nueva coincide con el real",
+  "observado": "126/4.4; 105/false; 126/4.4; copia 105/false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1a",
+  "escenario": "Vínculo histórico DISCORDANTE (historia «otra-historia» con la referencia hidrogeno-norte:1)",
+  "esperado": "La lectura lo marca inválido (par, no solo identificador) y el seguimiento NO lo trata como «responde»; el correcto sigue «responde»",
+  "observado": "discordante inválido true, estado sin/true; correcto inválido false, estado responde",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1b",
+  "escenario": "PATCH sobre un vínculo discordante",
+  "esperado": "Renombrar conserva el vínculo discordante sin fallar (200); desvincularlo expresamente lo quita (200) y conserva el texto personal",
+  "observado": "200(hidrogeno-norte:1) / 200(null, «¿Se han firmado los dos c»)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1c",
+  "escenario": "Desvincular una pregunta RESPONDIDA",
+  "esperado": "Con una revisión obsoleta → 409 y nada cambia; con la vigente → 200: se elimina la asociación editorial, el texto personal se conserva y el seguimiento pasa a «otra pregunta»",
+  "observado": "409; 200; ref null; «¿Se han firmado los »; otra",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M2a",
+  "escenario": "`limitacion.perdida` heredada (objeto JS directo) frente a propia",
+  "esperado": "La heredada se rechaza; la propia, aceptada",
+  "observado": "heredada false; propia true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M2b",
+  "escenario": "Texto visible: ancho cero fuera, escritura legítima dentro",
+  "esperado": "Se rechazan U+200B, U+2060 y U+FEFF; se aceptan el ZWJ de un emoji compuesto, el ZWNJ del persa, ñ, tildes y «»; los controles bidireccionales siguen fuera",
+  "observado": "{\"zwsp\":false,\"wj\":false,\"bom\":false,\"zwj\":true,\"zwnj\":true,\"es\":true,\"bidi\":false}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M3",
+  "escenario": "La explicación no atribuye una fecha común a todos los fundamentales",
+  "esperado": "Dice «Instantánea del 4 nov 2026; ejercicios hasta FY2024» y no «fundamentales observados el»; el detalle da la fecha de carga y la fuente de cada empresa",
+  "observado": "Instantánea del 4 nov 2026; ejercicios hasta FY2024.; KO: ejercicios hasta FY2024, cargado el 2026-11-04 (prueba).; observados false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M4",
+  "escenario": "Título del ejemplo bancario",
+  "esperado": "Se llama «Ejemplo con evaluación parcial» (límite del método), no «datos incompletos»",
+  "observado": "Ejemplo con evaluación parcial (no es tuyo)",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

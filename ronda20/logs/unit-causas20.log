@@ -1,0 +1,16 @@
+# comando: node tests/ronda20/unit-causas20.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 11:37:25 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [C1] JPM 50 % + KO 50 %, KO sin EBITDA (caso 1 de la revisión)
+OK    [C2] SCHD 1 % + AAPL 99 %, sin tocar la semilla (caso 2)
+OK    [C3] JPM 50 % + PG 50 %, JPM sin capitalización (caso 3)
+OK    [C4] Caso conjunto ETF 20 % + banco 40 % + dato ausente de KO 40 %
+OK    [C5] Plantilla mixta actual (con ETF)
+OK    [C6] Solo ETF
+OK    [C7] Cartera con nota (KO 60 % / PG 40 %)
+OK    [C8] KO 50 % + JPM 50 % (evaluación parcial con un banco)
+OK    [C9] Espera real (procedencia incompleta)
+OK    [C10] Cuatro familias a la vez (ETF 20 %, banco 30 %, KO 20 % sin EBITDA, AAPL 30 %)
+
+RESULTADO: 10 correctas, 0 fallos

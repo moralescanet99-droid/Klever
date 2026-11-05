@@ -6,9 +6,9 @@
 #            BATERIAS / UNIDAD / DEMO_TEST / DEMO_DIR / DEMO_PORT / DEMO_SERVIDOR (para probar el propio ejecutor), OMITIR_DEMO=1.
 set -uo pipefail
 cd "$(dirname "$0")/.."
-export RONDA="${RONDA:-ronda19}"; LIMITE="${LIMITE_BATERIA:-900}"
+export RONDA="${RONDA:-ronda20}"; LIMITE="${LIMITE_BATERIA:-900}"
 BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs tests/ronda16/testO.cjs tests/ronda17/testP.cjs tests/ronda18/testQ.cjs tests/ronda19/testR.cjs tests/ronda18/paridad-demo.cjs}"
-UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs tests/ronda19/unit-redondeo19.mjs tests/ronda19/unit-revision19.mjs}"
+UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs tests/ronda19/unit-redondeo19.mjs tests/ronda19/unit-revision19.mjs tests/ronda20/unit-causas20.mjs tests/ronda20/unit-cierre20.mjs}"
 PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
@@ -27,12 +27,16 @@ con_limite() {
   matar_arbol "$vig"; wait "$vig" 2>/dev/null
   SALIDA_T="$(cat "$tmp")"; if [ -f "$tmp.agotado" ]; then TIEMPO_AGOTADO=1; else TIEMPO_AGOTADO=0; fi; rm -f "$tmp" "$tmp.agotado"
 }
-evaluar() { # nombre
+guardar_log() { # nombre — registro ÍNTEGRO (también para la demo): comando, entorno, código, tiempo agotado y toda la salida
   # Registro ÍNTEGRO de cada batería (comando, entorno, código y toda su salida, incluida la de error), también cuando falla: LOGS_DIR (por defecto <ronda>/logs)
   mkdir -p "${LOGS_DIR:-$RONDA/logs}"; { echo "# comando: ${CMD_LOG:-?}"; echo "# entorno: Node $(node -v) · $(uname -sr) · $(date -u '+%Y-%m-%d %H:%M:%S UTC')"; echo "# código de salida: ${CODIGO:-?} · tiempo agotado: ${TIEMPO_AGOTADO:-0}"; echo; echo "$SALIDA_T"; } > "${LOGS_DIR:-$RONDA/logs}/$1.log"
+}
+evaluar() { # nombre
+  guardar_log "$1"
   echo "$SALIDA_T" | grep -E "^FALLA|RESULTADO|^- |Timeout" | tee -a "$SALIDA"
   [ "$TIEMPO_AGOTADO" = 1 ] && fallo "$1 superó el límite de ${LIMITE}s (proceso detenido)"
   echo "$SALIDA_T" | grep -q "RESULTADO" || fallo "$1 terminó SIN resultado"
+  echo "$SALIDA_T" | grep -q "^CIERRE FORZADO\|^CIERRE ANÓMALO" && fallo "$1: CIERRE ANÓMALO o forzado (el proceso no terminó solo; ver su registro)"
   [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "$1 salió con código $CODIGO"
   local n; n="$(echo "$SALIDA_T" | sed -n 's/.*RESULTADO: [0-9]* correctas, \([0-9]*\) fallos.*/\1/p' | tail -1)"
   [ -n "$n" ] && [ "$n" -gt 0 ] && fallo "$1 tiene $n fallos"
@@ -85,6 +89,7 @@ if [ "${OMITIR_DEMO:-0}" != 1 ]; then
       fallo "el servidor de la demo no arrancó ($(tail -1 .wrangler/demo.log 2>/dev/null))"
     else
       DEMO_URL="http://localhost:$DPORT/" con_limite "$LIMITE" node "$DTEST"
+      guardar_log demotest
       echo "$SALIDA_T" | grep -E "^FALLA|DEMO OK|HAY FALLOS" | tee -a "$SALIDA"
       [ "$TIEMPO_AGOTADO" = 1 ] && fallo "la demo superó el límite de ${LIMITE}s (proceso detenido)"
       [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "la demo salió con código $CODIGO (aunque imprimiera «DEMO OK»)"

@@ -603,7 +603,9 @@ function pasoActual(n, foco = false) {
   // El desplazamiento es INSTANTÁNEO y se calcula tras dos fotogramas (cuando el paso ya está pintado): así el resultado queda siempre en la zona útil y las capturas no dependen de una animación.
   if (foco && cambia) requestAnimationFrame(() => requestAnimationFrame(() => {
     const d = n === 3 ? $('#nota-panel') : ($('#h-pos').offsetParent ? $('#h-pos') : $('#comp'));
-    window.scrollTo({ top: n === 3 ? Math.max(0, d.getBoundingClientRect().top + scrollY - 8) : 0, behavior: 'auto' }); d.focus({ preventScroll: true });
+    // móvil: la nota va arriba del viewport. Escritorio (ronda 20): se vuelve al INICIO de la página para conservar nombre, pasos, Volver y la acción de guardado; la nota está en la parte alta de su columna (orden por CSS).
+    const escritorio = matchMedia('(min-width:900px)').matches;
+    window.scrollTo({ top: n === 3 && !escritorio ? Math.max(0, d.getBoundingClientRect().top + scrollY - 8) : 0, behavior: 'auto' }); d.focus({ preventScroll: true });
   }));
 }
 function reiniciarPaso() { paso = 2; $('#vista-cartera').dataset.paso = '2'; $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === 2) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }

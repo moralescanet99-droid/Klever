@@ -6,6 +6,8 @@ const RONDA = process.env.RONDA || 'ronda11';
 const EVDIR = path.resolve(ROOT, RONDA, 'evidencias') + path.sep;          // capturas de esta ejecución (no se versionan salvo que se indique)
 fs.mkdirSync(EVDIR, { recursive: true });
 let pass = 0, fail = 0; const fails = [];
+// Ronda 20: se anotan los navegadores lanzados para cerrarlos en `fin` (también si la batería olvidó cerrarlos) y poder señalar un cierre anómalo
+const lanzados = []; { const lanzar = chromium.launch.bind(chromium); chromium.launch = async (...a) => { const br = await lanzar(...a); lanzados.push(br); return br; }; }
 const ok = (n, c, x = '') => { c ? pass++ : (fail++, fails.push(n + (x ? ' → ' + x : ''))); console.log((c ? 'OK   ' : 'FALLA') + ' ' + n + (!c && x ? '  [' + x + ']' : '')); };
 const T = async (p, s) => ((await p.textContent(s)) || '').trim().replace(/ /g, ' ');
 let n = 0; const mail = t => `t4-${t}-${Date.now()}-${++n}@example.com`;
@@ -34,9 +36,20 @@ const revision = async p => { await p.evaluate(() => document.querySelector('.js
 const distribucion = async p => { await p.evaluate(() => document.querySelector('#paso-dist').click()); await p.waitForSelector('#vista-cartera[data-paso="2"]', { state: 'attached' }); await p.waitForTimeout(250); };
 const evid = []; // evidencias: escenario, esperado, observado (medido en la ejecución), resultado
 const ev = (id, escenario, esperado, observado, cond, evidencia) => { ok(`[${id}] ${escenario}`, cond, observado); evid.push({ id, escenario, esperado, observado, resultado: cond ? 'OK' : 'FALLA', evidencia }); };
-const fin = (nombre) => { if (TRAZA && traza.length) { fs.mkdirSync(path.resolve(ROOT, RONDA, 'trazas'), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, 'trazas', `${path.basename(process.argv[1] || 'bateria', '.cjs')}${LAT ? '-lat' + LAT : ''}.txt`), traza.join('\n') + '\n'); }
+const fin = async (nombre) => { if (TRAZA && traza.length) { fs.mkdirSync(path.resolve(ROOT, RONDA, 'trazas'), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, 'trazas', `${path.basename(process.argv[1] || 'bateria', '.cjs')}${LAT ? '-lat' + LAT : ''}.txt`), traza.join('\n') + '\n'); }
   console.log(`\nRESULTADO: ${pass} correctas, ${fail} fallos` + (fail ? '\nFALLOS:\n- ' + fails.join('\n- ') : ''));
   if (nombre && evid.length) { fs.mkdirSync(path.resolve(ROOT, RONDA), { recursive: true }); fs.writeFileSync(path.resolve(ROOT, RONDA, `${nombre}.json`), JSON.stringify(evid, null, 1)); }
-  // Ronda 19: si tras el resultado quedara algún manejador abierto (un navegador que no cierra), el proceso termina solo a los 10 s con su código y no agota el límite de la batería (ocurrió con testO: 18/0 y 900 s colgado)
-  setTimeout(() => process.exit(process.exitCode || 0), 10000).unref(); };
+  // Ronda 20: el CÓDIGO DE SALIDA refleja el resultado. Aserciones fallidas → 1; un código distinto de cero ya fijado (error previo) se conserva; los navegadores que sigan abiertos se cierran en `finally` con
+  // un plazo, y si el cierre no llega o el proceso no termina solo a los 10 s, se escribe «CIERRE FORZADO» y se sale con código 3 (nunca con éxito silencioso). «Aserciones aprobadas» ≠ «proceso cerrado bien».
+  if (fail) process.exitCode = 1;
+  try { /* resultado y evidencias ya escritos arriba */ } finally {
+    const abiertos = lanzados.filter(b => { try { return b.isConnected(); } catch { return false; } });
+    if (abiertos.length) {
+      const cierre = Promise.allSettled(abiertos.map(b => b.close())).then(() => 'cerrado'), plazo = new Promise(r => setTimeout(() => r('plazo'), 8000));
+      if (await Promise.race([cierre, plazo]) === 'plazo') { console.log(`CIERRE FORZADO: ${abiertos.length} navegador(es) no cerraron en 8 s tras el resultado (${pass} correctas, ${fail} fallos).`); process.exitCode = process.exitCode || 3; }
+      else console.log(`CIERRE ANÓMALO: ${abiertos.length} navegador(es) seguían abiertos al terminar la batería y se cerraron al final (la batería debe cerrarlos ella).`);
+      if (!fail) process.exitCode = process.exitCode || 3;
+    }
+    setTimeout(() => { console.log(`CIERRE FORZADO: el proceso no terminó solo 10 s después del resultado (${pass} correctas, ${fail} fallos).`); process.exit(process.exitCode || 3); }, 10000).unref();
+  } };
 module.exports = { chromium, B, ROOT, EVDIR, ok, ev, T, nuevo, entrar, peso, fin, mail, revision, distribucion };

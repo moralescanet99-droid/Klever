@@ -81,7 +81,7 @@ export const CARTERA_EJEMPLO = {
 // Segundo ejemplo, INCOMPLETO a propósito: enseña cómo se ve una nota que no se puede calcular y por qué (un banco no tiene deuda/EBITDA comparable).
 export const CARTERA_EJEMPLO_INCOMPLETA = {
   nombre: 'Ejemplo con evaluación parcial (no es tuyo)',
-  aviso: 'Es un ejemplo para aprender cuándo Klever dice «pendiente» y por qué (aquí, un límite del método con los bancos): no es una recomendación.',
+  aviso: 'Es un ejemplo para aprender cuándo Klever dice «evaluación parcial» y por qué (aquí, un límite del método con los bancos): no es una recomendación.',
   posiciones: [
     { ticker: 'KO', peso: 50, razon: 'Una empresa de bebidas muy conocida: de ella sí hay todos los datos que necesita la nota.' },
     { ticker: 'JPM', peso: 50, razon: 'Un banco. Los bancos no se miden con deuda neta/EBITDA ni con ROIC, así que la mitad de la cartera queda sin valorar en esos apartados.' },

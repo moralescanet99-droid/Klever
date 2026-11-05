@@ -93,6 +93,11 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
   #vista-cartera[data-paso="3"] .ws-grid{display:flex;flex-direction:column;gap:var(--s2);max-width:880px}
   #vista-cartera[data-paso="3"] .ws-main,#vista-cartera[data-paso="3"] .ws-resumen{display:contents}
 }
+/* ronda 20 · Revisión en ESCRITORIO: la página no salta a la nota; se queda arriba (nombre, pasos, acción de guardado) y en la columna derecha el resultado va PRIMERO, con «Volver a la distribución»; a su izquierda siguen las posiciones. */
+@media (min-width:900px){
+  #vista-cartera[data-paso="3"] .paso3-volver{display:block} #vista-cartera[data-paso="3"] .paso-etq{display:none}
+  #vista-cartera[data-paso="3"] .panel-nota{order:1} #vista-cartera[data-paso="3"] .panel-donut{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-pub{order:4}
+}
 .panel-pos{order:1} .panel-donut{order:2} .ws-pie{order:3}
 .panel-nota{order:3} .panel-res{order:4} .panel-pub{order:5} .panel-graf{order:6}
 @media (max-width:899px){#vista-cartera[data-paso="3"] .panel-donut{order:1} #vista-cartera[data-paso="3"] .panel-nota{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-pub{order:4} #vista-cartera[data-paso="3"] .panel-graf{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}}
@@ -175,7 +180,9 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 .nota{padding:var(--s3)}
 .nota-num{font-family:var(--serif);font-size:3rem;line-height:1;margin:var(--s1) 0;color:var(--text)} .nota-num b{font-weight:400} .nota-num span{font-size:1.1rem;color:var(--muted);font-family:var(--fuente)}
 .nota-expl{font-size:1.125rem;font-weight:600;line-height:1.4}
-.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;line-height:1.5}
+/* ronda 20: un estado sin cifra (sin método o parcial) no es una alarma: texto normal con filete; el ámbar queda para una espera real */
+.nota-pend{background:transparent;color:var(--text);border-left:3px solid var(--border-strong,var(--muted));border-radius:0;padding:2px 0 2px 12px;margin:8px 0;line-height:1.5} .nota-pend b{color:var(--text)}
+.nota-pend.espera{border-left-color:var(--warn);background:var(--warn-bg);border-radius:0 12px 12px 0;padding:10px 12px} .nota-pend.espera b{color:var(--warn)}
 .nota-aviso{color:var(--muted)}
 @media (max-width:719px){.nota-num{font-size:2.5rem}}
 

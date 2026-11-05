@@ -24,7 +24,7 @@ export async function mostrarEjemplo(inicio) {
   const EJ = ID.incompleto ? CARTERA_EJEMPLO_INCOMPLETA : CARTERA_EJEMPLO, pos = EJ.posiciones;
   const sel = (id, txt) => `<button class="btn btn-secundario ej-opc" type="button" data-ej="${id}" aria-pressed="${(id === 'incompleta') === ID.incompleto}">${txt}</button>`;
   cont.innerHTML = `<div class="pag-cab"><h1>${esc(EJ.nombre)}</h1><p class="mut">${esc(EJ.aviso)}</p><p><span class="chip sim">Ejemplo con datos ficticios</span></p></div>
-    <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · pendiente')}</div>
+    <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · evaluación parcial')}</div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <div id="ej-nota" role="region" aria-label="Nota de estructura del ejemplo" aria-live="polite"><p class="mut peq">Calculando la nota de estructura…</p></div>
     <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primer portafolio</button></p>

@@ -42,29 +42,29 @@ function preparar(universo) {
     const w = ventana(e.ej), ult = e.ej?.length ? [...e.ej].sort((a, b) => String(a.p).localeCompare(String(b.p))).at(-1) : null, o = { t, sector: e.sector, actividad: e.actividad, emisor: e.emisor, motivos: {} };
     const fin = SIN_METODOLOGIA.has(e.sector);
     // deuda neta / EBITDA del último ejercicio
-    if (fin) o.motivos.ratio = 'Sector sin metodología de deuda/EBITDA (banca y seguros).';
-    else if (!ult) o.motivos.ratio = 'Sin fundamentales.';
+    if (fin) o.motivos.ratio = M('metodo_no_aplicable', 'Sector sin metodología de deuda/EBITDA (banca y seguros).');
+    else if (!ult) o.motivos.ratio = M('dato_ausente', 'Sin fundamentales.');
     else {
       const d = ult.deuda, eb = ult.ebitda;
-      if (!esNum(d)) o.motivos.ratio = 'Falta la deuda neta del último ejercicio.';
-      else if (!esNum(eb)) o.motivos.ratio = 'Falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).';
+      if (!esNum(d)) o.motivos.ratio = M('dato_ausente', 'Falta la deuda neta del último ejercicio.');
+      else if (!esNum(eb)) o.motivos.ratio = M('dato_ausente', 'Falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).');
       else if (d <= 0 && eb > 0) o.deudaCaso = { caso: 'caja neta con EBITDA positivo', puntos: 10 };
       else if (d > 0 && eb <= 0) o.deudaCaso = { caso: 'deuda con EBITDA nulo o negativo', puntos: 1 };
       else if (d > 0 && eb > 0) o.ratio = d / eb;
-      else o.motivos.ratio = 'Deuda neta no positiva con EBITDA nulo o negativo: sin evaluar.';
+      else o.motivos.ratio = M('dato_invalido', 'Deuda neta no positiva con EBITDA nulo o negativo: sin evaluar.');
     }
     if (w) { o.fcf = w.every(x => esNum(x.fcf)) ? w.filter(x => x.fcf > 0).length : null; o.ben = w.every(x => esNum(x.ni)) ? w.filter(x => x.ni > 0).length : null;
       o.crec = w.every(x => esNum(x.ing) && x.ing > 0) ? w.slice(1).filter((x, i) => x.ing > w[i].ing).length : null; o.roicMed = !fin && w.every(x => esNum(x.roic)) ? mediana(w.map(x => x.roic)) : null; }
-    else o.motivos.ventana = `Faltan ejercicios: hacen falta ${PARAMETROS.ejercicios} consecutivos.`;
+    else o.motivos.ventana = M('dato_ausente', `Faltan ejercicios: hacen falta ${PARAMETROS.ejercicios} consecutivos.`);
     // mercado: con moneda, fuente y fecha, de la misma procedencia que el resto, y (liquidez) con las 60 sesiones acordadas
     const tieneCap = esNum(e.cap) && e.cap > 0, tieneImp = esNum(e.imp) && e.imp > 0;
     let mk = null;
-    if (!tieneCap && !tieneImp) mk = 'Faltan los datos de mercado (capitalización e importe diario negociado).';
-    else if (!e.moneda || !e.fuenteMercado || !e.fechaMercado) mk = 'Faltan la moneda, la fuente o la fecha de los datos de mercado.';
-    else if (claveMk(e) !== ref) mk = ref ? `Moneda o fuente de mercado (${e.moneda}, ${e.fuenteMercado}) distinta de la del resto del universo (${ref.replace('|', ', ')}): no son comparables.` : 'No hay una moneda y fuente de mercado de referencia común (empate o mezcla).';
+    if (!tieneCap && !tieneImp) mk = M('dato_ausente', 'Faltan los datos de mercado (capitalización e importe diario negociado).');
+    else if (!e.moneda || !e.fuenteMercado || !e.fechaMercado) mk = M('dato_ausente', 'Faltan la moneda, la fuente o la fecha de los datos de mercado.');
+    else if (claveMk(e) !== ref) mk = M('dato_invalido', ref ? `Moneda o fuente de mercado (${e.moneda}, ${e.fuenteMercado}) distinta de la del resto del universo (${ref.replace('|', ', ')}): no son comparables.` : 'No hay una moneda y fuente de mercado de referencia común (empate o mezcla).');
     o.cap = !mk && tieneCap ? e.cap : null; o.imp = !mk && tieneImp && esNum(e.sesiones) && e.sesiones >= PARAMETROS.sesiones ? e.imp : null;
-    if (!o.cap) o.motivos.cap = mk || 'Falta la capitalización.';
-    if (!o.imp) o.motivos.liq = mk || (!tieneImp ? 'Falta el importe diario negociado.' : !esNum(e.sesiones) ? 'No consta el número de sesiones de negociación.' : `Solo hay ${e.sesiones} sesiones de negociación (hacen falta ${PARAMETROS.sesiones}).`);
+    if (!o.cap) o.motivos.cap = mk || M('dato_ausente', 'Falta la capitalización.');
+    if (!o.imp) o.motivos.liq = mk || M('dato_ausente', !tieneImp ? 'Falta el importe diario negociado.' : !esNum(e.sesiones) ? 'No consta el número de sesiones de negociación.' : `Solo hay ${e.sesiones} sesiones de negociación (hacen falta ${PARAMETROS.sesiones}).`);
     E[t] = o;
   }
   const porSector = {}; for (const o of Object.values(E)) { (porSector[o.sector] ||= { ratios: [], roics: [] }); if (o.ratio != null) porSector[o.sector].ratios.push(o.ratio); if (o.roicMed != null) porSector[o.sector].roics.push(o.roicMed); }
@@ -93,6 +93,9 @@ function problemasProcedencia(pos, universo) {
     if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${t}${ajena}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${t}${ajena}: la fecha de los datos de mercado no es una fecha válida`); } }
   return out;
 }
+// Ronda 20: cada motivo de «peso sin evaluar» lleva un CÓDIGO estable (no se deduce del texto): metodo_no_aplicable (el instrumento no tiene método: ETF, bancos), dato_ausente (falta el dato),
+// dato_invalido (el dato existe pero no es utilizable o no es comparable) y comparables_insuficientes (la población de comparación es demasiado pequeña). Varios coexisten en una misma posición.
+const M = (c, t) => ({ c, t });
 const MOTIVO_ORIGEN = {
   incompleto: 'Hay filas sin fuente o con una fecha que no es válida: sin procedencia verificable la nota no se calcula.',
   mixto: 'El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero.',
@@ -113,46 +116,46 @@ export function evaluar(cartera, universo) {
   res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => { const ej = [...universo.empresas[p.ticker].ej].sort((a, b) => String(a.p).localeCompare(String(b.p))), u = ej.at(-1); return { ticker: p.ticker, hasta: u.p, carga: normalizarFecha(u.d), fuente: u.f ?? null }; });
   { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
-  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: universo.empresas[x.t] ? 'sin_metodo' : 'datos', motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
+  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'], causas: [universo.empresas[x.t] ? { codigo: 'metodo_no_aplicable', texto: 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' } : { codigo: 'dato_ausente', texto: 'No está en el universo evaluado.' }] });
   const bloques = {};
   const cierre = (id, evaluables, puntuarEmpresa, extra = {}) => {            // evaluables: [{t, w}] con puntuación por empresa; pondera por peso normalizado
     const E = evaluables.reduce((s, x) => s + x.w, 0), cob = E / tot;
     bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: cob, disponible: E >= PARAMETROS.minCobertura * tot, puntuacion: null, ...extra };
     return E;
   };
-  const causaDe = m => /banca y seguros|sin metodolog/i.test(m) ? 'sin_metodo' : 'datos';
-  const motivoSin = (x, m) => { const e = res.sinEvaluar.find(s => s.ticker === x.t); if (e) { if (!e.motivos.includes(m)) e.motivos.push(m); if (e.causa === 'datos' && causaDe(m) === 'sin_metodo') e.causa = 'sin_metodo'; } else res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: causaDe(m), motivos: [m] }); };
+  const motivoSin = (x, m, bloque, indicador) => { let e = res.sinEvaluar.find(q => q.ticker === x.t); if (!e) { e = { ticker: x.t, peso: x.w / 10, motivos: [], causas: [] }; res.sinEvaluar.push(e); }
+    if (!e.motivos.includes(m.t)) e.motivos.push(m.t); if (!e.causas.some(c => c.codigo === m.c && c.bloque === bloque && c.indicador === indicador)) e.causas.push({ codigo: m.c, bloque, indicador, texto: m.t }); };
   // ---- Empresas: número efectivo N = 1 / Σ (peso)²; las clases de una misma compañía cuentan UNA vez
-  { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, 'Sin emisor identificado.'));
+  { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, M('dato_ausente', 'Sin emisor identificado.'), 'empresas'));
     const E = cierre('empresas', ev); const g = {}; ev.forEach(x => { g[x.o.emisor] = (g[x.o.emisor] || 0) + x.w; });
     const N = E ? 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0) : null;
     Object.assign(bloques.empresas, { efectivas: N, puntuacion: N == null ? null : escala(N, PARAMETROS.maxEmpresasEfectivas), detalle: N == null ? '' : `${N.toFixed(2).replace('.', ',')} empresas efectivas (máximo útil: ${PARAMETROS.maxEmpresasEfectivas}).` }); }
   // ---- Sectores y actividades: mitad sector, mitad actividad (misma fórmula; máximos 6 y 10 efectivos)
-  { const ev = empresas.filter(x => x.o && x.o.sector && x.o.actividad); empresas.filter(x => x.o && !(x.o.sector && x.o.actividad)).forEach(x => motivoSin(x, 'Sin sector o actividad.'));
+  { const ev = empresas.filter(x => x.o && x.o.sector && x.o.actividad); empresas.filter(x => x.o && !(x.o.sector && x.o.actividad)).forEach(x => motivoSin(x, M('dato_ausente', 'Sin sector o actividad.'), 'sectores'));
     const E = cierre('sectores', ev); const n = k => { const g = {}; ev.forEach(x => { g[x.o[k]] = (g[x.o[k]] || 0) + x.w; }); return 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0); };
     if (E) { const Ns = n('sector'), Na = n('actividad'); Object.assign(bloques.sectores, { efectivosSector: Ns, efectivasActividad: Na, puntuacion: (escala(Ns, PARAMETROS.maxSectoresEfectivos) + escala(Na, PARAMETROS.maxActividadesEfectivas)) / 2, detalle: `${Ns.toFixed(2).replace('.', ',')} sectores y ${Na.toFixed(2).replace('.', ',')} actividades efectivas.` }); } }
   // ---- Tamaño y liquidez, deuda y caja, rentabilidad y crecimiento: cada INDICADOR tiene su propia cobertura (≥ 90 % del peso); el bloque se publica si los tiene todos.
   //      Faltan datos en posiciones DISTINTAS para indicadores distintos sin que el bloque se caiga mientras cada indicador conserve su 90 %.
   const bloqueInd = (id, defs) => {
-    const inds = defs.map(d => { const ev = []; for (const x of empresas.filter(y => y.o)) { const r = d.fn(x.o); if (r.s == null) motivoSin(x, r.m); else ev.push({ w: x.w, s: r.s }); }
+    const inds = defs.map(d => { const ev = []; for (const x of empresas.filter(y => y.o)) { const r = d.fn(x.o); if (r.s == null) motivoSin(x, r.m, id, d.id); else ev.push({ w: x.w, s: r.s }); }
       const E = ev.reduce((s, y) => s + y.w, 0); return { id: d.id, nombre: d.nombre, peso: d.peso, cobertura: E / tot, disponible: E >= PARAMETROS.minCobertura * tot, media: E ? ev.reduce((s, y) => s + y.w * y.s, 0) / E : null }; });
     const disp = inds.every(i => i.disponible);
     bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: Math.min(...inds.map(i => i.cobertura)), disponible: disp, indicadores: inds.map(i => ({ id: i.id, nombre: i.nombre, cobertura: i.cobertura, disponible: i.disponible })),
       puntuacion: disp ? inds.reduce((s, i) => s + i.peso * i.media, 0) : null };
   };
   const D = P.porSector;
-  const sinComparables = (n, que) => ({ s: null, m: `Solo hay ${n} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de ${que}.` });
+  const sinComparables = (n, que) => ({ s: null, m: M('comparables_insuficientes', `Solo hay ${n} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de ${que}.`) });
   bloqueInd('tamano', [
-    { id: 'cap', nombre: 'capitalización', peso: 1 / 3, fn: o => o.cap && P.caps.length > 1 ? { s: percentilAPuntos(percentil(o.cap, P.caps)) } : { s: null, m: o.motivos.cap || 'No hay otras capitalizaciones comparables.' } },
-    { id: 'liq', nombre: 'liquidez (importe diario)', peso: 2 / 3, fn: o => o.imp && P.imps.length > 1 ? { s: percentilAPuntos(percentil(o.imp, P.imps)) } : { s: null, m: o.motivos.liq || 'No hay otros importes diarios comparables.' } }]);
+    { id: 'cap', nombre: 'capitalización', peso: 1 / 3, fn: o => o.cap && P.caps.length > 1 ? { s: percentilAPuntos(percentil(o.cap, P.caps)) } : { s: null, m: o.motivos.cap || M('comparables_insuficientes', 'No hay otras capitalizaciones comparables.') } },
+    { id: 'liq', nombre: 'liquidez (importe diario)', peso: 2 / 3, fn: o => o.imp && P.imps.length > 1 ? { s: percentilAPuntos(percentil(o.imp, P.imps)) } : { s: null, m: o.motivos.liq || M('comparables_insuficientes', 'No hay otros importes diarios comparables.') } }]);
   bloqueInd('deuda', [
     { id: 'ratio', nombre: 'deuda neta / EBITDA', peso: 0.5, fn: o => { if (o.motivos.ratio) return { s: null, m: o.motivos.ratio }; if (o.deudaCaso) return { s: o.deudaCaso.puntos }; const l = D[o.sector].ratios; return l.length < PARAMETROS.minComparables ? sinComparables(l.length, 'deuda') : { s: percentilAPuntos(100 - percentil(o.ratio, l)) }; } },
-    { id: 'fcf', nombre: 'caja libre de los cinco ejercicios', peso: 0.5, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de deuda/EBITDA (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.fcf == null ? { s: null, m: 'Falta algún dato de caja libre en los cinco ejercicios.' } : { s: frecuencia(o.fcf, PARAMETROS.ejercicios) } }]);
+    { id: 'fcf', nombre: 'caja libre de los cinco ejercicios', peso: 0.5, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de deuda/EBITDA (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.fcf == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de caja libre en los cinco ejercicios.') } : { s: frecuencia(o.fcf, PARAMETROS.ejercicios) } }]);
   bloqueInd('rentabilidad', [
-    { id: 'roic', nombre: 'ROIC', peso: 0.5, fn: o => { if (SIN_METODOLOGIA.has(o.sector)) return { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' }; if (o.motivos.ventana) return { s: null, m: o.motivos.ventana }; if (o.roicMed == null) return { s: null, m: 'Falta algún ROIC en los cinco ejercicios.' };
+    { id: 'roic', nombre: 'ROIC', peso: 0.5, fn: o => { if (SIN_METODOLOGIA.has(o.sector)) return { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') }; if (o.motivos.ventana) return { s: null, m: o.motivos.ventana }; if (o.roicMed == null) return { s: null, m: M('dato_ausente', 'Falta algún ROIC en los cinco ejercicios.') };
       const l = D[o.sector].roics; return l.length < PARAMETROS.minComparables ? sinComparables(l.length, 'ROIC') : { s: percentilAPuntos(percentil(o.roicMed, l)) }; } },
-    { id: 'ben', nombre: 'años con beneficio', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.ben == null ? { s: null, m: 'Falta algún dato de beneficio en los cinco ejercicios.' } : { s: frecuencia(o.ben, PARAMETROS.ejercicios) } },
-    { id: 'crec', nombre: 'años con ventas al alza', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.crec == null ? { s: null, m: 'Falta algún dato de ventas en los cinco ejercicios.' } : { s: frecuencia(o.crec, PARAMETROS.ejercicios - 1) } }]);
+    { id: 'ben', nombre: 'años con beneficio', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.ben == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de beneficio en los cinco ejercicios.') } : { s: frecuencia(o.ben, PARAMETROS.ejercicios) } },
+    { id: 'crec', nombre: 'años con ventas al alza', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.crec == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de ventas en los cinco ejercicios.') } : { s: frecuencia(o.crec, PARAMETROS.ejercicios - 1) } }]);
   res.bloques = bloques;
   const lista = Object.values(bloques), faltan = lista.filter(b => !b.disponible || b.puntuacion == null);
   res.cobertura = { minima: Math.min(...lista.map(b => b.cobertura)), umbral: PARAMETROS.minCobertura };
