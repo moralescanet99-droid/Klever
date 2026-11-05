@@ -1,5 +1,5 @@
-Ejecución: 2026-11-05 00:12 UTC
-Código: commit 6385a17845189f64ff786ede82d2004aefe6cfda; árbol de trabajo limpio
+Ejecución: 2026-11-05 00:33 UTC
+Código: commit 4359bbfb2e223183699d6fc16a2b7cd2a0cc52b3; árbol de trabajo limpio
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -33,64 +33,3 @@ RESULTADO: 20 correctas, 0 fallos
 === unit-integridad18 ===
 RESULTADO: 18 correctas, 0 fallos
 === test-zip ===
-RESULTADO: 8 correctas, 0 fallos
-=== testA ===
-RESULTADO: 31 correctas, 0 fallos
-=== testB ===
-FALLA orden 390px, paso 3: resultado → anillo → resumen detallado → gráficos → publicación, sin las posiciones  [495 < 373 < 1151 < 2928 < 2356]
-FALLA orden 768px, paso 3: resultado → anillo → resumen detallado → gráficos → publicación, sin las posiciones  [393 < 283 < 840 < 2297 < 1893]
-RESULTADO: 51 correctas, 2 fallos
-- orden 390px, paso 3: resultado → anillo → resumen detallado → gráficos → publicación, sin las posiciones → 495 < 373 < 1151 < 2928 < 2356
-- orden 768px, paso 3: resultado → anillo → resumen detallado → gráficos → publicación, sin las posiciones → 393 < 283 < 840 < 2297 < 1893
-FALLA (ejecutor): testB tiene 2 fallos
-=== testC ===
-RESULTADO: 50 correctas, 0 fallos
-=== testD ===
-RESULTADO: 29 correctas, 0 fallos
-=== testE ===
-RESULTADO: 15 correctas, 0 fallos
-=== testF ===
-RESULTADO: 9 correctas, 0 fallos
-=== testG ===
-RESULTADO: 3 correctas, 0 fallos
-=== verificar-api ===
-RESULTADO: 8 correctas, 0 fallos
-=== testH ===
-page.fill: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testH terminó SIN resultado
-FALLA (ejecutor): testH salió con código 1
-=== testI ===
-RESULTADO: 16 correctas, 0 fallos
-=== testJ ===
-RESULTADO: 53 correctas, 0 fallos
-=== testK ===
-locator.click: Timeout 30000ms exceeded.
-  name: 'TimeoutError'
-FALLA (ejecutor): testK terminó SIN resultado
-FALLA (ejecutor): testK salió con código 1
-=== testL ===
-RESULTADO: 28 correctas, 0 fallos
-=== testM ===
-RESULTADO: 7 correctas, 0 fallos
-=== testN ===
-RESULTADO: 41 correctas, 0 fallos
-=== testO ===
-OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
-OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
-RESULTADO: 18 correctas, 0 fallos
-=== testP ===
-RESULTADO: 28 correctas, 0 fallos
-=== testQ ===
-RESULTADO: 25 correctas, 0 fallos
-=== paridad-demo ===
-FALLA [PD2] evaluar(): la demo y el módulo con las mismas cinco carteras sobre el mismo universo  [5 carteras; KO+PG demo 4.9 / módulo 4.9]
-RESULTADO: 4 correctas, 1 fallos
-- [PD2] evaluar(): la demo y el módulo con las mismas cinco carteras sobre el mismo universo → 5 carteras; KO+PG demo 4.9 / módulo 4.9
-FALLA (ejecutor): paridad-demo tiene 1 fallos
-=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
-RESULTADO: 6 correctas, 0 fallos
-=== demo (demotest) ===
-FALLA (ejecutor): la demo salió con código 1 (aunque imprimiera «DEMO OK»)
-FALLA (ejecutor): la demo no terminó en «DEMO OK»
-RESUMEN: 8 problema(s) en la ejecución. Código de salida 1.
