@@ -1,0 +1,43 @@
+Ejecución: 2026-11-05 16:09 UTC
+Código: commit 0e9bc0ae1055582172a0d231b02897e6752d3e02; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-carreras ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-migracion ===
+RESULTADO: 15 correctas, 0 fallos
+=== unit-acceso ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-calculos ===
+RESULTADO: 23 correctas, 0 fallos
+=== unit-r13 ===
+RESULTADO: 30 correctas, 0 fallos
+=== unit-carga ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-r14 ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-nota ===
+RESULTADO: 35 correctas, 0 fallos
+=== unit-comparador ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-almacen ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-escenarios16 ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-procedencia17 ===
+RESULTADO: 13 correctas, 0 fallos
+=== unit-guardada17 ===
+RESULTADO: 20 correctas, 0 fallos
+=== unit-integridad18 ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-redondeo19 ===
+RESULTADO: 6 correctas, 0 fallos
+=== unit-revision19 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-causas20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cierre20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-registro21 ===
