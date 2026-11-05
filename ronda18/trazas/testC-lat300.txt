@@ -1,0 +1,334 @@
+163 NAV http://localhost:8788/
+638 200 GET /api/assets
+653 NAV http://localhost:8788/#cartera
+707 200 GET /api/ideas
+979 200 GET /api/universo
+995 200 GET /api/public
+996 200 GET /api/datos
+1140 NAV http://localhost:8788/#cartera
+1560 200 GET /api/assets
+1583 200 GET /api/ideas
+1892 200 GET /api/universo
+1903 200 GET /api/public
+1903 200 GET /api/datos
+2512 200 POST /api/login
+2616 NAV http://localhost:8788/?login=e8798b263279c43e76688fa596086bb0f90a554a74089a077278649ef6340cc8
+2759 NAV http://localhost:8788/
+2778 200 POST /api/verify
+3093 200 GET /api/assets
+3431 200 GET /api/universo
+3439 200 GET /api/public
+3439 200 GET /api/datos
+3442 200 GET /api/portfolios
+3758 200 GET /api/radar
+3770 200 GET /api/ideas
+4075 200 GET /api/portfolios
+4676 NAV http://localhost:8788/?login=e8798b263279c43e76688fa596086bb0f90a554a74089a077278649ef6340cc8
+4799 NAV http://localhost:8788/
+4809 400 POST /api/verify
+5130 200 GET /api/assets
+5152 200 GET /api/ideas
+5462 200 GET /api/public
+5470 200 GET /api/universo
+5471 200 GET /api/datos
+5729 200 POST /api/login
+5775 NAV http://localhost:8788/?login=9eb98ffc024a72993b03048f175db3953828228e2295449b3a72f58bbe5aa0ef
+5881 NAV http://localhost:8788/
+5905 200 POST /api/verify
+6216 200 GET /api/assets
+6537 200 GET /api/universo
+6545 200 GET /api/public
+6547 200 GET /api/datos
+6548 200 GET /api/portfolios
+6860 200 GET /api/radar
+6874 200 GET /api/ideas
+6884 201 POST /api/portfolios
+6885 NAV http://localhost:8788/#cartera-4
+7199 200 GET /api/portfolios/4
+7207 200 GET /api/portfolios/4
+7859 200 PUT /api/portfolios/4
+7872 NAV http://localhost:8788/#carteras
+8186 200 GET /api/portfolios
+8716 NAV http://localhost:8788/#cartera-4
+8909 NAV http://localhost:8788/#cartera-4
+9335 200 GET /api/assets
+9664 200 GET /api/universo
+9676 200 GET /api/public
+9676 200 GET /api/datos
+9677 200 GET /api/portfolios
+9994 200 GET /api/radar
+10004 200 GET /api/ideas
+10312 200 GET /api/portfolios/4
+11161 200 GET /api/portfolios/4
+11636 200 PUT /api/portfolios/4
+11654 200 PATCH /api/portfolios/4
+11669 NAV http://localhost:8788/#publicas
+11972 200 GET /api/public
+12343 200 GET /api/public/4
+12850 NAV http://localhost:8788/#cartera-4
+12928 200 PATCH /api/portfolios/4
+12947 NAV http://localhost:8788/#publicas
+13016 NAV http://localhost:8788/
+13471 200 GET /api/assets
+13486 NAV http://localhost:8788/#cartera
+13535 200 GET /api/ideas
+13812 200 GET /api/universo
+13815 200 GET /api/public
+13815 200 GET /api/datos
+13824 200 POST /api/login
+13857 NAV http://localhost:8788/?login=065cee5f3c38eb36cab52dab4d87de4e65a9a6d274a8006c9216330e651675b8
+13955 NAV http://localhost:8788/
+13974 200 POST /api/verify
+14286 200 GET /api/assets
+14619 200 GET /api/universo
+14642 200 GET /api/public
+14642 200 GET /api/datos
+14644 200 GET /api/portfolios
+14961 200 GET /api/radar
+14967 NAV http://localhost:8788/#cartera
+14988 200 GET /api/ideas
+16076 201 POST /api/portfolios
+16078 NAV http://localhost:8788/#cartera-5
+16091 NAV http://localhost:8788/#carteras
+16109 NAV http://localhost:8788/#carteras
+16558 200 GET /api/assets
+16880 200 GET /api/universo
+16887 200 GET /api/public
+16887 200 GET /api/datos
+16895 200 GET /api/radar
+16907 200 GET /api/ideas
+17412 200 GET /api/portfolios
+17904 NAV http://localhost:8788/#cartera-
+17906 NAV http://localhost:8788/#carteras
+18222 200 GET /api/portfolios
+18222 200 GET /api/portfolios
+18732 NAV http://localhost:8788/#cartera-5
+19057 200 GET /api/portfolios/5
+20034 NAV http://localhost:8788/
+20180 NAV http://localhost:8788/#empresas
+20451 200 GET /api/assets
+20473 200 GET /api/ideas
+20781 200 GET /api/universo
+20785 200 GET /api/public
+20788 200 GET /api/datos
+21314 200 GET /api/assets/AMGN
+21330 NAV http://localhost:8788/#empresas
+21816 NAV http://localhost:8788/#empresas
+22221 NAV http://localhost:8788/#publicas
+22573 200 GET /api/public/3
+23078 NAV http://localhost:8788/
+23475 200 GET /api/assets
+23479 NAV http://localhost:8788/#cartera
+23512 200 GET /api/ideas
+23797 200 GET /api/universo
+23805 200 GET /api/public
+23805 200 GET /api/datos
+23927 NAV http://localhost:8788/
+24105 NAV http://localhost:8788/#empresas
+24379 200 GET /api/assets
+24405 200 GET /api/ideas
+24714 200 GET /api/universo
+24720 200 GET /api/public
+24721 200 GET /api/datos
+25245 200 GET /api/assets/AMGN
+25261 NAV http://localhost:8788/#empresas
+25749 NAV http://localhost:8788/#empresas
+26152 NAV http://localhost:8788/#publicas
+26508 200 GET /api/public/3
+27011 NAV http://localhost:8788/
+27426 200 GET /api/assets
+27430 NAV http://localhost:8788/#cartera
+27464 200 GET /api/ideas
+27744 200 GET /api/universo
+27750 200 GET /api/public
+27750 200 GET /api/datos
+27862 NAV http://localhost:8788/
+28001 NAV http://localhost:8788/#empresas
+28274 200 GET /api/assets
+28296 200 GET /api/ideas
+28603 200 GET /api/universo
+28609 200 GET /api/public
+28609 200 GET /api/datos
+29147 200 GET /api/assets/AMGN
+29164 NAV http://localhost:8788/#empresas
+29646 NAV http://localhost:8788/#empresas
+30050 NAV http://localhost:8788/#publicas
+30407 200 GET /api/public/3
+30912 NAV http://localhost:8788/
+31304 200 GET /api/assets
+31307 NAV http://localhost:8788/#cartera
+31344 200 GET /api/ideas
+31627 200 GET /api/universo
+31634 200 GET /api/public
+31634 200 GET /api/datos
+31754 NAV http://localhost:8788/
+31943 NAV http://localhost:8788/#empresas
+32200 200 GET /api/assets
+32231 200 GET /api/ideas
+32535 200 GET /api/universo
+32542 200 GET /api/public
+32543 200 GET /api/datos
+33079 200 GET /api/assets/AMGN
+33096 NAV http://localhost:8788/#empresas
+33584 NAV http://localhost:8788/#empresas
+33987 NAV http://localhost:8788/#publicas
+34340 200 GET /api/public/3
+34856 NAV http://localhost:8788/
+35258 200 GET /api/assets
+35261 NAV http://localhost:8788/#cartera
+35295 200 GET /api/ideas
+35580 200 GET /api/universo
+35587 200 GET /api/public
+35588 200 GET /api/datos
+35711 NAV http://localhost:8788/
+35856 NAV http://localhost:8788/#empresas
+36119 200 GET /api/assets
+36145 200 GET /api/ideas
+36456 200 GET /api/universo
+36465 200 GET /api/public
+36466 200 GET /api/datos
+36994 200 GET /api/assets/AMGN
+37008 NAV http://localhost:8788/#empresas
+37496 NAV http://localhost:8788/#empresas
+37900 NAV http://localhost:8788/#publicas
+38255 200 GET /api/public/3
+38765 NAV http://localhost:8788/
+39184 200 GET /api/assets
+39187 NAV http://localhost:8788/#cartera
+39224 200 GET /api/ideas
+39507 200 GET /api/universo
+39517 200 GET /api/public
+39518 200 GET /api/datos
+39652 NAV http://localhost:8788/
+39790 NAV http://localhost:8788/#empresas
+40057 200 GET /api/assets
+40081 200 GET /api/ideas
+40393 200 GET /api/universo
+40398 200 GET /api/public
+40399 200 GET /api/datos
+40927 200 GET /api/assets/AMGN
+40942 NAV http://localhost:8788/#empresas
+41427 NAV http://localhost:8788/#empresas
+41830 NAV http://localhost:8788/#publicas
+42188 200 GET /api/public/3
+42693 NAV http://localhost:8788/
+43111 200 GET /api/assets
+43116 NAV http://localhost:8788/#cartera
+43155 200 GET /api/ideas
+43436 200 GET /api/universo
+43444 200 GET /api/public
+43445 200 GET /api/datos
+43578 NAV http://localhost:8788/
+43716 NAV http://localhost:8788/#empresas
+43990 200 GET /api/assets
+44020 200 GET /api/ideas
+44327 200 GET /api/universo
+44333 200 GET /api/public
+44333 200 GET /api/datos
+44862 200 GET /api/assets/AMGN
+44877 NAV http://localhost:8788/#empresas
+45362 NAV http://localhost:8788/#empresas
+45765 NAV http://localhost:8788/#publicas
+46122 200 GET /api/public/3
+46627 NAV http://localhost:8788/
+47012 200 GET /api/assets
+47017 NAV http://localhost:8788/#cartera
+47050 200 GET /api/ideas
+47333 200 GET /api/universo
+47340 200 GET /api/public
+47340 200 GET /api/datos
+47478 NAV http://localhost:8788/
+47647 NAV http://localhost:8788/#empresas
+47921 200 GET /api/assets
+47946 200 GET /api/ideas
+48253 200 GET /api/universo
+48259 200 GET /api/public
+48259 200 GET /api/datos
+48795 200 GET /api/assets/AMGN
+48813 NAV http://localhost:8788/#empresas
+49304 NAV http://localhost:8788/#empresas
+49708 NAV http://localhost:8788/#publicas
+50056 200 GET /api/public/3
+50567 NAV http://localhost:8788/
+50973 200 GET /api/assets
+50977 NAV http://localhost:8788/#cartera
+51017 200 GET /api/ideas
+51307 200 GET /api/universo
+51314 200 GET /api/public
+51314 200 GET /api/datos
+51432 NAV http://localhost:8788/
+51573 NAV http://localhost:8788/#empresas
+51844 200 GET /api/assets
+51868 200 GET /api/ideas
+52177 200 GET /api/universo
+52185 200 GET /api/public
+52185 200 GET /api/datos
+52712 200 GET /api/assets/AMGN
+52728 NAV http://localhost:8788/#empresas
+53212 NAV http://localhost:8788/#empresas
+53616 NAV http://localhost:8788/#publicas
+53975 200 GET /api/public/3
+54485 NAV http://localhost:8788/
+54870 200 GET /api/assets
+54873 NAV http://localhost:8788/#cartera
+54904 200 GET /api/ideas
+55190 200 GET /api/universo
+55197 200 GET /api/public
+55198 200 GET /api/datos
+55306 NAV http://localhost:8788/
+55444 NAV http://localhost:8788/#empresas
+55711 200 GET /api/assets
+55735 200 GET /api/ideas
+56043 200 GET /api/universo
+56051 200 GET /api/public
+56051 200 GET /api/datos
+56578 200 GET /api/assets/AMGN
+56594 NAV http://localhost:8788/#empresas
+57082 NAV http://localhost:8788/#empresas
+57485 NAV http://localhost:8788/#publicas
+57841 200 GET /api/public/3
+58348 NAV http://localhost:8788/
+58751 200 GET /api/assets
+58755 NAV http://localhost:8788/#cartera
+58795 200 GET /api/ideas
+59070 200 GET /api/universo
+59077 200 GET /api/public
+59077 200 GET /api/datos
+59200 NAV http://localhost:8788/
+59329 NAV http://localhost:8788/#empresas
+59603 200 GET /api/assets
+59631 200 GET /api/ideas
+59941 200 GET /api/universo
+59947 200 GET /api/public
+59948 200 GET /api/datos
+60476 200 GET /api/assets/AMGN
+60491 NAV http://localhost:8788/#empresas
+60977 NAV http://localhost:8788/#empresas
+61380 NAV http://localhost:8788/#publicas
+61738 200 GET /api/public/3
+62250 NAV http://localhost:8788/
+62639 200 GET /api/assets
+62642 NAV http://localhost:8788/#cartera
+62679 200 GET /api/ideas
+62958 200 GET /api/universo
+62966 200 GET /api/public
+62966 200 GET /api/datos
+63081 NAV http://localhost:8788/
+63226 NAV http://localhost:8788/#empresas
+63495 200 GET /api/assets
+63522 200 GET /api/ideas
+63829 200 GET /api/universo
+63835 200 GET /api/public
+63835 200 GET /api/datos
+64358 200 GET /api/assets/AMGN
+64372 NAV http://localhost:8788/#empresas
+64858 NAV http://localhost:8788/#empresas
+65261 NAV http://localhost:8788/#publicas
+65621 200 GET /api/public/3
+66127 NAV http://localhost:8788/
+66523 200 GET /api/assets
+66526 NAV http://localhost:8788/#cartera
+66567 200 GET /api/ideas
+66845 200 GET /api/universo
+66853 200 GET /api/public
+66853 200 GET /api/datos

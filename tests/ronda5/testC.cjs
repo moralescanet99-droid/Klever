@@ -58,13 +58,14 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin, mail } = require('./h.cjs'
 
   // ===== 6. publicar y etiqueta de origen =====
   await p.evaluate(() => { document.querySelector('#det-pub').open = true; }); await p.fill('#tesis', 'Mi reparto de dividendos.'); await p.waitForTimeout(200); await p.click('#publicar'); await p.waitForFunction(() => document.querySelector('#chip').textContent === 'Pública');
-  await p.goto(B + '#publicas'); await p.waitForSelector('#publicas-lista .tarjeta');
+  const listaP = () => p.waitForResponse(r => /\/api\/public$/.test(r.url()) && r.request().method() === 'GET');   // se espera a la respuesta REAL de la lista (con la red lenta, las tarjetas de ejemplo salen antes)
+  { const r0 = listaP(); await p.goto(B + '#publicas'); await r0; await p.waitForSelector('#publicas-lista .tarjeta'); await p.waitForTimeout(200); }
   const chips = await p.locator('#publicas-lista .chip.origen').allTextContents(); ok('públicas: ejemplos de Klever y publicaciones de usuarios con etiquetas veraces', chips.includes('Ejemplo de Klever') && chips.includes('Publicada por un usuario'), chips.join('|'));
   ok('públicas: los ejemplos de Klever van primero', chips[0] === 'Ejemplo de Klever');
   await p.locator('#publicas-lista .tarjeta', { hasText: 'Publicada por un usuario' }).click(); await p.waitForSelector('#publica-detalle:not([hidden])');
   ok('detalle público: sin email ni rentabilidad', !/@|rentabilidad obtenida/i.test(await T(p, '#publica-detalle')) && (await T(p, '#publica-detalle')).includes('Mi reparto de dividendos.'));
   await p.goto(B + '#cartera-' + id); await p.waitForSelector('#pos-tabla tbody tr'); await p.evaluate(() => { document.querySelector('#det-pub').open = true; }); await p.click('#publicar'); await p.waitForFunction(() => document.querySelector('#chip').textContent === 'Privada');
-  ok('despublicar: Privada y fuera de «Carteras públicas»', true); await p.goto(B + '#publicas'); await p.waitForSelector('#publicas-lista .tarjeta'); ok('ya no aparece como publicación de usuario', !(await p.locator('#publicas-lista .chip.origen', { hasText: 'Publicada por un usuario' }).count()));
+  ok('despublicar: Privada y fuera de «Carteras públicas»', true); { const r1 = listaP(); await p.goto(B + '#publicas'); await r1; await p.waitForSelector('#publicas-lista .tarjeta'); await p.waitForTimeout(200); } ok('ya no aparece como publicación de usuario', !(await p.locator('#publicas-lista .chip.origen', { hasText: 'Publicada por un usuario' }).count()));
   await p.ctx.close();
 
   // ===== 7. borrador inválido + entrar desde el botón «Entrar» =====

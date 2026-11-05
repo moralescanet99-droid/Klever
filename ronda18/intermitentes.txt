@@ -1,0 +1,28 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 01:20:38Z · 21 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 01:21:06Z · 22 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 01:22:02Z · 49 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 01:22:57Z · 49 s · código 0
+RESULTADO: 15 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 01:23:24Z · 21 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 01:23:51Z · 21 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 01:24:47Z · 50 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 01:25:43Z · 50 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 01:26:17Z · 28 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 01:26:50Z · 27 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 01:28:04Z · 67 s · código 0
+FALLA públicas: ejemplos de Klever y publicaciones de usuarios con etiquetas veraces  [Ejemplo de Klever|Ejemplo de Klever|Ejemplo de Klever]
+FALLA ya no aparece como publicación de usuario
+RESULTADO: 48 correctas, 2 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 01:29:18Z · 67 s · código 0
+FALLA públicas: ejemplos de Klever y publicaciones de usuarios con etiquetas veraces  [Ejemplo de Klever|Ejemplo de Klever|Ejemplo de Klever]
+FALLA ya no aparece como publicación de usuario
+RESULTADO: 48 correctas, 2 fallos
