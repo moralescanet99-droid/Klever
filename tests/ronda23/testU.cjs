@@ -41,7 +41,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     // ---- U2. REINTENTO lento y edición durante la espera (misma clave y contenido)
     const E2 = (await crea('u-reint-' + w + '-bbb', { revisar_en: '2026-01-01' })).j; await preparaRuta(E2.id); await abrirFicha(p, E2.id);
     await p.fill('#rev-obs', 'Texto A2 (el intento)'); posts.length = 0; modo = 'perder'; await p.click('#rev-btn'); await p.waitForSelector('#rev-estado .rev-aviso'); const incierto = await msg(p);
-    await p.fill('#rev-obs', 'Texto B2 antes de reintentar'); modo = 'lento'; await p.click('#rev-btn'); await p.waitForTimeout(400); await p.fill('#rev-obs', 'Texto C2 durante el reintento lento');
+    modo = 'lento'; await p.click('#rev-btn');   // el formulario sigue IGUAL que el intento: solo se escribe durante la espera del reintento (con la lógica de la ronda 22 eso borraba el texto) await p.waitForTimeout(400); await p.fill('#rev-obs', 'Texto C2 durante el reintento lento');
     await p.waitForFunction(() => document.querySelectorAll('.esc-rev-lista > li').length === 1, null, { timeout: 15000 }); await p.waitForTimeout(300);
     const u2 = { incierto: /No hemos podido confirmar/.test(incierto), msg: await msg(p), obs: await p.inputValue('#rev-obs'), filas: (await filas(p, E2.id)).map(x => x.observacion), posts: posts.map(x => [x.clave, x.observacion]) };
     ev('U2-' + w, `Reintento lento y edición durante la espera (${w} px)`, 'El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice', J(u2),
