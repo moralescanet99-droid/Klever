@@ -228,3 +228,6 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 /* paso activo con su etiqueta en pantallas estrechas: los demás pasos quedan como número; en la revisión, «Paso 3 de 3 · Revisión» junto a «Volver» */
 @media (max-width:479px){ .paso:not([aria-current="step"]) .paso-t{display:none} .paso[aria-current="step"] .paso-t{white-space:nowrap} }
 .paso-etq{display:block;font-weight:600;color:var(--accent);margin:0 0 8px}
+
+/* lo que sí existe (revisión sin nota): lista compacta */
+.nota-existe{margin:12px 0;padding-left:1.1rem;font-size:var(--t-s);line-height:1.5} .nota-existe li{margin:0 0 6px} .nota-existe .mut{color:var(--muted)}
