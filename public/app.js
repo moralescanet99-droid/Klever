@@ -386,6 +386,14 @@ async function cargarMisCarteras() {
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
+// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis portafolios» ya no ofrece solo una plantilla)
+async function crearVaciaEnCuenta(origen) {
+  const b = $(origen === 'manual' ? '#nueva-manual' : '#nueva-vacia'); b.disabled = true;
+  try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); go('#cartera-' + id); }
+  catch (err) { toastError(err.message || 'No se pudo crear la cartera. Inténtalo de nuevo.'); } finally { b.disabled = false; }
+}
+$('#nueva-vacia').addEventListener('click', () => crearVaciaEnCuenta('vacia'));
+$('#nueva-manual').addEventListener('click', () => crearVaciaEnCuenta('manual'));
 $('#nueva-cancelar').addEventListener('click', () => { formNuevo(false); $('#btn-nueva').focus(); });
 $('#form-nueva').addEventListener('submit', async e => {
   e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
@@ -679,7 +687,8 @@ const AVISO_ORIGEN = {   // una línea visible (no empuja los controles fuera de
 function pintarOrigen() {
   const o = current?.origen || 'plantilla', oculto = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0);
   // el mismo aviso en dos sitios (arriba en escritorio; tras las posiciones en móvil, para no empujar los controles fuera del primer viewport): el nombre ya dice «Ejemplo simulado»
-  for (const a of [$('#origen-aviso'), $('#origen-aviso-pie')]) { if (!a) continue; a.hidden = oculto; if (!oculto) { const [corto, largo] = AVISO_ORIGEN[o], h = `${corto} <details class="origen-det"><summary>Más</summary><span>${largo}</span></details>`; if (a.dataset.o !== o) { a.dataset.o = o; a.innerHTML = h; } } }
+  const pv = $('#pos-vacio p.mut'); if (pv) pv.textContent = (o === 'vacia' || o === 'manual') ? 'Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.' : 'Busca un activo abajo o usa «Más acciones» para cargar el reparto de una plantilla.';   // sin plantilla no se ofrece una acción que no existe
+  for (const a of [$('#origen-aviso'), $('#origen-aviso-pie')]) { if (!a) continue; a.hidden = oculto; a.classList.toggle('vacio', pos.length === 0); if (!oculto) { const [corto, largo] = AVISO_ORIGEN[o], h = `${corto} <details class="origen-det"><summary>Más</summary><span>${largo}</span></details>`; if (a.dataset.o !== o) { a.dataset.o = o; a.innerHTML = h; } } }
   $('#mi-plantilla').hidden = o === 'vacia' || o === 'manual';       // «Reemplazar por la plantilla» solo tiene sentido en las que nacieron de una
 }
 function pintarEstado() {

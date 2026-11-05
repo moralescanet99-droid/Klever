@@ -17,7 +17,7 @@
   "id": "T3-1440",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (1440 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:17\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:17\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:03\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":1,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:03\"}]}}",
   "resultado": "OK"
  },
  {
@@ -39,6 +39,13 @@
   "escenario": "Archivar y descartar (1440 px)",
   "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
   "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-1440",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (1440 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-5\"} {\"origen\":\"manual\",\"n\":0}",
   "resultado": "OK"
  },
  {
@@ -66,7 +73,7 @@
   "id": "T3-390",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (390 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:27\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:27\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:14\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":5,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:14\"}]}}",
   "resultado": "OK"
  },
  {
@@ -88,6 +95,13 @@
   "escenario": "Archivar y descartar (390 px)",
   "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
   "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-390",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (390 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-7\"} {\"origen\":\"manual\",\"n\":0}",
   "resultado": "OK"
  },
  {
@@ -115,7 +129,7 @@
   "id": "T3-320",
   "escenario": "Respuesta perdida, relectura fallida y texto modificado (320 px)",
   "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
-  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:37\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 19:58:37\"}]}}",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:24\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"5 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":9,\"fecha\":\"2026-11-05\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-05 20:05:24\"}]}}",
   "resultado": "OK"
  },
  {
@@ -137,6 +151,13 @@
   "escenario": "Archivar y descartar (320 px)",
   "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
   "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-320",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (320 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-9\"} {\"origen\":\"manual\",\"n\":0}",
   "resultado": "OK"
  },
  {

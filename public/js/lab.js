@@ -381,7 +381,7 @@ async function pintarSeguimientoEscenarios() {
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
-  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
+  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';

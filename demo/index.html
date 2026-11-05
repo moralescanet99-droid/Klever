@@ -1097,6 +1097,11 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 .esc-editorial{margin:var(--s3) 0} .rev-estado p{margin:6px 0 0;padding:8px 10px;border-left:3px solid var(--muted);border-radius:0 8px 8px 0;background:var(--surface);line-height:1.45} .rev-estado .rev-ok{border-left-color:var(--ok)} .rev-estado .rev-aviso{border-left-color:var(--accent)}
 .lab-origen{background:var(--surface);color:var(--text);border-left:3px solid var(--accent);border-radius:0 10px 10px 0}
 
+/* ronda 22 · un aviso sobre una condición NORMAL (sin cuenta, cartera de ejemplo) no es una alarma: superficie neutra con filete, no ámbar */
+#seg-aviso,.lab-ejemplo{background:var(--surface);color:var(--text);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 12px 12px 0}
+#seg-aviso b,.lab-ejemplo b{color:var(--text)} .nueva-otras{margin:0 0 var(--s2);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media (max-width:719px){#origen-aviso.vacio{display:flex!important} .origen-pie.vacio{display:none!important}}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1263,7 +1268,8 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
     </div>
     <form id="form-nueva" class="panel nueva" hidden>
       <h2 id="nueva-titulo">Nueva cartera</h2>
-      <p id="nueva-ayuda" class="mut" hidden>Una cartera simulada es un reparto de porcentajes entre empresas y fondos, sin dinero real. Elige una plantilla y ajústala después: podrás guardarla en tu cuenta y publicarla cuando quieras.</p>
+      <p id="nueva-ayuda" class="mut" hidden>Una cartera simulada es un reparto de porcentajes entre empresas y fondos, sin dinero real. Empieza desde cero, recrea la tuya a mano o parte de una plantilla y ajústala: podrás guardarla en tu cuenta y publicarla cuando quieras.</p>
+      <p class="nueva-otras"><span class="mut">Sin plantilla:</span> <button type="button" id="nueva-vacia" class="btn btn-secundario">Empezar desde cero</button> <button type="button" id="nueva-manual" class="btn btn-secundario">Recrear la que ya tengo</button></p>
       <div class="nueva-campos">
         <div class="campo"><label for="nueva-nombre">Nombre</label>
           <input id="nueva-nombre" name="nombre" maxlength="80" required placeholder="Por ejemplo: Mi cartera de oro" autocomplete="off"></div>
@@ -3001,7 +3007,7 @@ async function pintarSeguimientoEscenarios() {
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
-  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
+  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
@@ -3702,6 +3708,14 @@ async function cargarMisCarteras() {
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
+// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis portafolios» ya no ofrece solo una plantilla)
+async function crearVaciaEnCuenta(origen) {
+  const b = $(origen === 'manual' ? '#nueva-manual' : '#nueva-vacia'); b.disabled = true;
+  try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); go('#cartera-' + id); }
+  catch (err) { toastError(err.message || 'No se pudo crear la cartera. Inténtalo de nuevo.'); } finally { b.disabled = false; }
+}
+$('#nueva-vacia').addEventListener('click', () => crearVaciaEnCuenta('vacia'));
+$('#nueva-manual').addEventListener('click', () => crearVaciaEnCuenta('manual'));
 $('#nueva-cancelar').addEventListener('click', () => { formNuevo(false); $('#btn-nueva').focus(); });
 $('#form-nueva').addEventListener('submit', async e => {
   e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
@@ -3995,7 +4009,8 @@ const AVISO_ORIGEN = {   // una línea visible (no empuja los controles fuera de
 function pintarOrigen() {
   const o = current?.origen || 'plantilla', oculto = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0);
   // el mismo aviso en dos sitios (arriba en escritorio; tras las posiciones en móvil, para no empujar los controles fuera del primer viewport): el nombre ya dice «Ejemplo simulado»
-  for (const a of [$('#origen-aviso'), $('#origen-aviso-pie')]) { if (!a) continue; a.hidden = oculto; if (!oculto) { const [corto, largo] = AVISO_ORIGEN[o], h = `${corto} <details class="origen-det"><summary>Más</summary><span>${largo}</span></details>`; if (a.dataset.o !== o) { a.dataset.o = o; a.innerHTML = h; } } }
+  const pv = $('#pos-vacio p.mut'); if (pv) pv.textContent = (o === 'vacia' || o === 'manual') ? 'Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.' : 'Busca un activo abajo o usa «Más acciones» para cargar el reparto de una plantilla.';   // sin plantilla no se ofrece una acción que no existe
+  for (const a of [$('#origen-aviso'), $('#origen-aviso-pie')]) { if (!a) continue; a.hidden = oculto; a.classList.toggle('vacio', pos.length === 0); if (!oculto) { const [corto, largo] = AVISO_ORIGEN[o], h = `${corto} <details class="origen-det"><summary>Más</summary><span>${largo}</span></details>`; if (a.dataset.o !== o) { a.dataset.o = o; a.innerHTML = h; } } }
   $('#mi-plantilla').hidden = o === 'vacia' || o === 'manual';       // «Reemplazar por la plantilla» solo tiene sentido en las que nacieron de una
 }
 function pintarEstado() {
