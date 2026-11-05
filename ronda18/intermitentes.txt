@@ -5,3 +5,26 @@ RESULTADO: 15 correctas, 0 fallos
 == tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 01:10:06Z · 32 s · código 1
 page.waitForFunction: Timeout 30000ms exceeded.
   name: 'TimeoutError'
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 01:10:44Z · 32 s · código 1
+page.waitForFunction: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 01:11:12Z · 22 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 01:11:40Z · 22 s · código 0
+RESULTADO: 9 correctas, 0 fallos
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 01:12:17Z · 31 s · código 1
+page.waitForFunction: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 01:12:55Z · 31 s · código 1
+page.waitForFunction: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 01:13:29Z · 28 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 01:14:02Z · 27 s · código 0
+RESULTADO: 50 correctas, 0 fallos
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 01:14:39Z · 30 s · código 1
+locator.fill: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 01:15:16Z · 30 s · código 1
+locator.fill: Timeout 30000ms exceeded.
+  name: 'TimeoutError'
