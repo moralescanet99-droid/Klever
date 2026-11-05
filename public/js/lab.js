@@ -32,6 +32,7 @@ export function iniciarLab(ctx) {
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
   $('#nota-cuerpo').addEventListener('click', e => { if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
+  $('#seg-escenarios').addEventListener('click', e => { const b = e.target.closest('[data-registrar]'); if (b) { LAB.abrirRev = Number(b.dataset.registrar); ctx.go('#escenario-' + b.dataset.registrar); } });
   $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#seg-radar').addEventListener('change', e => { if (e.target.id === 'seg-ref') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarSeguimientoRadar(); $('#seg-ref')?.focus(); } });
@@ -305,18 +306,18 @@ const pesoDe = (lista, t) => lista?.find(p => p.ticker === t)?.peso ?? 0;
 function tarjetaCaso(esc, c) {                                         // una pregunta que sigues: qué se preguntó, qué ha ocurrido, con qué peso lo probaste
   const est = c.estado || estadoSeguimiento({ historia: c.historia, pregunta_ref: c.pregunta_ref, pregunta: c.pregunta }), caso = est.caso, r = est.tipo === 'responde' ? caso.respuesta : null, h = c.historia && historia(c.historia);
   const inval = est.refInvalida ? ' El vínculo guardado ya no existe en el catálogo de preguntas: se trata como pregunta propia.' : '';
-  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b>${inval} La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta sigue pendiente: todavía no hay una fuente que la responda.</p>`
-    : est.tipo === 'sin' ? `<p><b>Pendiente.</b>${inval} Esta pregunta no está vinculada a ninguna historia ni fuente: sigue pendiente hasta que la revises tú.</p>` : '';
+  const contexto = est.tipo === 'otra' ? `<p><b>Pregunta distinta a la de la historia.</b>${inval} La revisión publicada de esta historia responde a otra cuestión: «${esc(est.editorial.pregunta)}». Tu pregunta no tiene respuesta editorial: todavía no hay una fuente que la responda.</p>`
+    : est.tipo === 'sin' ? `<p><b>Sin respuesta editorial.</b>${inval} Esta pregunta no está vinculada a ninguna historia ni fuente. Tu seguimiento son tus revisiones personales.</p>` : '';
   const formul = (est.tipo === 'responde' || est.tipo === 'pendiente') && est.distinta ? `<p class="mut peq">Tu formulación es distinta de la de la historia, pero sigue la misma cuestión: «${esc(caso.pregunta)}».</p>` : '';
   const ocurrido = r && c.compacta ? `<p class="mut peq">Misma respuesta que la de otra pregunta tuya vinculada a esta cuestión (más arriba). El desenlace completo no se repite aquí.</p>` : r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
-    : est.tipo === 'pendiente' ? `<p><b>Sigue pendiente.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
+    : est.tipo === 'pendiente' ? `<p><b>Sin respuesta editorial todavía.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
     : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
   const rev = !h ? '' : r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : est.tipo === 'otra' ? `<a class="btn btn-secundario" href="#historia-${esc(h.id)}">Ver revisión de la historia</a>` : `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>`;
   const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
-  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Tu reformulación tiene respuesta' : 'Tu pregunta tiene respuesta') : 'Pregunta pendiente'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
-    <h3>«${esc(c.pregunta)}»</h3>${formul}${c.revisarEn ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
-    ${ocurrido}${pesos}<p class="caso-acc">${rev} ${sim}</p></article>`;
+  return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Reformulación con respuesta editorial' : 'Con respuesta editorial') : 'Sin respuesta editorial aún'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
+    ${c.enFicha ? '' : `<h3>«${esc(c.pregunta)}»</h3>`}${formul}${c.revisarEn && !c.enFicha ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
+    ${ocurrido}${c.enFicha ? '' : pesos}<p class="caso-acc">${rev} ${c.enFicha ? '' : sim}</p></article>`;
 }
 // Resumen del vínculo con la revisión de la historia dentro de un escenario: responde / sigue pendiente / es otra pregunta (con enlace para verla).
 // Edición: muestra la pregunta de la historia a la que está vinculado el escenario y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
@@ -341,8 +342,24 @@ function tarjetaVinculo(esc, e) {
   const rev = est.tipo === 'responde' && est.caso.respuesta.revision ? `#tesis-${esc(h.id)}-${est.caso.respuesta.revision}` : `#historia-${esc(h.id)}`;
   return txt ? `<p class="esc-vinculo">${txt} <a href="${rev}">Ver revisión de la historia</a></p>` : '';
 }
+// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (los escenarios) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
+// de visitante, el ejemplo ficticio de «Tus preguntas» primero y después la invitación a entrar.
+function ordenarSeguimiento(conCuenta) {
+  const col = document.querySelector('.seg-col'), casos = document.querySelector('#seg-casos')?.closest('.seg-bloque'), escB = document.querySelector('#seg-escenarios')?.closest('.seg-bloque'); if (!col || !casos || !escB) return;
+  casos.hidden = conCuenta; if (conCuenta) col.insertBefore(escB, col.firstElementChild); else col.insertBefore(casos, col.firstElementChild);
+}
+// Respuesta editorial EN UNA FRASE (para la tarjeta compacta del Cuaderno). Independiente del seguimiento personal: una revisión personal no demuestra que haya una fuente ni que la pregunta esté resuelta.
+function lineaEditorial(esc, e) {
+  if (!e.historia) return '';
+  const est = estadoSeguimiento(e), h = historia(e.historia); if (!h) return '';
+  const txt = est.tipo === 'responde' ? 'la revisión de la historia responde a la cuestión que sigues.' : est.tipo === 'pendiente' ? 'sin respuesta todavía: la fuente aún no permite responder esa cuestión.'
+    : est.tipo === 'otra' ? 'la revisión de la historia responde a otra cuestión; tu pregunta no tiene respuesta editorial.' : 'tu pregunta no está vinculada a la cuestión de la historia.';
+  return `<p class="peq mut"><b>Respuesta editorial:</b> ${txt}</p>`;
+}
 function pintarSeguimientoCasos(lista) {
   const { $, esc, logged } = x(), cont = $('#seg-casos'); if (!cont) return;
+  ordenarSeguimiento(logged());
+  if (logged()) { cont.innerHTML = ''; return; }
   if (!logged()) {                                                       // visitante: ejemplo ficticio y rotulado; con cuenta solo salen SUS preguntas y posiciones
     cont.innerHTML = `<p class="mut peq">Así se verían tus preguntas (ejemplo ficticio). Con cuenta, aquí aparecen solo tus propias preguntas y posiciones.</p>` + SEGUIMIENTO_CASOS.map(c => tarjetaCaso(esc, { pregunta_ref: refPregunta(c.historia, c.tesis), pregunta: c.pregunta, historia: c.historia, ticker: historia(c.historia).ticker, pesoEsc: 10, ejemplo: true })).join('');
     return;
@@ -365,15 +382,19 @@ async function pintarSeguimientoEscenarios() {
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
   if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
-  const tarjetaEsc = e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
-      ${e.pregunta ? `<p class="esc-preg"><span class="sr">Pregunta: </span>«${esc(e.pregunta)}»</p>` : ''}${textoRevision(e) ? `<p class="peq">${esc(textoRevision(e))}</p>` : ''}
-      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>${e.revisar_en ? `<p class="peq">Revisar el <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}${e.n_revisiones ? `<p class="peq mut">${e.n_revisiones} ${e.n_revisiones === 1 ? 'revisión registrada' : 'revisiones registradas'}.</p>` : ''}
-      <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(x().fmtFecha(e.creado_en))}</p>
+  // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
+  const h0 = hoy(), tarjetaEsc = e => {
+    const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
+    const fecha = f ? `<p class="esc-fecha${vence ? ' vence' : ''}">${vence ? 'Toca revisar' : 'Próxima revisión'}: <b>${esc(fechaCorta(f))}</b>${f < h0 ? ' (la fecha ya ha pasado)' : f === h0 ? ' (hoy)' : ''}.</p>` : '';
+    return `<article class="esc-item${vence ? ' esc-toca' : ''}"><header><b class="esc-t">${e.pregunta ? `«${esc(e.pregunta)}»` : esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
+      ${fecha}<p class="peq"><b>Tu seguimiento:</b> ${n ? `${n} ${n === 1 ? 'revisión personal registrada' : 'revisiones personales registradas'}` : 'sin revisiones personales todavía'}.</p>${lineaEditorial(esc, e)}
+      <p class="mut peq">${esc(e.ticker)} al ${P(e.peso_objetivo)} en la alternativa · cartera «${esc(e.cartera_nombre)}»${e.pregunta ? ` · ${esc(e.nombre)}` : ''}</p>
       ${!e.cartera_existe ? '<p class="chip aviso">La cartera original ya no existe</p>' : e.hay_version_posterior ? '<p class="chip aviso">Hay una versión posterior de la cartera</p>' : ''}
-      ${e.nota ? `<p class="esc-nota">${esc(e.nota.length > 140 ? e.nota.slice(0, 140) + '…' : e.nota)}</p>` : ''}
-      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+      ${e.nota ? `<p class="esc-nota peq">${esc(e.nota.length > 110 ? e.nota.slice(0, 110) + '…' : e.nota)}</p>` : ''}
+      <p class="esc-acc">${pend ? `<button class="btn ${vence ? 'btn-primario' : 'btn-secundario'}" type="button" data-registrar="${e.id}">Registrar revisión<span class="sr"> de ${esc(e.nombre)}</span></button> ` : ''}<a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+  };
   // Ronda 21: «En estudio» se ordena para volver a decidir: primero lo que toca revisar (fecha de hoy o ya pasada), después las próximas revisiones y, al final, lo que no tiene fecha. Lo descartado o archivado no se presenta como pendiente.
-  const h0 = hoy(), grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
+  const grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
   if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
     cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
   else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
@@ -564,6 +585,10 @@ async function mostrarEscenario(id) {
   await cargarCarteras(); if (!vigente(g)) return;
   LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } pintarEscenario();
 }
+function htmlEditorialFicha(esc, e) {      // el contexto editorial completo, UNA vez y en su sitio: la ficha. Es independiente de las revisiones personales.
+  return `<section class="esc-editorial" aria-label="Respuesta editorial"><h2>Respuesta editorial</h2><p class="mut peq">Lo que dice la Revista sobre la cuestión que sigues. Tus revisiones personales (más abajo) son aparte: no cambian esta respuesta ni demuestran que exista una fuente.</p>
+    ${tarjetaCaso(esc, { enFicha: true, pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), idEsc: e.id, revisarEn: e.revisar_en })}</section>`;
+}
 function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
   const viva = LAB.carteras.find(c => c.id === e.cartera_id), activos = x().activos();
@@ -577,7 +602,7 @@ function pintarEscenario() {
       <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}», revisión ${e.base_revision}. Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
       ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
-      ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}${e.historia ? tarjetaVinculo(esc, e) : ''}
+      ${enlHist}${e.historia ? htmlEditorialFicha(esc, e) : ''}
       <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
       ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
       ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">

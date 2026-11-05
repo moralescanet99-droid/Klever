@@ -202,19 +202,19 @@
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
-      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta · Formará parte del futuro plan de pago</span></h1>
-      <p class="mut">Lo que quieres volver a revisar: empresas de tu radar, escenarios simulados y tus notas. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
+      <p class="mut">Tus ideas: lo que quieres volver a revisar —preguntas, escenarios simulados y empresas de tu radar—. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
     <div class="seg-col">
-      <section class="seg-bloque" aria-labelledby="seg-casos-t">
-        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
-        <div id="seg-casos" aria-live="polite"></div>
-      </section>
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
         <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-casos-t">
+        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
+        <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-radar-t">
         <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>

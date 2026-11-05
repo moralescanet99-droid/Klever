@@ -254,3 +254,9 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 .origen-aviso{margin:0 0 6px;padding:3px 8px;font-size:var(--t-xs,.8125rem);line-height:1.3;border-radius:8px} .origen-det summary{padding:2px 4px}
 @media (max-width:719px){#origen-aviso{display:none!important}} @media (min-width:720px){#origen-aviso-pie{display:none!important}} .origen-pie{margin:var(--s2) 0}
 .origen-pie{order:1}
+
+/* ronda 22 · comparación en móvil: la etiqueta («Cartera base», «Alternativa simulada») va ENCIMA de la barra, no en una columna estrecha que la parte en trozos */
+@media (max-width:719px){.esp-fila{grid-template-columns:minmax(0,1fr);gap:2px} .esp-tit{white-space:nowrap}}
+/* Cuaderno: una tarjeta por idea; lo que toca revisar se distingue sin ámbar (borde y texto normales) */
+.esc-item .esc-t{font-size:1.0625rem;line-height:1.35} .esc-fecha{margin:4px 0} .esc-fecha.vence{font-weight:600} .esc-toca{border-left:3px solid var(--accent)} .esc-acc{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 0}
+.esc-editorial{margin:var(--s3) 0} .rev-estado p{margin:6px 0 0;padding:8px 10px;border-left:3px solid var(--muted);border-radius:0 8px 8px 0;background:var(--surface);line-height:1.45} .rev-estado .rev-ok{border-left-color:var(--ok)} .rev-estado .rev-aviso{border-left-color:var(--accent)}
