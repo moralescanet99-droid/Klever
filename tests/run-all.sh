@@ -90,17 +90,17 @@ if [ "${OMITIR_DEMO:-0}" != 1 ]; then
     else
       DEMO_URL="http://localhost:$DPORT/" con_limite "$LIMITE" node "$DTEST"
       guardar_log demotest
+      echo "$SALIDA_T" | grep -E "^FALLA|DEMO OK|HAY FALLOS" | tee -a "$SALIDA"
+      [ "$TIEMPO_AGOTADO" = 1 ] && fallo "la demo superó el límite de ${LIMITE}s (proceso detenido)"
+      [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "la demo salió con código $CODIGO (aunque imprimiera «DEMO OK»)"
+      echo "$SALIDA_T" | grep -q "DEMO OK" || fallo "la demo no terminó en «DEMO OK»"
+      echo "$SALIDA_T" | grep -q "HAY FALLOS" && fallo "la demo informa «HAY FALLOS»"
       # ronda 22: el recorrido del Cuaderno en la demo (en memoria; no persiste tras recargar)
       DEMO_URL="http://localhost:$DPORT/" con_limite "$LIMITE" node tests/ronda22/testDemo22.cjs; guardar_log demotest22
       echo "$SALIDA_T" | grep -E "^FALLA|RESULTADO" | tee -a "$SALIDA"
       [ "$TIEMPO_AGOTADO" = 1 ] && fallo "testDemo22 superó el límite de ${LIMITE}s (proceso detenido)"
       [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "testDemo22 salió con código $CODIGO"
       echo "$SALIDA_T" | grep -q "RESULTADO: [0-9]* correctas, 0 fallos" || fallo "testDemo22 no terminó con 0 fallos"
-      echo "$SALIDA_T" | grep -E "^FALLA|DEMO OK|HAY FALLOS" | tee -a "$SALIDA"
-      [ "$TIEMPO_AGOTADO" = 1 ] && fallo "la demo superó el límite de ${LIMITE}s (proceso detenido)"
-      [ "$TIEMPO_AGOTADO" = 0 ] && [ "$CODIGO" -ne 0 ] && fallo "la demo salió con código $CODIGO (aunque imprimiera «DEMO OK»)"
-      echo "$SALIDA_T" | grep -q "DEMO OK" || fallo "la demo no terminó en «DEMO OK»"
-      echo "$SALIDA_T" | grep -q "HAY FALLOS" && fallo "la demo informa «HAY FALLOS»"
     fi
     matar_arbol "$DPID"; rm -f .wrangler/demo.pid
   fi

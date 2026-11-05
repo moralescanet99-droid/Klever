@@ -1,0 +1,37 @@
+[
+ {
+  "id": "PD1",
+  "escenario": "Reconstruir la demo dos veces",
+  "esperado": "Mismas huellas (la construcción es reproducible)",
+  "observado": "8527efb8ca6fc8ac / 8527efb8ca6fc8ac",
+  "resultado": "OK"
+ },
+ {
+  "id": "PD2",
+  "escenario": "evaluar(): la demo y el módulo con las mismas cinco carteras sobre el mismo universo",
+  "esperado": "Salidas idénticas (nota, motivo, resumen, población); KO + PG = 4,4 en ambos",
+  "observado": "5 carteras; KO+PG demo 4.4 / módulo 4.4",
+  "resultado": "OK"
+ },
+ {
+  "id": "PD3",
+  "escenario": "normalizarFecha() y validarResumen(): la demo y el módulo con las mismas entradas",
+  "esperado": "Mismas salidas (fechas válidas e inválidas; resumen coherente, nota 10 y versión «foo»)",
+  "observado": "[\"2026-11-04\",\"2026-11-04\",null,null,null,null] ; [true,false,false]",
+  "resultado": "OK"
+ },
+ {
+  "id": "PD4",
+  "escenario": "estadoSeguimiento(): la demo y el módulo con las mismas cinco entradas (incluido el par discordante)",
+  "esperado": "Mismas salidas",
+  "observado": "[[\"responde\",false,false],[\"responde\",true,false],[\"otra\",false,false],[\"sin\",false,true],[\"otra\",false,true]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "PD5",
+  "escenario": "Sin errores de JavaScript al cargar la demo y ejecutar sus funciones",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ }
+]
