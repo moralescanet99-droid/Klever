@@ -1074,6 +1074,18 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 /* lo que sí existe (revisión sin nota): lista compacta */
 .nota-existe{margin:12px 0;padding-left:1.1rem;font-size:var(--t-s);line-height:1.5} .nota-existe li{margin:0 0 6px} .nota-existe .mut{color:var(--muted)}
 
+/* ronda 21 · Cuaderno: grupos «Para revisar», historial de revisiones y formulario */
+.seg-grupo{margin:0 0 var(--s3)} .seg-grupo>h3{font-size:1.125rem;margin:0 0 6px} .seg-grupo .esc-item{margin-top:var(--s2)}
+.esc-revisiones{margin:var(--s3) 0} .esc-rev-lista{list-style:none;margin:var(--s2) 0;padding:0} .esc-rev-lista>li{border-left:3px solid var(--border-strong,var(--muted));padding:2px 0 2px 12px;margin:0 0 var(--s2)} .esc-rev-lista p{margin:0 0 4px}
+.rev-decision{border:0;margin:var(--s2) 0;padding:0} .rev-decision legend{font-weight:600;margin-bottom:4px} .esc-invalidacion{margin:0 0 var(--s2)}
+
+/* ronda 21 · portada con tres entradas, aviso de origen y «Tu cartera de un vistazo» */
+.entradas{margin:var(--s3) 0 var(--s2)} .entradas-t{font-size:1rem;font-weight:600;margin:0 0 8px;color:var(--muted)} .entradas ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.entrada{display:flex;flex-direction:column;gap:4px;width:100%;height:100%;text-align:left;padding:12px 14px;min-height:44px;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:var(--text);font:inherit;cursor:pointer} .entrada:hover{border-color:var(--accent)} .entrada b{font-size:1rem} .entrada span{color:var(--muted);font-size:var(--t-s);line-height:1.4}
+@media (max-width:719px){.entradas ul{grid-template-columns:1fr}}
+.origen-aviso{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:10px 12px;margin:0 0 var(--s2);font-size:var(--t-s);line-height:1.5}
+.vistazo{margin:0 0 var(--s2);padding:0 0 var(--s2);border-bottom:1px solid var(--border)} .vistazo h3{font-size:1.0625rem;margin:0 0 6px} .vistazo p{margin:0 0 6px} .vistazo-acc{margin:8px 0 0}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1119,11 +1131,17 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Crea, entiende y sigue tu portafolio</h1>
-        <p class="lead">Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.</p>
-        <p class="inicio-seg">Crea tu cartera y sigue qué ha cambiado en las empresas que elegiste investigar.</p>
+        <h1>Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir</h1>
+        <p class="lead">Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.</p>
+        <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crea tu primer portafolio</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Explora una cartera de ejemplo</a></p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Ver un ejemplo explicado</a></p>
+        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
+          <ul>
+            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Una cartera vacía: añade tu primer activo y reparte.</span></button></li>
+            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Una copia editable, rotulada como ejemplo simulado.</span></button></li>
+            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Introduce a mano tus activos y porcentajes. Sin conexión con ningún bróker.</span></button></li>
+          </ul></div>
         <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
@@ -1131,7 +1149,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
     </div>
 
     <div class="bloque" id="plantillas">
-      <h2>Elige una plantilla para empezar</h2>
+      <h2>Ejemplos simulados para explorar</h2><p class="mut">Cada uno se abre como una copia editable y rotulada como ejemplo simulado; no es una cartera recomendada.</p>
       <div class="plantillas">
         <button class="plantilla" type="button" data-plantilla="oro">
           <span class="pl-cuerpo"><span class="pl-tit">Oro</span>
@@ -1300,6 +1318,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
       <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> <span class="paso-t">Distribución</span></button></li>
       <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> <span class="paso-t">Revisión</span></button></li>
     </ol>
+    <p id="origen-aviso" class="origen-aviso" role="note" hidden></p>
     <div class="ws-cab">
       <div class="ws-titulo">
         <label class="sr" for="nombre">Nombre de la cartera</label>
@@ -2143,6 +2162,7 @@ function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
     crear: cuerpo => api('/escenarios', { method: 'POST', body: cuerpo }),
     actualizar: (id, cambios) => api('/escenarios/' + id, { method: 'PATCH', body: cambios }),
     borrar: id => api('/escenarios/' + id, { method: 'DELETE' }),
+    revisar: (id, cuerpo) => api('/escenarios/' + id + '/revisiones', { method: 'POST', body: cuerpo }),   // ronda 21: añade una revisión (clave de intento; control de revisión)
   };
   return { radar: radarAlmacen, escenarios: escenariosAlmacen, reiniciar: () => radarAlmacen.reiniciar() };
 }
@@ -2169,6 +2189,7 @@ const HISTORIAS = [{
     estudio: 'Porque enseña la diferencia entre anunciar y firmar: 2 de 4 proyectos (65 de 225 MW) ya tienen contrato y los dos más grandes dependen de una promesa con fecha.',
     riesgo: 'Que los contratos grandes se retrasen o no lleguen, y que la financiación de la planta C no esté asegurada. Un caso no demuestra nada sobre otras empresas.',
   },
+  desconocido: ['Si la financiación de la planta C está asegurada: no hay ningún documento que lo diga.', 'Qué ocurrirá con el contrato de D: no hay documento ni precio.', 'Cómo se comportaría el negocio con contratos firmados: es un caso inventado y no permite concluirlo.'],
   fuentes: [
     { n: 1, titulo: 'Comunicado de ejemplo: cartera de cuatro proyectos de hidrógeno verde', fecha: '2026-08-12', tipo: 'Documento de ejemplo (ficticio)' },
     { n: 2, titulo: 'Contrato de ejemplo del proyecto A (40 MW), resumen público', fecha: '2026-09-03', tipo: 'Documento de ejemplo (ficticio)' },
@@ -2197,7 +2218,7 @@ const HISTORIAS = [{
       hecho: ['Dos de cuatro proyectos (A y B, 65 de 225 MW) tienen contrato publicado [2][3].', 'C tiene un memorando no vinculante [4] y D no tiene documento.', 'La empresa prometió firmar C y D antes del 31 de octubre [5].'],
       interpretacion: ['Los proyectos pequeños se cierran rápido; los grandes dependen de financiación que todavía no se ha publicado.', 'Mi lectura: C llegará a contrato antes que D, porque ya hay un memorando; D no tiene ni documento. Lo más probable es que se firme uno y el otro se aplace.'],
       cambiaria: ['Un contrato firmado para D, con precio y volumen, antes del 31 de octubre.', 'La publicación de financiación comprometida para C: reforzaría que C se firma.', 'Que el memorando de C se retire o caduque.'],
-      pregunta: '¿Se han firmado los dos contratos anunciados?' },
+      pregunta: '¿Se han firmado los dos contratos anunciados?', revisionPrevista: '2026-11-01' },
     { n: 2, fecha: '2026-11-03', firma: 'El Superespeculador (personaje de ejemplo)', revisa: 1, simulada: true,
       titulo: 'Revisión: se firmó C, D se aplazó (desenlace simulado)',
       resultado: 'DESENLACE SIMULADO en esta demo: el 29 de octubre se firmó el contrato de C [6] y el de D se aplazó sin fecha. Es un final inventado para probar la revisión, no un hecho.',
@@ -2492,9 +2513,13 @@ function fuentes(esc, h) {
     ${h.ficticia ? '<p class="mut peq">Todas las fuentes son documentos de ejemplo inventados para esta demostración: no hay enlace porque no existen.</p>' : ''}</details>`;
 }
 function cta(esc, h) {
-  return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Probar en mi cartera</button>
+  if (!h.ticker) return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><a class="btn btn-primario" href="#empresas">Explorar empresas relacionadas</a></p><p class="mut peq">Este contenido no trata de una posición concreta, así que no se elige ninguna empresa por ti.</p></section>`;
+  return `<section class="art-acc" aria-label="Qué hacer con esta historia"><p><button class="btn btn-primario" type="button" data-probar="${esc(h.ticker)}" data-historia="${esc(h.id)}">Explorar esta idea en una simulación</button>
     <button class="btn btn-secundario" type="button" data-ficha="${esc(h.ticker)}">Ver la ficha de ${esc(h.empresa)}</button></p>
-    <p class="mut peq">«Probar en mi cartera» abre el laboratorio con ${esc(h.empresa)} ya elegida. Si no tienes cartera, te ofrece una de ejemplo; es una simulación y no cambia nada.</p></section>`;
+    <p class="mut peq">«Explorar esta idea en una simulación» abre el laboratorio con ${esc(h.empresa)} ya elegida; allí puedes comparar con tu cartera y <b>guardar tu pregunta en el Cuaderno</b>. Si no tienes cartera, te ofrece una de ejemplo; es una simulación y no cambia nada.</p></section>`;
+}
+function desconocido(esc, h) {
+  return h.desconocido?.length ? `<section class="art-desconocido" aria-label="Qué se desconoce"><h2>Qué no sabemos</h2>${lista(esc, h.desconocido)}</section>` : '';
 }
 
 function mostrarArticulo({ tipo, id, n }) {
@@ -2509,7 +2534,7 @@ function mostrarArticulo({ tipo, id, n }) {
       ${h.bloques.map(b => b.t === 'h2' ? `<h2>${esc(b.x)}</h2>` : b.t === 'p' ? `<p>${refs(esc, b.x)}</p>` : b.t === 'ul' ? lista(esc, b.x)
         : `<div class="tabla-h" role="region" aria-label="Estado de los proyectos" tabindex="0"><table class="tabla-lab"><thead><tr>${b.cab.map(c => `<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${b.filas.map(f => `<tr><th scope="row">${esc(f[0])}</th>${f.slice(1).map(c => `<td>${refs(esc, c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`).join('')}
       <p class="art-opinion"><a class="btn btn-secundario" href="#tesis-${esc(h.id)}-1">Leer la opinión de El Superespeculador</a></p>
-      ${cta(esc, h)}${fuentes(esc, h)}</article>`;
+      ${desconocido(esc, h)}${cta(esc, h)}${fuentes(esc, h)}</article>`;
     return;
   }
   const t = tesisDe(h, n), posterior = revisionDe(h, t.n);
@@ -2523,8 +2548,8 @@ function mostrarArticulo({ tipo, id, n }) {
     <h2>Hecho observado</h2>${lista(esc, t.hecho)}
     <h2>Interpretación del autor</h2>${lista(esc, t.interpretacion)}
     <h2>Qué me haría cambiar de opinión</h2>${lista(esc, t.cambiaria)}
-    <h2>Pregunta para seguir</h2><p><b>${esc(t.pregunta)}</b></p>
-    ${cta(esc, h)}${fuentes(esc, h)}</article>`;
+    <h2>Pregunta para seguir</h2><p><b>${esc(t.pregunta)}</b></p>${t.revisionPrevista ? `<p class="mut">Fecha prevista para revisar esta opinión: <b>${esc(fechaCorta(t.revisionPrevista))}</b>.</p>` : ''}
+    ${desconocido(esc, h)}${cta(esc, h)}${fuentes(esc, h)}</article>`;
 }
 
 // Presentación de «Mi cartera» (radiografía), «Mi radar», «Mi laboratorio» y «Mi seguimiento». Los cálculos viven en calculos.js; el almacenamiento, en almacen.js.
@@ -2553,6 +2578,7 @@ function iniciarLab(ctx) {
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
+  $('#nota-cuerpo').addEventListener('click', e => { if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); } });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
   $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
   $('#seg-radar').addEventListener('input', e => { if (e.target.matches('textarea') && LAB.nota) LAB.nota.texto = e.target.value; });
@@ -2561,6 +2587,7 @@ function iniciarLab(ctx) {
   const lab = $('#lab-cuerpo');
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
+  lab.addEventListener('change', e => { if (e.target.name === 'rev-dec') { const p = $('#rev-prox'); p.disabled = e.target.value !== 'reprogramar'; if (p.disabled) p.value = ''; else p.focus(); } });
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
@@ -2657,6 +2684,19 @@ function frase(r) {
   if (r.estado === 'exceso') partes.push(`Los pesos suman el ${P(r.total)}: hay un exceso del ${P(r.exceso)}.`);
   return partes.join(' ');
 }
+// «Tu cartera de un vistazo» (ronda 21): lo que SÍ se sabe aunque no haya nota global. Usa los mismos datos de la radiografía (mayor posición, tres mayores) y el tipo de instrumento del universo;
+// no calcula nada nuevo. Concentración por posición ≠ exposición subyacente ni pérdida esperada; un ETF no es una empresa; una limitación de datos no convierte una cartera en mala.
+function htmlVistazo(esc, r, posiciones, activos, ev) {
+  const vivas = posiciones.filter(p => p.peso > 0), n = vivas.length;
+  if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
+  const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
+  const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
+  const parcial = ev && !ev.publicada;
+  return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
+    <p>${n} ${n === 1 ? 'posición' : 'posiciones'}, asignado ${P(r.total ?? 0)}. Mayor posición: <b>${esc(r.mayor.ticker)}</b> ${P(r.mayor.peso)}${r.top3.completo ? `; las tres mayores suman ${P(r.top3.peso)}` : ''}. Por tipo: ${esc(tipos)}.</p>
+    <p class="mut peq">Es la concentración <b>por posición</b>: no es la exposición real de los fondos ni una pérdida esperada.${parcial ? ' Debajo, qué se ha podido analizar y qué queda sin evaluar.' : ''}</p>
+    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Probar un cambio</button></p></section>`;
+}
 function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
   if (!ed.current) { cont.innerHTML = ''; delete cont.dataset.sig; const n0 = $('#nota-cuerpo'); if (n0) { n0.innerHTML = ''; delete n0.dataset.sig; } return; }
@@ -2679,6 +2719,7 @@ function pintarRadiografia() {
   if (r.cobertura.sinCategoria.length) cobertura.push(`${r.cobertura.sinCategoria.length} ${r.cobertura.sinCategoria.length === 1 ? 'posición no tiene' : 'posiciones no tienen'} categoría conocida (${esc(r.cobertura.sinCategoria.join(', '))}).`);
   if (r.cobertura.fondos.length) cobertura.push(`${esc(r.cobertura.fondos.join(', '))}: ${r.cobertura.fondos.length === 1 ? 'es un fondo' : 'son fondos'} y su categoría es la comercial, no su exposición sectorial real.`);
   const notaHtml = LAB.universo ? htmlNotaEstructura(esc, evaluar(posiciones, LAB.universo), origenCodigo()) : LAB.universoError ? '<p class="mut peq">La nota de estructura no está disponible ahora.</p>' : '<p class="mut peq">Calculando la nota de estructura…</p>';
+  const evNota = LAB.universo ? evaluar(posiciones, LAB.universo) : null, vista = r.estado === 'vacia' ? '' : htmlVistazo(esc, r, posiciones, x().activos(), evNota);
   const html = `<p class="radio-version">Analizando: <b>${etq}</b>.</p>${conmuta}
     <p class="radio-concl">${esc(frase(r))}</p>
     ${r.estado === 'vacia' ? '' : `<dl class="radio-datos"><div><dt>Mayor posición</dt><dd>${esc(r.mayor.ticker)} · ${P(r.mayor.peso)}</dd></div>
@@ -2687,8 +2728,8 @@ function pintarRadiografia() {
     ${sup ? `<ul class="radio-sup">${sup}</ul>` : ''}${limite}
     ${cobertura.length ? `<p class="radio-cob">${cobertura.join(' ')}</p>` : ''}
     <p class="radio-nota peq mut"><b>Concentración no es riesgo:</b> no mide pérdidas posibles ni diversificación. Qué más no se calcula, en «Más sobre las categorías».</p>
-    <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Simular un cambio en el laboratorio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
-  const nc = $('#nota-cuerpo'); if (nc && nc.dataset.sig !== notaHtml) { nc.dataset.sig = notaHtml; nc.innerHTML = notaHtml; }   // la nota tiene su propio panel
+    <p class="radio-acc"><button class="btn btn-secundario" type="button" id="radio-lab">Probar un cambio</button></p>${dirty ? '<p class="mut peq">El laboratorio parte de la versión guardada.</p>' : ''}`;
+  const nc = $('#nota-cuerpo'), notaCompleta = vista + notaHtml; if (nc && nc.dataset.sig !== notaCompleta) { nc.dataset.sig = notaCompleta; nc.innerHTML = notaCompleta; }   // la nota tiene su propio panel
   if (cont.dataset.sig === html) return;           // sin cambios: no se sustituye el DOM (un clic en curso no se pierde al salir el foco de un campo)
   cont.dataset.sig = html; cont.innerHTML = html;
 }
@@ -2870,13 +2911,18 @@ async function pintarSeguimientoEscenarios() {
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
   if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara cómo cambiaría una cartera antes de tocarla y guarda el escenario con una nota y, si quieres, una pregunta.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
-  cont.innerHTML = vistos.length ? vistos.map(e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
+  const tarjetaEsc = e => `<article class="esc-item"><header><b>${esc(e.nombre)}</b> <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></header>
       ${e.pregunta ? `<p class="esc-preg"><span class="sr">Pregunta: </span>«${esc(e.pregunta)}»</p>` : ''}${textoRevision(e) ? `<p class="peq">${esc(textoRevision(e))}</p>` : ''}
-      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>
+      <p>${esc(e.ticker)} al ${P(e.peso_objetivo)} · ${METODOS[e.metodo]}</p>${e.revisar_en ? `<p class="peq">Revisar el <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}${e.n_revisiones ? `<p class="peq mut">${e.n_revisiones} ${e.n_revisiones === 1 ? 'revisión registrada' : 'revisiones registradas'}.</p>` : ''}
       <p class="mut peq">Cartera «${esc(e.cartera_nombre)}» (revisión ${e.base_revision}) · creado el ${esc(x().fmtFecha(e.creado_en))}</p>
       ${!e.cartera_existe ? '<p class="chip aviso">La cartera original ya no existe</p>' : e.hay_version_posterior ? '<p class="chip aviso">Hay una versión posterior de la cartera</p>' : ''}
       ${e.nota ? `<p class="esc-nota">${esc(e.nota.length > 140 ? e.nota.slice(0, 140) + '…' : e.nota)}</p>` : ''}
-      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
+      <p><a class="btn btn-secundario" href="#escenario-${e.id}">Abrir<span class="sr"> ${esc(e.nombre)}</span></a></p></article>`;
+  // Ronda 21: «En estudio» se ordena para volver a decidir: primero lo que toca revisar (fecha de hoy o ya pasada), después las próximas revisiones y, al final, lo que no tiene fecha. Lo descartado o archivado no se presenta como pendiente.
+  const h0 = hoy(), grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
+  if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
+    cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
+  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
 }
 
 // =============== laboratorio ===============
@@ -2909,7 +2955,7 @@ function pintarLabForm() {
   const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
   const radar = alm.todos().map(f => `<option value="${esc(f.ticker)}">${esc(f.nombre)}</option>`).join('');
   const h = s.historia && historia(s.historia);
-  $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». ` : '')}
+  $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». <a href="#historia-${esc(h.id)}">Volver a la lectura</a>. ` : '')}
     <form id="lab-form" class="lab-form" novalidate>
       <fieldset><legend>1 · Cartera base</legend>
         ${base.ejemplo ? '<p class="lab-ejemplo" role="note"><b>No tienes ninguna cartera, así que usamos una de ejemplo</b> (KO 60 % · PG 40 %) para que puedas probar. No es tuya y la simulación es temporal.</p>' : ''}
@@ -2947,6 +2993,7 @@ function onLabSubmit(e) {
   if (e.target.id === 'lab-form') { e.preventDefault(); simularAhora(); }
   else if (e.target.id === 'lab-guardar') { e.preventDefault(); guardarEscenario(); }
   else if (e.target.id === 'esc-form') { e.preventDefault(); guardarCambiosEscenario(); }
+  else if (e.target.id === 'rev-form') { e.preventDefault(); registrarRevision(); }
 }
 function simularAhora() {
   const { $ } = x(), f = leerFormulario(), base = baseLab(), err = $('#lab-error'); err.textContent = '';
@@ -2961,14 +3008,14 @@ const dpts = d => d === 0 ? 'sin cambio' : (d > 0 ? '+' : '−') + String(Math.a
 function htmlComparacion(c, cambios, limiteTxt) {
   const { esc } = x(), A = c.antes, D = c.despues, a = x().activos();
   const fila = (n, va, vd) => `<tr><th scope="row">${n}</th><td>${va}</td><td>${vd}</td></tr>`;
-  return `<h3>Pesos por posición</h3><div class="tabla-h" role="region" aria-label="Pesos antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Posición</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio <small class="mut">(puntos)</small></th></tr></thead><tbody>
+  return `<h3>Pesos por posición</h3><div class="tabla-h" role="region" aria-label="Pesos antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Posición</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th><th scope="col">Cambio <small class="mut">(puntos)</small></th></tr></thead><tbody>
       ${cambios.map(f => `<tr><th scope="row"><b>${esc(f.ticker)}</b> <small>${esc(a[f.ticker]?.nombre || '')}</small>${f.nueva ? ' <span class="chip">nueva</span>' : ''}</th><td>${P(f.antes)}</td><td>${P(f.despues)}</td><td>${dpts(f.delta)}</td></tr>`).join('')}
       <tr class="tot"><th scope="row">Total asignado</th><td>${P(A.total)}</td><td>${P(D.total)}</td><td>${dpts(Math.round((D.total - A.total) * 10) / 10)}</td></tr></tbody></table></div>
-    <h3>Concentración</h3><div class="tabla-h" role="region" aria-label="Concentración antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Medida</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody>
+    <h3>Concentración</h3><div class="tabla-h" role="region" aria-label="Concentración antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Medida</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th></tr></thead><tbody>
       ${fila('Mayor posición', A.mayor ? `${esc(A.mayor.ticker)} · ${P(A.mayor.peso)}` : '—', D.mayor ? `${esc(D.mayor.ticker)} · ${P(D.mayor.peso)}` : '—')}
       ${fila(A.top3.completo && D.top3.completo ? 'Tres mayores' : 'Mayores posiciones (hasta tres)', P(A.top3.peso) + (A.top3.completo ? '' : ` (hay ${A.top3.n})`), P(D.top3.peso) + (D.top3.completo ? '' : ` (hay ${D.top3.n})`))}
       ${fila('Sin asignar', P(A.pendiente), P(D.pendiente))}${A.exceso || D.exceso ? fila('Exceso', P(A.exceso), P(D.exceso)) : ''}</tbody></table></div>
-    <h3>Categorías disponibles <small class="mut">(comerciales; no son la exposición real de los fondos)</small></h3><div class="tabla-h" role="region" aria-label="Categorías antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Categoría</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody>
+    <h3>Categorías disponibles <small class="mut">(comerciales; no son la exposición real de los fondos)</small></h3><div class="tabla-h" role="region" aria-label="Categorías antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Categoría</th><th scope="col">Cartera base</th><th scope="col">Alternativa simulada</th></tr></thead><tbody>
       ${c.categorias.map(k => fila(esc(k.categoria), P(k.antes), P(k.despues))).join('')}</tbody></table></div>
     <h3>Tu límite personal</h3>${limiteTxt}`;
 }
@@ -2985,33 +3032,35 @@ function limitesHtml(c, limite) {
 function htmlBarras(esc, sim) {                                          // dos barras (antes / después) con los pesos reales; la empresa probada va marcada
   const tks = [...new Set([...sim.antes.map(p => p.ticker), ...sim.despues.map(p => p.ticker)])], col = t => tks.indexOf(t) % 8;
   const barra = (lista, tit) => `<div class="esp-fila"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}</span></div>`;
-  return `<div class="esp">${barra(sim.antes, 'Antes')}${barra(sim.despues, 'Después')}</div>`;
+  return `<div class="esp">${barra(sim.antes, 'Cartera base')}${barra(sim.despues, 'Alternativa simulada')}</div>`;
 }
 function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
   const activos = x().activos(), c = comparar(sim.antes, sim.despues, activos, base.limite), n = sim.cambios.filter(f => f.delta !== 0).length;
   const mio = sim.cambios.find(f => f.ticker === sim.ticker);
-  const concl = `${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.`;
+  const mayorTxt = !c.antes.mayor || !c.despues.mayor ? '' : c.antes.mayor.ticker === c.despues.mayor.ticker && c.antes.mayor.peso === c.despues.mayor.peso ? ` La mayor posición sigue siendo ${esc(c.despues.mayor.ticker)} (${P(c.despues.mayor.peso)}).` : ` La mayor posición pasa de ${esc(c.antes.mayor.ticker)} (${P(c.antes.mayor.peso)}) a ${esc(c.despues.mayor.ticker)} (${P(c.despues.mayor.peso)}).`;
+  const concl = `En la alternativa simulada, ${esc(sim.ticker)} pasaría del ${P(mio.antes)} al ${P(mio.despues)} ${METODOS[sim.financiacion]}. ${n} ${n === 1 ? 'posición cambia' : 'posiciones cambian'}; sin asignar: ${P(c.antes.pendiente)} → ${P(c.despues.pendiente)}.${mayorTxt} Es una comparación: no dice que la alternativa sea mejor.`;
   const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
   const evA = LAB.universo ? evaluar(sim.antes, LAB.universo) : null, evD = LAB.universo ? evaluar(sim.despues, LAB.universo) : null;
   s.evaluacion = evA && evD ? { antes: resumenNota(evA), despues: resumenNota(evD) } : null;
   const guardar = logged() && base.guardada
-    ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar este escenario</h3><p class="mut peq">Se guarda en tu seguimiento como simulación privada. No cambia tu cartera ni su versión pública.</p>
+    ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar en mi Cuaderno</h3><p class="mut peq"><b>Guardar la comparación no aplica el cambio a tu cartera.</b> Tu cartera base sigue igual; esto se guarda como simulación privada, con la base y la alternativa tal como las ves ahora.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
         ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
-        <label for="lab-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
-        <label for="lab-revisar">Fecha de revisión <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
-        <label for="lab-nota">Nota <span class="mut">(opcional: por qué lo pruebas, qué quieres revisar)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        <label for="lab-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
+        <label for="lab-nota">Por qué lo estoy estudiando <span class="mut">(opcional)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
+        <label for="lab-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional; hasta 600 caracteres)</span></label><textarea id="lab-invalidacion" rows="2" maxlength="600" placeholder="Por ejemplo: si la empresa pierde a su principal cliente"></textarea>
+        <label for="lab-revisar">Cuándo quiero revisarlo <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
         ${h ? `<p class="peq mut">Se vincula a la historia «${esc(h.titulo)}»${rev && rev.n > 1 ? ' y a su revisión editorial' : ''}.</p>` : ''}
-        <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar escenario</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
+        <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar en mi Cuaderno</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
     : base.ejemplo && logged()
       ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
-      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardar escenarios en tu seguimiento (con una cartera guardada en tu cuenta).'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
+      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
     <p class="lab-origen"><b>Quién cede el peso:</b> ${esc(origenPeso(sim))}</p>${htmlBarras(esc, sim)}
-    <p class="lab-concl">${concl}</p>
+    <p class="lab-concl">${concl}</p><p class="mut peq"><b>Tu cartera base no cambia.</b> Aquí solo se compara con una alternativa simulada.</p>
     ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
     ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
@@ -3022,15 +3071,15 @@ async function guardarEscenario() {
   s.clave = s.clave || LAB.alm.escenarios.nuevaClave();                 // el mismo intento reutiliza la clave: un reintento no duplica
   btn.disabled = true; btn.textContent = 'Guardando…';
   try {
-    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null, pregunta_ref: ($('#lab-ref')?.checked && s.historia) ? refPregunta(s.historia, 1) : null,
+    const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, invalidacion: $('#lab-invalidacion').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null, pregunta_ref: ($('#lab-ref')?.checked && s.historia) ? refPregunta(s.historia, 1) : null,
       cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues, evaluacion: s.evaluacion || undefined });
     if (!vigente(g)) return;
-    toast(r.duplicado ? 'Ese escenario ya estaba guardado' : 'Escenario guardado en tu seguimiento'); x().go('#escenario-' + r.id);
+    toast(r.duplicado ? 'Esa comparación ya estaba guardada en tu Cuaderno' : 'Comparación guardada en tu Cuaderno'); x().go('#escenario-' + r.id);
   } catch (e) {
     if (!vigente(g)) return;
     if (e.status === 409) { err.textContent = 'La cartera cambió después de la versión que simulaste. Se ha actualizado la base: vuelve a simular.'; await cargarCarteras(); s.res = null; s.clave = null; pintarLabForm(); return; }
     err.textContent = e.message + ' Tus datos siguen aquí: puedes reintentar.'; toastError(e.message);
-  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Guardar escenario'; } }
+  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Guardar en mi Cuaderno'; } }
 }
 async function crearEjemploEnCuenta() {
   const { $, api, toastError } = x(), g = LAB.gen, btn = $('#lab-crear-ejemplo'); btn.disabled = true;
@@ -3059,7 +3108,7 @@ async function mostrarEscenario(id) {
   if (!logged()) { go('#seguimiento'); return; }
   let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
-  LAB.esc = e; LAB.editEsc = false; pintarEscenario();
+  LAB.esc = e; LAB.editEsc = false; LAB.revClave = null; pintarEscenario();
 }
 function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
@@ -3075,26 +3124,63 @@ function pintarEscenario() {
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
       ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
       ${textoRevision(e) ? `<p>${esc(textoRevision(e))}</p>` : ''}${enlHist}${e.historia ? tarjetaVinculo(esc, e) : ''}
-      <h2>Tu nota</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
+      <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
+      ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
       ${LAB.editEsc ? `<form id="esc-form" class="lab-guardar"><label for="esc-nombre">Nombre</label><input id="esc-nombre" maxlength="80" required value="${esc(e.nombre)}">
         ${htmlVinculoEdicion(esc, e)}
-        <label for="esc-pregunta">Tu pregunta <span class="mut">(opcional; con tus palabras)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
-        <label for="esc-revisar">Fecha de revisión <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
-        <label for="esc-nota">Nota</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
+        <label for="esc-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="esc-pregunta" maxlength="200" value="${esc(e.pregunta)}">
+        <label for="esc-nota">Por qué lo estoy estudiando</label><textarea id="esc-nota" rows="3" maxlength="600">${esc(e.nota)}</textarea>
+        <label for="esc-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional)</span></label><textarea id="esc-invalidacion" rows="2" maxlength="600">${esc(e.invalidacion || '')}</textarea>
+        <label for="esc-revisar">Cuándo quiero revisarlo <span class="mut">(opcional)</span></label><input id="esc-revisar" type="date" value="${esc(e.revisar_en || '')}">
         <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost" type="button" id="esc-cancelar">Cancelar</button></p><p class="error" id="esc-error" role="alert"></p></form>`
-        : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar nota y pregunta</button></p>'}
+        : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
+    ${htmlRevisiones(esc, e)}
     <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
+}
+// Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
+const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };
+function htmlRevisiones(esc, e) {
+  const l = e.revisiones || [], mk = r => `<li><p><b>${esc(fechaCorta(r.fecha))}</b> · ${DECIS[r.decision] || esc(r.decision)}${r.proxima_fecha ? ` (próxima revisión: ${esc(fechaCorta(r.proxima_fecha))})` : ''}</p>${r.observacion ? `<p><span class="mut">Tu observación:</span> ${esc(r.observacion)}</p>` : ''}${r.aprendizaje ? `<p><span class="mut">Lo que aprendiste:</span> ${esc(r.aprendizaje)}</p>` : ''}</li>`;
+  return `<section class="esc-revisiones" aria-labelledby="esc-rev-t"><h2 id="esc-rev-t">Revisiones <span class="mut">(${l.length})</span></h2>
+    <p class="mut peq">Anota aquí lo que has observado al volver sobre esta idea. Es <b>tu comentario personal</b>, no un dato verificado: Klever no añade lo que haya ocurrido en el mercado. Cada revisión se suma al historial; no cambia la hipótesis original ni las composiciones guardadas.</p>
+    ${l.length ? `<ol class="esc-rev-lista">${l.map(mk).join('')}</ol>` : '<p class="mut">Todavía no has registrado ninguna revisión.</p>'}
+    <details class="mini" id="rev-det"${e.revisar_en && e.revisar_en <= hoy() ? ' open' : ''}><summary>Registrar revisión</summary>
+      <form id="rev-form" class="lab-guardar"><label for="rev-fecha">Fecha de la revisión</label><input id="rev-fecha" type="date" required value="${hoy()}">
+        <label for="rev-obs">Tu observación <span class="mut">(comentario personal; opcional)</span></label><textarea id="rev-obs" rows="3" maxlength="600"></textarea>
+        <label for="rev-apr">Qué has aprendido <span class="mut">(opcional)</span></label><textarea id="rev-apr" rows="2" maxlength="600"></textarea>
+        <fieldset class="rev-decision"><legend>¿Qué haces con esta idea?</legend>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-m" value="mantener" checked> <label for="rev-dec-m">La mantengo (sin nueva fecha)</label></p>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-r" value="reprogramar"> <label for="rev-dec-r">Programo otra revisión</label> <input id="rev-prox" type="date" min="${hoy()}" aria-label="Fecha de la próxima revisión" disabled></p>
+          <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-d" value="descartar"> <label for="rev-dec-d">La descarto (se conserva en el Cuaderno como descartada)</label></p></fieldset>
+        <p><button class="btn btn-primario" type="submit" id="rev-btn">Registrar revisión</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
+}
+async function registrarRevision() {
+  const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
+  const dec = document.querySelector('input[name="rev-dec"]:checked')?.value, prox = $('#rev-prox').value || null;
+  if (dec === 'reprogramar' && !prox) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
+  LAB.revClave = LAB.revClave || LAB.alm.escenarios.nuevaClave();      // el mismo intento reutiliza la clave: un reintento no duplica la revisión
+  btn.disabled = true; btn.textContent = 'Registrando…';
+  try {
+    const r = await LAB.alm.escenarios.revisar(e.id, { clave: LAB.revClave, revision: e.revision, fecha: $('#rev-fecha').value, observacion: $('#rev-obs').value, aprendizaje: $('#rev-apr').value, decision: dec, proxima_fecha: dec === 'descartar' ? null : prox });
+    if (!vigente(g)) return;
+    LAB.revClave = null; LAB.esc = await LAB.alm.escenarios.leer(e.id); if (!vigente(g)) return;
+    toast(r.duplicado ? 'Esa revisión ya estaba registrada' : 'Revisión registrada'); pintarEscenario(); $('#esc-rev-t')?.scrollIntoView({ block: 'start' });
+  } catch (er) {
+    if (!vigente(g)) return;
+    const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; tu texto sigue aquí y no se ha registrado nada.' : er.message + ' Tu texto sigue aquí: puedes reintentar.';
+    err.textContent = m; toastError(m);
+  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Registrar revisión'; } }
 }
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
   try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
   catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
-function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value }, 'Cambios guardados', '#esc-error'); }
+function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value, invalidacion: $('#esc-invalidacion').value }, 'Cambios guardados', '#esc-error'); }
 function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
 async function eliminarEscenario() {
   const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;
@@ -3200,7 +3286,7 @@ const leerCopia = id => { try { return JSON.parse(store.getItem('klever_edit_' +
 function guardarBorrador(conservarFecha = false) { // conservarFecha: se reescribe la copia (p. ej. nueva versión base) sin cambiar cuándo se editó
   if (!current) return;
   if (!current.id) { // aún no está en la cuenta: borrador del dispositivo
-    store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
+    store.setItem(DRAFT, JSON.stringify({ plantilla: current.plantilla, origen: current.origen || 'plantilla', nombre: $('#nombre').value || current.nombre, pos })); copiaLocal = store.ok; return;
   }
   const key = 'klever_edit_' + current.id; // cartera de la cuenta: copia de los cambios sin guardar
   if (rev !== savedRev) {
@@ -3499,7 +3585,7 @@ $('#form-nueva').addEventListener('submit', async e => {
 async function cargarCartera(id, rseq = null) {
   const s0 = sesionSeq; let c; try { c = await api('/portfolios/' + id); } catch (err) { toastError(err.message); return false; }
   if (s0 !== sesionSeq || (rseq !== null && rseq !== routeSeq)) return false;   // otra sesión u otra navegación: esta respuesta NO toca el estado
-  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
+  current = { id: c.id, nombre: c.nombre, plantilla: c.plantilla, origen: c.origen || 'plantilla', tesis: c.tesis || '', publico: c.publico, revision: c.revision, limite_peso: c.limite_peso ?? null, fecha: c.actualizado_en || c.creado_en || '' };
   pos = c.posiciones.map(p => ({ ticker: p.ticker, peso: p.peso })); posGuardada = pos.map(p => ({ ...p })); rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false;
   chartEls.clear(); $('#graficos').innerHTML = ''; colores.clear();
   await recuperarCambiosLocales(); return true;
@@ -3554,14 +3640,22 @@ async function recuperarCambiosLocales() { // cambios locales pendientes de una 
 // Con la red lenta la persona puede pulsar una plantilla ANTES de que lleguen los activos: `repartoPlantilla` devolvía [] y el borrador quedaba vacío (y se perdía al entrar).
 // Se espera a los activos antes de armar el reparto.
 let activosListos; const esperaActivos = new Promise(r => { activosListos = r; });
-async function abrirInvitado(plantilla) {
+// Ronda 21: UN solo editor y cuatro orígenes. «plantilla» (heredado), «ejemplo» (copia EDITABLE y rotulada como ejemplo simulado), «vacia» (desde cero) y «manual» (la persona introduce su cartera).
+// Para «vacia» y «manual» `plantilla` es solo un valor técnico heredado de la base de datos (no significa nada y no se muestra).
+async function abrirInvitado(plantilla, origen = 'ejemplo') {
   await esperaActivos;
-  current = { id: null, nombre: 'Mi cartera de ' + nombrePlantilla(plantilla), plantilla, tesis: '', publico: 0 };
+  current = { id: null, nombre: (origen === 'ejemplo' ? 'Ejemplo simulado: ' : 'Mi cartera de ') + nombrePlantilla(plantilla), plantilla, origen, tesis: '', publico: 0 };
   pos = repartoPlantilla(plantilla); posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
   guardarBorrador(); go('#cartera');
 }
+async function abrirNueva(origen) {                          // «Crear desde cero» y «Recrear mi cartera»: el mismo editor, sin posiciones
+  await esperaActivos;
+  current = { id: null, nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, tesis: '', publico: 0 };
+  pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; chartEls.clear(); $('#graficos').innerHTML = '';
+  guardarBorrador(); go('#cartera');
+}
 function restaurarBorrador(d) {
-  current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, tesis: '', publico: 0 };
+  current = { id: null, nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', tesis: '', publico: 0 };
   pos = d.pos; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = store.ok;
 }
 async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI es guardable; si no, se conserva tal cual
@@ -3573,7 +3667,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     location.hash = '#cartera'; return;
   }
   try {
-    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, posiciones: d.pos } }); // una sola operación: todo o nada
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', posiciones: d.pos } }); // una sola operación: todo o nada
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
@@ -3765,8 +3859,19 @@ function pintarMotivo(v, razon) { // jerarquía: título · estado · acción; e
   const hayDetalle = !!razon && !saveErr && razon !== principal;
   $('#mv-det').hidden = !hayDetalle; $('#mv-txt').textContent = hayDetalle ? razon : '';
 }
+const AVISO_ORIGEN = {
+  ejemplo: 'Esto es un <b>ejemplo simulado</b>: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.',
+  manual: 'Estás <b>recreando tu cartera a mano</b>: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.',
+  vacia: 'Cartera <b>vacía</b>: añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.',
+};
+function pintarOrigen() {
+  const o = current?.origen || 'plantilla', a = $('#origen-aviso'); if (!a) return;
+  a.hidden = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0); if (!a.hidden) a.innerHTML = AVISO_ORIGEN[o];
+  $('#mi-plantilla').hidden = o === 'vacia' || o === 'manual';       // «Reemplazar por la plantilla» solo tiene sentido en las que nacieron de una
+}
 function pintarEstado() {
   if (!current) return;
+  pintarOrigen();
   const v = validar(), dirty = rev !== savedRev, id = enCuenta(), razon = razonGuardar(v);
   const [largo, breve, cls] = textoPersistencia(id, dirty);
   const est = $('#estado'); est.textContent = largo; est.className = 'estado-btn ' + cls;           // persistencia, siempre explícita
@@ -3823,7 +3928,7 @@ async function guardar() {
     // UNA sola operación en el servidor (posiciones + nombre + tesis, con la revisión desde la que se edita): todo o nada
     u = cur.id
       ? await api('/portfolios/' + cur.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: cur.revision } })
-      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, tesis: $('#tesis').value, posiciones: pos } });
+      : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, origen: cur.origen || 'plantilla', tesis: $('#tesis').value, posiciones: pos } });
   } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else fallo = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
   const vigente = current === cur;           // ¿sigue abierta la misma cartera?
   if (vigente) saving = false;
@@ -3982,7 +4087,7 @@ function cbPintar() {
   cbList.innerHTML = cbOpts.length ? cbOpts.map((a, i) => {
     const ya = pos.some(p => p.ticker === a.ticker);
     return `<li role="option" id="opt-${i}" data-t="${esc(a.ticker)}" aria-selected="false"${ya ? ' aria-disabled="true"' : ''}><span><b>${esc(a.ticker)}</b> ${esc(a.nombre)}</span><small>${ya ? 'Ya en la cartera' : esc(a.sector)}</small></li>`;
-  }).join('') : `<li class="sin" role="option" aria-disabled="true">Ningún activo coincide con «${esc(q)}»</li>`;
+  }).join('') : `<li class="sin" role="option" aria-disabled="true">Ningún activo coincide con «${esc(q)}». Si no está en el universo disponible, no lo sustituimos por otro.</li>`;
   cbList.hidden = false; cbIn.setAttribute('aria-expanded', 'true'); cbMarcar(cbOpts.length ? 0 : -1);
   avisar(cbOpts.length ? `${cbOpts.length} resultados` : 'Sin resultados');
 }
@@ -4223,6 +4328,18 @@ function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
   b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crea tu primer portafolio';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
+  pintarPendientes();
+}
+// Usuario recurrente (ronda 21): lo primero es continuar y revisar, no repetir la bienvenida. Si hay ideas del Cuaderno con fecha de revisión de hoy o vencida, se avisa con un enlace; si no se pueden leer, no se dice nada (no se inventa un «0»).
+let pendSeq = 0;
+async function pintarPendientes() {
+  const el = $('#inicio-revisar'), n = ++pendSeq; el.hidden = true; if (!logged()) return;
+  try {
+    const l = await api('/escenarios'); if (n !== pendSeq || !logged()) return;
+    const d = new Date(), hoy = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const k = l.filter(e => e.estado === 'en_estudio' && e.revisar_en && e.revisar_en <= hoy).length;
+    if (k) { el.firstElementChild.textContent = `Tienes ${k} ${k === 1 ? 'idea' : 'ideas'} para revisar en tu Cuaderno`; el.hidden = false; }
+  } catch { /* sin datos fiables no se muestra nada */ }
 }
 $('#probar').addEventListener('click', () => { // destino inequívoco según el estado; al crear, la elección de plantilla con el foco allí
   const modo = $('#probar').dataset.modo;
@@ -4230,7 +4347,11 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
   const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
 });
-$$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla)));
+$$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
+// las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)
+$('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
+$('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
+$('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
   const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
   const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
