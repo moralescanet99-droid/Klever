@@ -94,4 +94,11 @@ env.sql.exec(`INSERT INTO portafolios(id,usuario_id,nombre,plantilla,publico,tes
 const e6 = (await crear({})).j; let r6 = 0, ult;
 for (let i = 0; i < 201; i++) { const act = await escen(e6.id); ult = await rev(e6.id, { revision: act.revision, fecha: '2026-11-10' }); if (ult.s === 201) r6++ }
 t('K19', 'Tope de 200 revisiones por escenario', 'Se aceptan 200 y la 201 devuelve 400 con mensaje', `aceptadas ${r6}; última HTTP ${ult.s}`, r6 === 200 && ult.s === 400);
+// ---- 7. REGRESIÓN real de esta ronda: la columna nueva `portafolios.origen` hacía que el ORDER BY de las carteras públicas (alias `origen`) ordenara por la COLUMNA y los ejemplos de Klever dejaran de ir primero
+import * as PU from '../../functions/api/public/index.js';
+import { DEMO_EMAIL } from '../../functions/_lib.js';
+env.sql.prepare('INSERT INTO usuarios(id,email) VALUES(9,?)').run(DEMO_EMAIL);
+env.sql.exec(`INSERT INTO portafolios(id,usuario_id,nombre,plantilla,publico,tesis) VALUES (50,9,'Ejemplo de Klever','oro',1,NULL),(51,1,'De una persona','oro',1,NULL); INSERT INTO posiciones(portafolio_id,ticker,peso) VALUES (50,'B',100),(51,'A',100)`);
+const pub = await (await PU.onRequestGet({ env })).json();
+t('K20', 'Carteras públicas: los ejemplos de Klever van primero aunque `portafolios` tenga ahora una columna `origen`', 'La primera es la del usuario de ejemplo (origen «ejemplo») y la segunda la de la persona, aunque su id sea MENOR (sin el orden por origen saldría la de la persona, id 51, primero)', J(pub.map(x => [x.id, x.origen])), pub.length === 2 && pub[0].id === 50 && pub[0].origen === 'ejemplo' && pub[1].origen === 'usuario');
 await fin();

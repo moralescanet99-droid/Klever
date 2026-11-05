@@ -1,0 +1,113 @@
+Ejecución: 2026-11-05 15:13 UTC
+Código: commit 3dad4cc2428b2b1c5cec481e50efcc2a6e974abb; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-carreras ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-migracion ===
+RESULTADO: 15 correctas, 0 fallos
+=== unit-acceso ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-calculos ===
+RESULTADO: 23 correctas, 0 fallos
+=== unit-r13 ===
+RESULTADO: 30 correctas, 0 fallos
+=== unit-carga ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-r14 ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-nota ===
+RESULTADO: 35 correctas, 0 fallos
+=== unit-comparador ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-almacen ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-escenarios16 ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-procedencia17 ===
+RESULTADO: 13 correctas, 0 fallos
+=== unit-guardada17 ===
+RESULTADO: 20 correctas, 0 fallos
+=== unit-integridad18 ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-redondeo19 ===
+RESULTADO: 6 correctas, 0 fallos
+=== unit-revision19 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-causas20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cierre20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-registro21 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cuaderno21 ===
+RESULTADO: 19 correctas, 0 fallos
+=== test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+FALLA portada: titular conservado
+FALLA portada: explicación acortada (texto pedido)  [Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.]
+RESULTADO: 51 correctas, 2 fallos
+- portada: titular conservado
+- portada: explicación acortada (texto pedido) → Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.
+FALLA (ejecutor): testB salió con código 1
+FALLA (ejecutor): testB tiene 2 fallos
+=== testC ===
+FALLA públicas: los ejemplos de Klever van primero
+RESULTADO: 49 correctas, 1 fallos
+- públicas: los ejemplos de Klever van primero
+FALLA (ejecutor): testC salió con código 1
+FALLA (ejecutor): testC tiene 1 fallos
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 10 correctas, 0 fallos
+=== testG ===
+RESULTADO: 3 correctas, 0 fallos
+=== verificar-api ===
+RESULTADO: 8 correctas, 0 fallos
+=== testH ===
+RESULTADO: 25 correctas, 0 fallos
+=== testI ===
+RESULTADO: 16 correctas, 0 fallos
+=== testJ ===
+RESULTADO: 53 correctas, 0 fallos
+=== testK ===
+FALLA (ejecutor): testK terminó SIN resultado
+FALLA (ejecutor): testK salió con código 1
+=== testL ===
+RESULTADO: 28 correctas, 0 fallos
+=== testM ===
+RESULTADO: 7 correctas, 0 fallos
+=== testN ===
+FALLA (ejecutor): testN terminó SIN resultado
+FALLA (ejecutor): testN salió con código 1
+=== testO ===
+OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
+OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
+RESULTADO: 18 correctas, 0 fallos
+=== testP ===
+RESULTADO: 28 correctas, 0 fallos
+=== testQ ===
+FALLA [Q1-320] Distribución: en el VIEWPORT inicial de 320×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (320 px)  [campo {"y":750,"h":44,"enViewport":false,"libre":false,"id":"peso-in","texto":""}; deslizador {"y":803,"h":44,"enViewport":false,"libre":false,"id":"peso-rng","texto":""}; revisar [{"y":622,"h":44,"enViewport":true,"libre":true,"id":"btn btn-primario js-revisar js","texto":"Revisar →"}]; barra 708]
+RESULTADO: 24 correctas, 1 fallos
+- [Q1-320] Distribución: en el VIEWPORT inicial de 320×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (320 px) → campo {"y":750,"h":44,"enViewport":false,"libre":false,"id":"peso-in","texto":""}; deslizador {"y":803,"h":44,"enViewport":false,"libre":false,"id":"peso-rng","texto":""}; revisar [{"y":622,"h":44,"enViewport":true,"libre":true,"id":"btn btn-primario js-revisar js","texto":"Revisar →"}]; barra 708
+FALLA (ejecutor): testQ salió con código 1
+FALLA (ejecutor): testQ tiene 1 fallos
+=== testR ===
+RESULTADO: 16 correctas, 0 fallos
+=== testS ===
+RESULTADO: 30 correctas, 0 fallos
+=== paridad-demo ===
+RESULTADO: 5 correctas, 0 fallos
+=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
+RESULTADO: 6 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK
+RESUMEN: 10 problema(s) en la ejecución. Código de salida 1.

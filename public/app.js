@@ -671,14 +671,15 @@ function pintarMotivo(v, razon) { // jerarquía: título · estado · acción; e
   const hayDetalle = !!razon && !saveErr && razon !== principal;
   $('#mv-det').hidden = !hayDetalle; $('#mv-txt').textContent = hayDetalle ? razon : '';
 }
-const AVISO_ORIGEN = {
-  ejemplo: 'Esto es un <b>ejemplo simulado</b>: una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.',
-  manual: 'Estás <b>recreando tu cartera a mano</b>: es la representación que tú introduces. Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.',
-  vacia: 'Cartera <b>vacía</b>: añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.',
+const AVISO_ORIGEN = {   // una línea visible (no empuja los controles fuera del primer viewport en móvil) y el detalle desplegable
+  ejemplo: ['<b>Ejemplo simulado</b> · datos de prueba.', 'Es una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.'],
+  manual: ['<b>Tu cartera, a mano</b> · sin conexión con bróker.', 'Es la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.'],
+  vacia: ['<b>Cartera vacía</b> · añade un activo.', 'Añade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.'],
 };
 function pintarOrigen() {
-  const o = current?.origen || 'plantilla', a = $('#origen-aviso'); if (!a) return;
-  a.hidden = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0); if (!a.hidden) a.innerHTML = AVISO_ORIGEN[o];
+  const o = current?.origen || 'plantilla', oculto = !AVISO_ORIGEN[o] || (o === 'vacia' && pos.length > 0);
+  // el mismo aviso en dos sitios (arriba en escritorio; tras las posiciones en móvil, para no empujar los controles fuera del primer viewport): el nombre ya dice «Ejemplo simulado»
+  for (const a of [$('#origen-aviso'), $('#origen-aviso-pie')]) { if (!a) continue; a.hidden = oculto; if (!oculto) { const [corto, largo] = AVISO_ORIGEN[o], h = `${corto} <details class="origen-det"><summary>Más</summary><span>${largo}</span></details>`; if (a.dataset.o !== o) { a.dataset.o = o; a.innerHTML = h; } } }
   $('#mi-plantilla').hidden = o === 'vacia' || o === 'manual';       // «Reemplazar por la plantilla» solo tiene sentido en las que nacieron de una
 }
 function pintarEstado() {
@@ -1142,7 +1143,7 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
 // Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
-  b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crea tu primer portafolio';
+  b.dataset.modo = modo; b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }

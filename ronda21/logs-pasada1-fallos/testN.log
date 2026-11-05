@@ -1,0 +1,19 @@
+# comando: node tests/ronda15/testN.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 15:27:08 UTC
+# código de salida: 1 · tiempo agotado: 0
+
+OK    [N1-320] Navegación principal de cuatro entradas (320 px)
+OK    [N1b-320] Revista reúne historias, empresas y carteras públicas (320 px)
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.evaluate: TypeError: Cannot read properties of null (reading 'textContent')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:226)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at /home/user/Klever/tests/ronda15/testN.cjs:30:25 {
+  log: []
+}
+
+Node.js v22.23.4

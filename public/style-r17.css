@@ -250,3 +250,7 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 @media (max-width:719px){.entradas ul{grid-template-columns:1fr}}
 .origen-aviso{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:10px;padding:10px 12px;margin:0 0 var(--s2);font-size:var(--t-s);line-height:1.5}
 .vistazo{margin:0 0 var(--s2);padding:0 0 var(--s2);border-bottom:1px solid var(--border)} .vistazo h3{font-size:1.0625rem;margin:0 0 6px} .vistazo p{margin:0 0 6px} .vistazo-acc{margin:8px 0 0}
+.origen-aviso{display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline;line-height:1.35;padding:6px 10px} .origen-det{display:inline} .origen-det summary{display:inline;cursor:pointer;color:var(--accent);padding:4px 6px;min-height:24px} .origen-det[open]{display:block;flex-basis:100%} .origen-det[open] span{display:block;margin-top:4px}
+.origen-aviso{margin:0 0 6px;padding:3px 8px;font-size:var(--t-xs,.8125rem);line-height:1.3;border-radius:8px} .origen-det summary{padding:2px 4px}
+@media (max-width:719px){#origen-aviso{display:none!important}} @media (min-width:720px){#origen-aviso-pie{display:none!important}} .origen-pie{margin:var(--s2) 0}
+.origen-pie{order:1}

@@ -176,7 +176,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       const sinRef = N(await p.textContent('#fi-radar')); await p.click('#fir-toggle'); await p.waitForSelector('#fi-radar [data-nota=editar]'); await p.click('#fi-radar [data-nota=editar]'); await p.fill('#fir-nota', 'Mirar con calma'); await p.click('#fi-radar [data-nota=guardar]'); await p.waitForSelector('#fi-radar .nota-txt'); await p.waitForTimeout(300);
       const est = N(await p.textContent('#fir-estado')), local = await p.evaluate(() => localStorage.getItem('klever_radar_local'));
       ev('K21-' + w, `Visitante: el radar se guarda SOLO en este dispositivo y lo dice (${w} px)`, 'Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage', `${est}; ${local}`, /solo en este dispositivo/.test(est) && !/Guardada en tu cuenta/.test(est) && /Mirar con calma/.test(local || '') && /Probar en mi cartera/.test(sinRef));
-      await p.keyboard.press('Escape');
+      await p.keyboard.press('Escape'); await p.waitForFunction(() => !history.state?.ficha, null, { timeout: 5000 }); await p.waitForTimeout(300);   // ronda 21: cerrar la ficha hace history.back() (asíncrono); un goto inmediato se abortaba (ERR_ABORTED)
       // probar una cartera (borrador) y simular de forma temporal
       await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.locator('.peso-in >> visible=true').first().waitFor(); await p.waitForTimeout(400);
       const radG = N(await p.textContent('#radio-cuerpo'));

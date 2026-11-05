@@ -1,0 +1,198 @@
+[
+ {
+  "id": "L1-1440",
+  "escenario": "Privacidad al salir: la nota y la cartera de A no quedan en pantalla ni en memoria (1440 px)",
+  "esperado": "Con A: la ficha muestra su nota. Tras salir SIN recargar, el HTML no contiene ni la nota ni el nombre de la cartera; la referencia guardada se borra; al reabrir la ficha como visitante no hay nota ni «En tu radar»",
+  "observado": "con A: true; HTML tras salir: nota false, cartera false; referencia null; visitante: Probar en mi cartera Comparar con otra empresa Si aún no tie; HTML tras reabrir: nota false, cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "L1b-1440",
+  "escenario": "Entra B tras A: no ve nada de A (1440 px)",
+  "esperado": "Radar y carteras de B vacíos; el HTML no contiene la nota ni el nombre de la cartera de A",
+  "observado": "radar 0, carteras 0; nota false, cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "L1-390",
+  "escenario": "Privacidad al salir: la nota y la cartera de A no quedan en pantalla ni en memoria (390 px)",
+  "esperado": "Con A: la ficha muestra su nota. Tras salir SIN recargar, el HTML no contiene ni la nota ni el nombre de la cartera; la referencia guardada se borra; al reabrir la ficha como visitante no hay nota ni «En tu radar»",
+  "observado": "con A: true; HTML tras salir: nota false, cartera false; referencia null; visitante: Probar en mi cartera Comparar con otra empresa Si aún no tie; HTML tras reabrir: nota false, cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "L1b-390",
+  "escenario": "Entra B tras A: no ve nada de A (390 px)",
+  "esperado": "Radar y carteras de B vacíos; el HTML no contiene la nota ni el nombre de la cartera de A",
+  "observado": "radar 0, carteras 0; nota false, cartera false",
+  "resultado": "OK"
+ },
+ {
+  "id": "L2",
+  "escenario": "Respuesta lenta de A que llega después de salir",
+  "esperado": "Las respuestas pendientes se descartan: ni la nota ni la cartera de A aparecen en ninguna parte del HTML",
+  "observado": "nota false, cartera false; ficha «»; lista «»",
+  "resultado": "OK"
+ },
+ {
+  "id": "L3",
+  "escenario": "Caducidad de la sesión (401) con datos privados en pantalla",
+  "esperado": "Se abre el acceso y no queda en el HTML ni la nota ni el nombre de la cartera",
+  "observado": "nota false, cartera false; token null",
+  "resultado": "OK"
+ },
+ {
+  "id": "L4",
+  "escenario": "Fallo de escritura tras un primer guardado correcto",
+  "esperado": "Se avisa «No se ha podido guardar», el texto se conserva en pantalla, el botón pasa a «Reintentar guardado» y lo guardado en el dispositivo NO cambia (no se finge el nuevo valor ni se devuelve el viejo como si fuera el nuevo)",
+  "observado": "No se ha podido guardar. No se ha podido guardar en este dispositivo (…; texto conservado=true; botón «Reintentar guardado»; guardado «»",
+  "resultado": "OK"
+ },
+ {
+  "id": "L5",
+  "escenario": "Recuperar espacio, reintentar y recargar",
+  "esperado": "El reintento guarda; tras recargar, la nota está en «Mi seguimiento»",
+  "observado": "«Revisar la deuda neta y comparar con KO antes de decidir nada»",
+  "resultado": "OK"
+ },
+ {
+  "id": "L6",
+  "escenario": "Un fallo de lectura no se muestra como radar vacío",
+  "esperado": "Dice que no se puede leer (y que no significa que esté vacío), ofrece Reintentar y NO borra el valor dañado",
+  "observado": "El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.Esto no significa que tu r…; crudo conservado=true",
+  "resultado": "OK"
+ },
+ {
+  "id": "L6b",
+  "escenario": "Con cuenta, un fallo de lectura del radar tampoco es «vacío»",
+  "esperado": "Mensaje de error con Reintentar; no dice «Aún no has guardado ninguna empresa»",
+  "observado": "Sin conexión con el servidor. Inténtalo de nuevo.Esto no significa que tu radar esté vacío: no se ha podido leer.Reintentar",
+  "resultado": "OK"
+ },
+ {
+  "id": "L7b-320",
+  "escenario": "La tabla de la historia se lee sin partir palabras (320 px)",
+  "esperado": "Ninguna celda desborda su ancho y las columnas no quedan tan estrechas que una palabra se corte (≥ 48 px)",
+  "observado": "{\"partidas\":0,\"minAncho\":58.328125}",
+  "resultado": "OK"
+ },
+ {
+  "id": "L7-320",
+  "escenario": "Historia legible sin cuenta, con autor, fecha, fuentes y empresa vinculada; ficticia desde el título (320 px)",
+  "esperado": "Título con «Caso ficticio»; aviso de caso ficticio; autor y fecha; 6 fuentes de ejemplo; tabla de proyectos; empresa vinculada; botón «Probar en mi cartera»; sin desbordamiento",
+  "observado": "Caso ficticio: cómo Hidrógeno Norte convierte proyectos anun…; Por Ana Ejemplo (autora ficticia) · 20 oct 2026 · Empresa vinculada: Hidrógeno Norte (empr; fuentes 6; sin desborde true",
+  "resultado": "OK"
+ },
+ {
+  "id": "L8-320",
+  "escenario": "Opinión firmada con hecho, interpretación y qué cambiaría la opinión; revisión fechada y simulada; la original sigue accesible (320 px)",
+  "esperado": "La tesis original tiene Hecho observado / Interpretación / Qué me haría cambiar de opinión / Pregunta, aviso de revisión posterior; la revisión dice «Desenlace simulado», cita la tesis que revisa y la original se conserva intacta",
+  "observado": "Hecho observado | Interpretación del autor | Qué me haría cambiar de opinión | Pregunta para seguir | Qué no sabemos; Esta tesis tiene una revisión posterior (3 nov 2026). Se conserva tal como se pu; revisión: Revisión: se firmó C, D se aplazó (desenlace simulado); Firmada por El Superespeculador (personaje de ejemplo) · 3 nov 2026 · Revisa la tesis del 20 oct 202; original: Creo que solo uno de los dos contratos se firmará a tiempo",
+  "resultado": "OK"
+ },
+ {
+  "id": "L9-320",
+  "escenario": "Primera visita: «Probar en mi cartera» con la cartera de ejemplo; A 60 / B 40 + C 10 → 54 / 36 / 10 (320 px)",
+  "esperado": "La empresa llega elegida (HNORT); se ofrece la cartera de ejemplo (no es tuya); el redondeo está en un desplegable cerrado; primero se dice de dónde sale el peso (KO cede 6, PG cede 4) y después la tabla (KO 54, PG 36, HNORT 10); la simulación es temporal y no hay formulario de guardado",
+  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Quién cede el peso: Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), P; {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar este escenarioEsta simulación es temporal: se perder",
+  "resultado": "OK"
+ },
+ {
+  "id": "L10-320",
+  "escenario": "Regreso con cuenta: pregunta, fecha, base original y revisión editorial (320 px)",
+  "esperado": "La pregunta de la historia llega precargada y se guarda; al volver a entrar se ven la pregunta «¿Se han firmado los dos contratos anunciados?», la revisión prevista «15 dic 2026», la base KO 60 / PG 40, la propuesta 54/36/10 y los enlaces a la historia, la opinión y la revisión editorial (desenlace simulado)",
+  "observado": "precargada «¿Se han firmado los dos contratos anunciados?»; tarjeta: HNORT al 10 % (proporcional) Simulación En estudio Pregunta: «¿Se han firmado los dos contratos anunciados?»Re; enlaces #historia-hidrogeno-norte,#tesis-hidrogeno-norte-1,#tesis-hidrogeno-norte-2",
+  "resultado": "OK"
+ },
+ {
+  "id": "L11-320",
+  "escenario": "Un cambio posterior en mi cartera conserva los pesos históricos del escenario (320 px)",
+  "esperado": "Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original",
+  "observado": "La cartera cambió después de este escenario (revisión 0 → 1).",
+  "resultado": "OK"
+ },
+ {
+  "id": "L12-320",
+  "escenario": "«Marcar como descartado» conserva; «Eliminar definitivamente» borra (320 px)",
+  "esperado": "Tras descartar, el escenario sigue existiendo (200); tras eliminar, 404; la cartera no se toca",
+  "observado": "descartado → 200; eliminado → 404",
+  "resultado": "OK"
+ },
+ {
+  "id": "L13-320",
+  "escenario": "Sin errores de JavaScript en las dos visitas (320 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "L7b-390",
+  "escenario": "La tabla de la historia se lee sin partir palabras (390 px)",
+  "esperado": "Ninguna celda desborda su ancho y las columnas no quedan tan estrechas que una palabra se corte (≥ 48 px)",
+  "observado": "{\"partidas\":0,\"minAncho\":59.234375}",
+  "resultado": "OK"
+ },
+ {
+  "id": "L7-390",
+  "escenario": "Historia legible sin cuenta, con autor, fecha, fuentes y empresa vinculada; ficticia desde el título (390 px)",
+  "esperado": "Título con «Caso ficticio»; aviso de caso ficticio; autor y fecha; 6 fuentes de ejemplo; tabla de proyectos; empresa vinculada; botón «Probar en mi cartera»; sin desbordamiento",
+  "observado": "Caso ficticio: cómo Hidrógeno Norte convierte proyectos anun…; Por Ana Ejemplo (autora ficticia) · 20 oct 2026 · Empresa vinculada: Hidrógeno Norte (empr; fuentes 6; sin desborde true",
+  "resultado": "OK"
+ },
+ {
+  "id": "L8-390",
+  "escenario": "Opinión firmada con hecho, interpretación y qué cambiaría la opinión; revisión fechada y simulada; la original sigue accesible (390 px)",
+  "esperado": "La tesis original tiene Hecho observado / Interpretación / Qué me haría cambiar de opinión / Pregunta, aviso de revisión posterior; la revisión dice «Desenlace simulado», cita la tesis que revisa y la original se conserva intacta",
+  "observado": "Hecho observado | Interpretación del autor | Qué me haría cambiar de opinión | Pregunta para seguir | Qué no sabemos; Esta tesis tiene una revisión posterior (3 nov 2026). Se conserva tal como se pu; revisión: Revisión: se firmó C, D se aplazó (desenlace simulado); Firmada por El Superespeculador (personaje de ejemplo) · 3 nov 2026 · Revisa la tesis del 20 oct 202; original: Creo que solo uno de los dos contratos se firmará a tiempo",
+  "resultado": "OK"
+ },
+ {
+  "id": "L9-390",
+  "escenario": "Primera visita: «Probar en mi cartera» con la cartera de ejemplo; A 60 / B 40 + C 10 → 54 / 36 / 10 (390 px)",
+  "esperado": "La empresa llega elegida (HNORT); se ofrece la cartera de ejemplo (no es tuya); el redondeo está en un desplegable cerrado; primero se dice de dónde sale el peso (KO cede 6, PG cede 4) y después la tabla (KO 54, PG 36, HNORT 10); la simulación es temporal y no hay formulario de guardado",
+  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Quién cede el peso: Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), P; {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar este escenarioEsta simulación es temporal: se perder",
+  "resultado": "OK"
+ },
+ {
+  "id": "L10-390",
+  "escenario": "Regreso con cuenta: pregunta, fecha, base original y revisión editorial (390 px)",
+  "esperado": "La pregunta de la historia llega precargada y se guarda; al volver a entrar se ven la pregunta «¿Se han firmado los dos contratos anunciados?», la revisión prevista «15 dic 2026», la base KO 60 / PG 40, la propuesta 54/36/10 y los enlaces a la historia, la opinión y la revisión editorial (desenlace simulado)",
+  "observado": "precargada «¿Se han firmado los dos contratos anunciados?»; tarjeta: HNORT al 10 % (proporcional) Simulación En estudio Pregunta: «¿Se han firmado los dos contratos anunciados?»Re; enlaces #historia-hidrogeno-norte,#tesis-hidrogeno-norte-1,#tesis-hidrogeno-norte-2",
+  "resultado": "OK"
+ },
+ {
+  "id": "L11-390",
+  "escenario": "Un cambio posterior en mi cartera conserva los pesos históricos del escenario (390 px)",
+  "esperado": "Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original",
+  "observado": "La cartera cambió después de este escenario (revisión 0 → 1).",
+  "resultado": "OK"
+ },
+ {
+  "id": "L12-390",
+  "escenario": "«Marcar como descartado» conserva; «Eliminar definitivamente» borra (390 px)",
+  "esperado": "Tras descartar, el escenario sigue existiendo (200); tras eliminar, 404; la cartera no se toca",
+  "observado": "descartado → 200; eliminado → 404",
+  "resultado": "OK"
+ },
+ {
+  "id": "L13-390",
+  "escenario": "Sin errores de JavaScript en las dos visitas (390 px)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "L14",
+  "escenario": "Simular y guardar el escenario deja intactas la composición privada y la publicación",
+  "esperado": "La cartera pública conserva posiciones, revisión y estado público; la vista pública no cambia",
+  "observado": "revisión 1→1; posiciones iguales true; pública igual true",
+  "resultado": "OK"
+ },
+ {
+  "id": "L15",
+  "escenario": "Ficha de la empresa del caso: historia relacionada y procedencia",
+  "esperado": "Enlaza a la historia, se llama «empresa ficticia» y declara «PRUEBA ficticios» para su ejercicio (no SEC); «Probar en mi cartera» disponible",
+  "observado": "Hidrógeno Norte (empresa ficticia) (HNORT)Energía · Datos del ejercicio FY2024 Cerrar Pregunta que investigas: «¿Se han firmado los dos contratos anunciados?» P",
+  "resultado": "OK"
+ }
+]

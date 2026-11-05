@@ -95,8 +95,8 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== PORTADA =====
   p = await nuevo(b, 1440, 900); await p.goto(B); await p.waitForSelector('#muestra-publicas .tarjeta');
-  ok('portada: titular conservado', (await T(p, 'h1')) === 'Crea, entiende y sigue tu portafolio');
-  ok('portada: explicación acortada (texto pedido)', (await T(p, '.lead')) === 'Crea una cartera, investiga por qué darle espacio a una empresa y observa qué cambia. Sin invertir dinero real.', await T(p, '.lead'));
+  ok('portada: titular con la promesa de producto (ronda 21)', (await T(p, 'h1')) === 'Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir');
+  ok('portada: explicación breve con la transparencia de simulación (ronda 21)', /sin dinero real/.test(await T(p, '.lead')) && /datos de prueba/.test(await T(p, '.lead')) && (await T(p, '.lead')).length < 220, await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
   await p.click('#probar'); await p.waitForTimeout(700);
   ok('portada: «Probar una cartera» desplaza a las plantillas y mueve el foco', await p.evaluate(() => document.activeElement.classList.contains('plantilla') && document.activeElement.getBoundingClientRect().top < innerHeight && document.activeElement.getBoundingClientRect().bottom > 0));
