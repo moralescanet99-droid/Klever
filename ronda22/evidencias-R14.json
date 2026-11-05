@@ -1,0 +1,114 @@
+[
+ {
+  "id": "Q1",
+  "escenario": "Peso de 10,04 %",
+  "esperado": "HTTP 400 (una decimal como mucho); no se guarda un objetivo de 10,04 con una posición de 10",
+  "observado": "HTTP 400: El peso admite como mucho un decimal (por ejemplo 10 o 10,5 %).; filas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q2",
+  "escenario": "Propuesta con un símbolo duplicado (C dos veces, 5 + 5)",
+  "esperado": "HTTP 400: no se normaliza antes de comparar; nada guardado",
+  "observado": "HTTP 400: La propuesta repite o no identifica algún símbolo.; filas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q3",
+  "escenario": "Propuesta con pesos de más de una decimal",
+  "esperado": "HTTP 400",
+  "observado": "HTTP 400: La propuesta contiene un peso con más de un decimal o no válido.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q3b",
+  "escenario": "Propuesta con una fila de más (misma posición repetida)",
+  "esperado": "HTTP 400",
+  "observado": "HTTP 400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q3c",
+  "escenario": "Un decimal SÍ se acepta (10,5 %)",
+  "esperado": "HTTP 201 con A 53,7 · B 35,8 · C 10,5",
+  "observado": "HTTP 201: [{\"ticker\":\"A\",\"peso\":53.7},{\"ticker\":\"B\",\"peso\":35.8},{\"ticker\":\"C\",\"peso\":10.5}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q4",
+  "escenario": "Pregunta, fecha de revisión e historia vinculada",
+  "esperado": "201 y los tres campos se devuelven",
+  "observado": "[201,\"¿Se han firmado los dos contratos anunciados?\",\"2026-12-15\",\"hidrogeno-norte\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q4b",
+  "escenario": "Campos no válidos",
+  "esperado": "400 con fecha inexistente (2026-02-31), pregunta de 201 caracteres e historia con mayúsculas/espacios",
+  "observado": "[400,400,400]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q4c",
+  "escenario": "Editar la pregunta y quitar la fecha (revisión 0 → 1)",
+  "esperado": "200; pregunta nueva; fecha null; base y propuesta intactas",
+  "observado": "[200,\"Otra pregunta\",null,1,2,3]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q5",
+  "escenario": "Un escenario anterior (sin los campos nuevos) se abre y se lista",
+  "esperado": "pregunta vacía, sin fecha ni historia; base y propuesta intactas",
+  "observado": "[200,\"\",null,null,1]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q6",
+  "escenario": "«Marcar como descartado» conserva la historia; «Eliminar» la borra del todo",
+  "esperado": "Tras descartar sigue en la lista con estado descartado y su base; tras eliminar no queda nada",
+  "observado": "[\"descartado\",1]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q7",
+  "escenario": "Dos pestañas: otra escritura se cuela entre la lectura y la actualización",
+  "esperado": "La edición con la revisión antigua recibe 409 y la nota más reciente se conserva",
+  "observado": "HTTP 409; nota «Edición de la OTRA pestaña»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q8",
+  "escenario": "Dos reintentos con la misma clave a la vez (el otro escribe entre la comprobación y el INSERT)",
+  "esperado": "Una sola fila; la respuesta es el escenario ya guardado (duplicado)",
+  "observado": "HTTP 200; duplicado true; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q9",
+  "escenario": "Tope de 100 escenarios con una escritura simultánea",
+  "esperado": "El INSERT comprueba el tope en la propia sentencia: se rechaza (400) y no se pasa de 100",
+  "observado": "HTTP 400: Puedes guardar hasta 100 escenarios. Elimina alguno para guardar otro.; filas 100",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Q10",
+  "escenario": "Tope de 200 en el radar con una escritura simultánea",
+  "esperado": "Una fila NUEVA se rechaza (400) cuando el hueco lo ocupó otra petición; actualizar la nota de una EXISTENTE sigue permitido; no se pasa de 200",
+  "observado": "nueva HTTP 400; actualizar HTTP 200; filas 200",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]
