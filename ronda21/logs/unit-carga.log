@@ -1,0 +1,24 @@
+# comando: node tests/ronda14/unit-carga.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 15:13:40 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [L1] Carga VACÍA (catálogo sin empresas) sobre datos previos
+OK    [L2] Carga donde TODAS fallan o vienen sin años
+OK    [L3] Carga PARCIAL: una empresa falla
+OK    [L3b] La ficha lleva la procedencia de CADA dato
+OK    [L4] Carga CORRECTA (y repetida: idempotente)
+OK    [L5] Sin ninguna fila: no se atribuye a nadie
+OK    [L5b] Filas anteriores sin fuente registrada (datos antiguos)
+OK    [L6] Métricas derivadas: ausencia ≠ cero
+OK    [L7] Criterios: beneficio 0 ≠ beneficio ausente; EBITDA ausente → deuda sin datos
+OK    [L8] Crecimiento con año anterior ausente o con ingresos 0
+OK    [L9] El SQL no escribe ningún origen global
+OK    [L10] Flujo anual: un acumulado de 9 meses con el mismo ejercicio NO se confunde con el año completo
+OK    [L10b] Un flujo sin duración de ~12 meses se descarta (no hay dato en lugar de un dato falso)
+OK    [L10c] Un SALDO (deuda, caja, patrimonio) no tiene duración y sí se acepta
+OK    [L10d] Revisión del mismo cierre: gana la presentación más reciente y se conserva su informe
+OK    [L10e] Trimestrales (10-Q) y hechos sin ejercicio no cuentan
+OK    [L11] La carga exige declarar su fuente: no existe «sec» por defecto
+OK    [L12] La carga guarda el resultado operativo (para el margen operativo) y el informe de origen
+
+RESULTADO: 18 correctas, 0 fallos

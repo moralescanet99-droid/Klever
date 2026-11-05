@@ -1,0 +1,282 @@
+[
+ {
+  "id": "N1",
+  "escenario": "Empresas efectivas: 50/50",
+  "esperado": "N = 2 y puntuación 1 + 9·(2−1)/14 = 1,6429",
+  "observado": "N=2; 1.6428571428571428",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N1b",
+  "escenario": "Empresas efectivas: 90/10",
+  "esperado": "N ≈ 1,22 (1/(0,81+0,01)=1,2195)",
+  "observado": "N=1.2195",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N2",
+  "escenario": "Dos clases del mismo emisor cuentan una vez",
+  "esperado": "N = 1 (puntuación 1)",
+  "observado": "N=1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N2b",
+  "escenario": "Con 20 posiciones iguales N = 20 ≥ 15: puntuación máxima",
+  "esperado": "10",
+  "observado": "10",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N3",
+  "escenario": "Sectores y actividades: mitad y mitad",
+  "esperado": "Con 6 sectores casi iguales (N≈5,56) y 6 actividades (N≈5,56): ½·(1+9·(5,56−1)/5) + ½·(1+9·(5,56−1)/9)",
+  "observado": "5.556 / 5.556 → 7.378",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N4",
+  "escenario": "Una empresa pequeña al 2 % pesa menos que al 30 %",
+  "esperado": "La puntuación de tamaño se aleja menos de la de las grandes al 2 % que al 30 %",
+  "observado": "grandes 9.25; con S00 al 2 %: 9.09; al 30 %: 6.83",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N5",
+  "escenario": "Falta un ejercicio (4 de 5) en una empresa del 15 %",
+  "esperado": "Deuda y caja y Rentabilidad quedan con cobertura 85 % (< 90 %): nota pendiente y motivo exacto «Faltan ejercicios»",
+  "observado": "Faltan datos para valorar deuda y caja (caja libre de los cinco ejercicios: 85,0 %; hace falta 90 %); rentabilidad y crecimiento (ROIC: 85,0 %, años con beneficio: 85,0 %, años con ventas al alza: 85,0 %; hace falta 90 %).; Faltan ejercicios: hacen falta 5 consecutivos.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N5b",
+  "escenario": "Cobertura de 90 % EXACTO (empresa sin evaluar del 10 %)",
+  "esperado": "Se publica: 90,0 % cumple el mínimo (≥ 90 %)",
+  "observado": "cobertura 90.0; publicada true; nota 5.2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N5c",
+  "escenario": "Cobertura de 89,9 %",
+  "esperado": "No se publica y dice 89,9 %",
+  "observado": "Faltan datos para valorar deuda y caja (caja libre de los cinco ejercicios: 89,9 %; hace falta 90 %); rentabilidad y cre",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N6",
+  "escenario": "19 comparables en el sector",
+  "esperado": "Deuda y Rentabilidad no se pueden calcular: «Solo hay 19 comparables… hacen falta 20»; no se inventa un percentil",
+  "observado": "Solo hay 19 comparables en su sector (hacen falta 20) para el percentil de deuda. | Solo hay 19 comparables en su sector (hacen fa",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N6b",
+  "escenario": "20 comparables en el sector",
+  "esperado": "Ya se calcula (nota publicada)",
+  "observado": "publicada true; nota 4.5",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N7",
+  "escenario": "Un ETF sin composición verificada (20 %)",
+  "esperado": "Cuenta como peso sin evaluar en todos los bloques: cobertura 80 %, nota pendiente y el ETF señalado",
+  "observado": "Faltan datos para valorar empresas (cobertura 80,0 %; hace falta 90 %); sectores y activid…; ETF1: Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N8",
+  "escenario": "Cartera que suma 95 %",
+  "esperado": "Sin nota ni bloques: dice que suma 95 % y que no se reescala",
+  "observado": "La cartera suma 95 %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N8b",
+  "escenario": "Cartera que suma 110 %",
+  "esperado": "Sin nota: dice 110 % y que no se recorta",
+  "observado": "La cartera suma 110 %: la nota solo se calcula con el 100 % asignado (no se reescala una cartera incompleta ni se recorta una que excede).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N8c",
+  "escenario": "Cartera vacía",
+  "esperado": "Sin nota y lo dice",
+  "observado": "La cartera está vacía: no hay nada que evaluar.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N9",
+  "escenario": "Empates: percentil por rango medio",
+  "esperado": "percentil(2, [1,2,2,3]) = 50; percentil(1) = 12,5; percentil(3) = 87,5",
+  "observado": "[50,12.5,87.5]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N10",
+  "escenario": "Caja neta con EBITDA positivo",
+  "esperado": "Deuda: (10 + frecuencia de caja libre 5/5 = 10) / 2 = 10",
+  "observado": "10",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N10b",
+  "escenario": "Deuda positiva con EBITDA negativo y caja libre siempre negativa",
+  "esperado": "Deuda: (1 + 1) / 2 = 1",
+  "observado": "1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N10c",
+  "escenario": "Deuda y EBITDA AUSENTES (null)",
+  "esperado": "Pendiente por dato ausente (cobertura 0 en deuda)",
+  "observado": "0; Falta la deuda neta del último ejercicio.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N10d",
+  "escenario": "Caja neta pero EBITDA negativo (ambos «nulos o negativos»)",
+  "esperado": "Sin evaluar",
+  "observado": "0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N11",
+  "escenario": "Bancos y aseguradoras",
+  "esperado": "Cuentan como peso sin evaluar en Deuda y caja y en Rentabilidad (ROIC); sí en Empresas y Sectores",
+  "observado": "{\"empresas\":1,\"sectores\":1,\"tamano\":1,\"deuda\":0,\"rentabilidad\":0}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N12",
+  "escenario": "Rentabilidad y crecimiento de la empresa con mayor ROIC del sector (24 comparables)",
+  "esperado": "Percentil 100·(23+½)/24 = 97,9 → 9,81 puntos; frecuencias 10 y 10: ½·9,8125 + ¼·10 + ¼·10 = 9,906",
+  "observado": "9.90625",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N13",
+  "escenario": "Sin doble redondeo: la nota es la suma de los bloques SIN redondear, redondeada una vez a un decimal",
+  "esperado": "nota = round(Σ peso·puntuación / 100, 1) con puntuaciones sin redondear",
+  "observado": "suma 4.800469571189679; nota 4.8",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N14",
+  "escenario": "Principal limitación = mayor «peso del bloque × (10 − puntuación)»; principal fortaleza = bloque de mayor puntuación",
+  "esperado": "limitación sectores con 1.708",
+  "observado": "sectores 1.708; fortaleza deuda",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N15",
+  "escenario": "Cartera y escenario con igual composición, fecha y datos",
+  "esperado": "Misma nota y mismo resumen (sin importar el orden de las posiciones ni quién llame)",
+  "observado": "4.8 / 4.8",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N16",
+  "escenario": "La evaluación no cambia el universo ni la cartera de entrada",
+  "esperado": "Entradas intactas tras evaluar",
+  "observado": "sin mutaciones",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N20a",
+  "escenario": "EBITDA AUSENTE (null) con deuda positiva, una posición al 100 % y los demás datos válidos",
+  "esperado": "El indicador deuda/EBITDA queda PENDIENTE (no se evalúa como EBITDA ≤ 0): sin nota publicada y el motivo habla del EBITDA ausente",
+  "observado": "publicada false; nota null; Falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N20b",
+  "escenario": "EBITDA observado igual a CERO con deuda positiva (mismos datos)",
+  "esperado": "Es un hecho: 1 punto en ese indicador; deuda y caja = (1 + 10) / 2 = 5,5 y la nota se publica",
+  "observado": "deuda 5.5; publicada true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N20c",
+  "escenario": "EBITDA NEGATIVO con deuda positiva",
+  "esperado": "Igual que cero: 1 punto (tercera entrada distinta de la ausencia)",
+  "observado": "deuda 5.5",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N21",
+  "escenario": "59 frente a 60 sesiones de negociación (EBITDA válido)",
+  "esperado": "59: la liquidez queda pendiente y la nota no se publica, con el motivo «Solo hay 59 sesiones»; 60: se publica",
+  "observado": "59 → false (Solo hay 59 sesiones de negociación (hacen falta 60).); 60 → true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N22",
+  "escenario": "Una empresa con otra MONEDA, otra FUENTE o sin FECHA de mercado",
+  "esperado": "Cada caso deja su tamaño y liquidez pendientes con su motivo; el resto del universo no cambia",
+  "observado": "false/false/false; Moneda o fuente de mercado (EUR, prueba) distinta de la del ",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N23a",
+  "escenario": "Datos ausentes en posiciones DISTINTAS: sin EBITDA en una posición del 10 % y sin un dato de caja libre en otra del 10 %",
+  "esperado": "Cada indicador conserva el 90 % evaluable: el bloque «Deuda y caja» se publica (antes se caía por exigir los datos conjuntos)",
+  "observado": "deuda ratio 90.0, fcf 90.0; publicada true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N23b",
+  "escenario": "Mismo caso con la posición sin EBITDA al 10,1 % (89,9 % evaluable en ese indicador)",
+  "esperado": "El indicador deuda/EBITDA tiene 89,9 % y el bloque queda pendiente, aunque el otro indicador tenga 90 %: el motivo cita el indicador",
+  "observado": "Faltan datos para valorar deuda y caja (deuda neta / EBITDA: 89,9 %; hace falta 90 %).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N24",
+  "escenario": "Origen de los datos",
+  "esperado": "Solo un conjunto sintético IDENTIFICADO publica la nota; con datos reales, mixtos o sin origen hace falta una habilitación explícita posterior a la calibración",
+  "observado": "false/false/true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "N25",
+  "escenario": "Guardar y reabrir la misma evaluación (JSON)",
+  "esperado": "Conserva cifra, fecha, cobertura y versión",
+  "observado": "4.8/2026-11-04/100/estructura-v1",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]
