@@ -651,11 +651,12 @@ const CLAVE_REV = 'klever_rev_', DIAS_REV = 7;
 function persistirBorradorRev(b) { try { const { store } = LAB.ctx, k = CLAVE_REV + b.esc; if ((b.obs || '').trim() || (b.apr || '').trim() || b.dec !== 'mantener') store.setItem(k, JSON.stringify({ ...b, t: Date.now() })); else store.removeItem(k); } catch { /* sin almacenamiento */ } }
 function leerBorradorGuardado(id) { try { const b = JSON.parse(LAB.ctx.store.getItem(CLAVE_REV + id)); if (b && b.esc === id && Date.now() - b.t < DIAS_REV * 864e5) return b; } catch { /* dañado */ } return null; }
 function olvidarBorradorRev(id) { try { LAB.ctx.store.removeItem(CLAVE_REV + id); } catch { /* sin almacenamiento */ } if (LAB.revBorrador?.esc === id) LAB.revBorrador = null; }
+const clavesRev = () => { const ks = []; try { for (let k = 0; k < localStorage.length; k++) { const c = localStorage.key(k); if (c && c.startsWith(CLAVE_REV)) ks.push(c); } } catch { /* sin almacenamiento */ } return ks; };   // se listan ANTES de borrar: el orden de localStorage.key() cambia al eliminar
 export function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de los escenarios de ESTA cuenta (null = solo caducidad)
-  try { for (let k = localStorage.length - 1; k >= 0; k--) { const c = localStorage.key(k); if (!c || !c.startsWith(CLAVE_REV)) continue; const id = Number(c.slice(CLAVE_REV.length)); let b = null; try { b = JSON.parse(localStorage.getItem(c)); } catch { /* dañado */ }
-    if (!b || Date.now() - b.t >= DIAS_REV * 864e5 || (idsPropios && !idsPropios.includes(id))) localStorage.removeItem(c); } } catch { /* sin almacenamiento */ }
+  for (const c of clavesRev()) { const id = Number(c.slice(CLAVE_REV.length)); let b = null; try { b = JSON.parse(localStorage.getItem(c)); } catch { /* dañado */ }
+    if (!b || Date.now() - b.t >= DIAS_REV * 864e5 || (idsPropios && !idsPropios.includes(id))) { try { localStorage.removeItem(c); } catch { /* sin almacenamiento */ } } }
 }
-export function borrarBorradoresRev() { try { for (let k = localStorage.length - 1; k >= 0; k--) { const c = localStorage.key(k); if (c && c.startsWith(CLAVE_REV)) localStorage.removeItem(c); } } catch { /* sin almacenamiento */ } if (LAB) LAB.revBorrador = null; }
+export function borrarBorradoresRev() { for (const c of clavesRev()) { try { localStorage.removeItem(c); } catch { /* sin almacenamiento */ } } if (LAB) LAB.revBorrador = null; }
 const cuerpoDeBorrador = b => ({ fecha: b.fecha, observacion: (b.obs || '').trim(), aprendizaje: (b.apr || '').trim(), decision: b.dec, proxima_fecha: b.dec === 'reprogramar' ? (b.prox || null) : null });
 function guardarBorradorRev() {
   if (!document.querySelector('#rev-form')) return;
