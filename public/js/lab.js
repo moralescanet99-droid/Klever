@@ -6,6 +6,7 @@ import { crearAlmacen } from './almacen.js';
 import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, estadoSeguimiento, refPregunta, casoPorRef, similitudPregunta, UMBRAL_PARECIDO, SEGUIMIENTO_CASOS } from './contenido.js';
 import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota, htmlEvaluacionGuardada } from './nota-ui.js';
+import { nuevoIntento, enviarIntento, actualizarVista, mismoContenido } from './revisiones.js';
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
@@ -38,6 +39,8 @@ export function iniciarLab(ctx) {
   const lab = $('#lab-cuerpo');
   lab.addEventListener('submit', onLabSubmit);
   lab.addEventListener('change', onLabCambio);
+  lab.addEventListener('input', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
+  lab.addEventListener('change', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
   lab.addEventListener('change', e => { if (e.target.name === 'rev-dec') { const p = $('#rev-prox'); p.disabled = e.target.value !== 'reprogramar'; if (p.disabled) p.value = ''; else p.focus(); } });
   lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
@@ -559,7 +562,7 @@ async function mostrarEscenario(id) {
   if (!logged()) { go('#seguimiento'); return; }
   let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
-  LAB.esc = e; LAB.editEsc = false; LAB.revClave = null; pintarEscenario();
+  LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } pintarEscenario();
 }
 function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
@@ -591,6 +594,8 @@ function pintarEscenario() {
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
+  restaurarFormRev();
+  if (LAB.abrirRev === e.id) { LAB.abrirRev = null; const d = $('#rev-det'); if (d) { d.open = true; $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); $('#rev-obs')?.focus({ preventScroll: true }); } }   // «Registrar revisión» desde el Cuaderno lleva directamente al formulario
 }
 // Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
 const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };
@@ -607,24 +612,51 @@ function htmlRevisiones(esc, e) {
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-m" value="mantener" checked> <label for="rev-dec-m">La mantengo (sin nueva fecha)</label></p>
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-r" value="reprogramar"> <label for="rev-dec-r">Programo otra revisión</label> <input id="rev-prox" type="date" min="${hoy()}" aria-label="Fecha de la próxima revisión" disabled></p>
           <p class="fila"><input type="radio" name="rev-dec" id="rev-dec-d" value="descartar"> <label for="rev-dec-d">La descarto (se conserva en el Cuaderno como descartada)</label></p></fieldset>
-        <p><button class="btn btn-primario" type="submit" id="rev-btn">Registrar revisión</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
+        <div id="rev-estado" class="rev-estado" role="status" aria-live="polite"></div>
+        <p><button class="btn btn-primario" type="submit" id="rev-btn">${rotuloBotonRev()}</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
 }
+// Estado del registro de una revisión (ronda 22). LAB.revIntento = { intento, fase }: fase «incierto» (no se sabe si el servidor lo registró: se reintenta EL MISMO intento) o «vista» (el servidor ya lo confirmó y solo falta
+// releer el escenario: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
+const rotuloBotonRev = () => LAB.revIntento?.fase === 'vista' ? 'Actualizar la vista' : LAB.revIntento?.fase === 'incierto' ? 'Reintentar el mismo envío' : 'Registrar revisión';
+const leerBorradorRev = () => { const q = s => document.querySelector(s), dec = document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener';
+  return { fecha: q('#rev-fecha').value, observacion: q('#rev-obs').value.trim(), aprendizaje: q('#rev-apr').value.trim(), decision: dec, proxima_fecha: dec === 'reprogramar' ? (q('#rev-prox').value || null) : null }; };
+function guardarBorradorRev() { if (document.querySelector('#rev-form')) LAB.revBorrador = { esc: LAB.esc?.id, fecha: document.querySelector('#rev-fecha').value, obs: document.querySelector('#rev-obs').value, apr: document.querySelector('#rev-apr').value, dec: document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener', prox: document.querySelector('#rev-prox').value }; }
+function restaurarFormRev() {
+  const b = LAB.revBorrador, q = s => document.querySelector(s); if (!q('#rev-form')) return;
+  if (b && b.esc === LAB.esc?.id) { q('#rev-fecha').value = b.fecha || hoy(); q('#rev-obs').value = b.obs; q('#rev-apr').value = b.apr; const r = q(`input[name="rev-dec"][value="${b.dec}"]`); if (r) r.checked = true; q('#rev-prox').value = b.prox || ''; q('#rev-prox').disabled = b.dec !== 'reprogramar'; if (b.obs || b.apr) q('#rev-det').open = true; }
+  const m = LAB.revMsg; if (m && m.esc === LAB.esc?.id) { q('#rev-estado').innerHTML = `<p class="${m.tipo === 'ok' ? 'rev-ok' : 'rev-aviso'}">${x().esc(m.texto)}</p>`; q('#rev-det').open = true; }
+}
+const avisarRev = (tipo, texto) => { LAB.revMsg = { esc: LAB.esc?.id, tipo, texto }; };
 async function registrarRevision() {
-  const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
-  const dec = document.querySelector('input[name="rev-dec"]:checked')?.value, prox = $('#rev-prox').value || null;
-  if (dec === 'reprogramar' && !prox) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
-  LAB.revClave = LAB.revClave || LAB.alm.escenarios.nuevaClave();      // el mismo intento reutiliza la clave: un reintento no duplica la revisión
-  btn.disabled = true; btn.textContent = 'Registrando…';
+  const { $, toast } = x(), e = LAB.esc, g = LAB.gen, btn = $('#rev-btn'), err = $('#rev-error'); err.textContent = '';
+  const pend = LAB.revIntento && LAB.revIntento.intento.escId === e.id ? LAB.revIntento : null;
+  const refrescar = async () => { const v = await actualizarVista(LAB.alm.escenarios, e.id); return v.ok ? v.escenario : null; };
+  btn.disabled = true;
   try {
-    const r = await LAB.alm.escenarios.revisar(e.id, { clave: LAB.revClave, revision: e.revision, fecha: $('#rev-fecha').value, observacion: $('#rev-obs').value, aprendizaje: $('#rev-apr').value, decision: dec, proxima_fecha: dec === 'descartar' ? null : prox });
-    if (!vigente(g)) return;
-    LAB.revClave = null; LAB.esc = await LAB.alm.escenarios.leer(e.id); if (!vigente(g)) return;
-    toast(r.duplicado ? 'Esa revisión ya estaba registrada' : 'Revisión registrada'); pintarEscenario(); $('#esc-rev-t')?.scrollIntoView({ block: 'start' });
-  } catch (er) {
-    if (!vigente(g)) return;
-    const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; tu texto sigue aquí y no se ha registrado nada.' : er.message + ' Tu texto sigue aquí: puedes reintentar.';
-    err.textContent = m; toastError(m);
-  } finally { if (btn.isConnected) { btn.disabled = false; btn.textContent = 'Registrar revisión'; } }
+    // 1) la revisión ya está CONFIRMADA y solo falta la vista: leer, nunca reenviar (lo que haya escrito después NO se envía)
+    if (pend?.fase === 'vista') {
+      btn.textContent = 'Actualizando…'; const n = await refrescar(); if (!vigente(g)) return;
+      if (n) { LAB.esc = n; LAB.revIntento = null; avisarRev('ok', 'Vista actualizada: tu revisión aparece en el historial.'); } else avisarRev('aviso', 'Tu revisión SÍ está guardada. Todavía no hemos podido actualizar la vista: pulsa «Actualizar la vista» cuando tengas conexión. No hace falta volver a escribirla.');
+      guardarBorradorRev(); pintarEscenario(); return;
+    }
+    // 2) intento pendiente de resultado incierto: se reintenta EL MISMO (clave y contenido congelados), aunque el formulario tenga ahora otro texto
+    const borr = leerBorradorRev();
+    if (!pend && borr.decision === 'reprogramar' && !borr.proxima_fecha) { err.textContent = 'Indica la fecha de la próxima revisión.'; $('#rev-prox').focus(); return; }
+    const intento = pend ? pend.intento : nuevoIntento(LAB.alm.escenarios, e, borr), textoNuevo = !!pend && !mismoContenido(pend.intento, borr);
+    btn.textContent = pend ? 'Comprobando…' : 'Registrando…'; guardarBorradorRev();
+    const r = await enviarIntento(LAB.alm.escenarios, intento, e); if (!vigente(g)) return;
+    if (r.tipo === 'confirmada') {
+      const conservar = textoNuevo;                                   // si hay texto nuevo, queda en el formulario SIN enviar
+      if (r.vista === 'actualizada') { LAB.esc = r.escenario; LAB.revIntento = null; } else LAB.revIntento = { intento, fase: 'vista' };
+      if (!conservar) LAB.revBorrador = null; else guardarBorradorRev();
+      avisarRev(r.vista === 'actualizada' ? 'ok' : 'aviso', r.vista === 'pendiente' ? 'Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.' : (conservar ? 'Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.' : (r.duplicado ? 'Esa revisión ya estaba registrada.' : 'Revisión registrada.')));
+      toast(r.vista === 'pendiente' ? 'Revisión guardada' : 'Revisión registrada'); pintarEscenario(); if (!conservar) $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); return;
+    }
+    if (r.tipo === 'incierto') { LAB.revIntento = { intento, fase: 'incierto' }; avisarRev('aviso', r.mensaje + ' Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.'); }
+    else if (r.tipo === 'conflicto') { LAB.revIntento = null; const n = await refrescar(); if (!vigente(g)) return; if (n) LAB.esc = n; avisarRev('aviso', r.mensaje + (n ? ' Hemos cargado la versión actual: pulsa «Registrar revisión» para añadirla.' : ' No hemos podido cargar la versión actual: recarga la página; tu texto sigue aquí.')); }
+    else { LAB.revIntento = null; avisarRev('aviso', r.mensaje + ' No se ha registrado nada; tu texto sigue aquí.'); }
+    guardarBorradorRev(); pintarEscenario();
+  } finally { const b2 = document.querySelector('#rev-btn'); if (b2) { b2.disabled = false; b2.textContent = rotuloBotonRev(); } }
 }
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';

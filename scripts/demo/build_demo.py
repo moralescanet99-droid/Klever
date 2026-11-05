@@ -12,7 +12,7 @@ HERE=pathlib.Path(__file__).resolve().parent; R=str(HERE.parent.parent)+'/'; SP=
 html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read()+'\n'+open(R+'public/style-r13.css').read()+'\n'+open(R+'public/style-r17.css').read()
 def quitar_modulos(txt):  # los módulos ES se concatenan en un solo script clásico: sin import/export (los nombres no chocan entre archivos)
     txt=re.sub(r"^import [^\n]*from '[^']+';\n",'',txt,flags=re.M); return re.sub(r'^export (async function|function|const|let)',r'\1',txt,flags=re.M)
-js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','catalogo.js','nota.js','comparador.js','almacen.js','contenido.js','nota-ui.js','ideas.js','revista.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
+js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','catalogo.js','nota.js','comparador.js','almacen.js','contenido.js','nota-ui.js','ideas.js','revista.js','revisiones.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
 import json
 uni=json.dumps(json.load(open(R+'data/universe.json'))+json.load(open(R+'data/ficticios.json')),ensure_ascii=False); import subprocess; semilla=subprocess.check_output(['node',R+'scripts/demo/exportar-semilla.mjs']).decode(); mock=open(SP+'mock.js').read() % (uni, semilla)
 body=re.search(r'<a class="saltar".*?(?=<script src="app.js")',html,re.S).group(0)
