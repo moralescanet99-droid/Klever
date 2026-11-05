@@ -928,6 +928,11 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
   #vista-cartera[data-paso="3"] .ws-grid{display:flex;flex-direction:column;gap:var(--s2);max-width:880px}
   #vista-cartera[data-paso="3"] .ws-main,#vista-cartera[data-paso="3"] .ws-resumen{display:contents}
 }
+/* ronda 20 · Revisión en ESCRITORIO: la página no salta a la nota; se queda arriba (nombre, pasos, acción de guardado) y en la columna derecha el resultado va PRIMERO, con «Volver a la distribución»; a su izquierda siguen las posiciones. */
+@media (min-width:900px){
+  #vista-cartera[data-paso="3"] .paso3-volver{display:block} #vista-cartera[data-paso="3"] .paso-etq{display:none}
+  #vista-cartera[data-paso="3"] .panel-nota{order:1} #vista-cartera[data-paso="3"] .panel-donut{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-pub{order:4}
+}
 .panel-pos{order:1} .panel-donut{order:2} .ws-pie{order:3}
 .panel-nota{order:3} .panel-res{order:4} .panel-pub{order:5} .panel-graf{order:6}
 @media (max-width:899px){#vista-cartera[data-paso="3"] .panel-donut{order:1} #vista-cartera[data-paso="3"] .panel-nota{order:2} #vista-cartera[data-paso="3"] .panel-res{order:3} #vista-cartera[data-paso="3"] .panel-pub{order:4} #vista-cartera[data-paso="3"] .panel-graf{order:5} #vista-cartera[data-paso="3"] .ws-pie{order:6}}
@@ -1010,7 +1015,9 @@ input,select,textarea{background:var(--surface-2);color:var(--text);border-color
 .nota{padding:var(--s3)}
 .nota-num{font-family:var(--serif);font-size:3rem;line-height:1;margin:var(--s1) 0;color:var(--text)} .nota-num b{font-weight:400} .nota-num span{font-size:1.1rem;color:var(--muted);font-family:var(--fuente)}
 .nota-expl{font-size:1.125rem;font-weight:600;line-height:1.4}
-.nota-pend{background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:12px 14px;line-height:1.5}
+/* ronda 20: un estado sin cifra (sin método o parcial) no es una alarma: texto normal con filete; el ámbar queda para una espera real */
+.nota-pend{background:transparent;color:var(--text);border-left:3px solid var(--border-strong,var(--muted));border-radius:0;padding:2px 0 2px 12px;margin:8px 0;line-height:1.5} .nota-pend b{color:var(--text)}
+.nota-pend.espera{border-left-color:var(--warn);background:var(--warn-bg);border-radius:0 12px 12px 0;padding:10px 12px} .nota-pend.espera b{color:var(--warn)}
 .nota-aviso{color:var(--muted)}
 @media (max-width:719px){.nota-num{font-size:2.5rem}}
 
@@ -1807,29 +1814,29 @@ function preparar(universo) {
     const w = ventana(e.ej), ult = e.ej?.length ? [...e.ej].sort((a, b) => String(a.p).localeCompare(String(b.p))).at(-1) : null, o = { t, sector: e.sector, actividad: e.actividad, emisor: e.emisor, motivos: {} };
     const fin = SIN_METODOLOGIA.has(e.sector);
     // deuda neta / EBITDA del último ejercicio
-    if (fin) o.motivos.ratio = 'Sector sin metodología de deuda/EBITDA (banca y seguros).';
-    else if (!ult) o.motivos.ratio = 'Sin fundamentales.';
+    if (fin) o.motivos.ratio = M('metodo_no_aplicable', 'Sector sin metodología de deuda/EBITDA (banca y seguros).');
+    else if (!ult) o.motivos.ratio = M('dato_ausente', 'Sin fundamentales.');
     else {
       const d = ult.deuda, eb = ult.ebitda;
-      if (!esNum(d)) o.motivos.ratio = 'Falta la deuda neta del último ejercicio.';
-      else if (!esNum(eb)) o.motivos.ratio = 'Falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).';
+      if (!esNum(d)) o.motivos.ratio = M('dato_ausente', 'Falta la deuda neta del último ejercicio.');
+      else if (!esNum(eb)) o.motivos.ratio = M('dato_ausente', 'Falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).');
       else if (d <= 0 && eb > 0) o.deudaCaso = { caso: 'caja neta con EBITDA positivo', puntos: 10 };
       else if (d > 0 && eb <= 0) o.deudaCaso = { caso: 'deuda con EBITDA nulo o negativo', puntos: 1 };
       else if (d > 0 && eb > 0) o.ratio = d / eb;
-      else o.motivos.ratio = 'Deuda neta no positiva con EBITDA nulo o negativo: sin evaluar.';
+      else o.motivos.ratio = M('dato_invalido', 'Deuda neta no positiva con EBITDA nulo o negativo: sin evaluar.');
     }
     if (w) { o.fcf = w.every(x => esNum(x.fcf)) ? w.filter(x => x.fcf > 0).length : null; o.ben = w.every(x => esNum(x.ni)) ? w.filter(x => x.ni > 0).length : null;
       o.crec = w.every(x => esNum(x.ing) && x.ing > 0) ? w.slice(1).filter((x, i) => x.ing > w[i].ing).length : null; o.roicMed = !fin && w.every(x => esNum(x.roic)) ? mediana(w.map(x => x.roic)) : null; }
-    else o.motivos.ventana = `Faltan ejercicios: hacen falta ${PARAMETROS.ejercicios} consecutivos.`;
+    else o.motivos.ventana = M('dato_ausente', `Faltan ejercicios: hacen falta ${PARAMETROS.ejercicios} consecutivos.`);
     // mercado: con moneda, fuente y fecha, de la misma procedencia que el resto, y (liquidez) con las 60 sesiones acordadas
     const tieneCap = esNum(e.cap) && e.cap > 0, tieneImp = esNum(e.imp) && e.imp > 0;
     let mk = null;
-    if (!tieneCap && !tieneImp) mk = 'Faltan los datos de mercado (capitalización e importe diario negociado).';
-    else if (!e.moneda || !e.fuenteMercado || !e.fechaMercado) mk = 'Faltan la moneda, la fuente o la fecha de los datos de mercado.';
-    else if (claveMk(e) !== ref) mk = ref ? `Moneda o fuente de mercado (${e.moneda}, ${e.fuenteMercado}) distinta de la del resto del universo (${ref.replace('|', ', ')}): no son comparables.` : 'No hay una moneda y fuente de mercado de referencia común (empate o mezcla).';
+    if (!tieneCap && !tieneImp) mk = M('dato_ausente', 'Faltan los datos de mercado (capitalización e importe diario negociado).');
+    else if (!e.moneda || !e.fuenteMercado || !e.fechaMercado) mk = M('dato_ausente', 'Faltan la moneda, la fuente o la fecha de los datos de mercado.');
+    else if (claveMk(e) !== ref) mk = M('dato_invalido', ref ? `Moneda o fuente de mercado (${e.moneda}, ${e.fuenteMercado}) distinta de la del resto del universo (${ref.replace('|', ', ')}): no son comparables.` : 'No hay una moneda y fuente de mercado de referencia común (empate o mezcla).');
     o.cap = !mk && tieneCap ? e.cap : null; o.imp = !mk && tieneImp && esNum(e.sesiones) && e.sesiones >= PARAMETROS.sesiones ? e.imp : null;
-    if (!o.cap) o.motivos.cap = mk || 'Falta la capitalización.';
-    if (!o.imp) o.motivos.liq = mk || (!tieneImp ? 'Falta el importe diario negociado.' : !esNum(e.sesiones) ? 'No consta el número de sesiones de negociación.' : `Solo hay ${e.sesiones} sesiones de negociación (hacen falta ${PARAMETROS.sesiones}).`);
+    if (!o.cap) o.motivos.cap = mk || M('dato_ausente', 'Falta la capitalización.');
+    if (!o.imp) o.motivos.liq = mk || M('dato_ausente', !tieneImp ? 'Falta el importe diario negociado.' : !esNum(e.sesiones) ? 'No consta el número de sesiones de negociación.' : `Solo hay ${e.sesiones} sesiones de negociación (hacen falta ${PARAMETROS.sesiones}).`);
     E[t] = o;
   }
   const porSector = {}; for (const o of Object.values(E)) { (porSector[o.sector] ||= { ratios: [], roics: [] }); if (o.ratio != null) porSector[o.sector].ratios.push(o.ratio); if (o.roicMed != null) porSector[o.sector].roics.push(o.roicMed); }
@@ -1858,6 +1865,9 @@ function problemasProcedencia(pos, universo) {
     if ((esNum(e.cap) && e.cap > 0) || (esNum(e.imp) && e.imp > 0)) { if (!e.fuenteMercado) out.push(`${t}${ajena}: los datos de mercado no tienen fuente`); if (!fechaFila(e.fechaMercado)) out.push(`${t}${ajena}: la fecha de los datos de mercado no es una fecha válida`); } }
   return out;
 }
+// Ronda 20: cada motivo de «peso sin evaluar» lleva un CÓDIGO estable (no se deduce del texto): metodo_no_aplicable (el instrumento no tiene método: ETF, bancos), dato_ausente (falta el dato),
+// dato_invalido (el dato existe pero no es utilizable o no es comparable) y comparables_insuficientes (la población de comparación es demasiado pequeña). Varios coexisten en una misma posición.
+const M = (c, t) => ({ c, t });
 const MOTIVO_ORIGEN = {
   incompleto: 'Hay filas sin fuente o con una fecha que no es válida: sin procedencia verificable la nota no se calcula.',
   mixto: 'El conjunto mezcla datos sintéticos y datos con otra fuente: la nota solo se calcula con un conjunto sintético identificado entero.',
@@ -1878,46 +1888,46 @@ function evaluar(cartera, universo) {
   res.periodos = pos.filter(p => universo.empresas?.[p.ticker]?.tipo === 'accion' && universo.empresas[p.ticker].ej?.length).map(p => { const ej = [...universo.empresas[p.ticker].ej].sort((a, b) => String(a.p).localeCompare(String(b.p))), u = ej.at(-1); return { ticker: p.ticker, hasta: u.p, carga: normalizarFecha(u.d), fuente: u.f ?? null }; });
   { const l = Object.values(universo.empresas).filter(e => e.tipo === 'accion'); res.poblacion = { empresas: Object.keys(P.E).length, ficticias: l.filter(e => e.ficticia).length }; }
   const empresas = pos.map(p => ({ t: p.ticker, w: dec(p.peso), o: P.E[p.ticker] })), noAccion = empresas.filter(x => !x.o);
-  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: universo.empresas[x.t] ? 'sin_metodo' : 'datos', motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'] });
+  for (const x of noAccion) res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, motivos: [universo.empresas[x.t] ? 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' : 'No está en el universo evaluado.'], causas: [universo.empresas[x.t] ? { codigo: 'metodo_no_aplicable', texto: 'Fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.' } : { codigo: 'dato_ausente', texto: 'No está en el universo evaluado.' }] });
   const bloques = {};
   const cierre = (id, evaluables, puntuarEmpresa, extra = {}) => {            // evaluables: [{t, w}] con puntuación por empresa; pondera por peso normalizado
     const E = evaluables.reduce((s, x) => s + x.w, 0), cob = E / tot;
     bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: cob, disponible: E >= PARAMETROS.minCobertura * tot, puntuacion: null, ...extra };
     return E;
   };
-  const causaDe = m => /banca y seguros|sin metodolog/i.test(m) ? 'sin_metodo' : 'datos';
-  const motivoSin = (x, m) => { const e = res.sinEvaluar.find(s => s.ticker === x.t); if (e) { if (!e.motivos.includes(m)) e.motivos.push(m); if (e.causa === 'datos' && causaDe(m) === 'sin_metodo') e.causa = 'sin_metodo'; } else res.sinEvaluar.push({ ticker: x.t, peso: x.w / 10, causa: causaDe(m), motivos: [m] }); };
+  const motivoSin = (x, m, bloque, indicador) => { let e = res.sinEvaluar.find(q => q.ticker === x.t); if (!e) { e = { ticker: x.t, peso: x.w / 10, motivos: [], causas: [] }; res.sinEvaluar.push(e); }
+    if (!e.motivos.includes(m.t)) e.motivos.push(m.t); if (!e.causas.some(c => c.codigo === m.c && c.bloque === bloque && c.indicador === indicador)) e.causas.push({ codigo: m.c, bloque, indicador, texto: m.t }); };
   // ---- Empresas: número efectivo N = 1 / Σ (peso)²; las clases de una misma compañía cuentan UNA vez
-  { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, 'Sin emisor identificado.'));
+  { const ev = empresas.filter(x => x.o && x.o.emisor); empresas.filter(x => x.o && !x.o.emisor).forEach(x => motivoSin(x, M('dato_ausente', 'Sin emisor identificado.'), 'empresas'));
     const E = cierre('empresas', ev); const g = {}; ev.forEach(x => { g[x.o.emisor] = (g[x.o.emisor] || 0) + x.w; });
     const N = E ? 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0) : null;
     Object.assign(bloques.empresas, { efectivas: N, puntuacion: N == null ? null : escala(N, PARAMETROS.maxEmpresasEfectivas), detalle: N == null ? '' : `${N.toFixed(2).replace('.', ',')} empresas efectivas (máximo útil: ${PARAMETROS.maxEmpresasEfectivas}).` }); }
   // ---- Sectores y actividades: mitad sector, mitad actividad (misma fórmula; máximos 6 y 10 efectivos)
-  { const ev = empresas.filter(x => x.o && x.o.sector && x.o.actividad); empresas.filter(x => x.o && !(x.o.sector && x.o.actividad)).forEach(x => motivoSin(x, 'Sin sector o actividad.'));
+  { const ev = empresas.filter(x => x.o && x.o.sector && x.o.actividad); empresas.filter(x => x.o && !(x.o.sector && x.o.actividad)).forEach(x => motivoSin(x, M('dato_ausente', 'Sin sector o actividad.'), 'sectores'));
     const E = cierre('sectores', ev); const n = k => { const g = {}; ev.forEach(x => { g[x.o[k]] = (g[x.o[k]] || 0) + x.w; }); return 1 / Object.values(g).reduce((s, v) => s + (v / E) ** 2, 0); };
     if (E) { const Ns = n('sector'), Na = n('actividad'); Object.assign(bloques.sectores, { efectivosSector: Ns, efectivasActividad: Na, puntuacion: (escala(Ns, PARAMETROS.maxSectoresEfectivos) + escala(Na, PARAMETROS.maxActividadesEfectivas)) / 2, detalle: `${Ns.toFixed(2).replace('.', ',')} sectores y ${Na.toFixed(2).replace('.', ',')} actividades efectivas.` }); } }
   // ---- Tamaño y liquidez, deuda y caja, rentabilidad y crecimiento: cada INDICADOR tiene su propia cobertura (≥ 90 % del peso); el bloque se publica si los tiene todos.
   //      Faltan datos en posiciones DISTINTAS para indicadores distintos sin que el bloque se caiga mientras cada indicador conserve su 90 %.
   const bloqueInd = (id, defs) => {
-    const inds = defs.map(d => { const ev = []; for (const x of empresas.filter(y => y.o)) { const r = d.fn(x.o); if (r.s == null) motivoSin(x, r.m); else ev.push({ w: x.w, s: r.s }); }
+    const inds = defs.map(d => { const ev = []; for (const x of empresas.filter(y => y.o)) { const r = d.fn(x.o); if (r.s == null) motivoSin(x, r.m, id, d.id); else ev.push({ w: x.w, s: r.s }); }
       const E = ev.reduce((s, y) => s + y.w, 0); return { id: d.id, nombre: d.nombre, peso: d.peso, cobertura: E / tot, disponible: E >= PARAMETROS.minCobertura * tot, media: E ? ev.reduce((s, y) => s + y.w * y.s, 0) / E : null }; });
     const disp = inds.every(i => i.disponible);
     bloques[id] = { id, nombre: NOMBRES[id], peso: PESOS[id], cobertura: Math.min(...inds.map(i => i.cobertura)), disponible: disp, indicadores: inds.map(i => ({ id: i.id, nombre: i.nombre, cobertura: i.cobertura, disponible: i.disponible })),
       puntuacion: disp ? inds.reduce((s, i) => s + i.peso * i.media, 0) : null };
   };
   const D = P.porSector;
-  const sinComparables = (n, que) => ({ s: null, m: `Solo hay ${n} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de ${que}.` });
+  const sinComparables = (n, que) => ({ s: null, m: M('comparables_insuficientes', `Solo hay ${n} comparables en su sector (hacen falta ${PARAMETROS.minComparables}) para el percentil de ${que}.`) });
   bloqueInd('tamano', [
-    { id: 'cap', nombre: 'capitalización', peso: 1 / 3, fn: o => o.cap && P.caps.length > 1 ? { s: percentilAPuntos(percentil(o.cap, P.caps)) } : { s: null, m: o.motivos.cap || 'No hay otras capitalizaciones comparables.' } },
-    { id: 'liq', nombre: 'liquidez (importe diario)', peso: 2 / 3, fn: o => o.imp && P.imps.length > 1 ? { s: percentilAPuntos(percentil(o.imp, P.imps)) } : { s: null, m: o.motivos.liq || 'No hay otros importes diarios comparables.' } }]);
+    { id: 'cap', nombre: 'capitalización', peso: 1 / 3, fn: o => o.cap && P.caps.length > 1 ? { s: percentilAPuntos(percentil(o.cap, P.caps)) } : { s: null, m: o.motivos.cap || M('comparables_insuficientes', 'No hay otras capitalizaciones comparables.') } },
+    { id: 'liq', nombre: 'liquidez (importe diario)', peso: 2 / 3, fn: o => o.imp && P.imps.length > 1 ? { s: percentilAPuntos(percentil(o.imp, P.imps)) } : { s: null, m: o.motivos.liq || M('comparables_insuficientes', 'No hay otros importes diarios comparables.') } }]);
   bloqueInd('deuda', [
     { id: 'ratio', nombre: 'deuda neta / EBITDA', peso: 0.5, fn: o => { if (o.motivos.ratio) return { s: null, m: o.motivos.ratio }; if (o.deudaCaso) return { s: o.deudaCaso.puntos }; const l = D[o.sector].ratios; return l.length < PARAMETROS.minComparables ? sinComparables(l.length, 'deuda') : { s: percentilAPuntos(100 - percentil(o.ratio, l)) }; } },
-    { id: 'fcf', nombre: 'caja libre de los cinco ejercicios', peso: 0.5, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de deuda/EBITDA (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.fcf == null ? { s: null, m: 'Falta algún dato de caja libre en los cinco ejercicios.' } : { s: frecuencia(o.fcf, PARAMETROS.ejercicios) } }]);
+    { id: 'fcf', nombre: 'caja libre de los cinco ejercicios', peso: 0.5, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de deuda/EBITDA (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.fcf == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de caja libre en los cinco ejercicios.') } : { s: frecuencia(o.fcf, PARAMETROS.ejercicios) } }]);
   bloqueInd('rentabilidad', [
-    { id: 'roic', nombre: 'ROIC', peso: 0.5, fn: o => { if (SIN_METODOLOGIA.has(o.sector)) return { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' }; if (o.motivos.ventana) return { s: null, m: o.motivos.ventana }; if (o.roicMed == null) return { s: null, m: 'Falta algún ROIC en los cinco ejercicios.' };
+    { id: 'roic', nombre: 'ROIC', peso: 0.5, fn: o => { if (SIN_METODOLOGIA.has(o.sector)) return { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') }; if (o.motivos.ventana) return { s: null, m: o.motivos.ventana }; if (o.roicMed == null) return { s: null, m: M('dato_ausente', 'Falta algún ROIC en los cinco ejercicios.') };
       const l = D[o.sector].roics; return l.length < PARAMETROS.minComparables ? sinComparables(l.length, 'ROIC') : { s: percentilAPuntos(percentil(o.roicMed, l)) }; } },
-    { id: 'ben', nombre: 'años con beneficio', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.ben == null ? { s: null, m: 'Falta algún dato de beneficio en los cinco ejercicios.' } : { s: frecuencia(o.ben, PARAMETROS.ejercicios) } },
-    { id: 'crec', nombre: 'años con ventas al alza', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: 'Sector sin metodología de ROIC (banca y seguros).' } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.crec == null ? { s: null, m: 'Falta algún dato de ventas en los cinco ejercicios.' } : { s: frecuencia(o.crec, PARAMETROS.ejercicios - 1) } }]);
+    { id: 'ben', nombre: 'años con beneficio', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.ben == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de beneficio en los cinco ejercicios.') } : { s: frecuencia(o.ben, PARAMETROS.ejercicios) } },
+    { id: 'crec', nombre: 'años con ventas al alza', peso: 0.25, fn: o => SIN_METODOLOGIA.has(o.sector) ? { s: null, m: M('metodo_no_aplicable', 'Sector sin metodología de ROIC (banca y seguros).') } : o.motivos.ventana ? { s: null, m: o.motivos.ventana } : o.crec == null ? { s: null, m: M('dato_ausente', 'Falta algún dato de ventas en los cinco ejercicios.') } : { s: frecuencia(o.crec, PARAMETROS.ejercicios - 1) } }]);
   res.bloques = bloques;
   const lista = Object.values(bloques), faltan = lista.filter(b => !b.disponible || b.puntuacion == null);
   res.cobertura = { minima: Math.min(...lista.map(b => b.cobertura)), umbral: PARAMETROS.minCobertura };
@@ -2219,7 +2229,7 @@ const CARTERA_EJEMPLO = {
 // Segundo ejemplo, INCOMPLETO a propósito: enseña cómo se ve una nota que no se puede calcular y por qué (un banco no tiene deuda/EBITDA comparable).
 const CARTERA_EJEMPLO_INCOMPLETA = {
   nombre: 'Ejemplo con evaluación parcial (no es tuyo)',
-  aviso: 'Es un ejemplo para aprender cuándo Klever dice «pendiente» y por qué (aquí, un límite del método con los bancos): no es una recomendación.',
+  aviso: 'Es un ejemplo para aprender cuándo Klever dice «evaluación parcial» y por qué (aquí, un límite del método con los bancos): no es una recomendación.',
   posiciones: [
     { ticker: 'KO', peso: 50, razon: 'Una empresa de bebidas muy conocida: de ella sí hay todos los datos que necesita la nota.' },
     { ticker: 'JPM', peso: 50, razon: 'Un banco. Los bancos no se miden con deuda neta/EBITDA ni con ROIC, así que la mitad de la cartera queda sin valorar en esos apartados.' },
@@ -2283,24 +2293,53 @@ function explicarNota(ev) {
   }
   const ok = bl.filter(b => b.puntuacion != null), falta = bl.filter(b => b.puntuacion == null), q = b => `«${minus(b.nombre)}»`;
   if (!bl.length) return '';
-  // TRES motivos distintos de que no haya nota global (se explican por separado y sin repetir un párrafo por activo; el detalle por activo sigue en «Cómo se calcula»):
-  //   · instrumento SIN MÉTODO aplicable (ETF/fondos; bancos y aseguradoras): no faltan datos que vayan a llegar, el método actual no los evalúa;
-  //   · datos AUSENTES o inválidos en las empresas evaluables; · COBERTURA insuficiente para publicar la nota global (cada indicador necesita el 90 % del peso).
-  const sm = (ev.sinEvaluar || []).filter(s => s.causa === 'sin_metodo'), tipoDe = t => ev.reparto.find(r => r.ticker === t)?.tipo;
-  const etf = sm.filter(s => tipoDe(s.ticker) !== 'accion'), bancos = sm.filter(s => tipoDe(s.ticker) === 'accion'), datos = (ev.sinEvaluar || []).filter(s => s.causa === 'datos');
-  const suma = xs => Math.round(xs.reduce((a, s) => a + s.peso, 0) * 10) / 10;
-  if (etf.length) {
-    const quien = bancos.length ? `Los ETF representan el ${cm(suma(etf))} % y ${bancos.length === 1 ? 'el banco' : 'los bancos'} el ${cm(suma(bancos))} %: el método actual no evalúa la composición de los ETF ni la deuda y los beneficios de los bancos` : (suma(etf) >= 99.95 ? 'Todo el peso son ETF y el método actual no evalúa su composición' : `Los ETF representan el ${cm(suma(etf))} % y el método actual no evalúa su composición`);
-    return `Esta cartera no tiene nota global. ${quien}. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis.${datos.length ? ` Además faltan datos de ${lista(datos.map(d => d.ticker))}: el detalle dice cuáles.` : ''}`;
-  }
-  if (bancos.length && !datos.length && ev.bloques?.empresas?.puntuacion != null && ev.bloques?.sectores?.puntuacion != null) {
-    const w = suma(bancos), parte = w === 50 ? 'La mitad' : `El ${cm(w)} %`, uno = bancos.length === 1;
+  // Ronda 20: las causas COEXISTEN y vienen con código estable desde el cálculo (`sinEvaluar[].causas[{codigo, bloque, indicador}]`): método no aplicable (ETF, bancos), dato ausente o inválido y
+  // comparables insuficientes. Se separan del efecto agregado «no se alcanza la cobertura»: para cada indicador que no llega al mínimo se buscan las familias que, resueltas SOLAS, lo arreglarían
+  // (si ninguna basta por sí sola, son relevantes todas las que le afectan). Lo demás se menciona al final, brevemente; el peso de una posición se cuenta una sola vez por familia.
+  const rel = causasRelevantes(ev), tipoDe = t => ev.reparto.find(r => r.ticker === t)?.tipo, esEtf = t => tipoDe(t) !== 'accion';
+  const suma = ts => Math.round(ts.reduce((a, t) => a + (ev.reparto.find(r => r.ticker === t)?.peso || 0), 0) * 10) / 10;
+  const piezas = fam => {
+    const T = fam.metodo.size || fam.comparables.size || fam.datos.size ? fam : null; if (!T) return [];
+    const out = [], met = [...fam.metodo], etf = met.filter(esEtf), bancos = met.filter(t => !esEtf(t));
+    if (met.length) out.push(etf.length && bancos.length ? `el método no analiza la composición de los ETF (${cm(suma(etf))} %) ni la deuda y los beneficios ${bancos.length === 1 ? 'del banco' : 'de los bancos'} (${cm(suma(bancos))} %)`
+      : etf.length ? (suma(etf) >= 99.95 ? 'todo el peso son ETF y el método no analiza su composición' : `el método no analiza la composición de los ETF (${cm(suma(etf))} %)`)
+      : `el método no analiza la deuda y los beneficios ${bancos.length === 1 ? 'del banco' : 'de los bancos'} (${cm(suma(bancos))} %)`);
+    if (fam.comparables.size) out.push(`no hay comparables suficientes en su sector para valorar ${lista([...fam.bloquesComp].map(b => `«${minus(NOMBRES[b])}»`))} de ${lista([...fam.comparables])} (${cm(suma([...fam.comparables]))} %)`);
+    if (fam.datos.size) out.push(`${fam.soloInvalidos ? 'no son utilizables los datos de' : 'faltan datos de'} ${lista([...fam.datos])}`);
+    return out;
+  };
+  const unir = xs => xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} y ${xs.at(-1)}`, may = x => x.charAt(0).toUpperCase() + x.slice(1);
+  const bancosSolos = rel.relevantes.metodo.size && [...rel.relevantes.metodo].every(t => !esEtf(t)) && !rel.relevantes.datos.size && !rel.relevantes.comparables.size && !rel.otras.datos.size && !rel.otras.comparables.size;
+  if (bancosSolos && ev.bloques?.empresas?.puntuacion != null && ev.bloques?.sectores?.puntuacion != null) {
+    const w = suma([...rel.relevantes.metodo]), parte = w === 50 ? 'La mitad' : `El ${cm(w)} %`, uno = rel.relevantes.metodo.size === 1;
     return `Podemos medir cómo repartes tu cartera. ${parte} está en ${uno ? 'un banco' : 'bancos o aseguradoras'} y este método todavía no evalúa bien la deuda y los beneficios de ${uno ? 'los bancos' : 'esas entidades'}. Por eso no damos una nota total.`;
   }
-  const grupos = new Map(); for (const d of (datos.length ? datos : ev.sinEvaluar || [])) { const m = minus((d.motivos[0] || '').replace(/\.$/, '')); if (!grupos.has(m)) grupos.set(m, []); grupos.get(m).push(d); }
-  const causas = [...grupos].slice(0, 2).map(([m, l]) => `${lista(l.map(x => x.ticker))} (${cm(suma(l))} % de la cartera): ${m}`);
-  return `${ok.length ? `Podemos medir ${lista(ok.map(q))}. ` : ''}${falta.length ? `Faltan datos para valorar ${lista(falta.map(q))}.` : ''}${causas.length ? ` Causa principal: ${causas.join('; ')}.` : ''}`;
+  const a = piezas(rel.relevantes), b = piezas(rel.otras);
+  if (a.length) return `${may(unir(a))}.${b.length ? ` Además, ${unir(b)}.` : ''}`;
+  const grupos = new Map(); for (const d of (ev.sinEvaluar || [])) { const m = minus((d.motivos[0] || '').replace(/\.$/, '')); if (!grupos.has(m)) grupos.set(m, []); grupos.get(m).push(d); }
+  const causas = [...grupos].slice(0, 2).map(([m, l]) => `${lista(l.map(x => x.ticker))} (${cm(Math.round(l.reduce((acc, x) => acc + x.peso, 0) * 10) / 10)} % de la cartera): ${m}`);
+  return `${ok.length ? `Podemos medir ${lista(ok.map(q))}. ` : ''}${falta.length ? `No se alcanza la cobertura mínima en ${lista(falta.map(q))}.` : ''}${causas.length ? ` Causa principal: ${causas.join('; ')}.` : ''}`;
 }
+const FAMILIA = { metodo_no_aplicable: 'metodo', dato_ausente: 'datos', dato_invalido: 'datos', comparables_insuficientes: 'comparables' };
+const vacia = () => ({ metodo: new Set(), datos: new Set(), comparables: new Set(), bloquesComp: new Set(), soloInvalidos: true });
+function causasRelevantes(ev) {
+  const sin = ev.sinEvaluar || [], umbral = ev.cobertura?.umbral ?? PARAMETROS.minCobertura, relevantes = vacia(), otras = vacia(), todas = vacia();
+  const unidades = []; for (const b of Object.values(ev.bloques || {})) { if (b.indicadores) { for (const i of b.indicadores) if (!i.disponible) unidades.push({ bloque: b.id, indicador: i.id, cob: i.cobertura }); } else if (!b.disponible) unidades.push({ bloque: b.id, indicador: undefined, cob: b.cobertura }); }
+  const aplica = (c, u) => c.bloque === undefined || (c.bloque === u.bloque && (u.indicador === undefined || c.indicador === u.indicador));
+  const anota = (conj, fam, s, c, u) => { conj[fam].add(s.ticker); if (fam === 'comparables') conj.bloquesComp.add(u.bloque); if (fam === 'datos' && c.codigo === 'dato_ausente') conj.soloInvalidos = false; };
+  for (const s of sin) for (const c of s.causas || []) { const fam = FAMILIA[c.codigo]; if (fam) { todas[fam].add(s.ticker); if (fam === 'datos' && c.codigo === 'dato_ausente') todas.soloInvalidos = false; if (fam === 'comparables' && c.bloque) todas.bloquesComp.add(c.bloque); } }
+  for (const u of unidades) {
+    const w = { metodo: 0, datos: 0, comparables: 0 }, afecta = [];
+    for (const s of sin) { const fams = new Set(); for (const c of s.causas || []) if (aplica(c, u) && FAMILIA[c.codigo]) fams.add(FAMILIA[c.codigo]); for (const f of fams) { w[f] += s.peso / 100; afecta.push([f, s]); } }
+    const sola = Object.keys(w).filter(f => w[f] > 0 && u.cob + w[f] >= umbral - 1e-9), elegidas = sola.length ? sola : Object.keys(w).filter(f => w[f] > 0);
+    for (const [f, s] of afecta) if (elegidas.includes(f)) for (const c of s.causas) if (aplica(c, u) && FAMILIA[c.codigo] === f) anota(relevantes, f, s, c, u);
+  }
+  for (const fam of ['metodo', 'datos', 'comparables']) for (const t of todas[fam]) if (!relevantes[fam].has(t)) otras[fam].add(t);
+  otras.soloInvalidos = todas.soloInvalidos; otras.bloquesComp = todas.bloquesComp;
+  return { relevantes, otras };
+}
+// Título de estado de la nota SIN cifra: «pendiente» solo cuando hay una espera real (cartera incompleta, procedencia, origen); con método y datos evaluados a medias, «Evaluación parcial»; sin nada evaluable, «Sin nota global».
+function estadoNota(ev) { if (ev?.publicada) return null; const bl = ev?.bloques ? Object.values(ev.bloques) : []; return !bl.length ? 'Nota pendiente' : bl.some(b => b.puntuacion != null) ? 'Evaluación parcial' : 'Sin nota global'; }
 
 // Lo que SÍ existe aunque no haya nota global: asignación, número de posiciones, mayor posición y reparto por tipo de instrumento (concentración por posición ≠ exposición subyacente).
 function datosExistentes(esc, ev) {
@@ -2324,7 +2363,7 @@ function htmlNotaEstructura(esc, ev, origen) {
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
       ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
   } else {
-    cuerpo = `<p class="nota-pend"><b>Nota pendiente.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques ? datosExistentes(esc, ev) : ''}${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
+    cuerpo = `<p class="nota-pend${estadoNota(ev) === 'Nota pendiente' ? ' espera' : ''}"><b>${esc(estadoNota(ev))}.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques ? datosExistentes(esc, ev) : ''}${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
   const filas = bl.map(b => `<tr><th scope="row">${esc(b.nombre)}</th><td>${PESOS[b.id]} %</td><td>${b.puntuacion == null ? 'pendiente' : cm(b.puntuacion.toFixed(2))}</td><td>${cm((b.cobertura * 100).toFixed(1))} %</td></tr>`).join('');
   const sin = ev.sinEvaluar.length ? `<p><b>Peso sin evaluar:</b></p><ul>${ev.sinEvaluar.map(s => `<li><b>${esc(s.ticker)}</b> (${cm(s.peso)} %): ${esc(s.motivos.join(' '))}</li>`).join('')}</ul>` : '';
@@ -2386,7 +2425,7 @@ async function mostrarEjemplo(inicio) {
   const EJ = ID.incompleto ? CARTERA_EJEMPLO_INCOMPLETA : CARTERA_EJEMPLO, pos = EJ.posiciones;
   const sel = (id, txt) => `<button class="btn btn-secundario ej-opc" type="button" data-ej="${id}" aria-pressed="${(id === 'incompleta') === ID.incompleto}">${txt}</button>`;
   cont.innerHTML = `<div class="pag-cab"><h1>${esc(EJ.nombre)}</h1><p class="mut">${esc(EJ.aviso)}</p><p><span class="chip sim">Ejemplo con datos ficticios</span></p></div>
-    <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · pendiente')}</div>
+    <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · evaluación parcial')}</div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <div id="ej-nota" role="region" aria-label="Nota de estructura del ejemplo" aria-live="polite"><p class="mut peq">Calculando la nota de estructura…</p></div>
     <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primer portafolio</button></p>
@@ -3666,7 +3705,9 @@ function pasoActual(n, foco = false) {
   // El desplazamiento es INSTANTÁNEO y se calcula tras dos fotogramas (cuando el paso ya está pintado): así el resultado queda siempre en la zona útil y las capturas no dependen de una animación.
   if (foco && cambia) requestAnimationFrame(() => requestAnimationFrame(() => {
     const d = n === 3 ? $('#nota-panel') : ($('#h-pos').offsetParent ? $('#h-pos') : $('#comp'));
-    window.scrollTo({ top: n === 3 ? Math.max(0, d.getBoundingClientRect().top + scrollY - 8) : 0, behavior: 'auto' }); d.focus({ preventScroll: true });
+    // móvil: la nota va arriba del viewport. Escritorio (ronda 20): se vuelve al INICIO de la página para conservar nombre, pasos, Volver y la acción de guardado; la nota está en la parte alta de su columna (orden por CSS).
+    const escritorio = matchMedia('(min-width:900px)').matches;
+    window.scrollTo({ top: n === 3 && !escritorio ? Math.max(0, d.getBoundingClientRect().top + scrollY - 8) : 0, behavior: 'auto' }); d.focus({ preventScroll: true });
   }));
 }
 function reiniciarPaso() { paso = 2; $('#vista-cartera').dataset.paso = '2'; $$('#pasos .paso').forEach(li => { if (+li.dataset.paso === 2) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current'); }); }

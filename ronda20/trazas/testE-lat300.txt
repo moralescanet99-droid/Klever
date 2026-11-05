@@ -1,0 +1,223 @@
+197 NAV http://localhost:8788/
+717 200 GET /api/assets
+738 NAV http://localhost:8788/#cartera
+830 200 GET /api/ideas
+1077 200 GET /api/public
+1099 200 GET /api/universo
+1100 200 GET /api/datos
+1123 200 POST /api/login
+1203 NAV http://localhost:8788/?login=c002b3159125c13b6ff65f8cf1508f6794aecf3567d50cff5f74bf1a4737e08d
+1403 NAV http://localhost:8788/
+1437 200 POST /api/verify
+1756 200 GET /api/assets
+2093 200 GET /api/universo
+2107 200 GET /api/public
+2110 200 GET /api/datos
+2110 200 GET /api/portfolios
+2430 200 GET /api/radar
+2450 200 GET /api/ideas
+2472 201 POST /api/portfolios
+2475 NAV http://localhost:8788/#cartera-4
+2793 200 GET /api/portfolios/4
+2797 200 GET /api/portfolios/4
+3506 200 PUT /api/portfolios/4
+3554 NAV http://localhost:8788/#carteras
+3879 200 GET /api/portfolios
+4519 NAV http://localhost:8788/#cartera-4
+4635 NAV http://localhost:8788/#cartera-4
+5143 200 GET /api/assets
+5479 200 GET /api/universo
+5495 200 GET /api/public
+5501 200 GET /api/datos
+5501 200 GET /api/portfolios
+5817 200 GET /api/radar
+5833 200 GET /api/ideas
+6134 200 GET /api/portfolios/4
+6721 NAV http://localhost:8788/#carteras
+7047 200 GET /api/portfolios
+7940 NAV http://localhost:8788/#carteras
+8474 200 GET /api/assets
+8808 200 GET /api/universo
+8820 200 GET /api/public
+8822 200 GET /api/datos
+8827 200 GET /api/portfolios
+9147 200 GET /api/radar
+9169 200 GET /api/ideas
+9468 200 GET /api/portfolios
+9551 NAV http://localhost:8788/#cartera-4
+9873 200 GET /api/portfolios/4
+12255 200 GET /api/portfolios/4
+12277 200 PUT /api/portfolios/4
+12319 NAV http://localhost:8788/#cartera-4
+12794 200 GET /api/assets
+13123 200 GET /api/universo
+13139 200 GET /api/public
+13139 200 GET /api/datos
+13141 200 GET /api/portfolios
+13461 200 GET /api/radar
+13480 200 GET /api/ideas
+13779 200 GET /api/portfolios/4
+14383 NAV http://localhost:8788/#cartera-4
+14852 200 GET /api/assets
+15190 200 GET /api/universo
+15206 200 GET /api/public
+15208 200 GET /api/datos
+15212 200 GET /api/portfolios
+15529 200 GET /api/radar
+15544 200 GET /api/ideas
+15846 200 GET /api/portfolios/4
+16556 NAV http://localhost:8788/#cartera-4
+17035 200 GET /api/assets
+17367 200 GET /api/universo
+17375 200 GET /api/public
+17383 200 GET /api/datos
+17383 200 GET /api/portfolios
+17703 200 GET /api/radar
+17725 200 GET /api/ideas
+18022 200 GET /api/portfolios/4
+20223 200 GET /api/portfolios/4
+20253 200 PUT /api/portfolios/4
+20305 409 PUT /api/portfolios/4
+20621 200 GET /api/portfolios/4
+21429 200 GET /api/portfolios/4
+22325 200 GET /api/portfolios/4
+22399 200 PUT /api/portfolios/4
+22728 200 GET /api/portfolios/4
+24446 200 GET /api/portfolios/4
+24469 200 PUT /api/portfolios/4
+24515 409 PUT /api/portfolios/4
+24831 200 GET /api/portfolios/4
+25983 200 GET /api/portfolios/4
+26181 NAV http://localhost:8788/
+26663 200 GET /api/assets
+26680 NAV http://localhost:8788/#cartera
+26731 200 GET /api/ideas
+26943 200 POST /api/login
+27010 200 GET /api/universo
+27041 NAV http://localhost:8788/?login=079e2460e0d72bea4eec13071d51bd943814b556bca0ab5fadf003aeccb1c0b5
+27224 NAV http://localhost:8788/
+27251 200 POST /api/verify
+27566 200 GET /api/assets
+27899 200 GET /api/universo
+27914 200 GET /api/public
+27914 200 GET /api/datos
+27915 200 GET /api/portfolios
+28230 200 GET /api/radar
+28246 200 GET /api/ideas
+28271 201 POST /api/portfolios
+28273 NAV http://localhost:8788/#cartera-5
+28592 200 GET /api/portfolios/5
+28594 200 GET /api/portfolios/5
+29987 200 PUT /api/portfolios/5
+30349 200 GET /api/portfolios/5
+30680 200 GET /api/portfolios/5
+31001 200 GET /api/portfolios/5
+31066 NAV http://localhost:8788/
+31562 200 GET /api/assets
+31579 NAV http://localhost:8788/#cartera
+31641 200 GET /api/ideas
+31866 200 POST /api/login
+31921 200 GET /api/universo
+31937 200 GET /api/public
+31939 200 GET /api/datos
+32000 NAV http://localhost:8788/?login=2b9a51b9789d1b34e9fcd08c219eb0dc57b4e3eeaa7650a1106d01350f18feb3
+32192 NAV http://localhost:8788/
+32214 200 POST /api/verify
+32532 200 GET /api/assets
+32876 200 GET /api/universo
+32886 200 GET /api/public
+32886 200 GET /api/datos
+32888 200 GET /api/portfolios
+33204 200 GET /api/radar
+33222 200 GET /api/ideas
+33524 200 GET /api/portfolios
+34008 NAV http://localhost:8788/
+34484 200 GET /api/assets
+34818 200 GET /api/universo
+34838 200 GET /api/public
+34838 200 GET /api/datos
+34839 200 GET /api/portfolios
+35159 200 GET /api/radar
+35175 200 GET /api/ideas
+35479 200 GET /api/portfolios
+35730 NAV http://localhost:8788/
+36229 200 GET /api/assets
+36554 200 GET /api/universo
+36569 200 GET /api/public
+36569 200 GET /api/datos
+36570 200 GET /api/portfolios
+36889 200 GET /api/radar
+36904 200 GET /api/ideas
+37209 200 GET /api/portfolios
+37402 NAV http://localhost:8788/
+37926 200 GET /api/assets
+37952 NAV http://localhost:8788/#cartera
+38029 200 GET /api/ideas
+38243 200 POST /api/login
+38286 200 GET /api/universo
+38335 NAV http://localhost:8788/?login=6224b44651b0168d711a90db7809c0e6d8c53981f666c99d9f1e639de7decd4d
+38505 NAV http://localhost:8788/
+38534 200 POST /api/verify
+38851 200 GET /api/assets
+39183 200 GET /api/universo
+39199 200 GET /api/public
+39199 200 GET /api/datos
+39199 200 GET /api/portfolios
+39518 200 GET /api/radar
+39539 200 GET /api/ideas
+39565 201 POST /api/portfolios
+39568 NAV http://localhost:8788/#cartera-6
+39885 200 GET /api/portfolios/6
+39888 200 GET /api/portfolios/6
+40451 200 PUT /api/portfolios/6
+40479 200 PATCH /api/portfolios/6
+40796 200 GET /api/public
+41109 200 GET /api/public/6
+41682 200 GET /api/public/6
+42231 200 PATCH /api/portfolios/6
+42550 200 GET /api/public
+42871 404 GET /api/public/6
+42912 NAV http://localhost:8788/#cartera-6
+43396 200 GET /api/assets
+43722 200 GET /api/universo
+43729 200 GET /api/public
+43734 200 GET /api/datos
+43734 200 GET /api/portfolios
+44056 200 GET /api/radar
+44069 200 GET /api/ideas
+44375 200 GET /api/portfolios/6
+45182 200 PUT /api/portfolios/6
+45221 200 PATCH /api/portfolios/6
+45558 200 GET /api/public
+46073 200 GET /api/public/6
+46151 200 PUT /api/portfolios/6
+46506 200 GET /api/public/6
+46585 NAV http://localhost:8788/#empresas
+47072 200 GET /api/assets
+47115 200 GET /api/ideas
+47424 200 GET /api/universo
+47431 200 GET /api/public
+47432 200 GET /api/datos
+47599 200 GET /api/ideas
+48292 200 GET /api/assets/AXP
+48303 NAV http://localhost:8788/#empresas
+49186 NAV http://localhost:8788/
+49655 200 GET /api/assets
+49678 NAV http://localhost:8788/#cartera
+49737 200 GET /api/ideas
+49977 200 POST /api/login
+50012 200 GET /api/universo
+50048 NAV http://localhost:8788/?login=c499280c71cd8debb0817fe77441493f0d56302963a03b54fd02a9e540486481
+50189 NAV http://localhost:8788/
+50223 200 POST /api/verify
+50538 200 GET /api/assets
+50865 200 GET /api/universo
+50877 200 GET /api/public
+50877 200 GET /api/datos
+50877 200 GET /api/portfolios
+51193 200 GET /api/radar
+51206 200 GET /api/ideas
+51221 201 POST /api/portfolios
+51223 NAV http://localhost:8788/#cartera-7
+51545 200 GET /api/portfolios/7
+51546 200 GET /api/portfolios/7
