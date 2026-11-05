@@ -30,7 +30,7 @@ case "${1:-}" in
     EXTRA=(--binding DEV_RETURN_LINK=1); [ "${SIN_ENLACE_DEV:-0}" = 1 ] && EXTRA=()
     nohup "$WR" pages dev public --port "$PORT" --persist-to "$ESTADO" ${EXTRA[@]+"${EXTRA[@]}"} >"$LOG" 2>&1 &
     echo $! >"$PID"
-    for _ in $(seq 1 90); do [ "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:$PORT/api/ideas" || true)" = 200 ] && { echo "Servidor listo en http://localhost:$PORT"; exit 0; }; sleep 1; done
+    for _ in $(seq 1 90); do [ "$(curl -s -o /dev/null -w '%{http_code}' "http://localhost:$PORT/api/ideas" || true)" = 200 ] && { for u in / /api/assets /api/universo /api/public /api/escenarios /api/portfolios; do curl -s -o /dev/null --max-time 30 "http://localhost:$PORT$u" || true; done; echo "Servidor listo en http://localhost:$PORT"; exit 0; }   # ronda 22: calentamiento (la primera carga tras arrancar tardó más de 30 s una vez: testE 1/2 con latencia 0); mitigación, causa no demostrada; sleep 1; done
     echo "El servidor no arrancó; mira $LOG" >&2; matar_arbol "$(cat "$PID")"; rm -f "$PID"; exit 1 ;;
   *) echo "Uso: $0 start|stop|reset" >&2; exit 2 ;;
 esac
