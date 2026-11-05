@@ -11,6 +11,7 @@ for(const [w,h] of [[390,844],[1440,900]]){
  await p.locator('.peso-in').filter({visible:true}).first().fill('17');
  await p.click('.js-guardar >> visible=true');await p.waitForSelector('#dlg-acceso[open]');await p.fill('#acc-email','a@b.co');await p.check('#acc-acepto');await p.click('#form-acceso button');await p.waitForSelector('#demo-enter');await p.click('#demo-enter');await p.waitForTimeout(900);
  ok(w+': tras "simular enlace" la cartera queda en la cuenta',/^#cartera-\d+$/.test(await p.evaluate(()=>location.hash)));
+ await p.evaluate(()=>document.querySelector('.js-revisar').click());await p.waitForSelector('#vista-cartera[data-paso="3"]',{state:'attached'});await p.waitForTimeout(200);   /* ronda 18: la publicación vive en el paso Revisión */
  await p.evaluate(()=>{document.querySelector('#det-pub').open=true});await p.fill('#tesis','Dividendos.');await p.click('#publicar');await p.waitForFunction(()=>document.querySelector('#chip').textContent==='Pública');
  await p.goto(F+'#publicas');await p.waitForSelector('#publicas-lista .tarjeta');ok(w+': publicada con etiqueta de usuario',(await p.locator('#publicas-lista .chip.origen').allTextContents()).includes('Publicada por un usuario'));
  await p.goto(F+'#empresas');await p.waitForSelector('[data-t]:visible');await p.locator('[data-t]:visible').nth(1).click();await p.waitForSelector('#dlg-ficha[open]');ok(w+': ficha con 5 comprobaciones',await p.locator('#fi-cuerpo .checks li').count()===5);

@@ -4,7 +4,7 @@ Salidas:
   demo/index.html                    versión autónoma para publicar como web normal (Cloudflare Pages)
   build/klever_demo_artifact.html    variante para publicar como artefacto de Claude (sin <html>/<head>)
 Entradas: public/index.html, public/style.css, public/app.js, data/universe.json, scripts/demo/mock.js
-El mock.js se formatea con %: dentro de él, un % literal se escribe %%.
+El mock.js se formatea con % (dos %s: universo y semilla): dentro de él, un % literal se escribe %%. Los números de la demo son los de data/seed-prueba.sql (scripts/demo/exportar-semilla.mjs).
 """
 import re
 import pathlib
@@ -14,7 +14,7 @@ def quitar_modulos(txt):  # los módulos ES se concatenan en un solo script clá
     txt=re.sub(r"^import [^\n]*from '[^']+';\n",'',txt,flags=re.M); return re.sub(r'^export (async function|function|const|let)',r'\1',txt,flags=re.M)
 js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','catalogo.js','nota.js','comparador.js','almacen.js','contenido.js','nota-ui.js','ideas.js','revista.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())
 import json
-uni=json.dumps(json.load(open(R+'data/universe.json'))+json.load(open(R+'data/ficticios.json')),ensure_ascii=False); mock=open(SP+'mock.js').read() % uni
+uni=json.dumps(json.load(open(R+'data/universe.json'))+json.load(open(R+'data/ficticios.json')),ensure_ascii=False); import subprocess; semilla=subprocess.check_output(['node',R+'scripts/demo/exportar-semilla.mjs']).decode(); mock=open(SP+'mock.js').read() % (uni, semilla)
 body=re.search(r'<a class="saltar".*?(?=<script src="app.js")',html,re.S).group(0)
 body=re.sub(r'<a href="legal.html"[^>]*>(.*?)</a>',r'\1',body)
 body=body.replace('<main id="contenido" tabindex="-1">','<main id="contenido" tabindex="-1">\n  <div class="demo-banner"><b>Demostración sin persistencia de cuenta.</b> Todo vive en la memoria de esta página: <b>al recargar se pierde todo</b> (cuentas, carteras y cambios), y no es equivalente al servidor real que se prueba con las baterías automáticas. Todos los datos son inventados; nada de aquí es información financiera real.<label class="demo-fallo"><input type="checkbox" id="demo-fallo" onchange="window.__demoFalloGuardado=this.checked"> <b>Simular fallo de red al guardar</b> (solo demo: las peticiones de esta página son simuladas y no fallan por activar el modo sin conexión del navegador)</label></div>',1)
