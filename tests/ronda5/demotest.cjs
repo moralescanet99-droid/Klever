@@ -22,7 +22,7 @@ for(const [w,h] of [[390,844],[1440,900]]){
  await p.click('[data-plantilla=dividendos]');await p.waitForSelector('#vista-cartera:not([hidden])');await p.click('.js-guardar >> visible=true');await p.waitForSelector('#dlg-acceso[open]');await p.fill('#acc-email','a@b.co');await p.check('#acc-acepto');await p.click('#form-acceso button');await p.waitForSelector('#demo-enter');await p.click('#demo-enter');
  await p.waitForFunction(()=>document.querySelector('#estado-live')?.textContent.includes('Guardada'));
  await p.locator('.peso-in >> visible=true').first().fill('10');await p.waitForTimeout(150);
- await p.check('#demo-fallo');await p.click('.js-guardar >> visible=true');await p.waitForTimeout(600);
+ await p.evaluate(()=>{const d=document.querySelector('.demo-banner details');if(d)d.open=true;});await p.check('#demo-fallo');await p.click('.js-guardar >> visible=true');await p.waitForTimeout(600);
  ok('demo: la casilla «Simular fallo de red al guardar» provoca un fallo explícito',((await p.textContent('#estado'))||'').trim().startsWith('No se pudo guardar')&&((await p.locator('.js-guardar >> visible=true').textContent())||'').trim()==='Reintentar guardado');
  await p.uncheck('#demo-fallo');await p.click('.js-guardar >> visible=true');await p.waitForFunction(()=>document.querySelector('#estado-live').textContent.startsWith('Guardada en tu cuenta'));ok('demo: al quitar la simulación, reintentar guarda',true);
  // ronda 13: recorrido radar → laboratorio → escenario en la demo (simulado en memoria; etiquetado como demostración)
