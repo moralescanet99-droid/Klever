@@ -1,0 +1,12 @@
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 1/2 · 21:34:49Z · 1 s · código 1
+== tests/ronda5/testE.cjs · latencia 0 ms · repetición 2/2 · 21:34:49Z · 0 s · código 1
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 1/2 · 21:34:50Z · 1 s · código 1
+== tests/ronda5/testE.cjs · latencia 300 ms · repetición 2/2 · 21:34:50Z · 0 s · código 1
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 1/2 · 21:34:51Z · 1 s · código 1
+== tests/ronda7/testF.cjs · latencia 0 ms · repetición 2/2 · 21:34:52Z · 1 s · código 1
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 1/2 · 21:34:52Z · 0 s · código 1
+== tests/ronda7/testF.cjs · latencia 300 ms · repetición 2/2 · 21:34:53Z · 1 s · código 1
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 1/2 · 21:34:53Z · 0 s · código 1
+== tests/ronda5/testC.cjs · latencia 0 ms · repetición 2/2 · 21:34:54Z · 1 s · código 1
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 1/2 · 21:34:54Z · 0 s · código 1
+== tests/ronda5/testC.cjs · latencia 300 ms · repetición 2/2 · 21:34:55Z · 0 s · código 1

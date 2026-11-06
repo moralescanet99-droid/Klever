@@ -1,0 +1,74 @@
+[
+ {
+  "id": "A1",
+  "escenario": "La migración empieza bajo A, se retrasa la lectura, se reinicia el módulo y se pasa a B",
+  "esperado": "Ningún PUT (ni bajo A ni bajo B) y el radar local de A NO se borra",
+  "observado": "[\"A:GET /radar\"]; migrados 0; local conservado true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A2",
+  "escenario": "Se cambia de cuenta entre la primera y la segunda escritura",
+  "esperado": "Solo se envió el primer PUT (bajo A); el segundo no sale; el original local no se borra",
+  "observado": "[\"A:GET /radar\",\"A:PUT /radar/JNJ\"]; local conservado true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A3",
+  "escenario": "Migración sin interrupciones",
+  "esperado": "Migra las dos empresas y solo entonces borra el original local",
+  "observado": "migrados 2; [\"GET /radar\",\"PUT /radar/JNJ\",\"PUT /radar/KO\"]; local undefined",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A4",
+  "escenario": "Un GET retrasado que devuelve «vacío» llega DESPUÉS de guardar una nota",
+  "esperado": "La copia en memoria conserva la nota (la lectura es anterior a la escritura y no se aplica)",
+  "observado": "«nota guardada correctamente»; empresas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A5",
+  "escenario": "Almacenamiento bloqueado desde el inicio (lectura y escritura fallan)",
+  "esperado": "Leer lanza error de LECTURA (no «radar vacío») y guardar también (no se escribe sin poder leer); nada queda en memoria",
+  "observado": "lectura / lectura; empresas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A5b",
+  "escenario": "Se puede leer pero NO escribir (cuota llena)",
+  "esperado": "Guardar lanza error de ESCRITURA y la memoria no cambia",
+  "observado": "escritura; empresas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A6",
+  "escenario": "El borrado de la ÚLTIMA fila falla",
+  "esperado": "Lanza error de escritura; el dato sigue en el almacenamiento y en memoria (no se oculta el fallo)",
+  "observado": "escritura; en disco «{\"JNJ\":{\"nota\":\"una sola\",\"t\":\"2026-11-05T16:09:22.845Z\"}}»; memoria 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A6b",
+  "escenario": "Recuperado el almacenamiento, el borrado funciona y sobrevive a «recargar»",
+  "esperado": "Sin radar en disco ni en una instancia nueva",
+  "observado": "disco undefined; nueva 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A7",
+  "escenario": "Datos locales dañados",
+  "esperado": "Leer y guardar lanzan error de lectura; el valor dañado NO se sobrescribe",
+  "observado": "lectura / lectura; disco «{dañado»",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

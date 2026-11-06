@@ -1,0 +1,19 @@
+# comando: node tests/ronda17/unit-procedencia17.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:27:55 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Q1] Semilla íntegra, KO 60 % / PG 40 %
+OK    [Q1b] La instantánea y el periodo efectivo se exponen
+OK    [Q2] KO con la fuente de todas sus filas a NULL
+OK    [Q3] Fecha IMPOSIBLE (2026-02-31) en un ejercicio de KO
+OK    [Q4] Texto «ayer» como fecha de un ejercicio
+OK    [Q4b] «ayer» como fecha de los datos de mercado de KO
+OK    [Q5] Datos de mercado de PG sin fuente
+OK    [Q6] Origen MIXTO desde SQL (PG con fuente «sec», el resto de prueba)
+OK    [Q7] Todo con fuente real (sec / mercado)
+OK    [Q8] Con datos reales HABILITADOS a mano, las empresas ficticias no son comparables
+OK    [Q9] KO 50 % / JPM 50 % (semilla íntegra)
+OK    [Q10] Cambios cosméticos (renombrar KO; invertir el orden de las posiciones)
+OK    [Q11] Conjuntos de tickers (no solo recuentos): las originales siguen y las ficticias están aparte
+
+RESULTADO: 13 correctas, 0 fallos

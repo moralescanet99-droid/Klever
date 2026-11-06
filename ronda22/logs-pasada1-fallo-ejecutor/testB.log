@@ -1,0 +1,59 @@
+# comando: node tests/ronda5/testB.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:09:13 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    móvil: cabecera global 56–64 px
+OK    móvil: navegación secundaria dentro de un menú accesible
+OK    móvil: el menú se abre (aria-expanded) con enlaces y Salir
+OK    móvil: Escape cierra el menú y devuelve el foco
+OK    móvil: un solo botón «Guardar cartera» visible (sin duplicado en cabecera)
+OK    móvil: barra inferior 72–88 px
+OK    móvil: persistencia explícita en la cabecera y versión breve en la barra
+OK    móvil: la barra muestra «Asignado: 100 %», estado breve y acción
+OK    móvil: margen exterior de 16 px
+OK    móvil: texto principal de 16 px
+OK    móvil: controles táctiles ≥ 44 × 44
+OK    móvil: campo de peso compacto (≤ 90 px) y cómodo
+OK    móvil: acepta coma decimal
+OK    móvil: detalles muestran el nombre completo
+OK    móvil: se puede llegar a la última posición y al último enlace del pie sin que la barra los tape
+OK    teclado (emulado): el campo activo queda visible y por encima de la barra
+OK    teclado: con la clase «teclado» la barra se oculta (no tapa el campo)
+OK    móvil: sin desbordamiento y sin errores
+OK    orden 390px, paso 2: estado compacto → posiciones → anillo, y la revisión oculta
+OK    orden 390px, paso 3: anillo (una línea) → resultado → resumen detallado → publicación → gráficos, sin las posiciones (orden visual = orden DOM)
+OK    orden 768px, paso 2: estado compacto → posiciones → anillo, y la revisión oculta
+OK    orden 768px, paso 3: anillo (una línea) → resultado → resumen detallado → publicación → gráficos, sin las posiciones (orden visual = orden DOM)
+OK    1440: dos columnas, resumen lateral y resumen breve oculto
+OK    empresas: encabezados Empresa · Sector · Comprobaciones · acción
+OK    empresas: nombre con protagonismo y símbolo complementario
+OK    empresas: filas de 56–96 px (ronda 12: con las cinco píldoras de comprobaciones)
+OK    empresas: «Ver ficha» visible en cada fila
+OK    empresas: orden real = superadas (desc) → no superadas (asc) → símbolo (A–Z); sin datos no cuentan como fallo
+OK    empresas: criterio de orden y empates explicados
+OK    empresas: «no es una recomendación de compra»
+OK    empresas: sin paginación ficticia
+OK    empresas: «Ver ficha» se abre con teclado
+OK    empresas: «Ir a los filtros de precio» salta la lista de 126 filas
+OK    empresas: el foco recorre las filas en orden (Tab)
+OK    ficha móvil: cinco comprobaciones con valor, icono y texto
+OK    ficha móvil: moneda y escala en el título; sin «mil M»
+OK    ficha móvil: periodo y fuente visibles, metodología accesible
+OK    ficha móvil: tabla desplazable dentro de su contenedor, con aviso visible
+OK    ficha móvil: la columna de año se mantiene como referencia al desplazar
+OK    ficha móvil: página sin desbordamiento horizontal
+OK    ficha móvil: «Cerrar» sigue a la vista al desplazarse
+OK    ficha con texto al 200 %: «Cerrar» accesible y sin desbordar la página
+OK    portada: titular con la promesa de producto (ronda 21)
+OK    portada: explicación breve con la transparencia de simulación (ronda 21)
+OK    portada: SEC solo en texto secundario de fuentes
+OK    portada: «Explorar un ejemplo» desplaza a las plantillas y mueve el foco
+OK    portada: vista previa abreviada (3 posiciones + «+3 posiciones») con totales completos
+OK    portada: vista previa más baja (< 460 px)
+OK    portada: etiquetas veraces de origen en carteras públicas
+OK    portada: descripciones completas, sin recortes
+OK    portada: aviso general conservado y sin avisos recortados
+OK    portada móvil: las tres plantillas caben en ≤ 360 px de alto (antes 649)
+OK    portada móvil: vista previa oculta
+
+RESULTADO: 53 correctas, 0 fallos

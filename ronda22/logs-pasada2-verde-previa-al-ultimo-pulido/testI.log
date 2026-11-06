@@ -1,0 +1,22 @@
+# comando: node tests/ronda11/testI.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:37:20 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [I1-320] Composición dibujada con los datos reales (320 px)
+OK    [I2-320] Una acción principal y jerarquía composición > ROIC (320 px)
+OK    [I3-320] Filas de activos comparables y táctiles (320 px)
+OK    [I4-320] Sin desbordamiento horizontal en pendiente, error y texto ampliado (320 px; ampliado SIMULADO)
+OK    [I5-320] Sin errores de JavaScript (320 px)
+OK    [I1-390] Composición dibujada con los datos reales (390 px)
+OK    [I2-390] Una acción principal y jerarquía composición > ROIC (390 px)
+OK    [I3-390] Filas de activos comparables y táctiles (390 px)
+OK    [I4-390] Sin desbordamiento horizontal en pendiente, error y texto ampliado (390 px; ampliado SIMULADO)
+OK    [I5-390] Sin errores de JavaScript (390 px)
+OK    [I1-1440] Composición dibujada con los datos reales (1440 px)
+OK    [I2-1440] Una acción principal y jerarquía composición > ROIC (1440 px)
+OK    [I3-1440] Filas de activos comparables y táctiles (1440 px)
+OK    [I4-1440] Sin desbordamiento horizontal en pendiente, error y texto ampliado (1440 px; ampliado SIMULADO)
+OK    [I5-1440] Sin errores de JavaScript (1440 px)
+OK    [I6] Contraste de los tokens de color (claro y oscuro), calculado desde el CSS real
+
+RESULTADO: 16 correctas, 0 fallos

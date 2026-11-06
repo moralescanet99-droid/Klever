@@ -1,0 +1,20 @@
+Ejecución: 2026-11-03 16:33 UTC
+Código: commit 3c3c861fa7b61fc3b02da8933d00616d1edc53f2; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+RESULTADO: 51 correctas, 0 fallos
+=== testC ===
+RESULTADO: 50 correctas, 0 fallos
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK

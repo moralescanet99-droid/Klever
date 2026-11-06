@@ -1,0 +1,26 @@
+# testU contra el código de la ronda 22 (commit b7ae443): debe FALLAR en los casos de la corrección
+FALLA [U1-1440] Primer envío lento y edición durante la espera (1440 px)  [{"msg":"Revisión registrada.","obs":"Texto B escrito mientras se guarda","items":["5 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)"],"filas":["Texto A (el q
+FALLA [U2-1440] Reintento lento y edición durante la espera (1440 px)  [{"durante2":"Texto C2 durante el reintento lento","boton2":"Comprobando…","durante2b":"Texto C2 durante el reintento lento","incierto":true,"msg":"Esa revisión ya estaba registrada.","
+FALLA [U3-1440] Conflicto y lectura posterior fallida (1440 px)  [{"c1":{"msg":"Este escenario cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión 
+FALLA [U4-1440] Sesión caducada y regreso con la misma cuenta (1440 px)  [{"trasCaducar":{"local":[],"posts":1},"vuelve":{"obs":"","filas":0}}]
+FALLA [U5-1440] Otra cuenta no ve el borrador (1440 px)  [{"antes":0,"trasEntrar":0,"restantes":[],"trasCuaderno":[],"form":false,"texto":false,"api":404}]
+FALLA [U5b-1440] Cerrar sesión a propósito borra los borradores de revisión (1440 px)  [{"tras":1}]
+OK    [U6-1440] Base inalterada tras todos los casos (1440 px)
+OK    [U0-1440] Sin errores de JavaScript ni diálogos inesperados (1440 px)
+FALLA [U1-390] Primer envío lento y edición durante la espera (390 px)  [{"msg":"Revisión registrada.","obs":"Texto B escrito mientras se guarda","items":["5 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)"],"filas":["Texto A (el que
+FALLA [U2-390] Reintento lento y edición durante la espera (390 px)  [{"durante2":"Texto C2 durante el reintento lento","boton2":"Comprobando…","durante2b":"Texto C2 durante el reintento lento","incierto":true,"msg":"Esa revisión ya estaba registrada.","ob
+FALLA [U3-390] Conflicto y lectura posterior fallida (390 px)  [{"c1":{"msg":"Este escenario cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión ac
+FALLA [U4-390] Sesión caducada y regreso con la misma cuenta (390 px)  [{"trasCaducar":{"local":[],"posts":1},"vuelve":{"obs":"","filas":0}}]
+FALLA [U5-390] Otra cuenta no ve el borrador (390 px)  [{"antes":0,"trasEntrar":0,"restantes":[],"trasCuaderno":[],"form":false,"texto":false,"api":404}]
+FALLA [U5b-390] Cerrar sesión a propósito borra los borradores de revisión (390 px)  [{"tras":1}]
+OK    [U6-390] Base inalterada tras todos los casos (390 px)
+OK    [U0-390] Sin errores de JavaScript ni diálogos inesperados (390 px)
+FALLA [U1-320] Primer envío lento y edición durante la espera (320 px)  [{"msg":"Revisión registrada.","obs":"Texto B escrito mientras se guarda","items":["5 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)"],"filas":["Texto A (el que
+FALLA [U2-320] Reintento lento y edición durante la espera (320 px)  [{"durante2":"Texto C2 durante el reintento lento","boton2":"Comprobando…","durante2b":"Texto C2 durante el reintento lento","incierto":true,"msg":"Esa revisión ya estaba registrada.","ob
+FALLA [U3-320] Conflicto y lectura posterior fallida (320 px)  [{"c1":{"msg":"Este escenario cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión ac
+FALLA [U4-320] Sesión caducada y regreso con la misma cuenta (320 px)  [{"trasCaducar":{"local":[],"posts":1},"vuelve":{"obs":"","filas":0}}]
+FALLA [U5-320] Otra cuenta no ve el borrador (320 px)  [{"antes":0,"trasEntrar":0,"restantes":[],"trasCuaderno":[],"form":false,"texto":false,"api":404}]
+FALLA [U5b-320] Cerrar sesión a propósito borra los borradores de revisión (320 px)  [{"tras":1}]
+OK    [U6-320] Base inalterada tras todos los casos (320 px)
+OK    [U0-320] Sin errores de JavaScript ni diálogos inesperados (320 px)
+RESULTADO: 6 correctas, 18 fallos

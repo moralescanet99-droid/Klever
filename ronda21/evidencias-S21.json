@@ -1,0 +1,212 @@
+[
+ {
+  "id": "S1-1440",
+  "escenario": "Portada (1440 px): promesa de producto y TRES entradas claras, con la transparencia de simulación visible desde el principio",
+  "esperado": "El título contiene la promesa; hay tres entradas (crear desde cero, explorar un ejemplo, recrear mi cartera); el texto inicial dice «sin dinero real»",
+  "observado": "{\"h1\":\"Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir\",\"entradas\":[\"Crear desde cero\",\"Explorar un ejemplo\",\"Recrear mi cartera\"],\"simulacion\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S2-1440",
+  "escenario": "Crear desde cero (1440 px): cartera vacía con su aviso, primer activo, reparto al 100 %",
+  "esperado": "Empieza sin posiciones y con el aviso de «cartera vacía»; tras añadir KO y PG y repartir 60/40 el editor muestra 100 % asignado y el aviso desaparece",
+  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía · añade un activo. MásAñade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S3-1440",
+  "escenario": "Guardar pidiendo acceso (1440 px): el borrador no se pierde",
+  "esperado": "Se pidió acceso; tras entrar, la cartera existe en la cuenta con KO 60 % y PG 40 %, origen «vacia» y sin duplicados",
+  "observado": "{\"dialogoAcceso\":true,\"n\":1,\"origen\":\"vacia\",\"pos\":[{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S4-1440",
+  "escenario": "Revisión de la cartera guardada (1440 px): «Tu cartera de un vistazo», estado de guardado inequívoco y acción «Probar un cambio»",
+  "esperado": "Hay resumen (posiciones, mayor posición, tipos), el estado dice que está guardada en la cuenta y existe el botón; la nota 4,4 es un indicador dentro del análisis, no lo único",
+  "observado": "{\"estadoGuardada\":\"Guardada en tu cuenta\",\"rev\":{\"vz\":\"Tu cartera de un vistazo 2 posiciones, asignado 100 %. Mayor posición: KO 60 %. Por tipo: acciones 100 %. Es la concentración por posición: no es la exposición real de los fondos ni una pérdida esperada. Probar un cambio\",\"probar\":true,\"nota\":\"4,4 de 10\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S5-1440",
+  "escenario": "Comparación (1440 px): «Cartera base» frente a «Alternativa simulada», con el origen del peso añadido y sin afirmar que sea mejor",
+  "esperado": "Las columnas se llaman «Cartera base» y «Alternativa simulada»; se explica quién cede el peso; se dice que la base no cambia",
+  "observado": "{\"cab\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"],\"origen\":\"Quién cede el peso: Los 10 puntos de JNJ salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %).\",\"baseIntacta\":true,\"noMejor\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S6-1440",
+  "escenario": "Guardar en mi Cuaderno (1440 px): pregunta, motivo, qué me haría cambiar de opinión y fecha; la cartera base NO cambia",
+  "esperado": "El escenario existe con los cuatro campos y la ficha los muestra; la cartera guardada tiene las mismas posiciones y la misma revisión que antes",
+  "observado": "{\"n\":1,\"esc\":{\"p\":\"¿Aporta JNJ más estabilidad?\",\"n\":\"Quiero ver qué cambia si diversifico\",\"i\":\"Si JNJ recorta su dividendo, lo descarto\",\"f\":\"2026-11-05\"},\"inval\":\"Si JNJ recorta su dividendo, lo descarto\",\"revAntes\":0,\"revDespues\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S7b-1440",
+  "escenario": "Usuario recurrente (1440 px): la portada le lleva a lo que toca revisar",
+  "esperado": "Con una idea con fecha de hoy aparece «Tienes 1 idea para revisar en tu Cuaderno» con enlace al Cuaderno",
+  "observado": "\"Tienes 1 idea para revisar en tu Cuaderno\"",
+  "resultado": "OK"
+ },
+ {
+  "id": "S7-1440",
+  "escenario": "Cerrar sesión y volver con la misma cuenta (1440 px): la idea reaparece en «Para revisar»",
+  "esperado": "El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»",
+  "observado": "{\"revocado\":401,\"grupos\":[{\"t\":\"Para revisar (1)\",\"n\":1}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S8-1440",
+  "escenario": "Registrar revisión (1440 px): se suma al historial; la pregunta y la invalidación originales siguen; persiste tras recargar",
+  "esperado": "1 revisión visible, con la observación y la próxima fecha; la pregunta y la condición originales intactas; sigue allí tras recargar; el servidor tiene la fecha reprogramada",
+  "observado": "{\"hist\":{\"items\":[\"5 nov 2026 · Programo otra revisión (próxima revisión: 15 ene 2099)Tu observación: JNJ mantuvo su dividendoLo que aprendiste: Mi condición no se cumplió\"],\"preg\":\"Pregunta: «¿Aporta JNJ más estabilidad?»\",\"inval\":\"Si JNJ recorta su dividendo, lo descarto\"},\"trasRecargar\":1,\"revisar_en\":\"2099-01-15\",\"n\":1}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S9-1440",
+  "escenario": "Idea reprogramada y aislamiento (1440 px)",
+  "esperado": "La idea ya no está en «Para revisar» sino en «Próximas revisiones»; otra cuenta autenticada recibe 404 al leer, listar revisiones, registrar y editar, no ve nada en su Cuaderno y no cambia la revisión del original",
+  "observado": "{\"grupos2\":[\"Próximas revisiones (1)\"],\"ajena\":[404,404,404,404],\"listaAjena\":0,\"n\":1}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S0-1440",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados en el recorrido (1440 px)",
+  "esperado": "Ningún pageerror; los avisos de «cambios sin guardar» se aceptan y se cuentan",
+  "observado": "errores []; beforeunload 0; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "S1-390",
+  "escenario": "Portada (390 px): promesa de producto y TRES entradas claras, con la transparencia de simulación visible desde el principio",
+  "esperado": "El título contiene la promesa; hay tres entradas (crear desde cero, explorar un ejemplo, recrear mi cartera); el texto inicial dice «sin dinero real»",
+  "observado": "{\"h1\":\"Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir\",\"entradas\":[\"Crear desde cero\",\"Explorar un ejemplo\",\"Recrear mi cartera\"],\"simulacion\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S2-390",
+  "escenario": "Crear desde cero (390 px): cartera vacía con su aviso, primer activo, reparto al 100 %",
+  "esperado": "Empieza sin posiciones y con el aviso de «cartera vacía»; tras añadir KO y PG y repartir 60/40 el editor muestra 100 % asignado y el aviso desaparece",
+  "observado": "{\"vacio\":{\"aviso\":\"Cartera vacía · añade un activo. MásAñade tu primer activo, reparte hasta el 100 % y pulsa «Revisar». Es una simulación, sin dinero real.\",\"filas\":0},\"tras\":{\"filas\":\"60,0/40,0\",\"aviso\":true,\"total\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S3-390",
+  "escenario": "Guardar pidiendo acceso (390 px): el borrador no se pierde",
+  "esperado": "Se pidió acceso; tras entrar, la cartera existe en la cuenta con KO 60 % y PG 40 %, origen «vacia» y sin duplicados",
+  "observado": "{\"dialogoAcceso\":true,\"n\":1,\"origen\":\"vacia\",\"pos\":[{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S4-390",
+  "escenario": "Revisión de la cartera guardada (390 px): «Tu cartera de un vistazo», estado de guardado inequívoco y acción «Probar un cambio»",
+  "esperado": "Hay resumen (posiciones, mayor posición, tipos), el estado dice que está guardada en la cuenta y existe el botón; la nota 4,4 es un indicador dentro del análisis, no lo único",
+  "observado": "{\"estadoGuardada\":\"Guardada en tu cuenta\",\"rev\":{\"vz\":\"Tu cartera de un vistazo 2 posiciones, asignado 100 %. Mayor posición: KO 60 %. Por tipo: acciones 100 %. Es la concentración por posición: no es la exposición real de los fondos ni una pérdida esperada. Probar un cambio\",\"probar\":true,\"nota\":\"4,4 de 10\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S5-390",
+  "escenario": "Comparación (390 px): «Cartera base» frente a «Alternativa simulada», con el origen del peso añadido y sin afirmar que sea mejor",
+  "esperado": "Las columnas se llaman «Cartera base» y «Alternativa simulada»; se explica quién cede el peso; se dice que la base no cambia",
+  "observado": "{\"cab\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"],\"origen\":\"Quién cede el peso: Los 10 puntos de JNJ salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %).\",\"baseIntacta\":true,\"noMejor\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S6-390",
+  "escenario": "Guardar en mi Cuaderno (390 px): pregunta, motivo, qué me haría cambiar de opinión y fecha; la cartera base NO cambia",
+  "esperado": "El escenario existe con los cuatro campos y la ficha los muestra; la cartera guardada tiene las mismas posiciones y la misma revisión que antes",
+  "observado": "{\"n\":1,\"esc\":{\"p\":\"¿Aporta JNJ más estabilidad?\",\"n\":\"Quiero ver qué cambia si diversifico\",\"i\":\"Si JNJ recorta su dividendo, lo descarto\",\"f\":\"2026-11-05\"},\"inval\":\"Si JNJ recorta su dividendo, lo descarto\",\"revAntes\":0,\"revDespues\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S7b-390",
+  "escenario": "Usuario recurrente (390 px): la portada le lleva a lo que toca revisar",
+  "esperado": "Con una idea con fecha de hoy aparece «Tienes 1 idea para revisar en tu Cuaderno» con enlace al Cuaderno",
+  "observado": "\"Tienes 1 idea para revisar en tu Cuaderno\"",
+  "resultado": "OK"
+ },
+ {
+  "id": "S7-390",
+  "escenario": "Cerrar sesión y volver con la misma cuenta (390 px): la idea reaparece en «Para revisar»",
+  "esperado": "El token antiguo queda revocado (401); con la sesión nueva, el Cuaderno agrupa la idea con fecha de hoy en «Para revisar»",
+  "observado": "{\"revocado\":401,\"grupos\":[{\"t\":\"Para revisar (1)\",\"n\":1}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S8-390",
+  "escenario": "Registrar revisión (390 px): se suma al historial; la pregunta y la invalidación originales siguen; persiste tras recargar",
+  "esperado": "1 revisión visible, con la observación y la próxima fecha; la pregunta y la condición originales intactas; sigue allí tras recargar; el servidor tiene la fecha reprogramada",
+  "observado": "{\"hist\":{\"items\":[\"5 nov 2026 · Programo otra revisión (próxima revisión: 15 ene 2099)Tu observación: JNJ mantuvo su dividendoLo que aprendiste: Mi condición no se cumplió\"],\"preg\":\"Pregunta: «¿Aporta JNJ más estabilidad?»\",\"inval\":\"Si JNJ recorta su dividendo, lo descarto\"},\"trasRecargar\":1,\"revisar_en\":\"2099-01-15\",\"n\":1}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S9-390",
+  "escenario": "Idea reprogramada y aislamiento (390 px)",
+  "esperado": "La idea ya no está en «Para revisar» sino en «Próximas revisiones»; otra cuenta autenticada recibe 404 al leer, listar revisiones, registrar y editar, no ve nada en su Cuaderno y no cambia la revisión del original",
+  "observado": "{\"grupos2\":[\"Próximas revisiones (1)\"],\"ajena\":[404,404,404,404],\"listaAjena\":0,\"n\":1}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S0-390",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados en el recorrido (390 px)",
+  "esperado": "Ningún pageerror; los avisos de «cambios sin guardar» se aceptan y se cuentan",
+  "observado": "errores []; beforeunload 0; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "S10-1440",
+  "escenario": "Explorar un ejemplo (1440 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
+  "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Ejemplo simulado · datos de prueba. MásEs una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S11-1440",
+  "escenario": "Recrear mi cartera (1440 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
+  "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
+  "observado": "{\"manual\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no en\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S12-1440",
+  "escenario": "Teclado real (1440 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío",
+  "esperado": "El foco alcanza la entrada (≤ 60 pulsaciones) y Enter abre la cartera vacía con su aviso",
+  "observado": "Tab ×10; aviso true",
+  "resultado": "OK"
+ },
+ {
+  "id": "S13-1440",
+  "escenario": "Sin errores de JavaScript ni desbordes en las otras entradas (1440 px)",
+  "esperado": "Ningún pageerror; sin desbordamiento horizontal",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "S10-390",
+  "escenario": "Explorar un ejemplo (390 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación",
+  "esperado": "El nombre y el aviso dicen «ejemplo simulado»; la revisión tiene resumen, el estado «Sin nota global» (no «pendiente») y «Probar un cambio»; la comparación se calcula",
+  "observado": "{\"ejemplo\":{\"nombre\":\"Ejemplo simulado: dividendos\",\"aviso\":\"Ejemplo simulado · datos de prueba. MásEs una copia editable para ver qué muestra Klever. No es una cartera óptima ni recomendada y los datos son de prueba. Cámbiala como quieras: no afecta a ninguna cartera tuya.\"},\"sinNota\":{\"vz\":true,\"probar\":true,\"nota\":false,\"estado\":\"Sin nota global.\"},\"cmp\":[\"Posición\",\"Cartera base\",\"Alternativa simulada\",\"Cambio (puntos)\",\"Medida\",\"Cartera base\",\"Alternativa simulada\",\"Categoría\",\"Cartera base\",\"Alternativa simulada\",\"Bloque\",\"Antes\",\"Después\",\"Cambio\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S11-390",
+  "escenario": "Recrear mi cartera (390 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio",
+  "esperado": "El aviso dice que no hay conexión, custodia ni órdenes; «ZZZZQ» no se añade y se explica que no se sustituye; KO se añade y queda al 100 %",
+  "observado": "{\"manual\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no en\",\"noSoportado\":\"Ningún activo coincide con «ZZZZQ». Si no está en el universo disponible, no lo sustituimos por otro.\",\"enGuardado\":0,\"traer\":{\"filas\":\"Peso de KO, en porcentaje\",\"aviso\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "S12-390",
+  "escenario": "Teclado real (390 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío",
+  "esperado": "El foco alcanza la entrada (≤ 60 pulsaciones) y Enter abre la cartera vacía con su aviso",
+  "observado": "Tab ×7; aviso true",
+  "resultado": "OK"
+ },
+ {
+  "id": "S13-390",
+  "escenario": "Sin errores de JavaScript ni desbordes en las otras entradas (390 px)",
+  "esperado": "Ningún pageerror; sin desbordamiento horizontal",
+  "observado": "[]",
+  "resultado": "OK"
+ }
+]

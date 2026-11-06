@@ -1,0 +1,43 @@
+# comando: node tests/ronda15/unit-nota.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:27:54 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [N1] Empresas efectivas: 50/50
+OK    [N1b] Empresas efectivas: 90/10
+OK    [N2] Dos clases del mismo emisor cuentan una vez
+OK    [N2b] Con 20 posiciones iguales N = 20 ≥ 15: puntuación máxima
+OK    [N3] Sectores y actividades: mitad y mitad
+OK    [N4] Una empresa pequeña al 2 % pesa menos que al 30 %
+OK    [N5] Falta un ejercicio (4 de 5) en una empresa del 15 %
+OK    [N5b] Cobertura de 90 % EXACTO (empresa sin evaluar del 10 %)
+OK    [N5c] Cobertura de 89,9 %
+OK    [N6] 19 comparables en el sector
+OK    [N6b] 20 comparables en el sector
+OK    [N7] Un ETF sin composición verificada (20 %)
+OK    [N8] Cartera que suma 95 %
+OK    [N8b] Cartera que suma 110 %
+OK    [N8c] Cartera vacía
+OK    [N9] Empates: percentil por rango medio
+OK    [N10] Caja neta con EBITDA positivo
+OK    [N10b] Deuda positiva con EBITDA negativo y caja libre siempre negativa
+OK    [N10c] Deuda y EBITDA AUSENTES (null)
+OK    [N10d] Caja neta pero EBITDA negativo (ambos «nulos o negativos»)
+OK    [N11] Bancos y aseguradoras
+OK    [N12] Rentabilidad y crecimiento de la empresa con mayor ROIC del sector (24 comparables)
+OK    [N13] Sin doble redondeo: la nota es la suma de los bloques SIN redondear, redondeada una vez a un decimal
+OK    [N14] Principal limitación = mayor «peso del bloque × (10 − puntuación)»; principal fortaleza = bloque de mayor puntuación
+OK    [N15] Cartera y escenario con igual composición, fecha y datos
+OK    [N16] La evaluación no cambia el universo ni la cartera de entrada
+OK    [N20a] EBITDA AUSENTE (null) con deuda positiva, una posición al 100 % y los demás datos válidos
+OK    [N20b] EBITDA observado igual a CERO con deuda positiva (mismos datos)
+OK    [N20c] EBITDA NEGATIVO con deuda positiva
+OK    [N21] 59 frente a 60 sesiones de negociación (EBITDA válido)
+OK    [N22] Una empresa con otra MONEDA, otra FUENTE o sin FECHA de mercado
+OK    [N23a] Datos ausentes en posiciones DISTINTAS: sin EBITDA en una posición del 10 % y sin un dato de caja libre en otra del 10 %
+OK    [N23b] Mismo caso con la posición sin EBITDA al 10,1 % (89,9 % evaluable en ese indicador)
+OK    [N24] Origen de los datos
+OK    [N25] Guardar y reabrir la misma evaluación (JSON)
+
+RESULTADO: 35 correctas, 0 fallos
+(node:21661) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,17 @@
+# comando: node tests/ronda15/unit-almacen.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 13:12:07 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [A1] La migración empieza bajo A, se retrasa la lectura, se reinicia el módulo y se pasa a B
+(node:2963) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+OK    [A2] Se cambia de cuenta entre la primera y la segunda escritura
+OK    [A3] Migración sin interrupciones
+OK    [A4] Un GET retrasado que devuelve «vacío» llega DESPUÉS de guardar una nota
+OK    [A5] Almacenamiento bloqueado desde el inicio (lectura y escritura fallan)
+OK    [A5b] Se puede leer pero NO escribir (cuota llena)
+OK    [A6] El borrado de la ÚLTIMA fila falla
+OK    [A6b] Recuperado el almacenamiento, el borrado funciona y sobrevive a «recargar»
+OK    [A7] Datos locales dañados
+
+RESULTADO: 9 correctas, 0 fallos

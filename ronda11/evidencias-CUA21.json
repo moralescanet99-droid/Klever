@@ -1,0 +1,154 @@
+[
+ {
+  "id": "K1",
+  "escenario": "Guardar una comparación con pregunta, motivo, «qué me haría cambiar de opinión» y fecha",
+  "esperado": "201; los cuatro campos se conservan y se devuelven; sin revisiones aún",
+  "observado": "HTTP 201; {\"p\":\"¿Y si C pesara un 10 %?\",\"n\":\"Quiero ver qué cambia\",\"i\":\"Si C pierde un cliente grande, lo descarto\",\"f\":\"2026-11-07\",\"nr\":0}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K2",
+  "escenario": "No se exige rellenar todo: solo con nombre y comparación",
+  "esperado": "201; pregunta, nota e invalidación vacías; sin fecha",
+  "observado": "HTTP 201; {\"p\":\"\",\"i\":\"\",\"f\":null}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K3",
+  "escenario": "Límite explícito en servidor: 601 caracteres de invalidación",
+  "esperado": "400 y no se guarda nada",
+  "observado": "HTTP 400; filas 2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K4",
+  "escenario": "Editar la invalidación con control de revisión (PATCH)",
+  "esperado": "200; revisión +1; resto intacto",
+  "observado": "HTTP 200; {\"i\":\"Si el dividendo baja\",\"r\":1,\"p\":\"¿Y si C pesara un 10 %?\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K5",
+  "escenario": "Registrar una revisión que reprograma",
+  "esperado": "201; el historial tiene 1 registro; el escenario sube de revisión y pasa a revisarse el 2026-12-01; pregunta, nota, invalidación, base y propuesta SIN cambios",
+  "observado": "HTTP 201; revisiones 1; revisar_en 2026-12-01; revisión 1→2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K6",
+  "escenario": "Mantener sin nueva fecha",
+  "esperado": "201; el historial conserva la revisión anterior y suma esta (2 registros, la más reciente primero); el escenario queda en estudio sin fecha",
+  "observado": "HTTP 201; [[\"2026-12-02\",\"mantener\"],[\"2026-11-08\",\"reprogramar\"]]; estado en_estudio; revisar_en null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K7",
+  "escenario": "Descartar tras revisar",
+  "esperado": "201; estado «descartado» y sin fecha; el historial (3) y la hipótesis original se conservan; descartar no es borrar",
+  "observado": "HTTP 201; estado descartado; revisiones 3; existe true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K8",
+  "escenario": "Reintento con la MISMA clave (corte de red)",
+  "esperado": "La primera 201 y la segunda 200 con duplicado; un solo registro y la revisión del escenario sube UNA vez",
+  "observado": "HTTP 201/200; registros 1; revisión 0→1; duplicado true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K9",
+  "escenario": "Dos envíos SIMULTÁNEOS con la misma clave",
+  "esperado": "Un solo registro; la revisión sube una vez; ninguno falla con 500",
+  "observado": "HTTP 201/200; registros 1; revisión 0→1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K10",
+  "escenario": "Conflicto entre dos pestañas: la segunda lleva una revisión antigua",
+  "esperado": "La primera 201; la segunda 409 con «conflicto» y la revisión actual; solo 1 registro y la edición de la primera NO se pisa",
+  "observado": "HTTP 201/409; registros 1; conflicto true; revisión actual 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K11",
+  "escenario": "Editar el escenario con la revisión anterior a una revisión registrada",
+  "esperado": "409: la edición no pisa lo registrado",
+  "observado": "HTTP 409",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K12",
+  "escenario": "Validación en servidor de la revisión",
+  "esperado": "Todas las entradas inválidas devuelven 400 y no añaden registros",
+  "observado": "decisión desconocida:400 · fecha imposible 2026-02-31:400 · reprogramar sin fecha:400 · descartar con fecha:400 · observación de 601:400 · próxima fecha inválida:400 · clave corta:400; registros 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K13",
+  "escenario": "El texto se guarda tal cual (se escapa al MOSTRAR, no al guardar) y se devuelve como dato",
+  "esperado": "201; la observación vuelve idéntica como cadena JSON",
+  "observado": "HTTP 201; \"<img src=x onerror=window.__pwn=1>\"",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K14",
+  "escenario": "Otra cuenta (autenticada) y una sesión inválida",
+  "esperado": "Otra cuenta: 404 al leer y al registrar (no se distingue «no existe» de «es de otro»); sin sesión: 401; el dueño sigue viendo sus 3 revisiones",
+  "observado": "HTTP 404/404/404; sin sesión 401; propias 3",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K15",
+  "escenario": "Una clave de intento ya usada en OTRO escenario de la misma cuenta",
+  "esperado": "409; no se registra nada",
+  "observado": "HTTP 409; registros del escenario 3",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K16",
+  "escenario": "Cambiar la cartera original después de guardar la comparación",
+  "esperado": "La copia base/propuesta NO cambia; se avisa de que hay una versión posterior de la cartera; no se recalcula",
+  "observado": "PUT HTTP 200; igual=true; hay_version_posterior=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K17",
+  "escenario": "Borrar la cartera original: la comparación y su historial siguen",
+  "esperado": "El escenario se lee; base/propuesta intactas; «la cartera ya no existe»; la revisión registrada sigue",
+  "observado": "revisión HTTP 201; cartera_existe=false; igual=true; revisiones 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K18",
+  "escenario": "Eliminar el escenario elimina su historial (no quedan filas huérfanas)",
+  "esperado": "200 y 0 revisiones de ese escenario",
+  "observado": "HTTP 200; huérfanas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "K19",
+  "escenario": "Tope de 200 revisiones por escenario",
+  "esperado": "Se aceptan 200 y la 201 devuelve 400 con mensaje",
+  "observado": "aceptadas 200; última HTTP 400",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

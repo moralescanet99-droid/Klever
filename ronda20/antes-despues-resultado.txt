@@ -1,0 +1,39 @@
+# ANTES (ronda 19, 9a1e272)
+1. JPM 50 % + KO 50 %, KO sin EBITDA
+    estado: «Nota pendiente» (único encabezado)
+    texto: Podemos medir «empresas», «sectores y actividades» y «tamaño y liquidez». Faltan datos para valorar «deuda y caja» y «rentabilidad y crecimiento». Causa principal: KO (50 % de la cartera): falta el EBITDA del último ejercicio (un dato ausente no es un EBITDA cero).
+2. SCHD 1 % + AAPL 99 %
+    estado: «Nota pendiente» (único encabezado)
+    texto: Esta cartera no tiene nota global. Los ETF representan el 1 % y el método actual no evalúa su composición. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis. Además faltan datos de AAPL: el detalle dice cuáles.
+3. JPM 50 % + PG 50 %, JPM sin capitalización
+    estado: «Nota pendiente» (único encabezado)
+    texto: Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los beneficios de los bancos. Por eso no damos una nota total.
+4. SCHD 20 % + JPM 40 % + KO 40 %, KO sin EBITDA
+    estado: «Nota pendiente» (único encabezado)
+    texto: Esta cartera no tiene nota global. Los ETF representan el 20 % y el banco el 40 %: el método actual no evalúa la composición de los ETF ni la deuda y los beneficios de los bancos. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis. Además faltan datos de KO: el detalle dice cuáles.
+5. Plantilla mixta (con ETF)
+    estado: «Nota pendiente» (único encabezado)
+    texto: Esta cartera no tiene nota global. Los ETF representan el 33,6 % y el método actual no evalúa su composición. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis. Además faltan datos de JNJ y XOM: el detalle dice cuáles.
+6. Ayudante de pruebas con UNA aserción fallida (el ejemplo literal de la revisión)
+    salida: RESULTADO: 0 correctas, 1 fallos
+    código de salida: 0
+
+# DESPUÉS (ronda 20)
+1. JPM 50 % + KO 50 %, KO sin EBITDA
+    estado: Evaluación parcial
+    texto: El método no analiza la deuda y los beneficios del banco (50 %) y faltan datos de KO.
+2. SCHD 1 % + AAPL 99 %
+    estado: Evaluación parcial
+    texto: No hay comparables suficientes en su sector para valorar «deuda y caja» y «rentabilidad y crecimiento» de AAPL (99 %). Además, el método no analiza la composición de los ETF (1 %).
+3. JPM 50 % + PG 50 %, JPM sin capitalización
+    estado: Evaluación parcial
+    texto: El método no analiza la deuda y los beneficios del banco (50 %) y faltan datos de JPM.
+4. SCHD 20 % + JPM 40 % + KO 40 %, KO sin EBITDA
+    estado: Sin nota global
+    texto: El método no analiza la composición de los ETF (20 %) ni la deuda y los beneficios del banco (40 %) y faltan datos de KO.
+5. Plantilla mixta (con ETF)
+    estado: Sin nota global
+    texto: El método no analiza la composición de los ETF (33,6 %) y no hay comparables suficientes en su sector para valorar «deuda y caja» y «rentabilidad y crecimiento» de JNJ y XOM (33,2 %).
+6. Ayudante de pruebas con UNA aserción fallida (el ejemplo literal de la revisión)
+    salida: RESULTADO: 0 correctas, 1 fallos
+    código de salida: 1

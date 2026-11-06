@@ -1,0 +1,7 @@
+Ejecutor de la ronda 8 (commit 6d18887), ANTES de corregir, con baterías vacías y una demo de mentira:
+
+1) demo que imprime «DEMO OK» y sale con código 1 → código de salida del ejecutor: 0 (esperado ≠ 0)
+DEMO OK
+RESUMEN: todo correcto. Código de salida 0.
+
+2) puerto 8790 ocupado por un servidor AJENO → código de salida: 0; la prueba de la demo se ejecutó contra el servidor ajeno: SÍ

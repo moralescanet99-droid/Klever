@@ -1,0 +1,50 @@
+[
+ {
+  "id": "R1",
+  "escenario": "Contraejemplo EXACTO de la revisión: bloques 5,44 / 5,44 / 5,44 / 5,46 (deuda) / 5,44 con nota 5,5 (suma 5,445; la nota 5,5 necesita llegar a 5,450 y el extremo superior de 5,445 es 5,450 EXCLUIDO)",
+  "esperado": "El validador lo rechaza y el POST devuelve 400 («no puede salir de sus bloques»); fortaleza = deuda y pérdida 1,135 como en la revisión",
+  "observado": "validador false; HTTP 400: La evaluación adjunta no es válida: La nota (5.5) no puede salir de sus bloques (suma 5,4450).; deuda 1.135",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R2",
+  "escenario": "Vecinos a ambos lados de la frontera por validador, POST y oráculo independiente",
+  "esperado": "Coinciden los tres con lo esperado: compatibles → 201; incompatibles → 400",
+  "observado": "mismos bloques con nota 5,4 (compatible): validador true POST 201 oráculo true | una unidad de peso más (5,43 en empresas y 5,47 en deuda: S = 5,4455) con nota 5,5: validador true POST 201 oráculo true | una unidad menos (5,45 en empresas y 5,45 en deuda: S = 5,4475… 5,4425) con nota 5,5: validador false POST 400 oráculo false | deuda 5,50 (S = 5,455) con nota 5,4: contacto por el otro lado: validador false POST 400 oráculo false | deuda 5,50 con nota 5,5 (compatible): validador true POST 201 oráculo true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3",
+  "escenario": "Extremos 1 y 10 por POST",
+  "esperado": "Se aceptan (201)",
+  "observado": "extremo 1,0: 201 | extremo 10: 201 | nota 1,0 con bloques 1,04 (T < 1,045 → redondea a 1,0): 201",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4",
+  "escenario": "Lectura de una fila histórica: la del contraejemplo y la de su vecino compatible",
+  "esperado": "La del contraejemplo se identifica como inválida (sin recalcular nada en silencio); la compatible se entrega tal cual",
+  "observado": "contraejemplo: invalida true, evaluacion null; vecino: invalida undefined, nota 5.4",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5",
+  "escenario": "Oráculo de fuerza bruta frente al validador en 12 000 resúmenes (6 000 combinaciones de bloques entre 5,40 y 5,50, con notas 5,4 y 5,5)",
+  "esperado": "Ninguna discrepancia, y entre ellos hay casos EN la frontera exacta",
+  "observado": "12000 resúmenes; 556 en la frontera (±0,0005); discrepancias 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R6",
+  "escenario": "Barrida de carteras calculadas por el EVALUADOR (12 universos aleatorios × 400 carteras de 2 a 5 posiciones, semilla fija)",
+  "esperado": "Toda nota publicada por el evaluador se acepta con el contrato estricto: 0 rechazos (no hace falta tolerar empates binarios)",
+  "observado": "4800 notas publicadas; 0 a ≤ 0,001 de la frontera; rechazadas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

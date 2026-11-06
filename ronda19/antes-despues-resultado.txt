@@ -1,0 +1,13 @@
+# ANTES (ronda 18, 51d9523)
+5,44/5,44/5,44/5,46/5,44 · nota 5,5 (el contraejemplo de la revisión): ACEPTADO
+mismos bloques · nota 5,4 (la que sí corresponde: el total real máximo es 5,4499…): ACEPTADO
+frontera legítima 5,45 en todos · nota 5,5: ACEPTADO
+plantilla mixta · nota publicada: false
+plantilla mixta · explicación breve: Faltan datos para valorar «empresas», «sectores y actividades», «tamaño y liquidez», «deuda y caja» y «rentabilidad y crecimiento». Causa principal: SCHD (17 % de la cartera): fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar; VYM (16,6 % de la cartera): fondo (ETF) sin metodología ni composición válida: cuenta como peso sin evaluar.
+
+# DESPUÉS (ronda 19)
+5,44/5,44/5,44/5,46/5,44 · nota 5,5 (el contraejemplo de la revisión): RECHAZADO
+mismos bloques · nota 5,4 (la que sí corresponde: el total real máximo es 5,4499…): ACEPTADO
+frontera legítima 5,45 en todos · nota 5,5: ACEPTADO
+plantilla mixta · nota publicada: false
+plantilla mixta · explicación breve: Esta cartera no tiene nota global. Los ETF representan el 33,6 % y el método actual no evalúa su composición. Puedes revisar el reparto y la concentración por posición; el detalle explica los límites del análisis. Además faltan datos de JNJ y XOM: el detalle dice cuáles.

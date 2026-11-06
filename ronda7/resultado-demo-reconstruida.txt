@@ -1,0 +1,20 @@
+Demo reconstruida con python3 scripts/demo/build_demo.py DESPUÉS de la ejecución limpia (la demo commiteada en 3c3c861 era anterior al último ajuste de foco/CSS del diálogo).
+Comprobada con tests/ronda5/demotest.cjs sobre la demo reconstruida:
+OK    390: portada, banner de demo, 3 plantillas, ejemplos con etiqueta
+OK    390: 103 % → Guardar desactivado con motivo
+OK    390: tras "simular enlace" la cartera queda en la cuenta
+OK    390: publicada con etiqueta de usuario
+OK    390: ficha con 5 comprobaciones
+OK    390: sin desbordamiento y sin errores
+OK    1440: portada, banner de demo, 3 plantillas, ejemplos con etiqueta
+OK    1440: 103 % → Guardar desactivado con motivo
+OK    1440: tras "simular enlace" la cartera queda en la cuenta
+OK    1440: publicada con etiqueta de usuario
+OK    1440: ficha con 5 comprobaciones
+OK    1440: sin desbordamiento y sin errores
+OK    banner: demostración sin persistencia de cuenta y no equivalente al servidor probado
+OK    demo: la casilla «Simular fallo de red al guardar» provoca un fallo explícito
+OK    demo: al quitar la simulación, reintentar guarda
+OK    demo: al recargar se pierde todo (sin sesión ni carteras)
+OK    demo: sin errores de JavaScript
+DEMO OK

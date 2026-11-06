@@ -1,0 +1,18 @@
+# comando: node tests/ronda21/unit-registro21.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:29:12 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Y1] Éxito real (módulo)
+OK    [Y2] Aserción fallida (módulo)
+OK    [Y3] Error previo (código 2 fijado antes) con las aserciones aprobadas — el caso exacto de la revisión de la ronda 20
+OK    [Y4] Error previo MÁS aserción fallida
+OK    [Y5] Recurso que mantiene vivo el proceso (módulo)
+OK    [Y6] run-all.sh con la fixture de módulo en modo «exito»
+OK    [Y7] run-all.sh con la fixture de módulo en modo «fallo»
+OK    [Y8] run-all.sh con la fixture de módulo en modo «error-previo»
+OK    [Y9] run-all.sh con la fixture de módulo en modo «error-previo-y-fallo»
+OK    [Y10] run-all.sh con la fixture de módulo en modo «recurso»
+
+RESULTADO: 10 correctas, 0 fallos
+(node:22836) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

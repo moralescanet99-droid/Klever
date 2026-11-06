@@ -1,0 +1,66 @@
+[
+ {
+  "id": "A1",
+  "escenario": "Acceso con envío de correo (configuración pública, sin DEV_RETURN_LINK)",
+  "esperado": "La respuesta es solo {ok:true}: sin dev_link, sin token ni «login=»; el enlace va únicamente en el correo (a la dirección pedida)",
+  "observado": "HTTP 200; cuerpo {\"ok\":true}; correos enviados 1 a a1@example.com; enlace en el correo=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A2",
+  "escenario": "Enlace de un solo uso",
+  "esperado": "El primer canje da sesión; el segundo, 400 «caducado o ya se usó»",
+  "observado": "1.º HTTP 200 (sesión=true); 2.º HTTP 400 «El enlace ha caducado o ya se usó»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A3",
+  "escenario": "Tokens guardados solo como hash",
+  "esperado": "Ni el enlace ni la sesión están en claro en la base de datos",
+  "observado": "enlaces con token en claro=false; sesiones con token en claro=false; hash del enlace correcto=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A4",
+  "escenario": "Caducidad del enlace",
+  "esperado": "Dura unos 15 min y, caducado, no entra (400) ni crea sesión",
+  "observado": "duración inicial ≈ 15.0 min; tras caducar HTTP 400 «El enlace ha caducado o ya se usó»; sesiones=0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A5",
+  "escenario": "Si el correo no se puede enviar (proveedor caído o sin configurar)",
+  "esperado": "HTTP 502 con mensaje de reintento; NUNCA se devuelve el enlace como alternativa",
+  "observado": "proveedor 500: HTTP 502 «No se pudo enviar el email; inténtalo más tarde»; sin red/sin claves: HTTP 502; enlace en alguna respuesta=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A6",
+  "escenario": "El enlace en pantalla solo con DEV_RETURN_LINK exactamente «1»",
+  "esperado": "Con «1» sí; con «true», «0», vacío o sin definir, no",
+  "observado": "\"1\"→enlace; \"true\"→sin enlace; \"0\"→sin enlace; \"\"→sin enlace; undefined→sin enlace",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A7",
+  "escenario": "Límites de envío por correo",
+  "esperado": "Un segundo envío en menos de un minuto: 429; a partir del 5.º del día: 429",
+  "observado": "2.º inmediato HTTP 429; tras 2 min HTTP 200; 6.º del día HTTP 429 «Demasiados intentos hoy; inténtalo mañana»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A8",
+  "escenario": "La configuración desplegable no activa el enlace en pantalla ni guarda secretos (modo repositorio)",
+  "esperado": "wrangler.toml sin [vars] ni DEV_RETURN_LINK; .dev.vars ignorado y ausente del contenido; DEV_RETURN_LINK solo en el manejador de acceso (y en scripts/pruebas/documentación); marcador de database_id; el HISTORIAL solo se declara verificado si hay repositorio con historial real",
+  "observado": "[vars]=false; DEV_RETURN_LINK en wrangler.toml=false; .dev.vars ignorado=true; presente en el contenido=false; código con DEV_RETURN_LINK: functions/api/login.js; marcador de database_id=true; historial: VERIFICADO en el repositorio (132 commits): .dev.vars nunca se versionó=true; wrangler.toml nunca tuvo un database_id distinto del marcador=true",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

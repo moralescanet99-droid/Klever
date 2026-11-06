@@ -1,0 +1,37 @@
+# comando: node tests/ronda5/testA.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 07:53:00 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    estado: tres conceptos separados (cuenta · sin cambios · privada)
+OK    diálogo de estado: dónde, cambios pendientes y visibilidad
+OK    103 %: Guardar desactivado y motivo junto a la acción
+OK    103 %: la persistencia sigue visible («Cambios locales pendientes de guardar en tu cuenta»)
+OK    103 %: Publicar también desactivado, con motivo al lado
+OK    servidor: guardar >100 % rechazado (misma regla)
+OK    chip sigue Privada y no hay confirmación
+OK    88 %: «Pendiente de asignar: 12 %»
+OK    88 %: se puede guardar (reparto incompleto, privado)
+OK    88 %: Publicar desactivado: pendiente de asignar
+OK    88 %: guardado sin inventar efectivo (sigue «Pendiente de asignar»)
+OK    servidor: publicar con 88 % rechazado
+OK    100 %: «Asignado: 100 %» y Publicar disponible
+OK    publicada: chip Pública + botón «Dejar de publicar»
+OK    pública + incompleto: Guardar desactivado; la versión publicada no cambia y no hace falta despublicar
+OK    pública + incompleto: «Actualizar tesis» desactivado, «Dejar de publicar» activo
+OK    servidor: guardar incompleto en cartera pública rechazado
+OK    despublicar funciona aunque la composición esté a medias
+OK    ya privada: se guarda el reparto incompleto
+OK    publicación fallida: sin «Cartera publicada», sigue Privada y con aviso
+OK    guardado fallido: «No se pudo guardar», sin «Guardada», valor conservado
+OK    tras recuperarse: Guardada con el valor conservado
+OK    resumen: «Distribución por categorías»
+OK    resumen: «ROIC medio de empresas con datos»
+OK    resumen: «No representa la rentabilidad de tu cartera»
+OK    resumen: cobertura por posiciones y por peso con denominador definido
+OK    resumen: media ponderada, fórmula y datos ausentes en el desplegable
+OK    ROIC: fondos «No aplicable»
+OK    ROIC: empresa sin dato «No disponible» (distinto de «No aplicable»)
+OK    añadir un activo reparte lo que faltaba: queda «Asignado: 100 %»
+OK    sin errores JS
+
+RESULTADO: 31 correctas, 0 fallos

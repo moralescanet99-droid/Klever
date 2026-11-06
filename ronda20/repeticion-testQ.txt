@@ -1,0 +1,6 @@
+rep 1: RESULTADO: 25 correctas, 0 fallos 
+rep 2: RESULTADO: 25 correctas, 0 fallos 
+rep 3: RESULTADO: 25 correctas, 0 fallos 
+rep 4: RESULTADO: 25 correctas, 0 fallos 
+rep 5: FALLA [Q3-1440] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)  [{"paso":"3","foco":"nota-panel","posVisibl RESULTADO: 24 correctas, 1 fallos 
+rep 6: RESULTADO: 25 correctas, 0 fallos 

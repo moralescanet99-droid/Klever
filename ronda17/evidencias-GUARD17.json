@@ -1,0 +1,162 @@
+[
+ {
+  "id": "G0",
+  "escenario": "La evaluación REAL calculada por el módulo se acepta",
+  "esperado": "HTTP 201 y vuelve idéntica (cifra, fecha, cobertura, versión)",
+  "observado": "HTTP 201; 4.6 (estructura-v1, 2026-11-04, 100)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G1",
+  "escenario": "Cambiar SOLO la nota (de la calculada a 10) conservando todos los bloques",
+  "esperado": "HTTP 400: la nota no cuadra con sus bloques",
+  "observado": "HTTP 400: La evaluación adjunta no es válida: La nota (10) no cuadra con sus bloques (4,64).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G2",
+  "escenario": "Cambiar SOLO la versión a «foo»",
+  "esperado": "HTTP 400: versión no conocida",
+  "observado": "HTTP 400: La evaluación adjunta no es válida: La versión del método «foo» no es una versión conocida.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G3",
+  "escenario": "Redondeos válidos y límites",
+  "esperado": "Se aceptan: 1,0; 10; 5,4 con bloques de 5,43; 5,5 con 5,45; cobertura del 90 % exacta",
+  "observado": "todos aceptados",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G4",
+  "escenario": "Resúmenes incoherentes o fuera de rango",
+  "esperado": "Todos se rechazan (nota fuera de la tolerancia de redondeo, cobertura < 90, fuera de 1–10, fortaleza y limitación incoherentes)",
+  "observado": "todos rechazados",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G5",
+  "escenario": "Entidad escapada en el motivo (texto «&lt;img…&gt;»)",
+  "esperado": "Se acepta como TEXTO y al pintar sigue siendo texto: el HTML generado no contiene ninguna etiqueta <img>",
+  "observado": "acepta true; etiquetas img en el HTML false; texto visible «&amp;lt;img»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G6",
+  "escenario": "Controles de dirección bidireccionales (U+202E) en el motivo",
+  "esperado": "Se rechazan al guardar",
+  "observado": "acepta false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G7",
+  "escenario": "Límite del motivo: 700 caracteres sí, 701 no (por HTTP)",
+  "esperado": "700 → 201; 701 → 400",
+  "observado": "201 / 400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G8",
+  "escenario": "Clave JSON propia «__proto__» y propiedades HEREDADAS",
+  "esperado": "La clave __proto__ propia es un campo extra (rechazada); un objeto que solo hereda sus campos no vale",
+  "observado": "__proto__: false; heredada: false; -0 en un bloque: false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G9",
+  "escenario": "Fila antigua con la nota cambiada a 10 directamente en la base",
+  "esperado": "No se entrega (evaluacion nula, evaluacion_invalida) y no se presenta como comprobada",
+  "observado": "invalida true; evaluacion null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G10",
+  "escenario": "Fila antigua de una versión que esta pantalla no sabe comprobar («estructura-v9»), bien formada",
+  "esperado": "Se entrega marcada «sin comprobar» y la pantalla la presenta como «valor guardado por el cliente», no como verificada",
+  "observado": "sin_comprobar true; «Valor guardado por el cliente (4 nov 2026, método «estructura-v9», que esta pantalla no sabe comprobar): 4,6 de 10 → pendiente. No»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V1",
+  "escenario": "Referencias nuevas: inexistente (hidrogeno-norte:99), de otra historia y válida (hidrogeno-norte:2)",
+  "esperado": "Inexistente y de otra historia → 400; la válida → 201 (el catálogo es compartido por cliente y servidor)",
+  "observado": "400/400/201; catálogo [\"hidrogeno-norte:1\",\"hidrogeno-norte:2\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V2",
+  "escenario": "La reformulación legítima conserva el vínculo",
+  "esperado": "Tras reescribir con otras palabras el vínculo sigue y el seguimiento dice «responde» (avisando de que son palabras distintas)",
+  "observado": "ref hidrogeno-norte:1; responde; distinta true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V3",
+  "escenario": "Vínculo histórico inválido (escrito por la ronda 16: hidrogeno-norte:99)",
+  "esperado": "La lectura lo identifica (`pregunta_ref_invalida`) y el seguimiento lo trata como pregunta propia («otra») avisando de que el vínculo ya no existe",
+  "observado": "invalida true; estado otra; refInvalida true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V4",
+  "escenario": "Editar un escenario con vínculo histórico inválido",
+  "esperado": "Renombrarlo no falla (el vínculo no cambia); cambiarlo a otro inexistente → 400; desvincularlo expresamente → 200 y desaparece la marca",
+  "observado": "200/400/200; ref null; inválida false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V5",
+  "escenario": "Edición concurrente (dos pestañas con la misma revisión)",
+  "esperado": "La primera gana (200); la segunda recibe 409 con conflicto y no pisa nada; el vínculo sigue",
+  "observado": "200/409; «Edición de la pestaña 1»; ref hidrogeno-norte:1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V6",
+  "escenario": "La migración 0011 usa exactamente los textos del catálogo",
+  "esperado": "Cada texto literal del SQL coincide con el del catálogo compartido (si se cambia uno, esta prueba falla)",
+  "observado": "hidrogeno-norte:1: true; hidrogeno-norte:2: true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V7",
+  "escenario": "Aviso de que una reformulación parece tratar otro asunto",
+  "esperado": "Un texto sobre otro asunto queda por debajo del umbral (0.2); el mismo texto con espacios, en 1",
+  "observado": "[0,0,1]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V8",
+  "escenario": "Otra cuenta con sesión VÁLIDA",
+  "esperado": "Autenticada (200) con lista VACÍA; 404 al abrir el ID concreto de la otra cuenta y 404 al editarlo; nada cambia",
+  "observado": "lista 200/0; detalle 404; patch 404; pregunta intacta «¿Se han firmado los dos contra»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V9",
+  "escenario": "Cerrar sesión por la API revoca el token antiguo; volver con la misma cuenta recupera lo mismo",
+  "esperado": "El token antiguo da 401; con una sesión nueva de la misma cuenta, texto, vínculo, fecha y evaluación son idénticos a los de antes",
+  "observado": "logout 200; token antiguo 401; sesión nueva 200; igual true",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -1,0 +1,11 @@
+# comando: node tests/ronda18/paridad-demo.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 08:26:58 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [PD1] Reconstruir la demo dos veces
+OK    [PD2] evaluar(): la demo y el módulo con las mismas cinco carteras sobre el mismo universo
+OK    [PD3] normalizarFecha() y validarResumen(): la demo y el módulo con las mismas entradas
+OK    [PD4] estadoSeguimiento(): la demo y el módulo con las mismas cinco entradas (incluido el par discordante)
+OK    [PD5] Sin errores de JavaScript al cargar la demo y ejecutar sus funciones
+
+RESULTADO: 5 correctas, 0 fallos

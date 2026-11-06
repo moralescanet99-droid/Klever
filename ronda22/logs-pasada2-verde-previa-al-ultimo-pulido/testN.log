@@ -1,0 +1,47 @@
+# comando: node tests/ronda15/testN.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 20:41:38 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [N1-320] Navegación principal de cuatro entradas (320 px)
+OK    [N1b-320] Revista reúne historias, empresas y carteras públicas (320 px)
+OK    [N2-320] Portada: crear o explorar un ejemplo, y las tres entradas (320 px; texto actualizado en la ronda 21)
+OK    [N2b-320] Cartera de ejemplo: nombre, peso y por qué está cada posición (320 px)
+OK    [N3-320] Ideas: primera vista con qué hace el negocio, por qué estudiarla y qué puede salir mal (320 px)
+OK    [N4-320] Ficha: nombre y símbolo juntos; pregunta y acciones arriba; «atrás» conserva el contexto (320 px)
+OK    [N4b-320] «Cerrar» y «atrás» no atascan el historial y conservan la búsqueda (320 px)
+OK    [N5-320] Comparador: tres filas del mismo sector, con las cifras de los datos y su fuente (320 px)
+OK    [N5b-320] La acción final del comparador abre el laboratorio con la empresa elegida (320 px)
+OK    [N6-320] Laboratorio: cuánto espacio, quién cede y qué cambia en los bloques evaluables (320 px)
+OK    [N7-320] Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (320 px)
+OK    [N7b-320] Sin errores de JavaScript en el recorrido de visitante (320 px)
+OK    [N1-390] Navegación principal de cuatro entradas (390 px)
+OK    [N1b-390] Revista reúne historias, empresas y carteras públicas (390 px)
+OK    [N2-390] Portada: crear o explorar un ejemplo, y las tres entradas (390 px; texto actualizado en la ronda 21)
+OK    [N2b-390] Cartera de ejemplo: nombre, peso y por qué está cada posición (390 px)
+OK    [N3-390] Ideas: primera vista con qué hace el negocio, por qué estudiarla y qué puede salir mal (390 px)
+OK    [N4-390] Ficha: nombre y símbolo juntos; pregunta y acciones arriba; «atrás» conserva el contexto (390 px)
+OK    [N4b-390] «Cerrar» y «atrás» no atascan el historial y conservan la búsqueda (390 px)
+OK    [N5-390] Comparador: tres filas del mismo sector, con las cifras de los datos y su fuente (390 px)
+OK    [N5b-390] La acción final del comparador abre el laboratorio con la empresa elegida (390 px)
+OK    [N6-390] Laboratorio: cuánto espacio, quién cede y qué cambia en los bloques evaluables (390 px)
+OK    [N7-390] Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (390 px)
+OK    [N7b-390] Sin errores de JavaScript en el recorrido de visitante (390 px)
+OK    [N1-1440] Navegación principal de cuatro entradas (1440 px)
+OK    [N1b-1440] Revista reúne historias, empresas y carteras públicas (1440 px)
+OK    [N2-1440] Portada: crear o explorar un ejemplo, y las tres entradas (1440 px; texto actualizado en la ronda 21)
+OK    [N2b-1440] Cartera de ejemplo: nombre, peso y por qué está cada posición (1440 px)
+OK    [N3-1440] Ideas: primera vista con qué hace el negocio, por qué estudiarla y qué puede salir mal (1440 px)
+OK    [N4-1440] Ficha: nombre y símbolo juntos; pregunta y acciones arriba; «atrás» conserva el contexto (1440 px)
+OK    [N4b-1440] «Cerrar» y «atrás» no atascan el historial y conservan la búsqueda (1440 px)
+OK    [N5-1440] Comparador: tres filas del mismo sector, con las cifras de los datos y su fuente (1440 px)
+OK    [N5b-1440] La acción final del comparador abre el laboratorio con la empresa elegida (1440 px)
+OK    [N6-1440] Laboratorio: cuánto espacio, quién cede y qué cambia en los bloques evaluables (1440 px)
+OK    [N7-1440] Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (1440 px)
+OK    [N7b-1440] Sin errores de JavaScript en el recorrido de visitante (1440 px)
+OK    [N8] El escenario guarda la evaluación de estructura fechada que vio la persona
+OK    [N9] Seguimiento con cuenta (ronda 22): la tarjeta compacta (pregunta, fecha, seguimiento personal, aviso de versión posterior) y, en la ficha, qué ha ocurrido y los pesos distinguidos
+OK    [N9b] Con cuenta solo se usan las preguntas y posiciones del propietario
+OK    [N10] La nota de estructura en el editor, con su aviso de datos y «Cómo se calcula»
+OK    [N11] Explorar: los filtros no ocupan la primera vista
+
+RESULTADO: 41 correctas, 0 fallos

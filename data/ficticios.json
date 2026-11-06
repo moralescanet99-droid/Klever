@@ -1,0 +1,149 @@
+[
+ {
+  "ticker": "HNORT",
+  "nombre": "Hidrógeno Norte (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Energía",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBA",
+  "nombre": "Alimentación de ejemplo 01 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBB",
+  "nombre": "Alimentación de ejemplo 02 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBC",
+  "nombre": "Alimentación de ejemplo 03 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBD",
+  "nombre": "Alimentación de ejemplo 04 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBE",
+  "nombre": "Alimentación de ejemplo 05 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBF",
+  "nombre": "Alimentación de ejemplo 06 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBG",
+  "nombre": "Alimentación de ejemplo 07 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBH",
+  "nombre": "Alimentación de ejemplo 08 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBI",
+  "nombre": "Alimentación de ejemplo 09 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBJ",
+  "nombre": "Alimentación de ejemplo 10 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBK",
+  "nombre": "Alimentación de ejemplo 11 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBL",
+  "nombre": "Alimentación de ejemplo 12 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBM",
+  "nombre": "Alimentación de ejemplo 13 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBN",
+  "nombre": "Alimentación de ejemplo 14 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBO",
+  "nombre": "Alimentación de ejemplo 15 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBP",
+  "nombre": "Alimentación de ejemplo 16 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBQ",
+  "nombre": "Alimentación de ejemplo 17 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBR",
+  "nombre": "Alimentación de ejemplo 18 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBS",
+  "nombre": "Alimentación de ejemplo 19 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ },
+ {
+  "ticker": "EJBT",
+  "nombre": "Alimentación de ejemplo 20 (empresa ficticia)",
+  "tipo": "accion",
+  "sector": "Consumo básico",
+  "ficticia": true
+ }
+]

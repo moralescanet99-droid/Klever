@@ -1,0 +1,74 @@
+[
+ {
+  "id": "G1",
+  "escenario": "Guardado fallido de una cartera pública (servidor real)",
+  "esperado": "Con el guardado único, si falla NO queda nada a medias: ni posiciones, ni nombre, ni tesis, ni la versión pública; la interfaz dice que no se guardó y ofrece reintentar; al reintentar se guarda todo junto",
+  "observado": "antes «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2; tras fallar «Mi cartera de oro» · tesis «Tesis original» · GDX:25,GLD:25,IAU:25,NEM:25 · rev 2 (idéntica=true); público antes/después igual=true; interfaz «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.La versión pública sigue igual.Detalle» / botón «Reintentar guardado»; peticiones de escritura enviadas en todo el guardado: PUT,PUT; tras reintentar «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25 · rev 3; público «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25",
+  "resultado": "OK",
+  "evidencia": "G1-fallo-sin-parciales-1440.png"
+ },
+ {
+  "id": "G2",
+  "escenario": "Ticker desconocido en un guardado con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)",
+  "esperado": "HTTP 400 por validación y la cartera queda exactamente igual (revisión incluida); el rollback ante un error interno es la evidencia R4a",
+  "observado": "HTTP 400; antes «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25 · rev 3; después «Nombre nuevo» · tesis «Tesis NUEVA» · GDX:40,GLD:10,IAU:25,NEM:25 · rev 3",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G3",
+  "escenario": "Escrituras con la misma revisión (servidor real, HTTP)",
+  "esperado": "Dos guardados SEGUIDOS en el mismo segundo con la misma revisión: 200 y 409 (antes 200 y 200). 20 pares SIMULTÁNEOS: nunca pasan los dos y la revisión sube exactamente una vez por escritura aceptada",
+  "observado": "seguidos: 200 y 409; 20 pares simultáneos: ambos aceptados=0, ninguno=0, exactamente uno=20; revisión 3 → 24 (esperado 24)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G4a",
+  "escenario": "Conflicto al GUARDAR: elegir la versión de este dispositivo no escribe; Guardar sí",
+  "esperado": "Escape y «Decidir después» conservan la copia y no tocan la cuenta; «Conservar la de este dispositivo» vuelve al editor SIN escribir (cuenta idéntica byte a byte, revisión incluida); al pulsar Guardar se escribe y sube la revisión",
+  "observado": "Escape: diálogo abierto=0, copia=true, cuenta intacta=true; «Decidir después»: copia=true, cuenta intacta=true, foco de vuelta en Guardar=true; elegir la local: cuenta idéntica=true, estado «Cambios locales pendientes de guardar en tu cuenta», copia=true, valores 15,0 25,0 25,0 30,0; tras Guardar: «Mi cartera de oro» · tesis «null» · GDX:30,GLD:15,IAU:25,NEM:25 · rev 3 (revisión 2 → 3)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G4b",
+  "escenario": "Conflicto al ABRIR: mismo comportamiento que al guardar",
+  "esperado": "Escape y «Decidir después» conservan la copia y muestran la versión de la cuenta sin dirty; elegir la local carga la copia en el editor SIN escribir; Guardar escribe",
+  "observado": "Escape: copia=true, cuenta intacta=true, se ve «Guardada en tu cuenta»; «Decidir después»: copia=true, cuenta intacta=true; elegir la local: cuenta idéntica=true, estado «Cambios locales pendientes de guardar en tu cuenta», valores 12,0 25,0 25,0 30,0, copia=true; tras Guardar: «Mi cartera de oro» · tesis «null» · GDX:30,GLD:12,IAU:25,NEM:25 · rev 5 (revisión 4 → 5)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G5",
+  "escenario": "Modo sin conexión REAL contra el servidor local",
+  "esperado": "Sin conexión el guardado falla de verdad: «No se pudo guardar», cambios en el dispositivo, botón «Reintentar guardado»; la cuenta no cambia; al volver la conexión se guarda",
+  "observado": "sin conexión: «No se pudo guardar. Tus cambios siguen en este dispositivo» / «Sin conexión con el servidor. Inténtalo de nuevo.La versión pública sigue igual.Detalle» / botón «Reintentar guardado»; cuenta intacta=true; tras reconectar «Guardada en tu cuenta»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G6",
+  "escenario": "E16a corregida: última posición, ampliación de texto SIMULADA al 200 % (font-size del documento, no zoom del navegador) a 390 px",
+  "esperado": "Tras desplazar y enfocar, el campo queda dentro de la ventana (top ≥ 0, bottom ≤ inicio de la barra fija, sin desbordar a los lados) y permite escribir",
+  "observado": "campo enfocado: arriba 339, abajo 405, barra empieza en 744, ventana 390×844, ancho de página 390; tras escribir «12,5» el total pasó de «Asignado: 100 %» a «Asignado: 95,9 %» y el campo sigue visible (abajo 405 ≤ 704)",
+  "resultado": "OK",
+  "evidencia": "G6-ultima-posicion-200-390.png"
+ },
+ {
+  "id": "G7",
+  "escenario": "Diálogo de conflicto en móvil (320×568, texto ampliado al 200 % SIMULADO, 6 posiciones distintas + nombre)",
+  "esperado": "«Decidir después» y las dos decisiones alcanzables siempre (cabecera y pie fijos, cuerpo con desplazamiento propio); el foco no sale del diálogo; posponer no elige, no descarta y no escribe",
+  "observado": "«Decidir después» visible sin desplazar=true (arriba 163); decisiones visibles: «Usar la de la cuenta» true, «Conservar la local» true (abajo 559/568); el cuerpo se desplaza=true (scrollTop tras rueda 2000); tras desplazar siguen visibles: true; diferencias listadas 7; foco inicial «cn-titulo»; 8 Tab sin salir del diálogo=true; ancho de página 320/320; tras «Decidir después»: diálogo abierto=0, copia local=true, cuenta intacta=true",
+  "resultado": "OK",
+  "evidencia": "G7-dialogo-320-texto200.png"
+ },
+ {
+  "id": "G8",
+  "escenario": "Sin errores de JavaScript en la batería F",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

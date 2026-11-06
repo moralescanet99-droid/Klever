@@ -1,0 +1,6 @@
+Prueba R6 (GET público) de la ronda 9 ejecutada contra el código de la ronda 8 (commit 6d18887), ANTES de corregir
+
+FALLA [R6a] GET público: la cartera se despublica y cambian sus posiciones entre las lecturas originales  [HTTP 200; nombre «Prueba», tesis «Tesis pública», posiciones NEM:100; la despublicación sí se aplicó=true; fuga de datos privados=true]
+OK    [R6b] GET público de una cartera ya privada
+RESULTADO: 7 correctas, 1 fallos
+- R6a GET público: la cartera se despublica y cambian sus posiciones entre las lecturas originales → HTTP 200; nombre «Prueba», tesis «Tesis pública», posiciones NEM:100; la despublicación sí se aplicó=true; fuga de datos privados=true

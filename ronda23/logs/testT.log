@@ -1,0 +1,33 @@
+# comando: node tests/ronda22/testT.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v236 · 2026-11-05 23:41:49 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [T1-1440] Cuaderno (1440 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista
+OK    [T2b-1440] Formulario de revisión (1440 px): los botones de opción tienen un tamaño normal
+OK    [T2-1440] Registrar desde el Cuaderno (1440 px)
+OK    [T3-1440] Respuesta perdida, relectura fallida y texto modificado (1440 px)
+OK    [T4-1440] Dos pestañas con versión antigua (1440 px)
+OK    [T5-1440] Revisión personal con historia editorial (1440 px)
+OK    [T6-1440] Archivar y descartar (1440 px)
+OK    [T7-1440] Con cuenta: «Recrear la que ya tengo» (1440 px)
+OK    [T0-1440] Sin errores de JavaScript ni diálogos inesperados (1440 px)
+OK    [T1-390] Cuaderno (390 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista
+OK    [T2b-390] Formulario de revisión (390 px): los botones de opción tienen un tamaño normal
+OK    [T2-390] Registrar desde el Cuaderno (390 px)
+OK    [T3-390] Respuesta perdida, relectura fallida y texto modificado (390 px)
+OK    [T4-390] Dos pestañas con versión antigua (390 px)
+OK    [T5-390] Revisión personal con historia editorial (390 px)
+OK    [T6-390] Archivar y descartar (390 px)
+OK    [T7-390] Con cuenta: «Recrear la que ya tengo» (390 px)
+OK    [T0-390] Sin errores de JavaScript ni diálogos inesperados (390 px)
+OK    [T1-320] Cuaderno (320 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista
+OK    [T2b-320] Formulario de revisión (320 px): los botones de opción tienen un tamaño normal
+OK    [T2-320] Registrar desde el Cuaderno (320 px)
+OK    [T3-320] Respuesta perdida, relectura fallida y texto modificado (320 px)
+OK    [T4-320] Dos pestañas con versión antigua (320 px)
+OK    [T5-320] Revisión personal con historia editorial (320 px)
+OK    [T6-320] Archivar y descartar (320 px)
+OK    [T7-320] Con cuenta: «Recrear la que ya tengo» (320 px)
+OK    [T0-320] Sin errores de JavaScript ni diálogos inesperados (320 px)
+
+RESULTADO: 27 correctas, 0 fallos

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klever · Crea y entiende tu cartera simulada</title>
+<meta name="description" content="Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real. Beta gratuita y educativa.">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style-r13.css">
+<link rel="stylesheet" href="style-r17.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cab">
+  <div class="cab-in">
+    <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
+    <nav class="menu menu-escritorio" aria-label="Principal">
+      <a href="#carteras" data-nav="mis">Mis portafolios</a>
+      <a href="#inicio" data-nav="crear">Crear portafolio</a>
+      <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+      <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
+    </nav>
+    <div class="cab-acc">
+      <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
+      <button id="salir" class="btn btn-ghost solo-escritorio" type="button" hidden>Salir</button>
+      <button id="btn-menu" class="btn btn-secundario btn-icono solo-movil" type="button" aria-expanded="false" aria-controls="menu-movil"><span aria-hidden="true">☰</span><span class="sr">Menú</span></button>
+    </div>
+  </div>
+  <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
+    <a href="#carteras" data-nav="mis">Mis portafolios</a>
+    <a href="#inicio" data-nav="crear">Crear portafolio</a>
+    <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
+    <a href="#revista" data-nav="revista">Revista</a>
+    <button id="salir-m" type="button" hidden>Salir</button>
+  </nav>
+</header>
+
+<!-- Zona reservada para avisos: debajo de la cabecera, en el flujo (no flota sobre nada) y pegada arriba al desplazarse -->
+<div id="avisos" class="avisos">
+  <div class="avisos-in">
+    <div id="toast" role="status" aria-live="polite"></div>
+    <button id="toast-x" class="av-x" type="button" aria-label="Cerrar aviso" hidden><span aria-hidden="true">✕</span></button>
+  </div>
+</div>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- ===== PORTADA ===== -->
+  <section id="vista-inicio" data-vista="inicio">
+    <div class="hero">
+      <div class="hero-txt">
+        <h1>Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir</h1>
+        <p class="lead">Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.</p>
+        <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
+        <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Ver un ejemplo explicado</a></p>
+        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
+          <ul>
+            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Una cartera vacía: añade tu primer activo y reparte.</span></button></li>
+            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Una copia editable, rotulada como ejemplo simulado.</span></button></li>
+            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Introduce a mano tus activos y porcentajes. Sin conexión con ningún bróker.</span></button></li>
+          </ul></div>
+        <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
+        <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
+      </div>
+      <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
+    </div>
+
+    <div class="bloque" id="plantillas">
+      <h2>Ejemplos simulados para explorar</h2><p class="mut">Cada uno se abre como una copia editable y rotulada como ejemplo simulado; no es una cartera recomendada.</p>
+      <div class="plantillas">
+        <button class="plantilla" type="button" data-plantilla="oro">
+          <span class="pl-cuerpo"><span class="pl-tit">Oro</span>
+          <span class="pl-desc">Dos fondos de oro físico, uno de mineras y Newmont.</span>
+          <span class="pl-tick">GLD · IAU · GDX · NEM</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+        <button class="plantilla" type="button" data-plantilla="dividendos">
+          <span class="pl-cuerpo"><span class="pl-tit">Dividendos</span>
+          <span class="pl-desc">Dos fondos de dividendos y cuatro empresas consolidadas.</span>
+          <span class="pl-tick">SCHD · VYM · KO · PG · JNJ · XOM</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+        <button class="plantilla" type="button" data-plantilla="riesgo">
+          <span class="pl-cuerpo"><span class="pl-tit">Crecimiento</span>
+          <span class="pl-desc">Seis grandes empresas tecnológicas y de consumo.</span>
+          <span class="pl-tick">NVDA · MSFT · AMZN · GOOGL · META · TSLA</span></span>
+          <span class="pl-acc"><span class="pl-acc-txt">Probar esta plantilla</span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <div class="bloque-cab"><h2>Carteras públicas</h2><a href="#publicas">Ver todas</a></div>
+      <div id="muestra-publicas" class="tarjetas"></div>
+    </div>
+  </section>
+
+  <!-- ===== EXPLORAR EMPRESAS ===== -->
+  <section id="vista-empresas" data-vista="empresas" hidden>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <div class="pag-cab pag-cab-corta">
+      <h1>Explorar empresas</h1>
+      <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
+    </div>
+    <div class="busqueda">
+      <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
+      <input id="emp-buscar" type="search" placeholder="Buscar por empresa, símbolo o sector" autocomplete="off">
+      <button id="emp-borrar" class="btn btn-ghost emp-borrar" type="button" hidden>Borrar búsqueda</button>
+      <span id="emp-cuenta" class="mut" aria-live="polite"></span>
+      <button id="ir-screener" class="enlace" type="button">Ir a los filtros de precio</button>
+    </div>
+    <details class="emp-filtros-det" id="emp-filtros-det"><summary>Filtros <span id="emp-filtros-n" class="mut"></span></summary>
+    <div class="emp-filtros" role="group" aria-label="Filtros de la lista">
+      <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
+      <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
+      <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
+      <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+    </div></details>
+    <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
+    <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
+      <table class="tabla-emp">
+        <caption class="sr">Empresas ordenadas por comprobaciones superadas; a igualdad, menos no superadas; después, por símbolo</caption>
+        <thead><tr><th scope="col">Empresa</th><th scope="col" class="col-sector">Sector</th><th scope="col" class="num">Comprobaciones</th><th scope="col"><span class="sr">Acción</span></th></tr></thead>
+        <tbody id="empresas-lista"></tbody>
+      </table>
+    </div>
+    <ul id="empresas-cards" class="emp-cards" aria-label="Lista de empresas"></ul>
+    <details class="plegable">
+      <summary>Cómo se calcula cada comprobación y cómo se ordena la lista</summary>
+      <div class="plegable-cuerpo">
+        <p>Cada empresa suma una marca por cada comprobación que supera:</p>
+        <ul>
+          <li><b>Deuda:</b> la deuda neta es menor de 2,5 veces su EBITDA.</li>
+          <li><b>ROIC:</b> supera el 10 %.</li>
+          <li><b>Margen neto:</b> el beneficio neto supera el 10 % de las ventas.</li>
+          <li><b>Caja libre:</b> el flujo de caja libre es positivo.</li>
+          <li><b>Crecimiento:</b> las ventas son mayores que las del año anterior.</li>
+        </ul>
+        <p><b>Datos ausentes:</b> si una empresa no tiene el dato de una comprobación, esta no suma ni resta y se indica como «sin datos». No se cuenta como no superada.</p>
+        <p><b>Orden de la lista:</b> primero las que superan más comprobaciones; a igualdad, las que tienen menos comprobaciones no superadas; después, por símbolo. Las comprobaciones sin datos no suman ni restan, y una evaluación con datos ausentes se muestra siempre como parcial («3 superadas · 2 sin datos»).</p>
+        <p>El origen y la fecha de los datos se indican arriba y en cada ficha. EBITDA y ROIC son cálculos aproximados y pueden contener errores.</p>
+      </div>
+    </details>
+    <div class="bloque" id="filtros-precio" tabindex="-1">
+      <h2>Filtros de precio</h2>
+      <p class="mut">Screener de TradingView para PER, rentabilidad y otros filtros que dependen del precio. Es independiente de nuestro ranking.</p>
+      <div id="tv-screener"></div>
+    </div>
+  </section>
+
+  <!-- ===== CARTERAS PÚBLICAS ===== -->
+  <section id="vista-publicas" data-vista="publicas" hidden>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <div class="pag-cab">
+      <h1>Carteras públicas</h1>
+      <p class="mut">Muestran qué contiene cada cartera simulada y por qué. Nunca incluyen rentabilidad ni datos personales. Unas son ejemplos de Klever y otras las publican los usuarios.</p>
+    </div>
+    <div id="publicas-lista" class="tarjetas"></div>
+    <div id="publica-detalle" class="panel" hidden></div>
+  </section>
+
+  <!-- ===== MIS CARTERAS ===== -->
+  <section id="vista-carteras" data-vista="carteras" hidden>
+    <div class="pag-cab pag-cab-fila"><h1>Mis portafolios</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
+      <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
+        <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
+      <button id="aviso-cerrar" class="btn btn-secundario" type="button">Entendido</button>
+    </div>
+    <form id="form-nueva" class="panel nueva" hidden>
+      <h2 id="nueva-titulo">Nueva cartera</h2>
+      <p id="nueva-ayuda" class="mut" hidden>Una cartera simulada es un reparto de porcentajes entre empresas y fondos, sin dinero real. Empieza desde cero, recrea la tuya a mano o parte de una plantilla y ajústala: podrás guardarla en tu cuenta y publicarla cuando quieras.</p>
+      <p class="nueva-otras"><span class="mut">Sin plantilla:</span> <button type="button" id="nueva-vacia" class="btn btn-secundario">Empezar desde cero</button> <button type="button" id="nueva-manual" class="btn btn-secundario">Recrear la que ya tengo</button></p>
+      <div class="nueva-campos">
+        <div class="campo"><label for="nueva-nombre">Nombre</label>
+          <input id="nueva-nombre" name="nombre" maxlength="80" required placeholder="Por ejemplo: Mi cartera de oro" autocomplete="off"></div>
+        <div class="campo"><label for="nueva-plantilla">Plantilla inicial</label>
+          <select id="nueva-plantilla" name="plantilla">
+            <option value="riesgo">Crecimiento</option><option value="oro">Oro</option><option value="dividendos">Dividendos</option>
+          </select></div>
+      </div>
+      <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
+    </form>
+    <ul id="mis-lista" class="lista-carteras"></ul>
+  </section>
+
+  <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
+  <section id="vista-revista" data-vista="revista" hidden>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
+    <div id="revista-cuerpo"></div>
+  </section>
+  <section id="vista-articulo" data-vista="articulo" hidden>
+    <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
+    <div id="articulo-cuerpo"></div>
+  </section>
+
+  <section id="vista-ejemplo" data-vista="ejemplo" hidden><div id="ejemplo-cuerpo"></div></section>
+  <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
+
+  <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
+  <section id="vista-seguimiento" data-vista="seguimiento" hidden>
+    <div class="pag-cab">
+      <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
+      <p class="mut">Tus ideas: lo que quieres volver a revisar —preguntas, escenarios simulados y empresas de tu radar—. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+    </div>
+    <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
+    <div class="seg-col">
+      <section class="seg-bloque" aria-labelledby="seg-esc-t">
+        <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
+          <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
+        <div id="seg-escenarios" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-casos-t">
+        <div class="seg-cab"><h2 id="seg-casos-t">Tus preguntas</h2></div>
+        <div id="seg-casos" aria-live="polite"></div>
+      </section>
+      <section class="seg-bloque" aria-labelledby="seg-radar-t">
+        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div id="seg-radar" aria-live="polite"></div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ===== LABORATORIO (simulación de porcentajes; escenario nuevo o guardado) ===== -->
+  <section id="vista-lab" data-vista="lab" hidden>
+    <div id="lab-cuerpo"></div>
+  </section>
+
+  <!-- ===== ESPACIO DE TRABAJO ===== -->
+  <section id="vista-cartera" data-vista="cartera" hidden>
+    <h1 id="creador-titulo">Crea tu portafolio</h1>
+    <p class="mut creador-sub" id="creador-sub">Elige cómo repartir tu dinero simulado.</p>
+    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
+      <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> <span class="paso-t">Objetivo</span></a></li>
+      <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> <span class="paso-t">Distribución</span></button></li>
+      <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> <span class="paso-t">Revisión</span></button></li>
+    </ol>
+    <p id="origen-aviso" class="origen-aviso" role="note" hidden></p>
+    <div class="ws-cab">
+      <div class="ws-titulo">
+        <label class="sr" for="nombre">Nombre de la cartera</label>
+        <textarea id="nombre" class="nombre" rows="1" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Nombre de la cartera"></textarea>
+        <div class="ws-meta">
+          <span id="chip" class="chip">Privada</span>
+          <span id="pub-pend" class="chip aviso" hidden>Tus cambios aún no son públicos</span>
+          <button id="estado" class="estado-btn" type="button" aria-haspopup="dialog" aria-describedby="estado-live"></button>
+          <span id="estado-live" class="sr" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="ws-acc">
+        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar portafolio <span aria-hidden="true">→</span></button>
+        <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
+        <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
+        <div class="menu-mas">
+          <button id="mas" class="btn btn-secundario btn-icono" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="mas-lista"><span aria-hidden="true">⋯</span><span class="sr">Más acciones</span></button>
+          <div id="mas-lista" class="mas-lista" role="menu" aria-label="Más acciones" hidden>
+            <button role="menuitem" type="button" id="mi-plantilla">Reemplazar por la plantilla…</button>
+            <button role="menuitem" type="button" id="mi-descartar">Descartar cambios locales…</button>
+            <button role="menuitem" type="button" id="mi-eliminar" class="peligro">Eliminar cartera…</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ws-grid">
+      <div class="ws-main">
+        <div id="res-breve" class="res-breve">
+          <b id="rb-total" class="num">Asignado: 0&nbsp;%</b>
+          <p id="rb-estado" class="rb-estado"></p>
+          <div class="rb-pie"><span id="rb-n" class="num mut"></span></div>
+        </div>
+
+        <section class="panel panel-pos" aria-labelledby="h-pos">
+          <h2 id="h-pos" tabindex="-1">Posiciones</h2>
+          <div class="comp" id="comp" tabindex="-1">
+            <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button class="btn btn-primario js-revisar js-revisar-comp" type="button">Revisar <span aria-hidden="true">→</span></button></span></div>
+            <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
+            <p id="comp-pie" class="comp-pie"></p>
+          </div>
+          <p id="pos-error" class="msg-error" role="status"></p>
+          <div class="tabla-scroll">
+            <table id="pos-tabla" class="tabla-pos">
+              <caption class="sr">Posiciones de la cartera</caption>
+              <thead><tr><th scope="col">Activo</th><th scope="col" class="num">Peso</th><th scope="col"><span class="sr">Quitar</span></th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <ul id="pos-cards" class="pos-cards"></ul>
+          <div id="pos-vacio" class="vacio" hidden>
+            <p><b>Aún no hay posiciones.</b></p>
+            <p class="mut">Busca un activo abajo o usa «Más acciones» para cargar el reparto de una plantilla.</p>
+          </div>
+          <div class="combo">
+            <label for="buscar-activo">Añadir un activo</label>
+            <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
+            <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
+            <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+        <p id="origen-aviso-pie" class="origen-aviso origen-pie" role="note" hidden></p>
+
+      </div>
+
+      <aside class="ws-resumen" aria-label="Resumen de la cartera">
+        <details class="panel panel-donut" id="panel-donut" open>
+          <summary><h2 id="donut-t">Tu portafolio</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
+          <div class="donut-cuerpo">
+            <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
+            <ul class="donut-leyenda" id="donut-leyenda"></ul>
+          </div>
+          <p class="donut-estado" id="donut-estado" role="status" aria-live="polite"></p>
+          <div class="hipo" id="hipo">
+            <h3>Una hipótesis, no una previsión</h3>
+            <p class="hipo-fila"><label for="hipo-pos">Si</label> <select id="hipo-pos"></select> <label for="hipo-pct">cayera un</label> <span class="peso"><input id="hipo-pct" type="number" inputmode="numeric" min="1" max="100" step="1" value="25"><span aria-hidden="true">%</span></span></p>
+            <p class="hipo-res" id="hipo-res" role="status" aria-live="polite"></p>
+          </div>
+          <p class="mut peq" id="donut-pie">Podrás ajustar estos porcentajes antes de guardar.</p>
+        </details>
+        <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><span class="paso-etq" id="paso-etq">Paso 3 de 3 · Revisión</span><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
+        <section class="panel panel-res" id="res-detalle" tabindex="-1">
+          <h2>Resumen</h2>
+          <section id="radio" class="radio" aria-labelledby="radio-t">
+            <h3 id="radio-t">Radiografía de concentración</h3>
+            <div id="radio-cuerpo"></div>
+          </section>
+          <div class="asig">
+            <span class="etq">Asignado</span>
+            <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>
+            <div class="barra" role="progressbar" aria-label="Porcentaje asignado" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="r-barra"></i></div>
+            <p id="r-falta" class="asig-estado"></p>
+          </div>
+          <h3>Distribución por categorías</h3>
+          <div id="r-sectores"></div>
+          <details class="mini">
+            <summary>Más sobre las categorías</summary>
+            <p>Los ETF se agrupan por tipo; no se desglosan sus empresas.</p>
+            <p><b>Qué no calcula la radiografía:</b> no mide riesgo, volatilidad ni diversificación; no deduce países ni divisas del mercado de cotización; no calcula solapamientos entre fondos (no hay composiciones verificadas y fechadas); y una cartera incompleta se analiza tal cual, sin rellenarla ni reescalarla al 100 %.</p>
+            <p>Cada activo se agrupa por su categoría: el sector si es una empresa o el tipo de fondo si es un ETF. Por eso la lista mezcla sectores («Salud») con tipos de fondo («ETF dividendos»). No es la exposición sectorial de las empresas que hay dentro de los ETF, porque no se ha calculado.</p>
+          </details>
+          <div class="roic-bloque">
+          <dl class="datos datos-roic">
+            <div class="dato-roic"><dt><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</dt><dd id="r-roic" class="num">—</dd></div>
+            <div><dt>Posiciones</dt><dd id="r-n" class="num">0</dd></div>
+          </dl>
+          <p class="nota-roic">No representa la rentabilidad de tu cartera.</p>
+          <div id="r-cobertura" class="cobertura">
+          <p id="r-cob-corta" class="cob-corta"></p>
+          <details class="mini" id="roic-det">
+            <summary>Cómo se calcula y qué se excluye</summary>
+            <div id="r-cob-larga" class="cob-larga"></div>
+            <p>El ROIC mide cuánto gana una empresa por cada dólar invertido en su negocio. Es una característica de la empresa; no es lo que ganaría tu cartera.</p>
+            <p><b>Fórmula:</b> ROIC medio = suma de (ROIC de cada posición × su peso) ÷ suma de los pesos de las posiciones que tienen dato. Es una media ponderada, no simple.</p>
+            <p><b>Datos ausentes:</b> una empresa sin dato («no disponible») queda fuera del cálculo, ni como cero ni en el denominador. <b>No aplicable:</b> los fondos (ETF) no tienen ROIC y también quedan fuera.</p>
+            <p><b>Cobertura:</b> número de posiciones con dato sobre el total de posiciones, y su peso sobre el peso asignado.</p>
+          </details>
+          </div>
+          </div>
+        </section>
+
+        <details class="panel plegable-panel solo-cuenta panel-pub" id="det-pub">
+          <summary><h2>Publicación</h2><span id="pub-chip" class="chip">Privada</span></summary>
+          <p class="mut">Publicar hace pública la composición de esta cartera y tu tesis en «Carteras públicas». No se muestra tu email ni ninguna rentabilidad. Solo se puede publicar con el 100 % asignado, y puedes volver a hacerla privada cuando quieras.</p>
+          <label for="tesis">Tesis: por qué esta cartera <span class="mut">(obligatoria para publicar, máx. 600 caracteres)</span></label>
+          <textarea id="tesis" maxlength="600" rows="3"></textarea>
+          <div class="fila fila-motivo">
+            <button id="publicar" class="btn btn-secundario" type="button" aria-describedby="pub-razon">Publicar cartera</button>
+            <button id="tesis-guardar" class="btn btn-ghost" type="button" hidden aria-describedby="pub-razon">Actualizar tesis</button>
+            <p id="pub-razon" class="peq pub-razon"></p>
+          </div>
+          <p id="pub-error" class="msg-error" role="alert"></p>
+        </details>
+      </aside>
+        <details class="panel plegable-panel panel-graf" id="det-graficos">
+          <summary><h2>Gráficos de precio</h2></summary>
+          <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
+          <div id="graficos" class="grid-graf"></div>
+        </details>
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas.</p>
+  <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p data-origen="pie">Consulta el origen de los datos en cada ficha.</p><p>Las cifras se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
+  <p class="pie-enl"><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+</footer>
+
+<div id="barra-guardar" class="barra-guardar" hidden>
+  <div class="bg-info">
+    <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
+    <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
+  </div>
+  <button class="btn btn-primario js-guardar" type="button">Guardar cartera</button>
+</div>
+
+<!-- ===== DIÁLOGOS ===== -->
+<dialog id="dlg-acceso" aria-labelledby="acc-titulo">
+  <div class="dlg-cab"><h2 id="acc-titulo">Guarda tu cartera</h2><button class="btn btn-ghost" type="button" data-cerrar>Cerrar</button></div>
+  <div id="acc-paso1">
+    <p id="acc-sub">Te enviaremos un enlace para entrar sin contraseña.</p>
+    <p id="acc-borrador" class="peq mut" hidden>Para conservar tu borrador, abre el enlace en este mismo navegador.</p>
+    <form id="form-acceso">
+      <div class="campo"><label for="acc-email">Tu email</label>
+        <input id="acc-email" type="email" name="email" required autocomplete="email" inputmode="email"></div>
+      <label class="chk" for="acc-acepto"><input id="acc-acepto" type="checkbox" name="acepto" required> <span>He leído el <a href="legal.html" target="_blank" rel="noopener">aviso legal y la privacidad</a></span></label>
+      <p id="acc-error" class="msg-error" role="alert"></p>
+      <button class="btn btn-primario btn-bloque">Enviarme el enlace</button>
+    </form>
+  </div>
+  <div id="acc-paso2" hidden>
+    <p class="msg-info" role="status"><b>Enlace enviado.</b> Hemos enviado un enlace a <b id="acc-enviado"></b>. Revisa tu bandeja de entrada y la carpeta de spam. Caduca en 15 minutos.</p>
+    <p id="acc-aviso-borrador" class="peq" hidden><b>Sobre tu borrador:</b> se guardará en tu cuenta solo si abres el enlace en este mismo dispositivo y navegador. Si lo abres en otro, entrarás en tu cuenta pero el borrador no se trasladará: seguirá guardado solo aquí.</p>
+    <p id="acc-dev" class="mut"></p>
+    <p id="acc-error2" class="msg-error" role="alert"></p>
+    <div class="fila">
+      <button id="acc-reenviar" class="btn btn-secundario" type="button">Reenviar enlace</button>
+      <button id="acc-cambiar" class="btn btn-ghost" type="button">Cambiar email</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="dlg-estado" aria-labelledby="es-titulo">
+  <div class="dlg-cab"><h2 id="es-titulo">Estado de tu cartera</h2><button class="btn btn-ghost" type="button" data-cerrar>Cerrar</button></div>
+  <dl id="es-cuerpo" class="es-lista"></dl>
+  <div id="es-acciones" class="fila"></div>
+</dialog>
+
+<dialog id="dlg-conflicto" data-fijo aria-labelledby="cn-titulo">
+  <div class="cn-cab">
+    <h2 id="cn-titulo" tabindex="-1">Hay dos versiones de esta cartera</h2>
+    <button id="cn-despues" class="btn btn-secundario" type="button">Decidir después</button>
+  </div>
+  <div class="cn-cuerpo">
+    <p id="cn-intro"></p>
+    <div class="cn-cols"><section id="cn-local" class="cn-v" aria-label="Versión de este dispositivo"></section><section id="cn-cuenta" class="cn-v" aria-label="Versión de tu cuenta"></section></div>
+    <div id="cn-dif" class="cn-dif"></div>
+    <p class="mut peq">«Decidir después» (o Escape) no cambia nada: ni elige una copia, ni descarta datos, ni escribe en tu cuenta. «Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» vuelve al editor sin guardar: revisa y pulsa Guardar.</p>
+  </div>
+  <div class="cn-pie">
+    <button id="cn-cuenta-b" class="btn btn-secundario" type="button">Usar la versión de tu cuenta</button>
+    <button id="cn-local-b" class="btn btn-primario" type="button">Conservar la de este dispositivo</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-confirmar" aria-labelledby="cf-titulo">
+  <div class="dlg-cab"><h2 id="cf-titulo"></h2></div>
+  <p id="cf-texto"></p>
+  <div class="fila fila-fin">
+    <button id="cf-no" class="btn btn-secundario" type="button">Cancelar</button>
+    <button id="cf-si" class="btn btn-primario" type="button">Aceptar</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-salir" aria-labelledby="salir-t">
+  <h2 id="salir-t">Tienes cambios sin guardar</h2>
+  <p>Hay cambios sin guardar en <b id="salir-n">1 cartera</b> en este dispositivo. Si sales ahora y compartes el dispositivo, la siguiente persona podría llegar a verlos. Puedes volver para guardarlos o descartarlos y salir.</p>
+  <p class="fila"><button id="salir-volver" class="btn btn-primario" type="button">Volver para guardarlos</button><button id="salir-descartar" class="btn btn-secundario peligro" type="button">Descartar los cambios y salir</button></p>
+</dialog>
+
+<dialog id="dlg-ficha" aria-labelledby="fi-titulo">
+  <div class="dlg-cab dlg-cab-fijo">
+    <div><h2 id="fi-titulo"></h2><p id="fi-sub" class="mut"></p></div>
+    <button class="btn btn-secundario" type="button" data-cerrar>Cerrar</button>
+  </div>
+  <div id="fi-cuerpo"></div>
+</dialog>
+
+<script src="app.js" type="module"></script>
+</body>
+</html>
