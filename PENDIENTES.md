@@ -97,7 +97,12 @@
 - **Capacidades nuevas, para después:** ideas generales sin escenario, ampliaciones del laboratorio, cobros, integraciones, datos reales.
 
 ## Tras la ronda 23
-- ⬜ **Piloto con cinco principiantes en dos contactos** (`ronda23/PRUEBA-CON-USUARIOS.md`, con dos preguntas abiertas al cierre): no realizado; es lo siguiente.
+- ⬜ **Piloto con cinco principiantes en dos contactos** (`ronda24/PRUEBA-CON-USUARIOS.md` (antes ronda23), con dos preguntas abiertas al cierre): no realizado; es lo siguiente.
 - ⬜ M102 con una caducidad real y en un dispositivo, M106 y M107 (`ronda23/pruebas-manuales.md`) y las anteriores.
 - ⬜ El formulario de «guardar en el Cuaderno» no persiste su borrador (solo el de revisión); un envío incierto pendiente se pierde si caduca la sesión.
 - ⬜ K9 con dos clientes reales simultáneos; causa de `testP`/primera carga lenta (mitigada, no demostrada).
+
+## Tras la ronda 24 (preparación del piloto)
+- ⬜ **Verificación previa en el dispositivo previsto** (`ronda24/VERIFICACION-PREVIA-DISPOSITIVO.md`): sin rellenar.
+- ⬜ **Piloto con cinco principiantes** (`ronda24/PRUEBA-CON-USUARIOS.md`, registro vacío): no realizado.
+- ⬜ **Antes de una beta pública (no del piloto):** conservar el intento de revisión pendiente completo (clave, escenario, carga y contexto de cuenta) hasta conocer su resultado; restaurarlo solo para la cuenta autorizada; reconciliar con el servidor antes de otra escritura; probar cierre/recarga y cambio de cuenta. Hoy `limpiarSesionLab()` borra `revIntento` y puede duplicarse una anotación.

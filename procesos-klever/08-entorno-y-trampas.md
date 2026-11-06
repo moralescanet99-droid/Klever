@@ -181,3 +181,5 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Iterar `localStorage.key(i)` mientras se borra se salta claves** (el orden cambia): listar primero, borrar después (`clavesRev`).
 - **Probar la lógica del formulario, no solo el módulo de envío:** el borrado del borrador ocurría en la integración con la pantalla; una prueba solo del módulo no lo ve. Contrastar siempre la prueba nueva contra el código anterior (6/24).
 - **`git push` puede fallar del lado del remoto («fatal error in commit_refs») aun siendo fast-forward:** probar a empujar commit a commit (`git push origin <hash>:refs/heads/<rama>`).
+
+- **`scripts/local/servidor.sh start` RESIEMBRA la base de datos (borra lo guardado) en cada arranque**: sirve para pruebas, **no para el piloto**. Para el piloto usar `scripts/piloto/abrir-piloto.sh` (estado en `.wrangler/piloto`, solo se borra con `RESET_PILOTO=1`; nunca entre la sesión 1 y la 2). Con `LAN=1` cualquiera de la misma wifi ve el acceso con enlace en pantalla: solo en red de confianza.

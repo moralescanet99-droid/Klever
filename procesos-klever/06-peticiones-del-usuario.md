@@ -1982,3 +1982,111 @@ Notas orientativas de revisión, no métricas de usuarios ni certificaciones.
 Sin comprobar personalmente: navegador interactivo, móvil físico, lector de pantalla, zoom real, Safari/Firefox, correo real, D1 remota, sesión caducada de extremo a extremo, piloto y regreso real al día siguiente, carga de producción y auditoría integral de seguridad. La inspección de capturas no sustituye esas verificaciones.
 
 **Cierre propuesto: conservar el producto y el diseño actuales, reparar el borrador y empezar a aprender de personas reales.**
+
+## C21 · Ronda 24 (2026-11-06) — revisión de la ronda 23 y aceptación para piloto privado, literal
+
+# Klever — revisión R23 y aceptación para piloto privado
+
+6 de noviembre de 2026 · Para Javier y Claude Code
+
+## Decisión
+
+**Acepto el cierre de B1 y B2:** el texto escrito durante un envío se conserva y la recuperación tras un conflicto puede limitarse a leer, sin reenviar.
+**Acepto R23 para un piloto privado y supervisado con cinco principiantes**, tras comprobar el entorno y el regreso a la cuenta en el dispositivo utilizado.
+**No abro otra ronda general de desarrollo.** Queda una limitación de duplicación tras perder un intento pendiente que debe corregirse antes de una beta pública; esta aceptación no es una autorización de publicación ni de cobro.
+
+## 1. Qué está cerrado
+
+### B1 — Texto escrito durante la petición
+
+`public/js/lab.js`, `registrarRevision()`, ahora lee el borrador cuando se resuelve la petición y lo compara con el contenido del intento confirmado. La decisión de conservar ya no depende del valor anterior al envío.
+
+He repetido dos casos sobre la función real extraída del archivo, con formulario mínimo controlado y respuesta diferida:
+
+- Primer envío: A se envía, se escribe B mientras espera y B permanece como borrador.
+- Reintento: el intento conserva su carga original; lo escrito durante la espera permanece sin enviarse.
+
+En ambos casos comprobé el borrador en memoria, la copia local y el mensaje «NO se ha enviado». Son comprobaciones de lógica de interfaz, no una navegación real. La captura U1 aportada muestra A en el historial y B en el formulario.
+
+### B2 — Conflicto y lectura fallida
+
+La nueva rama `revLectura` ofrece «Reintentar la lectura». He comprobado que, después del conflicto, los intentos de recuperar la vista no incrementan el número de escrituras, conservan el texto y recuperan la versión actual cuando la lectura vuelve a funcionar. Ya no necesita recomendar una recarga que perdería el borrador.
+
+### M102 — Regreso después de caducar la sesión
+
+La solución guarda el borrador de revisión en el dispositivo, por escenario y con caducidad de siete días. La restauración se realiza después de obtener una ficha autorizada. El cierre voluntario de sesión borra los borradores; el Cuaderno purga los que no pertenecen a la cuenta que entra.
+
+He inspeccionado esta integración y la prueba U4/U5/U5b. El autor prueba una revocación real de sesión en el servidor, recibe 401 y vuelve a entrar: es una prueba válida del camino de sesión inválida, aunque no espere a que caduque por tiempo. **No la he repetido en navegador ni en dispositivo físico.** Acepto esa evidencia local para preparar el piloto, manteniendo la comprobación previa en su dispositivo.
+
+La captura U4, por sí sola, no muestra el contenido restaurado porque queda más abajo. El respaldo de esa afirmación es la prueba que lee el valor del formulario, no esa imagen aislada.
+
+## 2. Pruebas ejecutadas y límites
+
+| Batería repetida por mí | Correctas | Fallos |
+|---|---:|---:|
+| `unit-cliente-revision22` | 8 | 0 |
+| `unit-cuaderno21` | 20 | 0 |
+| `unit-registro21` | 10 | 0 |
+| `unit-migracion` | 15 | 0 |
+| `unit-nota` | 35 | 0 |
+| **Total** | **88** | **0** |
+
+Además: tres comprobaciones aisladas de integración del formulario —primer envío, reintento y conflicto con recuperación de lectura— correctas. No las sumo a las 88 aserciones como si fueran una batería equivalente.
+
+También he reproducido la limitación de duplicación descrita en el apartado 3, usando los manejadores reales sobre SQLite y el módulo del cliente. No es un caso superado: confirma una incidencia conocida.
+
+Las **960 comprobaciones correctas**, `testU` con **24**, la comparación contra R22 de **6 correctas/18 fallos** y las repeticiones **12/12** pertenecen a la ejecución local del autor. El código de `testU` comprueba los campos reales del formulario y no solo mensajes de éxito. U5/U5b no prueban por sí solos una regresión antigua: algunos fallos contra R22 se deben a que la copia local todavía no existía; el informe lo reconoce correctamente.
+
+El Chromium de este entorno vuelve a fallar al arrancar por `socket() failed: Operation not permitted`. No he ejecutado `testU`, el recorrido de navegador completo ni la demo. No se ha comprobado aquí D1 remota, correo real, Safari/Firefox, lector de pantalla, móvil físico, zoom real, concurrencia de producción ni retorno real al día siguiente.
+
+## 3. Limitación conocida: intento incierto y pérdida de sesión
+
+**Gravedad: importante antes de abrir la aplicación al público; gestionable durante un piloto privado supervisado.**
+
+En `limpiarSesionLab()` se borra `revIntento`. La copia local conserva el texto, pero no la clave y la carga congelada del intento. Si el primer envío llegó al servidor y se perdió su respuesta, al volver a entrar puede enviarse lo mismo con una clave nueva y registrarse dos veces. La pérdida de memoria al recargar también puede dejar sin esa clave al cliente.
+
+He reproducido la consecuencia: primer envío con respuesta perdida → resultado `incierto`; se pierde la clave, se lee la versión actual y se envía el mismo texto como intento nuevo → resultado `confirmada` y **dos registros**. Esta comprobación reproduce la pérdida del intento y el nuevo envío; no reproduce toda la navegación de caducidad de sesión.
+
+No se modifica la cartera ni se duplica una operación de inversión: se duplica una anotación del historial. Es un defecto real de recuperación, no una mejora cosmética. No lo doy por resuelto porque el texto sobreviva.
+
+**Durante el piloto:** si ocurre una interrupción con resultado incierto seguida de un nuevo acceso, el facilitador detiene esa tarea y comprueba el historial antes de permitir otro envío. Se registra como incidencia del producto y como intervención; no se cuenta la tarea como completada sin ayuda ni se oculta el duplicado. No borrar automáticamente anotaciones por tener el mismo texto: podrían ser legítimas.
+
+**Antes de una beta pública:** conservar el intento pendiente completo —clave, escenario, carga y contexto de cuenta— hasta conocer su resultado. Restaurarlo solo para la cuenta autorizada y reconciliarlo con el servidor antes de permitir otra escritura. Probar también cierre/recarga y cambio de cuenta. Esta corrección no necesita bloquear las sesiones de observación normales con datos ficticios; sí impide afirmar que la recuperación es infalible o publicar sin resolverla.
+
+## 4. Revisión del diff de pruebas antiguas
+
+El diff recibido permite revisar las adaptaciones concretas de seis archivos:
+
+- `testB`: cambia la entrada usada, pero conserva comprobación de desplazamiento y foco.
+- `testL`, `testP` y parte de `testN`: actualizan fechas/etiquetas y eliminan la promesa de pago conforme a las decisiones aprobadas.
+- `testN`: traslada la verificación de pesos históricos y actuales a la ficha; siguen comprobándose valores y enlace editorial.
+- `testO`: sustituye las tarjetas editoriales duplicadas por tarjetas compactas y añade comprobación del detalle editorial en la ficha. Mantiene comprobaciones de aislamiento de cuentas.
+- `testQ`: deja de exigir dos tarjetas editoriales simultáneas dentro del viewport y comprueba prioridad, ausencia de duplicación y estados separados. Es un cambio de criterio coherente con el diseño aprobado, no la misma aserción intacta.
+
+Acepto estas adaptaciones para el alcance acordado. No afirmo equivalencia literal de todas las aserciones ni que el diff pruebe por sí solo que toda la aplicación carece de regresiones. El conjunto combina comprobaciones trasladadas, nuevas y requisitos visuales retirados expresamente.
+
+## 5. Diseño y pulido: se mantienen cerrados
+
+Se conservan las decisiones aprobadas: fondo oscuro cálido, naranja, serif en títulos, interfaz sans, nota global secundaria, comparación simultánea, una tarjeta por escenario y prioridad de «Para revisar».
+
+No encargo otro ajuste de tipografías, radios, animaciones o distribución para pasar al piloto. Tampoco calendario, modo claro, histórico, benchmark, exportación de imágenes, gamificación, bancos, datos reales o funciones de pago. Si los participantes encuentran una dificultad concreta, se documentará antes de decidir un cambio.
+
+## 6. Encargo para Claude: preparar el piloto, sin ampliar el producto
+
+1. Conservar R23 como versión identificable del piloto, con código y evidencias vinculados. No introducir cambios funcionales silenciosos entre participantes.
+2. Preparar el entorno privado con persistencia, acceso de pruebas y datos ficticios. No publicar ni enviar correos reales.
+3. En el dispositivo previsto, verificar antes de la primera sesión: crear y recuperar cartera/escenario; editar durante un envío; recuperar una lectura; regresar tras sesión inválida con el borrador; salir voluntariamente y comprobar limpieza.
+4. Incorporar al guion del facilitador la incidencia del apartado 3 y cómo registrarla. No enseñar preventivamente a los participantes el recorrido correcto ni convertir una intervención en éxito sin ayuda.
+5. Entregar a Javier instrucciones breves para abrir el piloto y el registro de resultados. No inventar participantes ni completar casillas pendientes.
+
+Javier reúne a cinco principiantes. La primera sesión dura aproximadamente 20–30 minutos; la segunda, concertada al día siguiente, unos diez. Se observa si crean, entienden, comparan, guardan y recuperan una pregunta. Preguntar al final «¿Qué te ha aportado?» y «¿En qué situación volverías a usarlo?».
+
+El criterio acordado sigue siendo cuatro de cinco completando sin ayuda sustancial, con comprensión de la simulación, y todas las personas recuperando lo guardado. Es una señal diagnóstica de usabilidad; no una demostración estadística ni comercial. El retorno concertado no demuestra retención espontánea.
+
+## 7. Qué damos por terminado y qué viene después
+
+**Termina la fase de correcciones generales previa a la observación con personas.** B1 y B2 no se vuelven a abrir sin una regresión concreta. El diseño aceptado tampoco.
+
+La próxima revisión se basará en el resultado del piloto y en incidencias reales, no en añadir ideas de manera indefinida. La excepción ya identificada es la conservación del intento pendiente antes de publicar. Aprobar un piloto supervisado con una limitación conocida no equivale a declarar terminada la validación para uso público.
+
+No hemos demostrado todavía demanda, retención espontánea, disposición a pagar ni utilidad con datos financieros reales. Ese aprendizaje empieza ahora; no se obtiene añadiendo más pruebas de código.

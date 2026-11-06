@@ -229,3 +229,5 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 
 ## Fuera de alcance de la beta (futuro plan de pago)
 - **No implementar**: conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión. Decisión del usuario en la ronda 5. Además chocarían con las restricciones actuales (sin recomendaciones personalizadas, sin dinero real, sin cobrar).
+
+- **2026-11-06 · Piloto sobre una versión congelada (`piloto-r23`).** El código no cambia entre participantes; `abrir-piloto.sh` verifica los hashes y se niega a abrir si difiere. Motivo: la revisión C21 exige «no introducir cambios funcionales silenciosos entre participantes»; un cambio exige una versión nueva declarada. La limitación del intento incierto se **gestiona en el guion** durante el piloto y se corrige antes de una beta pública (no se toca el producto ahora).
