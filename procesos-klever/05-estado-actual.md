@@ -14,6 +14,9 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
+## Evolución visual 25 (rama `evolucion-25`)
+- ✅ Patch integrado y batería completa 961/0 (local); regresiones del patch corregidas (ver `ronda25/LEEME.md`). ⬜ Teléfono real, ETF/datos ausentes a la vista, 5 usuarios y revisión visual: no hechos. El piloto sigue en `piloto-r23`.
+
 ## Mapa del código
 ```
 public/            index.html · app.js · style.css · legal.html       (interfaz, sin dependencias)

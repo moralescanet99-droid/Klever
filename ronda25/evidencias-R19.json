@@ -1,0 +1,114 @@
+[
+ {
+  "id": "R0-320-no-preference",
+  "escenario": "Sin errores de JavaScript en las revisiones (320 px, movimiento no-preference)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0-320-reduce",
+  "escenario": "Sin errores de JavaScript en las revisiones (320 px, movimiento reduce)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-con-nota-320",
+  "escenario": "Revisión con nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: con nota res 468–584 / barra 708 / etq 33–57 / foco nota-panel | no-preference/teclado: con nota res 468–584 / barra 708 / etq 33–57 / foco nota-panel | reduce/raton: con nota res 468–584 / barra 708 / etq 33–57 / foco nota-panel | reduce/teclado: con nota res 468–584 / barra 708 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-sin-nota-320",
+  "escenario": "Revisión sin nota a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: sin nota res 489–685 / barra 708 / etq 33–57 / foco nota-panel | no-preference/teclado: sin nota res 489–685 / barra 708 / etq 33–57 / foco nota-panel | reduce/raton: sin nota res 489–685 / barra 708 / etq 33–57 / foco nota-panel | reduce/teclado: sin nota res 489–685 / barra 708 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-con-nota-y-cambios-sin-guardar-320",
+  "escenario": "Revisión con nota y cambios sin guardar a 320×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: con nota res 468–583 / barra 689 / etq 33–57 / foco nota-panel | no-preference/teclado: con nota res 468–583 / barra 689 / etq 33–57 / foco nota-panel | reduce/raton: con nota res 468–583 / barra 689 / etq 33–57 / foco nota-panel | reduce/teclado: con nota res 468–583 / barra 689 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0-390-no-preference",
+  "escenario": "Sin errores de JavaScript en las revisiones (390 px, movimiento no-preference)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0-390-reduce",
+  "escenario": "Sin errores de JavaScript en las revisiones (390 px, movimiento reduce)",
+  "esperado": "Ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-con-nota-390",
+  "escenario": "Revisión con nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: con nota res 429–545 / barra 708 / etq 33–57 / foco nota-panel | no-preference/teclado: con nota res 429–545 / barra 708 / etq 33–57 / foco nota-panel | reduce/raton: con nota res 429–545 / barra 708 / etq 33–57 / foco nota-panel | reduce/teclado: con nota res 429–545 / barra 708 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-sin-nota-390",
+  "escenario": "Revisión sin nota a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: sin nota res 450–598 / barra 708 / etq 33–57 / foco nota-panel | no-preference/teclado: sin nota res 450–598 / barra 708 / etq 33–57 / foco nota-panel | reduce/raton: sin nota res 450–598 / barra 708 / etq 33–57 / foco nota-panel | reduce/teclado: sin nota res 450–598 / barra 708 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R1-con-nota-y-cambios-sin-guardar-390",
+  "escenario": "Revisión con nota y cambios sin guardar a 390×780: el RECTÁNGULO del resultado queda entero entre la parte superior y la barra fija, con «Paso 3 de 3 · Revisión» y «Volver» a la vista (ratón y TECLADO REAL con Tab, con y sin movimiento reducido)",
+  "esperado": "En las 4 combinaciones: resultado (cifra + titular, o el aviso completo) con top ≥ 0 y bottom ≤ inicio de la barra; etiqueta del paso y Volver también; foco en #nota-panel; paso 3; al volver, los pesos son idénticos a los de antes de revisar (también los editados sin guardar)",
+  "observado": "no-preference/raton: con nota res 429–544 / barra 708 / etq 33–57 / foco nota-panel | no-preference/teclado: con nota res 429–544 / barra 708 / etq 33–57 / foco nota-panel | reduce/raton: con nota res 429–544 / barra 708 / etq 33–57 / foco nota-panel | reduce/teclado: con nota res 429–544 / barra 708 / etq 33–57 / foco nota-panel | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R2-1440",
+  "escenario": "Escritorio 1440×900: tras «Revisar portafolio», el resultado (con nota, sin nota y con cambios sin guardar) queda entero en el viewport y con el foco en la nota",
+  "esperado": "El rectángulo del resultado está dentro de la ventana en todos los casos",
+  "observado": "con nota/raton: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (inactivo), estado «Guardada en tu cuenta» true | sin nota/raton: res 739–839 de 900; nombre true, pasos true, volver true, guardar true (inactivo), estado «Guardada en tu cuenta» true | con nota y cambios sin guardar/raton: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (activo), estado «Cambios locales pendientes de guardar en tu cuenta» true | con nota/teclado: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (activo), estado «Cambios locales pendientes de guardar en tu cuenta» true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R3-1440",
+  "escenario": "Escritorio 1440×900: en la Revisión siguen a la vista el NOMBRE de la cartera, los pasos, «Volver a la distribución», la acción de guardado (activa si hay cambios sin guardar) y el estado de guardado; al volver, los pesos son idénticos",
+  "esperado": "Todos los elementos de contexto dentro del viewport, en los cuatro recorridos (ratón y teclado real); pesos conservados",
+  "observado": "con nota/raton: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (inactivo), estado «Guardada en tu cuenta» true | sin nota/raton: res 739–839 de 900; nombre true, pasos true, volver true, guardar true (inactivo), estado «Guardada en tu cuenta» true | con nota y cambios sin guardar/raton: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (activo), estado «Cambios locales pendientes de guardar en tu cuenta» true | con nota/teclado: res 739–833 de 900; nombre true, pasos true, volver true, guardar true (activo), estado «Cambios locales pendientes de guardar en tu cuenta» true | pesos conservados true",
+  "resultado": "OK"
+ },
+ {
+  "id": "R4-1440",
+  "escenario": "Revisar a menos de 300 ms de editar un peso NO deja la página desplazada (escritorio): el centrado diferido del campo activo se cancela si el campo ya no tiene el foco",
+  "esperado": "scrollY = 0 tras 900 ms en las 6 repeticiones",
+  "observado": "[0,0,0,0,0,0]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0e",
+  "escenario": "Estabilización del desplazamiento: ninguna medición ni captura se hizo a medias",
+  "esperado": "Cada espera de «quieto» terminó con cinco fotogramas sin cambio de scrollY (si no, se lista aquí)",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0t",
+  "escenario": "Teclado REAL: se llegó a «Revisar» solo con Tab desde el nombre de la cartera",
+  "esperado": "Todas las llegadas ocurrieron (≤ 80 pulsaciones) y fueron al menos una",
+  "observado": "pulsaciones de Tab por recorrido: [3,3,3,3,3,3,3,3,3,3,3,3,2]",
+  "resultado": "OK"
+ },
+ {
+  "id": "R0d",
+  "escenario": "Diálogos: solo el aviso esperado de «cambios sin guardar» (beforeunload) y ningún otro",
+  "esperado": "Ningún diálogo inesperado; los beforeunload se aceptan y se cuentan",
+  "observado": "beforeunload aceptados 0; inesperados []",
+  "resultado": "OK"
+ }
+]

@@ -1,0 +1,35 @@
+# comando: node tests/ronda5/testD.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 13:21:26 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [E2] Mis carteras sin carteras
+OK    [E1] Mis carteras con carteras
+OK    [E1b] Abrir «Nueva cartera»
+OK    [E3] Datos de cada cartera
+OK    [E3b] Fechas no inventadas
+OK    [E4a] Cartera privada al 88 %
+OK    [E4b] Cartera privada al 100 %
+OK    [E4c] Cartera privada al 103 %
+OK    [E5] Publicar desactivado se ve como Guardar desactivado
+OK    [E7] Con error de asignación, la persistencia sigue visible
+OK    [E8] Aviso flotante y vocabulario
+OK    [E7b] Guardada
+OK    [E6] Edición inválida de una cartera pública
+OK    [E12] Guardado fallido y recuperación
+OK    [E14] Regreso desde «Mis carteras»
+OK    [E15] Teclado móvil abierto al editar la última posición (EMULADO: ventana de 390×420)
+OK    [E13b] Acceso por email en OTRO navegador
+OK    [E13a] Acceso por email en el MISMO navegador
+OK    [E9a] Exceso de asignación a 360 px
+OK    [E9b] Etiquetas del resumen
+OK    [E9c] Cobertura: datos ausentes distintos de no aplicable
+OK    [E9d] Con una empresa sin dato (JPMorgan)
+OK    [E10a] Explorar empresas en móvil: dos líneas
+OK    [E10b] Nombres largos, sectores largos, resultados incompletos
+OK    [E11a] Ficha: cifra y unidad separadas
+OK    [E11b] Tabla histórica: desplazamiento horizontal REAL con teclado (flecha derecha) y columna del año fija
+OK    [E16a] Texto ampliado al 200 % en el editor (APROXIMADO: tamaño de texto de la página, no zoom del navegador)
+OK    [E16b] Foco en diálogos con teclado
+OK    [E16c] Sin errores de JavaScript en toda la ronda
+
+RESULTADO: 29 correctas, 0 fallos

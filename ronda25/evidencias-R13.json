@@ -1,0 +1,242 @@
+[
+ {
+  "id": "R1a",
+  "escenario": "Radar sin sesión",
+  "esperado": "HTTP 401",
+  "observado": "HTTP 401",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1b",
+  "escenario": "Guardar en el radar es idempotente",
+  "esperado": "La primera vez es nuevo; la segunda no duplica (1 fila)",
+  "observado": "nuevo true/false; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1c",
+  "escenario": "Sin «nota» en el cuerpo se conserva la nota",
+  "esperado": "La nota sigue siendo la anterior",
+  "observado": "Me interesa por su caja",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1d",
+  "escenario": "Actualizar la nota",
+  "esperado": "Nota nueva y sigue habiendo 1 fila",
+  "observado": "Revisar deuda; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1e",
+  "escenario": "Ticker desconocido, mal formado o nota demasiado larga",
+  "esperado": "HTTP 400 los tres",
+  "observado": "400,400,400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R2a",
+  "escenario": "Aislamiento: cada usuario solo ve su radar (mismo activo, notas distintas)",
+  "esperado": "Usuario 1: «Revisar deuda»; usuario 2: «Nota de la otra persona»",
+  "observado": "Revisar deuda / Nota de la otra persona",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R2b",
+  "escenario": "Quitar de MI radar no afecta al de otro usuario",
+  "esperado": "Usuario 1 conserva A",
+  "observado": "1 fila(s)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1f",
+  "escenario": "Quitar algo que no estaba es idempotente",
+  "esperado": "HTTP 200",
+  "observado": "HTTP 200",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3a",
+  "escenario": "Definir un límite personal",
+  "esperado": "limite_peso 20 y la revisión NO cambia (no es composición)",
+  "observado": "{\"revision\":0,\"publico\":1,\"limite_peso\":20,\"nombre\":\"Mi cartera\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3b",
+  "escenario": "Límites no válidos",
+  "esperado": "HTTP 400 con 0, 101, «abc»",
+  "observado": "400,400,400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3c",
+  "escenario": "Aislamiento: otro usuario no puede poner límite a mi cartera",
+  "esperado": "HTTP 404 y el límite sigue en 20",
+  "observado": "HTTP 404; 20",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3d",
+  "escenario": "El límite es privado: lo ve su dueño, no la vista pública",
+  "esperado": "GET cartera y lista lo incluyen; GET público no",
+  "observado": "cartera 20; lista 20; público false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3e",
+  "escenario": "Quitar el límite",
+  "esperado": "limite_peso null",
+  "observado": "{\"revision\":0,\"publico\":1,\"limite_peso\":null,\"nombre\":\"Mi cartera\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4a",
+  "escenario": "Guardar un escenario válido",
+  "esperado": "201; copia de la base y propuesta; método; estado «en_estudio»; revisión de origen",
+  "observado": "HTTP 201; {\"b\":[{\"ticker\":\"A\",\"peso\":60},{\"ticker\":\"B\",\"peso\":40}],\"p\":[{\"ticker\":\"A\",\"peso\":54},{\"ticker\":\"B\",\"peso\":36},{\"ticker\":\"C\",\"peso\":10}],\"m\":\"proporcional\",\"e\":\"en_estudio\",\"br\":0}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4b",
+  "escenario": "Guardar un escenario NO modifica la cartera base ni su versión pública",
+  "esperado": "Cartera, posiciones, publicación y revisión idénticas",
+  "observado": "idénticas",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4c",
+  "escenario": "Reintento con la misma clave: no duplica",
+  "esperado": "200 con «duplicado»; 1 escenario",
+  "observado": "HTTP 200; duplicado true; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4d",
+  "escenario": "Propuesta manipulada (cifras distintas a las del método)",
+  "esperado": "HTTP 400 y nada guardado",
+  "observado": "HTTP 400; La propuesta no coincide con el resultado del método elegido.; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4e",
+  "escenario": "Base que ya no es la vigente al guardar",
+  "esperado": "HTTP 409",
+  "observado": "HTTP 409",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4f",
+  "escenario": "Simulación inviable (cartera completa, financiar con lo sin asignar)",
+  "esperado": "HTTP 400 con el motivo",
+  "observado": "HTTP 400; La simulación no es viable: No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4g",
+  "escenario": "Datos inválidos (nombre vacío, clave corta, ticker raro)",
+  "esperado": "HTTP 400 los tres",
+  "observado": "400,400,400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5a",
+  "escenario": "Aislamiento: otro usuario no puede crear un escenario sobre MI cartera",
+  "esperado": "HTTP 404; sin filas nuevas",
+  "observado": "HTTP 404; filas 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5b",
+  "escenario": "Aislamiento: otro usuario no lista, lee, edita ni borra mi escenario",
+  "esperado": "Lista vacía; GET/PATCH/DELETE → 404; el escenario intacto",
+  "observado": "lista 0; 404/404/404",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5c",
+  "escenario": "Sin sesión no hay escenarios",
+  "esperado": "HTTP 401",
+  "observado": "HTTP 401",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R6a",
+  "escenario": "Editar la nota con revisión; la revisión sube y una pestaña vieja recibe 409",
+  "esperado": "HTTP 200, revisión 1; la edición con revisión 0 → 409 y la nota no se pisa",
+  "observado": "200/1; 409; nota «Falta comprobar la deuda»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R6b",
+  "escenario": "Estado no válido y base/propuesta inmutables",
+  "esperado": "400 con «borrado»; un PATCH con base_json la ignora",
+  "observado": "400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R7a",
+  "escenario": "Si cambia la cartera original, el escenario conserva su base y avisa de la versión posterior",
+  "esperado": "base 60/40 y propuesta 54/36/10 intactas; hay_version_posterior; revisión actual 1",
+  "observado": "{\"b\":[{\"ticker\":\"A\",\"peso\":60},{\"ticker\":\"B\",\"peso\":40}],\"p\":[{\"ticker\":\"A\",\"peso\":54},{\"ticker\":\"B\",\"peso\":36},{\"ticker\":\"C\",\"peso\":10}],\"post\":true,\"rev\":1}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R7b",
+  "escenario": "Si se borra la cartera, el escenario sigue y lo dice",
+  "esperado": "cartera_existe=false, nombre y base conservados",
+  "observado": "{\"ex\":false,\"n\":\"Mi cartera\",\"b\":2}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R8",
+  "escenario": "Fallo de infraestructura al guardar y reintento",
+  "esperado": "El fallo da 500 sin dejar filas; el reintento con la misma clave guarda UNA",
+  "observado": "fallo HTTP 500, filas 1→1; reintento HTTP 201, filas 2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R9",
+  "escenario": "Descartar un escenario lo borra sin tocar la cartera",
+  "esperado": "HTTP 200; la cartera 3 intacta",
+  "observado": "HTTP 200; 2 posiciones",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R10",
+  "escenario": "Origen de los datos (derivado de las filas)",
+  "esperado": "Sin filas: origen null (no se atribuye); con una fila «prueba»: «prueba»",
+  "observado": "null / prueba",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]
