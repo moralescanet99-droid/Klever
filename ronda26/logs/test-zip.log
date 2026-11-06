@@ -1,0 +1,14 @@
+# comando: bash tests/ronda11/test-zip.sh
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 15:02:01 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Z0] El ZIP no contiene .git (por eso el historial no es verificable desde él)
+OK    [Z1] Un ZIP correcto se verifica (código 0) y la salida separa lo verificado de lo que exige un repositorio
+OK    [Z2] Sin .git, A8 pasa en modo ZIP (solo contenido) y dice «historial: NO verificado»
+OK    [Z3-vacio] Repositorio nuevo (vacio): NO se declara verificado el historial
+OK    [Z3-uncommit] Repositorio nuevo (uncommit): NO se declara verificado el historial
+OK    [Z4] Un archivo modificado tras crear el ZIP se detecta (huella distinta, código ≠ 0)
+OK    [Z5] Un ZIP con .dev.vars se rechaza
+OK    [Z6] Un ZIP sin manifiesto de huellas se rechaza (no se puede comprobar su integridad)
+
+RESULTADO: 8 correctas, 0 fallos

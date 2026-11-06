@@ -50,7 +50,8 @@ Capturas de partida a 1440 y 390 px del recorrido completo (portada, ejemplo, ed
 Teléfono real, teclado virtual, Safari/Firefox, lector de pantalla con las fichas de señales y el deslizador, contraste medido sobre píxeles (el azul da 7,6–8,7:1 **calculado** sobre los fondos planos), D1 remota, correo real, personas. Que las señales se **entiendan** como referencia y no como consejo, que la comparación instantánea aumente las ganas de volver y que la propuesta se capte en 10 s son **hipótesis**: solo el piloto con personas puede decirlo.
 
 ## 5. Resultado de la pasada completa
-*(se completa al terminar `bash tests/run-all.sh`; ver `resultado-ejecucion.txt` y `logs/`)*
+- **Primera pasada** (commit `eabef44`): 996 correctas, **2 fallos**, ambos en `testB`: (1) al acortar la cabecera de Explorar se perdió «no es una recomendación **de compra**» → **repuesto en el código**; (2) el titular literal de la portada → **prueba adaptada** por el cambio de promesa (declarado arriba).
+- **Pasada definitiva** (commit `cdae3ee`, árbol limpio, 2026-11-06 14:59 UTC, local del autor): **998 correctas, 0 fallos, código de salida 0** (50 baterías con resultado; 961 anteriores + 13 `unit-senales26` + 24 `testV`). Registro en `resultado-ejecucion.txt` y `logs/`; capturas en `capturas/` (no versionadas salvo `V*`).
 
 ## 6. Decisiones que necesita Javier
 1. **Promesa:** el producto dice ahora «compara tus opciones **antes de invertir**» (tu texto). La evolución 25 la había cambiado a «antes de decidir» para no sugerir que se opera o se recomienda. ¿Confirmas «antes de invertir»?

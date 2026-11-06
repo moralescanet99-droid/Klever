@@ -1,0 +1,30 @@
+# comando: node tests/ronda26/testV.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 15:19:00 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [V1-1440] Portada (1440 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas
+OK    [V2-1440] Revisión (1440 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal
+OK    [V3-1440] «Ver qué cambiaría» (1440 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia
+OK    [V4-1440] Deslizador del laboratorio (1440 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta
+OK    [V5-1440] Descubrir (1440 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro
+OK    [V6-1440] Cuaderno (1440 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar
+OK    [V7-1440] Mis portafolios (1440 px): cada cartera lleva su señal principal (de la versión guardada)
+OK    [V0-1440] Sin errores de JavaScript ni desbordes horizontales (1440 px)
+OK    [V1-390] Portada (390 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas
+OK    [V2-390] Revisión (390 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal
+OK    [V3-390] «Ver qué cambiaría» (390 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia
+OK    [V4-390] Deslizador del laboratorio (390 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta
+OK    [V5-390] Descubrir (390 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro
+OK    [V6-390] Cuaderno (390 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar
+OK    [V7-390] Mis portafolios (390 px): cada cartera lleva su señal principal (de la versión guardada)
+OK    [V0-390] Sin errores de JavaScript ni desbordes horizontales (390 px)
+OK    [V1-320] Portada (320 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas
+OK    [V2-320] Revisión (320 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal
+OK    [V3-320] «Ver qué cambiaría» (320 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia
+OK    [V4-320] Deslizador del laboratorio (320 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta
+OK    [V5-320] Descubrir (320 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro
+OK    [V6-320] Cuaderno (320 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar
+OK    [V7-320] Mis portafolios (320 px): cada cartera lleva su señal principal (de la versión guardada)
+OK    [V0-320] Sin errores de JavaScript ni desbordes horizontales (320 px)
+
+RESULTADO: 24 correctas, 0 fallos

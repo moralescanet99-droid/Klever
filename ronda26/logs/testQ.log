@@ -1,0 +1,31 @@
+# comando: node tests/ronda18/testQ.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 15:14:35 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Q1-1440] Distribución: en el VIEWPORT inicial de 1440×900 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (1440 px)
+OK    [Q2-1440] Una sola acción dominante visible y habilitada en la distribución de un borrador (1440 px)
+OK    [Q3-1440] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)
+OK    [Q4-1440] Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (1440 px)
+OK    [Q5-1440] Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (1440 px)
+OK    [Qx-1440] Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (1440 px)
+OK    [Q1-390] Distribución: en el VIEWPORT inicial de 390×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (390 px)
+OK    [Q2-390] Una sola acción dominante visible y habilitada en la distribución de un borrador (390 px)
+OK    [Q3-390] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (390 px)
+OK    [Q4-390] Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (390 px)
+OK    [Q5-390] Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (390 px)
+OK    [Qx-390] Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (390 px)
+OK    [Q1-320] Distribución: en el VIEWPORT inicial de 320×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (320 px)
+OK    [Q2-320] Una sola acción dominante visible y habilitada en la distribución de un borrador (320 px)
+OK    [Q3-320] Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (320 px)
+OK    [Q4-320] Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (320 px)
+OK    [Q5-320] Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (320 px)
+OK    [Qx-320] Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (320 px)
+OK    [Q6-1440] Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (1440 px)
+OK    [Q6-390] Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (390 px)
+OK    [Q6-320] Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (320 px)
+OK    [Q8-1440] Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (1440 px)
+OK    [Q8-390] Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (390 px)
+OK    [Q8-320] Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (320 px)
+OK    [Q7] Referencia e implementación en tamaño comparable
+
+RESULTADO: 25 correctas, 0 fallos
