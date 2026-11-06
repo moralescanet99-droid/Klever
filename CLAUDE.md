@@ -1,6 +1,6 @@
 # Klever · instrucciones para Claude
 
-**Antes de hacer nada, lee `procesos-klever/README.md`, `procesos-klever/05-estado-actual.md` y `procesos-klever/08-entorno-y-trampas.md`.** Ahí está el contexto del proyecto, las decisiones, el estado y los errores que ya cometimos.
+**Antes de hacer nada, lee `procesos-klever/README.md`, `procesos-klever/05-estado-actual.md` y `procesos-klever/08-entorno-y-trampas.md`** (y `11-traspaso-supervisor.md` si eres el supervisor) Ahí está el contexto del proyecto, las decisiones, el estado y los errores que ya cometimos.
 
 ## Reglas permanentes
 - Idioma: **español de España** en interfaz, documentación y respuestas.

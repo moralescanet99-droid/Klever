@@ -17,6 +17,7 @@ Memoria del proyecto. Reúne el contexto que se ha dado, lo que se ha decidido y
 | `08-entorno-y-trampas.md` | Cómo ejecutar y probar, y los errores que ya nos costaron tiempo. |
 | `09-registro-de-cambios.md` | Registro cronológico, **solo se añade al final**. |
 | `10-referencias.md` | Enlaces, rama, artefactos, paquetes de capturas. |
+| `11-traspaso-supervisor.md` | **Traspaso al supervisor (Claude Opus):** roles, reglas, estado y decisiones abiertas. |
 
 ## Regla de mantenimiento (obligatoria)
 Al terminar **cada tarea** que cambie algo:
