@@ -50,21 +50,22 @@
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir</h1>
-        <p class="lead">Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.</p>
+        <p class="eyebrow">TU CARTERA. CON MÁS PERSPECTIVA.</p>
+        <h1>Entiende lo que tienes.<br><em>Explora lo que podría cambiar.</em></h1>
+        <p class="lead">Crea una cartera simulada, descubre alternativas y compara tus opciones antes de invertir.</p>
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Ver un ejemplo explicado</a></p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="enlace" href="#ejemplo">Explorar un ejemplo →</a></p>
         <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
           <ul>
-            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Una cartera vacía: añade tu primer activo y reparte.</span></button></li>
-            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Una copia editable, rotulada como ejemplo simulado.</span></button></li>
-            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Introduce a mano tus activos y porcentajes. Sin conexión con ningún bróker.</span></button></li>
+            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Elige activos y reparte su peso.</span></button></li>
+            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Abre una cartera de prueba y ajústala.</span></button></li>
+            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Añade tus porcentajes a mano. Sin conectar tu bróker.</span></button></li>
           </ul></div>
-        <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
+        <ul class="confianza"><li>Sin registro para probar</li><li>Sin dinero real · datos de prueba</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
-      <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
+      <div class="hero-prev" id="prev" aria-label="Ejemplo interactivo de reparto simulado"></div>
     </div>
 
     <div class="bloque" id="plantillas">
@@ -204,7 +205,7 @@
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
       <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
-      <p class="mut">Tus ideas: lo que quieres volver a revisar —preguntas, escenarios simulados y empresas de tu radar—. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+      <p class="mut">¿Sigue teniendo sentido tu idea? Revisa tus hipótesis y deja constancia de lo que ha cambiado. Tus carteras no se modifican.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
     <div class="seg-col">
@@ -322,10 +323,9 @@
         <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><span class="paso-etq" id="paso-etq">Paso 3 de 3 · Revisión</span><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
-          <section id="radio" class="radio" aria-labelledby="radio-t">
-            <h3 id="radio-t">Radiografía de concentración</h3>
+          <details id="radio" class="radio"><summary id="radio-t">Concentración y límite personal</summary>
             <div id="radio-cuerpo"></div>
-          </section>
+          </details>
           <div class="asig">
             <span class="etq">Asignado</span>
             <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>

@@ -9,6 +9,7 @@
 
 // ---------- utilidades ----------
 import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo } from './js/lab.js';
+import { simular } from './js/calculos.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
@@ -1180,14 +1181,20 @@ $('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
 $('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
 $('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
-  const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
-  const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
-  $('#prev').innerHTML = `<div class="prev"><div class="prev-cab"><b>Cartera de dividendos</b><span class="chip">Vista previa</span></div>
-    <div class="prev-fila prev-th" aria-hidden="true"><span>Activo</span><span class="num">Peso</span><span class="num"><abbr>ROIC</abbr></span></div>
-    ${vis.map(p => `<div class="prev-fila"><span><b>${esc(p.ticker)}</b><small>${esc(by[p.ticker].nombre)}</small></span><span class="num">${pesoTxt(p.peso)}</span><span class="num">${roicTxt(by[p.ticker])}</span></div>`).join('')}
-    ${resto ? `<div class="prev-mas">+${resto} posiciones más. Lista abreviada: los totales incluyen las ${ps.length} posiciones.</div>` : ''}
-    <div class="barra" aria-hidden="true"><i style="width:${Math.min(100, r.total)}%"></i></div>
-    <div class="prev-pie"><div><span>Total asignado</span><b class="num">${pesoTxt(r.total)}</b></div><div><span><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</span><b class="num">${pct(r.roic)}</b></div></div></div>`;
+  $('#prev').innerHTML = `<div class="prev preview-v25"><div class="prev-cab"><b>¿Y si añades otra empresa?</b><span class="chip sim">Ejemplo</span></div>
+    <p class="mut peq">KO 60 % · PG 40 %. Mueve el peso de JNJ.</p>
+    <label class="preview-control" for="preview-peso">Peso de JNJ <output id="preview-valor" for="preview-peso">10 %</output></label>
+    <input type="range" id="preview-peso" min="0" max="40" step="1" value="10" aria-describedby="preview-ayuda">
+    <div id="preview-reparto"></div>
+    <p id="preview-ayuda" class="mut peq">KO y PG ceden peso proporcionalmente. Solo cambia este ejemplo.</p>
+    <a class="btn btn-secundario" href="#ejemplo">Explorar el caso →</a></div>`;
+  const pintar = () => {
+    const peso = Number($('#preview-peso').value), sim = simular([{ticker:'KO',peso:60},{ticker:'PG',peso:40}], {ticker:'JNJ',peso}, 'proporcional');
+    $('#preview-valor').textContent = peso + ' %';
+    const bar = (lista, title) => { const ps = [...lista].sort((a,b)=>['KO','PG','JNJ'].indexOf(a.ticker)-['KO','PG','JNJ'].indexOf(b.ticker)); return `<div class="preview-chart"><span>${title}</span><div class="preview-stack" role="img" aria-label="${title}: ${ps.map(p=>p.ticker+' '+pesoTxt(p.peso)).join(', ')}">${ps.map(p=>`<i style="width:${p.peso}%;--c:var(--c${['KO','PG','JNJ'].indexOf(p.ticker)})">${p.peso >= 12 ? p.ticker : ''}</i>`).join('')}</div></div>`; };
+    $('#preview-reparto').innerHTML = bar(sim.antes,'Cartera base') + bar(sim.despues,'Alternativa simulada') + `<div class="delta-grid">${sim.cambios.map(p=>`<div><span>${p.ticker}</span><b>${pesoTxt(p.despues)}</b><small>${p.delta>0?'+':''}${nf(p.delta)} puntos</small></div>`).join('')}</div>`;
+  };
+  $('#preview-peso').addEventListener('input', pintar); pintar();
 }
 
 // ---------- reintentos genéricos ----------

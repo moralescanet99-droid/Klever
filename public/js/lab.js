@@ -146,11 +146,13 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
   const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
   const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
-  const parcial = ev && !ev.publicada;
+  const ancho = v => Math.max(0, Math.min(100, Number(v) || 0));
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
-    <p>${n} ${n === 1 ? 'posición' : 'posiciones'}, asignado ${P(r.total ?? 0)}. Mayor posición: <b>${esc(r.mayor.ticker)}</b> ${P(r.mayor.peso)}${r.top3.completo ? `; las tres mayores suman ${P(r.top3.peso)}` : ''}. Por tipo: ${esc(tipos)}.</p>
-    <p class="mut peq">Es la concentración <b>por posición</b>: no es la exposición real de los fondos ni una pérdida esperada.${parcial ? ' Debajo, qué se ha podido analizar y qué queda sin evaluar.' : ''}</p>
-    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Probar un cambio</button></p></section>`;
+    <div class="vista-metricas"><div><span>Mayor posición · ${esc(r.mayor.ticker)}</span><strong>${P(r.mayor.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.mayor.peso)}%"></i></div></div>
+    <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
+    <p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p>
+    <p class="mut peq">Concentración por posición; no mide pérdidas ni la composición interna de los ETF.</p>
+    <p class="vistazo-acc"><button class="btn btn-primario" type="button" id="vz-probar">Ver qué cambiaría →</button></p></section>`;
 }
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
@@ -422,7 +424,7 @@ const metodoTexto = fin => ({
   proporcional: { corto: 'Las demás posiciones bajan todas en la misma proporción para liberar el porcentaje necesario. Si el peso nuevo es menor que el actual, lo liberado queda sin asignar: no se reparte al alza.',
     redondeo: 'Cada posición se multiplica por (lo que deben sumar) / (lo que suman ahora) y se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Así los totales siempre cuadran.' },
 }[fin] || { corto: 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.', redondeo: '' });
-const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<b>Cómo se calcula:</b> ${esc(m.corto)}${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}`; };
+const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<details class="mini"><summary>Cómo se reparte el cambio</summary><p>${esc(m.corto)}</p>${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}</details>`; };
 function pintarLabForm() {
   const { $, esc, logged } = x(), s = LAB.sim, alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
   if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
@@ -534,10 +536,10 @@ function pintarResultado() {
       : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
-    <p class="lab-origen"><b>Quién cede el peso:</b> ${esc(origenPeso(sim))}</p>${htmlBarras(esc, sim)}
-    <p class="lab-concl">${concl}</p><p class="mut peq"><b>Tu cartera base no cambia.</b> Aquí solo se compara con una alternativa simulada.</p>
-    ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
-    ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
+    ${htmlBarras(esc, sim)}<h3>Quién cede el peso</h3><div class="delta-grid">${sim.cambios.filter(f => f.delta !== 0).map(f => `<div><span>${esc(f.ticker)}</span><b>${dpts(f.delta)}</b><small>${P(f.antes)} → ${P(f.despues)}</small></div>`).join('') || '<p>Sin cambios de peso.</p>'}</div><details class="mini"><summary>Ver el origen del peso</summary><p class="lab-origen">${esc(origenPeso(sim))}</p></details>
+    <p class="mut peq"><b>Tu cartera base no cambia.</b> Esta alternativa no implica una mayor rentabilidad.</p><details class="mini"><summary>Qué cambia, en palabras</summary><p class="lab-concl">${concl}</p></details>
+    <details class="mini"><summary>Comparar todos los pesos y categorías</summary>${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}</details>
+    ${evA && evD ? `<details class="mini"><summary>Comparar la nota de estructura</summary>${htmlCambioNota(esc, evA, evD)}</details>` : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
 }
 async function guardarEscenario() {

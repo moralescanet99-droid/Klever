@@ -86,9 +86,9 @@ export function htmlNotaEstructura(esc, ev, origen) {
   if (ev.publicada) {
     cuerpo = `<p class="nota-num"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
       <p class="nota-expl">${esc(explicarNota(ev))}</p>
-      <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
+      <details class="mini"><summary>Fortaleza, limitación y fecha</summary><ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
-      ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
+      ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul></details>`;
   } else {
     cuerpo = `<p class="nota-pend${estadoNota(ev) === 'Nota pendiente' ? ' espera' : ''}"><b>${esc(estadoNota(ev))}.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques ? datosExistentes(esc, ev) : ''}${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
@@ -103,7 +103,8 @@ export function htmlNotaEstructura(esc, ev, origen) {
     <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
     <p class="peq">Empresas y sectores: número efectivo de empresas = 1 / suma de los pesos al cuadrado (las clases de una misma compañía cuentan una vez). Tamaño, deuda y rentabilidad: percentiles del universo cubierto o del sector (hacen falta ${PARAMETROS.minComparables} comparables) y frecuencias de los últimos ${PARAMETROS.ejercicios} ejercicios. Los umbrales son provisionales.</p>
     ${sin}</details>`;
-  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${aviso}${porque}</section>`;
+  const visual = bl.length ? `<div class="nota-criterios">${bl.map(b => `<div><div class="criterio-cab"><span>${esc(b.nombre)}</span><b>${b.puntuacion == null ? 'Sin evaluar' : cm(b.puntuacion.toFixed(1)) + '/10'}</b></div>${b.puntuacion == null ? '<div class="criterio-ausente">Datos o método insuficientes</div>' : `<div class="vista-track" aria-hidden="true"><i style="width:${Math.max(0, Math.min(100,b.puntuacion*10))}%"></i></div>`}</div>`).join('')}</div>` : '';
+  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${visual}${aviso}${porque}</section>`;
 }
 
 // Qué cambia en los bloques evaluables al pasar de la cartera base a la propuesta (laboratorio). No recalcula nada: recibe las dos evaluaciones.
