@@ -183,3 +183,11 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **`git push` puede fallar del lado del remoto («fatal error in commit_refs») aun siendo fast-forward:** probar a empujar commit a commit (`git push origin <hash>:refs/heads/<rama>`).
 
 - **`scripts/local/servidor.sh start` RESIEMBRA la base de datos (borra lo guardado) en cada arranque**: sirve para pruebas, **no para el piloto**. Para el piloto usar `scripts/piloto/abrir-piloto.sh` (estado en `.wrangler/piloto`, solo se borra con `RESET_PILOTO=1`; nunca entre la sesión 1 y la 2). Con `LAN=1` cualquiera de la misma wifi ve el acceso con enlace en pantalla: solo en red de confianza.
+
+## Añadido en la ronda 26
+- **`tests/run-all.sh` sirve el árbol de trabajo EN VIVO:** si editas `public/` mientras corre una pasada, las baterías posteriores prueban una mezcla. Una línea base se toma con el árbol quieto (o en un `git worktree` aparte).
+- **No dejes `<details>` nuevos dentro de `#nota-cuerpo` antes del aviso de la nota:** `testQ` Q3 comprueba el orden «resultado → aviso → `details`» con `querySelector('#nota-cuerpo details')` (el primero que encuentra). Para desplegar algo en el vistazo, usa un botón con `aria-expanded`.
+- **La revisión va al límite de la pantalla** (Q3/R1/R2: el resultado de la nota debe caber entero sobre la barra fija a 320×780 y en 1440×900). Margen actual 26–30 px: cualquier línea más en el vistazo lo rompe. Mide con `testR` antes de añadir nada.
+- **Al fusionar, mira TODOS los conflictos** (`git diff --name-only --diff-filter=U`), no la cola de la salida: en la integración de la ronda 26 se quedaron marcadores en `03-decisiones.md` hasta revisarlo.
+- **La demo concatena todos los módulos en un solo script:** dos `const` con el mismo nombre en archivos distintos (p. ej. `cm`) la dejan en blanco. Usa nombres propios en módulos nuevos y añádelos a `scripts/demo/build_demo.py`.
+- **`textContent` de las cifras clave no lleva espacios entre nodos** («Mayor posición40 %→20 %») y los porcentajes llevan espacio duro: en pruebas, regex con `\s*` y `\s%`.

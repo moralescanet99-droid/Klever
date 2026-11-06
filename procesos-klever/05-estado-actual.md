@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-06, tras la ronda 24 (preparación del piloto, `ronda24/LEEME.md`; el producto es el de la ronda 23).
+**Última actualización:** 2026-11-06, tras la ronda 26 (evolución visual e interactiva sobre `evolucion-25`, `ronda26/LEEME.md`). El piloto sigue siendo `piloto-r23` (ronda 24).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
@@ -13,6 +13,10 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 ## Piloto (ronda 24)
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
+
+## Evolución visual e interactiva 26 (rama `claude/klever-visual-interactive-evolution-h6n454`, sobre `evolucion-25`)
+- ✅ Señales de cartera (`public/js/senales.js`), exposición por categoría, «Ver qué cambiaría» con la comparación ya calculada, deslizador instantáneo y cifras clave en el laboratorio, «Descubre otras categorías», anillo de la nota, resumen del Cuaderno, señal en «Mis portafolios», portada con la nueva promesa y recorrido de 5 pasos, `style-r26.css`. Pruebas: `unit-senales26` (13) y `testV` (24) en verde; Q/R/S en verde tras corregir 3 regresiones de geometría y orden (ver informe).
+- ⬜ Confirmar con Javier la promesa «antes de invertir» y los umbrales orientativos; teléfono real, lector de pantalla, Safari/Firefox y personas: no hechos. Margen estrecho de la revisión a 320 px y 1440 px (26–30 px).
 
 ## Evolución visual 25 (rama `evolucion-25`)
 - ✅ Patch integrado y batería completa 961/0 (local); regresiones del patch corregidas (ver `ronda25/LEEME.md`). ⬜ Teléfono real, ETF/datos ausentes a la vista, 5 usuarios y revisión visual: no hechos. El piloto sigue en `piloto-r23`.

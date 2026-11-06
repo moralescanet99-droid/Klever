@@ -232,12 +232,12 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 
 - **2026-11-06 · Piloto sobre una versión congelada (`piloto-r23`).** El código no cambia entre participantes; `abrir-piloto.sh` verifica los hashes y se niega a abrir si difiere. Motivo: la revisión C21 exige «no introducir cambios funcionales silenciosos entre participantes»; un cambio exige una versión nueva declarada. La limitación del intento incierto se **gestiona en el guion** durante el piloto y se corrige antes de una beta pública (no se toca el producto ahora).
 
-<<<<<<< HEAD
 - **2026-11-06 · La evolución visual 25 vive en la rama `evolucion-25`, no en la del piloto.** Motivo: el piloto exige código congelado (`piloto-r23`); mezclar cambios visuales invalidaría `verificar-version.sh` y la comparabilidad entre participantes. Se integra en la rama principal de trabajo solo si la validación (móvil real y 5 usuarios) la acepta.
-=======
-- **2026-11-06 · La evolución visual 25 vive en la rama `evolucion-25`, no en la del piloto** (el piloto exige código congelado; ver esa rama para el motivo completo).
 
 - **2026-11-06 · Se termina el circuito de revisión con ChatGPT.** Javier ya no lo necesita: a partir de ahora no se preparan paquetes ni instrucciones para ChatGPT, y las decisiones de alcance las da Javier directamente. Se conservan como histórico `06-`/`07-` y `revision-chatgpt/`. Las reglas de honestidad (implementado/probado/pendiente) y las restricciones del producto siguen igual; lo que dependía de la aceptación de ChatGPT (p. ej. el criterio del piloto, la limitación del intento incierto antes de una beta pública, la validación de la evolución 25) pasa a ser decisión de Javier.
 
 - **2026-11-06 · El supervisor pasa a ser un Claude Opus** (elección de Javier, que decide el alcance y lo que afecta a personas o publicación). Sustituye a ChatGPT. Motivo: que quien encarga y revisa trabaje dentro del mismo ecosistema y sin paquetes de ida y vuelta. Traspaso en `11-traspaso-supervisor.md`.
->>>>>>> origin/ccr-b652a7eb-uukhdy
+
+- **2026-11-06 · Ronda 26: nueva promesa «descubre alternativas y compara tus opciones antes de invertir»** (texto de Javier; sustituye a «antes de decidir» de la evolución 25). Público: 20–30 años con poca experiencia. Núcleo Cartera → Descubrimiento → Comparación → Decisión → Revisión; prioridad: que se entienda de forma visual e interactiva con poco texto. Sigue sin haber dinero real ni recomendaciones. *Pendiente de confirmación expresa de Javier (ver `ronda26/LEEME.md` §6).*
+- **2026-11-06 · Ronda 26: señales con umbrales orientativos (25 % posición, 40 % categoría, ≤ 3 categorías, < 4 posiciones).** Motivo: mostrar la concentración de un vistazo («Exposición alta: Tecnología») en vez de un párrafo. Se rotulan como referencia de Klever, no como norma ni consejo; la hipótesis que proponen solo reduce un activo que ya está (nunca elige uno nuevo). *Pendiente de confirmación de Javier.*
+- **2026-11-06 · Ronda 26 sobre `evolucion-25`.** La evolución visual 26 parte de la 25 (que ya pasaba 961/0) en la rama de trabajo de esta sesión; el piloto `piloto-r23` no cambia. Integrar esta rama implica integrar también la 25.

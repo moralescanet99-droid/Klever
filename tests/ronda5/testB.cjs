@@ -95,7 +95,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== PORTADA =====
   p = await nuevo(b, 1440, 900); await p.goto(B); await p.waitForSelector('#muestra-publicas .tarjeta');
-  ok('portada: titular con la promesa de producto (ronda 21)', (await T(p, 'h1')) === 'Entiende lo que tienes.Explora lo que podría cambiar.');
+  ok('portada: titular con la promesa de producto (ronda 26; antes «Entiende lo que tienes. Explora lo que podría cambiar.»)', (await T(p, 'h1')) === 'Descubre alternativas.Compáralas antes de invertir.');
   ok('portada: explicación breve con la transparencia de simulación (ronda 21)', /sin dinero real/.test(await T(p, '.lead')) && /datos de prueba/.test(await T(p, '.lead')) && (await T(p, '.lead')).length < 220, await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
   await p.click('#entrada-ejemplo'); await p.waitForTimeout(700);   // ronda 22: quien llega por primera vez usa las tres entradas (el botón superior solo aparece a quien vuelve)
