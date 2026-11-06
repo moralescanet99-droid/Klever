@@ -1,13 +1,13 @@
 // Presentación de «Mi cartera» (radiografía), «Mi radar», «Mi laboratorio» y «Mi seguimiento». Los cálculos viven en calculos.js; el almacenamiento, en almacen.js.
 // app.js le pasa sus utilidades (DOM, API, sesión, ficha…) por un contexto: este módulo no conoce el resto del estado de la aplicación.
 // Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
-import { radiografia, simular, comparar, origenPeso, FINANCIACIONES } from './calculos.js';
+import { radiografia, simular, comparar, origenPeso } from './calculos.js';
 import { crearAlmacen } from './almacen.js';
 import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, estadoSeguimiento, refPregunta, casoPorRef, similitudPregunta, UMBRAL_PARECIDO, SEGUIMIENTO_CASOS } from './contenido.js';
 import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota, htmlEvaluacionGuardada } from './nota-ui.js';
 import { nuevoIntento, enviarIntento, actualizarVista, mismoContenido, CAMPOS_REVISION } from './revisiones.js';
-import { senales, hipotesis } from './senales.js';
+import { senales, hipotesis, indicadores } from './senales.js';
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
@@ -153,7 +153,6 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
   const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
   const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
-  const ancho = v => Math.max(0, Math.min(100, Number(v) || 0));
   // Ronda 26: exposición por categoría (barra apilada) y señales breves; el detalle de cada señal aparece al pulsarla.
   const cats = r.categorias, escala = Math.max(100, r.total || 0);
   const expo = `<div class="vz-expo"><span class="vz-etq">Exposición por categoría</span><span class="vz-expo-barra" role="img" aria-label="${esc(cats.map(c => `${c.categoria} ${String(c.peso).replace('.', ',')} %`).join(', '))}">${cats.map((c, k) => `<i style="--c:var(--c${k % 8});width:${(c.peso / escala * 100).toFixed(2)}%"></i>`).join('')}</span>
@@ -162,13 +161,12 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   const chips = ss.map(q => `<button type="button" class="senal senal-${q.nivel}" data-senal="${q.id}" aria-pressed="${q === sel}"><i aria-hidden="true"></i>${esc(q.titulo)}</button>`).join('');
   const accion = sel?.accion ? sel.accion.pregunta : 'Probar un cambio';
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
-    <div class="vista-metricas"><div><span>Mayor posición · ${esc(r.mayor.ticker)}</span><strong>${P(r.mayor.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.mayor.peso)}%"></i></div></div>
-    <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
+    <ul class="indicadores" aria-label="Tu cartera en tres indicadores">${indicadores(r, ev).map(i => `<li class="ind ind-${i.nivel}" title="${esc(i.detalle)}"><span class="ind-etq"><i aria-hidden="true"></i>${esc(i.etiqueta)}</span><b>${esc(i.valor)}</b><small>${esc(i.dato)}</small><span class="sr">. ${esc(i.detalle)}</span></li>`).join('')}</ul>
     ${expo}
     <div class="senales" role="group" aria-label="Señales de la cartera">${chips}</div>
     ${sel ? `<p class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite">${esc(sel.detalle)}</p>` : ''}
     <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar" data-senal-accion="${sel?.id || ''}">Ver qué cambiaría →</button> <span class="vz-hipo">${esc(accion)}</span> <button type="button" class="enlace vz-mas" id="vz-mas-b" aria-expanded="${!!LAB.vzMas}" aria-controls="vz-mas-t">Qué mide</button></p>
-    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
+    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
 }
 // La hipótesis que propone la señal elegida (o la primera): se calcula sobre la MISMA composición que el laboratorio usará como base.
 function hipotesisVistazo() {
@@ -458,8 +456,11 @@ const metodoTexto = fin => ({
     redondeo: 'Cada posición se multiplica por (lo que deben sumar) / (lo que suman ahora) y se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Así los totales siempre cuadran.' },
 }[fin] || { corto: 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.', redondeo: '' });
 const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<details class="mini"><summary>Cómo se reparte el cambio</summary><p>${esc(m.corto)}</p>${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}</details>`; };
+// Ronda 28: las dos formas de financiar un cambio, en palabras llanas; «del resto de posiciones» queda elegida por defecto (la persona puede cambiarla).
+const FIN_LLANO = { proporcional: 'Del resto de posiciones <span class="mut">(bajan todas en la misma proporción)</span>', sin_asignar: 'De lo que falta por asignar' };
 function pintarLabForm() {
-  const { $, esc, logged } = x(), s = LAB.sim, alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
+  const { $, esc, logged } = x(), s = LAB.sim; if (!s.fin) s.fin = 'proporcional';
+  const alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
   if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
   s.carteraId = base.id;
   const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
@@ -477,8 +478,8 @@ function pintarLabForm() {
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
         <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10">
         ${!s.ticker ? htmlDescubrir(esc, r) : ''}</fieldset>
-      <fieldset><legend>3 · Cómo se financia</legend>
-        ${Object.entries(FINANCIACIONES).map(([k, v]) => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${v}${k === 'sin_asignar' ? ` <span class="mut">(ahora hay ${P(r.pendiente)} sin asignar)</span>` : ''}</label>`).join('')}
+      <fieldset><legend>3 · ¿De dónde sale el peso?</legend>
+        ${['proporcional', 'sin_asignar'].map(k => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${FIN_LLANO[k]}${k === 'sin_asignar' ? ` <span class="mut">(ahora falta ${P(r.pendiente)})</span>` : ''}</label>`).join('')}
         <div class="lab-metodo" id="lab-metodo" aria-live="polite">${htmlMetodo(esc, s.fin)}</div></fieldset>
       <p class="mut peq">Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos, y no es una recomendación.</p>
       <p><button class="btn btn-primario" type="submit">Simular</button></p><p id="lab-error" class="error" role="alert"></p>

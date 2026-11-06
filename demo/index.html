@@ -1318,6 +1318,38 @@ summary{min-height:44px;align-content:center;cursor:pointer}
   .vz-hipo{font-size:.75rem}
 }
 
+/* Ronda 28 · tres indicadores con semáforo (Concentración, Variedad, Datos): una fila compacta, el color dice el estado y la palabra lo nombra */
+.indicadores{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 12px;padding:0}
+.ind{min-width:0;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);display:grid;gap:1px}
+.ind-etq{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);white-space:nowrap}
+.ind-etq i{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.ind b{font-size:.95rem;font-weight:600;line-height:1.2}
+.ind small{font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ind-ok i{background:var(--verde)} .ind-ok b{color:var(--verde)}
+.ind-medio i{background:var(--warn)} .ind-medio b{color:var(--warn)}
+.ind-alto i{background:var(--accent)} .ind-alto b{color:var(--accent-on-soft)}
+.ind-alto{border-color:rgba(255,122,47,.45)}
+@media(max-width:479px){.indicadores{gap:6px;margin:6px 0 8px}.ind{padding:6px 8px}.ind b{font-size:.85rem}}
+
+/* Ronda 28 · portada: un botón principal; las otras entradas, más discretas */
+.hero .inicio-acc #probar{min-height:52px;padding-inline:28px;font-size:1.0625rem}
+.entradas .entrada{padding:12px 14px}
+.entradas .entrada span{font-size:.8125rem}
+#entrada-vacia{border-color:var(--border);background:var(--surface)}
+/* «Cómo funciona Klever»: cuatro pasos numerados (es una secuencia real: qué hace → qué no → datos → lo que guardamos) */
+.como{list-style:none;counter-reset:k28;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:16px 0 24px;padding:0;max-width:64rem}
+.como li{counter-increment:k28;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--capa),var(--surface);display:grid;gap:6px}
+.como li::before{content:counter(k28);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-on-soft);font-weight:600;font-size:.875rem}
+.como li:nth-child(2)::before{background:var(--alerta-bg);color:var(--accent)}
+.como b{font-size:1.0625rem}
+.como span{color:var(--muted)}
+.como-acc{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+/* Explorar: glosario al pulsar y reparto igual en el editor */
+.glosario{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 12px}
+.glosario .chip-btn[aria-pressed="true"]{border-color:var(--azul);color:var(--azul)}
+.glosa{flex-basis:100%;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:var(--azul-bg);color:var(--text);font-size:.875rem}
+.comp-igual{margin:6px 0 0}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1328,8 +1360,8 @@ summary{min-height:44px;align-content:center;cursor:pointer}
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#carteras" data-nav="mis">Mis portafolios</a>
-      <a href="#inicio" data-nav="crear">Crear portafolio</a>
+      <a href="#carteras" data-nav="mis">Mis carteras</a>
+      <a href="#inicio" data-nav="crear">Crear cartera</a>
       <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
       <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
     </nav>
@@ -1340,8 +1372,8 @@ summary{min-height:44px;align-content:center;cursor:pointer}
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#carteras" data-nav="mis">Mis portafolios</a>
-    <a href="#inicio" data-nav="crear">Crear portafolio</a>
+    <a href="#carteras" data-nav="mis">Mis carteras</a>
+    <a href="#inicio" data-nav="crear">Crear cartera</a>
     <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
     <a href="#revista" data-nav="revista">Revista</a>
     <button id="salir-m" type="button" hidden>Salir</button>
@@ -1370,13 +1402,14 @@ summary{min-height:44px;align-content:center;cursor:pointer}
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
         <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="enlace" href="#ejemplo">Explorar un ejemplo →</a></p>
-        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
+        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">O empieza de otra forma</h2>
           <ul>
             <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Elige activos y reparte su peso.</span></button></li>
             <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Abre una cartera de prueba y ajústala.</span></button></li>
             <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Añade tus porcentajes a mano. Sin conectar tu bróker.</span></button></li>
           </ul></div>
         <ul class="confianza"><li>Sin registro para probar</li><li>Sin dinero real · datos de prueba</li></ul>
+        <p class="peq"><a class="enlace" href="#como-funciona">Cómo funciona Klever →</a></p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Ejemplo interactivo de reparto simulado"></div>
@@ -1432,7 +1465,10 @@ summary{min-height:44px;align-content:center;cursor:pointer}
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
       <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+      <label class="chk"><input type="checkbox" id="emp-faltan"> Solo sectores que no tengo</label>
     </div></details>
+    <div class="glosario" role="group" aria-label="Qué significa cada comprobación"><span class="mut peq">¿Qué significa?</span> <button type="button" class="chip-btn" data-glosa="deuda_ebitda">Deuda</button><button type="button" class="chip-btn" data-glosa="roic">ROIC</button><button type="button" class="chip-btn" data-glosa="margen_neto">Margen</button><button type="button" class="chip-btn" data-glosa="flujo_caja">Caja libre</button><button type="button" class="chip-btn" data-glosa="crecimiento">Crecimiento</button>
+      <p id="glosa" class="glosa" aria-live="polite" hidden></p></div>
     <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
@@ -1478,7 +1514,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis portafolios</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -1512,6 +1548,17 @@ summary{min-height:44px;align-content:center;cursor:pointer}
     <div id="articulo-cuerpo"></div>
   </section>
 
+  <!-- ===== CÓMO FUNCIONA (ronda 28): qué hace, qué no hace, de dónde salen los datos y qué guardamos, en cuatro pasos ===== -->
+  <section id="vista-como-funciona" data-vista="como-funciona" hidden>
+    <div class="pag-cab"><h1>Cómo funciona Klever</h1><p class="mut">Cuatro cosas que conviene saber antes de empezar.</p></div>
+    <ol class="como">
+      <li><b>Qué hace</b><span>Creas una cartera simulada, ves dónde se concentra y comparas alternativas antes de decidir nada.</span></li>
+      <li><b>Qué no hace</b><span>No mueve dinero, no compra ni vende, no te dice qué hacer y no promete rentabilidades.</span></li>
+      <li><b>De dónde salen los datos</b><span>Cada ficha dice su origen y su fecha. En esta versión los datos son de prueba, inventados.</span></li>
+      <li><b>Qué guardamos</b><span>Tu email y las carteras e ideas que guardes. Son privadas salvo que publiques una.</span></li>
+    </ol>
+    <p class="como-acc"><a class="btn btn-primario" href="#inicio">Empezar</a> Aviso legal y privacidad</p>
+  </section>
   <section id="vista-ejemplo" data-vista="ejemplo" hidden><div id="ejemplo-cuerpo"></div></section>
   <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
 
@@ -1547,9 +1594,9 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
-    <h1 id="creador-titulo">Crea tu portafolio</h1>
+    <h1 id="creador-titulo">Crea tu cartera</h1>
     <p class="mut creador-sub" id="creador-sub">Elige cómo repartir tu dinero simulado.</p>
-    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
+    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu cartera">
       <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> <span class="paso-t">Objetivo</span></a></li>
       <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> <span class="paso-t">Distribución</span></button></li>
       <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> <span class="paso-t">Revisión</span></button></li>
@@ -1567,7 +1614,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
         </div>
       </div>
       <div class="ws-acc">
-        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar portafolio <span aria-hidden="true">→</span></button>
+        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar cartera <span aria-hidden="true">→</span></button>
         <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
@@ -1595,6 +1642,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
             <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button class="btn btn-primario js-revisar js-revisar-comp" type="button">Revisar <span aria-hidden="true">→</span></button></span></div>
             <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
             <p id="comp-pie" class="comp-pie"></p>
+            <p class="comp-igual"><button id="repartir-igual" class="chip-btn" type="button" hidden>Reparte a partes iguales</button></p>
           </div>
           <p id="pos-error" class="msg-error" role="status"></p>
           <div class="tabla-scroll">
@@ -1622,9 +1670,9 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
         <details class="panel panel-donut" id="panel-donut" open>
-          <summary><h2 id="donut-t">Tu portafolio</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
+          <summary><h2 id="donut-t">Tu cartera</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
           <div class="donut-cuerpo">
-            <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
+            <div class="donut" id="donut" role="img" aria-label="Reparto de la cartera"></div>
             <ul class="donut-leyenda" id="donut-leyenda"></ul>
           </div>
           <p class="donut-estado" id="donut-estado" role="status" aria-live="polite"></p>
@@ -1693,7 +1741,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
           <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
           <div id="graficos" class="grid-graf"></div>
         </details>
-        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar cartera <span aria-hidden="true">→</span></button></div>
     </div>
   </section>
 </main>
@@ -1701,7 +1749,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 <footer class="pie">
   <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas.</p>
   <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p data-origen="pie">Consulta el origen de los datos en cada ficha.</p><p>Las cifras se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
-  <p class="pie-enl">Aviso legal, privacidad y fuentes · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+  <p class="pie-enl"><a href="#como-funciona">Cómo funciona</a> · Aviso legal, privacidad y fuentes · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 
 <div id="barra-guardar" class="barra-guardar" hidden>
@@ -2074,6 +2122,26 @@ function hipotesis(s, r, pos = []) {
   if (!ticker) return { ticker: '', peso: fin === 'sin_asignar' && r?.pendiente ? Math.min(100, r.pendiente) : 10, fin };
   const actual = pos.find(p => p.ticker === ticker)?.peso;
   return actual > 0 ? { ticker, peso: pesoHipotesis(actual), fin } : null;
+}
+
+// Ronda 28 · TRES INDICADORES en lenguaje llano (semáforo), para quien empieza: Concentración, Variedad y Datos. Puros; salen de la radiografía y, para «Datos»,
+// de la evaluación de la nota (qué parte del peso se ha podido analizar). No son una nota ni un consejo: describen el reparto. Niveles: 'ok' · 'medio' · 'alto' (o 'na' sin datos).
+function indicadores(r, ev = null) {
+  if (!r || r.estado === 'vacia') return [];
+  const U = UMBRALES, cats = r.categorias.filter(c => c.conocida && !c.soloFondos), topCat = cats[0]?.peso || 0, may = r.mayor?.peso || 0;
+  const conc = may >= 40 || topCat >= 60 || r.n === 1 ? 'alto' : may >= U.posicion || topCat >= U.categoria ? 'medio' : 'ok';
+  const nCat = cats.length + (r.categorias.some(c => c.soloFondos) ? 1 : 0);   // los fondos cuentan como UNA variedad más (su categoría es comercial)
+  const vari = nCat >= 5 ? 'ok' : nCat >= 3 ? 'medio' : 'alto';
+  let datos = { nivel: 'na', valor: 'Calculando', detalle: 'La información de las empresas aún no está disponible.' };
+  if (ev?.reparto?.length) {
+    const total = ev.reparto.reduce((a, x) => a + x.peso, 0) || 0, sin = (ev.sinEvaluar || []).reduce((a, x) => a + (x.peso || 0), 0), pct = total ? Math.max(0, Math.min(100, Math.round((total - sin) / total * 100))) : 0;
+    datos = { nivel: pct >= 80 ? 'ok' : pct >= 50 ? 'medio' : 'alto', valor: pct >= 80 ? 'Completos' : pct >= 50 ? 'Parciales' : 'Escasos', detalle: `Klever puede analizar el ${pct} % del peso. ETF, bancos y empresas sin datos o sin comparables quedan fuera.`, pct };
+  }
+  return [
+    { id: 'concentracion', etiqueta: 'Concentración', nivel: conc, valor: { ok: 'Baja', medio: 'Media', alto: 'Alta' }[conc], dato: `${r.mayor.ticker} ${cmS(may)} %`, detalle: `La mayor posición es ${r.mayor.ticker} (${cmS(may)} %)${cats[0] ? ` y la mayor categoría, ${cats[0].categoria} (${cmS(topCat)} %)` : ''}.` },
+    { id: 'variedad', etiqueta: 'Variedad', nivel: vari, valor: { ok: 'Amplia', medio: 'Media', alto: 'Poca' }[vari], dato: `${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}`, detalle: `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} en ${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}${r.categorias.some(c => c.soloFondos) ? ' (los ETF cuentan como una)' : ''}.` },
+    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % analizable` : '', detalle: datos.detalle },
+  ];
 }
 
 // Catálogo COMPARTIDO (cliente y servidor) de las cuestiones editoriales que una persona puede seguir. Cada identificador «historia:n» es INMUTABLE: nunca se reutiliza
@@ -2746,7 +2814,7 @@ async function mostrarEjemplo(inicio) {
     <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · evaluación parcial')}</div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <div id="ej-nota" role="region" aria-label="Nota de estructura del ejemplo" aria-live="polite"><p class="mut peq">Calculando la nota de estructura…</p></div>
-    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primer portafolio</button></p>
+    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
     <p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
   try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }
@@ -3045,7 +3113,6 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
   const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
   const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
-  const ancho = v => Math.max(0, Math.min(100, Number(v) || 0));
   // Ronda 26: exposición por categoría (barra apilada) y señales breves; el detalle de cada señal aparece al pulsarla.
   const cats = r.categorias, escala = Math.max(100, r.total || 0);
   const expo = `<div class="vz-expo"><span class="vz-etq">Exposición por categoría</span><span class="vz-expo-barra" role="img" aria-label="${esc(cats.map(c => `${c.categoria} ${String(c.peso).replace('.', ',')} %`).join(', '))}">${cats.map((c, k) => `<i style="--c:var(--c${k % 8});width:${(c.peso / escala * 100).toFixed(2)}%"></i>`).join('')}</span>
@@ -3054,13 +3121,12 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   const chips = ss.map(q => `<button type="button" class="senal senal-${q.nivel}" data-senal="${q.id}" aria-pressed="${q === sel}"><i aria-hidden="true"></i>${esc(q.titulo)}</button>`).join('');
   const accion = sel?.accion ? sel.accion.pregunta : 'Probar un cambio';
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
-    <div class="vista-metricas"><div><span>Mayor posición · ${esc(r.mayor.ticker)}</span><strong>${P(r.mayor.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.mayor.peso)}%"></i></div></div>
-    <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
+    <ul class="indicadores" aria-label="Tu cartera en tres indicadores">${indicadores(r, ev).map(i => `<li class="ind ind-${i.nivel}" title="${esc(i.detalle)}"><span class="ind-etq"><i aria-hidden="true"></i>${esc(i.etiqueta)}</span><b>${esc(i.valor)}</b><small>${esc(i.dato)}</small><span class="sr">. ${esc(i.detalle)}</span></li>`).join('')}</ul>
     ${expo}
     <div class="senales" role="group" aria-label="Señales de la cartera">${chips}</div>
     ${sel ? `<p class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite">${esc(sel.detalle)}</p>` : ''}
     <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar" data-senal-accion="${sel?.id || ''}">Ver qué cambiaría →</button> <span class="vz-hipo">${esc(accion)}</span> <button type="button" class="enlace vz-mas" id="vz-mas-b" aria-expanded="${!!LAB.vzMas}" aria-controls="vz-mas-t">Qué mide</button></p>
-    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
+    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
 }
 // La hipótesis que propone la señal elegida (o la primera): se calcula sobre la MISMA composición que el laboratorio usará como base.
 function hipotesisVistazo() {
@@ -3350,8 +3416,11 @@ const metodoTexto = fin => ({
     redondeo: 'Cada posición se multiplica por (lo que deben sumar) / (lo que suman ahora) y se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Así los totales siempre cuadran.' },
 }[fin] || { corto: 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.', redondeo: '' });
 const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<details class="mini"><summary>Cómo se reparte el cambio</summary><p>${esc(m.corto)}</p>${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}</details>`; };
+// Ronda 28: las dos formas de financiar un cambio, en palabras llanas; «del resto de posiciones» queda elegida por defecto (la persona puede cambiarla).
+const FIN_LLANO = { proporcional: 'Del resto de posiciones <span class="mut">(bajan todas en la misma proporción)</span>', sin_asignar: 'De lo que falta por asignar' };
 function pintarLabForm() {
-  const { $, esc, logged } = x(), s = LAB.sim, alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
+  const { $, esc, logged } = x(), s = LAB.sim; if (!s.fin) s.fin = 'proporcional';
+  const alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
   if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
   s.carteraId = base.id;
   const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
@@ -3369,8 +3438,8 @@ function pintarLabForm() {
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
         <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10">
         ${!s.ticker ? htmlDescubrir(esc, r) : ''}</fieldset>
-      <fieldset><legend>3 · Cómo se financia</legend>
-        ${Object.entries(FINANCIACIONES).map(([k, v]) => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${v}${k === 'sin_asignar' ? ` <span class="mut">(ahora hay ${P(r.pendiente)} sin asignar)</span>` : ''}</label>`).join('')}
+      <fieldset><legend>3 · ¿De dónde sale el peso?</legend>
+        ${['proporcional', 'sin_asignar'].map(k => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${FIN_LLANO[k]}${k === 'sin_asignar' ? ` <span class="mut">(ahora falta ${P(r.pendiente)})</span>` : ''}</label>`).join('')}
         <div class="lab-metodo" id="lab-metodo" aria-live="polite">${htmlMetodo(esc, s.fin)}</div></fieldset>
       <p class="mut peq">Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos, y no es una recomendación.</p>
       <p><button class="btn btn-primario" type="submit">Simular</button></p><p id="lab-error" class="error" role="alert"></p>
@@ -3969,11 +4038,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu portafolio', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis portafolios', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -4081,7 +4150,7 @@ async function cargarMisCarteras() {
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
-// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis portafolios» ya no ofrece solo una plantilla)
+// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis carteras» ya no ofrece solo una plantilla)
 async function crearVaciaEnCuenta(origen) {
   const b = $(origen === 'manual' ? '#nueva-manual' : '#nueva-vacia'); b.disabled = true;
   try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); go('#cartera-' + id); }
@@ -4232,7 +4301,7 @@ function renderWorkspace() {
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
-  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta, revisa y guarda.' : 'Elige cómo repartir tu dinero simulado.';
+  $('#creador-titulo').textContent = id ? 'Tu cartera' : 'Crea tu cartera'; $('#creador-sub').textContent = id ? 'Ajusta, revisa y guarda.' : 'Elige cómo repartir tu dinero simulado.';
   $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
@@ -4279,11 +4348,12 @@ function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada 
   barra.innerHTML = seg.map(x => `<i style="--c:var(--c${colorDe(x.t)});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
   barra.classList.toggle('exceso', total > 100); barra.classList.toggle('vacia', !seg.length);
   barra.setAttribute('aria-label', 'Composición de la cartera: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)}`).join(', ') : 'sin posiciones') + (total < 100 && seg.length ? `; sin asignar ${pesoCorto(r1(100 - total))}` : '') + (total > 100 ? `; exceso de ${pesoCorto(r1(total - 100))}` : ''));
+  $('#repartir-igual').hidden = r.n < 2 || repartoIgual(r.n).every((w, k) => pos[k]?.peso === w);   // solo cuando aporta algo
   $('#comp-pie').textContent = !r.n ? 'Añade posiciones para ver el reparto.' : total > 100 ? `⚠ Exceso de asignación: ${pesoCorto(r1(total - 100))}` : total < 100 ? `Pendiente de asignar: ${pesoCorto(r1(100 - total))}` : '';
   cab.classList.toggle('error', total > 100); cab.classList.toggle('aviso', total < 100 && r.n > 0);
   $$('.pbar i').forEach(el => { const i = +(el.closest('tr')?.querySelector('.peso-in') || el.closest('li')?.querySelector('.peso-in'))?.dataset.i; if (Number.isInteger(i)) el.style.width = Math.max(0, Math.min(100, pos[i]?.peso || 0)) + '%'; });
 }
-// ---------- «Tu portafolio»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
+// ---------- «Tu cartera»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
 const BASE_SIM = 10000;                                                   // importe SIMULADO de referencia (no es dinero real ni se guarda)
 const eur = v => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, useGrouping: 'always' }).format(Math.round(v)).replace(/\u00a0/g, ' ');
 function pintarDonut(r) {
@@ -4292,7 +4362,7 @@ function pintarDonut(r) {
   let acum = 0; const arcos = seg.map(x => { const l = x.w / escala * 100, a = `<circle class="donut-arco" cx="21" cy="21" r="15.9155" fill="none" stroke="var(--c${colorDe(x.t)})" stroke-width="3.2" stroke-dasharray="${l.toFixed(3)} ${(100 - l).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}"/>`; acum += l; return a; }).join('');
   const libre = total < 100 && seg.length ? `<circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border-strong)" stroke-width="3.2" stroke-dasharray="${((100 - total) / escala * 100).toFixed(3)} ${(100 - (100 - total) / escala * 100).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}" opacity=".45"/>` : '';
   $('#donut').innerHTML = `<svg viewBox="0 0 42 42" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border)" stroke-width="3.2"/>${arcos}${libre}</svg><div class="donut-centro"><b class="num">${eur(BASE_SIM)}</b><span>simulados</span></div>`;
-  $('#donut').setAttribute('aria-label', 'Reparto del portafolio sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
+  $('#donut').setAttribute('aria-label', 'Reparto de la cartera sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
   $('#donut-leyenda').innerHTML = seg.length ? seg.map(x => `<li><i class="sw" style="--c:var(--c${colorDe(x.t)})" aria-hidden="true"></i><span class="lg-n">${esc(by[x.t]?.nombre || x.t)} <small>${esc(x.t)}</small></span><span class="num lg-p">${pesoCorto(x.w)}</span><span class="num lg-e">${eur(BASE_SIM * x.w / 100)}</span></li>`).join('') : '<li class="mut">Añade posiciones para ver el reparto.</li>';
   $('#donut-resumen').textContent = !r.n ? `${eur(BASE_SIM)} simulados` : `${pesoCorto(r.total)} asignado · ${eur(BASE_SIM)} simulados${r.exceso ? ` · sobran ${pesoCorto(r.exceso)}` : r.falta ? ` · faltan ${pesoCorto(r.falta)}` : ''}`;
   const est = $('#donut-estado'); est.className = 'donut-estado ' + (!r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok');
@@ -4302,10 +4372,10 @@ function pintarDonut(r) {
   sel.innerHTML = orden.map(x => `<option value="${esc(x.t)}">${esc(x.t)}</option>`).join(''); sel.value = orden.some(x => x.t === previa) ? previa : (orden[0]?.t || '');
   const pct = parsePeso($('#hipo-pct').value), h = $('#hipo-res'), x = orden.find(o => o.t === sel.value);
   $('#hipo').hidden = !orden.length;
-  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: el portafolio pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
+  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: la cartera pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
 }
 $('#hipo').addEventListener('input', () => { if (current) pintarDonut(calcResumen(pos)); });
-// pasos del creador: «Distribución» (editar pesos) y «Revisión» (resultado, su motivo, el guardado) son DOS vistas del mismo portafolio: los pesos viven en `pos` y no se pierden al ir y volver.
+// pasos del creador: «Distribución» (editar pesos) y «Revisión» (resultado, su motivo, el guardado) son DOS vistas de la misma cartera: los pesos viven en `pos` y no se pierden al ir y volver.
 let paso = 2;
 function pasoActual(n, foco = false) {
   const cambia = n !== paso; paso = n; $('#vista-cartera').dataset.paso = String(n);
@@ -4400,7 +4470,7 @@ function pintarEstado() {
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
   $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
-  // UNA acción principal según el estado. Distribución: «Guardar» con cambios pendientes en un portafolio de la cuenta; si no, «Revisar portafolio».
+  // UNA acción principal según el estado. Distribución: «Guardar» con cambios pendientes en una cartera de la cuenta; si no, «Revisar cartera».
   // Revisión: «Guardar» si hay algo que guardar (y «Revisar» se oculta); si no, no hay principal.
   const guardaActivo = !($('.js-guardar').disabled), principalGuardar = paso === 3 ? guardaActivo : (!!id && !!dirty && !razon && !saving);
   $$('.js-guardar').forEach(b => { b.classList.toggle('btn-primario', principalGuardar); b.classList.toggle('btn-secundario', !principalGuardar); });
@@ -4577,6 +4647,12 @@ $('#vista-cartera').addEventListener('click', e => {
   marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
   avisar(`${p.ticker} quitada de la cartera`); $('#buscar-activo').focus();
 });
+// Ronda 28 · «Reparte a partes iguales»: mismo peso para todas las posiciones, en décimas y sumando exactamente 100 % (las décimas sobrantes, a las primeras de la lista).
+function repartoIgual(n) { if (!(n > 0)) return []; const base = Math.floor(1000 / n), resto = 1000 - base * n; return Array.from({ length: n }, (_, k) => (base + (k < resto ? 1 : 0)) / 10); }
+$('#repartir-igual').addEventListener('click', () => {
+  if (!pos.length) return; const w = repartoIgual(pos.length); pos.forEach((p, k) => { p.peso = w[k]; });
+  marcarCambio(); renderPosiciones(); renderResumen(); renderCharts(); avisar(`Repartido a partes iguales: ${pesoCorto(w[w.length - 1])} cada una`);
+});
 const avisar = t => { $('#combo-aviso').textContent = ''; setTimeout(() => $('#combo-aviso').textContent = t, 50); };
 function enfocarPeso(i) { const el = [...$$(`.peso-in[data-i="${i}"]`)].find(x => x.offsetParent !== null); if (el) { el.focus(); el.select(); } }
 function agregar(ticker) {
@@ -4710,6 +4786,12 @@ const CRIT = {
 let empresas = [];
 const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ En tu radar</span>' : '';
 const ABR = { deuda_ebitda: 'Deuda', roic: 'ROIC', margen_neto: 'Margen', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' };
+// Ronda 28 · glosario en palabras llanas (al pulsar), para quien no conoce los términos. Describe la comprobación; no dice si comprar.
+const GLOSA = { deuda_ebitda: 'Deuda: si la empresa podría pagar lo que debe con menos de 2,5 años de su beneficio bruto (EBITDA).', roic: 'ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.',
+  margen_neto: 'Margen: de cada 100 € que vende, cuántos le quedan de beneficio. Se pide más de 10 €.', flujo_caja: 'Caja libre: si le sobra dinero después de pagar su actividad y sus inversiones.', crecimiento: 'Crecimiento: si vendió más que el año anterior.' };
+$$('[data-glosa]').forEach(b => b.addEventListener('click', () => { const g = $('#glosa'), k = b.dataset.glosa, mismo = !g.hidden && g.dataset.k === k; g.hidden = mismo; g.dataset.k = k; g.textContent = GLOSA[k]; $$('[data-glosa]').forEach(q => q.setAttribute('aria-pressed', String(!mismo && q === b))); }));
+// Sectores que ya tiene la cartera abierta (o el borrador de este dispositivo): para «Solo sectores que no tengo».
+const sectoresMios = () => { const l = current ? pos : (leerBorrador()?.pos || []); return new Set(l.filter(p => p.peso > 0).map(p => by[p.ticker]?.sector).filter(Boolean)); };
 const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nombre)}">${Object.keys(ABR).map(k => { const x = r.criterios?.[k]; // el estado va escrito, no solo en color
   const e = x?.ok === true ? ['ok', '✓', 'superada'] : x?.ok === false ? ['no', '✗', 'no superada'] : ['nd', '–', 'sin datos'];
   return `<li class="pil-${e[0]}"><span aria-hidden="true">${e[1]}</span> ${ABR[k]}<span class="sr">: ${e[2]}</span></li>`; }).join('')}</ul>`;
@@ -4717,12 +4799,13 @@ const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, 
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
 const FILT = 'klever_filtros_emp'; // filtros de Explorar: se conservan como la búsqueda (solo esta pestaña)
-const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
-const filtrosGuardar = f => { try { (f.sector || f.crit || f.estado || f.radar) ? sessionStorage.setItem(FILT, JSON.stringify(f)) : sessionStorage.removeItem(FILT); } catch { /* sin almacenamiento */ } };
-const filtrosActuales = () => ({ sector: $('#emp-sector').value, crit: $('#emp-crit').value, estado: $('#emp-estado').value, radar: $('#emp-radar').checked });
+const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, faltan: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
+const filtrosGuardar = f => { try { (f.sector || f.crit || f.estado || f.radar || f.faltan) ? sessionStorage.setItem(FILT, JSON.stringify(f)) : sessionStorage.removeItem(FILT); } catch { /* sin almacenamiento */ } };
+const filtrosActuales = () => ({ sector: $('#emp-sector').value, crit: $('#emp-crit').value, estado: $('#emp-estado').value, radar: $('#emp-radar').checked, faltan: $('#emp-faltan').checked });
 const pasaFiltros = (r, f) => {
   if (f.sector && r.sector !== f.sector) return false;
   if (f.radar && !enRadar(r.ticker)) return false;
+  if (f.faltan && sectoresMios().has(r.sector)) return false;
   if (f.estado) { // «Superada / No superada / Sin datos» de UNA comprobación (o de alguna de las cinco); no se calcula ninguna puntuación
     const claves = f.crit ? [f.crit] : Object.keys(ABR), est = k => r.criterios?.[k]?.ok === true ? 'ok' : r.criterios?.[k]?.ok === false ? 'no' : 'nd';
     if (!claves.some(k => est(k) === f.estado)) return false;
@@ -4732,10 +4815,10 @@ const pasaFiltros = (r, f) => {
 function poblarSectores() {
   const sel = $('#emp-sector'), f = filtrosLeer(), sectores = [...new Set(empresas.map(r => r.sector))].sort((p, q) => p.localeCompare(q, 'es'));
   sel.innerHTML = '<option value="">Todos</option>' + sectores.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
-  sel.value = sectores.includes(f.sector) ? f.sector : ''; $('#emp-crit').value = f.crit; $('#emp-estado').value = f.estado; $('#emp-radar').checked = !!f.radar;
+  sel.value = sectores.includes(f.sector) ? f.sector : ''; $('#emp-crit').value = f.crit; $('#emp-estado').value = f.estado; $('#emp-radar').checked = !!f.radar; $('#emp-faltan').checked = !!f.faltan;
 }
 function renderEmpresas() {
-  const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards'), filt = filtrosActuales(), hayFiltro = !!(filt.sector || filt.estado || filt.radar);
+  const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards'), filt = filtrosActuales(), hayFiltro = !!(filt.sector || filt.estado || filt.radar || filt.faltan);
   const vistas = empresas.filter(r => (!q || norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) && pasaFiltros(r, filt));
   const resultado = r => { const nd = r.sin_datos ?? 5 - r.evaluados; // sin datos NO es una comprobación fallida ni una evaluación completa: se muestra como parcial
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
@@ -4749,7 +4832,7 @@ function renderEmpresas() {
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
-  const nf = [filt.sector, filt.estado, filt.radar].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
+  const nf = [filt.sector, filt.estado, filt.radar, filt.faltan].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
   $('#emp-borrar').hidden = !bruto && !hayFiltro; $('#emp-borrar').textContent = hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda';
 }
 async function loadEmpresas() {
@@ -4760,9 +4843,9 @@ async function loadEmpresas() {
   poblarSectores(); renderEmpresas();
 }
 $('#emp-buscar').addEventListener('input', () => { busqGuardar($('#emp-buscar').value.trim()); renderEmpresas(); });
-const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); $('#emp-sector').value = ''; $('#emp-crit').value = ''; $('#emp-estado').value = ''; $('#emp-radar').checked = false; filtrosGuardar(filtrosActuales()); renderEmpresas(); $('#emp-buscar').focus(); };
+const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); $('#emp-sector').value = ''; $('#emp-crit').value = ''; $('#emp-estado').value = ''; $('#emp-radar').checked = false; $('#emp-faltan').checked = false; filtrosGuardar(filtrosActuales()); renderEmpresas(); $('#emp-buscar').focus(); };
 $('#emp-borrar').addEventListener('click', borrarBusqueda);
-for (const id of ['#emp-sector', '#emp-crit', '#emp-estado', '#emp-radar']) $(id).addEventListener('change', () => { filtrosGuardar(filtrosActuales()); renderEmpresas(); });
+for (const id of ['#emp-sector', '#emp-crit', '#emp-estado', '#emp-radar', '#emp-faltan']) $(id).addEventListener('change', () => { filtrosGuardar(filtrosActuales()); renderEmpresas(); });
 $('#empresas-lista').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
 $('#empresas-cards').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
 $('#emp-buscar').value = busqLeer();
@@ -4840,11 +4923,11 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
   .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
 
 // ---------- portada: acción principal y vista previa real ----------
-// Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
+// Una acción principal según el estado: con sesión, «Abrir mis carteras»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
-  b.dataset.modo = modo; b.hidden = modo === 'crear';   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis portafolios» o «Retomar mi borrador»
-  b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
+  b.dataset.modo = modo; b.hidden = false;   // ronda 28: un ÚNICO botón principal también para quien llega por primera vez (abre el editor vacío); las tres entradas quedan como alternativas   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis carteras» o «Retomar mi borrador»
+  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }
@@ -4863,7 +4946,7 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   const modo = $('#probar').dataset.modo;
   if (modo === 'mis') { go('#carteras'); return; }
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
-  const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
+  abrirNueva('vacia');
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
 // las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)

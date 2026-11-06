@@ -2,7 +2,7 @@
 //   V1 portada: propuesta «antes de invertir», recorrido de 5 pasos y el ejemplo interactivo ANTES de las tres entradas en móvil · V2 revisión: exposición por categoría y señales
 //   (detalle al pulsar) · V3 «Ver qué cambiaría» abre el laboratorio con la comparación YA calculada sobre un activo que ya está, sin tocar la cartera · V4 el deslizador recalcula al instante
 //   sin mover el foco y el hueco liberado se ve como «libre» · V5 «Descubre otras categorías» lleva a Explorar con ese filtro (sin elegir empresa) · V6 Cuaderno con resumen de cifras
-//   leídas · V7 «Mis portafolios» con la señal principal · V0 sin errores ni desbordes. En 1440, 390 y 320 px. Uso: node tests/ronda26/testV.cjs
+//   leídas · V7 «Mis carteras» con la señal principal · V0 sin errores ni desbordes. En 1440, 390 y 320 px. Uso: node tests/ronda26/testV.cjs
 const { chromium, B, ev, nuevo, mail, fin, revision } = require('../ronda5/h.cjs');
 const path = require('path'), fs = require('fs');
 const CAP = path.resolve(__dirname, '..', '..', process.env.RONDA || 'ronda26', 'capturas') + path.sep; fs.mkdirSync(CAP, { recursive: true });
@@ -78,12 +78,12 @@ const J = JSON.stringify, N = s => (s || '').replace(/\s+/g, ' ').trim();
     ev('V6-' + w, `Cuaderno (${w} px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar`, `escenarios creados (${e1.s}/${e2.s}); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»`, J(seg),
       e1.s === 201 && e2.s === 201 && seg.length === 3 && seg[0][0] === '1' && seg[0][2] && seg[1][0] === '2' && /Próxima/.test(seg[1][3]) && seg[2][0] === '0');
 
-    // ---- V7 Mis portafolios: la señal principal de cada cartera
+    // ---- V7 Mis carteras: la señal principal de cada cartera
     await api(p, 'POST', '/portfolios', { nombre: 'Repartida V', plantilla: 'riesgo', posiciones: [{ ticker: 'KO', peso: 20 }, { ticker: 'JNJ', peso: 20 }, { ticker: 'XOM', peso: 20 }, { ticker: 'NVDA', peso: 20 }, { ticker: 'JPM', peso: 20 }] });
     await p.evaluate(() => { location.hash = '#carteras'; }); await p.waitForSelector('#mis-lista .cartera-item'); await p.waitForTimeout(400);
     const mis = await p.evaluate(() => Object.fromEntries([...document.querySelectorAll('#mis-lista .cartera-item')].map(c => [c.querySelector('.ci-l1 b').textContent, c.querySelector('.ci-senal')?.textContent.trim() || ''])));
     await p.screenshot({ path: CAP + `V7-mis-portafolios-${w}.png` });
-    ev('V7-' + w, `Mis portafolios (${w} px): cada cartera lleva su señal principal (de la versión guardada)`, '«Concentrada V» → «Exposición alta: Tecnología»; «Repartida V» → «Sin concentraciones destacadas»', J(mis),
+    ev('V7-' + w, `Mis carteras (${w} px): cada cartera lleva su señal principal (de la versión guardada)`, '«Concentrada V» → «Exposición alta: Tecnología»; «Repartida V» → «Sin concentraciones destacadas»', J(mis),
       mis['Concentrada V'] === 'Exposición alta: Tecnología' && mis['Repartida V'] === 'Sin concentraciones destacadas');
 
     ev('V0-' + w, `Sin errores de JavaScript ni desbordes horizontales (${w} px)`, 'ningún pageerror; scrollWidth ≤ ancho', J({ errs, desb: await sinDesborde(p) }), errs.length === 0 && await sinDesborde(p));

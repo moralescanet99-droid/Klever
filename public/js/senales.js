@@ -45,3 +45,23 @@ export function hipotesis(s, r, pos = []) {
   const actual = pos.find(p => p.ticker === ticker)?.peso;
   return actual > 0 ? { ticker, peso: pesoHipotesis(actual), fin } : null;
 }
+
+// Ronda 28 · TRES INDICADORES en lenguaje llano (semáforo), para quien empieza: Concentración, Variedad y Datos. Puros; salen de la radiografía y, para «Datos»,
+// de la evaluación de la nota (qué parte del peso se ha podido analizar). No son una nota ni un consejo: describen el reparto. Niveles: 'ok' · 'medio' · 'alto' (o 'na' sin datos).
+export function indicadores(r, ev = null) {
+  if (!r || r.estado === 'vacia') return [];
+  const U = UMBRALES, cats = r.categorias.filter(c => c.conocida && !c.soloFondos), topCat = cats[0]?.peso || 0, may = r.mayor?.peso || 0;
+  const conc = may >= 40 || topCat >= 60 || r.n === 1 ? 'alto' : may >= U.posicion || topCat >= U.categoria ? 'medio' : 'ok';
+  const nCat = cats.length + (r.categorias.some(c => c.soloFondos) ? 1 : 0);   // los fondos cuentan como UNA variedad más (su categoría es comercial)
+  const vari = nCat >= 5 ? 'ok' : nCat >= 3 ? 'medio' : 'alto';
+  let datos = { nivel: 'na', valor: 'Calculando', detalle: 'La información de las empresas aún no está disponible.' };
+  if (ev?.reparto?.length) {
+    const total = ev.reparto.reduce((a, x) => a + x.peso, 0) || 0, sin = (ev.sinEvaluar || []).reduce((a, x) => a + (x.peso || 0), 0), pct = total ? Math.max(0, Math.min(100, Math.round((total - sin) / total * 100))) : 0;
+    datos = { nivel: pct >= 80 ? 'ok' : pct >= 50 ? 'medio' : 'alto', valor: pct >= 80 ? 'Completos' : pct >= 50 ? 'Parciales' : 'Escasos', detalle: `Klever puede analizar el ${pct} % del peso. ETF, bancos y empresas sin datos o sin comparables quedan fuera.`, pct };
+  }
+  return [
+    { id: 'concentracion', etiqueta: 'Concentración', nivel: conc, valor: { ok: 'Baja', medio: 'Media', alto: 'Alta' }[conc], dato: `${r.mayor.ticker} ${cmS(may)} %`, detalle: `La mayor posición es ${r.mayor.ticker} (${cmS(may)} %)${cats[0] ? ` y la mayor categoría, ${cats[0].categoria} (${cmS(topCat)} %)` : ''}.` },
+    { id: 'variedad', etiqueta: 'Variedad', nivel: vari, valor: { ok: 'Amplia', medio: 'Media', alto: 'Poca' }[vari], dato: `${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}`, detalle: `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} en ${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}${r.categorias.some(c => c.soloFondos) ? ' (los ETF cuentan como una)' : ''}.` },
+    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % analizable` : '', detalle: datos.detalle },
+  ];
+}

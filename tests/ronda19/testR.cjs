@@ -63,7 +63,7 @@ const J = JSON.stringify;
       if (!(c.nombre && c.pasos && c.volver && c.estado && c.guardar && (!sucio || c.guardarActivo))) ctxOk = false;
       await p.click('#paso-volver'); await p.waitForSelector('#vista-cartera[data-paso="2"]'); await quieto(p, `1440/${variante}/volver`); if ((await pesos(p)) !== antes) vuelven = false;
     }
-    ev('R2-1440', 'Escritorio 1440×900: tras «Revisar portafolio», el resultado (con nota, sin nota y con cambios sin guardar) queda entero en el viewport y con el foco en la nota', 'El rectángulo del resultado está dentro de la ventana en todos los casos', filas.join(' | '), todo);
+    ev('R2-1440', 'Escritorio 1440×900: tras «Revisar cartera», el resultado (con nota, sin nota y con cambios sin guardar) queda entero en el viewport y con el foco en la nota', 'El rectángulo del resultado está dentro de la ventana en todos los casos', filas.join(' | '), todo);
     ev('R3-1440', 'Escritorio 1440×900: en la Revisión siguen a la vista el NOMBRE de la cartera, los pasos, «Volver a la distribución», la acción de guardado (activa si hay cambios sin guardar) y el estado de guardado; al volver, los pesos son idénticos', 'Todos los elementos de contexto dentro del viewport, en los cuatro recorridos (ratón y teclado real); pesos conservados', filas.join(' | ') + ` | pesos conservados ${vuelven}`, ctxOk && vuelven);
     await p.ctx.close(); }
   // regresión REAL (ronda 20): pulsar «Revisar» a menos de 300 ms de editar un peso. El centrado diferido del campo activo (app.js, focusin) arrastraba la página tras cambiar de paso: Q3-1440 fallaba ~1 de cada 8-18 ejecuciones

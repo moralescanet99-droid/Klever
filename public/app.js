@@ -278,11 +278,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu portafolio', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis portafolios', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -390,7 +390,7 @@ async function cargarMisCarteras() {
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
-// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis portafolios» ya no ofrece solo una plantilla)
+// Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis carteras» ya no ofrece solo una plantilla)
 async function crearVaciaEnCuenta(origen) {
   const b = $(origen === 'manual' ? '#nueva-manual' : '#nueva-vacia'); b.disabled = true;
   try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); go('#cartera-' + id); }
@@ -541,7 +541,7 @@ function renderWorkspace() {
   const l = logged(), id = !!current.id;
   $$('.solo-cuenta').forEach(e => e.hidden = !(l && id));
   $('#mi-eliminar').hidden = !(l && id);
-  $('#creador-titulo').textContent = id ? 'Tu portafolio' : 'Crea tu portafolio'; $('#creador-sub').textContent = id ? 'Ajusta, revisa y guarda.' : 'Elige cómo repartir tu dinero simulado.';
+  $('#creador-titulo').textContent = id ? 'Tu cartera' : 'Crea tu cartera'; $('#creador-sub').textContent = id ? 'Ajusta, revisa y guarda.' : 'Elige cómo repartir tu dinero simulado.';
   $('#nombre').value = current.nombre; ajustarNombre(); $('#tesis').value = current.tesis || '';
   $('#pub-error').textContent = '';
   renderPosiciones(); renderResumen(); renderCharts(); pintarEstado();
@@ -588,11 +588,12 @@ function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada 
   barra.innerHTML = seg.map(x => `<i style="--c:var(--c${colorDe(x.t)});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
   barra.classList.toggle('exceso', total > 100); barra.classList.toggle('vacia', !seg.length);
   barra.setAttribute('aria-label', 'Composición de la cartera: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)}`).join(', ') : 'sin posiciones') + (total < 100 && seg.length ? `; sin asignar ${pesoCorto(r1(100 - total))}` : '') + (total > 100 ? `; exceso de ${pesoCorto(r1(total - 100))}` : ''));
+  $('#repartir-igual').hidden = r.n < 2 || repartoIgual(r.n).every((w, k) => pos[k]?.peso === w);   // solo cuando aporta algo
   $('#comp-pie').textContent = !r.n ? 'Añade posiciones para ver el reparto.' : total > 100 ? `⚠ Exceso de asignación: ${pesoCorto(r1(total - 100))}` : total < 100 ? `Pendiente de asignar: ${pesoCorto(r1(100 - total))}` : '';
   cab.classList.toggle('error', total > 100); cab.classList.toggle('aviso', total < 100 && r.n > 0);
   $$('.pbar i').forEach(el => { const i = +(el.closest('tr')?.querySelector('.peso-in') || el.closest('li')?.querySelector('.peso-in'))?.dataset.i; if (Number.isInteger(i)) el.style.width = Math.max(0, Math.min(100, pos[i]?.peso || 0)) + '%'; });
 }
-// ---------- «Tu portafolio»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
+// ---------- «Tu cartera»: anillo, leyenda con importes simulados y una hipótesis que se recalcula al editar ----------
 const BASE_SIM = 10000;                                                   // importe SIMULADO de referencia (no es dinero real ni se guarda)
 const eur = v => new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0, useGrouping: 'always' }).format(Math.round(v)).replace(/\u00a0/g, ' ');
 function pintarDonut(r) {
@@ -601,7 +602,7 @@ function pintarDonut(r) {
   let acum = 0; const arcos = seg.map(x => { const l = x.w / escala * 100, a = `<circle class="donut-arco" cx="21" cy="21" r="15.9155" fill="none" stroke="var(--c${colorDe(x.t)})" stroke-width="3.2" stroke-dasharray="${l.toFixed(3)} ${(100 - l).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}"/>`; acum += l; return a; }).join('');
   const libre = total < 100 && seg.length ? `<circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border-strong)" stroke-width="3.2" stroke-dasharray="${((100 - total) / escala * 100).toFixed(3)} ${(100 - (100 - total) / escala * 100).toFixed(3)}" stroke-dashoffset="${(25 - acum).toFixed(3)}" opacity=".45"/>` : '';
   $('#donut').innerHTML = `<svg viewBox="0 0 42 42" aria-hidden="true" focusable="false"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--border)" stroke-width="3.2"/>${arcos}${libre}</svg><div class="donut-centro"><b class="num">${eur(BASE_SIM)}</b><span>simulados</span></div>`;
-  $('#donut').setAttribute('aria-label', 'Reparto del portafolio sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
+  $('#donut').setAttribute('aria-label', 'Reparto de la cartera sobre ' + eur(BASE_SIM) + ' simulados: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)} (${eur(BASE_SIM * x.w / 100)})`).join(', ') : 'sin posiciones'));
   $('#donut-leyenda').innerHTML = seg.length ? seg.map(x => `<li><i class="sw" style="--c:var(--c${colorDe(x.t)})" aria-hidden="true"></i><span class="lg-n">${esc(by[x.t]?.nombre || x.t)} <small>${esc(x.t)}</small></span><span class="num lg-p">${pesoCorto(x.w)}</span><span class="num lg-e">${eur(BASE_SIM * x.w / 100)}</span></li>`).join('') : '<li class="mut">Añade posiciones para ver el reparto.</li>';
   $('#donut-resumen').textContent = !r.n ? `${eur(BASE_SIM)} simulados` : `${pesoCorto(r.total)} asignado · ${eur(BASE_SIM)} simulados${r.exceso ? ` · sobran ${pesoCorto(r.exceso)}` : r.falta ? ` · faltan ${pesoCorto(r.falta)}` : ''}`;
   const est = $('#donut-estado'); est.className = 'donut-estado ' + (!r.n ? '' : r.exceso ? 'error' : r.falta ? 'aviso' : 'ok');
@@ -611,10 +612,10 @@ function pintarDonut(r) {
   sel.innerHTML = orden.map(x => `<option value="${esc(x.t)}">${esc(x.t)}</option>`).join(''); sel.value = orden.some(x => x.t === previa) ? previa : (orden[0]?.t || '');
   const pct = parsePeso($('#hipo-pct').value), h = $('#hipo-res'), x = orden.find(o => o.t === sel.value);
   $('#hipo').hidden = !orden.length;
-  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: el portafolio pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
+  h.textContent = !x ? '' : !(pct >= 1 && pct <= 100) ? 'Escribe una caída entre 1 y 100 %.' : (() => { const imp = BASE_SIM * x.w / 100, perd = imp * pct / 100; return `Con ${eur(BASE_SIM)} simulados y ${eur(imp)} en ${x.t}, una caída hipotética del ${nf(pct, 0)} % en ${x.t}, con las demás posiciones constantes, supone ${eur(perd)} menos: la cartera pasaría de ${eur(BASE_SIM)} a ${eur(BASE_SIM - perd)}. Es una hipótesis, no una previsión.`; })();
 }
 $('#hipo').addEventListener('input', () => { if (current) pintarDonut(calcResumen(pos)); });
-// pasos del creador: «Distribución» (editar pesos) y «Revisión» (resultado, su motivo, el guardado) son DOS vistas del mismo portafolio: los pesos viven en `pos` y no se pierden al ir y volver.
+// pasos del creador: «Distribución» (editar pesos) y «Revisión» (resultado, su motivo, el guardado) son DOS vistas de la misma cartera: los pesos viven en `pos` y no se pierden al ir y volver.
 let paso = 2;
 function pasoActual(n, foco = false) {
   const cambia = n !== paso; paso = n; $('#vista-cartera').dataset.paso = String(n);
@@ -709,7 +710,7 @@ function pintarEstado() {
   const c = $('#chip'); c.textContent = current.publico ? 'Pública' : 'Privada'; c.classList.toggle('pub', !!current.publico); // privacidad
   const etq = saveErr && !saving ? 'Reintentar guardado' : current.publico && id ? 'Guardar y actualizar publicación' : 'Guardar cartera';
   $$('.js-guardar').forEach(b => { b.disabled = !!razon || saving || (id && !dirty); b.textContent = etq; b.classList.toggle('dos-lineas', etq.length > 20); b.setAttribute('aria-describedby', 'motivo estado'); });
-  // UNA acción principal según el estado. Distribución: «Guardar» con cambios pendientes en un portafolio de la cuenta; si no, «Revisar portafolio».
+  // UNA acción principal según el estado. Distribución: «Guardar» con cambios pendientes en una cartera de la cuenta; si no, «Revisar cartera».
   // Revisión: «Guardar» si hay algo que guardar (y «Revisar» se oculta); si no, no hay principal.
   const guardaActivo = !($('.js-guardar').disabled), principalGuardar = paso === 3 ? guardaActivo : (!!id && !!dirty && !razon && !saving);
   $$('.js-guardar').forEach(b => { b.classList.toggle('btn-primario', principalGuardar); b.classList.toggle('btn-secundario', !principalGuardar); });
@@ -886,6 +887,12 @@ $('#vista-cartera').addEventListener('click', e => {
   marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
   avisar(`${p.ticker} quitada de la cartera`); $('#buscar-activo').focus();
 });
+// Ronda 28 · «Reparte a partes iguales»: mismo peso para todas las posiciones, en décimas y sumando exactamente 100 % (las décimas sobrantes, a las primeras de la lista).
+export function repartoIgual(n) { if (!(n > 0)) return []; const base = Math.floor(1000 / n), resto = 1000 - base * n; return Array.from({ length: n }, (_, k) => (base + (k < resto ? 1 : 0)) / 10); }
+$('#repartir-igual').addEventListener('click', () => {
+  if (!pos.length) return; const w = repartoIgual(pos.length); pos.forEach((p, k) => { p.peso = w[k]; });
+  marcarCambio(); renderPosiciones(); renderResumen(); renderCharts(); avisar(`Repartido a partes iguales: ${pesoCorto(w[w.length - 1])} cada una`);
+});
 const avisar = t => { $('#combo-aviso').textContent = ''; setTimeout(() => $('#combo-aviso').textContent = t, 50); };
 function enfocarPeso(i) { const el = [...$$(`.peso-in[data-i="${i}"]`)].find(x => x.offsetParent !== null); if (el) { el.focus(); el.select(); } }
 function agregar(ticker) {
@@ -1023,6 +1030,12 @@ const CRIT = {
 let empresas = [];
 const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ En tu radar</span>' : '';
 const ABR = { deuda_ebitda: 'Deuda', roic: 'ROIC', margen_neto: 'Margen', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' };
+// Ronda 28 · glosario en palabras llanas (al pulsar), para quien no conoce los términos. Describe la comprobación; no dice si comprar.
+const GLOSA = { deuda_ebitda: 'Deuda: si la empresa podría pagar lo que debe con menos de 2,5 años de su beneficio bruto (EBITDA).', roic: 'ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.',
+  margen_neto: 'Margen: de cada 100 € que vende, cuántos le quedan de beneficio. Se pide más de 10 €.', flujo_caja: 'Caja libre: si le sobra dinero después de pagar su actividad y sus inversiones.', crecimiento: 'Crecimiento: si vendió más que el año anterior.' };
+$$('[data-glosa]').forEach(b => b.addEventListener('click', () => { const g = $('#glosa'), k = b.dataset.glosa, mismo = !g.hidden && g.dataset.k === k; g.hidden = mismo; g.dataset.k = k; g.textContent = GLOSA[k]; $$('[data-glosa]').forEach(q => q.setAttribute('aria-pressed', String(!mismo && q === b))); }));
+// Sectores que ya tiene la cartera abierta (o el borrador de este dispositivo): para «Solo sectores que no tengo».
+const sectoresMios = () => { const l = current ? pos : (leerBorrador()?.pos || []); return new Set(l.filter(p => p.peso > 0).map(p => by[p.ticker]?.sector).filter(Boolean)); };
 const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nombre)}">${Object.keys(ABR).map(k => { const x = r.criterios?.[k]; // el estado va escrito, no solo en color
   const e = x?.ok === true ? ['ok', '✓', 'superada'] : x?.ok === false ? ['no', '✗', 'no superada'] : ['nd', '–', 'sin datos'];
   return `<li class="pil-${e[0]}"><span aria-hidden="true">${e[1]}</span> ${ABR[k]}<span class="sr">: ${e[2]}</span></li>`; }).join('')}</ul>`;
@@ -1030,12 +1043,13 @@ const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, 
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
 const FILT = 'klever_filtros_emp'; // filtros de Explorar: se conservan como la búsqueda (solo esta pestaña)
-const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
-const filtrosGuardar = f => { try { (f.sector || f.crit || f.estado || f.radar) ? sessionStorage.setItem(FILT, JSON.stringify(f)) : sessionStorage.removeItem(FILT); } catch { /* sin almacenamiento */ } };
-const filtrosActuales = () => ({ sector: $('#emp-sector').value, crit: $('#emp-crit').value, estado: $('#emp-estado').value, radar: $('#emp-radar').checked });
+const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, faltan: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
+const filtrosGuardar = f => { try { (f.sector || f.crit || f.estado || f.radar || f.faltan) ? sessionStorage.setItem(FILT, JSON.stringify(f)) : sessionStorage.removeItem(FILT); } catch { /* sin almacenamiento */ } };
+const filtrosActuales = () => ({ sector: $('#emp-sector').value, crit: $('#emp-crit').value, estado: $('#emp-estado').value, radar: $('#emp-radar').checked, faltan: $('#emp-faltan').checked });
 const pasaFiltros = (r, f) => {
   if (f.sector && r.sector !== f.sector) return false;
   if (f.radar && !enRadar(r.ticker)) return false;
+  if (f.faltan && sectoresMios().has(r.sector)) return false;
   if (f.estado) { // «Superada / No superada / Sin datos» de UNA comprobación (o de alguna de las cinco); no se calcula ninguna puntuación
     const claves = f.crit ? [f.crit] : Object.keys(ABR), est = k => r.criterios?.[k]?.ok === true ? 'ok' : r.criterios?.[k]?.ok === false ? 'no' : 'nd';
     if (!claves.some(k => est(k) === f.estado)) return false;
@@ -1045,10 +1059,10 @@ const pasaFiltros = (r, f) => {
 function poblarSectores() {
   const sel = $('#emp-sector'), f = filtrosLeer(), sectores = [...new Set(empresas.map(r => r.sector))].sort((p, q) => p.localeCompare(q, 'es'));
   sel.innerHTML = '<option value="">Todos</option>' + sectores.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
-  sel.value = sectores.includes(f.sector) ? f.sector : ''; $('#emp-crit').value = f.crit; $('#emp-estado').value = f.estado; $('#emp-radar').checked = !!f.radar;
+  sel.value = sectores.includes(f.sector) ? f.sector : ''; $('#emp-crit').value = f.crit; $('#emp-estado').value = f.estado; $('#emp-radar').checked = !!f.radar; $('#emp-faltan').checked = !!f.faltan;
 }
 function renderEmpresas() {
-  const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards'), filt = filtrosActuales(), hayFiltro = !!(filt.sector || filt.estado || filt.radar);
+  const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards'), filt = filtrosActuales(), hayFiltro = !!(filt.sector || filt.estado || filt.radar || filt.faltan);
   const vistas = empresas.filter(r => (!q || norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) && pasaFiltros(r, filt));
   const resultado = r => { const nd = r.sin_datos ?? 5 - r.evaluados; // sin datos NO es una comprobación fallida ni una evaluación completa: se muestra como parcial
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
@@ -1062,7 +1076,7 @@ function renderEmpresas() {
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
-  const nf = [filt.sector, filt.estado, filt.radar].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
+  const nf = [filt.sector, filt.estado, filt.radar, filt.faltan].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
   $('#emp-borrar').hidden = !bruto && !hayFiltro; $('#emp-borrar').textContent = hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda';
 }
 async function loadEmpresas() {
@@ -1073,9 +1087,9 @@ async function loadEmpresas() {
   poblarSectores(); renderEmpresas();
 }
 $('#emp-buscar').addEventListener('input', () => { busqGuardar($('#emp-buscar').value.trim()); renderEmpresas(); });
-const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); $('#emp-sector').value = ''; $('#emp-crit').value = ''; $('#emp-estado').value = ''; $('#emp-radar').checked = false; filtrosGuardar(filtrosActuales()); renderEmpresas(); $('#emp-buscar').focus(); };
+const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); $('#emp-sector').value = ''; $('#emp-crit').value = ''; $('#emp-estado').value = ''; $('#emp-radar').checked = false; $('#emp-faltan').checked = false; filtrosGuardar(filtrosActuales()); renderEmpresas(); $('#emp-buscar').focus(); };
 $('#emp-borrar').addEventListener('click', borrarBusqueda);
-for (const id of ['#emp-sector', '#emp-crit', '#emp-estado', '#emp-radar']) $(id).addEventListener('change', () => { filtrosGuardar(filtrosActuales()); renderEmpresas(); });
+for (const id of ['#emp-sector', '#emp-crit', '#emp-estado', '#emp-radar', '#emp-faltan']) $(id).addEventListener('change', () => { filtrosGuardar(filtrosActuales()); renderEmpresas(); });
 $('#empresas-lista').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
 $('#empresas-cards').addEventListener('click', e => { if (e.target.closest('[data-borrar-busqueda]')) borrarBusqueda(); });
 $('#emp-buscar').value = busqLeer();
@@ -1153,11 +1167,11 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
   .observe($('#vista-publicas'), { attributes: true, attributeFilter: ['hidden'] });
 
 // ---------- portada: acción principal y vista previa real ----------
-// Una acción principal según el estado: con sesión, «Abrir mis portafolios»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
+// Una acción principal según el estado: con sesión, «Abrir mis carteras»; con un borrador en este dispositivo, «Retomar mi borrador»; si no, crear el primero.
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
-  b.dataset.modo = modo; b.hidden = modo === 'crear';   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis portafolios» o «Retomar mi borrador»
-  b.textContent = modo === 'mis' ? 'Abrir mis portafolios' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
+  b.dataset.modo = modo; b.hidden = false;   // ronda 28: un ÚNICO botón principal también para quien llega por primera vez (abre el editor vacío); las tres entradas quedan como alternativas   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis carteras» o «Retomar mi borrador»
+  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }
@@ -1176,7 +1190,7 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   const modo = $('#probar').dataset.modo;
   if (modo === 'mis') { go('#carteras'); return; }
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
-  const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true });
+  abrirNueva('vacia');
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
 // las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)

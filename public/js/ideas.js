@@ -27,7 +27,7 @@ export async function mostrarEjemplo(inicio) {
     <div class="ej-sel" role="group" aria-label="Elige un ejemplo">${sel('completa', 'KO + PG · con nota')}${sel('incompleta', 'KO + JPM · evaluación parcial')}</div>
     <div class="ej-barra" role="img" aria-label="Reparto: ${esc(pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${pos.map((p, i) => `<i style="--c:var(--c${i});width:${p.peso}%">${esc(p.ticker)} ${p.peso} %</i>`).join('')}</div>
     <div id="ej-nota" role="region" aria-label="Nota de estructura del ejemplo" aria-live="polite"><p class="mut peq">Calculando la nota de estructura…</p></div>
-    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primer portafolio</button></p>
+    <p class="ej-acc">${ID.incompleto ? '' : '<button class="btn btn-primario" type="button" id="ej-lab">Probar un cambio en esta cartera</button> '}<button class="btn btn-secundario" type="button" id="ej-crear">Crear mi primera cartera</button></p>
     <ul class="ej-lista">${pos.map(p => `<li><p class="ej-cab"><b>${esc(act[p.ticker]?.nombre || p.ticker)}</b> <span class="simbolo">${esc(p.ticker)}</span> · <b>${p.peso} %</b></p><p>${esc(p.razon)}</p></li>`).join('')}</ul>
     <p class="mut peq"><a href="#revista">Lee una historia para investigar una empresa</a> y pruébala aquí.</p>`;
   try { const u = await xi().universo(); const o = xi().origen(); $('#ej-nota').innerHTML = htmlNotaEstructura(esc, evaluar(pos, u), o); } catch { $('#ej-nota').innerHTML = '<p class="mut peq">La nota de estructura no está disponible ahora.</p>'; }

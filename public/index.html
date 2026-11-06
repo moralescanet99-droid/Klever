@@ -17,8 +17,8 @@
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#carteras" data-nav="mis">Mis portafolios</a>
-      <a href="#inicio" data-nav="crear">Crear portafolio</a>
+      <a href="#carteras" data-nav="mis">Mis carteras</a>
+      <a href="#inicio" data-nav="crear">Crear cartera</a>
       <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
       <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
     </nav>
@@ -29,8 +29,8 @@
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#carteras" data-nav="mis">Mis portafolios</a>
-    <a href="#inicio" data-nav="crear">Crear portafolio</a>
+    <a href="#carteras" data-nav="mis">Mis carteras</a>
+    <a href="#inicio" data-nav="crear">Crear cartera</a>
     <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
     <a href="#revista" data-nav="revista">Revista</a>
     <button id="salir-m" type="button" hidden>Salir</button>
@@ -58,13 +58,14 @@
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
         <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="enlace" href="#ejemplo">Explorar un ejemplo →</a></p>
-        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
+        <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">O empieza de otra forma</h2>
           <ul>
             <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Elige activos y reparte su peso.</span></button></li>
             <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Abre una cartera de prueba y ajústala.</span></button></li>
             <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Añade tus porcentajes a mano. Sin conectar tu bróker.</span></button></li>
           </ul></div>
         <ul class="confianza"><li>Sin registro para probar</li><li>Sin dinero real · datos de prueba</li></ul>
+        <p class="peq"><a class="enlace" href="#como-funciona">Cómo funciona Klever →</a></p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
       <div class="hero-prev" id="prev" aria-label="Ejemplo interactivo de reparto simulado"></div>
@@ -120,7 +121,10 @@
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
       <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+      <label class="chk"><input type="checkbox" id="emp-faltan"> Solo sectores que no tengo</label>
     </div></details>
+    <div class="glosario" role="group" aria-label="Qué significa cada comprobación"><span class="mut peq">¿Qué significa?</span> <button type="button" class="chip-btn" data-glosa="deuda_ebitda">Deuda</button><button type="button" class="chip-btn" data-glosa="roic">ROIC</button><button type="button" class="chip-btn" data-glosa="margen_neto">Margen</button><button type="button" class="chip-btn" data-glosa="flujo_caja">Caja libre</button><button type="button" class="chip-btn" data-glosa="crecimiento">Crecimiento</button>
+      <p id="glosa" class="glosa" aria-live="polite" hidden></p></div>
     <p id="aviso-datos" class="aviso-datos" role="note" hidden></p>
     <div class="tabla-emp-wrap" role="region" aria-label="Lista de empresas; se desplaza horizontalmente si hace falta" tabindex="0">
       <table class="tabla-emp">
@@ -166,7 +170,7 @@
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis portafolios</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -200,6 +204,17 @@
     <div id="articulo-cuerpo"></div>
   </section>
 
+  <!-- ===== CÓMO FUNCIONA (ronda 28): qué hace, qué no hace, de dónde salen los datos y qué guardamos, en cuatro pasos ===== -->
+  <section id="vista-como-funciona" data-vista="como-funciona" hidden>
+    <div class="pag-cab"><h1>Cómo funciona Klever</h1><p class="mut">Cuatro cosas que conviene saber antes de empezar.</p></div>
+    <ol class="como">
+      <li><b>Qué hace</b><span>Creas una cartera simulada, ves dónde se concentra y comparas alternativas antes de decidir nada.</span></li>
+      <li><b>Qué no hace</b><span>No mueve dinero, no compra ni vende, no te dice qué hacer y no promete rentabilidades.</span></li>
+      <li><b>De dónde salen los datos</b><span>Cada ficha dice su origen y su fecha. En esta versión los datos son de prueba, inventados.</span></li>
+      <li><b>Qué guardamos</b><span>Tu email y las carteras e ideas que guardes. Son privadas salvo que publiques una.</span></li>
+    </ol>
+    <p class="como-acc"><a class="btn btn-primario" href="#inicio">Empezar</a> <a href="legal.html" class="enlace">Aviso legal y privacidad</a></p>
+  </section>
   <section id="vista-ejemplo" data-vista="ejemplo" hidden><div id="ejemplo-cuerpo"></div></section>
   <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
 
@@ -235,9 +250,9 @@
 
   <!-- ===== ESPACIO DE TRABAJO ===== -->
   <section id="vista-cartera" data-vista="cartera" hidden>
-    <h1 id="creador-titulo">Crea tu portafolio</h1>
+    <h1 id="creador-titulo">Crea tu cartera</h1>
     <p class="mut creador-sub" id="creador-sub">Elige cómo repartir tu dinero simulado.</p>
-    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu portafolio">
+    <ol class="pasos" id="pasos" aria-label="Pasos para crear tu cartera">
       <li class="paso" data-paso="1"><a href="#inicio"><span class="paso-n" aria-hidden="true">1</span> <span class="paso-t">Objetivo</span></a></li>
       <li class="paso" data-paso="2" aria-current="step"><button type="button" class="paso-b" id="paso-dist"><span class="paso-n" aria-hidden="true">2</span> <span class="paso-t">Distribución</span></button></li>
       <li class="paso" data-paso="3"><button type="button" class="paso-b" id="paso-revisar"><span class="paso-n" aria-hidden="true">3</span> <span class="paso-t">Revisión</span></button></li>
@@ -255,7 +270,7 @@
         </div>
       </div>
       <div class="ws-acc">
-        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar portafolio <span aria-hidden="true">→</span></button>
+        <button class="btn btn-primario js-revisar solo-escritorio-ws" type="button">Revisar cartera <span aria-hidden="true">→</span></button>
         <div id="motivo" class="motivo solo-escritorio-ws" role="status" hidden><p id="mv-main" class="mv-main"></p><p id="mv-sub" class="mv-sub" hidden>La versión pública sigue igual.</p><details id="mv-det" class="mv-det" hidden><summary>Detalle</summary><p id="mv-txt"></p></details></div>
         <button class="btn btn-primario js-guardar solo-escritorio-ws" type="button">Guardar cartera</button>
         <div class="menu-mas">
@@ -283,6 +298,7 @@
             <div class="comp-cab"><span class="comp-tot"><b id="comp-total" class="num">0&nbsp;%</b> <span>asignado</span></span><span class="comp-der"><span id="comp-n" class="comp-n"></span><button class="btn btn-primario js-revisar js-revisar-comp" type="button">Revisar <span aria-hidden="true">→</span></button></span></div>
             <div id="comp-barra" class="comp-barra" role="img" aria-label="Composición de la cartera"></div>
             <p id="comp-pie" class="comp-pie"></p>
+            <p class="comp-igual"><button id="repartir-igual" class="chip-btn" type="button" hidden>Reparte a partes iguales</button></p>
           </div>
           <p id="pos-error" class="msg-error" role="status"></p>
           <div class="tabla-scroll">
@@ -310,9 +326,9 @@
 
       <aside class="ws-resumen" aria-label="Resumen de la cartera">
         <details class="panel panel-donut" id="panel-donut" open>
-          <summary><h2 id="donut-t">Tu portafolio</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
+          <summary><h2 id="donut-t">Tu cartera</h2><span class="donut-resumen" id="donut-resumen"></span></summary>
           <div class="donut-cuerpo">
-            <div class="donut" id="donut" role="img" aria-label="Reparto del portafolio"></div>
+            <div class="donut" id="donut" role="img" aria-label="Reparto de la cartera"></div>
             <ul class="donut-leyenda" id="donut-leyenda"></ul>
           </div>
           <p class="donut-estado" id="donut-estado" role="status" aria-live="polite"></p>
@@ -381,7 +397,7 @@
           <p class="mut">Los carga TradingView. Son un complemento y no afectan al cálculo de la cartera.</p>
           <div id="graficos" class="grid-graf"></div>
         </details>
-        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar portafolio <span aria-hidden="true">→</span></button></div>
+        <div class="ws-pie"><a class="enlace" href="#carteras">← Volver</a><button class="btn btn-primario js-revisar" type="button">Revisar cartera <span aria-hidden="true">→</span></button></div>
     </div>
   </section>
 </main>
@@ -389,7 +405,7 @@
 <footer class="pie">
   <p><b>Contenido educativo.</b> No es asesoramiento financiero ni una recomendación personalizada. Las carteras son simuladas.</p>
   <details class="pie-det"><summary>Fuentes y límites de los datos</summary><p data-origen="pie">Consulta el origen de los datos en cada ficha.</p><p>Las cifras se calculan de forma aproximada y pueden contener errores. Los precios y gráficos los muestra TradingView.</p></details>
-  <p class="pie-enl"><a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
+  <p class="pie-enl"><a href="#como-funciona">Cómo funciona</a> · <a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 
 <div id="barra-guardar" class="barra-guardar" hidden>

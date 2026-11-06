@@ -148,3 +148,35 @@
   .vistazo .vistazo-acc{margin-top:4px}
   .vz-hipo{font-size:.75rem}
 }
+
+/* Ronda 28 · tres indicadores con semáforo (Concentración, Variedad, Datos): una fila compacta, el color dice el estado y la palabra lo nombra */
+.indicadores{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 12px;padding:0}
+.ind{min-width:0;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);display:grid;gap:1px}
+.ind-etq{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);white-space:nowrap}
+.ind-etq i{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.ind b{font-size:.95rem;font-weight:600;line-height:1.2}
+.ind small{font-size:.7rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ind-ok i{background:var(--verde)} .ind-ok b{color:var(--verde)}
+.ind-medio i{background:var(--warn)} .ind-medio b{color:var(--warn)}
+.ind-alto i{background:var(--accent)} .ind-alto b{color:var(--accent-on-soft)}
+.ind-alto{border-color:rgba(255,122,47,.45)}
+@media(max-width:479px){.indicadores{gap:6px;margin:6px 0 8px}.ind{padding:6px 8px}.ind b{font-size:.85rem}}
+
+/* Ronda 28 · portada: un botón principal; las otras entradas, más discretas */
+.hero .inicio-acc #probar{min-height:52px;padding-inline:28px;font-size:1.0625rem}
+.entradas .entrada{padding:12px 14px}
+.entradas .entrada span{font-size:.8125rem}
+#entrada-vacia{border-color:var(--border);background:var(--surface)}
+/* «Cómo funciona Klever»: cuatro pasos numerados (es una secuencia real: qué hace → qué no → datos → lo que guardamos) */
+.como{list-style:none;counter-reset:k28;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:16px 0 24px;padding:0;max-width:64rem}
+.como li{counter-increment:k28;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--capa),var(--surface);display:grid;gap:6px}
+.como li::before{content:counter(k28);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent-on-soft);font-weight:600;font-size:.875rem}
+.como li:nth-child(2)::before{background:var(--alerta-bg);color:var(--accent)}
+.como b{font-size:1.0625rem}
+.como span{color:var(--muted)}
+.como-acc{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+/* Explorar: glosario al pulsar y reparto igual en el editor */
+.glosario{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 12px}
+.glosario .chip-btn[aria-pressed="true"]{border-color:var(--azul);color:var(--azul)}
+.glosa{flex-basis:100%;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:var(--azul-bg);color:var(--text);font-size:.875rem}
+.comp-igual{margin:6px 0 0}
