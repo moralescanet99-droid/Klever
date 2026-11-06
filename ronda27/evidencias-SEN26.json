@@ -1,0 +1,106 @@
+[
+ {
+  "id": "S1",
+  "escenario": "Tecnología 60 % y NVDA 40 %: dos alertas distintas, la de categoría primero",
+  "esperado": "ids [categoria, posicion]; títulos cortos; hipótesis NVDA → 20 % proporcional",
+  "observado": "[\"categoria\",\"posicion\"] [\"Exposición alta: Tecnología\",\"NVDA pesa el 40 %\"] {\"ticker\":\"NVDA\",\"peso\":20,\"fin\":\"proporcional\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S2",
+  "escenario": "La hipótesis propuesta se puede simular y deja el peso liberado sin asignar (no lo reparte en otra empresa)",
+  "esperado": "viable; NVDA 20; las demás igual; 20 % libre",
+  "observado": "true [{\"ticker\":\"MSFT\",\"peso\":20},{\"ticker\":\"NVDA\",\"peso\":20},{\"ticker\":\"AMZN\",\"peso\":15},{\"ticker\":\"KO\",\"peso\":15},{\"ticker\":\"JNJ\",\"peso\":10}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S3",
+  "escenario": "Una categoría alta con UNA sola empresa (KO 50 %): no se repite la idea como «KO pesa el 50 %»",
+  "esperado": "solo la de categoría (sin «posicion»)",
+  "observado": "[\"categoria\",\"pocas\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S4",
+  "escenario": "Los ETF no cuentan como exposición sectorial (ETF dividendos 80 % no es «Exposición alta»)",
+  "esperado": "sin «categoria»; SCHD 50 % sí se señala como posición",
+  "observado": "[\"SCHD pesa el 50 %\",\"Solo 1 categoría\",\"3 posiciones\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S5",
+  "escenario": "Plantilla Crecimiento (3 categorías de ~33 %): aviso «Solo 3 categorías», sin alertas inventadas",
+  "esperado": "un único aviso; su acción no elige activo (ticker vacío, 10 %)",
+  "observado": "[[\"aviso\",\"Solo 3 categorías\"]] {\"ticker\":\"\",\"peso\":10,\"fin\":\"proporcional\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S6",
+  "escenario": "Cartera incompleta (85 %): se declara lo que falta y la acción usa el porcentaje sin asignar",
+  "esperado": "«Falta asignar 15 %»; hipótesis sin_asignar 15",
+  "observado": "[\"Falta asignar 15 %\"] {\"ticker\":\"\",\"peso\":15,\"fin\":\"sin_asignar\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S7",
+  "escenario": "Exceso (120 %): la primera señal es el exceso y no tiene acción de laboratorio (no se puede simular)",
+  "esperado": "exceso primero; accion null",
+  "observado": "[\"Exceso de 20 %\",\"Exposición alta: Consumo básico\",\"KO pesa el 70 %\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S8",
+  "escenario": "Reparto sin concentraciones (5 × 20 %, 5 categorías): estado correcto, sin alarmas",
+  "esperado": "una señal «ok»; detalle que dice que no mide riesgo",
+  "observado": "[{\"id\":\"ok\",\"nivel\":\"ok\",\"titulo\":\"Sin concentraciones destacadas\",\"detalle\":\"Ninguna posición supera el 25 % ni ninguna categoría el 40 %. No mide riesgo ni rentabilidad.\",\"accion\":{\"ticker\":\"\",\"fin\":\"proporcional\",\"pregunta\":\"¿Y si probaras otra idea?\"}}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S9",
+  "escenario": "Una sola posición: alerta propia (no «Exposición alta» ni «KO pesa el 100 %»)",
+  "esperado": "ids [unica]",
+  "observado": "[\"unica\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S10",
+  "escenario": "Cartera vacía: ninguna señal",
+  "esperado": "[]",
+  "observado": "[]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S11",
+  "escenario": "El peso hipotético siempre es MENOR que el actual, ≥ 0,1 %, como mucho 20 % y con una decimal",
+  "esperado": "[20,20,20,13,2,1,1,0.1,0.1]",
+  "observado": "[20,20,20,13,2,1,1,0.1,0.1]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S12",
+  "escenario": "Ninguna hipótesis propone un activo que no esté ya en la cartera (sin recomendaciones)",
+  "esperado": "para todos los casos anteriores",
+  "observado": "revisado en S1–S9",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S13",
+  "escenario": "Los umbrales son los declarados en la interfaz (25 % posición, 40 % categoría, ≤ 3 categorías, < 4 posiciones) y no se pueden cambiar en tiempo de ejecución",
+  "esperado": "{\"posicion\":25,\"categoria\":40,\"sectores\":3,\"posiciones\":4}",
+  "observado": "{\"posicion\":25,\"categoria\":40,\"sectores\":3,\"posiciones\":4}",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

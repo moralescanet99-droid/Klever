@@ -1,0 +1,82 @@
+[
+ {
+  "id": "X1",
+  "escenario": "Éxito real",
+  "esperado": "Código 0 y «RESULTADO: 1 correctas, 0 fallos»",
+  "observado": "código 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X2",
+  "escenario": "Aserción fallida",
+  "esperado": "Código distinto de cero aunque el proceso termine solo (el defecto de la ronda 19: informaba el fallo y salía con 0)",
+  "observado": "código 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X3",
+  "escenario": "Error previo (un código distinto de cero ya fijado) con todas las aserciones correctas",
+  "esperado": "Se conserva: código ≠ 0",
+  "observado": "código 2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X4",
+  "escenario": "Recurso que mantiene vivo el proceso (el que ocultaba la salida forzada de la ronda 19 con código 0)",
+  "esperado": "Tras 10 s se fuerza el cierre, se registra «CIERRE FORZADO» y el código NO es 0",
+  "observado": "código 3; CIERRE FORZADO: el proceso no terminó solo 10 s después del resultado (1 correctas, 0 fallos).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X5",
+  "escenario": "Navegador que nadie cerró",
+  "esperado": "Se cierra en `finally`, se registra «CIERRE ANÓMALO» y el código NO es 0 aunque las aserciones pasen",
+  "observado": "código 3; CIERRE ANÓMALO: 1 navegador(es) seguían abiertos al terminar la batería y se cerraron al final (la batería debe cerrarlos ella).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X6",
+  "escenario": "run-all.sh con la fixture en modo «exito»",
+  "esperado": "Sale con código 0 y «todo correcto»",
+  "observado": "código 0; RESUMEN: todo correcto. Código de salida 0.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X7",
+  "escenario": "run-all.sh con la fixture en modo «fallo»",
+  "esperado": "El ejecutor sale con código 1 y nombra el problema",
+  "observado": "código 1; FALLA aserción | FALLA (ejecutor): fixture-cierre salió con código 1 | FALLA (ejecutor): fixture-cierre tiene 1 fallos | RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X8",
+  "escenario": "run-all.sh con la fixture en modo «error-previo»",
+  "esperado": "El ejecutor sale con código 1 y nombra el problema",
+  "observado": "código 1; FALLA (ejecutor): fixture-cierre salió con código 2 | RESUMEN: 1 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X9",
+  "escenario": "run-all.sh con la fixture en modo «recurso»",
+  "esperado": "El ejecutor sale con código 1 y nombra el problema",
+  "observado": "código 1; FALLA (ejecutor): fixture-cierre: CIERRE ANÓMALO o forzado (el proceso no terminó solo; ver su registro) | FALLA (ejecutor): fixture-cierre salió con código 3 | RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "X10",
+  "escenario": "run-all.sh con la fixture en modo «navegador-abierto»",
+  "esperado": "El ejecutor sale con código 1 y nombra el problema",
+  "observado": "código 1; FALLA (ejecutor): fixture-cierre: CIERRE ANÓMALO o forzado (el proceso no terminó solo; ver su registro) | FALLA (ejecutor): fixture-cierre salió con código 3 | RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

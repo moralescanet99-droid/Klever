@@ -1,0 +1,12 @@
+# comando: node tests/ronda19/unit-redondeo19.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 17:48:43 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [R1] Contraejemplo EXACTO de la revisión: bloques 5,44 / 5,44 / 5,44 / 5,46 (deuda) / 5,44 con nota 5,5 (suma 5,445; la nota 5,5 necesita llegar a 5,450 y el extremo superior de 5,445 es 5,450 EXCLUIDO)
+OK    [R2] Vecinos a ambos lados de la frontera por validador, POST y oráculo independiente
+OK    [R3] Extremos 1 y 10 por POST
+OK    [R4] Lectura de una fila histórica: la del contraejemplo y la de su vecino compatible
+OK    [R5] Oráculo de fuerza bruta frente al validador en 12 000 resúmenes (6 000 combinaciones de bloques entre 5,40 y 5,50, con notas 5,4 y 5,5)
+OK    [R6] Barrida de carteras calculadas por el EVALUADOR (12 universos aleatorios × 400 carteras de 2 a 5 posiciones, semilla fija)
+
+RESULTADO: 6 correctas, 0 fallos

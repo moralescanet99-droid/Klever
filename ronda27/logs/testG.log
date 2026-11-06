@@ -1,0 +1,9 @@
+# comando: node tests/ronda8/testG.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 17:53:57 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [H1] Guardado lento de A que termina cuando ya se ha abierto B
+OK    [H2] Publicación lenta de A que termina cuando ya se ha abierto B
+OK    [H3] Sin errores de JavaScript en la batería G
+
+RESULTADO: 3 correctas, 0 fallos

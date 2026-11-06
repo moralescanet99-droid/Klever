@@ -1,0 +1,16 @@
+# comando: node tests/ronda7/testF.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 17:53:37 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [G1] Guardado fallido de una cartera pública (servidor real)
+OK    [G2] Ticker desconocido en un guardado con nombre y tesis cambiados: se rechaza ANTES del lote (validación previa, no a mitad de transacción)
+OK    [G3] Escrituras con la misma revisión (servidor real, HTTP)
+OK    [G4a] Conflicto al GUARDAR: elegir la versión de este dispositivo no escribe; Guardar sí
+OK    [G4b] Conflicto al ABRIR: mismo comportamiento que al guardar
+OK    [G5] Modo sin conexión REAL contra el servidor local
+OK    [G6] E16a corregida: última posición, ampliación de texto SIMULADA al 200 % (font-size del documento, no zoom del navegador) a 390 px
+OK    [G7] Diálogo de conflicto en móvil (320×568, texto ampliado al 200 % SIMULADO, 6 posiciones distintas + nombre)
+OK    [G8] Sin errores de JavaScript en la batería F
+OK    [F9] Diálogos «beforeunload» al recargar con cambios sin guardar
+
+RESULTADO: 10 correctas, 0 fallos

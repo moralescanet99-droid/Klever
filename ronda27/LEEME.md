@@ -24,4 +24,4 @@
 Pasa a **`piloto-r27`** (`scripts/piloto/VERSION-PILOTO.txt`). La sección «Incidencia conocida» del guion de la ronda 24 **ya no aplica**: el facilitador ya no tiene que detener la tarea ni revisar el historial antes de un reenvío. Si ve un duplicado, se anota como incidencia del producto (sería una regresión). Opcional en la verificación previa del dispositivo: provocar un envío incierto («Offline» un momento), recargar y comprobar que «Reintentar el mismo envío» deja **una** anotación.
 
 ## Resultado de la pasada completa
-*(pendiente: se completa al terminar `bash tests/run-all.sh`)*
+**Commit `a73b4a2`, árbol limpio, 2026-11-06 17:48 UTC, local del autor: 1010 correctas, 0 fallos, código de salida 0** (51 baterías con resultado: las 998 de la ronda 26 + 12 de `testW`). Registro en `resultado-ejecucion.txt` y `logs/`.

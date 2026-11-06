@@ -1,0 +1,56 @@
+# comando: node tests/ronda5/testC.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v242 · 2026-11-06 17:52:05 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    coma decimal: «12,5» se normaliza y recalcula
+OK    campo vaciado: marcado inválido, motivo visible, Guardar desactivado
+OK    texto no numérico: sigue inválido
+OK    corregido: vuelve a ser válido, sin mensajes
+OK    total superior a 100 %: exceso indicado y borrador conservado
+OK    recargar con borrador inválido: se conserva (20 %) y sigue el aviso
+OK    añadir con teclado: AAPL entra con el peso que faltaba (5 por defecto si no falta)
+OK    quitar: vuelve a 6 posiciones y «Asignado: 100 %»
+OK    invitado: el estado dice «Solo en este dispositivo» (no «Guardada»)
+OK    acceso: avisa de que el enlace debe abrirse en el mismo navegador para conservar el borrador
+OK    acceso enviado: confirmación, cambiar email, reenviar con cuenta atrás
+OK    acceso enviado: no promete que el borrador se ha guardado
+OK    el borrador sigue en el dispositivo mientras se pide acceso
+OK    otro navegador: se entra en la cuenta pero NO hay borrador
+OK    otro navegador: aviso PERSISTENTE en «Mis carteras» («todavía no se ha guardado en la cuenta», borrador no disponible en este navegador), sin toast ni confirmación de guardado
+OK    otro navegador: sin carteras (no se inventó ninguna) y crear es la acción principal
+OK    el borrador original sigue intacto en el primer dispositivo
+OK    enlace ya canjeado: no entra de nuevo
+OK    mismo navegador: el borrador pasa a la cuenta (hash #cartera-N) y se borra del dispositivo
+OK    Mis carteras: lista la cartera con visibilidad, posiciones y total asignado
+OK    volver desde Mis carteras: versión guardada (17,0 %) y estado «Guardada»
+OK    editar sin guardar: «Cambios locales pendientes de guardar en tu cuenta»
+OK    recargar: se RECUPERAN los cambios sin guardar (10 %) y siguen marcados como pendientes
+OK    descartar cambios: vuelve la versión GUARDADA (17,0 %)
+OK    públicas: ejemplos de Klever y publicaciones de usuarios con etiquetas veraces
+OK    públicas: los ejemplos de Klever van primero
+OK    detalle público: sin email ni rentabilidad
+OK    despublicar: Privada y fuera de «Carteras públicas»
+OK    ya no aparece como publicación de usuario
+OK    borrador inválido al entrar: NO se altera ni se guarda; se avisa y se conserva
+OK    con sesión pero sin guardar: «Solo en este dispositivo» y Guardar desactivado por el exceso
+OK    corregido: se crea la cartera en la cuenta (hash #cartera-N) y se limpia el borrador
+OK    Mis carteras: estado de error con reintento
+OK    Mis carteras: el reintento recupera la lista
+OK    lector de pantalla (árbol de accesibilidad): roles y nombres de los controles clave
+OK    teclado: cada parada de Tab muestra foco visible
+OK    texto al 200 %: el editor no desborda horizontalmente
+OK    sin errores JS en todo el recorrido
+OK    sin desbordamiento 320px · claro
+OK    sin desbordamiento 360px · claro
+OK    sin desbordamiento 390px · claro
+OK    sin desbordamiento 720px · claro
+OK    sin desbordamiento 768px · claro
+OK    sin desbordamiento 1440px · claro
+OK    sin desbordamiento 320px · oscuro
+OK    sin desbordamiento 360px · oscuro
+OK    sin desbordamiento 390px · oscuro
+OK    sin desbordamiento 720px · oscuro
+OK    sin desbordamiento 768px · oscuro
+OK    sin desbordamiento 1440px · oscuro
+
+RESULTADO: 50 correctas, 0 fallos
