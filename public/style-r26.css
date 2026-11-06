@@ -180,3 +180,6 @@
 .glosario .chip-btn[aria-pressed="true"]{border-color:var(--azul);color:var(--azul)}
 .glosa{flex-basis:100%;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:var(--azul-bg);color:var(--text);font-size:.875rem}
 .comp-igual{margin:6px 0 0}
+.hero .inicio-acc{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px}
+.como li{align-content:start}
+@media(max-width:479px){.ind-etq i{display:none}.ind-etq{font-size:.68rem}}

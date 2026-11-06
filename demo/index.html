@@ -1349,6 +1349,9 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 .glosario .chip-btn[aria-pressed="true"]{border-color:var(--azul);color:var(--azul)}
 .glosa{flex-basis:100%;margin:4px 0 0;padding:10px 12px;border-radius:12px;background:var(--azul-bg);color:var(--text);font-size:.875rem}
 .comp-igual{margin:6px 0 0}
+.hero .inicio-acc{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px}
+.como li{align-content:start}
+@media(max-width:479px){.ind-etq i{display:none}.ind-etq{font-size:.68rem}}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
@@ -2140,7 +2143,7 @@ function indicadores(r, ev = null) {
   return [
     { id: 'concentracion', etiqueta: 'Concentración', nivel: conc, valor: { ok: 'Baja', medio: 'Media', alto: 'Alta' }[conc], dato: `${r.mayor.ticker} ${cmS(may)} %`, detalle: `La mayor posición es ${r.mayor.ticker} (${cmS(may)} %)${cats[0] ? ` y la mayor categoría, ${cats[0].categoria} (${cmS(topCat)} %)` : ''}.` },
     { id: 'variedad', etiqueta: 'Variedad', nivel: vari, valor: { ok: 'Amplia', medio: 'Media', alto: 'Poca' }[vari], dato: `${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}`, detalle: `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} en ${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}${r.categorias.some(c => c.soloFondos) ? ' (los ETF cuentan como una)' : ''}.` },
-    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % analizable` : '', detalle: datos.detalle },
+    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % con datos` : '', detalle: datos.detalle },
   ];
 }
 

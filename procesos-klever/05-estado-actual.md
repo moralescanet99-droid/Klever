@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-06, tras la ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
+**Última actualización:** 2026-11-06, tras la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
@@ -13,6 +13,11 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 ## Piloto (ronda 24)
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
+
+## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
+- ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).
+- ⬜ Fase 2 (móvil, descubrir, renombrados, sello único), fase 3 (personas), fase 4 (producción). Punto 14 aparcado.
+- Piloto: `piloto-r27` = commit `f991fd8` (`git checkout f991fd8` antes de `abrir-piloto.sh`).
 
 ## Evolución visual e interactiva 26 (rama `claude/klever-visual-interactive-evolution-h6n454`, sobre `evolucion-25`)
 - ✅ Señales de cartera (`public/js/senales.js`), exposición por categoría, «Ver qué cambiaría» con la comparación ya calculada, deslizador instantáneo y cifras clave en el laboratorio, «Descubre otras categorías», anillo de la nota, resumen del Cuaderno, señal en «Mis portafolios», portada con la nueva promesa y recorrido de 5 pasos, `style-r26.css`. Pruebas: `unit-senales26` (13) y `testV` (24) en verde; pasada completa **998/0** (`cdae3ee`, local) tras corregir 3 regresiones de geometría y orden y reponer «recomendación de compra» (ver informe).
