@@ -65,3 +65,4 @@
 | 2026-11-06 | *(commit del paquete ronda 24)* | Paquete para ChatGPT de la ronda 24 (instrucciones + `build/klever-ronda24-chatgpt.zip`; sin imágenes nuevas porque no cambia ninguna pantalla). | — |
 | 2026-11-06 | *(commit de esta nota)* | Llegó `Klever_Evolucion_25.zip` (evolución visual sobre R24). Integrada en la rama aparte `evolucion-25` (batería completa 961/0 local; ver su `ronda25/LEEME.md`). **Esta rama (piloto `piloto-r23`) no cambia.** | Pendiente: validación en móvil real y con usuarios antes de integrarla. |
 | 2026-11-06 | *(commit de esta nota)* | Javier indica que ya no necesita ChatGPT: fin del circuito de revisión externa y de los paquetes para ChatGPT (decisión en `03-`). | — |
+| 2026-11-06 | *(commit de esta nota)* | Nuevo supervisor: Claude Opus. Creado `11-traspaso-supervisor.md` (roles, reglas, estado, decisiones abiertas, trampas) e indexado en el README. | — |

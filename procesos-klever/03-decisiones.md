@@ -235,3 +235,5 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **2026-11-06 · La evolución visual 25 vive en la rama `evolucion-25`, no en la del piloto** (el piloto exige código congelado; ver esa rama para el motivo completo).
 
 - **2026-11-06 · Se termina el circuito de revisión con ChatGPT.** Javier ya no lo necesita: a partir de ahora no se preparan paquetes ni instrucciones para ChatGPT, y las decisiones de alcance las da Javier directamente. Se conservan como histórico `06-`/`07-` y `revision-chatgpt/`. Las reglas de honestidad (implementado/probado/pendiente) y las restricciones del producto siguen igual; lo que dependía de la aceptación de ChatGPT (p. ej. el criterio del piloto, la limitación del intento incierto antes de una beta pública, la validación de la evolución 25) pasa a ser decisión de Javier.
+
+- **2026-11-06 · El supervisor pasa a ser un Claude Opus** (elección de Javier, que decide el alcance y lo que afecta a personas o publicación). Sustituye a ChatGPT. Motivo: que quien encarga y revisa trabaje dentro del mismo ecosistema y sin paquetes de ida y vuelta. Traspaso en `11-traspaso-supervisor.md`.
