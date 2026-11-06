@@ -30,7 +30,7 @@ for(const [w,h] of [[390,844],[1440,900]]){
  const origen=((await p.textContent('#aviso-datos'))||'').trim();
  await p.locator('.ver-ficha >> visible=true').first().click();await p.waitForSelector('#fir-toggle');await p.click('#fir-toggle');await p.waitForSelector('#fi-radar [data-nota=editar]');
  ok('demo: el origen se declara como DEMOSTRACIÓN y no se atribuye a la SEC',/DEMOSTRACIÓN/.test(origen)&&!/SEC EDGAR/.test(await p.textContent('#fi-cuerpo')),origen);
- await p.click('#fir-sim');await p.waitForSelector('#lab-form');await p.fill('#lab-peso','5');await p.check('input[name=lab-fin][value=proporcional]');await p.click('#lab-form button[type=submit]');await p.waitForSelector('#lab-res table.tabla-lab');
+ await p.click('#fir-sim');await p.waitForSelector('#lab-form');await p.fill('#lab-peso','5');await p.check('input[name=lab-fin][value=proporcional]');await p.click('#lab-form button[type=submit]');await p.waitForSelector('#lab-res table.tabla-lab', { state: 'attached' }).then(() => p.evaluate(() => document.querySelectorAll('#lab-res details.mini').forEach(d => { d.open = true; })));
  ok('demo: la simulación muestra la tabla y la etiqueta «Simulación»',(await p.locator('#lab-res .chip.sim').count())>=1&&/AAPL/.test(await p.textContent('#lab-res')));
  await p.click('#lab-guardar-btn');await p.waitForSelector('#esc-editar');
  ok('demo: el escenario se guarda y se reabre como simulación',(await p.locator('#vista-lab h1 .chip.sim').count())===1&&/AAPL al 5/.test(await p.textContent('#vista-lab')));

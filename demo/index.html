@@ -1106,6 +1106,67 @@ h1 .chip,.pag-cab .chip{font-family:var(--fuente);font-weight:600;letter-spacing
 input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var(--accent);flex:none}
 .rev-decision label{font-weight:400} .rev-decision .fila{align-items:center;gap:8px} .rev-decision input[type=date]{max-width:11rem}
 
+/* Evolución 25: jerarquía visual. Conserva la paleta y los cálculos existentes. */
+:root{--r-control:12px;--r-panel:20px}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.eyebrow{color:var(--accent-on-soft);font-size:.7rem;font-weight:600;letter-spacing:.16em;margin-bottom:20px}
+.hero{gap:32px;align-items:start;padding-top:32px}
+.hero h1{font-size:clamp(2rem,3.4vw,3.7rem);line-height:1.08;letter-spacing:-.035em;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--accent-on-soft)}
+.hero .lead{font-size:1.05rem;line-height:1.6;max-width:42ch}
+.hero-prev{display:block;min-width:0}
+.preview-v25{padding:24px;background:linear-gradient(145deg,#302219,var(--surface) 58%);border:1px solid #64432e;border-radius:24px;box-shadow:0 24px 64px #0003}
+.preview-v25 .prev-cab{display:flex;gap:8px;flex-wrap:wrap;border:0;padding:0 0 12px}
+.preview-control{display:flex;justify-content:space-between;align-items:center;margin:24px 0 0;font-size:.875rem;color:var(--muted)}
+.preview-control output{font-size:1.75rem;color:var(--text);font-weight:500}
+#preview-peso{width:100%;min-height:44px;padding:0;accent-color:var(--accent);cursor:pointer;background:transparent;border:0;box-shadow:none}
+.preview-chart{margin:16px 0;font-size:.8rem;color:var(--muted)}
+.preview-stack{display:flex;height:28px;border-radius:8px;overflow:hidden;background:var(--surface-2);margin-top:8px;gap:1px}
+.preview-stack i{display:block;background:var(--c);min-width:0}
+.delta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin:16px 0}
+.delta-grid>div{min-width:0;border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--surface)}
+.delta-grid span,.delta-grid small{display:block;color:var(--muted);font-size:.75rem}
+.delta-grid b{display:block;font-size:1.1rem;font-weight:600;margin:6px 0;overflow-wrap:anywhere}
+.delta-grid b .u{display:inline;font-size:.75rem}
+.vista-metricas{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.vista-metricas>div{min-width:0;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--surface)}
+.vista-metricas span{display:block;font-size:.75rem;color:var(--muted)}
+.vista-metricas strong{display:block;font-size:clamp(1.4rem,2.7vw,2rem);font-weight:500;margin:8px 0}
+.vista-track{height:6px;background:var(--surface-2);border-radius:8px;overflow:hidden}
+.vista-track i{display:block;height:100%;background:var(--accent);border-radius:inherit}
+.vista-metricas>div+div .vista-track i{background:var(--c1)}
+.nota-criterios{display:grid;gap:16px;margin:24px 0}
+.criterio-cab{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:.8rem}
+.criterio-cab b{white-space:nowrap;font-weight:500;color:var(--accent-on-soft)}
+.criterio-ausente{font-size:.75rem;color:var(--muted);border-bottom:1px dashed var(--border-strong);padding-bottom:8px}
+.nota-num{font-family:inherit;font-weight:500}
+.vistazo .vistazo-acc{margin-top:16px}
+.lab-res .esp{padding:20px 0;margin:16px 0;border-block:1px solid var(--border)}
+.lab-res .esp-barra{height:36px;border-radius:8px}
+.lab-res .esp-fila{margin:12px 0}
+.lab-res .esp-barra i{font-style:normal;font-size:.75rem}
+.lab-res>.mini{padding:12px 0;border-top:1px solid var(--border)}
+.lab-res .lab-guardar{margin-top:24px}
+summary{min-height:44px;align-content:center;cursor:pointer}
+.seg-grupo{margin-bottom:32px}
+#seg-g0{color:var(--accent-on-soft)}
+.esc-item{border-radius:16px}
+.plantilla,.entrada,.btn{transition:background-color .18s,border-color .18s,box-shadow .18s}
+.plantilla:hover,.entrada:hover{border-color:var(--accent);box-shadow:0 8px 32px #0002}
+.entradas .entradas-t{font-size:.8rem;color:var(--muted);font-weight:500}
+@media(min-width:960px){.preview-v25{margin-top:42px}.hero{grid-template-columns:minmax(0,1fr) minmax(0,.95fr)}}
+@media(max-width:959px){.hero{grid-template-columns:1fr}.hero h1{max-width:22ch}.hero-prev{max-width:640px;width:100%}.preview-v25{padding:20px}}
+@media(max-width:479px){.hero{padding-top:16px;gap:24px}.hero h1{font-size:2.25rem}.preview-v25{padding:16px}.vista-metricas{gap:8px}.vista-metricas>div{padding:10px}.delta-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.delta-grid>div{padding:8px}.delta-grid b{font-size:.95rem}.hero .inicio-acc{display:flex;align-items:center;flex-wrap:wrap;gap:16px}.preview-v25 .prev-cab b{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.preview-stack i{display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.7rem;font-weight:600;color:var(--on-accent)}
+#entrada-vacia{border-color:var(--accent);background:var(--accent-soft)}
+.lab-res{padding:20px;border:1px solid var(--border)}
+.lab-res .esp-fila{grid-template-columns:minmax(0,1fr);gap:8px}
+@media(min-width:1200px){#lab-cuerpo:has(>#lab-form){display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;align-items:start}#lab-cuerpo>.pag-cab{grid-column:1/-1}#lab-res{min-width:0}#lab-res .lab-res{margin-top:0}}
+@media(max-width:479px){.lab-res{padding:14px}.lab-res .delta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Evolución 25 · ajuste de la integración: a 320–479 px el resumen visual no debe empujar el resultado de la revisión bajo la barra fija */
+@media(max-width:479px){.vista-metricas{margin:8px 0}.vista-metricas>div{padding:8px}.vista-metricas strong{font-size:1.25rem;margin:4px 0}.vista-track{height:4px}.vistazo .vistazo-acc{margin-top:8px}.nota-criterios{gap:10px;margin:14px 0}}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1145,27 +1206,28 @@ input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var
 </div>
 
 <main id="contenido" tabindex="-1">
-  <div class="demo-banner"><b>Demostración sin persistencia de cuenta.</b> Todo vive en la memoria de esta página: <b>al recargar se pierde todo</b> (cuentas, carteras y cambios), y no es equivalente al servidor real que se prueba con las baterías automáticas. Todos los datos son inventados; nada de aquí es información financiera real.<label class="demo-fallo"><input type="checkbox" id="demo-fallo" onchange="window.__demoFalloGuardado=this.checked"> <b>Simular fallo de red al guardar</b> (solo demo: las peticiones de esta página son simuladas y no fallan por activar el modo sin conexión del navegador)</label></div>
+  <div class="demo-banner"><b>Demo · datos inventados.</b> Al recargar se pierde todo.<details><summary>Detalles y prueba de guardado</summary>Demostración sin persistencia de cuenta. Todo vive en la memoria de esta página: <b>al recargar se pierde todo</b> (cuentas, carteras y cambios), y no es equivalente al servidor real que se prueba con las baterías automáticas. Todos los datos son inventados; nada de aquí es información financiera real.<label class="demo-fallo"><input type="checkbox" id="demo-fallo" onchange="window.__demoFalloGuardado=this.checked"> <b>Simular fallo de red al guardar</b> (solo demo: las peticiones de esta página son simuladas y no fallan por activar el modo sin conexión del navegador)</label></details></div>
 
   <!-- ===== PORTADA ===== -->
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <h1>Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir</h1>
-        <p class="lead">Una cartera simulada: sin dinero real y con datos de prueba. Descubre qué sabes de ella, qué desconoces y qué te gustaría revisar después.</p>
+        <p class="eyebrow">TU CARTERA. CON MÁS PERSPECTIVA.</p>
+        <h1>Entiende lo que tienes.<br><em>Explora lo que podría cambiar.</em></h1>
+        <p class="lead">Crea una cartera simulada (sin dinero real, con datos de prueba), descubre alternativas y compara tus opciones antes de decidir.</p>
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
-        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="btn btn-secundario btn-grande" href="#ejemplo">Ver un ejemplo explicado</a></p>
+        <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="enlace" href="#ejemplo">Explorar un ejemplo →</a></p>
         <div class="entradas" role="group" aria-labelledby="entradas-t"><h2 id="entradas-t" class="entradas-t">Tres formas de empezar</h2>
           <ul>
-            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Una cartera vacía: añade tu primer activo y reparte.</span></button></li>
-            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Una copia editable, rotulada como ejemplo simulado.</span></button></li>
-            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Introduce a mano tus activos y porcentajes. Sin conexión con ningún bróker.</span></button></li>
+            <li><button id="entrada-vacia" class="entrada" type="button"><b>Crear desde cero</b><span>Elige activos y reparte su peso.</span></button></li>
+            <li><button id="entrada-ejemplo" class="entrada" type="button"><b>Explorar un ejemplo</b><span>Abre una cartera de prueba y ajústala.</span></button></li>
+            <li><button id="entrada-manual" class="entrada" type="button"><b>Recrear mi cartera</b><span>Añade tus porcentajes a mano. Sin conectar tu bróker.</span></button></li>
           </ul></div>
-        <ul class="confianza"><li>Sin registro para probar</li><li>Contenido educativo</li></ul>
+        <ul class="confianza"><li>Sin registro para probar</li><li>Sin dinero real · datos de prueba</li></ul>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
-      <div class="hero-prev" id="prev" aria-label="Vista previa del editor con una cartera de dividendos"></div>
+      <div class="hero-prev" id="prev" aria-label="Ejemplo interactivo de reparto simulado"></div>
     </div>
 
     <div class="bloque" id="plantillas">
@@ -1305,7 +1367,7 @@ input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
       <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
-      <p class="mut">Tus ideas: lo que quieres volver a revisar —preguntas, escenarios simulados y empresas de tu radar—. Nada de aquí ejecuta operaciones ni cambia tus carteras.</p>
+      <p class="mut">¿Sigue teniendo sentido tu idea? Revisa tus hipótesis y deja constancia de lo que ha cambiado. Tus carteras no se modifican.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
     <div class="seg-col">
@@ -1423,10 +1485,9 @@ input[type=radio]{min-height:0;width:20px;height:20px;padding:0;accent-color:var
         <section class="panel panel-nota" id="nota-panel" tabindex="-1" aria-live="polite"><p class="paso3-volver"><span class="paso-etq" id="paso-etq">Paso 3 de 3 · Revisión</span><button class="btn btn-secundario" type="button" id="paso-volver">← Volver a la distribución</button></p><div id="nota-cuerpo"></div></section>
         <section class="panel panel-res" id="res-detalle" tabindex="-1">
           <h2>Resumen</h2>
-          <section id="radio" class="radio" aria-labelledby="radio-t">
-            <h3 id="radio-t">Radiografía de concentración</h3>
+          <details id="radio" class="radio"><summary id="radio-t">Concentración y límite personal</summary>
             <div id="radio-cuerpo"></div>
-          </section>
+          </details>
           <div class="asig">
             <span class="etq">Asignado</span>
             <div class="asig-fila"><span id="r-total" class="num-grande num">0&nbsp;%</span></div>
@@ -2414,9 +2475,9 @@ function htmlNotaEstructura(esc, ev, origen) {
   if (ev.publicada) {
     cuerpo = `<p class="nota-num"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
       <p class="nota-expl">${esc(explicarNota(ev))}</p>
-      <ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
+      <details class="mini"><summary>Fortaleza, limitación y fecha</summary><ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>
-      ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul>`;
+      ${inst ? `<li>Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</li>` : ''}</ul></details>`;
   } else {
     cuerpo = `<p class="nota-pend${estadoNota(ev) === 'Nota pendiente' ? ' espera' : ''}"><b>${esc(estadoNota(ev))}.</b> ${esc(explicarNota(ev) || ev.motivo || '')}</p>${ev.bloques ? datosExistentes(esc, ev) : ''}${inst ? `<p class="mut peq">Instantánea del ${esc(inst)}${periodos ? `; ejercicios hasta ${esc(periodos)}` : ''}.</p>` : ''}`;
   }
@@ -2431,7 +2492,8 @@ function htmlNotaEstructura(esc, ev, origen) {
     <p class="peq">La nota es la suma de cada bloque (puntuación de 1 a 10 × su peso) y se redondea una sola vez, al final, a un decimal. Solo se publica con la cartera al 100 % y con al menos el ${Math.round(PARAMETROS.minCobertura * 100)} % del peso evaluable en cada bloque; si no, se muestran los bloques disponibles y el motivo.</p>
     <p class="peq">Empresas y sectores: número efectivo de empresas = 1 / suma de los pesos al cuadrado (las clases de una misma compañía cuentan una vez). Tamaño, deuda y rentabilidad: percentiles del universo cubierto o del sector (hacen falta ${PARAMETROS.minComparables} comparables) y frecuencias de los últimos ${PARAMETROS.ejercicios} ejercicios. Los umbrales son provisionales.</p>
     ${sin}</details>`;
-  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${aviso}${porque}</section>`;
+  const visual = bl.length ? `<div class="nota-criterios">${bl.map(b => `<div><div class="criterio-cab"><span>${esc(b.nombre)}</span><b>${b.puntuacion == null ? 'Sin evaluar' : cm(b.puntuacion.toFixed(1)) + '/10'}</b></div>${b.puntuacion == null ? '<div class="criterio-ausente">Datos o método insuficientes</div>' : `<div class="vista-track" aria-hidden="true"><i style="width:${Math.max(0, Math.min(100,b.puntuacion*10))}%"></i></div>`}</div>`).join('')}</div>` : '';
+  return `<section class="nota" aria-labelledby="nota-t">${cab}${cuerpo}${visual}${aviso}${porque}</section>`;
 }
 
 // Qué cambia en los bloques evaluables al pasar de la cartera base a la propuesta (laboratorio). No recalcula nada: recibe las dos evaluaciones.
@@ -2776,11 +2838,13 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   if (!n) return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3><p class="mut">Todavía no hay posiciones: añade un activo y reparte para ver el resumen.</p></section>`;
   const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
   const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
-  const parcial = ev && !ev.publicada;
+  const ancho = v => Math.max(0, Math.min(100, Number(v) || 0));
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
-    <p>${n} ${n === 1 ? 'posición' : 'posiciones'}, asignado ${P(r.total ?? 0)}. Mayor posición: <b>${esc(r.mayor.ticker)}</b> ${P(r.mayor.peso)}${r.top3.completo ? `; las tres mayores suman ${P(r.top3.peso)}` : ''}. Por tipo: ${esc(tipos)}.</p>
-    <p class="mut peq">Es la concentración <b>por posición</b>: no es la exposición real de los fondos ni una pérdida esperada.${parcial ? ' Debajo, qué se ha podido analizar y qué queda sin evaluar.' : ''}</p>
-    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Probar un cambio</button></p></section>`;
+    <div class="vista-metricas"><div><span>Mayor posición · ${esc(r.mayor.ticker)}</span><strong>${P(r.mayor.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.mayor.peso)}%"></i></div></div>
+    <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
+    <p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p>
+    <p class="mut peq">Concentración por posición; no mide pérdidas ni la composición interna de los ETF.</p>
+    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Ver qué cambiaría →</button></p></section>`;
 }
 function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
@@ -3052,7 +3116,7 @@ const metodoTexto = fin => ({
   proporcional: { corto: 'Las demás posiciones bajan todas en la misma proporción para liberar el porcentaje necesario. Si el peso nuevo es menor que el actual, lo liberado queda sin asignar: no se reparte al alza.',
     redondeo: 'Cada posición se multiplica por (lo que deben sumar) / (lo que suman ahora) y se redondea a una décima repartiendo las décimas sobrantes por mayor resto (empate: orden de símbolo). Así los totales siempre cuadran.' },
 }[fin] || { corto: 'Elige cómo se financia el cambio y verás aquí cómo se calcula, antes de simular.', redondeo: '' });
-const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<b>Cómo se calcula:</b> ${esc(m.corto)}${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}`; };
+const htmlMetodo = (esc, fin) => { const m = metodoTexto(fin); return `<details class="mini"><summary>Cómo se reparte el cambio</summary><p>${esc(m.corto)}</p>${m.redondeo ? `<details class="mini"><summary>Cómo se redondea</summary><p>${esc(m.redondeo)}</p></details>` : ''}</details>`; };
 function pintarLabForm() {
   const { $, esc, logged } = x(), s = LAB.sim, alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
   if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
@@ -3164,10 +3228,10 @@ function pintarResultado() {
       : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
-    <p class="lab-origen"><b>Quién cede el peso:</b> ${esc(origenPeso(sim))}</p>${htmlBarras(esc, sim)}
-    <p class="lab-concl">${concl}</p><p class="mut peq"><b>Tu cartera base no cambia.</b> Aquí solo se compara con una alternativa simulada.</p>
-    ${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}
-    ${evA && evD ? htmlCambioNota(esc, evA, evD) : ''}
+    ${htmlBarras(esc, sim)}<h3>Quién cede el peso</h3><div class="delta-grid">${sim.cambios.filter(f => f.delta !== 0).map(f => `<div><span>${esc(f.ticker)}</span><b>${dpts(f.delta)}</b><small>${P(f.antes)} → ${P(f.despues)}</small></div>`).join('') || '<p>Sin cambios de peso.</p>'}</div><details class="mini"><summary>Ver el origen del peso</summary><p class="lab-origen">${esc(origenPeso(sim))}</p></details>
+    <p class="mut peq"><b>Tu cartera base no cambia.</b> Esta alternativa no implica una mayor rentabilidad.</p><details class="mini"><summary>Qué cambia, en palabras</summary><p class="lab-concl">${concl}</p></details>
+    <details class="mini"><summary>Comparar todos los pesos y categorías</summary>${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}</details>
+    ${evA && evD ? `<details class="mini"><summary>Comparar la nota de estructura</summary>${htmlCambioNota(esc, evA, evD)}</details>` : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
 }
 async function guardarEscenario() {
@@ -4527,14 +4591,20 @@ $('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
 $('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
 $('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
-  const ps = repartoPlantilla('dividendos'); if (!ps.length) return;
-  const r = calcResumen(ps), vis = ps.slice(0, 3), resto = ps.length - vis.length;
-  $('#prev').innerHTML = `<div class="prev"><div class="prev-cab"><b>Cartera de dividendos</b><span class="chip">Vista previa</span></div>
-    <div class="prev-fila prev-th" aria-hidden="true"><span>Activo</span><span class="num">Peso</span><span class="num"><abbr>ROIC</abbr></span></div>
-    ${vis.map(p => `<div class="prev-fila"><span><b>${esc(p.ticker)}</b><small>${esc(by[p.ticker].nombre)}</small></span><span class="num">${pesoTxt(p.peso)}</span><span class="num">${roicTxt(by[p.ticker])}</span></div>`).join('')}
-    ${resto ? `<div class="prev-mas">+${resto} posiciones más. Lista abreviada: los totales incluyen las ${ps.length} posiciones.</div>` : ''}
-    <div class="barra" aria-hidden="true"><i style="width:${Math.min(100, r.total)}%"></i></div>
-    <div class="prev-pie"><div><span>Total asignado</span><b class="num">${pesoTxt(r.total)}</b></div><div><span><abbr title="Rentabilidad sobre el capital invertido">ROIC</abbr> medio de empresas con datos</span><b class="num">${pct(r.roic)}</b></div></div></div>`;
+  $('#prev').innerHTML = `<div class="prev preview-v25"><div class="prev-cab"><b>¿Y si añades otra empresa?</b><span class="chip sim">Ejemplo</span></div>
+    <p class="mut peq">KO 60 % · PG 40 %. Mueve el peso de JNJ.</p>
+    <label class="preview-control" for="preview-peso">Peso de JNJ <output id="preview-valor" for="preview-peso">10 %</output></label>
+    <input type="range" id="preview-peso" min="0" max="40" step="1" value="10" aria-describedby="preview-ayuda">
+    <div id="preview-reparto"></div>
+    <p id="preview-ayuda" class="mut peq">KO y PG ceden peso proporcionalmente. Solo cambia este ejemplo.</p>
+    <a class="btn btn-secundario" href="#ejemplo">Explorar el caso →</a></div>`;
+  const pintar = () => {
+    const peso = Number($('#preview-peso').value), sim = simular([{ticker:'KO',peso:60},{ticker:'PG',peso:40}], {ticker:'JNJ',peso}, 'proporcional');
+    $('#preview-valor').textContent = peso + ' %';
+    const bar = (lista, title) => { const ps = [...lista].sort((a,b)=>['KO','PG','JNJ'].indexOf(a.ticker)-['KO','PG','JNJ'].indexOf(b.ticker)); return `<div class="preview-chart"><span>${title}</span><div class="preview-stack" role="img" aria-label="${title}: ${ps.map(p=>p.ticker+' '+pesoTxt(p.peso)).join(', ')}">${ps.map(p=>`<i style="width:${p.peso}%;--c:var(--c${['KO','PG','JNJ'].indexOf(p.ticker)})">${p.peso >= 12 ? p.ticker : ''}</i>`).join('')}</div></div>`; };
+    $('#preview-reparto').innerHTML = bar(sim.antes,'Cartera base') + bar(sim.despues,'Alternativa simulada') + `<div class="delta-grid">${sim.cambios.map(p=>`<div><span>${p.ticker}</span><b>${pesoTxt(p.despues)}</b><small>${p.delta>0?'+':''}${nf(p.delta)} puntos</small></div>`).join('')}</div>`;
+  };
+  $('#preview-peso').addEventListener('input', pintar); pintar();
 }
 
 // ---------- reintentos genéricos ----------

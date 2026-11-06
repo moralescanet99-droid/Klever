@@ -152,7 +152,7 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
     <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
     <p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p>
     <p class="mut peq">Concentración por posición; no mide pérdidas ni la composición interna de los ETF.</p>
-    <p class="vistazo-acc"><button class="btn btn-primario" type="button" id="vz-probar">Ver qué cambiaría →</button></p></section>`;
+    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Ver qué cambiaría →</button></p></section>`;
 }
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');

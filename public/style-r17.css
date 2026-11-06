@@ -329,3 +329,5 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 .lab-res .esp-fila{grid-template-columns:minmax(0,1fr);gap:8px}
 @media(min-width:1200px){#lab-cuerpo:has(>#lab-form){display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;align-items:start}#lab-cuerpo>.pag-cab{grid-column:1/-1}#lab-res{min-width:0}#lab-res .lab-res{margin-top:0}}
 @media(max-width:479px){.lab-res{padding:14px}.lab-res .delta-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Evolución 25 · ajuste de la integración: a 320–479 px el resumen visual no debe empujar el resultado de la revisión bajo la barra fija */
+@media(max-width:479px){.vista-metricas{margin:8px 0}.vista-metricas>div{padding:8px}.vista-metricas strong{font-size:1.25rem;margin:4px 0}.vista-track{height:4px}.vistazo .vistazo-acc{margin-top:8px}.nota-criterios{gap:10px;margin:14px 0}}

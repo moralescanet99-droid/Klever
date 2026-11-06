@@ -95,20 +95,24 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
 
   // ===== PORTADA =====
   p = await nuevo(b, 1440, 900); await p.goto(B); await p.waitForSelector('#muestra-publicas .tarjeta');
-  ok('portada: titular con la promesa de producto (ronda 21)', (await T(p, 'h1')) === 'Construye tu cartera, entiende sus puntos débiles y prueba cambios antes de decidir');
+  ok('portada: titular con la promesa de producto (ronda 21)', (await T(p, 'h1')) === 'Entiende lo que tienes.Explora lo que podría cambiar.');
   ok('portada: explicación breve con la transparencia de simulación (ronda 21)', /sin dinero real/.test(await T(p, '.lead')) && /datos de prueba/.test(await T(p, '.lead')) && (await T(p, '.lead')).length < 220, await T(p, '.lead'));
   ok('portada: SEC solo en texto secundario de fuentes', !(await T(p, '.lead')).includes('SEC') && (await T(p, '.fuentes')).includes('SEC'));
   await p.click('#entrada-ejemplo'); await p.waitForTimeout(700);   // ronda 22: quien llega por primera vez usa las tres entradas (el botón superior solo aparece a quien vuelve)
   ok('portada: «Explorar un ejemplo» desplaza a las plantillas y mueve el foco', await p.evaluate(() => document.activeElement.classList.contains('plantilla') && document.activeElement.getBoundingClientRect().top < innerHeight && document.activeElement.getBoundingClientRect().bottom > 0));
   const prev = await T(p, '#prev');
-  ok('portada: vista previa abreviada (3 posiciones + «+3 posiciones») con totales completos', (await p.locator('#prev .prev-fila:not(.prev-th)').count()) === 3 && prev.includes('+3 posiciones') && prev.includes('abreviada') && prev.includes('100,0 %') && prev.includes('6 posiciones'));
-  const ph = await p.evaluate(() => Math.round(document.querySelector('#prev .prev').getBoundingClientRect().height)); ok('portada: vista previa más baja (< 460 px)', ph < 460, ph + 'px');
+  // Evolución 25: la tabla abreviada de la portada se sustituye por un ejemplo interactivo (KO 60 / PG 40 + JNJ ajustable); mismas garantías de veracidad, comprobación nueva
+  { const rep = () => p.evaluate(() => Object.fromEntries([...document.querySelectorAll('#preview-reparto .delta-grid > div')].map(d => [d.querySelector('span').textContent, d.querySelector('b').textContent.replace(/\s+/g, ' ').trim()])));
+    ok('portada: ejemplo interactivo con JNJ al 10 % → KO 54 % / PG 36 % y la nota de que solo cambia el ejemplo', JSON.stringify(Object.keys(await rep())) === '["KO","PG","JNJ"]' && /54/.test((await rep()).KO) && /36/.test((await rep()).PG) && /Solo cambia este ejemplo/.test(prev), JSON.stringify(await rep()));
+    await p.locator('#preview-peso').fill('40'); await p.waitForTimeout(150);
+    ok('portada: al subir JNJ a 40 % el resto cede proporcionalmente (KO 36 %, PG 24 %) y el rótulo se actualiza', /36/.test((await rep()).KO) && /24/.test((await rep()).PG) && /40/.test(await T(p, '#preview-valor')), JSON.stringify(await rep()));
+    const ph = await p.evaluate(() => Math.round(document.querySelector('#prev .prev').getBoundingClientRect().height)); ok('portada: el ejemplo cabe sin desbordar (< 640 px de alto)', ph < 640, ph + 'px'); }
   ok('portada: etiquetas veraces de origen en carteras públicas', (await p.locator('#muestra-publicas .chip.origen').allTextContents()).every(t => t === 'Ejemplo de Klever'));
   ok('portada: descripciones completas, sin recortes', await p.evaluate(() => [...document.querySelectorAll('#muestra-publicas .t-tesis')].every(e => e.scrollHeight <= e.clientHeight + 1 && !/[…]|\.\.\.$/.test(e.textContent) && /[.]$/.test(e.textContent.trim()))));
   ok('portada: aviso general conservado y sin avisos recortados', (await T(p, '.pie')).includes('Contenido educativo. No es asesoramiento financiero'));
   await p.ctx.close();
   p = await nuevo(b, 390, 844); await p.goto(B); await p.waitForSelector('.plantilla');
   const th = await p.evaluate(() => { const c = [...document.querySelectorAll('.plantilla')]; return Math.round(c[c.length - 1].getBoundingClientRect().bottom - c[0].getBoundingClientRect().top); }); ok('portada móvil: las tres plantillas caben en ≤ 360 px de alto (antes 649)', th <= 360, th + 'px (antes: 649 px)');
-  ok('portada móvil: vista previa oculta', !(await p.isVisible('#prev'))); await p.ctx.close();
+  ok('portada móvil (Evolución 25): el ejemplo interactivo es visible y no desborda', (await p.isVisible('#prev')) && await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth)); await p.ctx.close();
   await b.close(); fin();
 })();

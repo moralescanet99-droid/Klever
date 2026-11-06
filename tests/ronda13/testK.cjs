@@ -30,6 +30,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     ev('K1-' + w, `Radiografía de la versión guardada (${w} px)`, 'Dice qué versión analiza y da conclusión primero: mayor KO 60 %, tres mayores (solo hay 2) 100 %, sin asignar 0 %; explica qué no mide',
       rad.t.slice(0, 330), rad.vis && /Analizando: la versión guardada en tu cuenta/.test(rad.t) && /La mayor posición es KO \(60 %\)/.test(rad.t) && /Solo hay 2 posiciones: suman el 100 %/.test(rad.t) && /Concentración no es riesgo/.test(rad.t) && /Mayores posiciones/.test(rad.t));
     // ---------- 2. Límite personal: se explica el hecho, no se impone un umbral
+    await p.evaluate(() => { const d = document.querySelector('#radio'); if (d) d.open = true; });   // Evolución 25: la concentración detallada es un desplegable
     await p.fill('#radio-lim', '50'); await p.click('#radio-lim-form button[type=submit]'); await p.waitForFunction(() => /supera el límite/.test(document.querySelector('#radio-cuerpo').textContent)); await p.waitForTimeout(300);
     const lim = await p.evaluate(() => document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '));
     const ap = await api(p, 'GET', '/portfolios/' + idBase);
@@ -41,6 +42,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     // ---------- 3. Guardada frente a cambios locales; cartera incompleta sin normalizar
     await abrir(p, 'Para cambios locales'); await peso(p, 2).fill('10'); await p.waitForTimeout(400); await revision(p);   // la radiografía vive en el paso «Revisión»
     const loc = await p.evaluate(() => ({ t: document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '), btns: [...document.querySelectorAll('#radio-cuerpo [data-modo]')].map(e => e.textContent + ':' + e.getAttribute('aria-pressed')) }));
+    await p.evaluate(() => { document.querySelector('#radio').open = true; });
     await p.locator('#radio-cuerpo [data-modo=guardada]').click(); await p.waitForTimeout(200);
     const gua = await p.evaluate(() => document.querySelector('#radio-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '));
     ev('K3-' + w, `Versión guardada frente a cambios locales (${w} px)`, 'Con cambios sin guardar analiza «tus cambios» (KO 50, PG 30, JNJ 10 = 90 %, falta asignar 10 %: NO se reescala); un botón cambia a «la versión guardada» (100 %)',
@@ -83,7 +85,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const metodo = N(await p.textContent('#lab-metodo')); await p.fill('#lab-peso', '10');
     ev('K8-' + w, `Laboratorio: base y activo llegan elegidos; el método se explica antes de calcular (${w} px)`, 'Activo JNJ y cartera «Base dividendos» preseleccionados; título con «Simulación»; el método menciona que cada posición se multiplica y que se redondea por mayor resto; aún no hay resultado',
       `${pre.t} / ${pre.base}; ${pre.h1}; método: ${metodo.slice(0, 90)}…`, pre.t === 'JNJ' && pre.base === 'Base dividendos' && /Simulación/.test(pre.h1) && /se multiplica/.test(metodo) && /mayor resto/.test(metodo) && (await p.locator('#lab-res h2').count()) === 0);
-    await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab');
+    await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab', { state: 'attached' }).then(() => p.evaluate(() => document.querySelectorAll('#lab-res details.mini').forEach(d => { d.open = true; })));
     const filas = await filasLab(p), tot = N(await p.locator('#lab-res tr.tot').first().textContent()), concl = N(await p.textContent('.lab-concl'));
     await snap(p, 'R4-laboratorio-resultado', w, true);
     ev('K9-' + w, `Simulación del ejemplo verificable: KO 60 / PG 40 + JNJ 10 reduciendo proporcionalmente (${w} px)`, 'KO 54, PG 36, JNJ 10; total 100; tabla con antes, después y cambio (con texto); sin asignar 0 %; ninguna cifra negativa',
@@ -134,7 +136,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     ev('K15-' + w, `Operación inviable: se explica el motivo y no se ofrece guardar (${w} px)`, 'Con la cartera al 100 % y financiación con lo sin asignar: «No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %»; sin formulario de guardado',
       inv.slice(0, 180), /No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 10 %/.test(inv) && (await p.locator('#lab-guardar').count()) === 0);
     // ---------- 12. Texto ampliado (simulado) en las pantallas nuevas
-    await p.fill('#lab-peso', '10'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab');
+    await p.fill('#lab-peso', '10'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab', { state: 'attached' }).then(() => p.evaluate(() => document.querySelectorAll('#lab-res details.mini').forEach(d => { d.open = true; })));
     await p.evaluate(() => { document.documentElement.style.fontSize = '200%'; }); await p.waitForTimeout(400);
     const amp = { lab: await sinDesborde(p) }; await snap(p, 'R7-laboratorio-ampliado', w);
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('.seg-item'); await p.waitForTimeout(300); amp.seg = await sinDesborde(p);
@@ -181,7 +183,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       await p.goto(B); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla=dividendos]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.locator('.peso-in >> visible=true').first().waitFor(); await p.waitForTimeout(400);
       const radG = N(await p.textContent('#radio-cuerpo'));
       ev('K22-' + w, `Visitante: la radiografía analiza el borrador y no ofrece guardar el límite (${w} px)`, 'Dice que analiza «tu borrador, que aún no está guardado en tu cuenta» y que el límite se podrá definir al guardar', radG.slice(0, 150), /Analizando: tu borrador, que aún no está guardado en tu cuenta/.test(radG) && /cuando guardes la cartera en tu cuenta/.test(radG) && !/Klever no impone/.test(radG));
-      await p.evaluate(() => { location.hash = '#laboratorio'; }); await p.waitForSelector('#lab-form'); await p.fill('#lab-ticker', 'JNJ'); await p.fill('#lab-peso', '5'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab');
+      await p.evaluate(() => { location.hash = '#laboratorio'; }); await p.waitForSelector('#lab-form'); await p.fill('#lab-ticker', 'JNJ'); await p.fill('#lab-peso', '5'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab', { state: 'attached' }).then(() => p.evaluate(() => document.querySelectorAll('#lab-res details.mini').forEach(d => { d.open = true; })));
       const g = N(await p.textContent('#lab-res .lab-guardar'));
       ev('K23-' + w, `Visitante: la simulación es temporal y no se dice «guardado» (${w} px)`, 'El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»', g.slice(0, 140), /temporal/.test(g) && (await p.locator('#lab-guardar-btn').count()) === 0 && !/Guardado en tu cuenta|Escenario guardado/.test(await p.textContent('body')));
       await p.ctx.close();
