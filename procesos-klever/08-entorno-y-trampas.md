@@ -191,3 +191,4 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Al fusionar, mira TODOS los conflictos** (`git diff --name-only --diff-filter=U`), no la cola de la salida: en la integración de la ronda 26 se quedaron marcadores en `03-decisiones.md` hasta revisarlo.
 - **La demo concatena todos los módulos en un solo script:** dos `const` con el mismo nombre en archivos distintos (p. ej. `cm`) la dejan en blanco. Usa nombres propios en módulos nuevos y añádelos a `scripts/demo/build_demo.py`.
 - **`textContent` de las cifras clave no lleva espacios entre nodos** («Mayor posición40 %→20 %») y los porcentajes llevan espacio duro: en pruebas, regex con `\s*` y `\s%`.
+- **En pruebas con varias pestañas, un ayudante ligado a la primera página falla cuando se cierra** («Target page… has been closed»): pasar la página actual como variable. `page.route` es por página: una pestaña nueva no hereda las rutas simuladas.

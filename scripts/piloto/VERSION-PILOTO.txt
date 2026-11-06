@@ -1,11 +1,11 @@
-# Versión identificable del piloto (ronda 26). NO se modifica entre participantes.
+# Versión identificable del piloto (ronda 27). NO se modifica entre participantes.
 # Un cambio funcional posterior exige una nueva versión declarada (y avisar a quien analice el piloto).
-# Sustituye en ESTA rama a piloto-r23 (que sigue intacta en la rama ccr-b652a7eb-uukhdy). Motivo en procesos-klever/03-decisiones.md.
-version: piloto-r26
-commit-codigo-probado: cdae3ee30da08edc459a7d4ee0103f4a908efe30
-# Pasada completa 998/0 sobre cdae3ee (ronda26/resultado-ejecucion.txt); el código no cambió después (solo documentación y scripts de piloto).
+# Sustituye a piloto-r26 (no se llegó a usar con personas): corrige la duplicación por un envío incierto. piloto-r23 sigue intacto en la rama ccr-b652a7eb-uukhdy.
+version: piloto-r27
+commit-codigo-probado: a73b4a280f4834b1e1dcebed8f58ddfaaa355e28
+# Pasada completa: ronda27/resultado-ejecucion.txt. El código no cambió después (solo documentación y scripts de piloto).
 # Se comprueba con scripts/piloto/verificar-version.sh (compara los hashes de estas carpetas con los de este archivo).
-tree-public: 6a6cb7ff9f9585c44a70812d49a244be085dbb85
+tree-public: 8de22ef68acbd965dc9491fe75ddc4eb105fda32
 tree-functions: f3e5cb26309940ac21da4248f28f82138af70ccd
 tree-migrations: 14c607623f5d2609bd1d0d145234cc60c348be7b
 blob-schema: 6632b419deb2a7547d4d8314204ae6f325e604fa

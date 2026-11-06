@@ -1,4 +1,6 @@
-# Piloto con cinco principiantes sobre `piloto-r26` — qué cambia respecto al guion de la ronda 24
+# Piloto con cinco principiantes sobre `piloto-r27` (antes `piloto-r26`) — qué cambia respecto al guion de la ronda 24
+
+> **Ronda 27:** la versión pasa a **`piloto-r27`** (mismo producto + corrección de la duplicación por un envío incierto). Donde aquí ponga `piloto-r26`, léase `piloto-r27`. La sección «Incidencia conocida» de `ronda24/PRUEBA-CON-USUARIOS.md` **ya no aplica**: ver `ronda27/LEEME.md`.
 
 **Estado: NO realizado.** No hay participantes ni resultados. Este documento **completa** (no sustituye) el guion, las instrucciones y la verificación previa de `ronda24/`: todo lo de allí sigue valiendo, cambiando `piloto-r23` por **`piloto-r26`**.
 
