@@ -58,3 +58,6 @@ Teléfono real, teclado virtual, Safari/Firefox, lector de pantalla con las fich
 2. **Umbrales de las señales (25 % / 40 % / ≤ 3 categorías / < 4 posiciones):** es la primera vez que Klever enseña umbrales propios (hasta ahora solo el límite personal, «Klever no impone ningún umbral»). Se rotulan como orientativos. ¿Se aceptan, se cambian o se dejan solo como límite personal?
 3. **Integración:** esta rama contiene la evolución 25. Integrarla aquí resuelve de hecho la decisión abierta 1 del traspaso (¿se integra `evolucion-25`?). El piloto sigue en `piloto-r23`; probar esta versión con personas sería un segundo grupo (no mezclar).
 4. ¿Siguiente paso: probar con 5 personas esta versión o el piloto ya preparado?
+
+### Decididas (Javier: «hazlo según tu criterio»)
+1. «Antes de invertir»: **se mantiene**. 2. Umbrales: **se aceptan como orientativos**; se revisan si el piloto muestra que se leen como consejo. 3. **No se integra en `main`** hasta el piloto. 4. **Piloto de un solo grupo sobre `piloto-r26`** (`PILOTO-R26.md`). Motivos en `procesos-klever/03-decisiones.md`.

@@ -16,7 +16,8 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Evolución visual e interactiva 26 (rama `claude/klever-visual-interactive-evolution-h6n454`, sobre `evolucion-25`)
 - ✅ Señales de cartera (`public/js/senales.js`), exposición por categoría, «Ver qué cambiaría» con la comparación ya calculada, deslizador instantáneo y cifras clave en el laboratorio, «Descubre otras categorías», anillo de la nota, resumen del Cuaderno, señal en «Mis portafolios», portada con la nueva promesa y recorrido de 5 pasos, `style-r26.css`. Pruebas: `unit-senales26` (13) y `testV` (24) en verde; pasada completa **998/0** (`cdae3ee`, local) tras corregir 3 regresiones de geometría y orden y reponer «recomendación de compra» (ver informe).
-- ⬜ Confirmar con Javier la promesa «antes de invertir» y los umbrales orientativos; teléfono real, lector de pantalla, Safari/Firefox y personas: no hechos. Margen estrecho de la revisión a 320 px y 1440 px (26–30 px).
+- ✅ Promesa y umbrales decididos (03-, con permiso de Javier). Piloto preparado sobre **`piloto-r26`** (versión congelada, persistencia comprobada en servidor; `ronda26/PILOTO-R26.md`). No integrado en `main` hasta el piloto.
+- ⬜ Verificación previa en el dispositivo, reclutar 5 personas y hacer el piloto; teléfono real, lector de pantalla, Safari/Firefox y personas: no hechos. Margen estrecho de la revisión a 320 px y 1440 px (26–30 px).
 
 ## Evolución visual 25 (rama `evolucion-25`)
 - ✅ Patch integrado y batería completa 961/0 (local); regresiones del patch corregidas (ver `ronda25/LEEME.md`). ⬜ Teléfono real, ETF/datos ausentes a la vista, 5 usuarios y revisión visual: no hechos. El piloto sigue en `piloto-r23`.
