@@ -3542,7 +3542,9 @@ async function mostrarEscenario(id) {
   if (!logged()) { go('#seguimiento'); return; }
   let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
-  LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } if (LAB.revLectura !== e.id) LAB.revLectura = null; pintarEscenario();
+  LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } if (LAB.revLectura !== e.id) LAB.revLectura = null;
+  if (!LAB.revIntento) { const pi = intentoGuardado(e.id); if (pi) { LAB.revIntento = { intento: pi, fase: 'incierto' }; if (LAB.revMsg?.esc !== e.id) avisarRev('aviso', 'Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.'); } }
+  pintarEscenario();
 }
 function htmlEditorialFicha(esc, e, viva) {      // el contexto editorial completo, UNA vez y en su sitio: la ficha. Es independiente de las revisiones personales.
   return `<section class="esc-editorial" aria-label="Respuesta editorial"><h2>Respuesta editorial</h2><p class="mut peq">Lo que dice la Revista sobre la cuestión que sigues. Tus revisiones personales (más abajo) son aparte: no cambian esta respuesta ni demuestran que exista una fuente.</p>
@@ -3607,8 +3609,17 @@ const leerBorradorRev = () => { const q = s => document.querySelector(s), dec = 
 // El borrador de una revisión vive en memoria Y en el dispositivo (clave por escenario, caduca a los 7 días): si la sesión caduca y se vuelve a entrar con la MISMA cuenta, sigue ahí; si entra OTRA cuenta, el escenario
 // no es suyo (404) y además se purgan los borradores de escenarios ajenos al cargar su Cuaderno; al cerrar sesión a propósito se borran todos.
 const CLAVE_REV = 'klever_rev_', DIAS_REV = 7;
-function persistirBorradorRev(b) { try { const { store } = LAB.ctx, k = CLAVE_REV + b.esc; if ((b.obs || '').trim() || (b.apr || '').trim() || b.dec !== 'mantener') store.setItem(k, JSON.stringify({ ...b, t: Date.now() })); else store.removeItem(k); } catch { /* sin almacenamiento */ } }
+function persistirBorradorRev(b) { try { const { store } = LAB.ctx, k = CLAVE_REV + b.esc; if ((b.obs || '').trim() || (b.apr || '').trim() || b.dec !== 'mantener' || b.intento) store.setItem(k, JSON.stringify({ ...b, t: Date.now() })); else store.removeItem(k); } catch { /* sin almacenamiento */ } }
 function leerBorradorGuardado(id) { try { const b = JSON.parse(LAB.ctx.store.getItem(CLAVE_REV + id)); if (b && b.esc === id && Date.now() - b.t < DIAS_REV * 864e5) return b; } catch { /* dañado */ } return null; }
+// Ronda 27 · intento incierto que sobrevive a recargar, cerrar la pestaña o caducar la sesión. Solo se restaura DESPUÉS de que el servidor haya devuelto el escenario
+// a la sesión actual (mostrarEscenario): otra cuenta recibe 404 y nunca lo ve. Al reenviarlo se usa LA MISMA clave: el servidor comprueba la clave antes que la revisión
+// y devuelve el registro ya guardado si llegó (reconciliación sin otra escritura) o lo registra una sola vez si no llegó.
+function intentoGuardado(id) {
+  const b = leerBorradorGuardado(id), i = b?.intento;
+  if (!i || i.escId !== id || !/^[A-Za-z0-9-]{8,64}$/.test(String(i.clave)) || !Number.isInteger(i.revision) || !i.cuerpo || typeof i.cuerpo !== 'object') return null;
+  const c = {}; for (const k of CAMPOS_REVISION) c[k] = i.cuerpo[k] ?? (k === 'proxima_fecha' ? null : '');
+  return Object.freeze({ escId: id, clave: String(i.clave), revision: i.revision, cuerpo: Object.freeze(c) });
+}
 function olvidarBorradorRev(id) { try { LAB.ctx.store.removeItem(CLAVE_REV + id); } catch { /* sin almacenamiento */ } if (LAB.revBorrador?.esc === id) LAB.revBorrador = null; }
 const clavesRev = () => { const ks = []; try { for (let k = 0; k < localStorage.length; k++) { const c = localStorage.key(k); if (c && c.startsWith(CLAVE_REV)) ks.push(c); } } catch { /* sin almacenamiento */ } return ks; };   // se listan ANTES de borrar: el orden de localStorage.key() cambia al eliminar
 function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de los escenarios de ESTA cuenta (null = solo caducidad)
@@ -3619,7 +3630,9 @@ function borrarBorradoresRev() { for (const c of clavesRev()) { try { localStora
 const cuerpoDeBorrador = b => ({ fecha: b.fecha, observacion: (b.obs || '').trim(), aprendizaje: (b.apr || '').trim(), decision: b.dec, proxima_fecha: b.dec === 'reprogramar' ? (b.prox || null) : null });
 function guardarBorradorRev() {
   if (!document.querySelector('#rev-form')) return;
-  LAB.revBorrador = { esc: LAB.esc?.id, fecha: document.querySelector('#rev-fecha').value, obs: document.querySelector('#rev-obs').value, apr: document.querySelector('#rev-apr').value, dec: document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener', prox: document.querySelector('#rev-prox').value };
+  const pi = LAB.revIntento?.fase === 'incierto' && LAB.revIntento.intento.escId === LAB.esc?.id ? LAB.revIntento.intento : null;   // ronda 27: el intento INCIERTO también se guarda (clave y contenido congelados)
+  LAB.revBorrador = { esc: LAB.esc?.id, fecha: document.querySelector('#rev-fecha').value, obs: document.querySelector('#rev-obs').value, apr: document.querySelector('#rev-apr').value, dec: document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener', prox: document.querySelector('#rev-prox').value,
+    intento: pi ? { escId: pi.escId, clave: pi.clave, revision: pi.revision, cuerpo: { ...pi.cuerpo } } : null };
   persistirBorradorRev(LAB.revBorrador);
 }
 function restaurarFormRev() {
