@@ -9,7 +9,8 @@
 
 // ---------- utilidades ----------
 import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo } from './js/lab.js';
-import { simular } from './js/calculos.js';
+import { simular, radiografia } from './js/calculos.js';
+import { senales } from './js/senales.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
@@ -356,6 +357,8 @@ function resumenComp(ps) { // «AAPL 30 % · MSFT 25 % · +3 más»: todo sale d
   const vis = lista.slice(0, 3).map(x => `<b>${esc(x.ticker)}</b> ${pesoCorto(x.peso)}`).join(' · ');
   return vis + (lista.length > 3 ? ` · +${lista.length - 3} más` : '');
 }
+// Ronda 26: la señal principal de la versión GUARDADA, como una etiqueta breve (la explicación está en la revisión de la cartera).
+function chipSenal(ps) { const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return ''; const s0 = senales(radiografia(lista, by))[0]; return s0 ? `<span class="ci-senal senal-${s0.nivel}"><i aria-hidden="true"></i>${esc(s0.titulo)}</span>` : ''; }
 function itemCartera(p) {
   const n = p.n_posiciones, total = r1(p.total), loc = leerCopia(p.id), hayLocal = !!store.getItem('klever_edit_' + p.id);
   const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
@@ -369,7 +372,7 @@ function itemCartera(p) {
   const comp = resumenComp(p.posiciones);
   return `<li><button class="tarjeta cartera-item${hayLocal ? ' pendiente' : ''}" type="button" data-id="${p.id}" aria-label="${hayLocal ? 'Continuar editando' : 'Abrir'} ${esc(p.nombre)}">
     <span class="ci-l1"><b>${esc(p.nombre)}</b><span class="chip${p.publico ? ' pub' : ''}">${p.publico ? 'Pública' : 'Privada'}</span>${chipLocal}</span>
-    ${composicionMini(p.posiciones)}${comp ? `<span class="ci-top">${comp}</span>` : ''}
+    ${composicionMini(p.posiciones)}${comp ? `<span class="ci-top">${comp}</span>` : ''}${chipSenal(p.posiciones)}
     ${l2}${lLoc}${fecha ? `<span class="ci-l3 mut">${fecha}</span>` : ''}
     <span class="pl-acc"><span class="pl-acc-txt">${hayLocal ? 'Continuar editando' : 'Abrir'}</span></span></button></li>`;
 }
@@ -1216,7 +1219,8 @@ function contextoLab() {
     activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
-    probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }) };
+    probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }),
+    explorarSector: sector => { const f = { ...filtrosLeer(), sector }; filtrosGuardar(f); poblarSectores(); renderEmpresas(); go('#empresas'); } };   // ronda 26: descubrir por categoría (sin elegir empresa)
 }
 // ---------- arranque ----------
 (async () => {

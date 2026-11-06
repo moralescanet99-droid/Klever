@@ -7,6 +7,7 @@ import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, estad
 import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota, htmlEvaluacionGuardada } from './nota-ui.js';
 import { nuevoIntento, enviarIntento, actualizarVista, mismoContenido } from './revisiones.js';
+import { senales, hipotesis } from './senales.js';
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
@@ -30,7 +31,11 @@ export function iniciarLab(ctx) {
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
-  $('#nota-cuerpo').addEventListener('click', e => { if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null }); } });
+  $('#nota-cuerpo').addEventListener('click', e => {
+    if (e.target.closest('#vz-mas-b')) { LAB.vzMas = !LAB.vzMas; pintarRadiografia(); $('#vz-mas-b')?.focus(); return; }   // sin <details>: el orden «resultado → aviso → detalle» de la nota no cambia
+    const sb = e.target.closest('[data-senal]'); if (sb) { LAB.senalSel = sb.dataset.senal; pintarRadiografia(); $('#nota-cuerpo [data-senal="' + sb.dataset.senal + '"]')?.focus(); return; }
+    if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null, ...hipotesisVistazo() }); }
+  });
   $('#seg-radar').addEventListener('click', clicSeguimientoRadar);
   $('#seg-escenarios').addEventListener('click', e => { const b = e.target.closest('[data-registrar]'); if (b) { LAB.abrirRev = Number(b.dataset.registrar); ctx.go('#escenario-' + b.dataset.registrar); } });
   $('#seg-casos').addEventListener('click', e => { const b = e.target.closest('[data-caso-probar]'); if (b) abrirLab({ carteraId: 'ejemplo', ticker: b.dataset.casoProbar, historia: b.dataset.historia }); });
@@ -43,10 +48,12 @@ export function iniciarLab(ctx) {
   lab.addEventListener('input', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
   lab.addEventListener('change', e => { if (e.target.closest('#rev-form')) guardarBorradorRev(); });
   lab.addEventListener('change', e => { if (e.target.name === 'rev-dec') { const p = $('#rev-prox'); p.disabled = e.target.value !== 'reprogramar'; if (p.disabled) p.value = ''; else p.focus(); } });
-  lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); });
+  lab.addEventListener('input', e => { if (e.target.closest('#lab-form')) invalidarResultado(); if (e.target.id === 'lab-peso') { const r = $('#lab-rango'), v = Number(e.target.value.replace(',', '.')); if (r && v > 0) r.value = Math.round(Math.min(60, v)); } });
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
   lab.addEventListener('click', onLabClic);
+  lab.addEventListener('input', e => { if (e.target.id === 'lab-rango') { const pi = $('#lab-peso'); if (pi) pi.value = e.target.value; e.target.style.setProperty('--f', ((e.target.value - 1) / 59).toFixed(3)); simularEnVivo(); } });
+  lab.addEventListener('click', e => { const b = e.target.closest('[data-explorar]'); if (b) ctx.explorarSector?.(b.dataset.explorar); });
   $('#fi-cuerpo').addEventListener('click', onFichaClic);
   $('#fi-cuerpo').addEventListener('input', e => { if (e.target.id === 'fir-nota' && LAB.nota) LAB.nota.texto = e.target.value; });
   $('#fi-cuerpo').addEventListener('change', e => { if (e.target.id === 'fir-cartera') { ctx.store.setItem(CLAVE_REF, e.target.value); pintarFichaRadar(LAB.fichaActivo); $('#fir-cartera')?.focus(); } });
@@ -147,12 +154,28 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   const por = {}; for (const p of vivas) { const k = activos[p.ticker]?.tipo === 'etf' ? 'ETF' : activos[p.ticker] ? 'acciones' : 'sin clasificar'; por[k] = (por[k] || 0) + p.peso; }
   const tipos = Object.entries(por).map(([k, v]) => `${k} ${P(Math.round(v * 10) / 10)}`).join(' · ');
   const ancho = v => Math.max(0, Math.min(100, Number(v) || 0));
+  // Ronda 26: exposición por categoría (barra apilada) y señales breves; el detalle de cada señal aparece al pulsarla.
+  const cats = r.categorias, escala = Math.max(100, r.total || 0);
+  const expo = `<div class="vz-expo"><span class="vz-etq">Exposición por categoría</span><span class="vz-expo-barra" role="img" aria-label="${esc(cats.map(c => `${c.categoria} ${String(c.peso).replace('.', ',')} %`).join(', '))}">${cats.map((c, k) => `<i style="--c:var(--c${k % 8});width:${(c.peso / escala * 100).toFixed(2)}%"></i>`).join('')}</span>
+    <span class="vz-expo-ley">${cats.slice(0, 4).map((c, k) => `<span><i style="--c:var(--c${k % 8})" aria-hidden="true"></i>${esc(c.categoria)} <b>${P(c.peso)}</b></span>`).join('')}${cats.length > 4 ? `<span class="mut">+${cats.length - 4}</span>` : ''}</span></div>`;
+  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0];
+  const chips = ss.map(q => `<button type="button" class="senal senal-${q.nivel}" data-senal="${q.id}" aria-pressed="${q === sel}"><i aria-hidden="true"></i>${esc(q.titulo)}</button>`).join('');
+  const accion = sel?.accion ? sel.accion.pregunta : 'Probar un cambio';
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
     <div class="vista-metricas"><div><span>Mayor posición · ${esc(r.mayor.ticker)}</span><strong>${P(r.mayor.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.mayor.peso)}%"></i></div></div>
     <div><span>${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}</span><strong>${P(r.top3.peso)}</strong><div class="vista-track" aria-hidden="true"><i style="width:${ancho(r.top3.peso)}%"></i></div></div></div>
-    <p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p>
-    <p class="mut peq">Concentración por posición; no mide pérdidas ni la composición interna de los ETF.</p>
-    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar">Ver qué cambiaría →</button></p></section>`;
+    ${expo}
+    <div class="senales" role="group" aria-label="Señales de la cartera">${chips}</div>
+    ${sel ? `<p class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite">${esc(sel.detalle)}</p>` : ''}
+    <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar" data-senal-accion="${sel?.id || ''}">Ver qué cambiaría →</button> <span class="vz-hipo">${esc(accion)}</span> <button type="button" class="enlace vz-mas" id="vz-mas-b" aria-expanded="${!!LAB.vzMas}" aria-controls="vz-mas-t">Qué mide</button></p>
+    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
+}
+// La hipótesis que propone la señal elegida (o la primera): se calcula sobre la MISMA composición que el laboratorio usará como base.
+function hipotesisVistazo() {
+  const ed = x().editor(); if (!ed.current) return {};
+  const pos = ed.current.id ? ed.posGuardada : ed.pos, r = radiografia(pos, x().activos(), ed.current.limite_peso ?? null);
+  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], h = hipotesis(sel, r, pos);
+  return h ? { ticker: h.ticker, peso: h.peso, fin: h.fin, auto: !!h.ticker } : {};
 }
 export function pintarRadiografia() {
   const { $, esc, logged } = x(), ed = x().editor(), cont = $('#radio-cuerpo');
@@ -375,11 +398,11 @@ function pintarSeguimientoCasos(lista) {
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
   if (!logged()) { pintarSeguimientoCasos(null); }
-  if (!logged()) { $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
+  if (!logged()) { pintarResumenSeg(null); $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
   cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
   let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
   if (!vigente(g)) return;
-  LAB.listaEsc = lista; purgarBorradoresRev(lista.map(e => e.id)); pintarSeguimientoCasos(lista);
+  LAB.listaEsc = lista; purgarBorradoresRev(lista.map(e => e.id)); pintarSeguimientoCasos(lista); pintarResumenSeg(lista);
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
@@ -402,9 +425,19 @@ async function pintarSeguimientoEscenarios() {
   else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
 }
 
+// Ronda 26 · resumen visual del Cuaderno: cuántas ideas tocan HOY, cuántas están en estudio y cuántas empresas sigues. Solo con datos leídos (sin lista fiable no hay cifras).
+function pintarResumenSeg(lista) {
+  const { $ } = x(), el = $('#seg-resumen'); if (!el) return;
+  if (!lista) { el.innerHTML = `<ol class="seg-ciclo" aria-label="Cómo funciona el Cuaderno"><li><b>Simula</b><span>un cambio en el laboratorio</span></li><li><b>Guarda</b><span>tu pregunta y una fecha</span></li><li><b>Vuelve</b><span>y anota qué ha cambiado</span></li></ol>`; return; }
+  const h0 = hoy(), activos = lista.filter(e => e.estado === 'en_estudio'), toca = activos.filter(e => e.revisar_en && e.revisar_en <= h0).length;
+  const prox = activos.filter(e => e.revisar_en && e.revisar_en > h0).map(e => e.revisar_en).sort()[0], radar = LAB.radarError ? null : LAB.alm.radar.todos().length;
+  const tile = (n, t, cls = '', extra = '') => `<div class="seg-tile ${cls}"><b>${n}</b><span>${t}</span>${extra}</div>`;
+  el.innerHTML = `<div class="seg-tiles">${tile(toca, 'Para revisar hoy', toca ? 'toca' : '')}${tile(activos.length, 'En estudio', '', prox ? `<small>Próxima: ${fechaCorta(prox)}</small>` : '')}${radar == null ? '' : tile(radar, 'En tu radar')}</div>`;
+}
+
 // =============== laboratorio ===============
-export function abrirLab({ carteraId = null, ticker = '', historia: hid = null } = {}) {
-  LAB.sim = { carteraId, ticker, peso: '', fin: '', clave: null, res: null, historia: hid };
+export function abrirLab({ carteraId = null, ticker = '', historia: hid = null, peso = '', fin = '', auto = false } = {}) {
+  LAB.sim = { carteraId, ticker, peso: peso === '' ? '' : String(peso), fin, clave: null, res: null, historia: hid, auto };
   guardarEstadoLab(); x().go('#laboratorio');
 }
 const guardarEstadoLab = () => { try { sessionStorage.setItem(CLAVE_LAB, JSON.stringify({ carteraId: LAB.sim.carteraId, ticker: LAB.sim.ticker, peso: LAB.sim.peso, fin: LAB.sim.fin, historia: LAB.sim.historia })); } catch { /* sin almacenamiento */ } };
@@ -442,16 +475,43 @@ function pintarLabForm() {
         <label for="lab-ticker">Activo (símbolo o nombre)</label><input id="lab-ticker" list="lab-activos" autocomplete="off" value="${esc(s.ticker)}" placeholder="Por ejemplo: KO"><datalist id="lab-activos">${Object.values(activos).map(a => `<option value="${esc(a.ticker)}">${esc(a.nombre)}</option>`).join('')}</datalist>
         ${radar ? `<label for="lab-radar">…o elige uno de tu radar (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
-        <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10"></fieldset>
+        <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10">
+        ${!s.ticker ? htmlDescubrir(esc, r) : ''}</fieldset>
       <fieldset><legend>3 · Cómo se financia</legend>
         ${Object.entries(FINANCIACIONES).map(([k, v]) => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${v}${k === 'sin_asignar' ? ` <span class="mut">(ahora hay ${P(r.pendiente)} sin asignar)</span>` : ''}</label>`).join('')}
         <div class="lab-metodo" id="lab-metodo" aria-live="polite">${htmlMetodo(esc, s.fin)}</div></fieldset>
       <p class="mut peq">Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos, y no es una recomendación.</p>
       <p><button class="btn btn-primario" type="submit">Simular</button></p><p id="lab-error" class="error" role="alert"></p>
-    </form><div id="lab-res" aria-live="polite"></div>`;
+    </form><div class="lab-lado"><div id="lab-ajuste">${htmlAjuste(esc, s, actual)}</div><div id="lab-res" aria-live="polite"></div></div>`;
   if (s.res) pintarResultado();
+  else if (s.auto) {           // ronda 26: viene de una señal con una hipótesis completa → la comparación aparece ya calculada (sin pulsar «Simular»)
+    s.auto = false;
+    if (actual != null && activos[s.ticker] && s.fin && s.peso !== '') { simularAhora(false); $('.lab-lado')?.scrollIntoView({ block: 'start', behavior: 'auto' }); }
+  }
 }
-const cabLab = (extra = '') => `<div class="pag-cab"><h1>Laboratorio <span class="chip sim">Simulación</span></h1><p class="mut">Compara cómo cambiaría el reparto de una cartera antes de tocarla. ${extra}Nada de lo que hagas aquí cambia tu cartera, ni su versión pública, ni ejecuta operaciones.</p></div>`;
+// Ronda 26 · ajuste instantáneo: un deslizador del peso que recalcula la comparación al moverlo (mismo cálculo que «Simular»).
+function htmlAjuste(esc, s, actual) {
+  const a = s.ticker && x().activos()[s.ticker];
+  if (!a) { const b = baseLab(); if (!b?.pos?.length) return '';   // sin activo elegido: la cartera base a la vista y dónde aparecerá la alternativa
+    const tks = b.pos.map(p => p.ticker), t = Math.round(b.pos.reduce((q, p) => q + p.peso, 0) * 10) / 10;
+    return `<div class="lab-ajuste lab-espera"><p class="esp-tit">Cartera base</p><span class="esp-barra" role="img" aria-label="Cartera base: ${esc(b.pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${b.pos.map(p => `<i style="--c:var(--c${tks.indexOf(p.ticker) % 8});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}${t < 100 ? `<i class="libre" style="width:${(100 - t).toFixed(1)}%"></i>` : ''}</span>
+      <p class="lab-espera-txt">Elige un activo y un peso: <b>la alternativa aparecerá aquí</b>.</p></div>`; }
+  const v = Number(String(s.peso).replace(',', '.')), val = Number.isFinite(v) && v > 0 ? Math.min(100, v) : (actual || 10);
+  return `<div class="lab-ajuste"><div class="lab-ajuste-cab"><label for="lab-rango">Peso de <b>${esc(s.ticker)}</b>${actual != null ? ` <span class="mut">(ahora ${P(actual)})</span>` : ''}</label><output id="lab-rango-v" for="lab-rango">${P(val)}</output></div>
+    <input id="lab-rango" class="peso-rng" type="range" min="1" max="60" step="1" value="${Math.round(Math.min(60, val))}" style="--c:var(--azul);--f:${((Math.min(60, val) - 1) / 59).toFixed(3)}" aria-describedby="lab-rango-ayuda"><p id="lab-rango-ayuda" class="mut peq">Muévelo: la comparación se recalcula al instante. Es una hipótesis, no una previsión.</p></div>`;
+}
+// Descubrir sin recomendar: las categorías que la cartera NO tiene llevan a «Explorar empresas» con ese filtro. Klever no elige la empresa.
+function htmlDescubrir(esc, r) {
+  const tiene = new Set(r.categorias.map(c => c.categoria)), lista = [...new Set(Object.values(x().activos()).filter(a => a.tipo !== 'etf' && a.sector).map(a => a.sector))].filter(c => !tiene.has(c)).sort((a, b) => a.localeCompare(b, 'es'));
+  if (!lista.length || !x().explorarSector) return '';
+  return `<div class="lab-descubre"><p class="peq"><b>Descubre otras categorías</b> <span class="mut">(no están en esta cartera)</span></p><p class="lab-descubre-chips">${lista.slice(0, 8).map(c => `<button type="button" class="chip-btn" data-explorar="${esc(c)}">${esc(c)}</button>`).join('')}</p></div>`;
+}
+function simularEnVivo() {          // desde el deslizador: sin mover el foco ni desplazar la página
+  const { $ } = x(), f = leerFormulario(); if (!x().activos()[f.t] || !f.fin || !(f.peso > 0)) return;
+  LAB.sim.res = simular(baseLab().pos, { ticker: f.t, peso: f.peso }, f.fin); LAB.sim.clave = null; pintarResultado();
+  const o = $('#lab-rango-v'); if (o) o.textContent = P(f.peso);
+}
+const cabLab = (extra = '') => `<div class="pag-cab"><h1>Laboratorio <span class="chip sim">Simulación</span></h1><p class="mut">Prueba un cambio y compáralo con tu cartera. ${extra}Aquí nada modifica tu cartera ni ejecuta operaciones.</p></div>`;
 function leerFormulario() {
   const { $ } = x(), fin = document.querySelector('input[name="lab-fin"]:checked')?.value || '';
   const t = $('#lab-ticker').value.trim().toUpperCase(), peso = $('#lab-peso').value.trim().replace(',', '.');
@@ -463,7 +523,7 @@ function onLabCambio(e) {
   if (id === 'lab-base') { LAB.sim.carteraId = e.target.value === 'borrador' ? null : (/^\d+$/.test(e.target.value) ? Number(e.target.value) : e.target.value); invalidarResultado(); pintarLabForm(); $('#lab-base').focus(); }
   else if (id === 'lab-radar' && e.target.value) { LAB.sim.ticker = e.target.value; invalidarResultado(); leerCampos(); pintarLabForm(); $('#lab-peso').focus(); }
   else if (e.target.name === 'lab-fin') { invalidarResultado(); $('#lab-metodo').innerHTML = htmlMetodo(esc, e.target.value); leerFormulario(); }
-  else if (id === 'lab-ticker') { leerFormulario(); const a = x().activos()[LAB.sim.ticker]; $('#lab-activo-info').textContent = a ? a.nombre : ''; }
+  else if (id === 'lab-ticker') { leerFormulario(); const a = x().activos()[LAB.sim.ticker]; $('#lab-activo-info').textContent = a ? a.nombre : ''; $('#lab-ajuste').innerHTML = htmlAjuste(esc, LAB.sim, baseLab()?.pos.find(p => p.ticker === LAB.sim.ticker)?.peso); if (a) simularEnVivo(); }
 }
 function leerCampos() { const { $ } = x(); LAB.sim.peso = $('#lab-peso')?.value || LAB.sim.peso; }
 function onLabSubmit(e) {
@@ -472,12 +532,13 @@ function onLabSubmit(e) {
   else if (e.target.id === 'esc-form') { e.preventDefault(); guardarCambiosEscenario(); }
   else if (e.target.id === 'rev-form') { e.preventDefault(); registrarRevision(); }
 }
-function simularAhora() {
+function simularAhora(enfocar = true) {
   const { $ } = x(), f = leerFormulario(), base = baseLab(), err = $('#lab-error'); err.textContent = '';
   if (!x().activos()[f.t]) { err.textContent = 'Elige un activo del universo (símbolo o nombre).'; $('#lab-ticker').focus(); return; }
   if (!f.fin) { err.textContent = 'Elige cómo se financia el cambio.'; return; }
   const sim = simular(base.pos, { ticker: f.t, peso: f.peso }, f.fin);
   LAB.sim.res = sim; LAB.sim.clave = null; pintarResultado();
+  if (!enfocar) return;
   if (!sim.viable) $('#lab-res').scrollIntoView({ block: 'nearest' });
   $('#lab-res').querySelector('h2')?.focus();
 }
@@ -508,8 +569,9 @@ function limitesHtml(c, limite) {
 }
 function htmlBarras(esc, sim) {                                          // dos barras (antes / después) con los pesos reales; la empresa probada va marcada
   const tks = [...new Set([...sim.antes.map(p => p.ticker), ...sim.despues.map(p => p.ticker)])], col = t => tks.indexOf(t) % 8;
-  const barra = (lista, tit) => `<div class="esp-fila"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}</span></div>`;
-  return `<div class="esp">${barra(sim.antes, 'Cartera base')}${barra(sim.despues, 'Alternativa simulada')}</div>`;
+  const libre = lista => { const t = Math.round(lista.reduce((a, p) => a + p.peso, 0) * 10) / 10; return t < 100 ? `<i class="libre" style="width:${(100 - t).toFixed(1)}%">${100 - t >= 9 ? 'libre' : ''}</i>` : ''; };   // ronda 26: lo no asignado se ve como hueco
+  const barra = (lista, tit, cls) => `<div class="esp-fila ${cls}"><span class="esp-tit">${tit}</span><span class="esp-barra" role="img" aria-label="${tit}: ${esc(lista.map(p => `${p.ticker} ${p.peso} %`).join(', ') || 'vacía')}">${lista.map(p => `<i class="${p.ticker === sim.ticker ? 'dest' : ''}" style="--c:var(--c${col(p.ticker)});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}${libre(lista)}</span></div>`;
+  return `<div class="esp">${barra(sim.antes, 'Cartera base', 'esp-base')}${barra(sim.despues, 'Alternativa simulada', 'esp-alt')}</div>`;
 }
 function pintarResultado() {
   const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
@@ -534,7 +596,10 @@ function pintarResultado() {
     : base.ejemplo && logged()
       ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
       : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
-  cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>
+  const nCat = l => l.filter(k => k > 0).length, catA = nCat(c.categorias.map(k => k.antes)), catD = nCat(c.categorias.map(k => k.despues));
+  const kpi = (t, a, d, ayuda) => `<div class="kpi${a === d ? ' igual' : ''}"><span>${t}</span><b><s>${a}</s><i aria-hidden="true">→</i><em>${d}</em></b>${ayuda ? `<small>${ayuda}</small>` : ''}</div>`;   // ronda 26: lo esencial de la comparación, en cifras grandes
+  const kpis = `<div class="lab-kpis" aria-label="Comparación rápida">${kpi('Mayor posición', c.antes.mayor ? P(c.antes.mayor.peso) : '—', c.despues.mayor ? P(c.despues.mayor.peso) : '—', c.despues.mayor ? esc(c.despues.mayor.ticker) : '')}${kpi('Tres mayores', P(c.antes.top3.peso), P(c.despues.top3.peso), '')}${kpi('Categorías', String(catA), String(catD), '')}${c.despues.pendiente || c.antes.pendiente ? kpi('Sin asignar', P(c.antes.pendiente), P(c.despues.pendiente), '') : ''}</div>`;
+  cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>${kpis}
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
     ${htmlBarras(esc, sim)}<h3>Quién cede el peso</h3><div class="delta-grid">${sim.cambios.filter(f => f.delta !== 0).map(f => `<div><span>${esc(f.ticker)}</span><b>${dpts(f.delta)}</b><small>${P(f.antes)} → ${P(f.despues)}</small></div>`).join('') || '<p>Sin cambios de peso.</p>'}</div><details class="mini"><summary>Ver el origen del peso</summary><p class="lab-origen">${esc(origenPeso(sim))}</p></details>
     <p class="mut peq"><b>Tu cartera base no cambia.</b> Esta alternativa no implica una mayor rentabilidad.</p><details class="mini"><summary>Qué cambia, en palabras</summary><p class="lab-concl">${concl}</p></details>

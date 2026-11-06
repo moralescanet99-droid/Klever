@@ -84,7 +84,7 @@ export function htmlNotaEstructura(esc, ev, origen) {
   const inst = ev.instantanea ? new Date(ev.instantanea + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : null;
   const periodos = (ev.periodos || []).length ? [...new Set(ev.periodos.map(p => p.hasta))].join(', ') : null;
   if (ev.publicada) {
-    cuerpo = `<p class="nota-num"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
+    cuerpo = `<p class="nota-num" style="--v:${Math.max(0, Math.min(100, Math.round(ev.nota * 10)))}"><b>${cm(ev.nota.toFixed(1))}</b><span> de 10</span></p>
       <p class="nota-expl">${esc(explicarNota(ev))}</p>
       <details class="mini"><summary>Fortaleza, limitación y fecha</summary><ul class="nota-puntos"><li><b>Principal fortaleza:</b> ${esc(NOMBRES[ev.fortaleza])} (${cm(ev.bloques[ev.fortaleza].puntuacion.toFixed(1))}/10).</li>
       <li><b>Principal limitación:</b> ${esc(NOMBRES[ev.limitacion.bloque])}: le quita ${cm(ev.limitacion.perdida.toFixed(1))} puntos a la nota.</li>

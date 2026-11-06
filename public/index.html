@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="style-r13.css">
 <link rel="stylesheet" href="style-r17.css">
+<link rel="stylesheet" href="style-r26.css">
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -50,9 +51,10 @@
   <section id="vista-inicio" data-vista="inicio">
     <div class="hero">
       <div class="hero-txt">
-        <p class="eyebrow">TU CARTERA. CON MÁS PERSPECTIVA.</p>
-        <h1>Entiende lo que tienes.<br><em>Explora lo que podría cambiar.</em></h1>
-        <p class="lead">Crea una cartera simulada (sin dinero real, con datos de prueba), descubre alternativas y compara tus opciones antes de decidir.</p>
+        <p class="eyebrow">CARTERAS SIMULADAS · SIN DINERO REAL</p>
+        <h1>Descubre alternativas.<br><em>Compáralas antes de invertir.</em></h1>
+        <p class="lead">Crea una cartera simulada (sin dinero real, con datos de prueba), mira dónde se concentra y compara tus opciones antes de invertir.</p>
+        <ol class="recorrido" aria-label="Cómo funciona Klever"><li><b>Cartera</b></li><li><b>Descubre</b></li><li><b>Compara</b></li><li><b>Decide</b></li><li><b>Revisa</b></li></ol>
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
         <p class="inicio-acc"><button id="probar" class="btn btn-primario btn-grande" type="button">Crear desde cero</button> <a id="ver-ejemplo" class="enlace" href="#ejemplo">Explorar un ejemplo →</a></p>
@@ -103,7 +105,7 @@
     <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
     <div class="pag-cab pag-cab-corta">
       <h1>Explorar empresas</h1>
-      <p class="mut">Cinco comprobaciones con las cifras anuales de cada empresa. Superarlas no es una recomendación de compra.</p>
+      <p class="mut">Cinco comprobaciones por empresa. Superarlas no es una recomendación.</p>
     </div>
     <div class="busqueda">
       <label class="sr" for="emp-buscar">Buscar empresa, símbolo o sector</label>
@@ -190,7 +192,7 @@
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
   <section id="vista-revista" data-vista="revista" hidden>
     <nav class="ideas-tabs" aria-label="Revista y exploración"><a href="#revista" data-ideas="revista">Historias</a><a href="#empresas" data-ideas="empresas">Empresas</a><a href="#publicas" data-ideas="publicas">Carteras públicas</a></nav>
-    <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias para investigar, con autor, fecha y fuentes, y opiniones firmadas que se pueden revisar. Esta versión interna incluye una pieza de ejemplo.</p></div>
+    <div class="pag-cab"><h1>Revista</h1><p class="mut">Historias con autor, fecha y fuentes. Esta versión incluye una pieza de ejemplo.</p></div>
     <div id="revista-cuerpo"></div>
   </section>
   <section id="vista-articulo" data-vista="articulo" hidden>
@@ -205,9 +207,10 @@
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
       <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
-      <p class="mut">¿Sigue teniendo sentido tu idea? Revisa tus hipótesis y deja constancia de lo que ha cambiado. Tus carteras no se modifican.</p>
+      <p class="mut">¿Sigue teniendo sentido tu idea? Vuelve, revisa y anota qué ha cambiado.</p>
     </div>
     <div id="seg-aviso" class="aviso-panel" role="note" hidden></div>
+    <div id="seg-resumen" class="seg-resumen" aria-live="polite"></div>
     <div class="seg-col">
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
         <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>

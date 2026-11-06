@@ -1,0 +1,47 @@
+// Ronda 26 · Señales de la cartera: alertas BREVES y visuales que salen de la radiografía (calculos.js). PURO: sin DOM, sin red, sin fecha.
+// Qué son: avisos de CONCENTRACIÓN por posición y por categoría, y de cartera incompleta. Qué NO son: una medida de riesgo, una previsión ni un consejo.
+// Los umbrales son REFERENCIAS ORIENTATIVAS de Klever (se declaran en cada señal); la persona decide. Cada señal accionable propone una HIPÓTESIS
+// para el laboratorio (qué peso probar), nunca un activo nuevo: Klever no elige por la persona qué comprar.
+export const UMBRALES = Object.freeze({ posicion: 25, categoria: 40, sectores: 3, posiciones: 4 });
+const cmS = v => String(Math.round(v * 10) / 10).replace('.', ',');
+// Peso hipotético para probar una posición más pequeña: la mitad, como mucho 20 % y al menos 1 % (siempre por debajo del actual).
+export const pesoHipotesis = w => { const h = Math.max(1, Math.min(20, Math.round(w / 2))); return h < w ? h : Math.max(0.1, Math.round((w - 1) * 10) / 10); };
+
+// r: resultado de radiografia(); devuelve la lista ordenada (alertas primero) con, como mucho, `max` señales.
+export function senales(r, max = 3) {
+  if (!r || r.estado === 'vacia') return [];
+  const out = [], U = UMBRALES;
+  if (r.estado === 'exceso') out.push({ id: 'exceso', nivel: 'alerta', titulo: `Exceso de ${cmS(r.exceso)} %`, detalle: `Los pesos suman el ${cmS(r.total)} %. Ajusta la distribución antes de comparar.`, accion: null });
+  const cats = r.categorias.filter(c => c.conocida && !c.soloFondos), top = cats[0];
+  if (top && top.peso >= U.categoria && r.n > 1) {
+    const t = top.tickers[0];  // la mayor posición de esa categoría (radiografía ordena por peso)
+    out.push({ id: 'categoria', nivel: 'alerta', titulo: `Exposición alta: ${top.categoria}`, valor: top.peso,
+      detalle: `${top.categoria} suma el ${cmS(top.peso)} % (${top.tickers.join(', ')}). Referencia orientativa de Klever: más del ${U.categoria} % en una categoría.`,
+      accion: { ticker: t, fin: 'proporcional', pregunta: `¿Y si ${t} pesara menos?` } });
+  }
+  const duplicada = out.some(s => s.id === 'categoria' && s.accion.ticker === r.mayor?.ticker && top.tickers.length === 1);   // misma idea dicha dos veces
+  if (r.mayor && r.mayor.peso >= U.posicion && r.n > 1 && !duplicada) {
+    out.push({ id: 'posicion', nivel: 'alerta', titulo: `${r.mayor.ticker} pesa el ${cmS(r.mayor.peso)} %`, valor: r.mayor.peso,
+      detalle: `Una sola posición supera el ${U.posicion} % de la cartera (referencia orientativa de Klever, no una norma).`,
+      accion: { ticker: r.mayor.ticker, fin: 'proporcional', pregunta: `¿Y si ${r.mayor.ticker} pesara menos?` } });
+  }
+  if (r.n === 1) out.push({ id: 'unica', nivel: 'alerta', titulo: 'Una sola posición', detalle: 'Toda la cartera depende de un único activo.', accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
+  else if (cats.length && cats.length <= U.sectores && !out.some(s => s.id === 'categoria')) {
+    out.push({ id: 'sectores', nivel: 'aviso', titulo: `Solo ${cats.length} ${cats.length === 1 ? 'categoría' : 'categorías'}`, valor: cats.length,
+      detalle: `Las acciones de la cartera están en ${cats.length === 1 ? 'una sola categoría' : `${cats.length} categorías`}${r.categorias.some(c => c.soloFondos) ? ' (los ETF se cuentan aparte: su categoría es comercial)' : ''}. Referencia orientativa: ${U.sectores} o menos.`,
+      accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras una idea de otra categoría?' } });
+  }
+  if (r.n > 1 && r.n < U.posiciones) out.push({ id: 'pocas', nivel: 'aviso', titulo: `${r.n} posiciones`, valor: r.n, detalle: `Menos de ${U.posiciones} posiciones: cada una pesa mucho en el conjunto.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
+  if (r.estado === 'incompleta') out.push({ id: 'pendiente', nivel: 'aviso', titulo: `Falta asignar ${cmS(r.pendiente)} %`, valor: r.pendiente, detalle: `Está asignado el ${cmS(r.total)} %. Puedes repartir lo que falta o probar a usarlo en el laboratorio.`, accion: { ticker: '', fin: 'sin_asignar', pregunta: '¿Y si usaras lo que falta?' } });
+  if (!out.length) out.push({ id: 'ok', nivel: 'ok', titulo: 'Sin concentraciones destacadas', detalle: `Ninguna posición supera el ${U.posicion} % ni ninguna categoría el ${U.categoria} %. No mide riesgo ni rentabilidad.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si probaras otra idea?' } });
+  return out.slice(0, max);
+}
+// Hipótesis completa para el laboratorio a partir de una señal: { ticker, peso, fin }. pos: las posiciones analizadas ({ ticker, peso }).
+// Sin activo elegido (añadir una idea), el peso de partida es 10 % o, si se usa lo que falta, lo que falta (como mucho 100 %).
+export function hipotesis(s, r, pos = []) {
+  if (!s?.accion) return null;
+  const { ticker, fin } = s.accion;
+  if (!ticker) return { ticker: '', peso: fin === 'sin_asignar' && r?.pendiente ? Math.min(100, r.pendiente) : 10, fin };
+  const actual = pos.find(p => p.ticker === ticker)?.peso;
+  return actual > 0 ? { ticker, peso: pesoHipotesis(actual), fin } : null;
+}
