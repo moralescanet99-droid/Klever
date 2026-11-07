@@ -8,21 +8,37 @@ const cmS = v => String(Math.round(v * 10) / 10).replace('.', ',');
 export const pesoHipotesis = w => { const h = Math.max(1, Math.min(20, Math.round(w / 2))); return h < w ? h : Math.max(0.1, Math.round((w - 1) * 10) / 10); };
 
 // r: resultado de radiografia(); devuelve la lista ordenada (alertas primero) con, como mucho, `max` señales.
-export function senales(r, max = 3) {
+// Ronda 28 (fase 2): `umb` permite que la PERSONA fije sus propios umbrales de posición y categoría (se validan; si no valen, se usan los de Klever).
+export function umbralesValidos(u) {
+  const ok = (v, a, b) => Number.isFinite(Number(v)) && Number(v) >= a && Number(v) <= b;
+  return { ...UMBRALES, ...(u && ok(u.posicion, 5, 95) ? { posicion: Number(u.posicion) } : {}), ...(u && ok(u.categoria, 10, 100) ? { categoria: Number(u.categoria) } : {}) };
+}
+// Por qué importa cada señal (segundo nivel del detalle), en una frase llana y sin prever pérdidas ni ganancias.
+const PORQUE = {
+  exceso: 'Con más del 100 % las cifras no cuadran y no se puede comparar nada.',
+  categoria: 'Si a ese sector le va mal, lo nota casi toda la cartera a la vez.',
+  posicion: 'Lo que le pase a una sola empresa mueve buena parte del total.',
+  unica: 'Todo depende de lo que le pase a ese activo.',
+  sectores: 'Pocos sectores hacen que la cartera dependa de pocas cosas.',
+  pocas: 'Con pocas posiciones, cada una cuenta mucho en el resultado.',
+  pendiente: 'Lo que falta no está en ninguna parte: la cartera no está completa.',
+  ok: 'El reparto no se apoya en una sola posición ni en un solo sector.',
+};
+export function senales(r, max = 3, umb = null) {
   if (!r || r.estado === 'vacia') return [];
-  const out = [], U = UMBRALES;
+  const out = [], U = umbralesValidos(umb), propio = !!umb && (U.posicion !== UMBRALES.posicion || U.categoria !== UMBRALES.categoria), ref = propio ? 'tu referencia' : 'referencia orientativa de Klever';
   if (r.estado === 'exceso') out.push({ id: 'exceso', nivel: 'alerta', titulo: `Exceso de ${cmS(r.exceso)} %`, detalle: `Los pesos suman el ${cmS(r.total)} %. Ajusta la distribución antes de comparar.`, accion: null });
   const cats = r.categorias.filter(c => c.conocida && !c.soloFondos), top = cats[0];
   if (top && top.peso >= U.categoria && r.n > 1) {
     const t = top.tickers[0];  // la mayor posición de esa categoría (radiografía ordena por peso)
     out.push({ id: 'categoria', nivel: 'alerta', titulo: `Exposición alta: ${top.categoria}`, valor: top.peso,
-      detalle: `${top.categoria} suma el ${cmS(top.peso)} % (${top.tickers.join(', ')}). Referencia orientativa de Klever: más del ${U.categoria} % en una categoría.`,
+      detalle: `${top.categoria} suma el ${cmS(top.peso)} % (${top.tickers.join(', ')}). ${ref.charAt(0).toUpperCase() + ref.slice(1)}: más del ${U.categoria} % en una categoría.`,
       accion: { ticker: t, fin: 'proporcional', pregunta: `¿Y si ${t} pesara menos?` } });
   }
   const duplicada = out.some(s => s.id === 'categoria' && s.accion.ticker === r.mayor?.ticker && top.tickers.length === 1);   // misma idea dicha dos veces
   if (r.mayor && r.mayor.peso >= U.posicion && r.n > 1 && !duplicada) {
     out.push({ id: 'posicion', nivel: 'alerta', titulo: `${r.mayor.ticker} pesa el ${cmS(r.mayor.peso)} %`, valor: r.mayor.peso,
-      detalle: `Una sola posición supera el ${U.posicion} % de la cartera (referencia orientativa de Klever, no una norma).`,
+      detalle: `Una sola posición supera el ${U.posicion} % de la cartera (${ref}, no una norma).`,
       accion: { ticker: r.mayor.ticker, fin: 'proporcional', pregunta: `¿Y si ${r.mayor.ticker} pesara menos?` } });
   }
   if (r.n === 1) out.push({ id: 'unica', nivel: 'alerta', titulo: 'Una sola posición', detalle: 'Toda la cartera depende de un único activo.', accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
@@ -34,6 +50,7 @@ export function senales(r, max = 3) {
   if (r.n > 1 && r.n < U.posiciones) out.push({ id: 'pocas', nivel: 'aviso', titulo: `${r.n} posiciones`, valor: r.n, detalle: `Menos de ${U.posiciones} posiciones: cada una pesa mucho en el conjunto.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
   if (r.estado === 'incompleta') out.push({ id: 'pendiente', nivel: 'aviso', titulo: `Falta asignar ${cmS(r.pendiente)} %`, valor: r.pendiente, detalle: `Está asignado el ${cmS(r.total)} %. Puedes repartir lo que falta o probar a usarlo en el laboratorio.`, accion: { ticker: '', fin: 'sin_asignar', pregunta: '¿Y si usaras lo que falta?' } });
   if (!out.length) out.push({ id: 'ok', nivel: 'ok', titulo: 'Sin concentraciones destacadas', detalle: `Ninguna posición supera el ${U.posicion} % ni ninguna categoría el ${U.categoria} %. No mide riesgo ni rentabilidad.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si probaras otra idea?' } });
+  for (const q of out) q.porque = PORQUE[q.id];
   return out.slice(0, max);
 }
 // Hipótesis completa para el laboratorio a partir de una señal: { ticker, peso, fin }. pos: las posiciones analizadas ({ ticker, peso }).
@@ -62,6 +79,6 @@ export function indicadores(r, ev = null) {
   return [
     { id: 'concentracion', etiqueta: 'Concentración', nivel: conc, valor: { ok: 'Baja', medio: 'Media', alto: 'Alta' }[conc], dato: `${r.mayor.ticker} ${cmS(may)} %`, detalle: `La mayor posición es ${r.mayor.ticker} (${cmS(may)} %)${cats[0] ? ` y la mayor categoría, ${cats[0].categoria} (${cmS(topCat)} %)` : ''}.` },
     { id: 'variedad', etiqueta: 'Variedad', nivel: vari, valor: { ok: 'Amplia', medio: 'Media', alto: 'Poca' }[vari], dato: `${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}`, detalle: `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} en ${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}${r.categorias.some(c => c.soloFondos) ? ' (los ETF cuentan como una)' : ''}.` },
-    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % con datos` : '', detalle: datos.detalle },
+    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % del peso` : '', detalle: datos.detalle },
   ];
 }

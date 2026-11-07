@@ -120,7 +120,7 @@
       <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
-      <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+      <label class="chk"><input type="checkbox" id="emp-radar"> Solo las que sigo</label>
       <label class="chk"><input type="checkbox" id="emp-faltan"> Solo sectores que no tengo</label>
     </div></details>
     <div class="glosario" role="group" aria-label="Qué significa cada comprobación"><span class="mut peq">¿Qué significa?</span> <button type="button" class="chip-btn" data-glosa="deuda_ebitda">Deuda</button><button type="button" class="chip-btn" data-glosa="roic">ROIC</button><button type="button" class="chip-btn" data-glosa="margen_neto">Margen</button><button type="button" class="chip-btn" data-glosa="flujo_caja">Caja libre</button><button type="button" class="chip-btn" data-glosa="crecimiento">Crecimiento</button>
@@ -228,7 +228,7 @@
     <div id="seg-resumen" class="seg-resumen" aria-live="polite"></div>
     <div class="seg-col">
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
-        <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
+        <div class="seg-cab"><h2 id="seg-esc-t">Mis ideas <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
       </section>
@@ -237,7 +237,7 @@
         <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-radar-t">
-        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div class="seg-cab"><h2 id="seg-radar-t">Empresas que sigo <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
         <div id="seg-radar" aria-live="polite"></div>
       </section>
     </div>
@@ -318,6 +318,9 @@
             <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
             <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
             <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
+            <p id="pegado-ayuda" class="pegado-ayuda" hidden>Pulsa Intro para añadir tu lista de una vez.</p>
+            <p class="mut peq combo-pista">También puedes pegar tu cartera: <span class="num">KO 40, PG 60</span></p>
+            <p id="pegado-res" class="pegado-res" role="status" hidden></p>
           </div>
         </section>
         <p id="origen-aviso-pie" class="origen-aviso origen-pie" role="note" hidden></p>
@@ -408,6 +411,12 @@
   <p class="pie-enl"><a href="#como-funciona">Cómo funciona</a> · <a href="legal.html">Aviso legal, privacidad y fuentes</a> · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 
+<!-- Ronda 28 (fase 2) · barra inferior en móvil con los tres destinos principales (no aparece en el editor ni en el laboratorio, que tienen su propia barra de acciones) -->
+<nav id="tabbar" class="tabbar" aria-label="Principal (barra inferior)">
+  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico" aria-hidden="true">◧</span>Carteras</a>
+  <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico" aria-hidden="true">◎</span>Descubrir</a>
+  <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico" aria-hidden="true">✎</span>Cuaderno</a>
+</nav>
 <div id="barra-guardar" class="barra-guardar" hidden>
   <div class="bg-info">
     <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>

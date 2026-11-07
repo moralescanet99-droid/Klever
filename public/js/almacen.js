@@ -1,6 +1,6 @@
-// Almacenamiento del radar y de los escenarios (sin interfaz).
+// Almacenamiento del radar y de las ideas (sin interfaz).
 // Con sesión: en la cuenta, por la API (la propiedad la comprueba el servidor en cada lectura y escritura).
-// Sin sesión: el radar queda SOLO en este dispositivo (localStorage) y se marca como tal; los escenarios requieren cuenta.
+// Sin sesión: el radar queda SOLO en este dispositivo (localStorage) y se marca como tal; las ideas requieren cuenta.
 // Reglas de confianza:
 //  · Nada devuelve «guardado» hasta que la escritura ha ocurrido de verdad (la API ha respondido bien o localStorage ha aceptado el valor).
 //  · Un fallo de lectura NO es un radar vacío: se lanza un error distinto, para no mostrar «aún no has guardado nada» ni sobrescribir lo que hay.
@@ -13,10 +13,10 @@ const fallo = (tipo, msg) => { const e = new Error(msg); e.tipo = tipo; return e
 export function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
   let gen = 0, mut = 0;                                     // mut: contador de escrituras; una lectura anterior a una escritura NO pisa su resultado                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
   const leerLocal = () => {                                 // {} si no hay nada; LANZA si no se puede leer (≠ vacío)
-    let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se ha podido leer el radar guardado en este dispositivo.'); }
+    let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se han podido leer las empresas que sigues en este dispositivo.'); }
     if (crudo == null || crudo === '') return {};
     try { const o = JSON.parse(crudo); if (o && typeof o === 'object' && !Array.isArray(o)) return o; } catch { /* se informa abajo */ }
-    throw fallo(ERR_LECTURA, 'El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
+    throw fallo(ERR_LECTURA, 'La lista de empresas que sigues en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
   };
   const escribirLocal = o => {                              // LANZA si el almacenamiento falla o está lleno: nunca cae en silencio a la memoria
     try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItemEstricto(CLAVE_RADAR_LOCAL); }     // el borrado también es estricto: si falla, el dato privado NO queda fingiendo estar borrado
@@ -34,7 +34,7 @@ export function crearAlmacen({ api, logged, store, activos, idSesion = () => nul
     async cargar() {
       const g = gen, m0 = mut;
       if (logged()) {
-        let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer tu radar.'); }
+        let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer la lista de empresas que sigues.'); }
         if (g !== gen) return [];                           // la sesión cambió: se descarta
         if (m0 !== mut) return this.todos();                // hubo una escritura mientras llegaba esta lectura: la lectura es anterior y NO se aplica
         radar = new Map(filas.map(f => [f.ticker, f]));

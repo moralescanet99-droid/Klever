@@ -70,7 +70,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const marca = await p.evaluate(() => [...document.querySelectorAll('.chip.radar')].filter(e => e.offsetParent !== null).length);
     await p.fill('#emp-buscar', ''); await p.click('#emp-filtros-det summary'); await p.check('#emp-radar'); await p.waitForTimeout(300);
     const soloRadar = await p.evaluate(() => ({ cuenta: document.querySelector('#emp-cuenta').textContent, filas: [...document.querySelectorAll(window.innerWidth >= 720 ? '#empresas-lista tr' : '#empresas-cards li')].filter(e => e.querySelector('[data-t]')).length }));
-    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo mi radar» (${w} px)`, 'La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 126/.test(soloRadar.cuenta) && soloRadar.filas === 1);
+    ev('K6-' + w, `Marca «En tu radar» y filtro «Solo las que sigo» (${w} px)`, 'La fila lleva «★ La sigues»; con «Solo las que sigo» queda 1 de 126; no cambia el orden ni crea ranking', `${marca} marca(s); ${soloRadar.cuenta}; ${soloRadar.filas} fila(s)`, marca >= 1 && /^1 de 126/.test(soloRadar.cuenta) && soloRadar.filas === 1);
     await p.uncheck('#emp-radar');
     // ---------- 5. Mi seguimiento: nota y paso al laboratorio con cartera y activo elegidos
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('.seg-item');
@@ -104,15 +104,15 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     const idEsc = +(await p.evaluate(() => location.hash.match(/escenario-(\d+)/)[1]));
     const despues = JSON.stringify((await api(p, 'GET', '/portfolios/' + idBase)).j.posiciones), revDesp = (await api(p, 'GET', '/portfolios/' + idBase)).j.revision;
     const escApi = await api(p, 'GET', '/escenarios/' + idEsc);
-    ev('K11-' + w, `Guardar el escenario no modifica la cartera base (${w} px)`, 'Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia',
+    ev('K11-' + w, `Guardar el escenario no modifica la cartera base (${w} px)`, 'Idea guardada con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia',
       `esc ${escApi.s} base ${JSON.stringify(escApi.j.base)} rev ${escApi.j.base_revision}; cartera ${antes === despues ? 'igual' : 'CAMBIÓ'}, rev ${revAntes}→${revDesp}`, escApi.s === 200 && escApi.j.base.length === 2 && escApi.j.base_revision === revBase && antes === despues && revAntes === revDesp && !(pub0.j || []).some?.(x => x.nombre === 'Base dividendos'));
     await snap(p, 'R5-escenario-guardado', w, true);
     // ---------- 8. La cartera cambia: el escenario conserva su base y avisa, sin recalcular
     await api(p, 'PUT', '/portfolios/' + idBase, { posiciones: [{ ticker: 'KO', peso: 50 }, { ticker: 'PG', peso: 50 }], nombre: 'Base dividendos', tesis: 'Cartera de prueba', revision: revBase });
     await p.reload(); await p.waitForSelector('#esc-editar'); await p.waitForTimeout(500);
     const post = await p.evaluate(() => ({ aviso: document.querySelector('#vista-lab .aviso-panel')?.textContent.replace(/\s+/g, ' ') || '', cuerpo: document.querySelector('#vista-lab').textContent.replace(/ /g, ' ').replace(/\s+/g, ' ') }));
-    ev('K12-' + w, `Reabrir un escenario tras cambiar la cartera original (${w} px)`, 'Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula',
-      `${post.aviso.slice(0, 110)}…; ${/Base: KO 60 % · PG 40 %/.test(post.cuerpo)}; ${/Propuesta: KO 54 %/.test(post.cuerpo)}`, /La cartera cambió después de este escenario/.test(post.aviso) && /revisión 0 → 1/.test(post.aviso) && /Base: KO 60 % · PG 40 %/.test(post.cuerpo) && /Propuesta: KO 54 % · PG 36 % · JNJ 10 %/.test(post.cuerpo));
+    ev('K12-' + w, `Reabrir un escenario tras cambiar la cartera original (${w} px)`, 'Avisa «La cartera cambió después de esta idea (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula',
+      `${post.aviso.slice(0, 110)}…; ${/Base: KO 60 % · PG 40 %/.test(post.cuerpo)}; ${/Propuesta: KO 54 %/.test(post.cuerpo)}`, /La cartera cambió después de esta idea/.test(post.aviso) && /revisión 0 → 1/.test(post.aviso) && /Base: KO 60 % · PG 40 %/.test(post.cuerpo) && /Propuesta: KO 54 % · PG 36 % · JNJ 10 %/.test(post.cuerpo));
     // ---------- 9. Estado, nota y seguimiento
     await p.click('#esc-editar'); await p.fill('#esc-nota', 'Archivado: ya no me interesa'); await p.click('#esc-guardar'); await p.waitForSelector('#esc-editar'); await p.click('[data-estado=archivado]'); await p.waitForFunction(() => /Archivado/.test(document.querySelector('#lab-cuerpo h1')?.textContent || '')); await p.waitForTimeout(300);
     const escB = await api(p, 'GET', '/escenarios/' + idEsc);
@@ -168,7 +168,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     ev('K19b', 'Sin sesión, las rutas nuevas devuelven 401', '401 en escenarios y radar', `${sinSesion.s}/${sinSesion2.s}`, sinSesion.s === 401 && sinSesion2.s === 401);
     // rutas de escenario inexistente
     await p.goto(B + '#escenario-999999'); await p.waitForSelector('#vista-lab:not([hidden])'); await p.waitForTimeout(600);
-    ev('K20', 'Escenario inexistente: mensaje claro y salida', 'Texto «No encontramos ese escenario» y enlace a Mi seguimiento', N(await p.textContent('#lab-cuerpo')).slice(0, 120), /No encontramos ese escenario/.test(await p.textContent('#lab-cuerpo')) && (await p.locator('#lab-cuerpo a[href="#seguimiento"]').count()) === 1);
+    ev('K20', 'Escenario inexistente: mensaje claro y salida', 'Texto «No encontramos esa idea» y enlace a Mi seguimiento', N(await p.textContent('#lab-cuerpo')).slice(0, 120), /No encontramos esa idea/.test(await p.textContent('#lab-cuerpo')) && (await p.locator('#lab-cuerpo a[href="#seguimiento"]').count()) === 1);
     await p.ctx.close(); await q.ctx.close();
   }
   { // visitante: exploración y simulación temporales, radar solo en este dispositivo, y migración al entrar
@@ -185,7 +185,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
       ev('K22-' + w, `Visitante: la radiografía analiza el borrador y no ofrece guardar el límite (${w} px)`, 'Dice que analiza «tu borrador, que aún no está guardado en tu cuenta» y que el límite se podrá definir al guardar', radG.slice(0, 150), /Analizando: tu borrador, que aún no está guardado en tu cuenta/.test(radG) && /cuando guardes la cartera en tu cuenta/.test(radG) && !/Klever no impone/.test(radG));
       await p.evaluate(() => { location.hash = '#laboratorio'; }); await p.waitForSelector('#lab-form'); await p.fill('#lab-ticker', 'JNJ'); await p.fill('#lab-peso', '5'); await p.check('input[name=lab-fin][value=proporcional]'); await p.click('#lab-form button[type=submit]'); await p.waitForSelector('#lab-res table.tabla-lab', { state: 'attached' }).then(() => p.evaluate(() => document.querySelectorAll('#lab-res details.mini').forEach(d => { d.open = true; })));
       const g = N(await p.textContent('#lab-res .lab-guardar'));
-      ev('K23-' + w, `Visitante: la simulación es temporal y no se dice «guardado» (${w} px)`, 'El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»', g.slice(0, 140), /temporal/.test(g) && (await p.locator('#lab-guardar-btn').count()) === 0 && !/Guardado en tu cuenta|Escenario guardado/.test(await p.textContent('body')));
+      ev('K23-' + w, `Visitante: la simulación es temporal y no se dice «guardado» (${w} px)`, 'El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»', g.slice(0, 140), /temporal/.test(g) && (await p.locator('#lab-guardar-btn').count()) === 0 && !/Guardado en tu cuenta|Idea guardada/.test(await p.textContent('body')));
       await p.ctx.close();
     }
     const p = await nuevo(b, 1440, 800); await p.goto(B + '#empresas'); await p.waitForSelector('.ver-ficha >> visible=true'); await p.fill('#emp-buscar', 'JNJ'); await p.waitForTimeout(250); await p.locator('.ver-ficha >> visible=true').first().click(); await p.waitForSelector('#fir-toggle'); await p.click('#fir-toggle'); await p.waitForSelector('#fi-radar [data-nota=editar]'); await p.click('#fi-radar [data-nota=editar]'); await p.fill('#fir-nota', 'Desde el visitante'); await p.click('#fi-radar [data-nota=guardar]'); await p.waitForSelector('#fi-radar .nota-txt'); await p.waitForTimeout(300); await p.keyboard.press('Escape');

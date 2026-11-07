@@ -29,7 +29,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await verFicha(p, 'KO'); const comoVisitante = N(await p.textContent('#fi-radar')), tras2 = await html(p);
     ev('L1-' + w, `Privacidad al salir: la nota y la cartera de A no quedan en pantalla ni en memoria (${w} px)`, 'Con A: la ficha muestra su nota. Tras salir SIN recargar, el HTML no contiene ni la nota ni el nombre de la cartera; la referencia guardada se borra; al reabrir la ficha como visitante no hay nota ni «En tu radar»',
       `con A: ${conNota.includes(SEC_A)}; HTML tras salir: nota ${tras.includes(SEC_A)}, cartera ${tras.includes(CAR_A)}; referencia ${refGuardada}; visitante: ${comoVisitante.slice(0, 60)}; HTML tras reabrir: nota ${tras2.includes(SEC_A)}, cartera ${tras2.includes(CAR_A)}`,
-      conNota.includes(SEC_A) && !tras.includes(SEC_A) && !tras.includes(CAR_A) && refGuardada === null && /Guardar en mi radar/.test(comoVisitante) && !comoVisitante.includes('En tu radar') && !tras2.includes(SEC_A) && !tras2.includes(CAR_A));
+      conNota.includes(SEC_A) && !tras.includes(SEC_A) && !tras.includes(CAR_A) && refGuardada === null && /Seguir esta empresa/.test(comoVisitante) && !comoVisitante.includes('La sigues') && !tras2.includes(SEC_A) && !tras2.includes(CAR_A));
     await p.keyboard.press('Escape'); await p.waitForTimeout(300);
     // entra B: no hay nada de A
     await entrarCon(p, mail('PB' + w)); const tB = await html(p), radarB = await api(p, 'GET', '/radar'), carB = await api(p, 'GET', '/portfolios');
@@ -77,12 +77,12 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     // error de lectura ≠ radar vacío
     await p.evaluate(() => localStorage.setItem('klever_radar_local', '{datos dañados')); await p.reload(); await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#seg-radar .vacio-util'); await p.waitForTimeout(300);
     const lec = await p.evaluate(() => ({ t: document.querySelector('#seg-radar').textContent.replace(/\s+/g, ' '), crudo: localStorage.getItem('klever_radar_local'), reint: !!document.querySelector('[data-acc=reintentar]') }));
-    ev('L6', 'Un fallo de lectura no se muestra como radar vacío', 'Dice que no se puede leer (y que no significa que esté vacío), ofrece Reintentar y NO borra el valor dañado', `${lec.t.slice(0, 120)}…; crudo conservado=${lec.crudo === '{datos dañados'}`, /no se puede leer/.test(lec.t) && /no significa que tu radar esté vacío/.test(lec.t) && lec.reint && !/Aún no has guardado/.test(lec.t) && lec.crudo === '{datos dañados');
+    ev('L6', 'Un fallo de lectura no se muestra como radar vacío', 'Dice que no se puede leer (y que no significa que esté vacío), ofrece Reintentar y NO borra el valor dañado', `${lec.t.slice(0, 120)}…; crudo conservado=${lec.crudo === '{datos dañados'}`, /no se puede leer/.test(lec.t) && /no significa que no sigas ninguna empresa/.test(lec.t) && lec.reint && !/Aún no has guardado/.test(lec.t) && lec.crudo === '{datos dañados');
     await p.ctx.close();
     // con cuenta: la lectura falla
     const q = await nuevo(b, 1440, 900); await entrarCon(q, mail('PR')); await q.route('**/api/radar', r => r.request().method() === 'GET' ? r.abort() : r.continue());
     await q.evaluate(() => { location.hash = '#seguimiento'; }); await q.waitForSelector('#seg-radar .vacio-util'); await q.waitForTimeout(300); const t = N(await q.textContent('#seg-radar'));
-    ev('L6b', 'Con cuenta, un fallo de lectura del radar tampoco es «vacío»', 'Mensaje de error con Reintentar; no dice «Aún no has guardado ninguna empresa»', t.slice(0, 140), /no significa que tu radar esté vacío/.test(t) && !/Aún no has guardado/.test(t));
+    ev('L6b', 'Con cuenta, un fallo de lectura del radar tampoco es «vacío»', 'Mensaje de error con Reintentar; no dice «Aún no has guardado ninguna empresa»', t.slice(0, 140), /no significa que no sigas ninguna empresa/.test(t) && !/Aún no has guardado/.test(t));
     await q.ctx.close();
   }
 
@@ -143,7 +143,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await api(p, 'PUT', '/portfolios/' + cart.id, { posiciones: [{ ticker: 'KO', peso: 50 }, { ticker: 'PG', peso: 50 }], nombre: cart.nombre, tesis: '', revision: cart.revision });
     await p.reload(); await p.waitForSelector('#esc-editar'); await p.waitForTimeout(400);
     const post = await p.evaluate(() => document.querySelector('#lab-cuerpo').textContent.replace(/ /g, ' ').replace(/\s+/g, ' '));
-    ev('L11-' + w, `Un cambio posterior en mi cartera conserva los pesos históricos del escenario (${w} px)`, 'Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original', post.match(/La cartera cambió[^.]*\./)?.[0] || '', /La cartera cambió después de este escenario/.test(post) && /Base: KO 60 % · PG 40 %/.test(post) && /Propuesta: KO 54 %/.test(post));
+    ev('L11-' + w, `Un cambio posterior en mi cartera conserva los pesos históricos del escenario (${w} px)`, 'Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original', post.match(/La cartera cambió[^.]*\./)?.[0] || '', /La cartera cambió después de esta idea/.test(post) && /Base: KO 60 % · PG 40 %/.test(post) && /Propuesta: KO 54 %/.test(post));
     // descartar (conserva) frente a eliminar (borra)
     await p.click('[data-estado=descartado]'); await p.waitForFunction(() => /Descartado/.test(document.querySelector('#lab-cuerpo h1')?.textContent || '')); const aunEsta = (await api(p, 'GET', '/escenarios/' + idEsc)).s;
     await p.click('#esc-eliminar'); await p.waitForSelector('#seg-escenarios'); await p.waitForTimeout(500); const yaNo = (await api(p, 'GET', '/escenarios/' + idEsc)).s;

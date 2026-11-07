@@ -80,7 +80,7 @@ const esperar = ms => new Promise(r => setTimeout(r, ms));
     // ---- U5. otra cuenta NUNCA ve el borrador (caducidad y acceso con otra cuenta; y cierre de sesión a propósito)
     const token2 = await p.evaluate(() => localStorage.getItem('klever_token')); await api(p, 'POST', '/logout', undefined, token2); await p.click('#rev-btn').catch(() => {}); await p.waitForSelector('#dlg-acceso[open]', { timeout: 15000 }).catch(() => {});
     const antesOtra = await guardadoLocal(p); await entrarCon(p, mail('UO' + w), true);
-    await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForFunction(() => /Aún no has guardado ningún escenario/.test(document.querySelector('#seg-escenarios')?.textContent || ''), null, { timeout: 15000 });
+    await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForFunction(() => /Aún no has guardado ninguna idea/.test(document.querySelector('#seg-escenarios')?.textContent || ''), null, { timeout: 15000 });
     const trasCuaderno = (await guardadoLocal(p)).map(x => x.k);
     await p.evaluate(i => { location.hash = '#escenario-' + i; }, E4.id); await p.waitForTimeout(1200);
     const restantes = await guardadoLocal(p), otra = { antes: antesOtra.length, trasEntrar: restantes.length, restantes: restantes.map(x => x.k), trasCuaderno, form: await p.evaluate(() => !!document.querySelector('#rev-form')), texto: await p.evaluate(() => /Borrador antes de que caduque/.test(document.body.textContent)), api: (await api(p, 'GET', '/escenarios/' + E4.id)).s };

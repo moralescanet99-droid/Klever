@@ -183,3 +183,32 @@
 .hero .inicio-acc{display:flex;align-items:center;flex-wrap:wrap;gap:12px 20px}
 .como li{align-content:start}
 @media(max-width:479px){.ind-etq i{display:none}.ind-etq{font-size:.68rem}}
+
+/* Ronda 28 (fase 2) · barra inferior en móvil: tres destinos, siempre al alcance del pulgar */
+.tabbar{display:none}
+@media(max-width:719px){
+  .tabbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));
+    background:rgba(19,16,14,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--border)}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:48px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:.75rem;font-weight:600}
+  .tabbar .tab-ico{font-size:1.15rem;line-height:1}
+  .tabbar a[aria-current="page"]{color:var(--accent-on-soft);background:var(--accent-soft)}
+  body:not(.sin-tabbar){padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  body.sin-tabbar .tabbar{display:none}
+}
+.pegado-ayuda{margin:6px 0 0;font-size:.8125rem;color:var(--azul)}
+.combo-pista{margin:6px 0 0}
+.pegado-res{margin:6px 0 0;padding:8px 12px;border-radius:10px;background:var(--azul-bg);font-size:.8125rem}
+
+/* Explorar: «Probar» junto a «Ver ficha» */
+.probar-emp{font:inherit;font-size:.8125rem;font-weight:600;color:var(--azul);background:var(--azul-bg);border:1px solid var(--azul-borde);border-radius:99px;padding:6px 12px;min-height:36px;margin-left:8px;cursor:pointer}
+.probar-emp:hover{background:rgba(108,180,255,.2)}
+
+/* Señal en tres niveles y umbrales propios */
+.senal-det p{margin:0 0 4px}
+.senal-det b{color:var(--text);font-weight:600}
+.senal-det.elegida{padding:10px 12px;border-radius:12px;background:var(--surface-2);margin-bottom:8px}
+.umb-form{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:grid;gap:6px}
+.umb-form label{font-size:.8125rem;color:var(--muted)}
+.umb-form .peso input{width:4.5rem;min-height:40px;text-align:right}
+.preg-plantillas{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.emp-card .ec-l2{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}

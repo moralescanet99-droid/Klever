@@ -6,27 +6,27 @@ import { SELECT_ESCENARIO, formato, fechaValida, MAX_INVALIDACION, MAX_PREGUNTA,
 
 const MAX_ESCENARIOS = 100;
 
-// Mis escenarios (solo los del usuario autenticado; la propiedad va en la consulta).
+// Mis ideas (solo los del usuario autenticado; la propiedad va en la consulta).
 export async function onRequestGet({ request, env }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
   try {
     const { results } = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? ORDER BY e.id DESC`).bind(user.id).all();
     return json(results.map(formato));
-  } catch (e) { console.error('leer escenarios:', e); return json({ error: 'No se pudieron leer tus escenarios. Inténtalo de nuevo.' }, 500); }
+  } catch (e) { console.error('leer escenarios:', e); return json({ error: 'No se pudieron leer tus ideas. Inténtalo de nuevo.' }, 500); }
 }
 
-// Guardar un escenario = SIMULACIÓN privada. No ejecuta operaciones, no cambia la cartera base y no toca su publicación.
+// Guardar una idea = SIMULACIÓN privada. No ejecuta operaciones, no cambia la cartera base y no toca su publicación.
 // { clave, nombre, nota?, pregunta?, revisar_en?, historia?, cartera_id, base_revision, ticker, peso, financiacion, propuesta }
 //  · La base es la composición GUARDADA de la cartera en ese momento (se copia en el servidor); si su revisión ya no es la que vio el cliente → 409.
 //  · El servidor recalcula la propuesta con el mismo módulo que la interfaz y rechaza una cifra distinta.
-//  · `clave` identifica el intento: un reintento tras un corte devuelve el escenario ya guardado en lugar de duplicarlo.
+//  · `clave` identifica el intento: un reintento tras un corte devuelve la idea ya guardado en lugar de duplicarlo.
 export async function onRequestPost({ request, env }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
   const b = await readJson(request) || {};
   const nombre = String(b.nombre ?? '').trim(), nota = String(b.nota ?? '').trim(), clave = String(b.clave ?? '');
-  if (!nombre || nombre.length > 80) return json({ error: 'Escribe un nombre de hasta 80 caracteres para el escenario.' }, 400);
+  if (!nombre || nombre.length > 80) return json({ error: 'Escribe un nombre de hasta 80 caracteres para la idea.' }, 400);
   if (nota.length > 600) return json({ error: 'La nota admite hasta 600 caracteres.' }, 400);
   if (!/^[A-Za-z0-9-]{8,64}$/.test(clave)) return json({ error: 'Falta la clave del intento de guardado.' }, 400);
   if (!['sin_asignar', 'proporcional'].includes(b.financiacion)) return json({ error: 'Método de financiación no válido.' }, 400);

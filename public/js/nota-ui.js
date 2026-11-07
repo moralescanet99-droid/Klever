@@ -118,15 +118,15 @@ export function htmlCambioNota(esc, a, d) {
     <div class="tabla-h" role="region" aria-label="Bloques de la nota antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio</th></tr></thead><tbody>${bl.map(fila).join('')}</tbody></table></div>`;
 }
 
-// Evaluación GUARDADA con un escenario: se revalida su forma y se pinta solo desde la copia reconstruida (números y fechas formateados, texto escapado).
+// Evaluación GUARDADA con una idea: se revalida su forma y se pinta solo desde la copia reconstruida (números y fechas formateados, texto escapado).
 // Es un registro de lo que vio la persona: el servidor comprueba su forma, no la recalcula.
 export function htmlEvaluacionGuardada(esc, e) {
-  const nada = '<p class="mut peq">Este escenario trae una evaluación de estructura que no supera las comprobaciones de formato: no se muestra.</p>';
+  const nada = '<p class="mut peq">Esta idea trae una evaluación de estructura que no supera las comprobaciones de formato: no se muestra.</p>';
   if (e.evaluacion_invalida) return nada; if (!e.evaluacion) return '';
   const a = validarResumen(e.evaluacion.antes), d = validarResumen(e.evaluacion.despues); if (!a.ok || !d.ok) return nada;
   const f = r => r.publicada ? `${cm(r.nota.toFixed(1))} de 10` : 'pendiente', A = a.limpio, D = d.limpio, sin = !!e.evaluacion_sin_comprobar;
   const fecha = A.fecha ? new Date(A.fecha + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'sin fecha';
   const cifra = `<b>${esc(f(A))}</b> → <b>${esc(f(D))}</b>${D.publicada || A.publicada ? '' : '. ' + esc(D.motivo || A.motivo || '')}`;
   return sin ? `<p class="mut peq">Valor guardado por el cliente (${esc(fecha)}, método «${esc(A.version)}», que esta pantalla no sabe comprobar): ${cifra}. No se ha podido verificar cómo se calculó.</p>`
-    : `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): ${cifra}. Se guardó con el escenario tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
+    : `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): ${cifra}. Se guardó con la idea tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
 }

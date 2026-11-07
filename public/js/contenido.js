@@ -104,7 +104,7 @@ export const SEGUIMIENTO_CASOS = [
 export const refPregunta = (hid, n) => `${hid}:${n}`;
 export const casoPorRef = (ref, hid) => !refExiste(ref) || (hid !== undefined && !refDeHistoria(ref, hid)) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
 export const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
-// Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
+// Qué dice la revisión editorial sobre una idea guardado (o un caso de ejemplo):
 //  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
 //  · «pendiente»  — vinculado, pero la fuente aún no permite responder;
 //  · «otra»       — la persona hizo una pregunta DISTINTA y la historia tiene revisión publicada de otra: no la responde, sigue pendiente, y se ofrece verla;

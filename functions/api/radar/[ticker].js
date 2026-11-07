@@ -23,7 +23,7 @@ export async function onRequestPut({ request, env, params }) {
        WHERE EXISTS (SELECT 1 FROM radar WHERE usuario_id = ? AND ticker = ?) OR (SELECT COUNT(*) FROM radar WHERE usuario_id = ?) < ?
        ON CONFLICT (usuario_id, ticker) DO UPDATE SET nota = COALESCE(?, nota), actualizado_en = datetime('now')
        RETURNING ticker, nota, creado_en, actualizado_en`).bind(user.id, ticker, nota, user.id, ticker, user.id, MAX_RADAR, nota).all();
-    if (!r.results.length) return json({ error: `Tu radar admite hasta ${MAX_RADAR} empresas. Quita alguna para añadir otra.` }, 400);
+    if (!r.results.length) return json({ error: `Puedes seguir hasta ${MAX_RADAR} empresas. Quita alguna para añadir otra.` }, 400);
     return json({ ok: true, nuevo: !ya, ...r.results[0] });
   } catch (e) { console.error('guardar radar:', e); return json({ error: ERROR_INTERNO }, 500); }
 }

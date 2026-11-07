@@ -7,7 +7,10 @@ import { historia, historiasDeTicker, revisionDe, ultimaTesis, fechaCorta, estad
 import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota, htmlEvaluacionGuardada } from './nota-ui.js';
 import { nuevoIntento, enviarIntento, actualizarVista, mismoContenido, CAMPOS_REVISION } from './revisiones.js';
-import { senales, hipotesis, indicadores } from './senales.js';
+import { senales, hipotesis, indicadores, umbralesValidos } from './senales.js';
+// Ronda 28 (fase 2): umbrales PROPIOS de esta persona (solo en este navegador; si no hay o no valen, los de Klever)
+const CLAVE_UMB = 'klever_umbrales';
+const umbPropios = () => { try { return JSON.parse(localStorage.getItem(CLAVE_UMB)); } catch { return null; } };
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
@@ -31,7 +34,11 @@ export function iniciarLab(ctx) {
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
+  $('#nota-cuerpo').addEventListener('submit', e => { if (e.target.id !== 'umb-form') return; e.preventDefault();
+    const u = umbralesValidos({ posicion: $('#umb-pos').value, categoria: $('#umb-cat').value }); try { localStorage.setItem(CLAVE_UMB, JSON.stringify({ posicion: u.posicion, categoria: u.categoria })); } catch { /* sin almacenamiento */ }
+    LAB.senalSel = null; pintarRadiografia(); ctx.toast(`Umbrales: posición ${u.posicion} %, sector ${u.categoria} %`); });
   $('#nota-cuerpo').addEventListener('click', e => {
+    if (e.target.closest('#umb-quitar')) { try { localStorage.removeItem(CLAVE_UMB); } catch { /* sin almacenamiento */ } pintarRadiografia(); x().pintarMisCarteras?.(); return; }
     if (e.target.closest('#vz-mas-b')) { LAB.vzMas = !LAB.vzMas; pintarRadiografia(); $('#vz-mas-b')?.focus(); return; }   // sin <details>: el orden «resultado → aviso → detalle» de la nota no cambia
     const sb = e.target.closest('[data-senal]'); if (sb) { LAB.senalSel = sb.dataset.senal; pintarRadiografia(); $('#nota-cuerpo [data-senal="' + sb.dataset.senal + '"]')?.focus(); return; }
     if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null, ...hipotesisVistazo() }); }
@@ -52,6 +59,7 @@ export function iniciarLab(ctx) {
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
   lab.addEventListener('click', onLabClic);
+  lab.addEventListener('click', e => { const b = e.target.closest('[data-pregunta]'); if (b) { const i = $('#lab-pregunta'); if (i) { i.value = b.dataset.pregunta; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus(); } } });
   lab.addEventListener('input', e => { if (e.target.id === 'lab-rango') { const pi = $('#lab-peso'); if (pi) pi.value = e.target.value; e.target.style.setProperty('--f', ((e.target.value - 1) / 59).toFixed(3)); simularEnVivo(); } });
   lab.addEventListener('click', e => { const b = e.target.closest('[data-explorar]'); if (b) ctx.explorarSector?.(b.dataset.explorar); });
   $('#fi-cuerpo').addEventListener('click', onFichaClic);
@@ -157,22 +165,26 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   const cats = r.categorias, escala = Math.max(100, r.total || 0);
   const expo = `<div class="vz-expo"><span class="vz-etq">Exposición por categoría</span><span class="vz-expo-barra" role="img" aria-label="${esc(cats.map(c => `${c.categoria} ${String(c.peso).replace('.', ',')} %`).join(', '))}">${cats.map((c, k) => `<i style="--c:var(--c${k % 8});width:${(c.peso / escala * 100).toFixed(2)}%"></i>`).join('')}</span>
     <span class="vz-expo-ley">${cats.slice(0, 4).map((c, k) => `<span><i style="--c:var(--c${k % 8})" aria-hidden="true"></i>${esc(c.categoria)} <b>${P(c.peso)}</b></span>`).join('')}${cats.length > 4 ? `<span class="mut">+${cats.length - 4}</span>` : ''}</span></div>`;
-  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0];
+  const ss = senales(r, 3, umbPropios()), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], U = umbralesValidos(umbPropios());
   const chips = ss.map(q => `<button type="button" class="senal senal-${q.nivel}" data-senal="${q.id}" aria-pressed="${q === sel}"><i aria-hidden="true"></i>${esc(q.titulo)}</button>`).join('');
   const accion = sel?.accion ? sel.accion.pregunta : 'Probar un cambio';
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
     <ul class="indicadores" aria-label="Tu cartera en tres indicadores">${indicadores(r, ev).map(i => `<li class="ind ind-${i.nivel}" title="${esc(i.detalle)}"><span class="ind-etq"><i aria-hidden="true"></i>${esc(i.etiqueta)}</span><b>${esc(i.valor)}</b><small>${esc(i.dato)}</small><span class="sr">. ${esc(i.detalle)}</span></li>`).join('')}</ul>
     ${expo}
     <div class="senales" role="group" aria-label="Señales de la cartera">${chips}</div>
-    ${sel ? `<p class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite">${esc(sel.detalle)}</p>` : ''}
+    ${sel ? `<div class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite"><p><b>Qué es:</b> ${esc(sel.detalle)}</p>${sel.porque ? `<p><b>Por qué importa:</b> ${esc(sel.porque)}</p>` : ''}${sel.accion ? `<p><b>Qué probar:</b> ${esc(sel.accion.pregunta)} Pulsa «Ver qué cambiaría».</p>` : ''}</div>` : ''}
     <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar" data-senal-accion="${sel?.id || ''}">Ver qué cambiaría →</button> <span class="vz-hipo">${esc(accion)}</span> <button type="button" class="enlace vz-mas" id="vz-mas-b" aria-expanded="${!!LAB.vzMas}" aria-controls="vz-mas-t">Qué mide</button></p>
-    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
+    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p>
+      <form id="umb-form" class="umb-form"><p class="peq"><b>Tus propios umbrales</b> <span class="mut">(solo en este navegador)</span></p>
+        <label for="umb-pos">Una posición pesa mucho desde</label> <span class="peso"><input id="umb-pos" type="number" inputmode="numeric" min="5" max="95" step="1" value="${U.posicion}"><span aria-hidden="true">%</span></span>
+        <label for="umb-cat">Un sector pesa mucho desde</label> <span class="peso"><input id="umb-cat" type="number" inputmode="numeric" min="10" max="100" step="1" value="${U.categoria}"><span aria-hidden="true">%</span></span>
+        <p class="fila"><button class="btn btn-secundario" type="submit">Usar mis umbrales</button> <button class="btn btn-ghost" type="button" id="umb-quitar">Volver a los de Klever</button></p></form></div></section>`;
 }
 // La hipótesis que propone la señal elegida (o la primera): se calcula sobre la MISMA composición que el laboratorio usará como base.
 function hipotesisVistazo() {
   const ed = x().editor(); if (!ed.current) return {};
   const pos = ed.current.id ? ed.posGuardada : ed.pos, r = radiografia(pos, x().activos(), ed.current.limite_peso ?? null);
-  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], h = hipotesis(sel, r, pos);
+  const ss = senales(r, 3, umbPropios()), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], h = hipotesis(sel, r, pos);
   return h ? { ticker: h.ticker, peso: h.peso, fin: h.fin, auto: !!h.ticker } : {};
 }
 export function pintarRadiografia() {
@@ -230,8 +242,8 @@ export async function pintarFichaRadar(a) {
   const hist = historiasDeTicker(a.ticker);
   const radar = LAB.radarError
     ? `<div class="fir-fila"><p class="error" role="alert">${esc(LAB.radarError)}</p><button class="btn btn-secundario" type="button" id="fir-reintentar">Reintentar</button></div>`
-    : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
-      <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, el radar se guarda solo en este dispositivo.'}</span></div>
+    : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ La sigues · Dejar de seguir' : '☆ Seguir esta empresa'}</button>
+      <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, las empresas que sigues se guardan solo en este dispositivo.'}</span></div>
       ${dentro ? `<div class="fir-nota" data-nota-zona="ficha">${htmlNota(esc, 'fir-nota', alm.nota(a.ticker), editando, editando ? LAB.nota.texto : '', editando ? LAB.nota.err : '')}</div>` : ''}`;
   const preg = hist[0]?.pregunta ? `Pregunta que investigas: «${esc(hist[0].pregunta)}»` : '';
   cont.innerHTML = `<div class="fir-acciones">${preg ? `<p class="fir-pregunta">${preg}</p>` : ''}
@@ -250,7 +262,7 @@ async function onFichaClic(e) {
     if (e.target.closest('#fir-reintentar')) { await cargarRadar(); await pintarFichaRadar(a); return; }
     if (e.target.closest('#fir-toggle')) {
       try {
-        if (alm.tiene(t)) { await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); } else { const r = await alm.guardar(t); if (!vigente(g)) return; toast(r.local ? 'Guardada en el radar de este dispositivo' : 'Guardada en tu radar'); }
+        if (alm.tiene(t)) { await alm.quitar(t); if (!vigente(g)) return; toast('Ya no la sigues'); } else { const r = await alm.guardar(t); if (!vigente(g)) return; toast(r.local ? 'La sigues (en este dispositivo)' : 'La sigues'); }
         await pintarFichaRadar(a); $('#fir-toggle')?.focus(); actualizarMarcasRadar();
       } catch (er) { const s = $('#fir-estado'); if (s) { s.textContent = 'No se ha podido guardar: ' + er.message; s.classList.add('error'); } }
       return;
@@ -278,7 +290,7 @@ export function actualizarMarcasRadar() { if (!marcasPend) { marcasPend = true; 
 export async function mostrarSeguimiento() {
   const { $, logged } = x(), g = LAB.gen;
   $('#seg-aviso').hidden = logged();
-  $('#seg-aviso').innerHTML = logged() ? '' : '<b>Estás sin cuenta.</b> Tu radar se guarda solo en este dispositivo y pasará a tu cuenta cuando entres. Los escenarios se guardan en tu cuenta: entra para conservarlos.';
+  $('#seg-aviso').innerHTML = logged() ? '' : '<b>Estás sin cuenta.</b> Las empresas que sigues se guardan solo en este dispositivo y pasarán a tu cuenta cuando entres. Las ideas se guardan en tu cuenta: entra para conservarlos.';
   await Promise.all([cargarCarteras(), cargarRadar()]);
   if (!vigente(g)) return;
   pintarSeguimientoRadar();
@@ -286,9 +298,9 @@ export async function mostrarSeguimiento() {
 }
 function pintarSeguimientoRadar() {
   const { $, esc } = x(), alm = LAB.alm.radar, filas = alm.todos(), ref = carteraRef();
-  if (LAB.radarError) { $('#seg-radar-n').textContent = ''; $('#seg-radar').innerHTML = `<div class="vacio-util"><p class="error" role="alert">${esc(LAB.radarError)}</p><p class="mut">Esto no significa que tu radar esté vacío: no se ha podido leer.</p><p><button class="btn btn-secundario" type="button" data-acc="reintentar">Reintentar</button></p></div>`; return; }
+  if (LAB.radarError) { $('#seg-radar-n').textContent = ''; $('#seg-radar').innerHTML = `<div class="vacio-util"><p class="error" role="alert">${esc(LAB.radarError)}</p><p class="mut">Esto no significa que no sigas ninguna empresa: no se ha podido leer.</p><p><button class="btn btn-secundario" type="button" data-acc="reintentar">Reintentar</button></p></div>`; return; }
   $('#seg-radar-n').textContent = filas.length ? `(${filas.length})` : '';
-  if (!filas.length) { $('#seg-radar').innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna empresa.</b></p><p class="mut">Abre la ficha de una empresa en «Explorar empresas» y pulsa «Guardar en mi radar». Podrás añadir una nota con lo que quieres investigar.</p><p><a class="btn btn-primario" href="#empresas">Explorar empresas</a></p></div>'; return; }
+  if (!filas.length) { $('#seg-radar').innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna empresa.</b></p><p class="mut">Abre la ficha de una empresa en «Explorar empresas» y pulsa «Seguir esta empresa». Podrás añadir una nota con lo que quieres investigar.</p><p><a class="btn btn-primario" href="#empresas">Explorar empresas</a></p></div>'; return; }
   const cab = LAB.carteras.length ? `<div class="seg-ref"><label for="seg-ref">Cartera de referencia</label><select id="seg-ref">${opcionesCartera(ref)}</select></div>` : '';
   $('#seg-radar').innerHTML = cab + filas.map(f => { const ed = LAB.nota?.ticker === f.ticker && LAB.nota.donde === 'seg';
     return `<article class="seg-item" data-t="${esc(f.ticker)}">
@@ -296,7 +308,7 @@ function pintarSeguimientoRadar() {
       ${htmlNota(esc, 'nota-' + f.ticker, f.nota, ed, ed ? LAB.nota.texto : '', ed ? LAB.nota.err : '')}
       <p class="peq" data-en>${esc(textoEnCartera(f.ticker, ref))}</p>
       <div class="seg-acc"><button class="btn btn-secundario" type="button" data-acc="ficha">Ver ficha<span class="sr"> de ${esc(f.nombre)}</span></button>
-      <button class="btn btn-secundario" type="button" data-acc="sim">Probar en mi cartera</button><button class="btn btn-ghost" type="button" data-acc="quitar">Quitar del radar<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`; }).join('');
+      <button class="btn btn-secundario" type="button" data-acc="sim">Probar en mi cartera</button><button class="btn btn-ghost" type="button" data-acc="quitar">Dejar de seguir<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`; }).join('');
 }
 async function clicSeguimientoRadar(e) {
   const { $, toast, toastError } = x(), g = LAB.gen, alm = LAB.alm.radar;
@@ -320,7 +332,7 @@ async function clicSeguimientoRadar(e) {
     else if (b.dataset.acc === 'sim') abrirLab({ carteraId: carteraRef()?.id ?? null, ticker: t });
     else if (b.dataset.acc === 'quitar') {
       const sig = art.nextElementSibling?.dataset?.t || art.previousElementSibling?.dataset?.t;
-      await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
+      await alm.quitar(t); if (!vigente(g)) return; toast('Ya no la sigues'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
     }
   } catch (err) { toastError(err.message); }
 }
@@ -335,15 +347,15 @@ function tarjetaCaso(esc, c) {                                         // una pr
   const ocurrido = r && c.compacta ? `<p class="mut peq">Misma respuesta que la de otra pregunta tuya vinculada a esta cuestión (más arriba). El desenlace completo no se repite aquí.</p>` : r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
     : est.tipo === 'pendiente' ? `<p><b>Sin respuesta editorial todavía.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
-    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
+    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>idea guardada</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
   const rev = !h ? '' : r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : est.tipo === 'otra' ? `<a class="btn btn-secundario" href="#historia-${esc(h.id)}">Ver revisión de la historia</a>` : `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>`;
   const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
   return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Reformulación con respuesta editorial' : 'Con respuesta editorial') : 'Sin respuesta editorial aún'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
     ${c.enFicha ? '' : `<h3>«${esc(c.pregunta)}»</h3>`}${formul}${c.revisarEn && !c.enFicha ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
     ${ocurrido}${pesos}<p class="caso-acc">${rev} ${c.enFicha ? '' : sim}</p></article>`;
 }
-// Resumen del vínculo con la revisión de la historia dentro de un escenario: responde / sigue pendiente / es otra pregunta (con enlace para verla).
-// Edición: muestra la pregunta de la historia a la que está vinculado el escenario y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
+// Resumen del vínculo con la revisión de la historia dentro de una idea: responde / sigue pendiente / es otra pregunta (con enlace para verla).
+// Edición: muestra la pregunta de la historia a la que está vinculado la idea y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
 // en el catálogo se identifica y se limpia al guardar. Avisa (sin decidir) si las palabras nuevas parecen tratar otro asunto.
 function htmlVinculoEdicion(esc, e) {
   if (!e.historia) return '';
@@ -365,7 +377,7 @@ function tarjetaVinculo(esc, e) {
   const rev = est.tipo === 'responde' && est.caso.respuesta.revision ? `#tesis-${esc(h.id)}-${est.caso.respuesta.revision}` : `#historia-${esc(h.id)}`;
   return txt ? `<p class="esc-vinculo">${txt} <a href="${rev}">Ver revisión de la historia</a></p>` : '';
 }
-// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (los escenarios) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
+// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (las ideas) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
 // de visitante, el ejemplo ficticio de «Tus preguntas» primero y después la invitación a entrar.
 function ordenarSeguimiento(conCuenta) {
   const col = document.querySelector('.seg-col'), casos = document.querySelector('#seg-casos')?.closest('.seg-bloque'), escB = document.querySelector('#seg-escenarios')?.closest('.seg-bloque'); if (!col || !casos || !escB) return;
@@ -388,7 +400,7 @@ function pintarSeguimientoCasos(lista) {
     return;
   }
   const con = (lista || []).filter(e => e.pregunta && e.estado !== 'descartado').sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id);
-  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
+  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes una idea con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
   const vistos = new Set();                                                // dos preguntas con el mismo desenlace: el artículo completo una sola vez, cada tarjeta con su enlace
   cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id), est = estadoSeguimiento(e), clave = est.tipo === 'responde' ? e.pregunta_ref : null, compacta = !!clave && vistos.has(clave); if (clave) vistos.add(clave);
     return tarjetaCaso(esc, { compacta, pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
@@ -396,15 +408,15 @@ function pintarSeguimientoCasos(lista) {
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
   if (!logged()) { pintarSeguimientoCasos(null); }
-  if (!logged()) { pintarResumenSeg(null); $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
-  cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
+  if (!logged()) { pintarResumenSeg(null); $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Las ideas se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar una idea y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
+  cont.innerHTML = '<p class="mut">Cargando tus ideas…</p>';
   let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
   if (!vigente(g)) return;
   LAB.listaEsc = lista; purgarBorradoresRev(lista.map(e => e.id)); pintarSeguimientoCasos(lista); pintarResumenSeg(lista);
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
-  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
+  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna idea.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
@@ -420,7 +432,7 @@ async function pintarSeguimientoEscenarios() {
   const grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
   if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
     cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
-  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
+  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay ideas con ese estado.</p>';
 }
 
 // Ronda 26 · resumen visual del Cuaderno: cuántas ideas tocan HOY, cuántas están en estudio y cuántas empresas sigues. Solo con datos leídos (sin lista fiable no hay cifras).
@@ -430,7 +442,7 @@ function pintarResumenSeg(lista) {
   const h0 = hoy(), activos = lista.filter(e => e.estado === 'en_estudio'), toca = activos.filter(e => e.revisar_en && e.revisar_en <= h0).length;
   const prox = activos.filter(e => e.revisar_en && e.revisar_en > h0).map(e => e.revisar_en).sort()[0], radar = LAB.radarError ? null : LAB.alm.radar.todos().length;
   const tile = (n, t, cls = '', extra = '') => `<div class="seg-tile ${cls}"><b>${n}</b><span>${t}</span>${extra}</div>`;
-  el.innerHTML = `<div class="seg-tiles">${tile(toca, 'Para revisar hoy', toca ? 'toca' : '')}${tile(activos.length, 'En estudio', '', prox ? `<small>Próxima: ${fechaCorta(prox)}</small>` : '')}${radar == null ? '' : tile(radar, 'En tu radar')}</div>`;
+  el.innerHTML = `<div class="seg-tiles">${tile(toca, 'Para revisar hoy', toca ? 'toca' : '')}${tile(activos.length, 'En estudio', '', prox ? `<small>Próxima: ${fechaCorta(prox)}</small>` : '')}${radar == null ? '' : tile(radar, 'Empresas que sigues')}</div>`;
 }
 
 // =============== laboratorio ===============
@@ -474,7 +486,7 @@ function pintarLabForm() {
         <p class="mut peq">${base.ejemplo ? 'Cartera de ejemplo.' : base.guardada ? `Versión guardada (revisión ${base.revision}).` : 'Tu borrador de este dispositivo, sin guardar.'} ${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} · asignado ${P(r.total)}${r.estado === 'incompleta' ? ` (falta asignar ${P(r.pendiente)})` : r.estado === 'exceso' ? ` (exceso de ${P(r.exceso)})` : ''}. El laboratorio parte siempre de lo guardado, no de cambios sin guardar.</p></fieldset>
       <fieldset><legend>2 · Activo y peso</legend>
         <label for="lab-ticker">Activo (símbolo o nombre)</label><input id="lab-ticker" list="lab-activos" autocomplete="off" value="${esc(s.ticker)}" placeholder="Por ejemplo: KO"><datalist id="lab-activos">${Object.values(activos).map(a => `<option value="${esc(a.ticker)}">${esc(a.nombre)}</option>`).join('')}</datalist>
-        ${radar ? `<label for="lab-radar">…o elige uno de tu radar (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
+        ${radar ? `<label for="lab-radar">…o elige una de las empresas que sigues (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
         <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10">
         ${!s.ticker ? htmlDescubrir(esc, r) : ''}</fieldset>
@@ -512,6 +524,8 @@ function simularEnVivo() {          // desde el deslizador: sin mover el foco ni
   LAB.sim.res = simular(baseLab().pos, { ticker: f.t, peso: f.peso }, f.fin); LAB.sim.clave = null; pintarResultado();
   const o = $('#lab-rango-v'); if (o) o.textContent = P(f.peso);
 }
+// Ronda 28 (fase 2): preguntas de ejemplo para no empezar en blanco (la persona puede editarlas o escribir la suya)
+const PREGUNTAS = ['¿Sigue creciendo {T}?', '¿Ha bajado la deuda de {T}?', '¿Me compensa que {T} pese tanto?'];
 const cabLab = (extra = '') => `<div class="pag-cab"><h1>Laboratorio <span class="chip sim">Simulación</span></h1><p class="mut">Prueba un cambio y compáralo con tu cartera. ${extra}Aquí nada modifica tu cartera ni ejecuta operaciones.</p></div>`;
 function leerFormulario() {
   const { $ } = x(), fin = document.querySelector('input[name="lab-fin"]:checked')?.value || '';
@@ -589,14 +603,15 @@ function pintarResultado() {
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
         ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
         <label for="lab-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
+        <p class="preg-plantillas" role="group" aria-label="Preguntas de ejemplo">${PREGUNTAS.map(q => `<button type="button" class="chip-btn" data-pregunta="${esc(q.replace('{T}', sim.ticker))}">${esc(q.replace('{T}', sim.ticker))}</button>`).join('')}</p>
         <label for="lab-nota">Por qué lo estoy estudiando <span class="mut">(opcional)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
         <label for="lab-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional; hasta 600 caracteres)</span></label><textarea id="lab-invalidacion" rows="2" maxlength="600" placeholder="Por ejemplo: si la empresa pierde a su principal cliente"></textarea>
         <label for="lab-revisar">Cuándo quiero revisarlo <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
         ${h ? `<p class="peq mut">Se vincula a la historia «${esc(h.titulo)}»${rev && rev.n > 1 ? ' y a su revisión editorial' : ''}.</p>` : ''}
         <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar en mi Cuaderno</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
     : base.ejemplo && logged()
-      ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
-      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
+      ? `<div class="lab-guardar"><h3>Guardar esta idea</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar ideas necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
+      : `<div class="lab-guardar"><h3>Guardar esta idea</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar ideas sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   const nCat = l => l.filter(k => k > 0).length, catA = nCat(c.categorias.map(k => k.antes)), catD = nCat(c.categorias.map(k => k.despues));
   const kpi = (t, a, d, ayuda) => `<div class="kpi${a === d ? ' igual' : ''}"><span>${t}</span><b><s>${a}</s><i aria-hidden="true">→</i><em>${d}</em></b>${ayuda ? `<small>${ayuda}</small>` : ''}</div>`;   // ronda 26: lo esencial de la comparación, en cifras grandes
   const kpis = `<div class="lab-kpis" aria-label="Comparación rápida">${kpi('Mayor posición', c.antes.mayor ? P(c.antes.mayor.peso) : '—', c.despues.mayor ? P(c.despues.mayor.peso) : '—', c.despues.mayor ? esc(c.despues.mayor.ticker) : '')}${kpi('Tres mayores', P(c.antes.top3.peso), P(c.despues.top3.peso), '')}${kpi('Categorías', String(catA), String(catD), '')}${c.despues.pendiente || c.antes.pendiente ? kpi('Sin asignar', P(c.antes.pendiente), P(c.despues.pendiente), '') : ''}</div>`;
@@ -640,7 +655,7 @@ function onLabClic(e) {
   else if (e.target.closest('#esc-eliminar')) eliminarEscenario();
 }
 
-// =============== escenario guardado: se muestra TAL COMO SE GUARDÓ ===============
+// =============== idea guardada: se muestra TAL COMO SE GUARDÓ ===============
 function cambiosEntre(base, prop) {
   const a = new Map(base.map(p => [p.ticker, p.peso])), d = new Map(prop.map(p => [p.ticker, p.peso]));
   return [...new Set([...a.keys(), ...d.keys()])].map(t => ({ ticker: t, antes: a.get(t) || 0, despues: d.get(t) || 0, delta: Math.round(((d.get(t) || 0) - (a.get(t) || 0)) * 10) / 10, nueva: !a.has(t) }))
@@ -649,7 +664,7 @@ function cambiosEntre(base, prop) {
 async function mostrarEscenario(id) {
   const { $, esc, go, logged } = x(), g = LAB.gen;
   if (!logged()) { go('#seguimiento'); return; }
-  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
+  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos esa idea (puede que la hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
   LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } if (LAB.revLectura !== e.id) LAB.revLectura = null;
   if (!LAB.revIntento) { const pi = intentoGuardado(e.id); if (pi) { LAB.revIntento = { intento: pi, fase: 'incierto' }; if (LAB.revMsg?.esc !== e.id) avisarRev('aviso', 'Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.'); } }
@@ -663,15 +678,15 @@ function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
   const viva = LAB.carteras.find(c => c.id === e.cartera_id), activos = x().activos();
   const c = comparar(e.base, e.propuesta, activos, viva?.limite ?? null);
-  const aviso = !e.cartera_existe ? `<p class="aviso-panel"><b>La cartera original ya no existe.</b> Este escenario conserva su copia de la base.</p>`
-    : e.hay_version_posterior ? `<div class="aviso-panel"><div><b>La cartera cambió después de este escenario</b> (revisión ${e.base_revision} → ${e.revision_actual}). El escenario conserva la base con la que se simuló y no se recalcula. <a href="#cartera-${e.cartera_id}">Abrir la cartera</a>. Si quieres, simula de nuevo con su versión actual.</div></div>` : '';
+  const aviso = !e.cartera_existe ? `<p class="aviso-panel"><b>La cartera original ya no existe.</b> Esta idea conserva su copia de la base.</p>`
+    : e.hay_version_posterior ? `<div class="aviso-panel"><div><b>La cartera cambió después de esta idea</b> (revisión ${e.base_revision} → ${e.revision_actual}). La idea conserva la base con la que se simuló y no se recalcula. <a href="#cartera-${e.cartera_id}">Abrir la cartera</a>. Si quieres, simula de nuevo con su versión actual.</div></div>` : '';
   const h = e.historia && historia(e.historia), rev = h && ultimaTesis(h);
   const enlHist = h ? `<p class="esc-historia"><b>Historia de origen:</b> <a href="#historia-${esc(h.id)}">${esc(h.titulo)}</a> · <a href="#tesis-${esc(h.id)}-1">Opinión original (${esc(fechaCorta(h.tesis[0].fecha))})</a>${rev && rev.n > 1 ? ` · <a href="#tesis-${esc(h.id)}-${rev.n}">Revisión editorial (${esc(fechaCorta(rev.fecha))}${rev.simulada ? ', desenlace simulado' : ''})</a>` : ''}</p>` : '';
   const estados = Object.keys(ESTADOS).filter(k => k !== e.estado).map(k => k === 'descartado' ? '<button class="btn btn-secundario" type="button" data-estado="descartado">Marcar como descartado</button>' : k === 'archivado' ? '<button class="btn btn-secundario" type="button" data-estado="archivado">Archivar</button>' : '<button class="btn btn-secundario" type="button" data-estado="en_estudio">Volver a «en estudio»</button>').join(' ');
   $('#lab-cuerpo').innerHTML = `<div class="pag-cab"><p><a class="enlace" href="#seguimiento">← Mi seguimiento</a></p><h1 tabindex="-1">${esc(e.nombre)} <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></h1>
       <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}». Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
-      ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
+      ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en esta idea.</p>'}
       ${enlHist}${e.historia ? htmlEditorialFicha(esc, e, viva) : ''}
       <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
       ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
@@ -685,7 +700,7 @@ function pintarEscenario() {
         : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
     ${htmlRevisiones(esc, e)}
-    <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
+    <section class="esc-estado" aria-label="Estado dla idea"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan la idea y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
@@ -711,16 +726,16 @@ function htmlRevisiones(esc, e) {
         <p><button class="btn btn-primario" type="submit" id="rev-btn">${rotuloBotonRev()}</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
 }
 // Estado del registro de una revisión (ronda 22). LAB.revIntento = { intento, fase }: fase «incierto» (no se sabe si el servidor lo registró: se reintenta EL MISMO intento) o «vista» (el servidor ya lo confirmó y solo falta
-// releer el escenario: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
+// releer la idea: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
 const rotuloBotonRev = () => LAB.revLectura === LAB.esc?.id ? 'Reintentar la lectura' : LAB.revIntento?.fase === 'vista' ? 'Actualizar la vista' : LAB.revIntento?.fase === 'incierto' ? 'Reintentar el mismo envío' : 'Registrar revisión';
 const leerBorradorRev = () => { const q = s => document.querySelector(s), dec = document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener';
   return { fecha: q('#rev-fecha').value, observacion: q('#rev-obs').value.trim(), aprendizaje: q('#rev-apr').value.trim(), decision: dec, proxima_fecha: dec === 'reprogramar' ? (q('#rev-prox').value || null) : null }; };
-// El borrador de una revisión vive en memoria Y en el dispositivo (clave por escenario, caduca a los 7 días): si la sesión caduca y se vuelve a entrar con la MISMA cuenta, sigue ahí; si entra OTRA cuenta, el escenario
+// El borrador de una revisión vive en memoria Y en el dispositivo (clave por escenario, caduca a los 7 días): si la sesión caduca y se vuelve a entrar con la MISMA cuenta, sigue ahí; si entra OTRA cuenta, la idea
 // no es suyo (404) y además se purgan los borradores de escenarios ajenos al cargar su Cuaderno; al cerrar sesión a propósito se borran todos.
 const CLAVE_REV = 'klever_rev_', DIAS_REV = 7;
 function persistirBorradorRev(b) { try { const { store } = LAB.ctx, k = CLAVE_REV + b.esc; if ((b.obs || '').trim() || (b.apr || '').trim() || b.dec !== 'mantener' || b.intento) store.setItem(k, JSON.stringify({ ...b, t: Date.now() })); else store.removeItem(k); } catch { /* sin almacenamiento */ } }
 function leerBorradorGuardado(id) { try { const b = JSON.parse(LAB.ctx.store.getItem(CLAVE_REV + id)); if (b && b.esc === id && Date.now() - b.t < DIAS_REV * 864e5) return b; } catch { /* dañado */ } return null; }
-// Ronda 27 · intento incierto que sobrevive a recargar, cerrar la pestaña o caducar la sesión. Solo se restaura DESPUÉS de que el servidor haya devuelto el escenario
+// Ronda 27 · intento incierto que sobrevive a recargar, cerrar la pestaña o caducar la sesión. Solo se restaura DESPUÉS de que el servidor haya devuelto la idea
 // a la sesión actual (mostrarEscenario): otra cuenta recibe 404 y nunca lo ve. Al reenviarlo se usa LA MISMA clave: el servidor comprueba la clave antes que la revisión
 // y devuelve el registro ya guardado si llegó (reconciliación sin otra escritura) o lo registra una sola vez si no llegó.
 function intentoGuardado(id) {
@@ -731,7 +746,7 @@ function intentoGuardado(id) {
 }
 function olvidarBorradorRev(id) { try { LAB.ctx.store.removeItem(CLAVE_REV + id); } catch { /* sin almacenamiento */ } if (LAB.revBorrador?.esc === id) LAB.revBorrador = null; }
 const clavesRev = () => { const ks = []; try { for (let k = 0; k < localStorage.length; k++) { const c = localStorage.key(k); if (c && c.startsWith(CLAVE_REV)) ks.push(c); } } catch { /* sin almacenamiento */ } return ks; };   // se listan ANTES de borrar: el orden de localStorage.key() cambia al eliminar
-export function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de los escenarios de ESTA cuenta (null = solo caducidad)
+export function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de las ideas de ESTA cuenta (null = solo caducidad)
   for (const c of clavesRev()) { const id = Number(c.slice(CLAVE_REV.length)); let b = null; try { b = JSON.parse(localStorage.getItem(c)); } catch { /* dañado */ }
     if (!b || Date.now() - b.t >= DIAS_REV * 864e5 || (idsPropios && !idsPropios.includes(id))) { try { localStorage.removeItem(c); } catch { /* sin almacenamiento */ } } }
 }
@@ -792,12 +807,12 @@ async function registrarRevision() {
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
   try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
-  catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
+  catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Esta idea cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
 function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value, invalidacion: $('#esc-invalidacion').value }, 'Cambios guardados', '#esc-error'); }
-function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
+function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Idea marcada como descartada (se conserva)' : estado === 'archivado' ? 'Idea archivada' : 'Idea de nuevo en estudio', '#esc-estado-error'); }
 async function eliminarEscenario() {
   const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;
-  if (!window.confirm(`¿Eliminar definitivamente el escenario «${e.nombre}»? Se borra del todo y no se puede deshacer; tu cartera no cambia. (Si solo quieres dejar de verlo, usa «Marcar como descartado»: se conserva.)`)) return;
-  try { await LAB.alm.escenarios.borrar(e.id); if (!vigente(g)) return; toast('Escenario eliminado'); go('#seguimiento'); } catch (er) { if (vigente(g)) toastError(er.message); }
+  if (!window.confirm(`¿Eliminar definitivamente la idea «${e.nombre}»? Se borra del todo y no se puede deshacer; tu cartera no cambia. (Si solo quieres dejar de verlo, usa «Marcar como descartado»: se conserva.)`)) return;
+  try { await LAB.alm.escenarios.borrar(e.id); if (!vigente(g)) return; toast('Idea eliminada'); go('#seguimiento'); } catch (er) { if (vigente(g)) toastError(er.message); }
 }

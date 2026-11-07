@@ -1353,6 +1353,35 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 .como li{align-content:start}
 @media(max-width:479px){.ind-etq i{display:none}.ind-etq{font-size:.68rem}}
 
+/* Ronda 28 (fase 2) · barra inferior en móvil: tres destinos, siempre al alcance del pulgar */
+.tabbar{display:none}
+@media(max-width:719px){
+  .tabbar{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));
+    background:rgba(19,16,14,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--border)}
+  .tabbar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:48px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:.75rem;font-weight:600}
+  .tabbar .tab-ico{font-size:1.15rem;line-height:1}
+  .tabbar a[aria-current="page"]{color:var(--accent-on-soft);background:var(--accent-soft)}
+  body:not(.sin-tabbar){padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  body.sin-tabbar .tabbar{display:none}
+}
+.pegado-ayuda{margin:6px 0 0;font-size:.8125rem;color:var(--azul)}
+.combo-pista{margin:6px 0 0}
+.pegado-res{margin:6px 0 0;padding:8px 12px;border-radius:10px;background:var(--azul-bg);font-size:.8125rem}
+
+/* Explorar: «Probar» junto a «Ver ficha» */
+.probar-emp{font:inherit;font-size:.8125rem;font-weight:600;color:var(--azul);background:var(--azul-bg);border:1px solid var(--azul-borde);border-radius:99px;padding:6px 12px;min-height:36px;margin-left:8px;cursor:pointer}
+.probar-emp:hover{background:rgba(108,180,255,.2)}
+
+/* Señal en tres niveles y umbrales propios */
+.senal-det p{margin:0 0 4px}
+.senal-det b{color:var(--text);font-weight:600}
+.senal-det.elegida{padding:10px 12px;border-radius:12px;background:var(--surface-2);margin-bottom:8px}
+.umb-form{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:grid;gap:6px}
+.umb-form label{font-size:.8125rem;color:var(--muted)}
+.umb-form .peso input{width:4.5rem;min-height:40px;text-align:right}
+.preg-plantillas{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+.emp-card .ec-l2{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1467,7 +1496,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
       <label>Sector <select id="emp-sector"><option value="">Todos</option></select></label>
       <label>Comprobación <select id="emp-crit"><option value="">Cualquiera de las cinco</option><option value="deuda_ebitda">Deuda</option><option value="roic">ROIC</option><option value="margen_neto">Margen</option><option value="flujo_caja">Caja libre</option><option value="crecimiento">Crecimiento</option></select></label>
       <label>Resultado <select id="emp-estado"><option value="">Sin filtrar</option><option value="ok">Superada</option><option value="no">No superada</option><option value="nd">Sin datos</option></select></label>
-      <label class="chk"><input type="checkbox" id="emp-radar"> Solo mi radar</label>
+      <label class="chk"><input type="checkbox" id="emp-radar"> Solo las que sigo</label>
       <label class="chk"><input type="checkbox" id="emp-faltan"> Solo sectores que no tengo</label>
     </div></details>
     <div class="glosario" role="group" aria-label="Qué significa cada comprobación"><span class="mut peq">¿Qué significa?</span> <button type="button" class="chip-btn" data-glosa="deuda_ebitda">Deuda</button><button type="button" class="chip-btn" data-glosa="roic">ROIC</button><button type="button" class="chip-btn" data-glosa="margen_neto">Margen</button><button type="button" class="chip-btn" data-glosa="flujo_caja">Caja libre</button><button type="button" class="chip-btn" data-glosa="crecimiento">Crecimiento</button>
@@ -1575,7 +1604,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
     <div id="seg-resumen" class="seg-resumen" aria-live="polite"></div>
     <div class="seg-col">
       <section class="seg-bloque" aria-labelledby="seg-esc-t">
-        <div class="seg-cab"><h2 id="seg-esc-t">Mis escenarios <span id="seg-esc-n" class="mut"></span></h2>
+        <div class="seg-cab"><h2 id="seg-esc-t">Mis ideas <span id="seg-esc-n" class="mut"></span></h2>
           <label class="seg-filtro">Mostrar <select id="seg-filtro"><option value="activos">En estudio</option><option value="archivado">Archivados</option><option value="descartado">Descartados</option><option value="todos">Todos</option></select></label></div>
         <div id="seg-escenarios" aria-live="polite"></div>
       </section>
@@ -1584,7 +1613,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
         <div id="seg-casos" aria-live="polite"></div>
       </section>
       <section class="seg-bloque" aria-labelledby="seg-radar-t">
-        <div class="seg-cab"><h2 id="seg-radar-t">Mi radar <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
+        <div class="seg-cab"><h2 id="seg-radar-t">Empresas que sigo <span id="seg-radar-n" class="mut"></span></h2><a href="#empresas" class="enlace">Explorar empresas</a></div>
         <div id="seg-radar" aria-live="polite"></div>
       </section>
     </div>
@@ -1665,6 +1694,9 @@ summary{min-height:44px;align-content:center;cursor:pointer}
             <input id="buscar-activo" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lista-activos" autocomplete="off" spellcheck="false" placeholder="Nombre o símbolo (Apple, KO…)">
             <ul id="lista-activos" class="combo-lista" role="listbox" aria-label="Activos disponibles" hidden></ul>
             <p id="combo-aviso" class="sr" role="status" aria-live="polite"></p>
+            <p id="pegado-ayuda" class="pegado-ayuda" hidden>Pulsa Intro para añadir tu lista de una vez.</p>
+            <p class="mut peq combo-pista">También puedes pegar tu cartera: <span class="num">KO 40, PG 60</span></p>
+            <p id="pegado-res" class="pegado-res" role="status" hidden></p>
           </div>
         </section>
         <p id="origen-aviso-pie" class="origen-aviso origen-pie" role="note" hidden></p>
@@ -1755,6 +1787,12 @@ summary{min-height:44px;align-content:center;cursor:pointer}
   <p class="pie-enl"><a href="#como-funciona">Cómo funciona</a> · Aviso legal, privacidad y fuentes · <button id="cookies-link" class="enlace" type="button">Preferencias de cookies de TradingView</button></p>
 </footer>
 
+<!-- Ronda 28 (fase 2) · barra inferior en móvil con los tres destinos principales (no aparece en el editor ni en el laboratorio, que tienen su propia barra de acciones) -->
+<nav id="tabbar" class="tabbar" aria-label="Principal (barra inferior)">
+  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico" aria-hidden="true">◧</span>Carteras</a>
+  <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico" aria-hidden="true">◎</span>Descubrir</a>
+  <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico" aria-hidden="true">✎</span>Cuaderno</a>
+</nav>
 <div id="barra-guardar" class="barra-guardar" hidden>
   <div class="bg-info">
     <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
@@ -2089,21 +2127,37 @@ const cmS = v => String(Math.round(v * 10) / 10).replace('.', ',');
 const pesoHipotesis = w => { const h = Math.max(1, Math.min(20, Math.round(w / 2))); return h < w ? h : Math.max(0.1, Math.round((w - 1) * 10) / 10); };
 
 // r: resultado de radiografia(); devuelve la lista ordenada (alertas primero) con, como mucho, `max` señales.
-function senales(r, max = 3) {
+// Ronda 28 (fase 2): `umb` permite que la PERSONA fije sus propios umbrales de posición y categoría (se validan; si no valen, se usan los de Klever).
+function umbralesValidos(u) {
+  const ok = (v, a, b) => Number.isFinite(Number(v)) && Number(v) >= a && Number(v) <= b;
+  return { ...UMBRALES, ...(u && ok(u.posicion, 5, 95) ? { posicion: Number(u.posicion) } : {}), ...(u && ok(u.categoria, 10, 100) ? { categoria: Number(u.categoria) } : {}) };
+}
+// Por qué importa cada señal (segundo nivel del detalle), en una frase llana y sin prever pérdidas ni ganancias.
+const PORQUE = {
+  exceso: 'Con más del 100 % las cifras no cuadran y no se puede comparar nada.',
+  categoria: 'Si a ese sector le va mal, lo nota casi toda la cartera a la vez.',
+  posicion: 'Lo que le pase a una sola empresa mueve buena parte del total.',
+  unica: 'Todo depende de lo que le pase a ese activo.',
+  sectores: 'Pocos sectores hacen que la cartera dependa de pocas cosas.',
+  pocas: 'Con pocas posiciones, cada una cuenta mucho en el resultado.',
+  pendiente: 'Lo que falta no está en ninguna parte: la cartera no está completa.',
+  ok: 'El reparto no se apoya en una sola posición ni en un solo sector.',
+};
+function senales(r, max = 3, umb = null) {
   if (!r || r.estado === 'vacia') return [];
-  const out = [], U = UMBRALES;
+  const out = [], U = umbralesValidos(umb), propio = !!umb && (U.posicion !== UMBRALES.posicion || U.categoria !== UMBRALES.categoria), ref = propio ? 'tu referencia' : 'referencia orientativa de Klever';
   if (r.estado === 'exceso') out.push({ id: 'exceso', nivel: 'alerta', titulo: `Exceso de ${cmS(r.exceso)} %`, detalle: `Los pesos suman el ${cmS(r.total)} %. Ajusta la distribución antes de comparar.`, accion: null });
   const cats = r.categorias.filter(c => c.conocida && !c.soloFondos), top = cats[0];
   if (top && top.peso >= U.categoria && r.n > 1) {
     const t = top.tickers[0];  // la mayor posición de esa categoría (radiografía ordena por peso)
     out.push({ id: 'categoria', nivel: 'alerta', titulo: `Exposición alta: ${top.categoria}`, valor: top.peso,
-      detalle: `${top.categoria} suma el ${cmS(top.peso)} % (${top.tickers.join(', ')}). Referencia orientativa de Klever: más del ${U.categoria} % en una categoría.`,
+      detalle: `${top.categoria} suma el ${cmS(top.peso)} % (${top.tickers.join(', ')}). ${ref.charAt(0).toUpperCase() + ref.slice(1)}: más del ${U.categoria} % en una categoría.`,
       accion: { ticker: t, fin: 'proporcional', pregunta: `¿Y si ${t} pesara menos?` } });
   }
   const duplicada = out.some(s => s.id === 'categoria' && s.accion.ticker === r.mayor?.ticker && top.tickers.length === 1);   // misma idea dicha dos veces
   if (r.mayor && r.mayor.peso >= U.posicion && r.n > 1 && !duplicada) {
     out.push({ id: 'posicion', nivel: 'alerta', titulo: `${r.mayor.ticker} pesa el ${cmS(r.mayor.peso)} %`, valor: r.mayor.peso,
-      detalle: `Una sola posición supera el ${U.posicion} % de la cartera (referencia orientativa de Klever, no una norma).`,
+      detalle: `Una sola posición supera el ${U.posicion} % de la cartera (${ref}, no una norma).`,
       accion: { ticker: r.mayor.ticker, fin: 'proporcional', pregunta: `¿Y si ${r.mayor.ticker} pesara menos?` } });
   }
   if (r.n === 1) out.push({ id: 'unica', nivel: 'alerta', titulo: 'Una sola posición', detalle: 'Toda la cartera depende de un único activo.', accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
@@ -2115,6 +2169,7 @@ function senales(r, max = 3) {
   if (r.n > 1 && r.n < U.posiciones) out.push({ id: 'pocas', nivel: 'aviso', titulo: `${r.n} posiciones`, valor: r.n, detalle: `Menos de ${U.posiciones} posiciones: cada una pesa mucho en el conjunto.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si añadieras otra idea?' } });
   if (r.estado === 'incompleta') out.push({ id: 'pendiente', nivel: 'aviso', titulo: `Falta asignar ${cmS(r.pendiente)} %`, valor: r.pendiente, detalle: `Está asignado el ${cmS(r.total)} %. Puedes repartir lo que falta o probar a usarlo en el laboratorio.`, accion: { ticker: '', fin: 'sin_asignar', pregunta: '¿Y si usaras lo que falta?' } });
   if (!out.length) out.push({ id: 'ok', nivel: 'ok', titulo: 'Sin concentraciones destacadas', detalle: `Ninguna posición supera el ${U.posicion} % ni ninguna categoría el ${U.categoria} %. No mide riesgo ni rentabilidad.`, accion: { ticker: '', fin: 'proporcional', pregunta: '¿Y si probaras otra idea?' } });
+  for (const q of out) q.porque = PORQUE[q.id];
   return out.slice(0, max);
 }
 // Hipótesis completa para el laboratorio a partir de una señal: { ticker, peso, fin }. pos: las posiciones analizadas ({ ticker, peso }).
@@ -2143,9 +2198,28 @@ function indicadores(r, ev = null) {
   return [
     { id: 'concentracion', etiqueta: 'Concentración', nivel: conc, valor: { ok: 'Baja', medio: 'Media', alto: 'Alta' }[conc], dato: `${r.mayor.ticker} ${cmS(may)} %`, detalle: `La mayor posición es ${r.mayor.ticker} (${cmS(may)} %)${cats[0] ? ` y la mayor categoría, ${cats[0].categoria} (${cmS(topCat)} %)` : ''}.` },
     { id: 'variedad', etiqueta: 'Variedad', nivel: vari, valor: { ok: 'Amplia', medio: 'Media', alto: 'Poca' }[vari], dato: `${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}`, detalle: `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} en ${nCat} ${nCat === 1 ? 'categoría' : 'categorías'}${r.categorias.some(c => c.soloFondos) ? ' (los ETF cuentan como una)' : ''}.` },
-    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % con datos` : '', detalle: datos.detalle },
+    { id: 'datos', etiqueta: 'Datos', nivel: datos.nivel, valor: datos.valor, dato: datos.pct != null ? `${datos.pct} % del peso` : '', detalle: datos.detalle },
   ];
 }
+
+// Ronda 28 (fase 2) · «Pega tu cartera»: convierte un texto como «KO 40, PG 60» o «AAPL: 25 %; MSFT 30,5» en posiciones. PURO: sin DOM.
+// Solo reconoce símbolos del universo disponible (no adivina ni sustituye uno por otro): lo que no reconoce lo devuelve aparte para decirlo.
+// Pesos con una decimal como mucho (coma o punto), entre 0,1 y 100. Un símbolo repetido conserva el último peso. Necesita al menos UN par símbolo + peso.
+function leerPegado(texto, universo) {
+  const out = { pares: [], desconocidos: [], invalidos: [] }, vistos = new Map();
+  const re = /([A-Za-z][A-Za-z.]{0,5})\s*[:=]?\s*(\d{1,3}(?:[.,]\d+)?)\s*%?/g;
+  let m; const limpio = String(texto || '');
+  while ((m = re.exec(limpio))) {
+    const t = m[1].toUpperCase().replace(/\.$/, ''), num = Number(m[2].replace(',', '.'));
+    if (!universo?.[t]) { if (!out.desconocidos.includes(t)) out.desconocidos.push(t); continue; }
+    if (!(num >= 0.1 && num <= 100) || Math.abs(num * 10 - Math.round(num * 10)) > 1e-9) { out.invalidos.push(`${t} ${m[2]}`); continue; }
+    vistos.set(t, num);
+  }
+  out.pares = [...vistos].map(([ticker, peso]) => ({ ticker, peso }));
+  return out;
+}
+// ¿Parece una lista para pegar (al menos dos símbolos con número) y no una búsqueda normal?
+const pareceLista = texto => (String(texto || '').match(/[A-Za-z][A-Za-z.]{0,5}\s*[:=]?\s*\d/g) || []).length >= 2;
 
 // Catálogo COMPARTIDO (cliente y servidor) de las cuestiones editoriales que una persona puede seguir. Cada identificador «historia:n» es INMUTABLE: nunca se reutiliza
 // para otra pregunta (si la cuestión cambia de fondo se crea otro identificador). Un vínculo nuevo solo se acepta si el par historia/identificador existe aquí.
@@ -2435,9 +2509,9 @@ function compararEmpresas(a, b) {
   return res;
 }
 
-// Almacenamiento del radar y de los escenarios (sin interfaz).
+// Almacenamiento del radar y de las ideas (sin interfaz).
 // Con sesión: en la cuenta, por la API (la propiedad la comprueba el servidor en cada lectura y escritura).
-// Sin sesión: el radar queda SOLO en este dispositivo (localStorage) y se marca como tal; los escenarios requieren cuenta.
+// Sin sesión: el radar queda SOLO en este dispositivo (localStorage) y se marca como tal; las ideas requieren cuenta.
 // Reglas de confianza:
 //  · Nada devuelve «guardado» hasta que la escritura ha ocurrido de verdad (la API ha respondido bien o localStorage ha aceptado el valor).
 //  · Un fallo de lectura NO es un radar vacío: se lanza un error distinto, para no mostrar «aún no has guardado nada» ni sobrescribir lo que hay.
@@ -2450,10 +2524,10 @@ const fallo = (tipo, msg) => { const e = new Error(msg); e.tipo = tipo; return e
 function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
   let gen = 0, mut = 0;                                     // mut: contador de escrituras; una lectura anterior a una escritura NO pisa su resultado                                              // se incrementa al reiniciar: toda respuesta de una generación anterior se descarta
   const leerLocal = () => {                                 // {} si no hay nada; LANZA si no se puede leer (≠ vacío)
-    let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se ha podido leer el radar guardado en este dispositivo.'); }
+    let crudo; try { crudo = store.getItemEstricto(CLAVE_RADAR_LOCAL); } catch { throw fallo(ERR_LECTURA, 'No se han podido leer las empresas que sigues en este dispositivo.'); }
     if (crudo == null || crudo === '') return {};
     try { const o = JSON.parse(crudo); if (o && typeof o === 'object' && !Array.isArray(o)) return o; } catch { /* se informa abajo */ }
-    throw fallo(ERR_LECTURA, 'El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
+    throw fallo(ERR_LECTURA, 'La lista de empresas que sigues en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.');
   };
   const escribirLocal = o => {                              // LANZA si el almacenamiento falla o está lleno: nunca cae en silencio a la memoria
     try { if (Object.keys(o).length) store.setItemEstricto(CLAVE_RADAR_LOCAL, JSON.stringify(o)); else store.removeItemEstricto(CLAVE_RADAR_LOCAL); }     // el borrado también es estricto: si falla, el dato privado NO queda fingiendo estar borrado
@@ -2471,7 +2545,7 @@ function crearAlmacen({ api, logged, store, activos, idSesion = () => null }) {
     async cargar() {
       const g = gen, m0 = mut;
       if (logged()) {
-        let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer tu radar.'); }
+        let filas; try { filas = await api('/radar'); } catch (e) { throw fallo(ERR_LECTURA, e.message || 'No se ha podido leer la lista de empresas que sigues.'); }
         if (g !== gen) return [];                           // la sesión cambió: se descarta
         if (m0 !== mut) return this.todos();                // hubo una escritura mientras llegaba esta lectura: la lectura es anterior y NO se aplica
         radar = new Map(filas.map(f => [f.ticker, f]));
@@ -2639,7 +2713,7 @@ const SEGUIMIENTO_CASOS = [
 const refPregunta = (hid, n) => `${hid}:${n}`;
 const casoPorRef = (ref, hid) => !refExiste(ref) || (hid !== undefined && !refDeHistoria(ref, hid)) ? null : SEGUIMIENTO_CASOS.find(c => refPregunta(c.historia, c.tesis) === ref) || null;
 const normalizaPregunta = t => String(t ?? '').normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
-// Qué dice la revisión editorial sobre un escenario guardado (o un caso de ejemplo):
+// Qué dice la revisión editorial sobre una idea guardado (o un caso de ejemplo):
 //  · «responde»   — está vinculado a una cuestión y la revisión ya la responde;
 //  · «pendiente»  — vinculado, pero la fuente aún no permite responder;
 //  · «otra»       — la persona hizo una pregunta DISTINTA y la historia tiene revisión publicada de otra: no la responde, sigue pendiente, y se ofrece verla;
@@ -2779,17 +2853,17 @@ function htmlCambioNota(esc, a, d) {
     <div class="tabla-h" role="region" aria-label="Bloques de la nota antes y después" tabindex="0"><table class="tabla-lab"><thead><tr><th scope="col">Bloque</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Cambio</th></tr></thead><tbody>${bl.map(fila).join('')}</tbody></table></div>`;
 }
 
-// Evaluación GUARDADA con un escenario: se revalida su forma y se pinta solo desde la copia reconstruida (números y fechas formateados, texto escapado).
+// Evaluación GUARDADA con una idea: se revalida su forma y se pinta solo desde la copia reconstruida (números y fechas formateados, texto escapado).
 // Es un registro de lo que vio la persona: el servidor comprueba su forma, no la recalcula.
 function htmlEvaluacionGuardada(esc, e) {
-  const nada = '<p class="mut peq">Este escenario trae una evaluación de estructura que no supera las comprobaciones de formato: no se muestra.</p>';
+  const nada = '<p class="mut peq">Esta idea trae una evaluación de estructura que no supera las comprobaciones de formato: no se muestra.</p>';
   if (e.evaluacion_invalida) return nada; if (!e.evaluacion) return '';
   const a = validarResumen(e.evaluacion.antes), d = validarResumen(e.evaluacion.despues); if (!a.ok || !d.ok) return nada;
   const f = r => r.publicada ? `${cm(r.nota.toFixed(1))} de 10` : 'pendiente', A = a.limpio, D = d.limpio, sin = !!e.evaluacion_sin_comprobar;
   const fecha = A.fecha ? new Date(A.fecha + 'T00:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : 'sin fecha';
   const cifra = `<b>${esc(f(A))}</b> → <b>${esc(f(D))}</b>${D.publicada || A.publicada ? '' : '. ' + esc(D.motivo || A.motivo || '')}`;
   return sin ? `<p class="mut peq">Valor guardado por el cliente (${esc(fecha)}, método «${esc(A.version)}», que esta pantalla no sabe comprobar): ${cifra}. No se ha podido verificar cómo se calculó.</p>`
-    : `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): ${cifra}. Se guardó con el escenario tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
+    : `<p class="mut peq">Registro de la nota de estructura que viste (${esc(fecha)}, método ${esc(A.version)}): ${cifra}. Se guardó con la idea tal como la viste: el servidor comprobó su formato, no la recalculó, y tampoco se recalcula aunque cambien los datos o el método.</p>`;
 }
 
 // Vistas de «Cartera de ejemplo» y «Comparar con otra empresa». Presentación; los cálculos están en comparador.js y nota.js.
@@ -2932,7 +3006,7 @@ const CAMPOS_REVISION = ['fecha', 'observacion', 'aprendizaje', 'decision', 'pro
 const copiaCongelada = o => Object.freeze({ ...o });
 const esIncierto = e => !e || e.obsoleta || e.status == null || e.status === 0 || e.status >= 500;   // sin respuesta del servidor o error de infraestructura: NO se sabe si llegó
 
-// intento = { escId, clave, revision, cuerpo }  (todo congelado al enviar; `revision` es la versión del escenario que vio la persona)
+// intento = { escId, clave, revision, cuerpo }  (todo congelado al enviar; `revision` es la versión dla idea que vio la persona)
 function nuevoIntento(alm, esc, borrador) {
   return Object.freeze({ escId: esc.id, clave: alm.nuevaClave(), revision: esc.revision, cuerpo: copiaCongelada(borrador) });
 }
@@ -2941,36 +3015,39 @@ function nuevoIntento(alm, esc, borrador) {
 const mismoContenido = (intento, borrador) => !!intento && CAMPOS_REVISION.every(k => (intento.cuerpo[k] ?? '') === (borrador[k] ?? ''));
 
 // Envía el intento. Resultados:
-//   { tipo: 'confirmada', revision, escenario, vista: 'actualizada' | 'pendiente' }  el servidor confirmó; `vista: 'pendiente'` = no se pudo releer el escenario (solo recuperar la vista)
+//   { tipo: 'confirmada', revision, escenario, vista: 'actualizada' | 'pendiente' }  el servidor confirmó; `vista: 'pendiente'` = no se pudo releer la idea (solo recuperar la vista)
 //   { tipo: 'rechazada', mensaje }  el servidor respondió que NO lo registra (validación, otra clave…): con certeza no se guardó
-//   { tipo: 'conflicto', mensaje }  el escenario cambió desde otra pestaña: con certeza no se registró este intento
+//   { tipo: 'conflicto', mensaje }  la idea cambió desde otra pestaña: con certeza no se registró este intento
 //   { tipo: 'incierto', mensaje }   no se sabe si se registró: conservar el intento y reintentar el MISMO
 async function enviarIntento(alm, intento, escActual) {
   let r;
   try { r = await alm.revisar(intento.escId, { clave: intento.clave, revision: intento.revision, ...intento.cuerpo }); }
   catch (e) {
     if (esIncierto(e)) return { tipo: 'incierto', mensaje: 'No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor).' };
-    if (e.status === 409 && e.data?.conflicto) return { tipo: 'conflicto', mensaje: 'Este escenario cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí.' };
+    if (e.status === 409 && e.data?.conflicto) return { tipo: 'conflicto', mensaje: 'Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí.' };
     return { tipo: 'rechazada', mensaje: e.message || 'No se pudo registrar la revisión.' };
   }
-  // el servidor confirmó (201 con el escenario actualizado, o 200 «duplicado» si ese mismo intento ya estaba guardado)
+  // el servidor confirmó (201 con la idea actualizado, o 200 «duplicado» si ese mismo intento ya estaba guardado)
   const fila = { id: r.id, fecha: r.fecha, observacion: r.observacion, aprendizaje: r.aprendizaje, decision: r.decision, proxima_fecha: r.proxima_fecha, creado_en: r.creado_en };
   if (r.escenario) {                                                    // datos confirmados por el propio POST: no hace falta otra lectura
     const previas = (escActual?.revisiones || []).filter(x => x.id !== fila.id);
     return { tipo: 'confirmada', revision: fila, escenario: { ...r.escenario, revisiones: [fila, ...previas].sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)) || b.id - a.id) }, vista: 'actualizada', duplicado: false };
   }
-  const v = await actualizarVista(alm, intento.escId);                  // duplicado: la respuesta no trae el escenario; se relee
+  const v = await actualizarVista(alm, intento.escId);                  // duplicado: la respuesta no trae la idea; se relee
   return v.ok ? { tipo: 'confirmada', revision: fila, escenario: v.escenario, vista: 'actualizada', duplicado: true } : { tipo: 'confirmada', revision: fila, escenario: null, vista: 'pendiente', duplicado: true };
 }
 
 // Recuperar la vista NUNCA escribe: solo lee.
 async function actualizarVista(alm, escId) {
-  try { return { ok: true, escenario: await alm.leer(escId) }; } catch (e) { return { ok: false, mensaje: e?.message || 'No se pudo leer el escenario.' }; }
+  try { return { ok: true, escenario: await alm.leer(escId) }; } catch (e) { return { ok: false, mensaje: e?.message || 'No se pudo leer la idea.' }; }
 }
 
 // Presentación de «Mi cartera» (radiografía), «Mi radar», «Mi laboratorio» y «Mi seguimiento». Los cálculos viven en calculos.js; el almacenamiento, en almacen.js.
 // app.js le pasa sus utilidades (DOM, API, sesión, ficha…) por un contexto: este módulo no conoce el resto del estado de la aplicación.
 // Privacidad: `limpiarSesionLab()` (al salir o caducar la sesión) vacía memoria y pantalla e invalida toda respuesta aún en vuelo (`LAB.gen`).
+// Ronda 28 (fase 2): umbrales PROPIOS de esta persona (solo en este navegador; si no hay o no valen, los de Klever)
+const CLAVE_UMB = 'klever_umbrales';
+const umbPropios = () => { try { return JSON.parse(localStorage.getItem(CLAVE_UMB)); } catch { return null; } };
 
 const LAB = { universo: null, universoError: false, ctx: null, alm: null, datos: null, carteras: [], radioModo: null, radioCartera: null, sim: null, esc: null, gen: 0, radarError: null, nota: null, editEsc: false, fichaActivo: null };
 const CLAVE_REF = 'klever_cartera_ref', CLAVE_LAB = 'klever_lab';
@@ -2994,7 +3071,11 @@ function iniciarLab(ctx) {
     if (e.target.closest('#radio-lim-quitar')) guardarLimite(null);
   });
   $('#radio-cuerpo').addEventListener('submit', e => { if (e.target.id === 'radio-lim-form') { e.preventDefault(); guardarLimite($('#radio-lim').value); } });
+  $('#nota-cuerpo').addEventListener('submit', e => { if (e.target.id !== 'umb-form') return; e.preventDefault();
+    const u = umbralesValidos({ posicion: $('#umb-pos').value, categoria: $('#umb-cat').value }); try { localStorage.setItem(CLAVE_UMB, JSON.stringify({ posicion: u.posicion, categoria: u.categoria })); } catch { /* sin almacenamiento */ }
+    LAB.senalSel = null; pintarRadiografia(); ctx.toast(`Umbrales: posición ${u.posicion} %, sector ${u.categoria} %`); });
   $('#nota-cuerpo').addEventListener('click', e => {
+    if (e.target.closest('#umb-quitar')) { try { localStorage.removeItem(CLAVE_UMB); } catch { /* sin almacenamiento */ } pintarRadiografia(); x().pintarMisCarteras?.(); return; }
     if (e.target.closest('#vz-mas-b')) { LAB.vzMas = !LAB.vzMas; pintarRadiografia(); $('#vz-mas-b')?.focus(); return; }   // sin <details>: el orden «resultado → aviso → detalle» de la nota no cambia
     const sb = e.target.closest('[data-senal]'); if (sb) { LAB.senalSel = sb.dataset.senal; pintarRadiografia(); $('#nota-cuerpo [data-senal="' + sb.dataset.senal + '"]')?.focus(); return; }
     if (e.target.closest('#vz-probar')) { const ed = ctx.editor(); abrirLab({ carteraId: ed.current?.id || null, ...hipotesisVistazo() }); }
@@ -3015,6 +3096,7 @@ function iniciarLab(ctx) {
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
   lab.addEventListener('click', onLabClic);
+  lab.addEventListener('click', e => { const b = e.target.closest('[data-pregunta]'); if (b) { const i = $('#lab-pregunta'); if (i) { i.value = b.dataset.pregunta; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus(); } } });
   lab.addEventListener('input', e => { if (e.target.id === 'lab-rango') { const pi = $('#lab-peso'); if (pi) pi.value = e.target.value; e.target.style.setProperty('--f', ((e.target.value - 1) / 59).toFixed(3)); simularEnVivo(); } });
   lab.addEventListener('click', e => { const b = e.target.closest('[data-explorar]'); if (b) ctx.explorarSector?.(b.dataset.explorar); });
   $('#fi-cuerpo').addEventListener('click', onFichaClic);
@@ -3120,22 +3202,26 @@ function htmlVistazo(esc, r, posiciones, activos, ev) {
   const cats = r.categorias, escala = Math.max(100, r.total || 0);
   const expo = `<div class="vz-expo"><span class="vz-etq">Exposición por categoría</span><span class="vz-expo-barra" role="img" aria-label="${esc(cats.map(c => `${c.categoria} ${String(c.peso).replace('.', ',')} %`).join(', '))}">${cats.map((c, k) => `<i style="--c:var(--c${k % 8});width:${(c.peso / escala * 100).toFixed(2)}%"></i>`).join('')}</span>
     <span class="vz-expo-ley">${cats.slice(0, 4).map((c, k) => `<span><i style="--c:var(--c${k % 8})" aria-hidden="true"></i>${esc(c.categoria)} <b>${P(c.peso)}</b></span>`).join('')}${cats.length > 4 ? `<span class="mut">+${cats.length - 4}</span>` : ''}</span></div>`;
-  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0];
+  const ss = senales(r, 3, umbPropios()), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], U = umbralesValidos(umbPropios());
   const chips = ss.map(q => `<button type="button" class="senal senal-${q.nivel}" data-senal="${q.id}" aria-pressed="${q === sel}"><i aria-hidden="true"></i>${esc(q.titulo)}</button>`).join('');
   const accion = sel?.accion ? sel.accion.pregunta : 'Probar un cambio';
   return `<section class="vistazo" aria-labelledby="vz-t"><h3 id="vz-t">Tu cartera de un vistazo</h3>
     <ul class="indicadores" aria-label="Tu cartera en tres indicadores">${indicadores(r, ev).map(i => `<li class="ind ind-${i.nivel}" title="${esc(i.detalle)}"><span class="ind-etq"><i aria-hidden="true"></i>${esc(i.etiqueta)}</span><b>${esc(i.valor)}</b><small>${esc(i.dato)}</small><span class="sr">. ${esc(i.detalle)}</span></li>`).join('')}</ul>
     ${expo}
     <div class="senales" role="group" aria-label="Señales de la cartera">${chips}</div>
-    ${sel ? `<p class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite">${esc(sel.detalle)}</p>` : ''}
+    ${sel ? `<div class="senal-det${LAB.senalSel ? ' elegida' : ''}" aria-live="polite"><p><b>Qué es:</b> ${esc(sel.detalle)}</p>${sel.porque ? `<p><b>Por qué importa:</b> ${esc(sel.porque)}</p>` : ''}${sel.accion ? `<p><b>Qué probar:</b> ${esc(sel.accion.pregunta)} Pulsa «Ver qué cambiaría».</p>` : ''}</div>` : ''}
     <p class="vistazo-acc"><button class="btn btn-secundario" type="button" id="vz-probar" data-senal-accion="${sel?.id || ''}">Ver qué cambiaría →</button> <span class="vz-hipo">${esc(accion)}</span> <button type="button" class="enlace vz-mas" id="vz-mas-b" aria-expanded="${!!LAB.vzMas}" aria-controls="vz-mas-t">Qué mide</button></p>
-    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p></div></section>`;
+    <div id="vz-mas-t" class="vz-mas-t"${LAB.vzMas ? '' : ' hidden'}><p class="mut peq">Mayor posición: ${esc(r.mayor.ticker)} ${P(r.mayor.peso)} · ${r.top3.completo ? 'Tres mayores' : `${n} ${n === 1 ? 'posición' : 'posiciones'}`}: ${P(r.top3.peso)}</p><p class="mut peq">Asignado ${P(r.total ?? 0)} · ${esc(tipos)}</p><p class="mut peq">Concentración por posición y por categoría; no mide pérdidas ni la composición interna de los ETF. Los umbrales son referencias orientativas, no consejos.</p>
+      <form id="umb-form" class="umb-form"><p class="peq"><b>Tus propios umbrales</b> <span class="mut">(solo en este navegador)</span></p>
+        <label for="umb-pos">Una posición pesa mucho desde</label> <span class="peso"><input id="umb-pos" type="number" inputmode="numeric" min="5" max="95" step="1" value="${U.posicion}"><span aria-hidden="true">%</span></span>
+        <label for="umb-cat">Un sector pesa mucho desde</label> <span class="peso"><input id="umb-cat" type="number" inputmode="numeric" min="10" max="100" step="1" value="${U.categoria}"><span aria-hidden="true">%</span></span>
+        <p class="fila"><button class="btn btn-secundario" type="submit">Usar mis umbrales</button> <button class="btn btn-ghost" type="button" id="umb-quitar">Volver a los de Klever</button></p></form></div></section>`;
 }
 // La hipótesis que propone la señal elegida (o la primera): se calcula sobre la MISMA composición que el laboratorio usará como base.
 function hipotesisVistazo() {
   const ed = x().editor(); if (!ed.current) return {};
   const pos = ed.current.id ? ed.posGuardada : ed.pos, r = radiografia(pos, x().activos(), ed.current.limite_peso ?? null);
-  const ss = senales(r), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], h = hipotesis(sel, r, pos);
+  const ss = senales(r, 3, umbPropios()), sel = ss.find(q => q.id === LAB.senalSel) || ss[0], h = hipotesis(sel, r, pos);
   return h ? { ticker: h.ticker, peso: h.peso, fin: h.fin, auto: !!h.ticker } : {};
 }
 function pintarRadiografia() {
@@ -3193,8 +3279,8 @@ async function pintarFichaRadar(a) {
   const hist = historiasDeTicker(a.ticker);
   const radar = LAB.radarError
     ? `<div class="fir-fila"><p class="error" role="alert">${esc(LAB.radarError)}</p><button class="btn btn-secundario" type="button" id="fir-reintentar">Reintentar</button></div>`
-    : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ En tu radar · Quitar' : '☆ Guardar en mi radar'}</button>
-      <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, el radar se guarda solo en este dispositivo.'}</span></div>
+    : `<div class="fir-fila"><button class="btn ${dentro ? 'btn-secundario' : 'btn-primario'}" type="button" id="fir-toggle" aria-pressed="${dentro}">${dentro ? '★ La sigues · Dejar de seguir' : '☆ Seguir esta empresa'}</button>
+      <span class="mut peq" id="fir-estado" role="status">${dentro ? (alm.enCuenta() ? 'Guardada en tu cuenta.' : 'Guardada solo en este dispositivo.') : alm.enCuenta() ? '' : 'Sin cuenta, las empresas que sigues se guardan solo en este dispositivo.'}</span></div>
       ${dentro ? `<div class="fir-nota" data-nota-zona="ficha">${htmlNota(esc, 'fir-nota', alm.nota(a.ticker), editando, editando ? LAB.nota.texto : '', editando ? LAB.nota.err : '')}</div>` : ''}`;
   const preg = hist[0]?.pregunta ? `Pregunta que investigas: «${esc(hist[0].pregunta)}»` : '';
   cont.innerHTML = `<div class="fir-acciones">${preg ? `<p class="fir-pregunta">${preg}</p>` : ''}
@@ -3213,7 +3299,7 @@ async function onFichaClic(e) {
     if (e.target.closest('#fir-reintentar')) { await cargarRadar(); await pintarFichaRadar(a); return; }
     if (e.target.closest('#fir-toggle')) {
       try {
-        if (alm.tiene(t)) { await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); } else { const r = await alm.guardar(t); if (!vigente(g)) return; toast(r.local ? 'Guardada en el radar de este dispositivo' : 'Guardada en tu radar'); }
+        if (alm.tiene(t)) { await alm.quitar(t); if (!vigente(g)) return; toast('Ya no la sigues'); } else { const r = await alm.guardar(t); if (!vigente(g)) return; toast(r.local ? 'La sigues (en este dispositivo)' : 'La sigues'); }
         await pintarFichaRadar(a); $('#fir-toggle')?.focus(); actualizarMarcasRadar();
       } catch (er) { const s = $('#fir-estado'); if (s) { s.textContent = 'No se ha podido guardar: ' + er.message; s.classList.add('error'); } }
       return;
@@ -3241,7 +3327,7 @@ function actualizarMarcasRadar() { if (!marcasPend) { marcasPend = true; queueMi
 async function mostrarSeguimiento() {
   const { $, logged } = x(), g = LAB.gen;
   $('#seg-aviso').hidden = logged();
-  $('#seg-aviso').innerHTML = logged() ? '' : '<b>Estás sin cuenta.</b> Tu radar se guarda solo en este dispositivo y pasará a tu cuenta cuando entres. Los escenarios se guardan en tu cuenta: entra para conservarlos.';
+  $('#seg-aviso').innerHTML = logged() ? '' : '<b>Estás sin cuenta.</b> Las empresas que sigues se guardan solo en este dispositivo y pasarán a tu cuenta cuando entres. Las ideas se guardan en tu cuenta: entra para conservarlos.';
   await Promise.all([cargarCarteras(), cargarRadar()]);
   if (!vigente(g)) return;
   pintarSeguimientoRadar();
@@ -3249,9 +3335,9 @@ async function mostrarSeguimiento() {
 }
 function pintarSeguimientoRadar() {
   const { $, esc } = x(), alm = LAB.alm.radar, filas = alm.todos(), ref = carteraRef();
-  if (LAB.radarError) { $('#seg-radar-n').textContent = ''; $('#seg-radar').innerHTML = `<div class="vacio-util"><p class="error" role="alert">${esc(LAB.radarError)}</p><p class="mut">Esto no significa que tu radar esté vacío: no se ha podido leer.</p><p><button class="btn btn-secundario" type="button" data-acc="reintentar">Reintentar</button></p></div>`; return; }
+  if (LAB.radarError) { $('#seg-radar-n').textContent = ''; $('#seg-radar').innerHTML = `<div class="vacio-util"><p class="error" role="alert">${esc(LAB.radarError)}</p><p class="mut">Esto no significa que no sigas ninguna empresa: no se ha podido leer.</p><p><button class="btn btn-secundario" type="button" data-acc="reintentar">Reintentar</button></p></div>`; return; }
   $('#seg-radar-n').textContent = filas.length ? `(${filas.length})` : '';
-  if (!filas.length) { $('#seg-radar').innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna empresa.</b></p><p class="mut">Abre la ficha de una empresa en «Explorar empresas» y pulsa «Guardar en mi radar». Podrás añadir una nota con lo que quieres investigar.</p><p><a class="btn btn-primario" href="#empresas">Explorar empresas</a></p></div>'; return; }
+  if (!filas.length) { $('#seg-radar').innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna empresa.</b></p><p class="mut">Abre la ficha de una empresa en «Explorar empresas» y pulsa «Seguir esta empresa». Podrás añadir una nota con lo que quieres investigar.</p><p><a class="btn btn-primario" href="#empresas">Explorar empresas</a></p></div>'; return; }
   const cab = LAB.carteras.length ? `<div class="seg-ref"><label for="seg-ref">Cartera de referencia</label><select id="seg-ref">${opcionesCartera(ref)}</select></div>` : '';
   $('#seg-radar').innerHTML = cab + filas.map(f => { const ed = LAB.nota?.ticker === f.ticker && LAB.nota.donde === 'seg';
     return `<article class="seg-item" data-t="${esc(f.ticker)}">
@@ -3259,7 +3345,7 @@ function pintarSeguimientoRadar() {
       ${htmlNota(esc, 'nota-' + f.ticker, f.nota, ed, ed ? LAB.nota.texto : '', ed ? LAB.nota.err : '')}
       <p class="peq" data-en>${esc(textoEnCartera(f.ticker, ref))}</p>
       <div class="seg-acc"><button class="btn btn-secundario" type="button" data-acc="ficha">Ver ficha<span class="sr"> de ${esc(f.nombre)}</span></button>
-      <button class="btn btn-secundario" type="button" data-acc="sim">Probar en mi cartera</button><button class="btn btn-ghost" type="button" data-acc="quitar">Quitar del radar<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`; }).join('');
+      <button class="btn btn-secundario" type="button" data-acc="sim">Probar en mi cartera</button><button class="btn btn-ghost" type="button" data-acc="quitar">Dejar de seguir<span class="sr"> ${esc(f.nombre)}</span></button></div></article>`; }).join('');
 }
 async function clicSeguimientoRadar(e) {
   const { $, toast, toastError } = x(), g = LAB.gen, alm = LAB.alm.radar;
@@ -3283,7 +3369,7 @@ async function clicSeguimientoRadar(e) {
     else if (b.dataset.acc === 'sim') abrirLab({ carteraId: carteraRef()?.id ?? null, ticker: t });
     else if (b.dataset.acc === 'quitar') {
       const sig = art.nextElementSibling?.dataset?.t || art.previousElementSibling?.dataset?.t;
-      await alm.quitar(t); if (!vigente(g)) return; toast('Quitada de tu radar'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
+      await alm.quitar(t); if (!vigente(g)) return; toast('Ya no la sigues'); pintarSeguimientoRadar(); (sig ? $(`.seg-item[data-t="${sig}"] [data-acc="ficha"]`) : $('#seg-radar a, #seg-radar button'))?.focus();
     }
   } catch (err) { toastError(err.message); }
 }
@@ -3298,15 +3384,15 @@ function tarjetaCaso(esc, c) {                                         // una pr
   const ocurrido = r && c.compacta ? `<p class="mut peq">Misma respuesta que la de otra pregunta tuya vinculada a esta cuestión (más arriba). El desenlace completo no se repite aquí.</p>` : r ? `<p><b>Qué ha ocurrido desde entonces</b> (${esc(fechaCorta(r.fecha))}${r.simulada ? ', desenlace SIMULADO' : ''}):</p><ul>${r.porContrato.map(k => `<li><b>${esc(k.nombre)}:</b> ${esc(k.estado)}${k.documento && k.documento !== '—' ? ' ' + esc(k.documento) : ''}</li>`).join('')}</ul><p class="mut peq">Fuente: ${esc(r.fuente)}. ${esc(r.resumen)}</p>`
     : est.tipo === 'pendiente' ? `<p><b>Sin respuesta editorial todavía.</b> ${esc(caso.pendiente || 'Todavía no hay una fuente que permita responder esta pregunta. Se revisará cuando haya una actualización verificada.')}</p>` : contexto;
   const pesos = c.ejemplo ? `<p class="caso-pesos">Peso de ${esc(c.ticker)} en la simulación de ejemplo: <b>${P(c.pesoEsc)}</b>. En tu cartera actual: no tienes ninguna (es un ejemplo).</p>`
-    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>escenario guardado</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
+    : `<p class="caso-pesos">Peso de ${esc(c.ticker)} en tu <b>idea guardada</b>: <b>${P(c.pesoEsc)}</b> (la base tenía ${P(c.pesoBase)}). En tu <b>cartera actual</b>: ${c.pesoActual == null ? 'la cartera ya no existe' : `<b>${P(c.pesoActual)}</b>`}.</p>`;
   const rev = !h ? '' : r?.revision ? `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${r.revision}">Leer la revisión</a>` : est.tipo === 'otra' ? `<a class="btn btn-secundario" href="#historia-${esc(h.id)}">Ver revisión de la historia</a>` : `<a class="btn btn-secundario" href="#tesis-${esc(h.id)}-${caso?.tesis || 1}">Leer la opinión</a>`;
   const sim = c.ejemplo ? `<button class="btn btn-secundario" type="button" data-caso-probar="${esc(c.ticker)}" data-historia="${esc(c.historia)}">Probar la simulación</button>` : `<a class="btn btn-secundario" href="#escenario-${c.idEsc}">Abrir la simulación</a>`;
   return `<article class="caso${r ? '' : ' caso-pend'}"><header><span class="chip${r ? '' : ' aviso'}">${r ? (est.distinta ? 'Reformulación con respuesta editorial' : 'Con respuesta editorial') : 'Sin respuesta editorial aún'}</span> ${c.ejemplo || h?.ficticia ? '<span class="chip sim">Ejemplo ficticio</span>' : ''}</header>
     ${c.enFicha ? '' : `<h3>«${esc(c.pregunta)}»</h3>`}${formul}${c.revisarEn && !c.enFicha ? `<p>Fecha de revisión: <b>${esc(fechaCorta(c.revisarEn))}</b>${c.revisarEn < hoy() ? ' (la fecha ya ha pasado)' : ''}.</p>` : ''}
     ${ocurrido}${pesos}<p class="caso-acc">${rev} ${c.enFicha ? '' : sim}</p></article>`;
 }
-// Resumen del vínculo con la revisión de la historia dentro de un escenario: responde / sigue pendiente / es otra pregunta (con enlace para verla).
-// Edición: muestra la pregunta de la historia a la que está vinculado el escenario y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
+// Resumen del vínculo con la revisión de la historia dentro de una idea: responde / sigue pendiente / es otra pregunta (con enlace para verla).
+// Edición: muestra la pregunta de la historia a la que está vinculado la idea y permite desvincularlo EXPRESAMENTE. Un vínculo guardado que ya no existe
 // en el catálogo se identifica y se limpia al guardar. Avisa (sin decidir) si las palabras nuevas parecen tratar otro asunto.
 function htmlVinculoEdicion(esc, e) {
   if (!e.historia) return '';
@@ -3328,7 +3414,7 @@ function tarjetaVinculo(esc, e) {
   const rev = est.tipo === 'responde' && est.caso.respuesta.revision ? `#tesis-${esc(h.id)}-${est.caso.respuesta.revision}` : `#historia-${esc(h.id)}`;
   return txt ? `<p class="esc-vinculo">${txt} <a href="${rev}">Ver revisión de la historia</a></p>` : '';
 }
-// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (los escenarios) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
+// Orden del Cuaderno (el orden del DOM es el visual): con cuenta, primero lo que toca revisar (las ideas) y el bloque editorial desaparece de esta pantalla (su detalle está en la ficha de cada idea);
 // de visitante, el ejemplo ficticio de «Tus preguntas» primero y después la invitación a entrar.
 function ordenarSeguimiento(conCuenta) {
   const col = document.querySelector('.seg-col'), casos = document.querySelector('#seg-casos')?.closest('.seg-bloque'), escB = document.querySelector('#seg-escenarios')?.closest('.seg-bloque'); if (!col || !casos || !escB) return;
@@ -3351,7 +3437,7 @@ function pintarSeguimientoCasos(lista) {
     return;
   }
   const con = (lista || []).filter(e => e.pregunta && e.estado !== 'descartado').sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id);
-  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes un escenario con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
+  if (!con.length) { cont.innerHTML = '<p class="mut">Cuando guardes una idea con una pregunta, aparecerá aquí con su fecha de revisión, lo que ha ocurrido desde entonces y el peso que probaste.</p>'; return; }
   const vistos = new Set();                                                // dos preguntas con el mismo desenlace: el artículo completo una sola vez, cada tarjeta con su enlace
   cont.innerHTML = con.map(e => { const viva = LAB.carteras.find(c => c.id === e.cartera_id), est = estadoSeguimiento(e), clave = est.tipo === 'responde' ? e.pregunta_ref : null, compacta = !!clave && vistos.has(clave); if (clave) vistos.add(clave);
     return tarjetaCaso(esc, { compacta, pregunta: e.pregunta, pregunta_ref: e.pregunta_ref, historia: e.historia, ticker: e.ticker, pesoEsc: pesoDe(e.propuesta, e.ticker), pesoBase: pesoDe(e.base, e.ticker), pesoActual: viva ? pesoDe(viva.pos, e.ticker) : null, revisarEn: e.revisar_en, idEsc: e.id }); }).join('');
@@ -3359,15 +3445,15 @@ function pintarSeguimientoCasos(lista) {
 async function pintarSeguimientoEscenarios() {
   const { $, esc, logged } = x(), cont = $('#seg-escenarios'), g = LAB.gen;
   if (!logged()) { pintarSeguimientoCasos(null); }
-  if (!logged()) { pintarResumenSeg(null); $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Los escenarios se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar un escenario y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
-  cont.innerHTML = '<p class="mut">Cargando tus escenarios…</p>';
+  if (!logged()) { pintarResumenSeg(null); $('#seg-esc-n').textContent = ''; cont.innerHTML = '<div class="vacio-util"><p><b>Las ideas se guardan en tu cuenta.</b></p><p class="mut">Puedes simular sin cuenta en el laboratorio, pero para conservar una idea y volver a él tienes que entrar.</p><p><a class="btn btn-secundario" href="#laboratorio">Ir al laboratorio</a></p></div>'; return; }
+  cont.innerHTML = '<p class="mut">Cargando tus ideas…</p>';
   let lista; try { lista = await LAB.alm.escenarios.listar(); } catch (e) { if (!vigente(g)) return; cont.innerHTML = `<p class="estado-lista">${esc(e.message)} <button class="enlace" type="button" id="seg-reintentar">Reintentar</button></p>`; $('#seg-reintentar').onclick = pintarSeguimientoEscenarios; return; }
   if (!vigente(g)) return;
   LAB.listaEsc = lista; purgarBorradoresRev(lista.map(e => e.id)); pintarSeguimientoCasos(lista); pintarResumenSeg(lista);
   const f = $('#seg-filtro').value;
   const vistos = lista.filter(e => f === 'todos' || (f === 'activos' ? e.estado === 'en_estudio' : e.estado === f));
   $('#seg-esc-n').textContent = lista.length ? `(${lista.length})` : '';
-  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ningún escenario.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
+  if (!lista.length) { cont.innerHTML = '<div class="vacio-util"><p><b>Aún no has guardado ninguna idea.</b></p><p class="mut">En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fecha para volver a revisarla.</p><p><a class="btn btn-primario" href="#laboratorio">Abrir el laboratorio</a></p></div>'; return; }
   // UNA tarjeta por escenario (ronda 22): pregunta, fecha, resumen breve, tu seguimiento personal, la respuesta editorial en una frase y la acción. La composición completa, el contexto editorial y el historial están en la ficha.
   const h0 = hoy(), tarjetaEsc = e => {
     const f = e.revisar_en, vence = !!f && f <= h0 && e.estado === 'en_estudio', n = e.n_revisiones || 0, pend = e.estado === 'en_estudio';
@@ -3383,7 +3469,7 @@ async function pintarSeguimientoEscenarios() {
   const grupo = e => !e.revisar_en ? 2 : e.revisar_en <= h0 ? 0 : 1, TIT = ['Para revisar', 'Próximas revisiones', 'Sin fecha de revisión'];
   if (f === 'activos' && vistos.length) { const g3 = [[], [], []]; vistos.forEach(e => g3[grupo(e)].push(e)); g3.forEach(l => l.sort((a, b) => (a.revisar_en || '9999').localeCompare(b.revisar_en || '9999') || b.id - a.id));
     cont.innerHTML = g3.map((l, k) => l.length ? `<section class="seg-grupo" aria-labelledby="seg-g${k}"><h3 id="seg-g${k}">${TIT[k]} <span class="mut">(${l.length})</span></h3>${k === 0 ? '<p class="mut peq">La fecha es de hoy o ya ha pasado. Abre la idea y registra tu revisión.</p>' : ''}${l.map(tarjetaEsc).join('')}</section>` : '').join(''); }
-  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay escenarios con ese estado.</p>';
+  else cont.innerHTML = vistos.length ? vistos.map(tarjetaEsc).join('') : '<p class="mut">No hay ideas con ese estado.</p>';
 }
 
 // Ronda 26 · resumen visual del Cuaderno: cuántas ideas tocan HOY, cuántas están en estudio y cuántas empresas sigues. Solo con datos leídos (sin lista fiable no hay cifras).
@@ -3393,7 +3479,7 @@ function pintarResumenSeg(lista) {
   const h0 = hoy(), activos = lista.filter(e => e.estado === 'en_estudio'), toca = activos.filter(e => e.revisar_en && e.revisar_en <= h0).length;
   const prox = activos.filter(e => e.revisar_en && e.revisar_en > h0).map(e => e.revisar_en).sort()[0], radar = LAB.radarError ? null : LAB.alm.radar.todos().length;
   const tile = (n, t, cls = '', extra = '') => `<div class="seg-tile ${cls}"><b>${n}</b><span>${t}</span>${extra}</div>`;
-  el.innerHTML = `<div class="seg-tiles">${tile(toca, 'Para revisar hoy', toca ? 'toca' : '')}${tile(activos.length, 'En estudio', '', prox ? `<small>Próxima: ${fechaCorta(prox)}</small>` : '')}${radar == null ? '' : tile(radar, 'En tu radar')}</div>`;
+  el.innerHTML = `<div class="seg-tiles">${tile(toca, 'Para revisar hoy', toca ? 'toca' : '')}${tile(activos.length, 'En estudio', '', prox ? `<small>Próxima: ${fechaCorta(prox)}</small>` : '')}${radar == null ? '' : tile(radar, 'Empresas que sigues')}</div>`;
 }
 
 // =============== laboratorio ===============
@@ -3437,7 +3523,7 @@ function pintarLabForm() {
         <p class="mut peq">${base.ejemplo ? 'Cartera de ejemplo.' : base.guardada ? `Versión guardada (revisión ${base.revision}).` : 'Tu borrador de este dispositivo, sin guardar.'} ${r.n} ${r.n === 1 ? 'posición' : 'posiciones'} · asignado ${P(r.total)}${r.estado === 'incompleta' ? ` (falta asignar ${P(r.pendiente)})` : r.estado === 'exceso' ? ` (exceso de ${P(r.exceso)})` : ''}. El laboratorio parte siempre de lo guardado, no de cambios sin guardar.</p></fieldset>
       <fieldset><legend>2 · Activo y peso</legend>
         <label for="lab-ticker">Activo (símbolo o nombre)</label><input id="lab-ticker" list="lab-activos" autocomplete="off" value="${esc(s.ticker)}" placeholder="Por ejemplo: KO"><datalist id="lab-activos">${Object.values(activos).map(a => `<option value="${esc(a.ticker)}">${esc(a.nombre)}</option>`).join('')}</datalist>
-        ${radar ? `<label for="lab-radar">…o elige uno de tu radar (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
+        ${radar ? `<label for="lab-radar">…o elige una de las empresas que sigues (opcional)</label><select id="lab-radar"><option value="">—</option>${radar}</select>` : ''}
         <p class="peq" id="lab-activo-info">${act ? `${esc(act.nombre)}${actual != null ? ` · ya figura con el ${P(actual)}` : ' · no figura directamente en la cartera'}` : ''}</p>
         <label for="lab-peso">Peso propuesto (%)</label><input id="lab-peso" inputmode="decimal" autocomplete="off" value="${esc(String(s.peso).replace('.', ','))}" placeholder="Por ejemplo: 10">
         ${!s.ticker ? htmlDescubrir(esc, r) : ''}</fieldset>
@@ -3475,6 +3561,8 @@ function simularEnVivo() {          // desde el deslizador: sin mover el foco ni
   LAB.sim.res = simular(baseLab().pos, { ticker: f.t, peso: f.peso }, f.fin); LAB.sim.clave = null; pintarResultado();
   const o = $('#lab-rango-v'); if (o) o.textContent = P(f.peso);
 }
+// Ronda 28 (fase 2): preguntas de ejemplo para no empezar en blanco (la persona puede editarlas o escribir la suya)
+const PREGUNTAS = ['¿Sigue creciendo {T}?', '¿Ha bajado la deuda de {T}?', '¿Me compensa que {T} pese tanto?'];
 const cabLab = (extra = '') => `<div class="pag-cab"><h1>Laboratorio <span class="chip sim">Simulación</span></h1><p class="mut">Prueba un cambio y compáralo con tu cartera. ${extra}Aquí nada modifica tu cartera ni ejecuta operaciones.</p></div>`;
 function leerFormulario() {
   const { $ } = x(), fin = document.querySelector('input[name="lab-fin"]:checked')?.value || '';
@@ -3552,14 +3640,15 @@ function pintarResultado() {
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
         ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
         <label for="lab-pregunta">Qué quiero averiguar <span class="mut">(opcional; con tus palabras)</span></label><input id="lab-pregunta" maxlength="200" value="${esc(h?.pregunta || '')}" placeholder="Por ejemplo: ¿Se han firmado los dos contratos anunciados?">
+        <p class="preg-plantillas" role="group" aria-label="Preguntas de ejemplo">${PREGUNTAS.map(q => `<button type="button" class="chip-btn" data-pregunta="${esc(q.replace('{T}', sim.ticker))}">${esc(q.replace('{T}', sim.ticker))}</button>`).join('')}</p>
         <label for="lab-nota">Por qué lo estoy estudiando <span class="mut">(opcional)</span></label><textarea id="lab-nota" rows="3" maxlength="600"></textarea>
         <label for="lab-invalidacion">Qué me haría cambiar de opinión <span class="mut">(opcional; hasta 600 caracteres)</span></label><textarea id="lab-invalidacion" rows="2" maxlength="600" placeholder="Por ejemplo: si la empresa pierde a su principal cliente"></textarea>
         <label for="lab-revisar">Cuándo quiero revisarlo <span class="mut">(opcional; Klever no envía avisos, es solo para ti)</span></label><input id="lab-revisar" type="date" min="${hoy()}">
         ${h ? `<p class="peq mut">Se vincula a la historia «${esc(h.titulo)}»${rev && rev.n > 1 ? ' y a su revisión editorial' : ''}.</p>` : ''}
         <p><button class="btn btn-primario" type="submit" id="lab-guardar-btn">Guardar en mi Cuaderno</button></p><p class="error" id="lab-guardar-error" role="alert"></p></form>`
     : base.ejemplo && logged()
-      ? `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar escenarios necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
-      : `<div class="lab-guardar"><h3>Guardar este escenario</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar escenarios sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
+      ? `<div class="lab-guardar"><h3>Guardar esta idea</h3><p>Esta simulación usa la cartera de ejemplo, que no está en tu cuenta. Para guardar ideas necesitas una cartera guardada.</p><p><button class="btn btn-primario" type="button" id="lab-crear-ejemplo">Crear la cartera de ejemplo en mi cuenta</button></p><p class="error" id="lab-crear-error" role="alert"></p></div>`
+      : `<div class="lab-guardar"><h3>Guardar esta idea</h3><p>${logged() ? 'Guarda primero la cartera en tu cuenta para poder conservar ideas sobre ella.' : 'Esta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada en tu cuenta). <b>Al entrar se conserva la simulación que has preparado</b> (la cartera, el activo y el peso); lo que escribas en el formulario de guardado todavía no.'}</p>${logged() ? '' : '<p><button class="btn btn-secundario" type="button" id="lab-entrar">Entrar para guardar</button></p>'}</div>`;
   const nCat = l => l.filter(k => k > 0).length, catA = nCat(c.categorias.map(k => k.antes)), catD = nCat(c.categorias.map(k => k.despues));
   const kpi = (t, a, d, ayuda) => `<div class="kpi${a === d ? ' igual' : ''}"><span>${t}</span><b><s>${a}</s><i aria-hidden="true">→</i><em>${d}</em></b>${ayuda ? `<small>${ayuda}</small>` : ''}</div>`;   // ronda 26: lo esencial de la comparación, en cifras grandes
   const kpis = `<div class="lab-kpis" aria-label="Comparación rápida">${kpi('Mayor posición', c.antes.mayor ? P(c.antes.mayor.peso) : '—', c.despues.mayor ? P(c.despues.mayor.peso) : '—', c.despues.mayor ? esc(c.despues.mayor.ticker) : '')}${kpi('Tres mayores', P(c.antes.top3.peso), P(c.despues.top3.peso), '')}${kpi('Categorías', String(catA), String(catD), '')}${c.despues.pendiente || c.antes.pendiente ? kpi('Sin asignar', P(c.antes.pendiente), P(c.despues.pendiente), '') : ''}</div>`;
@@ -3603,7 +3692,7 @@ function onLabClic(e) {
   else if (e.target.closest('#esc-eliminar')) eliminarEscenario();
 }
 
-// =============== escenario guardado: se muestra TAL COMO SE GUARDÓ ===============
+// =============== idea guardada: se muestra TAL COMO SE GUARDÓ ===============
 function cambiosEntre(base, prop) {
   const a = new Map(base.map(p => [p.ticker, p.peso])), d = new Map(prop.map(p => [p.ticker, p.peso]));
   return [...new Set([...a.keys(), ...d.keys()])].map(t => ({ ticker: t, antes: a.get(t) || 0, despues: d.get(t) || 0, delta: Math.round(((d.get(t) || 0) - (a.get(t) || 0)) * 10) / 10, nueva: !a.has(t) }))
@@ -3612,7 +3701,7 @@ function cambiosEntre(base, prop) {
 async function mostrarEscenario(id) {
   const { $, esc, go, logged } = x(), g = LAB.gen;
   if (!logged()) { go('#seguimiento'); return; }
-  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos ese escenario (puede que lo hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
+  let e; try { e = await LAB.alm.escenarios.leer(id); } catch (err) { if (!vigente(g)) return; $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">${esc(err.status === 404 ? 'No encontramos esa idea (puede que la hayas eliminado).' : err.message)}</p><p><a class="btn btn-secundario" href="#seguimiento">Volver a mi seguimiento</a></p>`; return; }
   await cargarCarteras(); if (!vigente(g)) return;
   LAB.esc = e; LAB.editEsc = false; if (LAB.revIntento && LAB.revIntento.intento.escId !== e.id) { LAB.revIntento = null; LAB.revBorrador = null; LAB.revMsg = null; } if (LAB.revLectura !== e.id) LAB.revLectura = null;
   if (!LAB.revIntento) { const pi = intentoGuardado(e.id); if (pi) { LAB.revIntento = { intento: pi, fase: 'incierto' }; if (LAB.revMsg?.esc !== e.id) avisarRev('aviso', 'Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.'); } }
@@ -3626,15 +3715,15 @@ function pintarEscenario() {
   const { $, esc, fmtFechaHora } = x(), e = LAB.esc; if (!e) return;
   const viva = LAB.carteras.find(c => c.id === e.cartera_id), activos = x().activos();
   const c = comparar(e.base, e.propuesta, activos, viva?.limite ?? null);
-  const aviso = !e.cartera_existe ? `<p class="aviso-panel"><b>La cartera original ya no existe.</b> Este escenario conserva su copia de la base.</p>`
-    : e.hay_version_posterior ? `<div class="aviso-panel"><div><b>La cartera cambió después de este escenario</b> (revisión ${e.base_revision} → ${e.revision_actual}). El escenario conserva la base con la que se simuló y no se recalcula. <a href="#cartera-${e.cartera_id}">Abrir la cartera</a>. Si quieres, simula de nuevo con su versión actual.</div></div>` : '';
+  const aviso = !e.cartera_existe ? `<p class="aviso-panel"><b>La cartera original ya no existe.</b> Esta idea conserva su copia de la base.</p>`
+    : e.hay_version_posterior ? `<div class="aviso-panel"><div><b>La cartera cambió después de esta idea</b> (revisión ${e.base_revision} → ${e.revision_actual}). La idea conserva la base con la que se simuló y no se recalcula. <a href="#cartera-${e.cartera_id}">Abrir la cartera</a>. Si quieres, simula de nuevo con su versión actual.</div></div>` : '';
   const h = e.historia && historia(e.historia), rev = h && ultimaTesis(h);
   const enlHist = h ? `<p class="esc-historia"><b>Historia de origen:</b> <a href="#historia-${esc(h.id)}">${esc(h.titulo)}</a> · <a href="#tesis-${esc(h.id)}-1">Opinión original (${esc(fechaCorta(h.tesis[0].fecha))})</a>${rev && rev.n > 1 ? ` · <a href="#tesis-${esc(h.id)}-${rev.n}">Revisión editorial (${esc(fechaCorta(rev.fecha))}${rev.simulada ? ', desenlace simulado' : ''})</a>` : ''}</p>` : '';
   const estados = Object.keys(ESTADOS).filter(k => k !== e.estado).map(k => k === 'descartado' ? '<button class="btn btn-secundario" type="button" data-estado="descartado">Marcar como descartado</button>' : k === 'archivado' ? '<button class="btn btn-secundario" type="button" data-estado="archivado">Archivar</button>' : '<button class="btn btn-secundario" type="button" data-estado="en_estudio">Volver a «en estudio»</button>').join(' ');
   $('#lab-cuerpo').innerHTML = `<div class="pag-cab"><p><a class="enlace" href="#seguimiento">← Mi seguimiento</a></p><h1 tabindex="-1">${esc(e.nombre)} <span class="chip sim">Simulación</span> <span class="chip">${ESTADOS[e.estado]}</span></h1>
       <p class="mut">${esc(e.ticker)} al ${P(e.peso_objetivo)} ${METODOS[e.metodo]}. Cartera «${esc(e.cartera_nombre)}». Creado el ${esc(fmtFechaHora(e.creado_en))}. Es una simulación: no ejecuta operaciones ni cambia la cartera.</p></div>${aviso}
     <section class="esc-ficha" aria-label="Lo que querías averiguar">
-      ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en este escenario.</p>'}
+      ${e.pregunta ? `<h2>Lo que querías averiguar</h2><p class="esc-preg">«${esc(e.pregunta)}»</p>` : '<p class="mut">No guardaste ninguna pregunta en esta idea.</p>'}
       ${enlHist}${e.historia ? htmlEditorialFicha(esc, e, viva) : ''}
       <h2>Por qué lo estudias</h2><p class="nota-txt">${e.nota ? esc(e.nota) : '<span class="mut">Sin nota.</span>'}</p>
       ${e.invalidacion ? `<h2>Qué te haría cambiar de opinión</h2><p class="esc-invalidacion">${esc(e.invalidacion)}</p>` : ''}${e.revisar_en ? `<p>Fecha de revisión: <b>${esc(fechaCorta(e.revisar_en))}</b>${e.revisar_en < hoy() ? ' (la fecha ya ha pasado)' : e.revisar_en === hoy() ? ' (hoy)' : ''}.</p>` : ''}
@@ -3648,7 +3737,7 @@ function pintarEscenario() {
         : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
     ${htmlRevisiones(esc, e)}
-    <section class="esc-estado" aria-label="Estado del escenario"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan el escenario y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
+    <section class="esc-estado" aria-label="Estado dla idea"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan la idea y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
@@ -3674,16 +3763,16 @@ function htmlRevisiones(esc, e) {
         <p><button class="btn btn-primario" type="submit" id="rev-btn">${rotuloBotonRev()}</button></p><p class="error" id="rev-error" role="alert"></p></form></details></section>`;
 }
 // Estado del registro de una revisión (ronda 22). LAB.revIntento = { intento, fase }: fase «incierto» (no se sabe si el servidor lo registró: se reintenta EL MISMO intento) o «vista» (el servidor ya lo confirmó y solo falta
-// releer el escenario: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
+// releer la idea: se recupera la vista SIN volver a escribir). LAB.revBorrador conserva lo escrito aunque la pantalla se repinte; LAB.revMsg, el aviso visible.
 const rotuloBotonRev = () => LAB.revLectura === LAB.esc?.id ? 'Reintentar la lectura' : LAB.revIntento?.fase === 'vista' ? 'Actualizar la vista' : LAB.revIntento?.fase === 'incierto' ? 'Reintentar el mismo envío' : 'Registrar revisión';
 const leerBorradorRev = () => { const q = s => document.querySelector(s), dec = document.querySelector('input[name="rev-dec"]:checked')?.value || 'mantener';
   return { fecha: q('#rev-fecha').value, observacion: q('#rev-obs').value.trim(), aprendizaje: q('#rev-apr').value.trim(), decision: dec, proxima_fecha: dec === 'reprogramar' ? (q('#rev-prox').value || null) : null }; };
-// El borrador de una revisión vive en memoria Y en el dispositivo (clave por escenario, caduca a los 7 días): si la sesión caduca y se vuelve a entrar con la MISMA cuenta, sigue ahí; si entra OTRA cuenta, el escenario
+// El borrador de una revisión vive en memoria Y en el dispositivo (clave por escenario, caduca a los 7 días): si la sesión caduca y se vuelve a entrar con la MISMA cuenta, sigue ahí; si entra OTRA cuenta, la idea
 // no es suyo (404) y además se purgan los borradores de escenarios ajenos al cargar su Cuaderno; al cerrar sesión a propósito se borran todos.
 const CLAVE_REV = 'klever_rev_', DIAS_REV = 7;
 function persistirBorradorRev(b) { try { const { store } = LAB.ctx, k = CLAVE_REV + b.esc; if ((b.obs || '').trim() || (b.apr || '').trim() || b.dec !== 'mantener' || b.intento) store.setItem(k, JSON.stringify({ ...b, t: Date.now() })); else store.removeItem(k); } catch { /* sin almacenamiento */ } }
 function leerBorradorGuardado(id) { try { const b = JSON.parse(LAB.ctx.store.getItem(CLAVE_REV + id)); if (b && b.esc === id && Date.now() - b.t < DIAS_REV * 864e5) return b; } catch { /* dañado */ } return null; }
-// Ronda 27 · intento incierto que sobrevive a recargar, cerrar la pestaña o caducar la sesión. Solo se restaura DESPUÉS de que el servidor haya devuelto el escenario
+// Ronda 27 · intento incierto que sobrevive a recargar, cerrar la pestaña o caducar la sesión. Solo se restaura DESPUÉS de que el servidor haya devuelto la idea
 // a la sesión actual (mostrarEscenario): otra cuenta recibe 404 y nunca lo ve. Al reenviarlo se usa LA MISMA clave: el servidor comprueba la clave antes que la revisión
 // y devuelve el registro ya guardado si llegó (reconciliación sin otra escritura) o lo registra una sola vez si no llegó.
 function intentoGuardado(id) {
@@ -3694,7 +3783,7 @@ function intentoGuardado(id) {
 }
 function olvidarBorradorRev(id) { try { LAB.ctx.store.removeItem(CLAVE_REV + id); } catch { /* sin almacenamiento */ } if (LAB.revBorrador?.esc === id) LAB.revBorrador = null; }
 const clavesRev = () => { const ks = []; try { for (let k = 0; k < localStorage.length; k++) { const c = localStorage.key(k); if (c && c.startsWith(CLAVE_REV)) ks.push(c); } } catch { /* sin almacenamiento */ } return ks; };   // se listan ANTES de borrar: el orden de localStorage.key() cambia al eliminar
-function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de los escenarios de ESTA cuenta (null = solo caducidad)
+function purgarBorradoresRev(idsPropios = null) {                 // idsPropios: ids de las ideas de ESTA cuenta (null = solo caducidad)
   for (const c of clavesRev()) { const id = Number(c.slice(CLAVE_REV.length)); let b = null; try { b = JSON.parse(localStorage.getItem(c)); } catch { /* dañado */ }
     if (!b || Date.now() - b.t >= DIAS_REV * 864e5 || (idsPropios && !idsPropios.includes(id))) { try { localStorage.removeItem(c); } catch { /* sin almacenamiento */ } } }
 }
@@ -3755,14 +3844,14 @@ async function registrarRevision() {
 async function aplicarCambios(cambios, mensaje, errId) {
   const { $, toast, toastError } = x(), e = LAB.esc, g = LAB.gen, z = $(errId); if (z) z.textContent = '';
   try { const r = await LAB.alm.escenarios.actualizar(e.id, { ...cambios, revision: e.revision }); if (!vigente(g)) return; LAB.esc = r; LAB.editEsc = false; toast(mensaje); pintarEscenario(); $('#lab-cuerpo h1')?.focus(); }
-  catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Este escenario cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
+  catch (er) { if (!vigente(g)) return; const m = er.status === 409 ? 'Esta idea cambió en otra pestaña o dispositivo. Recarga para ver la versión actual; no se ha guardado nada.' : er.message; const zz = $(errId); if (zz) zz.textContent = m; toastError(m); }
 }
 function guardarCambiosEscenario() { const { $ } = x(); return aplicarCambios({ nombre: $('#esc-nombre').value, pregunta: $('#esc-pregunta').value, ...($('#esc-ref-quitar') ? { pregunta_ref: null } : $('#esc-ref') ? { pregunta_ref: $('#esc-ref').checked ? (LAB.esc.pregunta_ref || refPregunta(LAB.esc.historia, 1)) : null } : {}), revisar_en: $('#esc-revisar').value || null, nota: $('#esc-nota').value, invalidacion: $('#esc-invalidacion').value }, 'Cambios guardados', '#esc-error'); }
-function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Escenario marcado como descartado (se conserva)' : estado === 'archivado' ? 'Escenario archivado' : 'Escenario de nuevo en estudio', '#esc-estado-error'); }
+function cambiarEstadoEscenario(estado) { return aplicarCambios({ estado }, estado === 'descartado' ? 'Idea marcada como descartada (se conserva)' : estado === 'archivado' ? 'Idea archivada' : 'Idea de nuevo en estudio', '#esc-estado-error'); }
 async function eliminarEscenario() {
   const { toast, toastError, go } = x(), e = LAB.esc, g = LAB.gen;
-  if (!window.confirm(`¿Eliminar definitivamente el escenario «${e.nombre}»? Se borra del todo y no se puede deshacer; tu cartera no cambia. (Si solo quieres dejar de verlo, usa «Marcar como descartado»: se conserva.)`)) return;
-  try { await LAB.alm.escenarios.borrar(e.id); if (!vigente(g)) return; toast('Escenario eliminado'); go('#seguimiento'); } catch (er) { if (vigente(g)) toastError(er.message); }
+  if (!window.confirm(`¿Eliminar definitivamente la idea «${e.nombre}»? Se borra del todo y no se puede deshacer; tu cartera no cambia. (Si solo quieres dejar de verlo, usa «Marcar como descartado»: se conserva.)`)) return;
+  try { await LAB.alm.escenarios.borrar(e.id); if (!vigente(g)) return; toast('Idea eliminada'); go('#seguimiento'); } catch (er) { if (vigente(g)) toastError(er.message); }
 }
 
 // =====================================================================
@@ -4071,9 +4160,11 @@ function mostrar(v, primera, extra = {}) {
   const { escenarioId = null, articulo = null, comparar = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
   const nv = v === 'lab' && escenarioId ? 'cuaderno' : NAV[v];
-  $$('[data-nav]').forEach(a => a.dataset.nav === nv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  $$('[data-nav]').forEach(a => a.dataset.nav === nv && !a.dataset.tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  const tab = nv === 'mis' || nv === 'crear' ? 'mis' : nv === 'cuaderno' ? 'cuaderno' : 'descubrir'; $$('[data-tab]').forEach(a => a.dataset.tab === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   $$('[data-ideas]').forEach(a => a.dataset.ideas === IDEAS[v] ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
+  document.body.classList.toggle('sin-tabbar', v === 'cartera' || v === 'lab');   // ronda 28: el editor y el laboratorio tienen su propia barra
   $('#barra-guardar').hidden = v !== 'cartera'; medirBarra(); menuAbrir(false);
   document.title = 'Klever · ' + TITULOS[v];
   if (v === 'cartera') renderWorkspace();
@@ -4121,7 +4212,7 @@ function resumenComp(ps) { // «AAPL 30 % · MSFT 25 % · +3 más»: todo sale d
   return vis + (lista.length > 3 ? ` · +${lista.length - 3} más` : '');
 }
 // Ronda 26: la señal principal de la versión GUARDADA, como una etiqueta breve (la explicación está en la revisión de la cartera).
-function chipSenal(ps) { const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return ''; const s0 = senales(radiografia(lista, by))[0]; return s0 ? `<span class="ci-senal senal-${s0.nivel}"><i aria-hidden="true"></i>${esc(s0.titulo)}</span>` : ''; }
+function chipSenal(ps) { const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return ''; let u = null; try { u = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ } const s0 = senales(radiografia(lista, by), 3, u)[0]; /* con los umbrales propios, si los hay */ return s0 ? `<span class="ci-senal senal-${s0.nivel}"><i aria-hidden="true"></i>${esc(s0.titulo)}</span>` : ''; }
 function itemCartera(p) {
   const n = p.n_posiciones, total = r1(p.total), loc = leerCopia(p.id), hayLocal = !!store.getItem('klever_edit_' + p.id);
   const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
@@ -4702,6 +4793,19 @@ cbIn.addEventListener('keydown', e => {
   else if (e.key === 'Enter') { if (!cbList.hidden && cbAct >= 0) { e.preventDefault(); cbElegir(cbAct); } }
   else if (e.key === 'Escape') { if (!cbList.hidden) { e.preventDefault(); cbCerrar(); } else cbIn.value = ''; }
 });
+// Ronda 28 (fase 2) · pegar o escribir una lista («KO 40, PG 60»): crea o actualiza esas posiciones de una vez. Lo que no está en el universo se dice, no se sustituye.
+function aplicarPegado(texto) {
+  const r = leerPegado(texto, by); if (!r.pares.length) { avisar(r.desconocidos.length ? `No reconocemos ${r.desconocidos.join(', ')}: no está en el universo disponible.` : 'No hemos encontrado pares «símbolo peso».'); return false; }
+  for (const { ticker, peso } of r.pares) { const k = pos.findIndex(p => p.ticker === ticker); if (k >= 0) pos[k].peso = peso; else pos.push({ ticker, peso }); }
+  cbIn.value = ''; cbCerrar(); marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
+  const extra = [r.desconocidos.length ? `sin reconocer: ${r.desconocidos.join(', ')}` : '', r.invalidos.length ? `pesos no válidos: ${r.invalidos.join(', ')}` : ''].filter(Boolean).join('; ');
+  avisar(`${r.pares.length} ${r.pares.length === 1 ? 'posición añadida' : 'posiciones añadidas'} desde tu lista${extra ? ` (${extra})` : ''}.`);
+  const pie = $('#pegado-res'); if (pie) { pie.textContent = `Añadidas ${r.pares.map(p => `${p.ticker} ${pesoCorto(p.peso)}`).join(' · ')}${extra ? ` · ${extra}` : ''}`; pie.hidden = false; }
+  return true;
+}
+cbIn.addEventListener('paste', e => { const t = e.clipboardData?.getData('text') || ''; if (pareceLista(t)) { e.preventDefault(); aplicarPegado(t); } });
+cbIn.addEventListener('keydown', e => { if (e.key === 'Enter' && pareceLista(cbIn.value)) { e.preventDefault(); e.stopImmediatePropagation(); aplicarPegado(cbIn.value); } }, true);
+cbIn.addEventListener('input', () => { const pl = pareceLista(cbIn.value); $('#pegado-ayuda').hidden = !pl; if (pl) cbCerrar(); });
 cbList.addEventListener('mousedown', e => { e.preventDefault(); const li = e.target.closest('li[data-t]'); if (li) cbElegir([...cbList.children].indexOf(li)); });
 
 // ---------- menú «Más acciones» ----------
@@ -4787,7 +4891,7 @@ const CRIT = {
   crecimiento: ['Crecimiento de ventas', 'Se supera si las ventas suben respecto al año anterior', v => [pct(v), '']],
 };
 let empresas = [];
-const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ En tu radar</span>' : '';
+const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ La sigues</span>' : '';
 const ABR = { deuda_ebitda: 'Deuda', roic: 'ROIC', margen_neto: 'Margen', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' };
 // Ronda 28 · glosario en palabras llanas (al pulsar), para quien no conoce los términos. Describe la comprobación; no dice si comprar.
 const GLOSA = { deuda_ebitda: 'Deuda: si la empresa podría pagar lo que debe con menos de 2,5 años de su beneficio bruto (EBITDA).', roic: 'ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.',
@@ -4798,6 +4902,9 @@ const sectoresMios = () => { const l = current ? pos : (leerBorrador()?.pos || [
 const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nombre)}">${Object.keys(ABR).map(k => { const x = r.criterios?.[k]; // el estado va escrito, no solo en color
   const e = x?.ok === true ? ['ok', '✓', 'superada'] : x?.ok === false ? ['no', '✗', 'no superada'] : ['nd', '–', 'sin datos'];
   return `<li class="pil-${e[0]}"><span aria-hidden="true">${e[1]}</span> ${ABR[k]}<span class="sr">: ${e[2]}</span></li>`; }).join('')}</ul>`;
+// Ronda 28 (fase 2): de la lista al laboratorio en un toque («Probar en mi cartera»), sin pasar por la ficha. No recomienda: solo abre la simulación.
+const botonProbar = r => `<button class="probar-emp" type="button" data-probar-emp="${esc(r.ticker)}">Probar<span class="sr"> ${esc(r.nombre)} en mi cartera</span></button>`;
+document.addEventListener('click', e => { const b = e.target.closest('[data-probar-emp]'); if (b) abrirLab({ carteraId: null, ticker: b.dataset.probarEmp, peso: 10, fin: 'proporcional' }); });
 const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, cambiar de pantalla y recargar (solo en esta pestaña)
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
@@ -4828,11 +4935,11 @@ function renderEmpresas() {
   const vacio = empresas.length ? `Ninguna empresa coincide con ${bruto ? `«${esc(bruto)}»${hayFiltro ? ' y los filtros elegidos' : ''}` : 'los filtros elegidos'}. <button class="enlace" type="button" data-borrar-busqueda>${hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda'}</button>` : 'Aún no hay datos de empresas cargados.';
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
       <td class="num">${resultado(r)}${pildoras(r)}</td>
-      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`).join('')
+      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
       <div class="ec-l1"><span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
-      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
+      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
   const nf = [filt.sector, filt.estado, filt.radar, filt.faltan].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;

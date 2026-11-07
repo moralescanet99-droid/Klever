@@ -1,7 +1,7 @@
 import { json, auth, readJson, ERROR_INTERNO } from '../../../_lib.js';
 import { SELECT_ESCENARIO, formato, fechaValida, DECISIONES, MAX_REVISIONES } from '../_comun.js';
 
-// Historial MÍNIMO de revisiones de un escenario (ronda 21). Solo se AÑADE: no sustituye la hipótesis original ni las composiciones base/propuesta, que no se tocan.
+// Historial MÍNIMO de revisiones de una idea (ronda 21). Solo se AÑADE: no sustituye la hipótesis original ni las composiciones base/propuesta, que no se tocan.
 // El texto es un comentario PERSONAL de la persona (no un hecho verificado y nunca se genera nada sobre el mercado). Las fechas son días de calendario elegidos por la persona (sin zona horaria).
 const CAMPOS = 'id, fecha, observacion, aprendizaje, decision, proxima_fecha, creado_en';
 const leer = (env, escId, userId) => env.DB.prepare(`SELECT ${CAMPOS} FROM revisiones_escenario WHERE escenario_id = ? AND usuario_id = ? ORDER BY fecha DESC, id DESC`).bind(escId, userId).all();
@@ -17,9 +17,9 @@ export async function onRequestGet({ request, env, params }) {
 }
 
 // { clave, revision, fecha, observacion?, aprendizaje?, decision: mantener|descartar|reprogramar, proxima_fecha? }
-//  · UNA operación atómica: se añade la revisión Y se actualiza el estado/fecha del escenario (mantener → en estudio; descartar → descartado, sin fecha; reprogramar → en estudio con la nueva fecha).
-//  · `revision` es la que vio la persona: si el escenario cambió desde otra pestaña → 409 y no se pisa nada.
-//  · `clave` identifica el intento: un reintento (corte de red) devuelve la revisión ya guardada, sin duplicarla ni subir otra vez la revisión del escenario.
+//  · UNA operación atómica: se añade la revisión Y se actualiza el estado/fecha dla idea (mantener → en estudio; descartar → descartado, sin fecha; reprogramar → en estudio con la nueva fecha).
+//  · `revision` es la que vio la persona: si la idea cambió desde otra pestaña → 409 y no se pisa nada.
+//  · `clave` identifica el intento: un reintento (corte de red) devuelve la revisión ya guardada, sin duplicarla ni subir otra vez la revisión dla idea.
 export async function onRequestPost({ request, env, params }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);
@@ -33,17 +33,17 @@ export async function onRequestPost({ request, env, params }) {
   if (proxima !== null && !fechaValida(proxima)) return json({ error: 'La fecha de la próxima revisión no es válida (AAAA-MM-DD).' }, 400);
   if (b.decision === 'reprogramar' && proxima === null) return json({ error: 'Indica la fecha de la próxima revisión.' }, 400);
   if (b.decision === 'descartar' && proxima !== null) return json({ error: 'Una idea descartada no lleva próxima revisión.' }, 400);
-  if (!Number.isInteger(b.revision) || b.revision < 0) return json({ error: 'Falta la revisión del escenario.' }, 400);
+  if (!Number.isInteger(b.revision) || b.revision < 0) return json({ error: 'Falta la revisión dla idea.' }, 400);
   const estado = b.decision === 'descartar' ? 'descartado' : 'en_estudio', revisar = b.decision === 'descartar' ? null : proxima;
   try {
     const e = await env.DB.prepare('SELECT id, revision FROM escenarios WHERE id = ? AND usuario_id = ?').bind(Number(params.id), user.id).first();
     if (!e) return json({ error: 'No encontrado' }, 404);
     const previa = await env.DB.prepare(`SELECT ${CAMPOS}, escenario_id FROM revisiones_escenario WHERE usuario_id = ? AND clave = ?`).bind(user.id, clave).first();
     if (previa) return previa.escenario_id === e.id ? json({ ...previa, duplicado: true }) : json({ error: 'Esa clave de intento ya se usó en otro escenario.' }, 409);   // reintento
-    if (b.revision !== e.revision) return json({ error: 'El escenario cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: e.revision }, 409);
+    if (b.revision !== e.revision) return json({ error: 'La idea cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: e.revision }, 409);
     let res;
     try {
-      // Un solo lote (transacción): la revisión solo se inserta si el escenario sigue en la revisión vista y no se superó el tope; el escenario solo se actualiza si esa revisión quedó insertada.
+      // Un solo lote (transacción): la revisión solo se inserta si la idea sigue en la revisión vista y no se superó el tope; la idea solo se actualiza si esa revisión quedó insertada.
       res = await env.DB.batch([
         env.DB.prepare(`INSERT INTO revisiones_escenario (escenario_id, usuario_id, clave, fecha, observacion, aprendizaje, decision, proxima_fecha)
           SELECT ?, ?, ?, ?, ?, ?, ?, ? WHERE EXISTS (SELECT 1 FROM escenarios WHERE id = ? AND usuario_id = ? AND revision = ?)
@@ -59,7 +59,7 @@ export async function onRequestPost({ request, env, params }) {
     }
     if (!res[0].meta?.changes) {
       const act = await env.DB.prepare('SELECT revision FROM escenarios WHERE id = ? AND usuario_id = ?').bind(e.id, user.id).first();
-      if (act && act.revision !== e.revision) return json({ error: 'El escenario cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: act.revision }, 409);
+      if (act && act.revision !== e.revision) return json({ error: 'La idea cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: act.revision }, 409);
       return json({ error: `Puedes registrar hasta ${MAX_REVISIONES} revisiones por escenario.` }, 400);
     }
     const nueva = await env.DB.prepare(`SELECT ${CAMPOS} FROM revisiones_escenario WHERE usuario_id = ? AND clave = ?`).bind(user.id, clave).first();

@@ -12,7 +12,7 @@ export async function onRequestGet({ request, env, params }) {
     if (!r) return json({ error: 'No encontrado' }, 404);
     const { results } = await env.DB.prepare('SELECT id, fecha, observacion, aprendizaje, decision, proxima_fecha, creado_en FROM revisiones_escenario WHERE escenario_id = ? AND usuario_id = ? ORDER BY fecha DESC, id DESC').bind(r.id, user.id).all();
     return json({ ...formato(r), revisiones: results });
-  } catch (e) { console.error('leer escenario:', e); return json({ error: 'No se pudo leer el escenario. Inténtalo de nuevo.' }, 500); }
+  } catch (e) { console.error('leer escenario:', e); return json({ error: 'No se pudo leer la idea. Inténtalo de nuevo.' }, 500); }
 }
 
 // Cambia nombre, nota, pregunta, fecha de revisión o estado. NUNCA la base ni la propuesta (son una copia fechada). Exige la revisión vista: dos pestañas no se pisan.
@@ -33,12 +33,12 @@ export async function onRequestPatch({ request, env, params }) {
   const revisar = b.revisar_en !== undefined ? (b.revisar_en === null || b.revisar_en === '' ? null : String(b.revisar_en)) : actual.revisar_en;
   if (pregunta.length > MAX_PREGUNTA) return json({ error: `La pregunta admite hasta ${MAX_PREGUNTA} caracteres.` }, 400);
   if (revisar !== null && !fechaValida(revisar)) return json({ error: 'La fecha de revisión no es válida (AAAA-MM-DD).' }, 400);
-  // Vínculo con la cuestión editorial: se puede mantener, quitar (null) o fijar uno de LA MISMA historia del escenario. Reescribir la pregunta no lo toca.
+  // Vínculo con la cuestión editorial: se puede mantener, quitar (null) o fijar uno de LA MISMA historia dla idea. Reescribir la pregunta no lo toca.
   const ref = b.pregunta_ref !== undefined ? (b.pregunta_ref === null || b.pregunta_ref === '' ? null : String(b.pregunta_ref)) : actual.pregunta_ref;
   if (ref !== null && ref !== actual.pregunta_ref && (!REF_PREGUNTA.test(ref) || actual.historia == null || !refDeHistoria(ref, actual.historia))) return json({ error: 'La pregunta de la historia vinculada no es válida.' }, 400);
   if (!ESTADOS.includes(estado)) return json({ error: 'Estado no válido.' }, 400);
-  if (!esRevision(b.revision)) return json({ error: 'Falta la revisión del escenario.' }, 400);
-  const conflicto = (r) => json({ error: 'El escenario cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: r.revision }, 409);
+  if (!esRevision(b.revision)) return json({ error: 'Falta la revisión dla idea.' }, 400);
+  const conflicto = (r) => json({ error: 'La idea cambió en tu cuenta después de la versión que ves.', conflicto: true, revision: r.revision }, 409);
   if (b.revision !== actual.revision) return conflicto(actual);
   try {
     const r = await env.DB.prepare(
@@ -49,7 +49,7 @@ export async function onRequestPatch({ request, env, params }) {
   } catch (e) { console.error('actualizar escenario:', e); return json({ error: ERROR_INTERNO }, 500); }
 }
 
-// Eliminar definitivamente = borrar el escenario (irreversible). «Marcar como descartado» es un PATCH de estado y conserva la historia. La cartera base no se toca.
+// Eliminar definitivamente = borrar la idea (irreversible). «Marcar como descartado» es un PATCH de estado y conserva la historia. La cartera base no se toca.
 export async function onRequestDelete({ request, env, params }) {
   const user = await auth(request, env);
   if (!user) return json({ error: 'No autorizado' }, 401);

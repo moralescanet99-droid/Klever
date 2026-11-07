@@ -79,7 +79,7 @@ const J = JSON.stringify;
     await q.click('#entrar').catch(() => {}); await q.waitForSelector('#dlg-acceso[open]', { timeout: 15000 }).catch(() => {}); await entrarCon(q, mail('WO' + w), true);
     await q.evaluate(i => { location.hash = '#escenario-' + i; }, E5.id); await q.waitForTimeout(1500);
     const vista5 = await q.evaluate(() => ({ form: !!document.querySelector('#rev-form'), texto: /Revisión W5 privada/.test(document.body.textContent) }));
-    await q.evaluate(() => { location.hash = '#seguimiento'; }); await q.waitForFunction(() => /Aún no has guardado ningún escenario/.test(document.querySelector('#seg-escenarios')?.textContent || ''), null, { timeout: 15000 });
+    await q.evaluate(() => { location.hash = '#seguimiento'; }); await q.waitForFunction(() => /Aún no has guardado ninguna idea/.test(document.querySelector('#seg-escenarios')?.textContent || ''), null, { timeout: 15000 });
     const despues5 = await q.evaluate(i => !!localStorage.getItem('klever_rev_' + i), E5.id);
     ev('W5-' + w, `Otra cuenta (${w} px): no ve ni envía el intento ajeno y se purga al cargar su Cuaderno`, 'el intento estaba guardado; la otra cuenta no ve formulario ni texto; ningún POST de revisión; tras su Cuaderno ya no está en el dispositivo',
       J({ antes5, vista5, posts: posts.length, despues5 }), antes5 && !vista5.form && !vista5.texto && posts.length === 0 && !despues5);

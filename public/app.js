@@ -11,6 +11,7 @@
 import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo } from './js/lab.js';
 import { simular, radiografia } from './js/calculos.js';
 import { senales } from './js/senales.js';
+import { leerPegado, pareceLista } from './js/pegado.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
@@ -308,9 +309,11 @@ function mostrar(v, primera, extra = {}) {
   const { escenarioId = null, articulo = null, comparar = null } = extra;
   $$('[data-vista]').forEach(s => s.hidden = s.dataset.vista !== v);
   const nv = v === 'lab' && escenarioId ? 'cuaderno' : NAV[v];
-  $$('[data-nav]').forEach(a => a.dataset.nav === nv ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  $$('[data-nav]').forEach(a => a.dataset.nav === nv && !a.dataset.tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
+  const tab = nv === 'mis' || nv === 'crear' ? 'mis' : nv === 'cuaderno' ? 'cuaderno' : 'descubrir'; $$('[data-tab]').forEach(a => a.dataset.tab === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   $$('[data-ideas]').forEach(a => a.dataset.ideas === IDEAS[v] ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   document.body.classList.toggle('en-cartera', v === 'cartera');
+  document.body.classList.toggle('sin-tabbar', v === 'cartera' || v === 'lab');   // ronda 28: el editor y el laboratorio tienen su propia barra
   $('#barra-guardar').hidden = v !== 'cartera'; medirBarra(); menuAbrir(false);
   document.title = 'Klever · ' + TITULOS[v];
   if (v === 'cartera') renderWorkspace();
@@ -358,7 +361,7 @@ function resumenComp(ps) { // «AAPL 30 % · MSFT 25 % · +3 más»: todo sale d
   return vis + (lista.length > 3 ? ` · +${lista.length - 3} más` : '');
 }
 // Ronda 26: la señal principal de la versión GUARDADA, como una etiqueta breve (la explicación está en la revisión de la cartera).
-function chipSenal(ps) { const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return ''; const s0 = senales(radiografia(lista, by))[0]; return s0 ? `<span class="ci-senal senal-${s0.nivel}"><i aria-hidden="true"></i>${esc(s0.titulo)}</span>` : ''; }
+function chipSenal(ps) { const lista = (ps || []).filter(x => x.peso > 0); if (!lista.length) return ''; let u = null; try { u = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ } const s0 = senales(radiografia(lista, by), 3, u)[0]; /* con los umbrales propios, si los hay */ return s0 ? `<span class="ci-senal senal-${s0.nivel}"><i aria-hidden="true"></i>${esc(s0.titulo)}</span>` : ''; }
 function itemCartera(p) {
   const n = p.n_posiciones, total = r1(p.total), loc = leerCopia(p.id), hayLocal = !!store.getItem('klever_edit_' + p.id);
   const fecha = p.actualizado_en ? `Modificada el ${fmtFecha(p.actualizado_en)}` : p.creado_en ? `Creada el ${fmtFecha(p.creado_en)}` : ''; // solo fechas que existen
@@ -939,6 +942,19 @@ cbIn.addEventListener('keydown', e => {
   else if (e.key === 'Enter') { if (!cbList.hidden && cbAct >= 0) { e.preventDefault(); cbElegir(cbAct); } }
   else if (e.key === 'Escape') { if (!cbList.hidden) { e.preventDefault(); cbCerrar(); } else cbIn.value = ''; }
 });
+// Ronda 28 (fase 2) · pegar o escribir una lista («KO 40, PG 60»): crea o actualiza esas posiciones de una vez. Lo que no está en el universo se dice, no se sustituye.
+function aplicarPegado(texto) {
+  const r = leerPegado(texto, by); if (!r.pares.length) { avisar(r.desconocidos.length ? `No reconocemos ${r.desconocidos.join(', ')}: no está en el universo disponible.` : 'No hemos encontrado pares «símbolo peso».'); return false; }
+  for (const { ticker, peso } of r.pares) { const k = pos.findIndex(p => p.ticker === ticker); if (k >= 0) pos[k].peso = peso; else pos.push({ ticker, peso }); }
+  cbIn.value = ''; cbCerrar(); marcarCambio(); renderPosiciones(); renderResumen(); renderCharts();
+  const extra = [r.desconocidos.length ? `sin reconocer: ${r.desconocidos.join(', ')}` : '', r.invalidos.length ? `pesos no válidos: ${r.invalidos.join(', ')}` : ''].filter(Boolean).join('; ');
+  avisar(`${r.pares.length} ${r.pares.length === 1 ? 'posición añadida' : 'posiciones añadidas'} desde tu lista${extra ? ` (${extra})` : ''}.`);
+  const pie = $('#pegado-res'); if (pie) { pie.textContent = `Añadidas ${r.pares.map(p => `${p.ticker} ${pesoCorto(p.peso)}`).join(' · ')}${extra ? ` · ${extra}` : ''}`; pie.hidden = false; }
+  return true;
+}
+cbIn.addEventListener('paste', e => { const t = e.clipboardData?.getData('text') || ''; if (pareceLista(t)) { e.preventDefault(); aplicarPegado(t); } });
+cbIn.addEventListener('keydown', e => { if (e.key === 'Enter' && pareceLista(cbIn.value)) { e.preventDefault(); e.stopImmediatePropagation(); aplicarPegado(cbIn.value); } }, true);
+cbIn.addEventListener('input', () => { const pl = pareceLista(cbIn.value); $('#pegado-ayuda').hidden = !pl; if (pl) cbCerrar(); });
 cbList.addEventListener('mousedown', e => { e.preventDefault(); const li = e.target.closest('li[data-t]'); if (li) cbElegir([...cbList.children].indexOf(li)); });
 
 // ---------- menú «Más acciones» ----------
@@ -1028,7 +1044,7 @@ const CRIT = {
   crecimiento: ['Crecimiento de ventas', 'Se supera si las ventas suben respecto al año anterior', v => [pct(v), '']],
 };
 let empresas = [];
-const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ En tu radar</span>' : '';
+const marcaRadar = t => enRadar(t) ? ' <span class="chip radar">★ La sigues</span>' : '';
 const ABR = { deuda_ebitda: 'Deuda', roic: 'ROIC', margen_neto: 'Margen', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' };
 // Ronda 28 · glosario en palabras llanas (al pulsar), para quien no conoce los términos. Describe la comprobación; no dice si comprar.
 const GLOSA = { deuda_ebitda: 'Deuda: si la empresa podría pagar lo que debe con menos de 2,5 años de su beneficio bruto (EBITDA).', roic: 'ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.',
@@ -1039,6 +1055,9 @@ const sectoresMios = () => { const l = current ? pos : (leerBorrador()?.pos || [
 const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nombre)}">${Object.keys(ABR).map(k => { const x = r.criterios?.[k]; // el estado va escrito, no solo en color
   const e = x?.ok === true ? ['ok', '✓', 'superada'] : x?.ok === false ? ['no', '✗', 'no superada'] : ['nd', '–', 'sin datos'];
   return `<li class="pil-${e[0]}"><span aria-hidden="true">${e[1]}</span> ${ABR[k]}<span class="sr">: ${e[2]}</span></li>`; }).join('')}</ul>`;
+// Ronda 28 (fase 2): de la lista al laboratorio en un toque («Probar en mi cartera»), sin pasar por la ficha. No recomienda: solo abre la simulación.
+const botonProbar = r => `<button class="probar-emp" type="button" data-probar-emp="${esc(r.ticker)}">Probar<span class="sr"> ${esc(r.nombre)} en mi cartera</span></button>`;
+document.addEventListener('click', e => { const b = e.target.closest('[data-probar-emp]'); if (b) abrirLab({ carteraId: null, ticker: b.dataset.probarEmp, peso: 10, fin: 'proporcional' }); });
 const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, cambiar de pantalla y recargar (solo en esta pestaña)
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
@@ -1069,11 +1088,11 @@ function renderEmpresas() {
   const vacio = empresas.length ? `Ninguna empresa coincide con ${bruto ? `«${esc(bruto)}»${hayFiltro ? ' y los filtros elegidos' : ''}` : 'los filtros elegidos'}. <button class="enlace" type="button" data-borrar-busqueda>${hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda'}</button>` : 'Aún no hay datos de empresas cargados.';
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
       <td class="num">${resultado(r)}${pildoras(r)}</td>
-      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></td></tr>`).join('')
+      <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
       <div class="ec-l1"><span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
-      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button></div>${pildoras(r)}</li>`).join('')
+      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
   const nf = [filt.sector, filt.estado, filt.radar, filt.faltan].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
