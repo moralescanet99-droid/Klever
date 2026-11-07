@@ -1,5 +1,5 @@
 # comando: node tests/ronda21/testS.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-07 00:06:50 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:52:14 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [S1-1440] Portada (1440 px): promesa de producto y TRES entradas claras, con la transparencia de simulación visible desde el principio

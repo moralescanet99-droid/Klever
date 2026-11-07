@@ -3,7 +3,7 @@
   "id": "F1",
   "escenario": "Crear, editar, guardar, cerrar, reabrir y recargar",
   "esperado": "Antes de guardar «Cambios locales pendientes…»; tras guardar «Guardada en tu cuenta» y toast corto «Cartera guardada»; la tarjeta no marca cambios locales; reabrir y recargar conservan 30/25/25/20",
-  "observado": "inicial 25,0 25,0 25,0 25,0; antes de guardar «Cambios locales pendientes de guardar en tu cuenta»; tras guardar «Guardada en tu cuenta», toast «Cartera guardada»; tarjeta «Ejemplo simulado: oroPrivada GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % ✓ Asignada al 100 % · 4 posicionesModificada el 6 nov 2026 Abrir»; reabierta 30,0 25,0 25,0 20,0; tras recargar 30,0 25,0 25,0 20,0",
+  "observado": "inicial 25,0 25,0 25,0 25,0; antes de guardar «Cambios locales pendientes de guardar en tu cuenta»; tras guardar «Guardada en tu cuenta», toast «Cartera guardada»; tarjeta «Ejemplo simulado: oroPrivada GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % ✓ Asignada al 100 % · 4 posicionesModificada el 7 nov 2026 Abrir»; reabierta 30,0 25,0 25,0 20,0; tras recargar 30,0 25,0 25,0 20,0",
   "resultado": "OK",
   "evidencia": "F1-mis-carteras-guardada.png"
  },
@@ -11,7 +11,7 @@
   "id": "F3",
   "escenario": "Cambios locales pendientes de guardar: tarjeta y recuperación",
   "esperado": "Chip «Cambios locales pendientes de guardar en tu cuenta»; «Versión de tu cuenta: … Asignado: 100 %» y «Versión de este dispositivo: … Asignado: 98 % (incompleta)» con fecha y hora; tras recargar se recuperan 28/25/25/20",
-  "observado": "tarjeta «Ejemplo simulado: oroPrivadaCambios locales pendientes de guardar en tu cuenta GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % Versión de tu cuenta: 4 posiciones · Asignado: 100 %Versión de este dispositivo: 4 posiciones · Asignado: 98 % (incompleta) · editada el 6 nov 2026, 23:53Modificada el 6 nov 2026 Continuar editando»; recuperado 28,0 25,0 25,0 20,0 / «Cambios locales pendientes de guardar en tu cuenta»; ancho de página 1440",
+  "observado": "tarjeta «Ejemplo simulado: oroPrivadaCambios locales pendientes de guardar en tu cuenta GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % Versión de tu cuenta: 4 posiciones · Asignado: 100 %Versión de este dispositivo: 4 posiciones · Asignado: 98 % (incompleta) · editada el 7 nov 2026, 07:39Modificada el 7 nov 2026 Continuar editando»; recuperado 28,0 25,0 25,0 20,0 / «Cambios locales pendientes de guardar en tu cuenta»; ancho de página 1440",
   "resultado": "OK",
   "evidencia": "F3-tarjeta-cambios-locales-1440.png"
  },
@@ -19,7 +19,7 @@
   "id": "F5a",
   "escenario": "Conflicto al abrir: versión local frente a versión de la cuenta",
   "esperado": "Diálogo con «Versión de este dispositivo» y «Versión de tu cuenta» con fecha y hora y qué cambia; Escape y «Decidir después» posponen sin perder nada; «Usar la versión de tu cuenta» descarta lo local",
-  "observado": "diálogo «Hay dos versiones de esta cartera Decidir después Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas. Versión de este dispositivoEditada el 6 nov 2026, 23:53Ejemplo simulado: oro4 posiciones · Asignado: 98 % (incompleta)Versión de tu cuentaModificada el 6 nov 2026, 23:53Ejemplo simulado: oro3 posiciones · Asignado: 100 % Qué cambiaSolo en este dispositivo: NEMGDX: 28 % en este dispositivo · 30 % en tu cuentaIAU: 25 % en este dispositivo · 30 % en tu cuentaGLD: 20 % en este dispositivo · 40 % en tu cuenta «Decidir después» (o Escape) no cambia nada: ni elige una copia, ni descarta datos, ni escribe en tu cuenta. «Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» vuelve al editor sin guardar: revisa y pulsa Guardar. Usar la versión de tu cuenta Conservar la de este dispositivo»; Escape: diálogo abierto=0, copia local=true; tras «Decidir después» se ve 40,0 30,0 30,0 y la copia local sigue=true; tras «Usar la versión de tu cuenta» 40,0 30,0 30,0, copia local=false, «Guardada en tu cuenta»",
+  "observado": "diálogo «Hay dos versiones de esta cartera Decidir después Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas. Versión de este dispositivoEditada el 7 nov 2026, 07:39Ejemplo simulado: oro4 posiciones · Asignado: 98 % (incompleta)Versión de tu cuentaModificada el 7 nov 2026, 07:39Ejemplo simulado: oro3 posiciones · Asignado: 100 % Qué cambiaSolo en este dispositivo: NEMGDX: 28 % en este dispositivo · 30 % en tu cuentaIAU: 25 % en este dispositivo · 30 % en tu cuentaGLD: 20 % en este dispositivo · 40 % en tu cuenta «Decidir después» (o Escape) no cambia nada: ni elige una copia, ni descarta datos, ni escribe en tu cuenta. «Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» vuelve al editor sin guardar: revisa y pulsa Guardar. Usar la versión de tu cuenta Conservar la de este dispositivo»; Escape: diálogo abierto=0, copia local=true; tras «Decidir después» se ve 40,0 30,0 30,0 y la copia local sigue=true; tras «Usar la versión de tu cuenta» 40,0 30,0 30,0, copia local=false, «Guardada en tu cuenta»",
   "resultado": "OK",
   "evidencia": "F5a-conflicto-1440.png"
  },
@@ -99,7 +99,7 @@
   "id": "F7c",
   "escenario": "Ficha con datos ausentes",
   "esperado": "Grupos «Superadas», «No superadas» y «Sin datos» con su recuento; texto «Evaluación parcial»; unidades «Importes en miles de millones de USD; ROIC en %»",
-  "observado": "grupos Superadas (3) | Sin datos (2); ficha «Probar en mi cartera Comparar con otra empresa Si aún no tienes cartera, «Probar en mi cartera» te ofrece una de ejemplo. ☆ Guardar en mi radar Sin cuenta, el radar se guarda solo en este dispositivo. Datos principales · ejercicio FY2024Ventas48,8miles de mill…»; ancho 390",
+  "observado": "grupos Superadas (3) | Sin datos (2); ficha «Probar en mi cartera Comparar con otra empresa Si aún no tienes cartera, «Probar en mi cartera» te ofrece una de ejemplo. ☆ Seguir esta empresa Sin cuenta, las empresas que sigues se guardan solo en este dispositivo. Datos principales · ejercicio FY2024Ventas4…»; ancho 390",
   "resultado": "OK",
   "evidencia": "F7-ficha-sin-datos-390.png"
  },

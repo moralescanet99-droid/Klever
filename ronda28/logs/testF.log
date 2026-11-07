@@ -1,5 +1,5 @@
 # comando: node tests/ronda7/testF.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-06 23:54:20 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:39:52 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [G1] Guardado fallido de una cartera pública (servidor real)

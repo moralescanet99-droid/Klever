@@ -1,9 +1,9 @@
 # comando: node tests/ronda15/unit-almacen.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-06 23:49:06 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:34:45 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [A1] La migración empieza bajo A, se retrasa la lectura, se reinicia el módulo y se pasa a B
-(node:745) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:20000) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 OK    [A2] Se cambia de cuenta entre la primera y la segunda escritura
 OK    [A3] Migración sin interrupciones

@@ -73,7 +73,7 @@
   "id": "N7-320",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (320 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta» completa y visible, sin prometer un plan de pago; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sin respuesta editorial todavía» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
+  "observado": "[\"Tus preguntas\",\"Mis ideas\",\"Empresas que sigo\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
   "resultado": "OK"
  },
  {
@@ -157,7 +157,7 @@
   "id": "N7-390",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (390 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta» completa y visible, sin prometer un plan de pago; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sin respuesta editorial todavía» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
+  "observado": "[\"Tus preguntas\",\"Mis ideas\",\"Empresas que sigo\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
   "resultado": "OK"
  },
  {
@@ -241,7 +241,7 @@
   "id": "N7-1440",
   "escenario": "Seguimiento (visitante): abre con la pregunta, etiqueta beta legible y caso sin novedades (1440 px)",
   "esperado": "Primero «Tus preguntas», luego escenarios y radar; etiqueta «En beta» completa y visible, sin prometer un plan de pago; caso 1 con qué pasó con cada contrato (C firmado, D aplazado, fuente y fecha, simulado); caso 2 «Sin respuesta editorial todavía» (ya no «Sin novedades»); ambos «Ejemplo ficticio»",
-  "observado": "[\"Tus preguntas\",\"Mis escenarios\",\"Mi radar\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
+  "observado": "[\"Tus preguntas\",\"Mis ideas\",\"Empresas que sigo\"]; «En beta»; Con respuesta editorial Ejemplo ficticio «¿Se han firmado los dos contratos anunciados?» Qué ha ocurrido desde entonces (3 nov 2026, desenlace SIMULADO):Proyect…",
   "resultado": "OK"
  },
  {
@@ -262,14 +262,14 @@
   "id": "N9",
   "escenario": "Seguimiento con cuenta (ronda 22): la tarjeta compacta (pregunta, fecha, seguimiento personal, aviso de versión posterior) y, en la ficha, qué ha ocurrido y los pesos distinguidos",
   "esperado": "La tarjeta tiene la pregunta, «15 dic 2026» y el aviso de versión posterior; la ficha tiene qué ha ocurrido (C firmado), el peso en el ESCENARIO (10 %, base 0 %) distinto del de la CARTERA ACTUAL (20 %) y el enlace a la revisión editorial",
-  "observado": "«¿Se han firmado los dos contratos anunciados?» Simulación En estudio Próxima revisión: 15 dic 2026.Tu seguimiento: sin revisiones personales todavía.Respuesta editorial: la revisión de la historia re || ← Mi seguimientoHNORT al 10 % (proporcional) Simulación En estudio HNORT al 10 % reduciendo proporcionalmente las otras posiciones. Cartera «Mi cartera N». Creado el 7 nov 2026, 00",
+  "observado": "«¿Se han firmado los dos contratos anunciados?» Simulación En estudio Próxima revisión: 15 dic 2026.Tu seguimiento: sin revisiones personales todavía.Respuesta editorial: la revisión de la historia re || ← Mi seguimientoHNORT al 10 % (proporcional) Simulación En estudio HNORT al 10 % reduciendo proporcionalmente las otras posiciones. Cartera «Mi cartera N». Creado el 7 nov 2026, 07",
   "resultado": "OK"
  },
  {
   "id": "N9b",
   "escenario": "Con cuenta solo se usan las preguntas y posiciones del propietario",
   "esperado": "Otra cuenta no ve la pregunta ni las posiciones de la primera (ni el ejemplo ficticio de visitante)",
-  "observado": "Aún no has guardado ningún escenario.En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y un",
+  "observado": "Aún no has guardado ninguna idea.En el laboratorio compara tu cartera con una alternativa y guárdala en el Cuaderno con tu pregunta y una fe",
   "resultado": "OK"
  },
  {

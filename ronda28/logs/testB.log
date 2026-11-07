@@ -1,5 +1,5 @@
 # comando: node tests/ronda5/testB.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-06 23:52:06 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:37:38 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    móvil: cabecera global 56–64 px

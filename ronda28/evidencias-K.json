@@ -43,8 +43,8 @@
  },
  {
   "id": "K6-320",
-  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (320 px)",
-  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "escenario": "Marca «En tu radar» y filtro «Solo las que sigo» (320 px)",
+  "esperado": "La fila lleva «★ La sigues»; con «Solo las que sigo» queda 1 de 126; no cambia el orden ni crea ranking",
   "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
   "resultado": "OK"
  },
@@ -93,15 +93,15 @@
  {
   "id": "K11-320",
   "escenario": "Guardar el escenario no modifica la cartera base (320 px)",
-  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "esperado": "Idea guardada con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
   "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
   "resultado": "OK"
  },
  {
   "id": "K12-320",
   "escenario": "Reabrir un escenario tras cambiar la cartera original (320 px)",
-  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
-  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "esperado": "Avisa «La cartera cambió después de esta idea (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de esta idea (revisión 0 → 1). La idea conserva la base con la que se simuló y no se…; true; true",
   "resultado": "OK"
  },
  {
@@ -115,7 +115,7 @@
   "id": "K14-320",
   "escenario": "Descartar un escenario no toca la cartera (320 px)",
   "esperado": "Tras descartarlo no queda ninguno; la cartera conserva su estado (50/50)",
-  "observado": "escenarios 0; [{\"ticker\":\"KO\",\"peso\":50,\"fecha_entrada\":\"2026-11-06\",\"nombre\":\"Coca-Cola\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.17788519467142547},{\"ticker\":\"PG\",\"peso\":50,\"fecha_entrada\":\"2026-11-06\",\"nombre\":\"Procter & Gamble\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.2598370680917842}]",
+  "observado": "escenarios 0; [{\"ticker\":\"KO\",\"peso\":50,\"fecha_entrada\":\"2026-11-07\",\"nombre\":\"Coca-Cola\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.17788519467142547},{\"ticker\":\"PG\",\"peso\":50,\"fecha_entrada\":\"2026-11-07\",\"nombre\":\"Procter & Gamble\",\"sector\":\"Consumo básico\",\"tipo\":\"accion\",\"roic\":0.2598370680917842}]",
   "resultado": "OK"
  },
  {
@@ -183,8 +183,8 @@
  },
  {
   "id": "K6-390",
-  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (390 px)",
-  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "escenario": "Marca «En tu radar» y filtro «Solo las que sigo» (390 px)",
+  "esperado": "La fila lleva «★ La sigues»; con «Solo las que sigo» queda 1 de 126; no cambia el orden ni crea ranking",
   "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
   "resultado": "OK"
  },
@@ -233,15 +233,15 @@
  {
   "id": "K11-390",
   "escenario": "Guardar el escenario no modifica la cartera base (390 px)",
-  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "esperado": "Idea guardada con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
   "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
   "resultado": "OK"
  },
  {
   "id": "K12-390",
   "escenario": "Reabrir un escenario tras cambiar la cartera original (390 px)",
-  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
-  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "esperado": "Avisa «La cartera cambió después de esta idea (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de esta idea (revisión 0 → 1). La idea conserva la base con la que se simuló y no se…; true; true",
   "resultado": "OK"
  },
  {
@@ -323,8 +323,8 @@
  },
  {
   "id": "K6-1440",
-  "escenario": "Marca «En tu radar» y filtro «Solo mi radar» (1440 px)",
-  "esperado": "La fila lleva «★ En tu radar»; con «Solo mi radar» queda 1 de 126; no cambia el orden ni crea ranking",
+  "escenario": "Marca «En tu radar» y filtro «Solo las que sigo» (1440 px)",
+  "esperado": "La fila lleva «★ La sigues»; con «Solo las que sigo» queda 1 de 126; no cambia el orden ni crea ranking",
   "observado": "1 marca(s); 1 de 126 empresas; 1 fila(s)",
   "resultado": "OK"
  },
@@ -373,15 +373,15 @@
  {
   "id": "K11-1440",
   "escenario": "Guardar el escenario no modifica la cartera base (1440 px)",
-  "esperado": "Escenario guardado con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
+  "esperado": "Idea guardada con base 60/40 en la revisión de origen; la cartera sigue igual (mismas posiciones y revisión) y su estado público no cambia",
   "observado": "esc 200 base [{\"ticker\":\"KO\",\"peso\":60},{\"ticker\":\"PG\",\"peso\":40}] rev 0; cartera igual, rev 0→0",
   "resultado": "OK"
  },
  {
   "id": "K12-1440",
   "escenario": "Reabrir un escenario tras cambiar la cartera original (1440 px)",
-  "esperado": "Avisa «La cartera cambió después de este escenario (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
-  "observado": "La cartera cambió después de este escenario (revisión 0 → 1). El escenario conserva la base con la que se simu…; true; true",
+  "esperado": "Avisa «La cartera cambió después de esta idea (revisión 0 → 1)»; sigue mostrando la base guardada KO 60 y la propuesta KO 54; no recalcula",
+  "observado": "La cartera cambió después de esta idea (revisión 0 → 1). La idea conserva la base con la que se simuló y no se…; true; true",
   "resultado": "OK"
  },
  {
@@ -443,7 +443,7 @@
  {
   "id": "K20",
   "escenario": "Escenario inexistente: mensaje claro y salida",
-  "esperado": "Texto «No encontramos ese escenario» y enlace a Mi seguimiento",
+  "esperado": "Texto «No encontramos esa idea» y enlace a Mi seguimiento",
   "observado": "Laboratorio SimulaciónPrueba un cambio y compáralo con tu cartera. Aquí nada modifica tu cartera ni ejecuta operaciones.",
   "resultado": "OK"
  },
@@ -451,7 +451,7 @@
   "id": "K21-390",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (390 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T00:00:27.247Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T07:45:57.037Z\"}}",
   "resultado": "OK"
  },
  {
@@ -465,14 +465,14 @@
   "id": "K23-390",
   "escenario": "Visitante: la simulación es temporal y no se dice «guardado» (390 px)",
   "esperado": "El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»",
-  "observado": "Guardar este escenarioEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guar",
+  "observado": "Guardar esta ideaEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada ",
   "resultado": "OK"
  },
  {
   "id": "K21-1440",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (1440 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T00:00:29.547Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T07:45:59.221Z\"}}",
   "resultado": "OK"
  },
  {
@@ -486,7 +486,7 @@
   "id": "K23-1440",
   "escenario": "Visitante: la simulación es temporal y no se dice «guardado» (1440 px)",
   "esperado": "El resultado se muestra; en lugar de guardar dice que es temporal y ofrece entrar; no existe el formulario de guardado ni se muestra «Guardado en tu cuenta»",
-  "observado": "Guardar este escenarioEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guar",
+  "observado": "Guardar esta ideaEsta simulación es temporal: se perderá al cerrar la página. Entra para guardarla en tu Cuaderno (con una cartera guardada ",
   "resultado": "OK"
  },
  {

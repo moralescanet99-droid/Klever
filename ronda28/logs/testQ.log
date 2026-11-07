@@ -1,5 +1,5 @@
 # comando: node tests/ronda18/testQ.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-07 00:04:28 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:49:53 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [Q1-1440] Distribución: en el VIEWPORT inicial de 1440×900 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (1440 px)

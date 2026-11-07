@@ -121,8 +121,8 @@
  {
   "id": "O5e",
   "escenario": "Otra cuenta, AUTENTICADA, en otro navegador",
-  "esperado": "Sesión válida (200 en /portfolios), lista de escenarios 200 y VACÍA, 404 al abrir el ID concreto de la primera cuenta y la pantalla dice «Aún no has guardado ningún escenario» (no un error de carga) y el bloque editorial no se muestra",
-  "observado": "portfolios 200; lista 200/0; ID ajeno 404; «Aún no has guardado ningún escenario.En el laboratorio compara tu cartera con un»",
+  "esperado": "Sesión válida (200 en /portfolios), lista de escenarios 200 y VACÍA, 404 al abrir el ID concreto de la primera cuenta y la pantalla dice «Aún no has guardado ninguna idea» (no un error de carga) y el bloque editorial no se muestra",
+  "observado": "portfolios 200; lista 200/0; ID ajeno 404; «Aún no has guardado ninguna idea.En el laboratorio compara tu cartera con una al»",
   "resultado": "OK"
  },
  {

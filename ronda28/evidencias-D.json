@@ -27,7 +27,7 @@
   "id": "E3",
   "escenario": "Datos de cada cartera",
   "esperado": "Nombre, privada/pública, posiciones, total asignado y última modificación SOLO si existe",
-  "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada PG 48 % · KO 40 %Exposición alta: Consumo básico Falta asignar 12 % · 2 posicionesModificada el 6 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 6 nov 2026 Abrir»",
+  "observado": "«Con posiciones y un nombre largo para comprobar el ajuste en pantallas pequeñasPrivada PG 48 % · KO 40 %Exposición alta: Consumo básico Falta asignar 12 % · 2 posicionesModificada el 7 nov 2026 Abrir Solo creadaPrivada Sin posicionesCreada el 7 nov 2026 Abrir»",
   "resultado": "OK",
   "evidencia": "E1-mis-carteras-390.png"
  },
@@ -35,7 +35,7 @@
   "id": "E3b",
   "escenario": "Fechas no inventadas",
   "esperado": "Una cartera nunca modificada muestra «Creada el», no «Modificada»",
-  "observado": "actualizado_en de «Solo creada» = null; texto: Creada el 6 nov 2026",
+  "observado": "actualizado_en de «Solo creada» = null; texto: Creada el 7 nov 2026",
   "resultado": "OK",
   "evidencia": ""
  },

@@ -10,7 +10,7 @@
   "id": "V2-1440",
   "escenario": "Revisión (1440 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
   "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
-  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Qué es: Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).Por qué importa: Lo que le pase a una sola empresa mueve buena parte del total.Qué probar: ¿Y si NVDA pesara menos? Pulsa «Ver qué cambiaría».\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
   "resultado": "OK"
  },
  {
@@ -38,7 +38,7 @@
   "id": "V6-1440",
   "escenario": "Cuaderno (1440 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
   "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
-  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"Empresas que sigues\",false,\"\"]]",
   "resultado": "OK"
  },
  {
@@ -66,7 +66,7 @@
   "id": "V2-390",
   "escenario": "Revisión (390 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
   "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
-  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Qué es: Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).Por qué importa: Lo que le pase a una sola empresa mueve buena parte del total.Qué probar: ¿Y si NVDA pesara menos? Pulsa «Ver qué cambiaría».\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
   "resultado": "OK"
  },
  {
@@ -94,7 +94,7 @@
   "id": "V6-390",
   "escenario": "Cuaderno (390 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
   "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
-  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"Empresas que sigues\",false,\"\"]]",
   "resultado": "OK"
  },
  {
@@ -122,7 +122,7 @@
   "id": "V2-320",
   "escenario": "Revisión (320 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
   "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
-  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Qué es: Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).Por qué importa: Lo que le pase a una sola empresa mueve buena parte del total.Qué probar: ¿Y si NVDA pesara menos? Pulsa «Ver qué cambiaría».\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
   "resultado": "OK"
  },
  {
@@ -150,7 +150,7 @@
   "id": "V6-320",
   "escenario": "Cuaderno (320 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
   "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
-  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"Empresas que sigues\",false,\"\"]]",
   "resultado": "OK"
  },
  {

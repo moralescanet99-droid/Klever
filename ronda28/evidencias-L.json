@@ -59,14 +59,14 @@
   "id": "L6",
   "escenario": "Un fallo de lectura no se muestra como radar vacío",
   "esperado": "Dice que no se puede leer (y que no significa que esté vacío), ofrece Reintentar y NO borra el valor dañado",
-  "observado": "El radar guardado en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.Esto no significa que tu r…; crudo conservado=true",
+  "observado": "La lista de empresas que sigues en este dispositivo no se puede leer (datos dañados). No se ha borrado nada.Esto no sign…; crudo conservado=true",
   "resultado": "OK"
  },
  {
   "id": "L6b",
   "escenario": "Con cuenta, un fallo de lectura del radar tampoco es «vacío»",
   "esperado": "Mensaje de error con Reintentar; no dice «Aún no has guardado ninguna empresa»",
-  "observado": "Sin conexión con el servidor. Inténtalo de nuevo.Esto no significa que tu radar esté vacío: no se ha podido leer.Reintentar",
+  "observado": "Sin conexión con el servidor. Inténtalo de nuevo.Esto no significa que no sigas ninguna empresa: no se ha podido leer.Reintentar",
   "resultado": "OK"
  },
  {
@@ -94,7 +94,7 @@
   "id": "L9-320",
   "escenario": "Primera visita: «Probar en mi cartera» con la cartera de ejemplo; A 60 / B 40 + C 10 → 54 / 36 / 10 (320 px)",
   "esperado": "La empresa llega elegida (HNORT); se ofrece la cartera de ejemplo (no es tuya); el redondeo está en un desplegable cerrado; primero se dice de dónde sale el peso (KO cede 6, PG cede 4) y después la tabla (KO 54, PG 36, HNORT 10); la simulación es temporal y no hay formulario de guardado",
-  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %); {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar este escenarioEsta simulación es temporal: se perder",
+  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %); {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar esta ideaEsta simulación es temporal: se perderá al ",
   "resultado": "OK"
  },
  {
@@ -108,7 +108,7 @@
   "id": "L11-320",
   "escenario": "Un cambio posterior en mi cartera conserva los pesos históricos del escenario (320 px)",
   "esperado": "Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original",
-  "observado": "La cartera cambió después de este escenario (revisión 0 → 1).",
+  "observado": "La cartera cambió después de esta idea (revisión 0 → 1).",
   "resultado": "OK"
  },
  {
@@ -150,7 +150,7 @@
   "id": "L9-390",
   "escenario": "Primera visita: «Probar en mi cartera» con la cartera de ejemplo; A 60 / B 40 + C 10 → 54 / 36 / 10 (390 px)",
   "esperado": "La empresa llega elegida (HNORT); se ofrece la cartera de ejemplo (no es tuya); el redondeo está en un desplegable cerrado; primero se dice de dónde sale el peso (KO cede 6, PG cede 4) y después la tabla (KO 54, PG 36, HNORT 10); la simulación es temporal y no hay formulario de guardado",
-  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %); {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar este escenarioEsta simulación es temporal: se perder",
+  "observado": "HNORT / Cartera de ejemplo (no es tuya); ejemplo «No tienes ninguna cartera, así que usamos una de e»; detalle abierto=false, visible=false; Los 10 puntos de HNORT salen de reducir las otras posiciones en proporción: KO cede 6 (60 → 54 %), PG cede 4 (40 → 36 %); {\"KO\":[\"60 %\",\"54 %\",\"−6 puntos\"],\"PG\":[\"40 %\",\"36 %\",\"−4 puntos\"],\"HNORT\":[\"0 %\",\"10 %\",\"+10 puntos\"]}; Guardar esta ideaEsta simulación es temporal: se perderá al ",
   "resultado": "OK"
  },
  {
@@ -164,7 +164,7 @@
   "id": "L11-390",
   "escenario": "Un cambio posterior en mi cartera conserva los pesos históricos del escenario (390 px)",
   "esperado": "Avisa de la versión posterior y sigue mostrando base KO 60 / PG 40 (no 50/50) y la propuesta original",
-  "observado": "La cartera cambió después de este escenario (revisión 0 → 1).",
+  "observado": "La cartera cambió después de esta idea (revisión 0 → 1).",
   "resultado": "OK"
  },
  {

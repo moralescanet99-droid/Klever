@@ -1,5 +1,5 @@
 # comando: node tests/ronda21/unit-cuaderno21.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-06 23:50:20 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:36:01 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [K1] Guardar una comparación con pregunta, motivo, «qué me haría cambiar de opinión» y fecha

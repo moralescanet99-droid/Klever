@@ -149,22 +149,22 @@
  {
   "id": "Q8-1440",
   "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (1440 px)",
-  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
-  "observado": "og 345–576; rf 592; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 900",
+  "esperado": "El primer bloque es «Mis ideas» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 345–576; rf 592; orden [\"Mis ideas (3)\",\"Empresas que sigo\"]; alto 900",
   "resultado": "OK"
  },
  {
   "id": "Q8-390",
   "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (390 px)",
-  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
-  "observado": "og 447–791; rf 807; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 780",
+  "esperado": "El primer bloque es «Mis ideas» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 415–759; rf 775; orden [\"Mis ideas (3)\",\"Empresas que sigo\"]; alto 780",
   "resultado": "OK"
  },
  {
   "id": "Q8-320",
   "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (320 px)",
-  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
-  "observado": "og 471–835; rf 851; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 780",
+  "esperado": "El primer bloque es «Mis ideas» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 471–835; rf 851; orden [\"Mis ideas (3)\",\"Empresas que sigo\"]; alto 780",
   "resultado": "OK"
  },
  {

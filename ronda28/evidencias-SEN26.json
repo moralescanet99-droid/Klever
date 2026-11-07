@@ -59,7 +59,7 @@
   "id": "S8",
   "escenario": "Reparto sin concentraciones (5 × 20 %, 5 categorías): estado correcto, sin alarmas",
   "esperado": "una señal «ok»; detalle que dice que no mide riesgo",
-  "observado": "[{\"id\":\"ok\",\"nivel\":\"ok\",\"titulo\":\"Sin concentraciones destacadas\",\"detalle\":\"Ninguna posición supera el 25 % ni ninguna categoría el 40 %. No mide riesgo ni rentabilidad.\",\"accion\":{\"ticker\":\"\",\"fin\":\"proporcional\",\"pregunta\":\"¿Y si probaras otra idea?\"}}]",
+  "observado": "[{\"id\":\"ok\",\"nivel\":\"ok\",\"titulo\":\"Sin concentraciones destacadas\",\"detalle\":\"Ninguna posición supera el 25 % ni ninguna categoría el 40 %. No mide riesgo ni rentabilidad.\",\"accion\":{\"ticker\":\"\",\"fin\":\"proporcional\",\"pregunta\":\"¿Y si probaras otra idea?\"},\"porque\":\"El reparto no se apoya en una sola posición ni en un solo sector.\"}]",
   "resultado": "OK",
   "evidencia": ""
  },
