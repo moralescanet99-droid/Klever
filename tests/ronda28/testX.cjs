@@ -19,10 +19,10 @@ const J = JSON.stringify;
     const x1 = await p.evaluate(() => { const v = e => !!e && e.offsetParent !== null; return { probar: v(document.querySelector('#probar')), texto: document.querySelector('#probar').textContent.trim(), primario: document.querySelector('#probar').classList.contains('btn-primario'),
       entradas: [...document.querySelectorAll('.entrada')].filter(v).length, primariosVisibles: [...document.querySelectorAll('#vista-inicio .btn-primario')].filter(v).length, como: v(document.querySelector('#vista-inicio a[href="#como-funciona"]')) }; });
     if (!(await sinDesborde())) desbordes.push('portada');
-    await p.click('#probar'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(400);
+    await p.click('#probar'); await p.waitForSelector('#vista-empezar:not([hidden])'); await p.click('#onb-cero'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(400);   // ronda 29: el botón abre el arranque guiado; «Prefiero empezar de cero» lleva al editor vacío
     const vacio = await p.evaluate(() => document.querySelectorAll('.peso-in').length === 0);
     ev('X1-' + w, `Portada (${w} px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»`, '#probar visible, primario, «Crear desde cero»; 1 botón primario visible en la portada; 3 entradas; editor sin posiciones al pulsarlo', J({ x1, vacio }),
-      x1.probar && x1.primario && x1.texto === 'Crear desde cero' && x1.primariosVisibles === 1 && x1.entradas === 3 && x1.como && vacio);
+      x1.probar && x1.primario && x1.texto === 'Empieza en 1 minuto' && x1.primariosVisibles === 1 && x1.entradas === 3 && x1.como && vacio);
 
     // ---- X3 reparto igual (con la plantilla Crecimiento: 17 + 5 × 16,6)
     await p.goto(B + '#inicio'); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla="riesgo"]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(400);

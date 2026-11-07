@@ -190,6 +190,7 @@
       </div>
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
+    <section id="tu-semana" class="semana" aria-labelledby="semana-t" hidden></section>
     <ul id="mis-lista" class="lista-carteras"></ul>
   </section>
 
@@ -204,6 +205,32 @@
     <div id="articulo-cuerpo"></div>
   </section>
 
+  <!-- ===== EMPEZAR EN 1 MINUTO (ronda 29): dos preguntas y una cartera de ejemplo ya revisada, con su primera señal ===== -->
+  <section id="vista-empezar" data-vista="empezar" hidden>
+    <div class="emp-onb">
+      <p class="eyebrow">EMPIEZA EN 1 MINUTO</p>
+      <ol class="onb-pasos" aria-label="Progreso"><li id="onb-p1" aria-current="step">1</li><li id="onb-p2">2</li><li id="onb-p3">3</li></ol>
+      <div id="onb-1" class="onb-paso">
+        <h1>¿Qué te interesa más?</h1>
+        <div class="onb-ops" role="group" aria-label="Qué te interesa">
+          <button type="button" class="onb-op" data-interes="riesgo"><span class="onb-ico" aria-hidden="true">↗</span><b>Que crezca a largo plazo</b><small>Empresas grandes de tecnología y consumo</small></button>
+          <button type="button" class="onb-op" data-interes="dividendos"><span class="onb-ico" aria-hidden="true">€</span><b>Que reparta dividendos</b><small>Fondos y empresas consolidadas</small></button>
+          <button type="button" class="onb-op" data-interes="oro"><span class="onb-ico" aria-hidden="true">◆</span><b>Algo refugio, como el oro</b><small>Fondos de oro y mineras</small></button>
+          <button type="button" class="onb-op" data-interes="dividendos" data-nose="1"><span class="onb-ico" aria-hidden="true">?</span><b>Aún no lo sé</b><small>Te enseñamos una mezcla para empezar</small></button>
+        </div>
+      </div>
+      <div id="onb-2" class="onb-paso" hidden>
+        <h1>¿Ya tienes una cartera de verdad?</h1>
+        <div class="onb-ops" role="group" aria-label="Si ya tienes cartera">
+          <button type="button" class="onb-op" data-tiene="no"><span class="onb-ico" aria-hidden="true">✦</span><b>Todavía no</b><small>Empieza con un ejemplo y míralo por dentro</small></button>
+          <button type="button" class="onb-op" data-tiene="si"><span class="onb-ico" aria-hidden="true">⧉</span><b>Sí, quiero copiarla aquí</b><small>Escribe o pega «KO 40, PG 60». Sin conectar tu bróker</small></button>
+        </div>
+        <p><button type="button" class="enlace" id="onb-atras">← Atrás</button></p>
+      </div>
+      <p class="sello"><span class="sello-b">Simulación · sin dinero real · no es una recomendación</span></p>
+      <p class="mut peq">Te enseñamos un ejemplo simulado para empezar. Podrás cambiarlo todo. <button type="button" class="enlace" id="onb-cero">Prefiero empezar de cero</button></p>
+    </div>
+  </section>
   <!-- ===== CÓMO FUNCIONA (ronda 28): qué hace, qué no hace, de dónde salen los datos y qué guardamos, en cuatro pasos ===== -->
   <section id="vista-como-funciona" data-vista="como-funciona" hidden>
     <div class="pag-cab"><h1>Cómo funciona Klever</h1><p class="mut">Cuatro cosas que conviene saber antes de empezar.</p></div>

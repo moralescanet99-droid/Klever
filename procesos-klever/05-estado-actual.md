@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-06, tras la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
+**Última actualización:** 2026-11-07, tras la ronda 29 (fase 2.5, `ronda29/`); antes, la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
@@ -17,7 +17,8 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 ## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
 - ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).
 - ✅ Fase 2 (móvil y descubrir): barra inferior, pegar cartera, «Probar» desde Explorar, señales en tres niveles con umbrales propios, «idea» / «empresas que sigo». Cerrada con varios cambios a la vez y «Aplicar a mi cartera», sello único, línea de tiempo y monogramas (`testZ`).
-- ⬜ Fase 3 (personas), fase 4 (producción). Punto 14 aparcado.
+- ✅ Fase 2.5 (ronda 29, retoma el punto 14): arranque guiado, huella de empresa, «Tu semana» y retos (`ronda29/LEEME.md`).
+- ⬜ Fase 3 (personas), fase 4 (producción). Abiertas: precios históricos, correo semanal (Brevo), datos reales de la SEC.
 - Piloto: `piloto-r27` = commit `f991fd8` (`git checkout f991fd8` antes de `abrir-piloto.sh`).
 
 ## Evolución visual e interactiva 26 (rama `claude/klever-visual-interactive-evolution-h6n454`, sobre `evolucion-25`)

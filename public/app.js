@@ -8,10 +8,12 @@
 // =====================================================================
 
 // ---------- utilidades ----------
-import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo } from './js/lab.js';
+import { iniciarLab, cargarOrigenDatos, cargarRadar, enRadar, migrarRadarLocal, pintarRadiografia, pintarFichaRadar, mostrarSeguimiento, mostrarLab, origenDatos, origenFicha, limpiarSesionLab, borrarBorradoresRev, abrirLab, origenCodigo, nSeguidas } from './js/lab.js';
 import { simular, radiografia } from './js/calculos.js';
 import { senales } from './js/senales.js';
 import { leerPegado, pareceLista } from './js/pegado.js';
+import { svgHuella } from './js/huella.js';
+import { retos, resumenSemana } from './js/semana.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
@@ -279,11 +281,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -323,6 +325,7 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
   if (v === 'inicio') pintarEntrada();
+  if (v === 'empezar') onbPaso(1);
   if (v === 'ejemplo') mostrarEjemplo(true);
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
@@ -387,9 +390,31 @@ async function cargarMisCarteras() {
     const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
     nMis = list.length;
     $('#btn-nueva').hidden = nMis === 0;
-    if (nMis === 0) { ul.innerHTML = ''; formNuevo(true, false); return; }
+    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
+    pintarSemana(list, seq);
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
+}
+// Ronda 29 (fase 2.5) · «Tu semana»: lo que conviene mirar hoy (señal de cada cartera, ideas de los próximos 7 días, cambios desde la última visita) y los retos de aprendizaje.
+// Todo sale de datos leídos: si las ideas no se pueden leer, sus retos se muestran «sin datos» (ni conseguidos ni suspendidos). La instantánea vive solo en este dispositivo.
+const hoyIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+async function pintarSemana(list, seq) {
+  const el = $('#tu-semana'); let ideas = null; try { ideas = await api('/escenarios'); } catch { ideas = null; } if (seq !== misSeq) return;
+  let umb = null; try { umb = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ }
+  const datos = { carteras: list.map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones || [] })), activos: by, ideas, sigues: nSeguidas(), umb, hoy: hoyIso() };
+  let g = null; try { g = JSON.parse(store.getItem('klever_semana')); } catch { g = null; }
+  const base = !g ? null : g.fecha < datos.hoy ? { fecha: g.fecha, carteras: g.carteras } : g.anterior || null;
+  const res = resumenSemana(datos, base), rt = retos(datos);
+  try { store.setItem('klever_semana', JSON.stringify({ ...res.instantanea, anterior: base })); } catch { /* sin almacenamiento */ }
+  const lin = c => `<li><a href="#cartera-${c.id}" class="sem-cart"><b>${esc(c.nombre)}</b>${c.senal ? `<span class="ci-senal senal-${c.senal.nivel}"><i aria-hidden="true"></i>${esc(c.senal.titulo)}</span>` : ''}</a></li>`;
+  const cambios = res.cambios.length ? `<p class="sem-desde">Desde el ${esc(fmtFecha(res.desde))}:</p><ul class="sem-cambios">${res.cambios.slice(0, 4).map(x => `<li class="sem-${x.tipo}">${x.tipo === 'resuelta' ? '✓ Ya no' : '● Nueva'}: ${esc(x.texto)} <span class="mut">(${esc(x.cartera)})</span></li>`).join('')}</ul>` : '';
+  const tocan = ideas == null ? '' : res.tocan.length ? `<a class="sem-tocan${res.vencidas ? ' hoy' : ''}" href="#seguimiento"><b>${res.tocan.length}</b> ${res.tocan.length === 1 ? 'idea para revisar' : 'ideas para revisar'} esta semana${res.vencidas ? ` · ${res.vencidas} hoy` : ''} →</a>` : '<p class="mut peq">Ninguna idea por revisar esta semana.</p>';
+  const reto = r => `<li class="reto ${r.hecho === true ? 'hecho' : r.hecho === null ? 'nd' : ''}"><span class="reto-i" aria-hidden="true">${r.hecho === true ? '✓' : '○'}</span><span><b>${esc(r.titulo)}</b>${r.hecho === true ? '' : `<a href="${r.ir}" class="reto-pista">${esc(r.hecho === null ? 'Sin datos ahora mismo' : r.pista)}</a>`}</span><span class="sr">${r.hecho === true ? ' (conseguido)' : r.hecho === null ? ' (sin datos)' : ' (pendiente)'}</span></li>`;
+  el.innerHTML = `<div class="sem-cab"><h2 id="semana-t">Tu semana</h2><span class="mut peq">${esc(fmtFecha(datos.hoy))}</span></div>
+    <div class="sem-grid"><div class="sem-col"><ul class="sem-carteras">${res.carteras.slice(0, 4).map(lin).join('')}</ul>${cambios}${tocan}</div>
+    <div class="sem-col"><div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
+      <ul class="retos">${rt.lista.map(reto).join('')}</ul><p class="mut peq">Retos para entender y ordenar tu cartera; no miden rentabilidad.</p></div></div>`;
+  el.hidden = false;
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
@@ -1090,11 +1115,11 @@ function renderEmpresas() {
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
   const vacio = empresas.length ? `Ninguna empresa coincide con ${bruto ? `«${esc(bruto)}»${hayFiltro ? ' y los filtros elegidos' : ''}` : 'los filtros elegidos'}. <button class="enlace" type="button" data-borrar-busqueda>${hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda'}</button>` : 'Aún no hay datos de empresas cargados.';
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td>${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
-      <td class="num">${resultado(r)}${pildoras(r)}</td>
+      <td class="num"><span class="emp-res">${svgHuella(r.criterios, { tam: 30 })}${resultado(r)}</span>${pildoras(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
-      <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
+      <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${svgHuella(r.criterios, { tam: 34 })}${resultado(r)}</span></div>
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
@@ -1133,7 +1158,8 @@ async function verFicha(t) {
   const f0 = a.fundamentales[0], U = 'miles de millones de USD';
   const dato = (l, v, u) => v == null ? `<div class="ausente"><dt>${l}</dt><dd><span class="v">No disponible</span><span class="u">dato ausente en el informe</span></dd></div>` : `<div><dt>${l}</dt><dd><span class="v num">${v}</span><span class="u">${u}</span></dd></div>`;
   const principal = f0 ? `<section class="ficha-datos" aria-labelledby="fd-t"><h3 id="fd-t">Datos principales · ejercicio ${esc(f0.periodo)}</h3><dl class="fd-grid">${dato('Ventas', f0.ingresos == null ? null : miles(f0.ingresos), U)}${dato('Beneficio neto', f0.beneficio_neto == null ? null : miles(f0.beneficio_neto), U)}${dato('EBITDA', f0.ebitda == null ? null : miles(f0.ebitda), U)}${dato('Caja libre', f0.flujo_caja_libre == null ? null : miles(f0.flujo_caja_libre), U)}${dato('ROIC', f0.roic == null ? null : pct(f0.roic), 'del capital invertido (cálculo aproximado)')}</dl></section>` : '<p class="mut peq">No hay cifras anuales disponibles para esta empresa.</p>';
-  $('#fi-cuerpo').innerHTML = `<div id="fi-radar" class="fi-radar"></div>${principal}<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
+  const huella = `<div class="ficha-huella">${svgHuella(c, { tam: 150, etiquetas: true, titulo: `Huella de ${a.nombre}: ${ok} de 5 comprobaciones superadas, ${no} no superadas, ${nd} sin datos` })}<p class="mut peq">La huella: cuanto más llena, más comprobaciones supera. Un punto hueco es un dato que falta, no un suspenso. No es una recomendación.</p></div>`;
+  $('#fi-cuerpo').innerHTML = `<div id="fi-radar" class="fi-radar"></div>${huella}${principal}<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
     ${seccion('Superadas', ok, grupos.ok)}${seccion('No superadas', no, grupos.no)}${seccion('Sin datos', nd, grupos.nd)}
     ${nd ? '<p class="mut peq">Una comprobación sin datos no suma ni resta: no cuenta como no superada.</p>' : ''}
     <h3>Cifras de los últimos años</h3>
@@ -1193,7 +1219,7 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
   b.dataset.modo = modo; b.hidden = false;   // ronda 28: un ÚNICO botón principal también para quien llega por primera vez (abre el editor vacío); las tres entradas quedan como alternativas   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis carteras» o «Retomar mi borrador»
-  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
+  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Empieza en 1 minuto';   // ronda 29: quien llega por primera vez, al arranque guiado
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }
@@ -1212,12 +1238,27 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   const modo = $('#probar').dataset.modo;
   if (modo === 'mis') { go('#carteras'); return; }
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
-  abrirNueva('vacia');
+  go('#empezar');
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
 // las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)
 $('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
 $('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
+// Ronda 29 (fase 2.5) · arranque guiado: dos preguntas → cartera de EJEMPLO (una plantilla, rotulada como ejemplo, no recomendación) abierta ya en la revisión,
+// con su primera señal a la vista; o, si ya tiene cartera, el editor vacío para escribirla o pegarla. Klever no elige empresas según las respuestas.
+let onbInteres = 'dividendos';
+function onbPaso(n) { $('#onb-1').hidden = n !== 1; $('#onb-2').hidden = n !== 2; ['#onb-p1', '#onb-p2', '#onb-p3'].forEach((q, k) => k + 1 === n ? $(q).setAttribute('aria-current', 'step') : $(q).removeAttribute('aria-current')); $(n === 1 ? '#onb-1 .onb-op' : '#onb-2 .onb-op')?.focus({ preventScroll: true }); }
+$('#vista-empezar').addEventListener('click', async e => {
+  const i = e.target.closest('[data-interes]'); if (i) { onbInteres = i.dataset.interes; onbPaso(2); return; }
+  if (e.target.closest('#onb-atras')) { onbPaso(1); return; }
+  if (e.target.closest('#onb-cero')) { abrirNueva('vacia'); return; }
+  const t = e.target.closest('[data-tiene]'); if (!t) return;
+  $('#onb-p3').setAttribute('aria-current', 'step');
+  if (t.dataset.tiene === 'si') { await abrirNueva('manual'); setTimeout(() => $('#buscar-activo')?.focus(), 400); return; }
+  await abrirInvitado(onbInteres, 'ejemplo');
+  for (let k = 0; k < 40 && $('#vista-cartera').hidden; k++) await new Promise(r => setTimeout(r, 50));   // la vista se abre por la ruta (asíncrona)
+  if (!$('#vista-cartera').hidden) revisarPortafolio();
+});
 $('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
   $('#prev').innerHTML = `<div class="prev preview-v25"><div class="prev-cab"><b>¿Y si añades otra empresa?</b><span class="chip sim">Ejemplo</span></div>

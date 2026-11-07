@@ -241,3 +241,58 @@
 .mono{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:10px;border-radius:9px;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:var(--c);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);font-size:.72rem;font-weight:700;letter-spacing:.02em;vertical-align:middle;flex:none}
 .emp-card .ec-l1{display:flex;align-items:center}
 .emp-card .ec-l1 .nombre-emp{flex:1;min-width:0}
+
+/* Ronda 29 · huella de empresa (pentágono de las 5 comprobaciones) */
+.huella{display:inline-block;vertical-align:middle;overflow:visible}
+.huella .h-marco{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1}
+.huella .h-ejes line{stroke:var(--border);stroke-width:.6}
+.huella .h-forma{fill:color-mix(in srgb,var(--accent) 30%,transparent);stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}
+.huella .h-forma.h-n5{fill:color-mix(in srgb,var(--verde) 28%,transparent);stroke:var(--verde)}
+.huella .h-ok{fill:var(--verde)} .huella .h-no{fill:var(--accent)}
+.huella .h-nd{fill:var(--bg);stroke:var(--muted);stroke-width:1;stroke-dasharray:2 1.5}
+.huella text{fill:var(--muted);font-size:9px;font-family:var(--fuente)}
+.emp-res,.ec-res{display:inline-flex;align-items:center;gap:8px}
+.emp-res .huella{width:30px;height:30px} .ec-res .huella{width:34px;height:34px}
+.ficha-huella{display:flex;align-items:center;gap:16px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--surface-2)}
+.ficha-huella .huella{width:170px;height:auto;flex:none}
+.ficha-huella p{margin:0}
+@media(max-width:479px){.ficha-huella{flex-direction:column;align-items:flex-start}.ficha-huella .huella{width:150px}}
+
+/* Ronda 29 · «Tu semana» y retos */
+.semana{margin:0 0 24px;padding:18px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(160deg,rgba(255,122,47,.08),transparent 55%),var(--surface)}
+.sem-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+.sem-cab h2{font-family:var(--serif);font-weight:400;font-size:1.5rem}
+.sem-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media(max-width:719px){.sem-grid{grid-template-columns:minmax(0,1fr)}}
+.sem-carteras,.sem-cambios,.retos{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px}
+.sem-cart{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);color:var(--text);text-decoration:none}
+.sem-cart:hover{border-color:var(--accent)}
+.sem-desde{margin:4px 0;font-size:.8125rem;color:var(--muted)}
+.sem-cambios li{font-size:.8125rem}
+.sem-resuelta{color:var(--verde)} .sem-nueva{color:var(--alerta)}
+.sem-tocan{display:inline-block;margin-top:4px;padding:8px 12px;border-radius:12px;background:var(--azul-bg);color:var(--azul);text-decoration:none;font-size:.875rem}
+.sem-tocan.hoy{background:var(--alerta-bg);color:var(--accent-on-soft)}
+.retos-cab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.retos-n{font-weight:600;color:var(--accent-on-soft)}
+.retos-barra{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-bottom:10px}
+.retos-barra i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--alerta));border-radius:inherit;transition:width .5s ease}
+.reto{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;font-size:.875rem}
+.reto-i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--border-strong);color:var(--muted);font-size:.75rem}
+.reto.hecho .reto-i{background:var(--verde-bg);border-color:var(--verde);color:var(--verde)}
+.reto.hecho b{color:var(--muted);font-weight:500;text-decoration:line-through;text-decoration-color:var(--border-strong)}
+.reto-pista{display:block;font-size:.75rem;color:var(--azul)}
+.reto.nd .reto-pista{color:var(--muted)}
+
+/* Ronda 29 · arranque guiado */
+.emp-onb{max-width:44rem;margin:8px auto 24px}
+.emp-onb h1{margin:8px 0 18px}
+.onb-pasos{list-style:none;display:flex;gap:8px;padding:0;margin:0 0 6px}
+.onb-pasos li{width:28px;height:6px;border-radius:99px;background:var(--surface-2);font-size:0;color:transparent;overflow:hidden}
+.onb-pasos li[aria-current="step"]{background:var(--accent)}
+.onb-ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:10px;margin-bottom:16px}
+.onb-op{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;font:inherit;color:var(--text);padding:16px;border:1px solid var(--border);border-radius:16px;background:var(--capa),var(--surface);cursor:pointer;min-height:76px;transition:border-color var(--rapido),transform var(--rapido),background-color var(--rapido)}
+.onb-op:hover,.onb-op:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+@media (hover:hover){.onb-op:hover{transform:translateY(-2px)}}
+.onb-ico{grid-row:1/3;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--surface-2);color:var(--accent-on-soft);font-size:1.25rem}
+.onb-op b{font-size:1rem}
+.onb-op small{color:var(--muted);font-size:.8125rem}

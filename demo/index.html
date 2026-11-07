@@ -1411,6 +1411,61 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 .emp-card .ec-l1{display:flex;align-items:center}
 .emp-card .ec-l1 .nombre-emp{flex:1;min-width:0}
 
+/* Ronda 29 · huella de empresa (pentágono de las 5 comprobaciones) */
+.huella{display:inline-block;vertical-align:middle;overflow:visible}
+.huella .h-marco{fill:var(--surface-2);stroke:var(--border-strong);stroke-width:1}
+.huella .h-ejes line{stroke:var(--border);stroke-width:.6}
+.huella .h-forma{fill:color-mix(in srgb,var(--accent) 30%,transparent);stroke:var(--accent);stroke-width:1.5;stroke-linejoin:round}
+.huella .h-forma.h-n5{fill:color-mix(in srgb,var(--verde) 28%,transparent);stroke:var(--verde)}
+.huella .h-ok{fill:var(--verde)} .huella .h-no{fill:var(--accent)}
+.huella .h-nd{fill:var(--bg);stroke:var(--muted);stroke-width:1;stroke-dasharray:2 1.5}
+.huella text{fill:var(--muted);font-size:9px;font-family:var(--fuente)}
+.emp-res,.ec-res{display:inline-flex;align-items:center;gap:8px}
+.emp-res .huella{width:30px;height:30px} .ec-res .huella{width:34px;height:34px}
+.ficha-huella{display:flex;align-items:center;gap:16px;margin:0 0 16px;padding:12px 14px;border:1px solid var(--border);border-radius:16px;background:var(--surface-2)}
+.ficha-huella .huella{width:170px;height:auto;flex:none}
+.ficha-huella p{margin:0}
+@media(max-width:479px){.ficha-huella{flex-direction:column;align-items:flex-start}.ficha-huella .huella{width:150px}}
+
+/* Ronda 29 · «Tu semana» y retos */
+.semana{margin:0 0 24px;padding:18px;border:1px solid var(--border);border-radius:18px;background:linear-gradient(160deg,rgba(255,122,47,.08),transparent 55%),var(--surface)}
+.sem-cab{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+.sem-cab h2{font-family:var(--serif);font-weight:400;font-size:1.5rem}
+.sem-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media(max-width:719px){.sem-grid{grid-template-columns:minmax(0,1fr)}}
+.sem-carteras,.sem-cambios,.retos{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px}
+.sem-cart{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);color:var(--text);text-decoration:none}
+.sem-cart:hover{border-color:var(--accent)}
+.sem-desde{margin:4px 0;font-size:.8125rem;color:var(--muted)}
+.sem-cambios li{font-size:.8125rem}
+.sem-resuelta{color:var(--verde)} .sem-nueva{color:var(--alerta)}
+.sem-tocan{display:inline-block;margin-top:4px;padding:8px 12px;border-radius:12px;background:var(--azul-bg);color:var(--azul);text-decoration:none;font-size:.875rem}
+.sem-tocan.hoy{background:var(--alerta-bg);color:var(--accent-on-soft)}
+.retos-cab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.retos-n{font-weight:600;color:var(--accent-on-soft)}
+.retos-barra{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-bottom:10px}
+.retos-barra i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--alerta));border-radius:inherit;transition:width .5s ease}
+.reto{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;font-size:.875rem}
+.reto-i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--border-strong);color:var(--muted);font-size:.75rem}
+.reto.hecho .reto-i{background:var(--verde-bg);border-color:var(--verde);color:var(--verde)}
+.reto.hecho b{color:var(--muted);font-weight:500;text-decoration:line-through;text-decoration-color:var(--border-strong)}
+.reto-pista{display:block;font-size:.75rem;color:var(--azul)}
+.reto.nd .reto-pista{color:var(--muted)}
+
+/* Ronda 29 · arranque guiado */
+.emp-onb{max-width:44rem;margin:8px auto 24px}
+.emp-onb h1{margin:8px 0 18px}
+.onb-pasos{list-style:none;display:flex;gap:8px;padding:0;margin:0 0 6px}
+.onb-pasos li{width:28px;height:6px;border-radius:99px;background:var(--surface-2);font-size:0;color:transparent;overflow:hidden}
+.onb-pasos li[aria-current="step"]{background:var(--accent)}
+.onb-ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:10px;margin-bottom:16px}
+.onb-op{display:grid;grid-template-columns:44px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;align-items:center;text-align:left;font:inherit;color:var(--text);padding:16px;border:1px solid var(--border);border-radius:16px;background:var(--capa),var(--surface);cursor:pointer;min-height:76px;transition:border-color var(--rapido),transform var(--rapido),background-color var(--rapido)}
+.onb-op:hover,.onb-op:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+@media (hover:hover){.onb-op:hover{transform:translateY(-2px)}}
+.onb-ico{grid-row:1/3;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--surface-2);color:var(--accent-on-soft);font-size:1.25rem}
+.onb-op b{font-size:1rem}
+.onb-op small{color:var(--muted);font-size:.8125rem}
+
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
 
@@ -1595,6 +1650,7 @@ summary{min-height:44px;align-content:center;cursor:pointer}
       </div>
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
+    <section id="tu-semana" class="semana" aria-labelledby="semana-t" hidden></section>
     <ul id="mis-lista" class="lista-carteras"></ul>
   </section>
 
@@ -1609,6 +1665,32 @@ summary{min-height:44px;align-content:center;cursor:pointer}
     <div id="articulo-cuerpo"></div>
   </section>
 
+  <!-- ===== EMPEZAR EN 1 MINUTO (ronda 29): dos preguntas y una cartera de ejemplo ya revisada, con su primera señal ===== -->
+  <section id="vista-empezar" data-vista="empezar" hidden>
+    <div class="emp-onb">
+      <p class="eyebrow">EMPIEZA EN 1 MINUTO</p>
+      <ol class="onb-pasos" aria-label="Progreso"><li id="onb-p1" aria-current="step">1</li><li id="onb-p2">2</li><li id="onb-p3">3</li></ol>
+      <div id="onb-1" class="onb-paso">
+        <h1>¿Qué te interesa más?</h1>
+        <div class="onb-ops" role="group" aria-label="Qué te interesa">
+          <button type="button" class="onb-op" data-interes="riesgo"><span class="onb-ico" aria-hidden="true">↗</span><b>Que crezca a largo plazo</b><small>Empresas grandes de tecnología y consumo</small></button>
+          <button type="button" class="onb-op" data-interes="dividendos"><span class="onb-ico" aria-hidden="true">€</span><b>Que reparta dividendos</b><small>Fondos y empresas consolidadas</small></button>
+          <button type="button" class="onb-op" data-interes="oro"><span class="onb-ico" aria-hidden="true">◆</span><b>Algo refugio, como el oro</b><small>Fondos de oro y mineras</small></button>
+          <button type="button" class="onb-op" data-interes="dividendos" data-nose="1"><span class="onb-ico" aria-hidden="true">?</span><b>Aún no lo sé</b><small>Te enseñamos una mezcla para empezar</small></button>
+        </div>
+      </div>
+      <div id="onb-2" class="onb-paso" hidden>
+        <h1>¿Ya tienes una cartera de verdad?</h1>
+        <div class="onb-ops" role="group" aria-label="Si ya tienes cartera">
+          <button type="button" class="onb-op" data-tiene="no"><span class="onb-ico" aria-hidden="true">✦</span><b>Todavía no</b><small>Empieza con un ejemplo y míralo por dentro</small></button>
+          <button type="button" class="onb-op" data-tiene="si"><span class="onb-ico" aria-hidden="true">⧉</span><b>Sí, quiero copiarla aquí</b><small>Escribe o pega «KO 40, PG 60». Sin conectar tu bróker</small></button>
+        </div>
+        <p><button type="button" class="enlace" id="onb-atras">← Atrás</button></p>
+      </div>
+      <p class="sello"><span class="sello-b">Simulación · sin dinero real · no es una recomendación</span></p>
+      <p class="mut peq">Te enseñamos un ejemplo simulado para empezar. Podrás cambiarlo todo. <button type="button" class="enlace" id="onb-cero">Prefiero empezar de cero</button></p>
+    </div>
+  </section>
   <!-- ===== CÓMO FUNCIONA (ronda 28): qué hace, qué no hace, de dónde salen los datos y qué guardamos, en cuatro pasos ===== -->
   <section id="vista-como-funciona" data-vista="como-funciona" hidden>
     <div class="pag-cab"><h1>Cómo funciona Klever</h1><p class="mut">Cuatro cosas que conviene saber antes de empezar.</p></div>
@@ -2249,6 +2331,74 @@ function leerPegado(texto, universo) {
 }
 // ¿Parece una lista para pegar (al menos dos símbolos con número) y no una búsqueda normal?
 const pareceLista = texto => (String(texto || '').match(/[A-Za-z][A-Za-z.]{0,5}\s*[:=]?\s*\d/g) || []).length >= 2;
+
+// Ronda 29 (fase 2.5) · HUELLA de una empresa: un pentágono con sus cinco comprobaciones (deuda, ROIC, margen, caja libre, crecimiento).
+// Cuanto más lleno, más comprobaciones superadas. PURO: devuelve SVG en texto, sin DOM. No puntúa ni recomienda: dibuja el mismo resultado que las fichas.
+// Superada → borde; no superada → 40 % del radio; sin datos → centro y un punto hueco (sin datos NO es «no superada», y se ve distinto).
+const EJES = [['deuda_ebitda', 'Deuda'], ['roic', 'ROIC'], ['margen_neto', 'Margen'], ['flujo_caja', 'Caja'], ['crecimiento', 'Crec.']];
+const NIVEL = { ok: 1, no: 0.4, nd: 0 };
+const estadoCriterio = x => x?.ok === true ? 'ok' : x?.ok === false ? 'no' : 'nd';
+// Puntos de la huella (para pruebas y para el SVG): [{ clave, estado, x, y }] en un lienzo de lado `tam`.
+function puntosHuella(criterios, tam = 100) {
+  const c = tam / 2, r = tam * 0.36;
+  return EJES.map(([k], i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 5, e = estadoCriterio(criterios?.[k]), f = NIVEL[e];
+    return { clave: k, estado: e, x: +(c + Math.cos(a) * r * f).toFixed(2), y: +(c + Math.sin(a) * r * f).toFixed(2), bx: +(c + Math.cos(a) * r).toFixed(2), by: +(c + Math.sin(a) * r).toFixed(2), lx: +(c + Math.cos(a) * (r + tam * 0.1)).toFixed(2), ly: +(c + Math.sin(a) * (r + tam * 0.1)).toFixed(2) }; });
+}
+// SVG de la huella. etiquetas: escribe el nombre de cada eje (solo en tamaños grandes). titulo: texto accesible (si no, decorativa).
+function svgHuella(criterios, { tam = 100, etiquetas = false, titulo = '' } = {}) {
+  const p = puntosHuella(criterios, tam), c = tam / 2, n = p.filter(q => q.estado === 'ok').length;
+  const marco = p.map(q => `${q.bx},${q.by}`).join(' '), forma = p.map(q => `${q.x},${q.y}`).join(' ');
+  const ejes = p.map(q => `<line x1="${c}" y1="${c}" x2="${q.bx}" y2="${q.by}"/>`).join('');
+  const marcas = p.map(q => q.estado === 'nd' ? `<circle class="h-nd" cx="${q.bx}" cy="${q.by}" r="${tam * 0.035}"/>` : `<circle class="h-${q.estado}" cx="${q.x}" cy="${q.y}" r="${tam * 0.03}"/>`).join('');
+  const txt = etiquetas ? p.map((q, i) => `<text x="${q.lx}" y="${q.ly}" text-anchor="middle" dominant-baseline="middle">${EJES[i][1]}</text>`).join('') : '';
+  const pad = etiquetas ? tam * 0.12 : 0, vb = `${-pad} ${-pad / 2} ${tam + pad * 2} ${tam + pad}`;
+  const acc = titulo ? `role="img" aria-label="${titulo.replace(/"/g, '&quot;')}"` : 'aria-hidden="true" focusable="false"';
+  return `<svg class="huella" viewBox="${vb}" ${acc} data-superadas="${n}"><polygon class="h-marco" points="${marco}"/><g class="h-ejes">${ejes}</g><polygon class="h-forma h-n${n}" points="${forma}"/>${marcas}${txt}</svg>`;
+}
+
+// Ronda 29 (fase 2.5) · «TU SEMANA» y RETOS de aprendizaje. PURO: recibe los datos ya leídos y devuelve qué mostrar.
+// Los retos premian ENTENDER y ORDENAR la cartera (concentración, variedad, comparar, revisar), nunca la rentabilidad, y no eligen activos por nadie.
+// «Desde tu última visita» compara las señales de ahora con una instantánea guardada en el dispositivo: cambios que ha hecho la persona, no del mercado.
+
+const DIA = 864e5;
+const isoMas = (hoy, d) => { const t = new Date(hoy + 'T00:00:00Z').getTime() + d * DIA, x = new Date(t); return `${x.getUTCFullYear()}-${String(x.getUTCMonth() + 1).padStart(2, '0')}-${String(x.getUTCDate()).padStart(2, '0')}`; };
+
+// datos = { carteras: [{ id, nombre, pos }], activos, ideas: [{ estado, revisar_en, n_revisiones }] | null, sigues: n | null, umb, hoy: 'AAAA-MM-DD' }
+// ideas === null → no se sabe (sin cuenta o sin lectura): esos retos se muestran como «con cuenta», nunca como conseguidos ni suspendidos.
+function retos(datos) {
+  const U = umbralesValidos(datos.umb), cs = (datos.carteras || []).filter(c => (c.pos || []).some(p => p.peso > 0));
+  const rad = cs.map(c => radiografia(c.pos, datos.activos || {}));
+  const algunaSinConcentrar = rad.some(r => r.mayor && r.mayor.peso < U.posicion && r.n > 1);
+  const maxCats = Math.max(0, ...rad.map(r => r.categorias.filter(k => k.conocida).length));
+  const ideas = datos.ideas, sigues = datos.sigues;
+  const L = [
+    { id: 'concentracion', titulo: `Que ninguna posición pese más del ${U.posicion} %`, hecho: cs.length ? algunaSinConcentrar : false, ir: cs.length ? '#laboratorio' : '#inicio', pista: cs.length ? 'Prueba en el laboratorio a bajar la mayor.' : 'Crea tu primera cartera.' },
+    { id: 'variedad', titulo: 'Reparte en 5 categorías o más', hecho: maxCats >= 5, ir: '#empresas', pista: maxCats ? `Ahora tienes ${maxCats}. Descubre sectores que no tienes.` : 'Crea tu primera cartera.' },
+    { id: 'idea', titulo: 'Compara una alternativa y guárdala como idea', hecho: ideas == null ? null : ideas.length > 0, ir: '#laboratorio', pista: 'Simula un cambio y pulsa «Guardar en mi Cuaderno».' },
+    { id: 'seguir', titulo: 'Sigue 3 empresas', hecho: sigues == null ? null : sigues >= 3, ir: '#empresas', pista: sigues ? `Sigues ${sigues}.` : 'Abre una ficha y pulsa «Seguir esta empresa».' },
+    { id: 'revisar', titulo: 'Vuelve sobre una idea y anota qué ha cambiado', hecho: ideas == null ? null : ideas.some(e => (e.n_revisiones || 0) > 0), ir: '#seguimiento', pista: 'Abre una idea y pulsa «Registrar revisión».' },
+  ];
+  return { lista: L, hechos: L.filter(r => r.hecho === true).length, total: L.length };
+}
+
+// Resumen de la semana: señal principal de cada cartera, ideas que tocan en los próximos 7 días y lo que ha cambiado desde la última visita.
+function resumenSemana(datos, previo = null) {
+  const hoy = datos.hoy, fin = isoMas(hoy, 7), U = datos.umb || null;
+  const carteras = (datos.carteras || []).filter(c => (c.pos || []).some(p => p.peso > 0)).map(c => { const s = senales(radiografia(c.pos, datos.activos || {}), 3, U); return { id: c.id, nombre: c.nombre, senal: s[0] || null, ids: s.map(q => q.id + ':' + q.titulo) }; });
+  const ideas = datos.ideas || [];
+  const tocan = ideas.filter(e => e.estado === 'en_estudio' && e.revisar_en && e.revisar_en <= fin).sort((a, b) => a.revisar_en.localeCompare(b.revisar_en));
+  const instantanea = { fecha: hoy, carteras: Object.fromEntries(carteras.map(c => [String(c.id ?? 'borrador'), c.ids])) };
+  const cambios = [];
+  if (previo?.carteras && previo.fecha && previo.fecha < hoy) {
+    for (const c of carteras) {
+      const antes = previo.carteras[String(c.id ?? 'borrador')]; if (!antes) continue;
+      const ahora = c.ids, tit = x => x.split(':').slice(1).join(':');
+      antes.filter(x => !ahora.includes(x)).forEach(x => cambios.push({ cartera: c.nombre, tipo: 'resuelta', texto: tit(x) }));
+      ahora.filter(x => !antes.includes(x)).forEach(x => cambios.push({ cartera: c.nombre, tipo: 'nueva', texto: tit(x) }));
+    }
+  }
+  return { carteras, tocan, vencidas: tocan.filter(e => e.revisar_en <= hoy).length, cambios, desde: previo?.fecha && previo.fecha < hoy ? previo.fecha : null, instantanea };
+}
 
 // Catálogo COMPARTIDO (cliente y servidor) de las cuestiones editoriales que una persona puede seguir. Cada identificador «historia:n» es INMUTABLE: nunca se reutiliza
 // para otra pregunta (si la cuestión cambia de fondo se crea otro identificador). Un vínculo nuevo solo se acepta si el par historia/identificador existe aquí.
@@ -3149,7 +3299,7 @@ function limpiarSesionLab() {
   const { $, store } = LAB.ctx;
   for (const s of ['#fi-radar', '#seg-radar', '#seg-escenarios', '#seg-casos', '#lab-cuerpo', '#radio-cuerpo', '#nota-cuerpo']) { const e = $(s); if (e) { e.innerHTML = ''; delete e.dataset.sig; } }
   const pend = $('#seg-radar-n'), pend2 = $('#seg-esc-n'); if (pend) pend.textContent = ''; if (pend2) pend2.textContent = '';
-  store.removeItem(CLAVE_REF); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }
+  store.removeItem(CLAVE_REF); store.removeItem('klever_semana'); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }   // ronda 29: la instantánea de «Tu semana» es privada
   if ($('#dlg-ficha')?.open && LAB.fichaActivo) pintarFichaRadar(LAB.fichaActivo);   // la ficha abierta pasa a verse como visitante
 }
 
@@ -3191,6 +3341,7 @@ async function cargarRadar() {                              // true = leído bie
   catch (e) { if (vigente(g)) LAB.radarError = e.message; return false; }
 }
 const enRadar = t => LAB.alm.radar.tiene(t);
+const nSeguidas = () => LAB.radarError ? null : LAB.alm.radar.todos().length;   // ronda 29: para «Tu semana» (null = no se sabe)
 const origenCodigo = () => LAB.datos?.origen ?? null;
 const migrarRadarLocal = () => LAB.alm.radar.migrarLocal().catch(() => 0);
 
@@ -4185,11 +4336,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear' };
+const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -4229,6 +4380,7 @@ function mostrar(v, primera, extra = {}) {
   if (v === 'revista') mostrarRevista();
   if (v === 'articulo') mostrarArticulo(articulo);
   if (v === 'inicio') pintarEntrada();
+  if (v === 'empezar') onbPaso(1);
   if (v === 'ejemplo') mostrarEjemplo(true);
   if (v === 'comparar') mostrarComparar(comparar);
   if (!primera) { window.scrollTo(0, 0); $('#contenido').focus({ preventScroll: true }); }
@@ -4293,9 +4445,31 @@ async function cargarMisCarteras() {
     const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
     nMis = list.length;
     $('#btn-nueva').hidden = nMis === 0;
-    if (nMis === 0) { ul.innerHTML = ''; formNuevo(true, false); return; }
+    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
+    pintarSemana(list, seq);
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
+}
+// Ronda 29 (fase 2.5) · «Tu semana»: lo que conviene mirar hoy (señal de cada cartera, ideas de los próximos 7 días, cambios desde la última visita) y los retos de aprendizaje.
+// Todo sale de datos leídos: si las ideas no se pueden leer, sus retos se muestran «sin datos» (ni conseguidos ni suspendidos). La instantánea vive solo en este dispositivo.
+const hoyIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+async function pintarSemana(list, seq) {
+  const el = $('#tu-semana'); let ideas = null; try { ideas = await api('/escenarios'); } catch { ideas = null; } if (seq !== misSeq) return;
+  let umb = null; try { umb = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ }
+  const datos = { carteras: list.map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones || [] })), activos: by, ideas, sigues: nSeguidas(), umb, hoy: hoyIso() };
+  let g = null; try { g = JSON.parse(store.getItem('klever_semana')); } catch { g = null; }
+  const base = !g ? null : g.fecha < datos.hoy ? { fecha: g.fecha, carteras: g.carteras } : g.anterior || null;
+  const res = resumenSemana(datos, base), rt = retos(datos);
+  try { store.setItem('klever_semana', JSON.stringify({ ...res.instantanea, anterior: base })); } catch { /* sin almacenamiento */ }
+  const lin = c => `<li><a href="#cartera-${c.id}" class="sem-cart"><b>${esc(c.nombre)}</b>${c.senal ? `<span class="ci-senal senal-${c.senal.nivel}"><i aria-hidden="true"></i>${esc(c.senal.titulo)}</span>` : ''}</a></li>`;
+  const cambios = res.cambios.length ? `<p class="sem-desde">Desde el ${esc(fmtFecha(res.desde))}:</p><ul class="sem-cambios">${res.cambios.slice(0, 4).map(x => `<li class="sem-${x.tipo}">${x.tipo === 'resuelta' ? '✓ Ya no' : '● Nueva'}: ${esc(x.texto)} <span class="mut">(${esc(x.cartera)})</span></li>`).join('')}</ul>` : '';
+  const tocan = ideas == null ? '' : res.tocan.length ? `<a class="sem-tocan${res.vencidas ? ' hoy' : ''}" href="#seguimiento"><b>${res.tocan.length}</b> ${res.tocan.length === 1 ? 'idea para revisar' : 'ideas para revisar'} esta semana${res.vencidas ? ` · ${res.vencidas} hoy` : ''} →</a>` : '<p class="mut peq">Ninguna idea por revisar esta semana.</p>';
+  const reto = r => `<li class="reto ${r.hecho === true ? 'hecho' : r.hecho === null ? 'nd' : ''}"><span class="reto-i" aria-hidden="true">${r.hecho === true ? '✓' : '○'}</span><span><b>${esc(r.titulo)}</b>${r.hecho === true ? '' : `<a href="${r.ir}" class="reto-pista">${esc(r.hecho === null ? 'Sin datos ahora mismo' : r.pista)}</a>`}</span><span class="sr">${r.hecho === true ? ' (conseguido)' : r.hecho === null ? ' (sin datos)' : ' (pendiente)'}</span></li>`;
+  el.innerHTML = `<div class="sem-cab"><h2 id="semana-t">Tu semana</h2><span class="mut peq">${esc(fmtFecha(datos.hoy))}</span></div>
+    <div class="sem-grid"><div class="sem-col"><ul class="sem-carteras">${res.carteras.slice(0, 4).map(lin).join('')}</ul>${cambios}${tocan}</div>
+    <div class="sem-col"><div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
+      <ul class="retos">${rt.lista.map(reto).join('')}</ul><p class="mut peq">Retos para entender y ordenar tu cartera; no miden rentabilidad.</p></div></div>`;
+  el.hidden = false;
 }
 $('#mis-lista').addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) go('#cartera-' + b.dataset.id); });
 $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidden));
@@ -4992,11 +5166,11 @@ function renderEmpresas() {
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
   const vacio = empresas.length ? `Ninguna empresa coincide con ${bruto ? `«${esc(bruto)}»${hayFiltro ? ' y los filtros elegidos' : ''}` : 'los filtros elegidos'}. <button class="enlace" type="button" data-borrar-busqueda>${hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda'}</button>` : 'Aún no hay datos de empresas cargados.';
   tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td>${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
-      <td class="num">${resultado(r)}${pildoras(r)}</td>
+      <td class="num"><span class="emp-res">${svgHuella(r.criterios, { tam: 30 })}${resultado(r)}</span>${pildoras(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
-      <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
+      <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${svgHuella(r.criterios, { tam: 34 })}${resultado(r)}</span></div>
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
@@ -5035,7 +5209,8 @@ async function verFicha(t) {
   const f0 = a.fundamentales[0], U = 'miles de millones de USD';
   const dato = (l, v, u) => v == null ? `<div class="ausente"><dt>${l}</dt><dd><span class="v">No disponible</span><span class="u">dato ausente en el informe</span></dd></div>` : `<div><dt>${l}</dt><dd><span class="v num">${v}</span><span class="u">${u}</span></dd></div>`;
   const principal = f0 ? `<section class="ficha-datos" aria-labelledby="fd-t"><h3 id="fd-t">Datos principales · ejercicio ${esc(f0.periodo)}</h3><dl class="fd-grid">${dato('Ventas', f0.ingresos == null ? null : miles(f0.ingresos), U)}${dato('Beneficio neto', f0.beneficio_neto == null ? null : miles(f0.beneficio_neto), U)}${dato('EBITDA', f0.ebitda == null ? null : miles(f0.ebitda), U)}${dato('Caja libre', f0.flujo_caja_libre == null ? null : miles(f0.flujo_caja_libre), U)}${dato('ROIC', f0.roic == null ? null : pct(f0.roic), 'del capital invertido (cálculo aproximado)')}</dl></section>` : '<p class="mut peq">No hay cifras anuales disponibles para esta empresa.</p>';
-  $('#fi-cuerpo').innerHTML = `<div id="fi-radar" class="fi-radar"></div>${principal}<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
+  const huella = `<div class="ficha-huella">${svgHuella(c, { tam: 150, etiquetas: true, titulo: `Huella de ${a.nombre}: ${ok} de 5 comprobaciones superadas, ${no} no superadas, ${nd} sin datos` })}<p class="mut peq">La huella: cuanto más llena, más comprobaciones supera. Un punto hueco es un dato que falta, no un suspenso. No es una recomendación.</p></div>`;
+  $('#fi-cuerpo').innerHTML = `<div id="fi-radar" class="fi-radar"></div>${huella}${principal}<p class="resumen-ficha">${nd ? 'Evaluación parcial: ' : ''}${resumenF}</p>
     ${seccion('Superadas', ok, grupos.ok)}${seccion('No superadas', no, grupos.no)}${seccion('Sin datos', nd, grupos.nd)}
     ${nd ? '<p class="mut peq">Una comprobación sin datos no suma ni resta: no cuenta como no superada.</p>' : ''}
     <h3>Cifras de los últimos años</h3>
@@ -5095,7 +5270,7 @@ new MutationObserver(() => { if (vistaActual() === 'publicas' && pendientePublic
 function pintarEntrada() {
   const b = $('#probar'), modo = logged() ? 'mis' : hayBorrador() ? 'borrador' : 'crear';
   b.dataset.modo = modo; b.hidden = false;   // ronda 28: un ÚNICO botón principal también para quien llega por primera vez (abre el editor vacío); las tres entradas quedan como alternativas   // quien llega por primera vez elige entre las tres entradas (la primera ES «Crear desde cero»: no se repite arriba); quien vuelve ve «Abrir mis carteras» o «Retomar mi borrador»
-  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Crear desde cero';
+  b.textContent = modo === 'mis' ? 'Abrir mis carteras' : modo === 'borrador' ? 'Retomar mi borrador' : 'Empieza en 1 minuto';   // ronda 29: quien llega por primera vez, al arranque guiado
   $('#entrada-demo').hidden = !window.__KLEVER_DEMO__;
   pintarPendientes();
 }
@@ -5114,12 +5289,27 @@ $('#probar').addEventListener('click', () => { // destino inequívoco según el 
   const modo = $('#probar').dataset.modo;
   if (modo === 'mis') { go('#carteras'); return; }
   if (modo === 'borrador') { const d = leerBorrador(); if (d?.pos?.length) { restaurarBorrador(d); go('#cartera'); return; } }
-  abrirNueva('vacia');
+  go('#empezar');
 });
 $$('[data-plantilla]').forEach(b => b.addEventListener('click', () => abrirInvitado(b.dataset.plantilla, 'ejemplo')));
 // las TRES entradas de la portada; todas abren el mismo editor (ver abrirNueva / abrirInvitado)
 $('#entrada-vacia').addEventListener('click', () => abrirNueva('vacia'));
 $('#entrada-manual').addEventListener('click', () => abrirNueva('manual'));
+// Ronda 29 (fase 2.5) · arranque guiado: dos preguntas → cartera de EJEMPLO (una plantilla, rotulada como ejemplo, no recomendación) abierta ya en la revisión,
+// con su primera señal a la vista; o, si ya tiene cartera, el editor vacío para escribirla o pegarla. Klever no elige empresas según las respuestas.
+let onbInteres = 'dividendos';
+function onbPaso(n) { $('#onb-1').hidden = n !== 1; $('#onb-2').hidden = n !== 2; ['#onb-p1', '#onb-p2', '#onb-p3'].forEach((q, k) => k + 1 === n ? $(q).setAttribute('aria-current', 'step') : $(q).removeAttribute('aria-current')); $(n === 1 ? '#onb-1 .onb-op' : '#onb-2 .onb-op')?.focus({ preventScroll: true }); }
+$('#vista-empezar').addEventListener('click', async e => {
+  const i = e.target.closest('[data-interes]'); if (i) { onbInteres = i.dataset.interes; onbPaso(2); return; }
+  if (e.target.closest('#onb-atras')) { onbPaso(1); return; }
+  if (e.target.closest('#onb-cero')) { abrirNueva('vacia'); return; }
+  const t = e.target.closest('[data-tiene]'); if (!t) return;
+  $('#onb-p3').setAttribute('aria-current', 'step');
+  if (t.dataset.tiene === 'si') { await abrirNueva('manual'); setTimeout(() => $('#buscar-activo')?.focus(), 400); return; }
+  await abrirInvitado(onbInteres, 'ejemplo');
+  for (let k = 0; k < 40 && $('#vista-cartera').hidden; k++) await new Promise(r => setTimeout(r, 50));   // la vista se abre por la ruta (asíncrona)
+  if (!$('#vista-cartera').hidden) revisarPortafolio();
+});
 $('#entrada-ejemplo').addEventListener('click', () => { const s = $('#plantillas'); s.scrollIntoView({ behavior: reducido() ? 'auto' : 'smooth' }); s.querySelector('.plantilla').focus({ preventScroll: true }); });
 function renderPreview() {
   $('#prev').innerHTML = `<div class="prev preview-v25"><div class="prev-cab"><b>¿Y si añades otra empresa?</b><span class="chip sim">Ejemplo</span></div>

@@ -83,7 +83,7 @@ export function limpiarSesionLab() {
   const { $, store } = LAB.ctx;
   for (const s of ['#fi-radar', '#seg-radar', '#seg-escenarios', '#seg-casos', '#lab-cuerpo', '#radio-cuerpo', '#nota-cuerpo']) { const e = $(s); if (e) { e.innerHTML = ''; delete e.dataset.sig; } }
   const pend = $('#seg-radar-n'), pend2 = $('#seg-esc-n'); if (pend) pend.textContent = ''; if (pend2) pend2.textContent = '';
-  store.removeItem(CLAVE_REF); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }
+  store.removeItem(CLAVE_REF); store.removeItem('klever_semana'); try { sessionStorage.removeItem(CLAVE_LAB); } catch { /* sin almacenamiento */ }   // ronda 29: la instantánea de «Tu semana» es privada
   if ($('#dlg-ficha')?.open && LAB.fichaActivo) pintarFichaRadar(LAB.fichaActivo);   // la ficha abierta pasa a verse como visitante
 }
 
@@ -125,6 +125,7 @@ export async function cargarRadar() {                              // true = le�
   catch (e) { if (vigente(g)) LAB.radarError = e.message; return false; }
 }
 export const enRadar = t => LAB.alm.radar.tiene(t);
+export const nSeguidas = () => LAB.radarError ? null : LAB.alm.radar.todos().length;   // ronda 29: para «Tu semana» (null = no se sabe)
 export const origenCodigo = () => LAB.datos?.origen ?? null;
 export const migrarRadarLocal = () => LAB.alm.radar.migrarLocal().catch(() => 0);
 
