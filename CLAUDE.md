@@ -1,5 +1,7 @@
 # Klever · instrucciones para Claude
 
+**Si Javier pregunta «qué nos queda por hacer», lee primero `PENDIENTES.md` (sección ★ del punto 14) y `procesos-klever/05-estado-actual.md`.**
+
 **Antes de hacer nada, lee `procesos-klever/README.md`, `procesos-klever/05-estado-actual.md` y `procesos-klever/08-entorno-y-trampas.md`** (y `11-traspaso-supervisor.md` si eres el supervisor) Ahí está el contexto del proyecto, las decisiones, el estado y los errores que ya cometimos.
 
 ## Reglas permanentes

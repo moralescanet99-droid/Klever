@@ -2182,3 +2182,13 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Hazlo
 
 (Responde a la propuesta de C33: fase 2.5 = arranque de 60 segundos, huella de empresa, resumen semanal dentro de la web y retos, sin cuentas externas. Retoma de hecho el punto 14. Las decisiones sobre precios históricos, Brevo y datos reales de la SEC siguen abiertas.)
+
+## C35 · (2026-11-07) — qué le falta al punto 14, literal
+> Que crees que le falta al punto 14 en el proyecto de Kleverpara que realmente valga la pena?
+
+(Respuesta en el chat: 7 puntos. 1 novedades de las empresas sin que la persona toque nada; 2 correo semanal; 3 instantánea en el servidor; 4 evolución en el tiempo; 5 reto semanal rotativo; 6 cerrar el ciclo de las ideas sin precios históricos; 7 criterio de 10 y medida. Los 3–6 se pueden hacer sin cuentas; 1 y 2 dependen de Javier.)
+
+## C36 · (2026-11-07) — anotar lo pendiente, literal
+> Me parece genial, cumplimenta el cuaderno maestro con los datos que aun quedan (seccion 1 y 2) por realizar para mas adelante cuando te pregunte que nos queda por hacer no lo pierdas
+
+(Anotado en `PENDIENTES.md` § ★ (14.1 y 14.2, más la Ronda 30 propuesta) y en `05-estado-actual.md`. Cuando Javier pregunte «qué nos queda», leer primero `PENDIENTES.md`.)

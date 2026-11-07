@@ -1,5 +1,31 @@
 # Tareas pendientes (lo que solo puedes hacer tú)
 
+## ★ Punto 14 «volver y valor»: lo que falta para que valga la pena (anotado 2026-11-07, C35–C36)
+La ronda 29 puso el «escaparate» (arranque guiado, huella, «Tu semana», retos). Falta el **motor** y el **aviso**. Estos dos bloques dependen de cuentas externas y **no están hechos**:
+
+### 14.1 · «Novedades de tus empresas» (que algo cambie sin que la persona toque nada)  ⬜
+- **Problema:** «Desde tu última visita» solo muestra cambios hechos por la propia persona (`public/js/semana.js`). Si no toca nada, a la semana ve lo mismo → no hay motivo para volver.
+- **Qué hacer:** sección en «Tu semana» con hechos de las empresas que tiene o sigue, sin precios ni rentabilidad:
+  - «KO ha publicado resultados y su huella ha cambiado: Información pasa de 3/5 a 4/5».
+  - «2 empresas de tu cartera presentan resultados esta semana» (calendario de resultados y nuevas presentaciones a la SEC).
+- **Depende de:** datos reales de la SEC (fase 4: secretos de GitHub `SEC_USER_AGENT`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, flujo `nightly.yml` funcionando y D1 remota; ver §2 de este archivo). Hace falta guardar la **fecha de cada presentación** y la huella anterior para detectar el cambio.
+- **Se puede adelantar sin cuentas:** construirlo entero con datos inventados y rotulados, para que solo falte enchufar la SEC.
+- **Criterio de hecho:** con datos reales, una cartera sin cambios del usuario muestra al menos una novedad real en una semana con resultados.
+
+### 14.2 · Resumen semanal por correo (el aviso fuera de la web)  ⬜
+- **Problema:** «Tu semana» solo la ve quien ya ha decidido volver. Sin un aviso, el punto 14 no pasa de un 6.
+- **Qué hacer:** correo semanal de 3 líneas (señal principal, ideas que tocan esta semana, novedades de sus empresas) con un enlace a «Tu semana». **Opcional y desactivado por defecto**, con baja en un clic y consentimiento registrado; sin rentabilidades ni recomendaciones.
+- **Depende de:** cuenta de **Brevo** (la misma del enlace de acceso, §1 de este archivo), despliegue en Cloudflare y una tarea programada (Cron Trigger de Cloudflare o GitHub Actions). Revisar el texto legal (consentimiento para comunicaciones).
+- **Requisito previo técnico:** la instantánea semanal en el servidor (ver «Ronda 30» abajo); hoy vive en el dispositivo y se borra al salir.
+- **Criterio de hecho:** en el piloto, al menos 1 de 5 personas vuelve desde el correo.
+
+### Ronda 30 propuesta (sin cuentas externas; la puede hacer Claude Code)  ⬜ no empezada
+1. **Instantánea semanal en el servidor** (D1): solo indicadores y señales, sin importes; sirve en varios dispositivos y para el correo.
+2. **Evolución en el tiempo:** «Hace 4 semanas: Concentración 🔴 · Variedad 🟡 → hoy 🟢 · 🟢».
+3. **Reto de la semana** rotativo (aprendizaje, nunca rentabilidad), además de los 5 fijos.
+4. **Cerrar el ciclo de las ideas:** «Hace 30 días guardaste esta idea para ganar variedad; esto ha cambiado en los datos de esas empresas». **Sin precios históricos** (recomendación de Claude: la decisión sigue abierta para Javier).
+5. **Criterio de 10 del punto 14** (no se escribió en `ronda28/PLAN.md` por estar aparcado): ≥ 3 de 5 personas del piloto vuelven solas en 7 días y ≥ 1 vuelve por el correo. Se mide con `scripts/metrics.sql`.
+
 ## 0. Publicar la demo pública (la más rápida: solo cuenta de Cloudflare)
 - [ ] `wrangler login` y `wrangler pages deploy demo --project-name klever-demo` (ver `demo/LEEME.md`). Da una dirección pública con datos inventados que cualquiera, incluido ChatGPT, puede abrir.
 
