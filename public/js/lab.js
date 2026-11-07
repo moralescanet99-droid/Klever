@@ -59,6 +59,13 @@ export function iniciarLab(ctx) {
   const vinc = e => { const q = $; if (e.target.id === 'esc-pregunta' || e.target.id === 'esc-ref') avisoParecido(q('#esc-pregunta'), q('#esc-ref'), q('#esc-vinculo-aviso')); if (e.target.id === 'lab-pregunta' || e.target.id === 'lab-ref') avisoParecido(q('#lab-pregunta'), q('#lab-ref'), q('#lab-vinculo-aviso')); };
   lab.addEventListener('input', vinc); lab.addEventListener('change', vinc);
   lab.addEventListener('click', onLabClic);
+  lab.addEventListener('click', async e => {
+    const s = LAB.sim; if (!s) return;
+    if (e.target.closest('#lab-otro') && s.res?.viable) { s.cadena = [...(s.cadena || []), { ticker: s.res.ticker, peso: Number(String(s.peso).replace(',', '.')), fin: s.res.financiacion }]; rehacerCadena(); Object.assign(s, { ticker: '', peso: '', res: null, clave: null }); pintarLabForm(); $('#lab-ticker')?.focus(); return; }
+    if (e.target.closest('#lab-cad-deshacer')) { s.cadena = (s.cadena || []).slice(0, -1); rehacerCadena(); s.res = null; pintarLabForm(); return; }
+    if (e.target.closest('#lab-cad-borrar')) { s.cadena = []; s.baseCad = null; s.res = null; pintarLabForm(); return; }
+    if (e.target.closest('#lab-aplicar') && s.finalPos) { await ctx.aplicarComposicion?.(baseLab(), s.finalPos); }
+  });
   lab.addEventListener('click', e => { const b = e.target.closest('[data-pregunta]'); if (b) { const i = $('#lab-pregunta'); if (i) { i.value = b.dataset.pregunta; i.dispatchEvent(new Event('input', { bubbles: true })); i.focus(); } } });
   lab.addEventListener('input', e => { if (e.target.id === 'lab-rango') { const pi = $('#lab-peso'); if (pi) pi.value = e.target.value; e.target.style.setProperty('--f', ((e.target.value - 1) / 59).toFixed(3)); simularEnVivo(); } });
   lab.addEventListener('click', e => { const b = e.target.closest('[data-explorar]'); if (b) ctx.explorarSector?.(b.dataset.explorar); });
@@ -461,6 +468,14 @@ export async function mostrarLab(modo, id) {
   if (!LAB.sim) { const s = leerEstadoLab(); LAB.sim = { carteraId: s?.carteraId ?? null, ticker: s?.ticker || '', peso: s?.peso || '', fin: s?.fin || '', clave: null, res: null, historia: s?.historia || null }; }
   pintarLabForm();
 }
+// Ronda 28 (fase 2) · varios cambios a la vez: cada cambio aceptado con «Añadir otro cambio» se acumula y el siguiente se prueba sobre el resultado.
+// La comparación final es SIEMPRE contra la cartera original. Las ideas del Cuaderno siguen siendo de UN cambio (el servidor las valida así).
+// Ronda 28 (fase 2) · SELLO ÚNICO de avisos: la misma línea breve en todas partes y el detalle propio de cada pantalla al pulsar «Más».
+let nSello = 0;
+const sello = detalle => { const id = 'sello-' + (++nSello); return `<p class="sello"><span class="sello-b">Simulación · sin dinero real · no es una recomendación</span> <button type="button" class="enlace sello-mas" aria-expanded="false" aria-controls="${id}">Más</button><span class="sello-t" id="${id}" hidden> ${detalle}</span></p>`; };
+const posBase = () => LAB.sim?.baseCad || baseLab()?.pos || [];
+function rehacerCadena() { let b = baseLab()?.pos || []; for (const o of LAB.sim.cadena || []) { const r = simular(b, o, o.fin); if (!r.viable) break; b = r.despues; } LAB.sim.baseCad = (LAB.sim.cadena || []).length ? b : null; }
+const ordenarPos = l => l.filter(p => p.peso > 0).map(p => ({ ticker: p.ticker, peso: p.peso })).sort((a, b) => b.peso - a.peso || (a.ticker < b.ticker ? -1 : 1));
 const baseLab = () => { const l = basesLab(), s = LAB.sim; return l.find(c => String(c.id) === String(s.carteraId)) || l[0] || null; };
 const metodoTexto = fin => ({
   sin_asignar: { corto: 'El peso nuevo se toma del porcentaje que ahora no está asignado. Las demás posiciones no cambian. Si no hay suficiente, este método no se puede usar.', redondeo: '' },
@@ -475,10 +490,11 @@ function pintarLabForm() {
   const alm = LAB.alm.radar, lista = basesLab(), base = baseLab();
   if (!base) { $('#lab-cuerpo').innerHTML = `${cabLab()}<p class="estado-lista">No hay ninguna cartera disponible.</p>`; return; }
   s.carteraId = base.id;
-  const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(base.pos, activos, base.limite), actual = base.pos.find(p => p.ticker === s.ticker)?.peso;
+  const activos = x().activos(), act = s.ticker && activos[s.ticker], r = radiografia(posBase(), activos, base.limite), actual = posBase().find(p => p.ticker === s.ticker)?.peso;
   const radar = alm.todos().map(f => `<option value="${esc(f.ticker)}">${esc(f.nombre)}</option>`).join('');
   const h = s.historia && historia(s.historia);
   $('#lab-cuerpo').innerHTML = `${cabLab(h ? `Vienes de la historia «${esc(h.titulo)}». <a href="#historia-${esc(h.id)}">Volver a la lectura</a>. ` : '')}
+    ${s.cadena?.length ? `<div class="lab-cadena" role="status"><p><b>Cambios acumulados (${s.cadena.length}):</b> ${s.cadena.map(o => `${esc(o.ticker)} → ${P(o.peso)}`).join(' · ')}</p><p class="mut peq">El siguiente cambio se prueba sobre la cartera con estos cambios; la comparación es siempre contra la original.</p><p><button type="button" class="enlace" id="lab-cad-deshacer">Deshacer el último</button> · <button type="button" class="enlace" id="lab-cad-borrar">Empezar de nuevo</button></p></div>` : ''}
     <form id="lab-form" class="lab-form" novalidate>
       <fieldset><legend>1 · Cartera base</legend>
         ${base.ejemplo ? '<p class="lab-ejemplo" role="note"><b>No tienes ninguna cartera, así que usamos una de ejemplo</b> (KO 60 % · PG 40 %) para que puedas probar. No es tuya y la simulación es temporal.</p>' : ''}
@@ -493,7 +509,7 @@ function pintarLabForm() {
       <fieldset><legend>3 · ¿De dónde sale el peso?</legend>
         ${['proporcional', 'sin_asignar'].map(k => `<label class="radio-op"><input type="radio" name="lab-fin" value="${k}"${s.fin === k ? ' checked' : ''}> ${FIN_LLANO[k]}${k === 'sin_asignar' ? ` <span class="mut">(ahora falta ${P(r.pendiente)})</span>` : ''}</label>`).join('')}
         <div class="lab-metodo" id="lab-metodo" aria-live="polite">${htmlMetodo(esc, s.fin)}</div></fieldset>
-      <p class="mut peq">Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos, y no es una recomendación.</p>
+      ${sello('Trabaja con porcentajes: no usa precios, rentabilidades esperadas, costes ni impuestos.')}
       <p><button class="btn btn-primario" type="submit">Simular</button></p><p id="lab-error" class="error" role="alert"></p>
     </form><div class="lab-lado"><div id="lab-ajuste">${htmlAjuste(esc, s, actual)}</div><div id="lab-res" aria-live="polite"></div></div>`;
   if (s.res) pintarResultado();
@@ -505,9 +521,9 @@ function pintarLabForm() {
 // Ronda 26 · ajuste instantáneo: un deslizador del peso que recalcula la comparación al moverlo (mismo cálculo que «Simular»).
 function htmlAjuste(esc, s, actual) {
   const a = s.ticker && x().activos()[s.ticker];
-  if (!a) { const b = baseLab(); if (!b?.pos?.length) return '';   // sin activo elegido: la cartera base a la vista y dónde aparecerá la alternativa
+  if (!a) { const b = { pos: posBase() }; if (!b.pos.length) return '';   // sin activo elegido: la cartera base a la vista y dónde aparecerá la alternativa
     const tks = b.pos.map(p => p.ticker), t = Math.round(b.pos.reduce((q, p) => q + p.peso, 0) * 10) / 10;
-    return `<div class="lab-ajuste lab-espera"><p class="esp-tit">Cartera base</p><span class="esp-barra" role="img" aria-label="Cartera base: ${esc(b.pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${b.pos.map(p => `<i style="--c:var(--c${tks.indexOf(p.ticker) % 8});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}${t < 100 ? `<i class="libre" style="width:${(100 - t).toFixed(1)}%"></i>` : ''}</span>
+    return `<div class="lab-ajuste lab-espera"><p class="esp-tit">${LAB.sim?.cadena?.length ? 'Cartera con tus cambios' : 'Cartera base'}</p><span class="esp-barra" role="img" aria-label="Cartera base: ${esc(b.pos.map(p => `${p.ticker} ${p.peso} %`).join(', '))}">${b.pos.map(p => `<i style="--c:var(--c${tks.indexOf(p.ticker) % 8});width:${p.peso}%">${p.peso >= 9 ? esc(p.ticker) : ''}</i>`).join('')}${t < 100 ? `<i class="libre" style="width:${(100 - t).toFixed(1)}%"></i>` : ''}</span>
       <p class="lab-espera-txt">Elige un activo y un peso: <b>la alternativa aparecerá aquí</b>.</p></div>`; }
   const v = Number(String(s.peso).replace(',', '.')), val = Number.isFinite(v) && v > 0 ? Math.min(100, v) : (actual || 10);
   return `<div class="lab-ajuste"><div class="lab-ajuste-cab"><label for="lab-rango">Peso de <b>${esc(s.ticker)}</b>${actual != null ? ` <span class="mut">(ahora ${P(actual)})</span>` : ''}</label><output id="lab-rango-v" for="lab-rango">${P(val)}</output></div>
@@ -521,7 +537,7 @@ function htmlDescubrir(esc, r) {
 }
 function simularEnVivo() {          // desde el deslizador: sin mover el foco ni desplazar la página
   const { $ } = x(), f = leerFormulario(); if (!x().activos()[f.t] || !f.fin || !(f.peso > 0)) return;
-  LAB.sim.res = simular(baseLab().pos, { ticker: f.t, peso: f.peso }, f.fin); LAB.sim.clave = null; pintarResultado();
+  LAB.sim.res = simular(posBase(), { ticker: f.t, peso: f.peso }, f.fin); LAB.sim.clave = null; pintarResultado();
   const o = $('#lab-rango-v'); if (o) o.textContent = P(f.peso);
 }
 // Ronda 28 (fase 2): preguntas de ejemplo para no empezar en blanco (la persona puede editarlas o escribir la suya)
@@ -535,10 +551,10 @@ function leerFormulario() {
 function invalidarResultado() { if (LAB.sim) { LAB.sim.res = null; LAB.sim.clave = null; } const r = x().$('#lab-res'); if (r) r.innerHTML = ''; }
 function onLabCambio(e) {
   const { $, esc } = x(), id = e.target.id;
-  if (id === 'lab-base') { LAB.sim.carteraId = e.target.value === 'borrador' ? null : (/^\d+$/.test(e.target.value) ? Number(e.target.value) : e.target.value); invalidarResultado(); pintarLabForm(); $('#lab-base').focus(); }
+  if (id === 'lab-base') { LAB.sim.cadena = []; LAB.sim.baseCad = null; LAB.sim.carteraId = e.target.value === 'borrador' ? null : (/^\d+$/.test(e.target.value) ? Number(e.target.value) : e.target.value); invalidarResultado(); pintarLabForm(); $('#lab-base').focus(); }
   else if (id === 'lab-radar' && e.target.value) { LAB.sim.ticker = e.target.value; invalidarResultado(); leerCampos(); pintarLabForm(); $('#lab-peso').focus(); }
   else if (e.target.name === 'lab-fin') { invalidarResultado(); $('#lab-metodo').innerHTML = htmlMetodo(esc, e.target.value); leerFormulario(); }
-  else if (id === 'lab-ticker') { leerFormulario(); const a = x().activos()[LAB.sim.ticker]; $('#lab-activo-info').textContent = a ? a.nombre : ''; $('#lab-ajuste').innerHTML = htmlAjuste(esc, LAB.sim, baseLab()?.pos.find(p => p.ticker === LAB.sim.ticker)?.peso); if (a) simularEnVivo(); }
+  else if (id === 'lab-ticker') { leerFormulario(); const a = x().activos()[LAB.sim.ticker]; $('#lab-activo-info').textContent = a ? a.nombre : ''; $('#lab-ajuste').innerHTML = htmlAjuste(esc, LAB.sim, posBase().find(p => p.ticker === LAB.sim.ticker)?.peso); if (a) simularEnVivo(); }
 }
 function leerCampos() { const { $ } = x(); LAB.sim.peso = $('#lab-peso')?.value || LAB.sim.peso; }
 function onLabSubmit(e) {
@@ -551,7 +567,7 @@ function simularAhora(enfocar = true) {
   const { $ } = x(), f = leerFormulario(), base = baseLab(), err = $('#lab-error'); err.textContent = '';
   if (!x().activos()[f.t]) { err.textContent = 'Elige un activo del universo (símbolo o nombre).'; $('#lab-ticker').focus(); return; }
   if (!f.fin) { err.textContent = 'Elige cómo se financia el cambio.'; return; }
-  const sim = simular(base.pos, { ticker: f.t, peso: f.peso }, f.fin);
+  const sim = simular(posBase(), { ticker: f.t, peso: f.peso }, f.fin);
   LAB.sim.res = sim; LAB.sim.clave = null; pintarResultado();
   if (!enfocar) return;
   if (!sim.viable) $('#lab-res').scrollIntoView({ block: 'nearest' });
@@ -589,7 +605,8 @@ function htmlBarras(esc, sim) {                                          // dos 
   return `<div class="esp">${barra(sim.antes, 'Cartera base', 'esp-base')}${barra(sim.despues, 'Alternativa simulada', 'esp-alt')}</div>`;
 }
 function pintarResultado() {
-  const { $, esc, logged } = x(), s = LAB.sim, sim = s.res, base = baseLab(), cont = $('#lab-res'); if (!sim) { cont.innerHTML = ''; return; }
+  const { $, esc, logged } = x(), s = LAB.sim, simR = s.res, base = baseLab(), cont = $('#lab-res'); if (!simR) { cont.innerHTML = ''; return; }
+  const sim = s.cadena?.length && simR.viable ? { ...simR, antes: ordenarPos(base.pos), cambios: cambiosEntre(base.pos, simR.despues) } : simR;   // con cambios acumulados, se compara con la ORIGINAL
   if (!sim.viable) { cont.innerHTML = `<section class="lab-res inviable"><h2 tabindex="-1">No se puede simular</h2><p>${esc(sim.motivo)}</p></section>`; return; }
   const activos = x().activos(), c = comparar(sim.antes, sim.despues, activos, base.limite), n = sim.cambios.filter(f => f.delta !== 0).length;
   const mio = sim.cambios.find(f => f.ticker === sim.ticker);
@@ -598,7 +615,12 @@ function pintarResultado() {
   const h = s.historia && historia(s.historia), rev = h && ultimaTesis(h);
   const evA = LAB.universo ? evaluar(sim.antes, LAB.universo) : null, evD = LAB.universo ? evaluar(sim.despues, LAB.universo) : null;
   s.evaluacion = evA && evD ? { antes: resumenNota(evA), despues: resumenNota(evD) } : null;
-  const guardar = logged() && base.guardada
+  const finalPos = ordenarPos(sim.despues), puedeAplicar = !!x().puedeAplicar?.(base);
+  const masAcc = `<p class="lab-mas-acc"><button class="btn btn-secundario" type="button" id="lab-otro">+ Añadir otro cambio</button>${puedeAplicar ? ' <button class="btn btn-secundario" type="button" id="lab-aplicar">Aplicar a mi cartera</button>' : ''}</p>`;
+  LAB.sim.finalPos = finalPos;
+  const guardar = s.cadena?.length
+    ? `<div class="lab-guardar"><h3>Varios cambios</h3><p>Una idea del Cuaderno guarda un solo cambio. Con varios, ${puedeAplicar ? 'pulsa «Aplicar a mi cartera» y después guarda la cartera' : 'ábrelos desde tu cartera para poder aplicarlos'}.</p></div>`
+    : logged() && base.guardada
     ? `<form id="lab-guardar" class="lab-guardar"><h3>Guardar en mi Cuaderno</h3><p class="mut peq"><b>Guardar la comparación no aplica el cambio a tu cartera.</b> Tu cartera base sigue igual; esto se guarda como simulación privada, con la base y la alternativa tal como las ves ahora.</p>
         <label for="lab-nombre">Nombre</label><input id="lab-nombre" maxlength="80" required value="${esc(`${sim.ticker} al ${String(s.peso).replace('.', ',')} % (${sim.financiacion === 'proporcional' ? 'proporcional' : 'sin asignar'})`)}">
         ${h?.pregunta ? `<p class="fila"><input type="checkbox" id="lab-ref" aria-describedby="lab-vinculo-aviso" checked> <label for="lab-ref">Sigo la pregunta de la historia: «${esc(h.pregunta)}»</label></p><p class="mut peq" id="lab-vinculo-aviso" role="status" aria-live="polite" data-editorial="${esc(h.pregunta)}">Vinculada: la revisión de la historia sigue siendo la de esta cuestión aunque cambies tus palabras. Desmarca la casilla para desvincularla.</p>` : ''}
@@ -617,8 +639,8 @@ function pintarResultado() {
   const kpis = `<div class="lab-kpis" aria-label="Comparación rápida">${kpi('Mayor posición', c.antes.mayor ? P(c.antes.mayor.peso) : '—', c.despues.mayor ? P(c.despues.mayor.peso) : '—', c.despues.mayor ? esc(c.despues.mayor.ticker) : '')}${kpi('Tres mayores', P(c.antes.top3.peso), P(c.despues.top3.peso), '')}${kpi('Categorías', String(catA), String(catD), '')}${c.despues.pendiente || c.antes.pendiente ? kpi('Sin asignar', P(c.antes.pendiente), P(c.despues.pendiente), '') : ''}</div>`;
   cont.innerHTML = `<section class="lab-res"><h2 tabindex="-1">Resultado <span class="chip sim">Simulación</span></h2>${kpis}
     <p class="lab-espacio"><b>Cuánto espacio ocuparía:</b> ${esc(sim.ticker)} ocuparía el ${P(mio.despues)} de la cartera${mio.antes ? ` (ahora ${P(mio.antes)})` : ' (ahora no figura)'}.</p>
-    ${htmlBarras(esc, sim)}<h3>Quién cede el peso</h3><div class="delta-grid">${sim.cambios.filter(f => f.delta !== 0).map(f => `<div><span>${esc(f.ticker)}</span><b>${dpts(f.delta)}</b><small>${P(f.antes)} → ${P(f.despues)}</small></div>`).join('') || '<p>Sin cambios de peso.</p>'}</div><details class="mini"><summary>Ver el origen del peso</summary><p class="lab-origen">${esc(origenPeso(sim))}</p></details>
-    <p class="mut peq"><b>Tu cartera base no cambia.</b> Esta alternativa no implica una mayor rentabilidad.</p><details class="mini"><summary>Qué cambia, en palabras</summary><p class="lab-concl">${concl}</p></details>
+    ${htmlBarras(esc, sim)}${masAcc}<h3>Quién cede el peso</h3><div class="delta-grid">${sim.cambios.filter(f => f.delta !== 0).map(f => `<div><span>${esc(f.ticker)}</span><b>${dpts(f.delta)}</b><small>${P(f.antes)} → ${P(f.despues)}</small></div>`).join('') || '<p>Sin cambios de peso.</p>'}</div><details class="mini"><summary>Ver el origen del peso</summary><p class="lab-origen">${esc(origenPeso(sim))}</p></details>
+    ${sello('<b>Tu cartera base no cambia.</b> Esta alternativa no implica una mayor rentabilidad.')}<details class="mini"><summary>Qué cambia, en palabras</summary><p class="lab-concl">${concl}</p></details>
     <details class="mini"><summary>Comparar todos los pesos y categorías</summary>${htmlComparacion(c, sim.cambios, limitesHtml(c, base.limite))}</details>
     ${evA && evD ? `<details class="mini"><summary>Comparar la nota de estructura</summary>${htmlCambioNota(esc, evA, evD)}</details>` : ''}
     <details class="mini"><summary>Ver los pasos del cálculo</summary><ol>${sim.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol></details>${guardar}</section>`;
@@ -713,7 +735,11 @@ function htmlRevisiones(esc, e) {
   const l = e.revisiones || [], mk = r => `<li><p><b>${esc(fechaCorta(r.fecha))}</b> · ${DECIS[r.decision] || esc(r.decision)}${r.proxima_fecha ? ` (próxima revisión: ${esc(fechaCorta(r.proxima_fecha))})` : ''}</p>${r.observacion ? `<p><span class="mut">Tu observación:</span> ${esc(r.observacion)}</p>` : ''}${r.aprendizaje ? `<p><span class="mut">Lo que aprendiste:</span> ${esc(r.aprendizaje)}</p>` : ''}</li>`;
   return `<section class="esc-revisiones" aria-labelledby="esc-rev-t"><h2 id="esc-rev-t">Revisiones <span class="mut">(${l.length})</span></h2>
     <p class="mut peq">Anota aquí lo que has observado al volver sobre esta idea. Es <b>tu comentario personal</b>, no un dato verificado: Klever no añade lo que haya ocurrido en el mercado. Cada revisión se suma al historial; no cambia la hipótesis original ni las composiciones guardadas.</p>
-    ${l.length ? `<ol class="esc-rev-lista">${l.map(mk).join('')}</ol>` : '<p class="mut">Todavía no has registrado ninguna revisión.</p>'}
+    <div class="esc-tiempo" aria-label="Línea de tiempo de la idea">
+      ${e.estado === 'en_estudio' && e.revisar_en ? `<p class="tl-nodo tl-prox${e.revisar_en <= hoy() ? ' tl-toca' : ''}"><b>${e.revisar_en <= hoy() ? 'Toca revisar' : 'Próxima revisión'}</b> · ${esc(fechaCorta(e.revisar_en))}</p>` : ''}
+      ${l.length ? `<ol class="esc-rev-lista">${l.map(mk).join('')}</ol>` : '<p class="mut tl-vacio">Todavía no has registrado ninguna revisión.</p>'}
+      <p class="tl-nodo tl-inicio"><b>Guardaste la idea</b>${e.creado_en ? ` · ${esc(x().fmtFecha(e.creado_en))}` : ''}${e.pregunta ? ` · «${esc(e.pregunta)}»` : ''}</p>
+    </div>
     <details class="mini" id="rev-det"${e.revisar_en && e.revisar_en <= hoy() ? ' open' : ''}><summary>Registrar revisión</summary>
       <form id="rev-form" class="lab-guardar"><label for="rev-fecha">Fecha de la revisión</label><input id="rev-fecha" type="date" required value="${hoy()}">
         <label for="rev-obs">Tu observación <span class="mut">(comentario personal; opcional)</span></label><textarea id="rev-obs" rows="3" maxlength="600"></textarea>

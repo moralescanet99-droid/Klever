@@ -52,14 +52,26 @@ Fase 2 (móvil con barra inferior, tarjetas de empresas, pegar «KO 40, PG 60»,
 - **Primera pasada completa de la fase 2** (`d545fca`): 1071 correctas, **2 fallos**, ambos por cambios intencionados: `testN` N9 buscaba «escenario guardado» (ahora «idea guardada») y `testB` exigía que, tras 12 tabulaciones desde el buscador, el foco estuviera en un «Ver ficha»; con el glosario y el botón «Probar» por fila, cae en un control de fila distinto. Se adaptan: N9 al texto nuevo; testB exige un control (Ver ficha o Probar) **de una fila** de la tabla. Ninguna otra condición cambia.
 - **Pruebas antiguas adaptadas a propósito (se declara):** 8 archivos buscaban textos literales que cambian («Aún no has guardado ningún escenario», «Guardar en mi radar», «Mis escenarios», «Mi radar», «No encontramos ese escenario», «★ En tu radar»…). Solo cambia el texto buscado.
 
-## Lo que la fase 2 NO incluye (se declara)
-- **Varios cambios a la vez en el laboratorio** y «aplicar a mi cartera»: el servidor valida cada idea guardada con UNA operación (`propuestaCoincide`). Cambiarlo toca el formato guardado y el servidor: necesita una ronda propia.
-- **Sello único de avisos** (punto 11): los avisos de simulación los comprueban muchas pruebas por su texto; se hará con cuidado en otra ronda.
-- **Línea de tiempo por idea** (punto 8) y **tarjetas de empresas con logotipo** (punto 7): pendientes.
+## Cierre de la fase 2 (encargo: «termina la fase 2»)
+| Punto | Cambio |
+|---|---|
+| 6 · Comparar | **Varios cambios a la vez:** tras simular, «+ Añadir otro cambio» acumula ese cambio y el siguiente se prueba sobre el resultado; un aviso muestra los cambios acumulados con «Deshacer el último» y «Empezar de nuevo». La comparación (barras, cifras clave, «Quién cede el peso») es **siempre contra la cartera original**. **«Aplicar a mi cartera»** (solo si la base es la cartera abierta en el editor): pide confirmación con la composición final y la pasa al editor como cambios sin guardar; la cuenta no cambia hasta pulsar «Guardar cartera». Una idea del Cuaderno sigue guardando **un solo cambio** (el servidor no cambia): con varios, se explica y se ofrece aplicar. |
+| 11 · Texto | **Sello único de avisos** en el laboratorio: «Simulación · sin dinero real · no es una recomendación», con el detalle propio de cada sitio al pulsar «Más». Sustituye a los dos párrafos de advertencia. Los avisos que exigen las pruebas por su texto (portada, Explorar, nota) se mantienen. |
+| 8 · Cuaderno | **Línea de tiempo** en cada idea: arriba la próxima revisión (o «Toca revisar»), en medio tus revisiones y abajo «Guardaste la idea» con la fecha y la pregunta. |
+| 7 · Descubrir | **Monograma** por empresa (dos letras del símbolo con el color de su sector). Sin logotipos externos: serían una fuente externa, y la regla del proyecto lo impide. |
+
+- **`tests/ronda28/testZ.cjs` (21, servidor real, 1440/390/320):** dos cambios encadenados contra la original, «Deshacer el último», sin guardado como idea con varios cambios, «Aplicar a mi cartera» con confirmación (el editor queda con NVDA 17,5, JNJ 10 y un 20 % sin asignar, igual que la simulación), sello con detalle al pulsar, línea de tiempo, monogramas, sin errores ni desbordes. Una primera versión de la prueba esperaba que el total sumara 100 %; era un error de la prueba: el método proporcional deja sin asignar lo que libera al bajar un peso.
+- Comprobadas además `testD` (geometría de las tarjetas de empresas con el monograma) y `testS` (aviso «Tu cartera base no cambia»): en verde.
+
+## Lo que queda fuera de la fase 2 (se declara)
 - **Revista:** sin contenido nuevo (depende de Javier).
+- **Guardar en el Cuaderno una idea con varios cambios:** exigiría cambiar el formato que valida el servidor y los datos guardados. Hoy se resuelve aplicando los cambios a la cartera.
 
 ## Sin comprobar
 Teléfono real (la barra inferior con zonas seguras de iPhone se ha escrito, no probado), lector de pantalla, Safari/Firefox, personas.
 
-## Resultado de la pasada completa de la fase 2
+## Resultado de la pasada completa de la fase 2 (antes del cierre)
 **Commit `cadb826`, árbol limpio, 2026-11-07 07:34 UTC, local del autor: 1073 correctas, 0 fallos, código de salida 0** (55 baterías con resultado: 1042 de la fase 1 + 10 de `unit-fase2-28` + 21 de `testY`). Registro en `resultado-ejecucion.txt` y `logs/` (sustituyen a los de la fase 1).
+
+## Resultado de la pasada completa del cierre de la fase 2
+*(pendiente)*

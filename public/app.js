@@ -1058,6 +1058,9 @@ const pildoras = r => `<ul class="pil" aria-label="Comprobaciones de ${esc(r.nom
 // Ronda 28 (fase 2): de la lista al laboratorio en un toque («Probar en mi cartera»), sin pasar por la ficha. No recomienda: solo abre la simulación.
 const botonProbar = r => `<button class="probar-emp" type="button" data-probar-emp="${esc(r.ticker)}">Probar<span class="sr"> ${esc(r.nombre)} en mi cartera</span></button>`;
 document.addEventListener('click', e => { const b = e.target.closest('[data-probar-emp]'); if (b) abrirLab({ carteraId: null, ticker: b.dataset.probarEmp, peso: 10, fin: 'proporcional' }); });
+// Ronda 28 (fase 2) · monograma de cada empresa (dos letras y el color de su sector): reconocible de un vistazo y sin logotipos externos (regla: sin fuentes externas)
+const SECT_COL = new Map(); const colSector = sec => { if (!SECT_COL.has(sec)) SECT_COL.set(sec, SECT_COL.size % 8); return SECT_COL.get(sec); };
+const monograma = r => `<span class="mono" style="--c:var(--c${colSector(r.sector || '')})" aria-hidden="true">${esc((r.ticker || '?').replace(/[^A-Z]/g, '').slice(0, 2))}</span>`;
 const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, cambiar de pantalla y recargar (solo en esta pestaña)
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
@@ -1086,12 +1089,12 @@ function renderEmpresas() {
   const resultado = r => { const nd = r.sin_datos ?? 5 - r.evaluados; // sin datos NO es una comprobación fallida ni una evaluación completa: se muestra como parcial
     return nd ? `<span class="marca-n">${r.cumplidos} superadas</span><small class="sin-d">${nd} sin datos</small>` : `<span class="marca-n">${r.cumplidos} de 5 superadas</span>`; };
   const vacio = empresas.length ? `Ninguna empresa coincide con ${bruto ? `«${esc(bruto)}»${hayFiltro ? ' y los filtros elegidos' : ''}` : 'los filtros elegidos'}. <button class="enlace" type="button" data-borrar-busqueda>${hayFiltro ? 'Borrar búsqueda y filtros' : 'Borrar búsqueda'}</button>` : 'Aún no hay datos de empresas cargados.';
-  tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td><span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
+  tb.innerHTML = vistas.length ? vistas.map(r => `<tr><td>${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}</span> <span class="simbolo">${esc(r.ticker)}</span>${marcaRadar(r.ticker)}</td><td>${esc(r.sector)}</td>
       <td class="num">${resultado(r)}${pildoras(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
   ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
-      <div class="ec-l1"><span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
+      <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${resultado(r)}</span></div>
       <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
@@ -1247,12 +1250,26 @@ try { history.scrollRestoration = 'manual'; } catch { /* sin historial */ }   //
 $('#dlg-ficha').addEventListener('close', () => { if (history.state?.ficha) { try { history.back(); } catch { /* sin historial */ } } });
 window.addEventListener('popstate', () => { const d = $('#dlg-ficha'); if (d.open) d.close(); });
 // ---------- contexto que se entrega a js/lab.js (radiografía, radar, laboratorio, seguimiento) ----------
+// Ronda 28 (fase 2) · «Aplicar a mi cartera» desde el laboratorio: solo sobre la cartera que está abierta en el editor (la misma que sirvió de base) y con confirmación.
+// Cambia el editor, NO la cuenta: hay que pulsar «Guardar cartera» después (los cambios quedan como cambios sin guardar, igual que si se editaran a mano).
+const esMismaCartera = base => !!current && !!base && !base.ejemplo && (base.guardada ? current.id === base.id : !current.id);
+async function aplicarDesdeLab(base, lista) {
+  if (!esMismaCartera(base) || !lista?.length) return false;
+  const ok = await confirmar({ titulo: 'Aplicar a tu cartera', texto: `Tu cartera «${current.nombre || $('#nombre').value || 'sin nombre'}» pasará a: ${lista.map(p => `${p.ticker} ${pesoCorto(p.peso)}`).join(' · ')}. No se guarda en tu cuenta hasta que pulses «Guardar cartera».`, ok: 'Aplicar' });
+  if (!ok) return false;
+  pos = lista.map(p => ({ ticker: p.ticker, peso: p.peso })); marcarCambio();
+  go(current.id ? '#cartera-' + current.id : '#cartera'); renderWorkspace(); toast('Cambios aplicados a tu cartera: revisa y guarda');
+  return true;
+}
+// El sello de avisos (ronda 28): «Más» despliega el detalle de esa pantalla
+document.addEventListener('click', e => { const b = e.target.closest('.sello-mas'); if (!b) return; const t = document.getElementById(b.getAttribute('aria-controls')); if (!t) return; const abrir = t.hidden; t.hidden = !abrir; b.setAttribute('aria-expanded', String(abrir)); b.textContent = abrir ? 'Menos' : 'Más'; });
 function contextoLab() {
   return { idSesion: () => tok(), sesion: () => sesionSeq, universo: cargarUniverso, empresas: () => empresas, origen: origenCodigo, cerrarFicha, abrirEjemplo: () => abrirLab({ carteraId: 'ejemplo' }), $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
     activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
     probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }),
+    puedeAplicar: base => esMismaCartera(base), aplicarComposicion: (base, lista) => aplicarDesdeLab(base, lista),
     explorarSector: sector => { const f = { ...filtrosLeer(), sector }; filtrosGuardar(f); poblarSectores(); renderEmpresas(); go('#empresas'); } };   // ronda 26: descubrir por categoría (sin elegir empresa)
 }
 // ---------- arranque ----------

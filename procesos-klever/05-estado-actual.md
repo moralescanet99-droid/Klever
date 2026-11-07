@@ -16,7 +16,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
 - ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).
-- ✅ Fase 2 (móvil y descubrir): barra inferior, pegar cartera, «Probar» desde Explorar, señales en tres niveles con umbrales propios, «idea» / «empresas que sigo». Pendiente de esta fase: varios cambios a la vez, sello único, línea de tiempo, tarjetas con logotipo.
+- ✅ Fase 2 (móvil y descubrir): barra inferior, pegar cartera, «Probar» desde Explorar, señales en tres niveles con umbrales propios, «idea» / «empresas que sigo». Cerrada con varios cambios a la vez y «Aplicar a mi cartera», sello único, línea de tiempo y monogramas (`testZ`).
 - ⬜ Fase 3 (personas), fase 4 (producción). Punto 14 aparcado.
 - Piloto: `piloto-r27` = commit `f991fd8` (`git checkout f991fd8` antes de `abrir-piloto.sh`).
 

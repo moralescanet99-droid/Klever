@@ -212,3 +212,32 @@
 .umb-form .peso input{width:4.5rem;min-height:40px;text-align:right}
 .preg-plantillas{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
 .emp-card .ec-l2{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+
+/* Varios cambios a la vez */
+.lab-cadena{padding:12px 14px;margin:0 0 16px;border:1px solid var(--azul-borde);border-radius:14px;background:var(--azul-bg)}
+.lab-cadena p{margin:0 0 4px}
+.lab-mas-acc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+
+/* Sello único de avisos */
+.sello{display:block;margin:8px 0 12px;font-size:.8125rem;color:var(--muted)}
+.sello-b{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-weight:600;font-size:.75rem}
+.sello-b::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--warn)}
+.sello-mas{font:inherit;font-size:.75rem;background:none;border:0;color:var(--muted);text-decoration:underline dotted;cursor:pointer;padding:4px}
+
+/* Línea de tiempo de una idea: lo próximo arriba, lo que ya pasó debajo y el origen al final */
+.esc-tiempo{position:relative;padding-left:22px;margin:12px 0 16px}
+.esc-tiempo::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:var(--border)}
+.esc-tiempo .esc-rev-lista{list-style:none;padding:0;margin:0}
+.esc-tiempo .esc-rev-lista>li,.tl-nodo{position:relative;margin:0 0 12px}
+.esc-tiempo .esc-rev-lista>li::before,.tl-nodo::before{content:"";position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--border-strong)}
+.tl-prox::before{border-color:var(--azul)!important;background:var(--azul-bg)!important}
+.tl-toca::before{border-color:var(--accent)!important;background:var(--alerta-bg)!important}
+.tl-toca b{color:var(--accent-on-soft)}
+.tl-inicio{color:var(--muted)}
+.tl-inicio::before{background:var(--border-strong)!important}
+.tl-vacio{margin:0 0 12px}
+
+/* Monograma de empresa */
+.mono{display:inline-grid;place-items:center;width:30px;height:30px;margin-right:10px;border-radius:9px;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:var(--c);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);font-size:.72rem;font-weight:700;letter-spacing:.02em;vertical-align:middle;flex:none}
+.emp-card .ec-l1{display:flex;align-items:center}
+.emp-card .ec-l1 .nombre-emp{flex:1;min-width:0}
