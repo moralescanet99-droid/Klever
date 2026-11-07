@@ -89,3 +89,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-06 · Ronda 28, fase 1 del plan (C28): claridad y lenguaje; 1042/0. Ver `ronda28/PLAN.md` y `ronda28/LEEME.md`.
 - 2026-11-07 · Ronda 28, fase 2 (C29, C30): móvil y descubrir, varios cambios a la vez, sello único, línea de tiempo; 1094/0.
 - 2026-11-07 · Memoria completada (C31) y automatizada con hooks de proyecto (C32).
+- 2026-11-07 · Opinión pedida por Javier (C33): por qué la web aún no atrae ni retiene y qué cambiar o tomar como referencia.

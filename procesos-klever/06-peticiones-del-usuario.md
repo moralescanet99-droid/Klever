@@ -2172,3 +2172,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Tienes que hacerlo automaticamente
 
 (Se añadieron dos hooks de proyecto en `.claude/settings.json`: `scripts/memoria/aviso-encargo.sh` recuerda con cada mensaje registrar el encargo literal y actualizar la memoria; `scripts/memoria/comprobar-memoria.sh` impide terminar un turno con código sin commitear o con commits de código sin anotar en `09-`.)
+
+## C33 · (2026-11-07) — ¿la web es superior? qué cambiar o copiar, literal
+> No termino de veer una web superior, le faltan muchas para atraer y retener al usuario. ¿Estas descuerdo? ¿Que cambiarias, harias de otra manera o copiarias de otro sitio?
+
+(Respuesta en el chat: de acuerdo; el producto es correcto y honesto pero no engancha. Propuestas ordenadas por impacto y decisiones que necesita Javier.)
