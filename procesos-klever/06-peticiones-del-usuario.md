@@ -2202,3 +2202,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > que has hecho? Esplicamelo para uqe lo entienda
 
 (Respuesta en el chat: explicación en lenguaje llano de la ronda 30, sin cambios de código.)
+
+## C39 · (2026-11-07) — cómo mejorar todo con las skills nuevas, literal
+> Con todos la nuevas skills instaladas como mejorarias todos los aspectos?
+
+(Respuesta en el chat: qué skill aporta a cada uno de los 14 aspectos, qué no pueden sustituir (personas, teléfono real, datos reales) y un orden propuesto: primero auditorías sin tocar código, después rondas de cambios. Sin cambios de código.)
