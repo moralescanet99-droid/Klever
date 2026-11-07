@@ -1,5 +1,5 @@
 # comando: node tests/ronda16/unit-escenarios16.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:34:45 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 08:36:14 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [P1] 18 evaluaciones adjuntas MALAS (marcado en motivo, nota, versión, fecha o bloque; números fuera de rango; fecha inexistente; cobertura insuficiente; campos extra)

@@ -1,5 +1,5 @@
 # comando: node tests/ronda28/testX.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:56:31 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 08:57:56 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [X1-1440] Portada (1440 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»

@@ -74,4 +74,4 @@ Teléfono real (la barra inferior con zonas seguras de iPhone se ha escrito, no 
 **Commit `cadb826`, árbol limpio, 2026-11-07 07:34 UTC, local del autor: 1073 correctas, 0 fallos, código de salida 0** (55 baterías con resultado: 1042 de la fase 1 + 10 de `unit-fase2-28` + 21 de `testY`). Registro en `resultado-ejecucion.txt` y `logs/` (sustituyen a los de la fase 1).
 
 ## Resultado de la pasada completa del cierre de la fase 2
-*(pendiente)*
+**Commit `0f5cfc9`, árbol limpio, 2026-11-07 08:36 UTC, local del autor: 1094 correctas, 0 fallos, código de salida 0** (56 baterías con resultado: 1073 anteriores + 21 de `testZ`). Registro en `resultado-ejecucion.txt` y `logs/`.

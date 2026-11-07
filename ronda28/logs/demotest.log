@@ -1,5 +1,5 @@
 # comando: node tests/ronda5/demotest.cjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:57:33 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 08:59:24 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    390: portada, banner de demo, 3 plantillas, ejemplos con etiqueta

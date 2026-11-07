@@ -1,5 +1,5 @@
-Ejecución: 2026-11-07 07:34 UTC
-Código: commit cadb826e2368843f5e52e0c941c108013b1b422f; árbol de trabajo limpio
+Ejecución: 2026-11-07 08:36 UTC
+Código: commit 0f5cfc9059a22805e31b95b5527823fe760a2843; árbol de trabajo limpio
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -107,6 +107,8 @@ RESULTADO: 12 correctas, 0 fallos
 === testX ===
 RESULTADO: 24 correctas, 0 fallos
 === testY ===
+RESULTADO: 21 correctas, 0 fallos
+=== testZ ===
 RESULTADO: 21 correctas, 0 fallos
 === paridad-demo ===
 RESULTADO: 5 correctas, 0 fallos

@@ -1,5 +1,5 @@
 # comando: node tests/ronda9/verificar-api.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 07:40:24 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 08:41:51 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [V0] Acceso por enlace de desarrollo  HTTP 200
@@ -8,7 +8,7 @@ OK    [V2] Guardar posiciones + nombre + tesis juntos; la respuesta trae su revi
 OK    [V3] Guardar con una revisión caducada  HTTP 409
 OK    [V4] Ticker desconocido: 400 y nada cambia  HTTP 400
 OK    [V5] 20 pares de guardados simultáneos con la misma revisión  ambos aceptados 0, exactamente uno 20, ninguno 0
-OK    [V6] GET con otro dispositivo guardando: nunca mezcla nombre y posiciones  79 lecturas, 0 mezclas
+OK    [V6] GET con otro dispositivo guardando: nunca mezcla nombre y posiciones  84 lecturas, 0 mezclas
 OK    [V7] GET público mientras se publica/despublica con otras posiciones: nunca devuelve una versión que no fue pública  233 lecturas, 0 versiones no públicas devueltas
 
 RESULTADO: 8 correctas, 0 fallos

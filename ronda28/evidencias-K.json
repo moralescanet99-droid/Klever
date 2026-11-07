@@ -451,7 +451,7 @@
   "id": "K21-390",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (390 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T07:45:57.037Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T08:47:22.367Z\"}}",
   "resultado": "OK"
  },
  {
@@ -472,7 +472,7 @@
   "id": "K21-1440",
   "escenario": "Visitante: el radar se guarda SOLO en este dispositivo y lo dice (1440 px)",
   "esperado": "Estado «Guardada solo en este dispositivo»; nada de «tu cuenta»; la nota está en localStorage",
-  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T07:45:59.221Z\"}}",
+  "observado": "Guardada solo en este dispositivo.; {\"JNJ\":{\"nota\":\"Mirar con calma\",\"t\":\"2026-11-07T08:47:24.550Z\"}}",
   "resultado": "OK"
  },
  {

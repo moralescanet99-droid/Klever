@@ -3,7 +3,7 @@
   "id": "PD1",
   "escenario": "Reconstruir la demo dos veces",
   "esperado": "Mismas huellas (la construcción es reproducible)",
-  "observado": "57c3bd0998406fed / 57c3bd0998406fed",
+  "observado": "9cbbc57a55ab968e / 9cbbc57a55ab968e",
   "resultado": "OK"
  },
  {

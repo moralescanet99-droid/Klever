@@ -179,7 +179,7 @@
   "id": "E10a",
   "escenario": "Explorar empresas en móvil: dos líneas",
   "esperado": "Línea 1: nombre y resultado; línea 2: símbolo, sector y «Ver ficha»; buscador cerca del título",
-  "observado": "nombre y resultado en la misma línea=true; símbolo/sector/«Ver ficha» en la línea inferior=true; distancia título→buscador 96 px; ancho del nombre 50 px",
+  "observado": "nombre y resultado en la misma línea=true; símbolo/sector/«Ver ficha» en la línea inferior=true; distancia título→buscador 96 px; ancho del nombre 116 px",
   "resultado": "OK",
   "evidencia": "E10-empresas-390.png"
  },
