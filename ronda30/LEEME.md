@@ -29,4 +29,5 @@
 Personas (¿la evolución hace volver?, ¿el reto semanal motiva o molesta?), teléfono real, lector de pantalla con los puntos de la evolución, una D1 remota con la migración 0013. Con los datos de prueba actuales las comprobaciones de las empresas **no cambian solas**: «Mira atrás» dirá casi siempre «no han cambiado» hasta que exista la carga real de la SEC (punto 14.1).
 
 ## Resultado de la pasada completa
-*(se rellena al terminar)*
+- **Pasada completa (2026-11-07 19:51 UTC, local del autor): 1173 correctas, 0 fallos, código de salida 0** (60 baterías con resultado, incluidas `unit-ronda30` (35) y `testAB` (15)). Registro en `resultado-ejecucion.txt` y `logs/`.
+- **Declarado:** la pasada se lanzó sobre el árbol de trabajo con los cambios aún sin commitear (el registro lo dice: «CON CAMBIOS sin commitear» sobre `2dceceb`). Esos cambios se commitearon sin tocarlos después como `4e42f30`; no se ha repetido la pasada sobre el árbol limpio.

@@ -1,0 +1,122 @@
+[
+ {
+  "id": "F1",
+  "escenario": "Crear, editar, guardar, cerrar, reabrir y recargar",
+  "esperado": "Antes de guardar «Cambios locales pendientes…»; tras guardar «Guardada en tu cuenta» y toast corto «Cartera guardada»; la tarjeta no marca cambios locales; reabrir y recargar conservan 30/25/25/20",
+  "observado": "inicial 25,0 25,0 25,0 25,0; antes de guardar «Cambios locales pendientes de guardar en tu cuenta»; tras guardar «Guardada en tu cuenta», toast «Cartera guardada»; tarjeta «Ejemplo simulado: oroPrivada GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % ✓ Asignada al 100 % · 4 posicionesModificada el 7 nov 2026 Abrir»; reabierta 30,0 25,0 25,0 20,0; tras recargar 30,0 25,0 25,0 20,0",
+  "resultado": "OK",
+  "evidencia": "F1-mis-carteras-guardada.png"
+ },
+ {
+  "id": "F3",
+  "escenario": "Cambios locales pendientes de guardar: tarjeta y recuperación",
+  "esperado": "Chip «Cambios locales pendientes de guardar en tu cuenta»; «Versión de tu cuenta: … Asignado: 100 %» y «Versión de este dispositivo: … Asignado: 98 % (incompleta)» con fecha y hora; tras recargar se recuperan 28/25/25/20",
+  "observado": "tarjeta «Ejemplo simulado: oroPrivadaCambios locales pendientes de guardar en tu cuenta GDX 30 % · IAU 25 % · NEM 25 % · +1 másGDX pesa el 30 % Versión de tu cuenta: 4 posiciones · Asignado: 100 %Versión de este dispositivo: 4 posiciones · Asignado: 98 % (incompleta) · editada el 7 nov 2026, 19:55Modificada el 7 nov 2026 Continuar editando»; recuperado 28,0 25,0 25,0 20,0 / «Cambios locales pendientes de guardar en tu cuenta»; ancho de página 1440",
+  "resultado": "OK",
+  "evidencia": "F3-tarjeta-cambios-locales-1440.png"
+ },
+ {
+  "id": "F5a",
+  "escenario": "Conflicto al abrir: versión local frente a versión de la cuenta",
+  "esperado": "Diálogo con «Versión de este dispositivo» y «Versión de tu cuenta» con fecha y hora y qué cambia; Escape y «Decidir después» posponen sin perder nada; «Usar la versión de tu cuenta» descarta lo local",
+  "observado": "diálogo «Hay dos versiones de esta cartera Decidir después Tienes cambios locales de esta cartera sin guardar, y la versión de tu cuenta se modificó después. No se sobrescribirá nada hasta que lo decidas. Versión de este dispositivoEditada el 7 nov 2026, 19:55Ejemplo simulado: oro4 posiciones · Asignado: 98 % (incompleta)Versión de tu cuentaModificada el 7 nov 2026, 19:55Ejemplo simulado: oro3 posiciones · Asignado: 100 % Qué cambiaSolo en este dispositivo: NEMGDX: 28 % en este dispositivo · 30 % en tu cuentaIAU: 25 % en este dispositivo · 30 % en tu cuentaGLD: 20 % en este dispositivo · 40 % en tu cuenta «Decidir después» (o Escape) no cambia nada: ni elige una copia, ni descarta datos, ni escribe en tu cuenta. «Usar la versión de tu cuenta» descarta los cambios locales. «Conservar la de este dispositivo» vuelve al editor sin guardar: revisa y pulsa Guardar. Usar la versión de tu cuenta Conservar la de este dispositivo»; Escape: diálogo abierto=0, copia local=true; tras «Decidir después» se ve 40,0 30,0 30,0 y la copia local sigue=true; tras «Usar la versión de tu cuenta» 40,0 30,0 30,0, copia local=false, «Guardada en tu cuenta»",
+  "resultado": "OK",
+  "evidencia": "F5a-conflicto-1440.png"
+ },
+ {
+  "id": "F5b",
+  "escenario": "Conflicto al guardar: elegir la versión de este dispositivo NO escribe; Guardar sí",
+  "esperado": "El servidor rechaza (409) sin guardar nada; al elegir la local se vuelve al editor sin tocar la cuenta; al pulsar Guardar se guarda esa y no otra",
+  "observado": "cuenta justo tras el rechazo «GDX:25,GLD:50,IAU:25» (la del otro dispositivo, intacta); diálogo «Hay dos versiones de esta cartera Decidir después Tu cuenta tiene una versión más reciente de esta cartera que la desde la que estabas editando. No se ha guardado nada. Elige cuál conservar. Versión d…»; tras elegir la local la cuenta sigue «GDX:25,GLD:50,IAU:25» y el estado es «Cambios locales pendientes de guardar en tu cuenta» con botón «Guardar cartera»; tras pulsar Guardar la cuenta tiene «GDX:30,GLD:35,IAU:30»",
+  "resultado": "OK",
+  "evidencia": "F5b-conflicto-al-guardar.png"
+ },
+ {
+  "id": "F5c",
+  "escenario": "Conflicto al guardar y «Decidir después»",
+  "esperado": "No se guarda nada, se explica el motivo, los cambios locales siguen en pantalla y en el dispositivo y el botón pasa a «Reintentar guardado»",
+  "observado": "motivo «La cartera cambió en tu cuenta. Elige qué versión conservar para poder guardar.La versión pública sigue igual.Detalle»; botón «Reintentar guardado»; copia local=true; cuenta «GDX:20,GLD:60,IAU:20»; valor en pantalla 20,0",
+  "resultado": "OK",
+  "evidencia": "F5c-decidir-despues.png"
+ },
+ {
+  "id": "F4",
+  "escenario": "Fallo de guardado y recuperación",
+  "esperado": "Botón «Reintentar guardado»; texto «No se pudo guardar… siguen en este dispositivo»; sin toast de éxito; al reintentar, «Guardada en tu cuenta» y el botón vuelve a «Guardar cartera»",
+  "observado": "tras fallar: «No se pudo guardar. Tus cambios siguen en este dispositivo», botón «Reintentar guardado», toasts=0; tras reintentar «Guardada en tu cuenta», botón «Guardar cartera», cuenta «GDX:30,GLD:20,IAU:25,NEM:25»",
+  "resultado": "OK",
+  "evidencia": "F4-fallo-guardado-390.png"
+ },
+ {
+  "id": "F2",
+  "escenario": "Enlace de acceso abierto en otro navegador",
+  "esperado": "Aviso persistente en «Mis carteras» antes del formulario: la cartera todavía no se ha guardado, el borrador no está en este navegador; sin toast flotante ni confirmación de guardado; sobrevive a recargar; se puede cerrar y no vuelve",
+  "observado": "aviso «Tu cartera todavía no se ha guardado en la cuenta. El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo. Entendido»; visible=true; toasts flotantes=0; tras recargar visible=true; tras «Entendido» oculto=true; tras recargar sigue oculto=true; carteras creadas=0",
+  "resultado": "OK",
+  "evidencia": "F2-aviso-otro-navegador-390.png"
+ },
+ {
+  "id": "F6a",
+  "escenario": "Editar una cartera pública con un reparto inválido",
+  "esperado": "Botón «Guardar y actualizar publicación»; chip «Tus cambios aún no son públicos»; la versión publicada no cambia; en móvil el botón puede ocupar dos líneas y no desborda",
+  "observado": "publicada «GDX:25,GLD:25,IAU:25,NEM:25»; botón «Guardar y actualizar publicación» (chip antes de editar visible=false); con 115 %: chip visible=true «Tus cambios aún no son públicos», publicada «GDX:25,GLD:25,IAU:25,NEM:25», motivo «Sobra un 15 % de asignaciónLa versión pública sigue igual.DetalleExceso de asignación: 15 %. Reduce los pesos hasta sumar 100 %. La versión publicada no cambia.»; móvil: botón «Guardar y actualizar publicación» de 51 px, ancho de página 390",
+  "resultado": "OK",
+  "evidencia": "F6-publica-pendiente-390.png"
+ },
+ {
+  "id": "F6b",
+  "escenario": "Dejar de publicar con cambios locales inválidos",
+  "esperado": "Dejar de publicar funciona y NO se pierde el trabajo local: sigue el 40, sigue «Cambios locales pendientes…» y sobrevive a recargar sin conflicto falso",
+  "observado": "tras dejar de publicar: valor 40,0, «Cambios locales pendientes de guardar en tu cuenta», copia local=true, ya no es público («HTTP 404»); tras recargar: valor 40,0, «Cambios locales pendientes de guardar en tu cuenta», diálogos de conflicto=0",
+  "resultado": "OK",
+  "evidencia": "F6-publica-pendiente-1440.png"
+ },
+ {
+  "id": "F6c",
+  "escenario": "Guardar una cartera pública con un reparto válido",
+  "esperado": "Se actualiza la publicación con una sola confirmación corta; desaparece «Tus cambios aún no son públicos»",
+  "observado": "publicada antes «GDX:25,GLD:25,IAU:25,NEM:25»; después «GDX:20,GLD:30,IAU:25,NEM:25»; toast «Cartera guardada y publicación actualizada»; estado «Guardada en tu cuenta»; chip de cambios no públicos visible=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F7a",
+  "escenario": "Resultados con datos ausentes en la lista",
+  "esperado": "Completas: «N de 5 superadas»; parciales: «N superadas · M sin datos» (nunca «N de 5» ni «no disponibles»); el parcial no se muestra como completo",
+  "observado": "completa «ADBE: 5 de 5 superadas»; parcial «AXP: 3 superadas 2 sin datos»; empresas parciales en los datos: AXP 3/2, C 3/2, JPM 3/2, MA 3/2, SCHW 3/2, V 3/2, WFC 3/2, BAC 2/2, BLK 2/2, MS 2/2, USB 2/2, GS 1/2",
+  "resultado": "OK",
+  "evidencia": "F7-empresas-sin-datos-390.png"
+ },
+ {
+  "id": "F7b",
+  "escenario": "Regla real de orden",
+  "esperado": "Superadas (desc) → no superadas (asc) → símbolo; sin datos no suman ni restan: el orden del servidor coincide con la regla recalculada y un parcial no queda detrás de otra empresa solo por tener datos ausentes",
+  "observado": "126 empresas; coincide con la regla=true; ejemplo: AXP (3 superadas, 0 no superadas, 2 sin datos) está en la posición 81 y ACN (3 superadas, 2 no superadas, 0 sin datos) en la 88",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F7c",
+  "escenario": "Ficha con datos ausentes",
+  "esperado": "Grupos «Superadas», «No superadas» y «Sin datos» con su recuento; texto «Evaluación parcial»; unidades «Importes en miles de millones de USD; ROIC en %»",
+  "observado": "grupos Superadas (3) | Sin datos (2); ficha «Probar en mi cartera Comparar con otra empresa Si aún no tienes cartera, «Probar en mi cartera» te ofrece una de ejemplo. ☆ Seguir esta empresa Sin cuenta, las empresas que sigues se guardan solo en este dispositivo. DeudaROICMargenCajaCrec.La huella: cuanto m…»; ancho 390",
+  "resultado": "OK",
+  "evidencia": "F7-ficha-sin-datos-390.png"
+ },
+ {
+  "id": "F8",
+  "escenario": "Título largo de la cartera en móvil",
+  "esperado": "Ocupa hasta dos líneas completas, sin cortarse con puntos suspensivos ni desbordar la página; Enter no inserta saltos",
+  "observado": "alto 60 px con línea de 25 px (≈ 2.4 líneas); cortado=false; ancho de página 390; sin saltos de línea=true. Límite medido: con 80 caracteres (máximo 80) el campo mide 62 px y el resto se desplaza dentro del campo",
+  "resultado": "OK",
+  "evidencia": "F8-titulo-dos-lineas-390.png"
+ },
+ {
+  "id": "F9",
+  "escenario": "Sin errores de JavaScript en la batería E",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

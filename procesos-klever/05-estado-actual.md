@@ -19,7 +19,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ✅ Fase 2 (móvil y descubrir): barra inferior, pegar cartera, «Probar» desde Explorar, señales en tres niveles con umbrales propios, «idea» / «empresas que sigo». Cerrada con varios cambios a la vez y «Aplicar a mi cartera», sello único, línea de tiempo y monogramas (`testZ`).
 - ✅ Fase 2.5 (ronda 29, retoma el punto 14): arranque guiado, huella de empresa, «Tu semana» y retos (`ronda29/LEEME.md`).
 - ⬜ Fase 3 (personas), fase 4 (producción). Abiertas: precios históricos, correo semanal (Brevo), datos reales de la SEC.
-- ✅ **Ronda 30 (C37), puntos 3–6 del punto 14:** foto semanal en el servidor (`/api/semana`, migración 0013), «Tu evolución», reto de la semana y ciclo de las ideas («Qué ha cambiado en los datos», «Mira atrás»). `unit-ronda30` (35) y `testAB` (15). Ver `ronda30/LEEME.md`.
+- ✅ **Ronda 30 (C37), puntos 3–6 del punto 14:** foto semanal en el servidor (`/api/semana`, migración 0013), «Tu evolución», reto de la semana y ciclo de las ideas («Qué ha cambiado en los datos», «Mira atrás»). `unit-ronda30` (35) y `testAB` (15); pasada completa **1173/0**. Ver `ronda30/LEEME.md`.
 - ⬜ **Punto 14, lo que falta** (`PENDIENTES.md` § ★): 14.1 «Novedades de tus empresas» (SEC real) y 14.2 correo semanal (Brevo + despliegue + tarea programada); criterio de 10 del punto 14 sin fijar.
 - Piloto: `piloto-r27` = commit `f991fd8` (`git checkout f991fd8` antes de `abrir-piloto.sh`).
 

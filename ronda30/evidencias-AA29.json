@@ -1,0 +1,107 @@
+[
+ {
+  "id": "AA1-1440",
+  "escenario": "Arranque guiado (1440 px): dos preguntas y la cartera de ejemplo ya revisada",
+  "esperado": "pregunta 1 con 4 opciones y el sello «no es una recomendación»; tras «crecer» + «todavía no»: «Ejemplo simulado: crecimiento» con 6 posiciones, en la revisión, con señal e indicadores",
+  "observado": "{\"paso1\":{\"h1\":\"¿Qué te interesa más?\",\"ops\":4,\"sello\":\"Simulación · sin dinero real · no es una recomendación\",\"foco\":false},\"aa1\":{\"nombre\":\"Ejemplo simulado: crecimiento\",\"n\":12,\"senal\":\"Solo 3 categorías\",\"indicadores\":3}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA2-1440",
+  "escenario": "Ya tengo cartera / empezar de cero (1440 px)",
+  "esperado": "«Sí, quiero copiarla» → editor vacío con el foco en el buscador y la pista de pegar; «Prefiero empezar de cero» → editor vacío",
+  "observado": "{\"copiar\":{\"n\":0,\"foco\":\"buscar-activo\",\"pista\":true},\"cero\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA3-1440",
+  "escenario": "Huella de empresa (1440 px)",
+  "esperado": "una huella decorativa por empresa visible en la lista; en la ficha, grande y con texto accesible que dice cuántas supera",
+  "observado": "{\"lista\":{\"n\":126,\"filas\":126,\"oculta\":\"true\"},\"ficha\":{\"label\":\"Huella de Coca-Cola: 4 de 5 comprobaciones superadas, 1 no superadas, 0 sin datos\",\"sup\":\"4\",\"ancho\":170}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA4-1440",
+  "escenario": "«Tu semana» en Mis carteras (1440 px)",
+  "esperado": "la cartera con su señal; «1 idea para revisar esta semana · 1 hoy»; retos «1 de 5» (la idea guardada) y la barra a 1; al volver «la semana siguiente» (foto del servidor) tras bajar NVDA, «Desde la semana del …» con «✓ Ya no: NVDA pesa el 40 %»",
+  "observado": "{\"sem\":{\"cart\":[\"Concentrada AAExposición alta: Tecnología\"],\"tocan\":\"1 idea para revisar esta semana · 1 hoy →\",\"retos\":\"1 de 5\",\"hechos\":[\"Compara una alternativa y guárdala como idea\"],\"barra\":\"1\"},\"desde\":{\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 40 % (Concentrada AA)\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA1-390",
+  "escenario": "Arranque guiado (390 px): dos preguntas y la cartera de ejemplo ya revisada",
+  "esperado": "pregunta 1 con 4 opciones y el sello «no es una recomendación»; tras «crecer» + «todavía no»: «Ejemplo simulado: crecimiento» con 6 posiciones, en la revisión, con señal e indicadores",
+  "observado": "{\"paso1\":{\"h1\":\"¿Qué te interesa más?\",\"ops\":4,\"sello\":\"Simulación · sin dinero real · no es una recomendación\",\"foco\":false},\"aa1\":{\"nombre\":\"Ejemplo simulado: crecimiento\",\"n\":12,\"senal\":\"Solo 3 categorías\",\"indicadores\":3}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA2-390",
+  "escenario": "Ya tengo cartera / empezar de cero (390 px)",
+  "esperado": "«Sí, quiero copiarla» → editor vacío con el foco en el buscador y la pista de pegar; «Prefiero empezar de cero» → editor vacío",
+  "observado": "{\"copiar\":{\"n\":0,\"foco\":\"buscar-activo\",\"pista\":true},\"cero\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA3-390",
+  "escenario": "Huella de empresa (390 px)",
+  "esperado": "una huella decorativa por empresa visible en la lista; en la ficha, grande y con texto accesible que dice cuántas supera",
+  "observado": "{\"lista\":{\"n\":126,\"filas\":126,\"oculta\":\"true\"},\"ficha\":{\"label\":\"Huella de Coca-Cola: 4 de 5 comprobaciones superadas, 1 no superadas, 0 sin datos\",\"sup\":\"4\",\"ancho\":150}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA4-390",
+  "escenario": "«Tu semana» en Mis carteras (390 px)",
+  "esperado": "la cartera con su señal; «1 idea para revisar esta semana · 1 hoy»; retos «1 de 5» (la idea guardada) y la barra a 1; al volver «la semana siguiente» (foto del servidor) tras bajar NVDA, «Desde la semana del …» con «✓ Ya no: NVDA pesa el 40 %»",
+  "observado": "{\"sem\":{\"cart\":[\"Concentrada AAExposición alta: Tecnología\"],\"tocan\":\"1 idea para revisar esta semana · 1 hoy →\",\"retos\":\"1 de 5\",\"hechos\":[\"Compara una alternativa y guárdala como idea\"],\"barra\":\"1\"},\"desde\":{\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 40 % (Concentrada AA)\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA1-320",
+  "escenario": "Arranque guiado (320 px): dos preguntas y la cartera de ejemplo ya revisada",
+  "esperado": "pregunta 1 con 4 opciones y el sello «no es una recomendación»; tras «crecer» + «todavía no»: «Ejemplo simulado: crecimiento» con 6 posiciones, en la revisión, con señal e indicadores",
+  "observado": "{\"paso1\":{\"h1\":\"¿Qué te interesa más?\",\"ops\":4,\"sello\":\"Simulación · sin dinero real · no es una recomendación\",\"foco\":false},\"aa1\":{\"nombre\":\"Ejemplo simulado: crecimiento\",\"n\":12,\"senal\":\"Solo 3 categorías\",\"indicadores\":3}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA2-320",
+  "escenario": "Ya tengo cartera / empezar de cero (320 px)",
+  "esperado": "«Sí, quiero copiarla» → editor vacío con el foco en el buscador y la pista de pegar; «Prefiero empezar de cero» → editor vacío",
+  "observado": "{\"copiar\":{\"n\":0,\"foco\":\"buscar-activo\",\"pista\":true},\"cero\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA3-320",
+  "escenario": "Huella de empresa (320 px)",
+  "esperado": "una huella decorativa por empresa visible en la lista; en la ficha, grande y con texto accesible que dice cuántas supera",
+  "observado": "{\"lista\":{\"n\":126,\"filas\":126,\"oculta\":\"true\"},\"ficha\":{\"label\":\"Huella de Coca-Cola: 4 de 5 comprobaciones superadas, 1 no superadas, 0 sin datos\",\"sup\":\"4\",\"ancho\":150}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA4-320",
+  "escenario": "«Tu semana» en Mis carteras (320 px)",
+  "esperado": "la cartera con su señal; «1 idea para revisar esta semana · 1 hoy»; retos «1 de 5» (la idea guardada) y la barra a 1; al volver «la semana siguiente» (foto del servidor) tras bajar NVDA, «Desde la semana del …» con «✓ Ya no: NVDA pesa el 40 %»",
+  "observado": "{\"sem\":{\"cart\":[\"Concentrada AAExposición alta: Tecnología\"],\"tocan\":\"1 idea para revisar esta semana · 1 hoy →\",\"retos\":\"1 de 5\",\"hechos\":[\"Compara una alternativa y guárdala como idea\"],\"barra\":\"1\"},\"desde\":{\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 40 % (Concentrada AA)\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AA0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]

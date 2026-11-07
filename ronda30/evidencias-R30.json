@@ -1,0 +1,282 @@
+[
+ {
+  "id": "S1",
+  "escenario": "lunesDe: la semana es la del lunes (UTC) que contiene el día",
+  "esperado": "sábado 7-nov-2026 → lunes 2-nov; lunes → sí mismo; domingo 1-nov → 26-oct; cambio de año",
+  "observado": "[\"2026-11-02\",\"2026-11-02\",\"2026-10-26\",\"2026-12-28\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S2",
+  "escenario": "fotoCartera: solo niveles, número de categorías y señales (sin pesos sueltos ni importes)",
+  "esperado": "concentrada: concentración media/alta, 3 categorías, señal de alerta; repartida: concentración baja, variedad amplia, 5 categorías; vacía → null",
+  "observado": "{\"fConc\":{\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3,\"senales\":[{\"id\":\"categoria\",\"nivel\":\"alerta\",\"titulo\":\"Exposición alta: Tecnología\"},{\"id\":\"posicion\",\"nivel\":\"alerta\",\"titulo\":\"NVDA pesa el 40 %\"}]},\"fVar\":{\"concentracion\":\"ok\",\"variedad\":\"ok\",\"n_categorias\":5,\"senales\":[{\"id\":\"ok\",\"nivel\":\"ok\",\"titulo\":\"Sin concentraciones destacadas\"}]}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S3",
+  "escenario": "fotoValida descarta formas inesperadas",
+  "esperado": "nivel desconocido, fecha mala, 4 señales o n_categorias negativo → null; una buena pasa",
+  "observado": "",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E1",
+  "escenario": "Evolución con tres semanas: de Alta/Poca a Baja/Amplia",
+  "esperado": "semanas 3, desde 19-oct; concentración y variedad «mejora»",
+  "observado": "{\"concentracion\":{\"antes\":\"alto\",\"ahora\":\"ok\",\"tendencia\":\"mejora\"},\"variedad\":{\"antes\":\"alto\",\"ahora\":\"ok\",\"tendencia\":\"mejora\"}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E2",
+  "escenario": "Orden indiferente y empeorar también se dice",
+  "esperado": "de Baja a Alta = «empeora» si el orden se invierte",
+  "observado": "{\"concentracion\":{\"antes\":\"ok\",\"ahora\":\"alto\",\"tendencia\":\"empeora\"},\"variedad\":{\"antes\":\"ok\",\"ahora\":\"alto\",\"tendencia\":\"empeora\"}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E3",
+  "escenario": "Con una sola semana NO hay evolución (no se inventa)",
+  "esperado": "tendencias null, semanas 1",
+  "observado": "{\"semanas\":1,\"serie\":[{\"semana\":\"2026-11-02\",\"concentracion\":\"ok\",\"variedad\":\"ok\",\"n_categorias\":5,\"senales\":[{\"id\":\"ok\",\"nivel\":\"ok\",\"titulo\":\"Sin concentraciones destacadas\"}]}],\"desde\":null,\"tendencias\":null}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E4",
+  "escenario": "Evolución: como mucho 6 semanas y nunca semanas futuras; filas dañadas fuera",
+  "esperado": "de 9 semanas válidas + una dañada + una futura → 6",
+  "observado": "",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C1",
+  "escenario": "Cambios de señales desde la última semana con foto",
+  "esperado": "«Ya no: NVDA pesa el 40 %» desde el 26-oct; «Sin concentraciones» no cuenta como señal nueva",
+  "observado": "{\"desde\":\"2026-10-26\",\"cambios\":[{\"tipo\":\"resuelta\",\"texto\":\"NVDA pesa el 40 %\"}]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "Sin semana anterior o sin foto de esta semana: sin cambios",
+  "esperado": "desde null",
+  "observado": "[{\"desde\":null,\"cambios\":[]},{\"desde\":null,\"cambios\":[]}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3",
+  "escenario": "fotoAnterior: la última semana ANTERIOR a la actual",
+  "esperado": "26-oct",
+  "observado": "\"2026-10-26\"",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W1",
+  "escenario": "Reto de la semana: rota cada lunes por los cinco y es el mismo toda la semana",
+  "esperado": "cinco semanas seguidas → cinco retos distintos; martes y domingo de la misma semana → el mismo",
+  "observado": "[\"invalidacion\",\"sin-alertas\",\"mejora\",\"categoria-nueva\",\"idea-semana\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W2",
+  "escenario": "Si el que toca necesita una semana anterior y no la hay, se pasa al siguiente",
+  "esperado": "en la semana de «mejora» sin historial → otro reto",
+  "observado": "{\"id\":\"idea-semana\",\"titulo\":\"Guarda esta semana una idea comparando\",\"pista\":\"Simula un cambio y pulsa «Guardar en mi Cuaderno».\",\"ir\":\"#laboratorio\",\"hecho\":false,\"cambia\":\"2026-11-23\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W3",
+  "escenario": "«Mejora un indicador»: conseguido solo si sube respecto a la semana anterior",
+  "esperado": "concentrada → repartida: hecho; al revés: no; cambia el lunes siguiente",
+  "observado": "[{\"id\":\"mejora\",\"titulo\":\"Mejora un indicador de una cartera respecto a otra semana\",\"pista\":\"Prueba en el laboratorio a bajar la posición o la categoría que más pesa.\",\"ir\":\"#laboratorio\",\"hecho\":true,\"cambia\":\"2026-11-23\"},{\"id\":\"mejora\",\"titulo\":\"Mejora un indicador de una cartera respecto a otra semana\",\"pista\":\"Prueba en el laboratorio a bajar la posición o la categoría que más pesa.\",\"ir\":\"#laboratorio\",\"hecho\":false,\"cambia\":\"2026-11-23\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W4",
+  "escenario": "«Guarda esta semana una idea»: cuenta solo lo guardado desde el lunes; sin poder leer ideas se salta",
+  "esperado": "hecho / no hecho / otro reto",
+  "observado": "[true,false,\"sin-alertas\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W5",
+  "escenario": "Nunca hay un reto de rentabilidad ni de precio",
+  "esperado": "ningún título habla de rentabilidad, ganar, precio o comprar",
+  "observado": "[\"Mejora un indicador de una cartera respecto a otra semana\",\"Añade a una cartera una categoría que no tenía\",\"Guarda esta semana una idea comparando\",\"Escribe en una idea qué te haría cambiar de opinión\",\"Deja una cartera sin alertas de concentración\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "W6",
+  "escenario": "Sin carteras ni ideas: no hay reto que aplicar",
+  "esperado": "null",
+  "observado": "null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1",
+  "escenario": "Empresas de una idea: la que se añade primero y luego las que ceden peso (como mucho 8)",
+  "esperado": "C, A, B; la que no cambia (D) fuera",
+  "observado": "[\"C\",\"A\",\"B\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2",
+  "escenario": "Foto de datos: estados ok/no/nd por comprobación y periodo; sin fila = sin datos",
+  "esperado": "KO con 5 estados y FY2024; ZZZ sin datos",
+  "observado": "{\"fecha\":\"2026-10-01\",\"empresas\":{\"KO\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"no\",\"margen_neto\":\"ok\",\"flujo_caja\":\"nd\",\"crecimiento\":\"ok\"}},\"ZZZ\":{\"periodo\":null,\"c\":null}}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I3",
+  "escenario": "validarFoto descarta formas inesperadas",
+  "esperado": "estado raro, clave extra, ticker malo, fecha mala, 9 empresas → null",
+  "observado": "",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4",
+  "escenario": "Qué ha cambiado: ROIC de «no superada» a «superada» y un informe nuevo",
+  "esperado": "KO: periodo FY2024→FY2025, roic no→ok; ZZZ: deuda nd→ok; n = 2",
+  "observado": "{\"desde\":\"2026-10-01\",\"empresas\":[{\"ticker\":\"KO\",\"sin_lectura\":false,\"periodo\":{\"antes\":\"FY2024\",\"ahora\":\"FY2025\"},\"cambios\":[{\"clave\":\"roic\",\"etiqueta\":\"ROIC\",\"antes\":\"no\",\"ahora\":\"ok\"}]},{\"ticker\":\"ZZZ\",\"sin_lectura\":false,\"periodo\":{\"antes\":null,\"ahora\":\"FY2025\"},\"cambios\":[{\"clave\":\"deuda_ebitda\",\"etiqueta\":\"Deuda / EBITDA\",\"antes\":\"nd\",\"ahora\":\"ok\"}]}],\"n\":2,\"periodos\":2}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I5",
+  "escenario": "Sin cambios se dice; una empresa que hoy no aparece es «no se puede comparar», no un cambio",
+  "esperado": "n = 0; ZZZ sin_lectura",
+  "observado": "[0,{\"ticker\":\"ZZZ\",\"sin_lectura\":true,\"periodo\":null,\"cambios\":[]}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I6",
+  "escenario": "«Mira atrás»: la idea en estudio más antigua con foto y al menos 28 días",
+  "esperado": "la «Vieja» (37 días), con su pregunta y 2 cambios; ni descartadas ni sin foto; nada si todas son recientes",
+  "observado": "{\"id\":2,\"nombre\":\"Vieja\",\"motivo\":\"¿Mejora su ROIC?\",\"dias\":37,\"cambios\":{\"desde\":\"2026-10-01\",\"empresas\":[{\"ticker\":\"KO\",\"sin_lectura\":false,\"periodo\":{\"antes\":\"FY2024\",\"ahora\":\"FY2025\"},\"cambios\":[{\"clave\":\"roic\",\"etiqueta\":\"ROIC\",\"antes\":\"no\",\"ahora\":\"ok\"}]},{\"ticker\":\"ZZZ\",\"sin_lectura\":false,\"periodo\":{\"antes\":null,\"ahora\":\"FY2025\"},\"cambios\":[{\"clave\":\"deuda_ebitda\",\"etiqueta\":\"Deuda / EBITDA\",\"antes\":\"nd\",\"ahora\":\"ok\"}]}],\"n\":2,\"periodos\":2}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V1",
+  "escenario": "/api/semana sin sesión",
+  "esperado": "HTTP 401 y nada escrito",
+  "observado": "HTTP 401; filas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V2",
+  "escenario": "Primera visita: registra la foto de ESTA semana de cada cartera con posiciones (no la vacía) y la devuelve",
+  "esperado": "una fila (cartera 1, semana 2026-11-02); la vacía sin foto; historial de 1 semana",
+  "observado": "{\"semana\":\"2026-11-02\",\"filas\":[{\"cartera_id\":1,\"semana\":\"2026-11-02\",\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3}],\"c1\":{\"id\":1,\"nombre\":\"Concentrada\",\"foto\":{\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3,\"senales\":[{\"id\":\"categoria\",\"nivel\":\"alerta\",\"titulo\":\"Exposición alta: Tecnología\"},{\"id\":\"posicion\",\"nivel\":\"alerta\",\"titulo\":\"NVDA pesa el 40 %\"}]},\"historial\":[{\"semana\":\"2026-11-02\",\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3,\"senales\":[{\"id\":\"categoria\",\"nivel\":\"alerta\",\"titulo\":\"Exposición alta: Tecnología\"},{\"id\":\"posicion\",\"nivel\":\"alerta\",\"titulo\":\"NVDA pesa el 40 %\"}]}]}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V3",
+  "escenario": "Lo guardado: niveles, categorías y señales; NUNCA importes ni la composición",
+  "esperado": "columnas sin pesos de posiciones ni dinero",
+  "observado": "[\"usuario_id\",\"cartera_id\",\"semana\",\"concentracion\",\"variedad\",\"n_categorias\",\"senales\",\"actualizado_en\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V4",
+  "escenario": "Otra visita la misma semana: actualiza la foto de la semana (no añade otra)",
+  "esperado": "sigue habiendo 1 fila y ahora refleja la cartera repartida",
+  "observado": "[{\"cartera_id\":1,\"semana\":\"2026-11-02\",\"concentracion\":\"medio\",\"variedad\":\"medio\",\"n_categorias\":4}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V5",
+  "escenario": "Con una semana anterior: evolución y cambios salen del servidor; lo de hace más de medio año y lo de carteras borradas se elimina",
+  "esperado": "historial de 2 semanas; «Ya no: NVDA pesa el 40 %»; la de 2020 y la de la cartera 99 borradas",
+  "observado": "{\"h1\":[{\"semana\":\"2026-10-26\",\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3,\"senales\":[{\"id\":\"posicion\",\"nivel\":\"alerta\",\"titulo\":\"NVDA pesa el 40 %\"}]},{\"semana\":\"2026-11-02\",\"concentracion\":\"medio\",\"variedad\":\"medio\",\"n_categorias\":4,\"senales\":[{\"id\":\"categoria\",\"nivel\":\"alerta\",\"titulo\":\"Exposición alta: Tecnología\"}]}],\"ev\":{\"concentracion\":{\"antes\":\"alto\",\"ahora\":\"medio\",\"tendencia\":\"mejora\"},\"variedad\":{\"antes\":\"medio\",\"ahora\":\"medio\",\"tendencia\":\"igual\"}},\"kS\":{\"desde\":\"2026-10-26\",\"cambios\":[{\"tipo\":\"resuelta\",\"texto\":\"NVDA pesa el 40 %\"},{\"tipo\":\"nueva\",\"texto\":\"Exposición alta: Tecnología\"}]},\"filas\":[{\"cartera_id\":1,\"semana\":\"2026-10-26\",\"concentracion\":\"alto\",\"variedad\":\"medio\",\"n_categorias\":3},{\"cartera_id\":1,\"semana\":\"2026-11-02\",\"concentracion\":\"medio\",\"variedad\":\"medio\",\"n_categorias\":4}]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V6",
+  "escenario": "Una fila dañada en la base no se entrega (ni rompe la respuesta)",
+  "esperado": "HTTP 200; sigue con 2 semanas válidas",
+  "observado": "HTTP 200; 2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V7",
+  "escenario": "Aislamiento: la otra cuenta solo ve y escribe lo suyo",
+  "esperado": "usuario 2: solo «Ajena»; las filas del usuario 1 no cambian",
+  "observado": "[\"Ajena\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V8",
+  "escenario": "Fallo de la base: error claro y nada a medias",
+  "esperado": "HTTP 500 con mensaje; filas iguales que antes",
+  "observado": "HTTP 500: No se pudo leer tu semana. Inténtalo de nuevo.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "V9",
+  "escenario": "Borrar una cartera borra también su foto semanal (es privada)",
+  "esperado": "HTTP 200; 0 filas de la cartera 1",
+  "observado": "HTTP 200; antes 3, ahora 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F1",
+  "escenario": "Guardar una idea: el servidor hace la foto (no la acepta del cliente)",
+  "esperado": "NVDA, KO y PG; KO con FY2024 y ROIC «no»; PG sin datos; fecha de hoy; la foto enviada por el cliente se ignora",
+  "observado": "{\"fecha\":\"2026-11-07\",\"empresas\":{\"NVDA\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"ok\",\"margen_neto\":\"ok\",\"flujo_caja\":\"nd\",\"crecimiento\":\"ok\"}},\"KO\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"no\",\"margen_neto\":\"ok\",\"flujo_caja\":\"nd\",\"crecimiento\":\"ok\"}},\"PG\":{\"periodo\":null,\"c\":null}}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F2",
+  "escenario": "Leer la idea más tarde: conserva su foto y se compara con los datos de hoy",
+  "esperado": "KO: informe nuevo y ROIC «no superada» → «superada»; NVDA y PG sin cambios",
+  "observado": "{\"desde\":\"2026-11-07\",\"empresas\":[{\"ticker\":\"NVDA\",\"sin_lectura\":false,\"periodo\":null,\"cambios\":[]},{\"ticker\":\"KO\",\"sin_lectura\":false,\"periodo\":{\"antes\":\"FY2024\",\"ahora\":\"FY2025\"},\"cambios\":[{\"clave\":\"roic\",\"etiqueta\":\"ROIC\",\"antes\":\"no\",\"ahora\":\"ok\"}]},{\"ticker\":\"PG\",\"sin_lectura\":false,\"periodo\":null,\"cambios\":[]}],\"n\":1,\"periodos\":1}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F3",
+  "escenario": "Una foto manipulada en la base no se entrega",
+  "esperado": "foto_datos null en la ficha y en la lista",
+  "observado": "[null,null]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "F4",
+  "escenario": "Un reintento con la misma clave no duplica la idea",
+  "esperado": "devuelve la misma idea (duplicado) y sigue habiendo una",
+  "observado": "200 true",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -1,0 +1,26 @@
+# comando: node tests/ronda21/unit-cuaderno21.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 19:52:24 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [K1] Guardar una comparación con pregunta, motivo, «qué me haría cambiar de opinión» y fecha
+OK    [K2] No se exige rellenar todo: solo con nombre y comparación
+OK    [K3] Límite explícito en servidor: 601 caracteres de invalidación
+OK    [K4] Editar la invalidación con control de revisión (PATCH)
+OK    [K5] Registrar una revisión que reprograma
+OK    [K6] Mantener sin nueva fecha
+OK    [K7] Descartar tras revisar
+OK    [K8] Reintento con la MISMA clave (corte de red)
+OK    [K9] Dos envíos SIMULTÁNEOS con la misma clave
+OK    [K10] Conflicto entre dos pestañas: la segunda lleva una revisión antigua
+OK    [K11] Editar el escenario con la revisión anterior a una revisión registrada
+OK    [K12] Validación en servidor de la revisión
+OK    [K13] El texto se guarda tal cual (se escapa al MOSTRAR, no al guardar) y se devuelve como dato
+OK    [K14] Otra cuenta (autenticada) y una sesión inválida
+OK    [K15] Una clave de intento ya usada en OTRO escenario de la misma cuenta
+OK    [K16] Cambiar la cartera original después de guardar la comparación
+OK    [K17] Borrar la cartera original: la comparación y su historial siguen
+OK    [K18] Eliminar el escenario elimina su historial (no quedan filas huérfanas)
+OK    [K19] Tope de 200 revisiones por escenario
+OK    [K20] Carteras públicas: los ejemplos de Klever van primero aunque `portafolios` tenga ahora una columna `origen`
+
+RESULTADO: 20 correctas, 0 fallos

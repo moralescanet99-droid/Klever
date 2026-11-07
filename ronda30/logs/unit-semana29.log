@@ -1,0 +1,20 @@
+# comando: node tests/ronda29/unit-semana29.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 19:52:24 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [H1] Huella: superada en el borde, no superada al 40 %, sin datos en el centro (y distinta de «no superada»)
+OK    [H2] SVG: accesible con título o decorativo sin él; marca 3 superadas y un punto hueco por el dato que falta
+OK    [H3] Un título con comillas no rompe el SVG
+OK    [R1] Cartera concentrada y sin ideas: ningún reto conseguido
+OK    [R2] Repartida en 5 categorías, una idea revisada y 3 empresas seguidas: 5 de 5
+OK    [R3] Sin poder leer ideas ni empresas seguidas: esos retos quedan «sin datos» (null), nunca conseguidos ni suspendidos
+OK    [R4] Sin carteras: nada conseguido y la pista invita a crear la primera
+OK    [R5] El reto de concentración usa los umbrales PROPIOS (70 %): KO 60 % lo cumple
+OK    [S1] Ideas de los próximos 7 días (en estudio): 2, una de ellas hoy; la descartada no cuenta
+OK    [S2] Señal principal de cada cartera y sin «cambios» la primera vez (no hay instantánea anterior)
+OK    [S3] Desde la última visita: la exposición alta se resolvió (cambio de la persona, no del mercado)
+OK    [S4] Una instantánea del MISMO día no se usa como «última visita»
+
+RESULTADO: 12 correctas, 0 fallos
+(node:6574) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

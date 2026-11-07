@@ -1,0 +1,16 @@
+# comando: node tests/ronda28/unit-claridad28.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 19:52:24 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [C1] Repartida (5 × 20 %, 5 categorías): concentración baja y variedad amplia
+OK    [C2] Bordes de concentración por posición: 24,9 % → baja; 25 % → media; 39,9 % → media; 40 % → alta
+OK    [C3] Concentración por CATEGORÍA aunque ninguna posición llegue al 25 %: Tecnología 44 % (22 + 22) → media
+OK    [C4] Los ETF cuentan como UNA variedad (dos ETF de dividendos + 2 acciones = 3)
+OK    [C5] Sin evaluación disponible, «Datos» dice «Calculando» y no inventa un porcentaje
+OK    [C6] «Datos» con evaluación: 50 % del peso analizable → parciales; 100 % → completos; 30 % → escasos
+OK    [C7] Cartera vacía: ningún indicador
+OK    [C8] Reparto a partes iguales: suma EXACTAMENTE 100 %, una decimal, diferencia máxima de 0,1 entre posiciones
+
+RESULTADO: 8 correctas, 0 fallos
+(node:6502) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
