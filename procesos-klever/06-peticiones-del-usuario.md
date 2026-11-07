@@ -2197,3 +2197,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Genial ahora haz los puntos 3, 4, 5 y 6 ya
 
 (Los de la propuesta C35 que no necesitan cuentas externas: foto semanal en el servidor, evolución en el tiempo, reto de la semana y cerrar el ciclo de las ideas. Resultado: `ronda30/LEEME.md`.)
+
+## C38 · (2026-11-07) — explicación de la ronda 30, literal
+> que has hecho? Esplicamelo para uqe lo entienda
+
+(Respuesta en el chat: explicación en lenguaje llano de la ronda 30, sin cambios de código.)
