@@ -16,15 +16,16 @@ La ronda 29 puso el «escaparate» (arranque guiado, huella, «Tu semana», reto
 - **Problema:** «Tu semana» solo la ve quien ya ha decidido volver. Sin un aviso, el punto 14 no pasa de un 6.
 - **Qué hacer:** correo semanal de 3 líneas (señal principal, ideas que tocan esta semana, novedades de sus empresas) con un enlace a «Tu semana». **Opcional y desactivado por defecto**, con baja en un clic y consentimiento registrado; sin rentabilidades ni recomendaciones.
 - **Depende de:** cuenta de **Brevo** (la misma del enlace de acceso, §1 de este archivo), despliegue en Cloudflare y una tarea programada (Cron Trigger de Cloudflare o GitHub Actions). Revisar el texto legal (consentimiento para comunicaciones).
-- **Requisito previo técnico:** la instantánea semanal en el servidor (ver «Ronda 30» abajo); hoy vive en el dispositivo y se borra al salir.
+- **Requisito previo técnico:** ✅ la instantánea semanal ya está en el servidor (ronda 30); falta que una tarea programada la haga también para quien no entra.
 - **Criterio de hecho:** en el piloto, al menos 1 de 5 personas vuelve desde el correo.
 
-### Ronda 30 propuesta (sin cuentas externas; la puede hacer Claude Code)  ⬜ no empezada
-1. **Instantánea semanal en el servidor** (D1): solo indicadores y señales, sin importes; sirve en varios dispositivos y para el correo.
-2. **Evolución en el tiempo:** «Hace 4 semanas: Concentración 🔴 · Variedad 🟡 → hoy 🟢 · 🟢».
-3. **Reto de la semana** rotativo (aprendizaje, nunca rentabilidad), además de los 5 fijos.
-4. **Cerrar el ciclo de las ideas:** «Hace 30 días guardaste esta idea para ganar variedad; esto ha cambiado en los datos de esas empresas». **Sin precios históricos** (recomendación de Claude: la decisión sigue abierta para Javier).
-5. **Criterio de 10 del punto 14** (no se escribió en `ronda28/PLAN.md` por estar aparcado): ≥ 3 de 5 personas del piloto vuelven solas en 7 días y ≥ 1 vuelve por el correo. Se mide con `scripts/metrics.sql`.
+### Ronda 30 (sin cuentas externas)  ✅ hecha el 2026-11-07 (C37, `ronda30/LEEME.md`)
+1. ✅ Instantánea semanal en el servidor (`/api/semana`, tabla `instantaneas`, migración 0013). **Al desplegar: aplicar `migrations/0013_instantaneas_y_foto.sql` en la D1 real** (en una base nueva basta `schema.sql`).
+2. ✅ Evolución en el tiempo («Tu evolución» en «Tu semana»).
+3. ✅ Reto de la semana rotativo.
+4. ✅ Cerrar el ciclo de las ideas («Qué ha cambiado en los datos desde que la guardaste» y «Mira atrás»), sin precios históricos.
+5. ⬜ **Criterio de 10 del punto 14** (no pedido aún): ≥ 3 de 5 personas del piloto vuelven solas en 7 días y ≥ 1 vuelve por el correo. Se mide con `scripts/metrics.sql`.
+- ⬜ Para el correo (14.2): la foto semanal ya existe en el servidor, pero solo se hace al abrir «Mis carteras»; el correo necesitará una **tarea programada** que la haga también para quien no entra.
 
 ## 0. Publicar la demo pública (la más rápida: solo cuenta de Cloudflare)
 - [ ] `wrangler login` y `wrangler pages deploy demo --project-name klever-demo` (ver `demo/LEEME.md`). Da una dirección pública con datos inventados que cualquiera, incluido ChatGPT, puede abrir.
@@ -53,7 +54,7 @@ La ronda 29 puso el «escaparate» (arranque guiado, huella, «Tu semana», reto
 
 ## 4. Cuando haya usuarios
 - [ ] Medir la decisión de la beta: `wrangler d1 execute klever --remote --file=scripts/metrics.sql` (registros, portafolios creados, usuarios que vuelven pasada una semana)
-- [ ] Bases creadas con versiones anteriores: aplicar `migrations/0002`, `0003`, `0004`, `0005`, `0006` y `0007` en orden (en una base nueva basta `schema.sql`)
+- [ ] Bases creadas con versiones anteriores: aplicar en orden las migraciones de `migrations/` que falten (de la `0002` a la `0013`) (en una base nueva basta `schema.sql`)
 - [ ] Si ya cargaste `data/demo.sql`, vuelve a cargarlo (o actualiza las tesis) para que las descripciones sean las nuevas, completas
 
 ## 5. Pruebas manuales que no se pueden ejecutar desde el entorno de trabajo

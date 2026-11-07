@@ -8,6 +8,7 @@ import { evaluar, resumenNota } from './nota.js';
 import { htmlNotaEstructura, htmlCambioNota, htmlEvaluacionGuardada } from './nota-ui.js';
 import { nuevoIntento, enviarIntento, actualizarVista, mismoContenido, CAMPOS_REVISION } from './revisiones.js';
 import { senales, hipotesis, indicadores, umbralesValidos } from './senales.js';
+import { cambiosDatos, diasEntre, ESTADO_CICLO } from './ciclo.js';
 // Ronda 28 (fase 2): umbrales PROPIOS de esta persona (solo en este navegador; si no hay o no valen, los de Klever)
 const CLAVE_UMB = 'klever_umbrales';
 const umbPropios = () => { try { return JSON.parse(localStorage.getItem(CLAVE_UMB)); } catch { return null; } };
@@ -722,13 +723,28 @@ function pintarEscenario() {
         <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost" type="button" id="esc-cancelar">Cancelar</button></p><p class="error" id="esc-error" role="alert"></p></form>`
         : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
+    <section class="esc-ciclo" id="esc-ciclo" aria-labelledby="esc-ciclo-t" aria-live="polite"><h2 id="esc-ciclo-t">Qué ha cambiado en los datos desde que la guardaste</h2>${e.foto_datos ? '<p class="mut peq">Comparando con los datos de hoy…</p>' : '<p class="mut peq">Esta idea es anterior a la foto de datos: no se puede comparar. Las ideas nuevas la guardan solas.</p>'}</section>
     ${htmlRevisiones(esc, e)}
     <section class="esc-estado" aria-label="Estado dla idea"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan la idea y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
-  restaurarFormRev();
+  restaurarFormRev(); pintarCiclo(e);
   if (LAB.abrirRev === e.id) { LAB.abrirRev = null; const d = $('#rev-det'); if (d) { d.open = true; $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); $('#rev-obs')?.focus({ preventScroll: true }); } }   // «Registrar revisión» desde el Cuaderno lleva directamente al formulario
+}
+// Ronda 30 · cerrar el ciclo: la foto de las comprobaciones que hizo el servidor al guardar la idea, frente a las de hoy. Solo datos de las empresas, sin precios ni consejo.
+async function pintarCiclo(e) {
+  if (!e.foto_datos) return;
+  let ahora = null; try { ahora = await x().criteriosAhora(); } catch { ahora = null; }
+  const el = x().$('#esc-ciclo'); if (!el || LAB.esc?.id !== e.id) return;   // se abrió otra idea mientras llegaban los datos
+  const { esc } = x(), c = ahora ? cambiosDatos(e.foto_datos, ahora) : null, hoyD = hoy(), dias = diasEntre(e.foto_datos.fecha, hoyD);
+  const cuando = dias <= 0 ? 'hoy' : dias === 1 ? 'hace 1 día' : `hace ${dias} días`;
+  const cuerpo = !c ? '<p class="mut">No se pudieron leer los datos de hoy. Vuelve a abrir la idea para intentarlo de nuevo.</p>'
+    : `<p>La guardaste ${cuando} (${esc(fechaCorta(e.foto_datos.fecha))}). ${c.n || c.periodos ? `Desde entonces: <b>${c.n} ${c.n === 1 ? 'comprobación ha cambiado' : 'comprobaciones han cambiado'}</b>${c.periodos ? ` y ${c.periodos} ${c.periodos === 1 ? 'empresa tiene' : 'empresas tienen'} un informe nuevo` : ''}.` : 'Desde entonces, <b>los datos de sus empresas no han cambiado</b>.'}</p>
+      <ul class="ciclo-lista">${c.empresas.map(m => `<li><b>${esc(m.ticker)}</b> ${m.sin_lectura ? '<span class="mut">no aparece hoy en los datos (no se puede comparar)</span>' : !m.cambios.length && !m.periodo ? '<span class="mut">sin cambios</span>'
+        : `${m.periodo ? `<span>nuevo informe: ${esc(m.periodo.antes || 'sin periodo')} → ${esc(m.periodo.ahora || 'sin periodo')}</span>` : ''}${m.cambios.map(k => `<span class="ciclo-c ciclo-${k.ahora}">${esc(k.etiqueta)}: ${ESTADO_CICLO[k.antes]} → ${ESTADO_CICLO[k.ahora]}</span>`).join('')}`}</li>`).join('')}</ul>
+      <p class="mut peq">Son las cinco comprobaciones de las fichas, no precios. Un cambio no dice qué hacer: compáralo con lo que escribiste arriba y, si quieres, registra una revisión.</p>`;
+  el.innerHTML = `<h2 id="esc-ciclo-t">Qué ha cambiado en los datos desde que la guardaste</h2>${cuerpo}`;
 }
 // Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
 const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };

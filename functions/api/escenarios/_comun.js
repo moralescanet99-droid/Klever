@@ -1,10 +1,12 @@
 import { refDeHistoria } from '../../../public/js/catalogo.js';
 import { validarResumen } from '../../../public/js/nota.js';
+import { validarFoto } from '../../../public/js/ciclo.js';
 // Utilidades de escenarios (privadas del módulo; el prefijo «_» evita que Pages lo enrute).
 export const ESTADOS = ['en_estudio', 'descartado', 'archivado'];
 const colegir = r => ({
   id: r.id, clave: r.clave, nombre: r.nombre, nota: r.nota, estado: r.estado, metodo: r.metodo, ticker: r.ticker, peso_objetivo: r.peso_objetivo,
   invalidacion: r.invalidacion || '', n_revisiones: r.n_revisiones ?? 0,
+  foto_datos: fotoLeida(r.foto_datos),   // ronda 30: foto de las comprobaciones al guardarla (null si es anterior o si no tiene la forma esperada)
   cartera_id: r.cartera_id, cartera_nombre: r.cartera_nombre, base_revision: r.base_revision, revision: r.revision,
   ...evaluacionGuardada(r.nota_json),
   pregunta: r.pregunta || '', pregunta_ref: r.pregunta_ref || null, pregunta_ref_invalida: !!r.pregunta_ref && !refDeHistoria(r.pregunta_ref, r.historia), revisar_en: r.revisar_en || null, historia: r.historia || null,
@@ -13,6 +15,7 @@ const colegir = r => ({
   cartera_existe: r.revision_actual != null, revision_actual: r.revision_actual ?? null,
   hay_version_posterior: r.revision_actual != null && r.revision_actual > r.base_revision,
 });
+const fotoLeida = t => { if (!t) return null; try { return validarFoto(JSON.parse(t)); } catch { return null; } };
 // Una fila antigua o manipulada NUNCA se entrega tal cual: se revalida su forma al leer. Si no es válida se devuelve `evaluacion_invalida` y ningún contenido.
 // `evaluacion_verificada` es siempre false: el servidor comprueba la forma, no recalcula la nota (es un registro fechado de lo que vio la persona).
 function evaluacionGuardada(texto) {

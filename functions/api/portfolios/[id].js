@@ -82,6 +82,7 @@ export async function onRequestDelete({ request, env, params }) {
   if (!p) return json({ error: 'No encontrado' }, 404);
   await env.DB.batch([
     env.DB.prepare('DELETE FROM posiciones WHERE portafolio_id = ?').bind(p.id),
+    env.DB.prepare('DELETE FROM instantaneas WHERE cartera_id = ? AND usuario_id = ?').bind(p.id, user.id),   // ronda 30: su foto semanal es privada y se va con ella
     env.DB.prepare('DELETE FROM portafolios WHERE id = ?').bind(p.id)]);
   return json({ ok: true });
 }

@@ -2,11 +2,12 @@
 //   AA1 portada → «Empieza en 1 minuto» → «Que crezca a largo plazo» → «Todavía no»: abre la cartera de EJEMPLO (Crecimiento) ya en la revisión, con una señal visible
 //   AA2 «Sí, quiero copiarla aquí» abre el editor vacío con el buscador listo para pegar · «Prefiero empezar de cero» también abre el editor vacío
 //   AA3 huella en Explorar (una por empresa visible) y grande en la ficha, con texto accesible
-//   AA4 «Tu semana» en Mis carteras: señal de cada cartera, ideas de la semana y retos con su avance; cambia «desde tu última visita» al día siguiente
+//   AA4 «Tu semana» en Mis carteras: señal de cada cartera, ideas de la semana y retos con su avance; cambia «desde la semana del…» (ronda 30: foto semanal en el servidor)
 //   AA0 sin errores ni desbordes
 const { chromium, B, ev, nuevo, mail, fin } = require('../ronda5/h.cjs');
 const J = JSON.stringify;
 (async () => {
+  process.removeAllListeners('warning');
   const b = await chromium.launch();
   const api = (p, m, ruta, body) => p.evaluate(async ([m, ruta, body]) => { const r = await fetch('/api' + ruta, { method: m, headers: { 'content-type': 'application/json', authorization: 'Bearer ' + localStorage.getItem('klever_token') }, body: body && JSON.stringify(body) }); return { s: r.status, j: await r.json().catch(() => ({})) }; }, [m, ruta, body]);
   const entrarCon = async (p, email) => { await p.goto(B); await p.waitForSelector('#entrar'); await p.click('#entrar'); await p.fill('#acc-email', email); await p.check('#acc-acepto'); await p.click('#form-acceso button');
@@ -45,14 +46,15 @@ const J = JSON.stringify;
     await p.evaluate(() => { location.hash = '#inicio'; }); await p.waitForTimeout(200); await p.evaluate(() => { location.hash = '#carteras'; }); await p.waitForSelector('#tu-semana:not([hidden]) .reto'); await p.waitForTimeout(300);
     const sem = await p.evaluate(() => ({ cart: [...document.querySelectorAll('.sem-cart')].map(a => a.textContent.replace(/\s+/g, ' ').trim()), tocan: document.querySelector('.sem-tocan')?.textContent.replace(/\s+/g, ' ').trim(), retos: document.querySelector('.retos-n').textContent, hechos: [...document.querySelectorAll('.reto.hecho b')].map(b => b.textContent), barra: document.querySelector('.retos-barra').getAttribute('aria-valuenow') }));
     await p.screenshot({ path: require('path').resolve(__dirname, '..', '..', process.env.RONDA || 'ronda29', 'evidencias', `AA4-semana-${w}.png`) }).catch(() => {});
-    // «desde tu última visita»: se simula una instantánea de ayer con la señal de concentración por posición, y se baja NVDA
-    await p.evaluate(() => { const g = JSON.parse(localStorage.getItem('klever_semana')); const d = new Date(Date.now() - 864e5); g.fecha = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; delete g.anterior; localStorage.setItem('klever_semana', JSON.stringify(g)); });
+    // «desde la última semana» (ronda 30: la foto vive en el SERVIDOR): la foto de esta semana, con NVDA al 40 %, se pasa a la semana anterior en la base local, y se baja NVDA
+    { const { DatabaseSync } = require('node:sqlite'), fs = require('fs'), path = require('path'), d = path.resolve(__dirname, '..', '..', '.wrangler/pruebas-auto/v3/d1/miniflare-D1DatabaseObject'), f = fs.readdirSync(d).filter(x => x.endsWith('.sqlite') && x !== 'metadata.sqlite');
+      const db = new DatabaseSync(path.join(d, f[0])); db.prepare("UPDATE instantaneas SET semana = date(semana, '-7 days') WHERE cartera_id = ?").run(c.id); db.close(); }
     await api(p, 'PUT', '/portfolios/' + c.id, { nombre: 'Concentrada AA', tesis: '', posiciones: [{ ticker: 'NVDA', peso: 20 }, { ticker: 'MSFT', peso: 20 }, { ticker: 'KO', peso: 20 }, { ticker: 'JNJ', peso: 20 }, { ticker: 'XOM', peso: 20 }], revision: cart.revision });
     await p.evaluate(() => { location.hash = '#inicio'; }); await p.waitForTimeout(200); await p.evaluate(() => { location.hash = '#carteras'; }); await p.waitForSelector('#tu-semana:not([hidden]) .reto'); await p.waitForTimeout(300);
     const desde = await p.evaluate(() => ({ desde: document.querySelector('.sem-desde')?.textContent, cambios: [...document.querySelectorAll('.sem-cambios li')].map(l => l.textContent.replace(/\s+/g, ' ').trim()) }));
-    ev('AA4-' + w, `«Tu semana» en Mis carteras (${w} px)`, 'la cartera con su señal; «1 idea para revisar esta semana · 1 hoy»; retos «1 de 5» (la idea guardada) y la barra a 1; al volver «al día siguiente» tras bajar NVDA, «Desde el …» con «✓ Ya no: NVDA pesa el 40 %»',
+    ev('AA4-' + w, `«Tu semana» en Mis carteras (${w} px)`, 'la cartera con su señal; «1 idea para revisar esta semana · 1 hoy»; retos «1 de 5» (la idea guardada) y la barra a 1; al volver «la semana siguiente» (foto del servidor) tras bajar NVDA, «Desde la semana del …» con «✓ Ya no: NVDA pesa el 40 %»',
       J({ sem, desde }), sem.cart.some(t => /Concentrada AA/.test(t) && /Exposición alta: Tecnología|NVDA pesa/.test(t)) && /1 idea para revisar esta semana · 1 hoy/.test(sem.tocan) && sem.retos === '1 de 5' && sem.barra === '1' && sem.hechos.length === 1 && /alternativa/.test(sem.hechos[0])
-      && /^Desde el/.test(desde.desde || '') && desde.cambios.some(t => /Ya no: NVDA pesa el 40 %/.test(t))); await mira('mis carteras');
+      && /^Desde la semana del/.test(desde.desde || '') && desde.cambios.some(t => /Ya no: NVDA pesa el 40 %/.test(t))); await mira('mis carteras');
     ev('AA0-' + w, `Sin errores ni desbordes (${w} px)`, 'ningún pageerror; ninguna vista más ancha que la ventana', J({ errs, desb }), errs.length === 0 && desb.length === 0);
     await p.ctx.close();
   }

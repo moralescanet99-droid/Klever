@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS escenarios (
   nota_json TEXT,                                                       -- ronda 15: evaluación de estructura fechada (antes/después)
   pregunta_ref TEXT CHECK (pregunta_ref IS NULL OR (length(pregunta_ref) BETWEEN 3 AND 70 AND pregunta_ref GLOB '*:[0-9]*')),   -- ronda 16 (migración 0011): cuestión editorial estable («historia:n»)
   invalidacion TEXT NOT NULL DEFAULT '' CHECK (length(invalidacion) <= 600),   -- ronda 21 (migración 0012): qué haría cambiar de opinión a la persona (opcional)
+  foto_datos TEXT CHECK (foto_datos IS NULL OR length(foto_datos) <= 4000),   -- ronda 30 (migración 0013): comprobaciones de sus empresas al guardarla (la hace el servidor)
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
   UNIQUE (usuario_id, clave)
@@ -141,4 +142,16 @@ CREATE TABLE IF NOT EXISTS mercado (
   moneda TEXT NOT NULL DEFAULT 'USD',
   fecha TEXT,
   fuente TEXT CHECK (fuente IS NULL OR fuente IN ('sec','mercado','prueba','demo'))
+);
+-- Ronda 30 (migración 0013): foto semanal de cada cartera (solo niveles y señales, nunca importes); se conserva medio año
+CREATE TABLE IF NOT EXISTS instantaneas (
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+  cartera_id INTEGER NOT NULL,                                   -- sin FK: se borra explícitamente al borrar la cartera
+  semana TEXT NOT NULL CHECK (semana GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),   -- lunes (UTC) de la semana
+  concentracion TEXT NOT NULL CHECK (concentracion IN ('ok','medio','alto')),
+  variedad TEXT NOT NULL CHECK (variedad IN ('ok','medio','alto')),
+  n_categorias INTEGER NOT NULL CHECK (n_categorias >= 0),
+  senales TEXT NOT NULL CHECK (length(senales) <= 1000),           -- JSON [{ id, nivel, titulo }] (como mucho 3); NUNCA importes
+  actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (usuario_id, cartera_id, semana)
 );

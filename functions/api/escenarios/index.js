@@ -2,6 +2,7 @@ import { json, auth, readJson, tickersDesconocidos, ERROR_INTERNO } from '../../
 import { refDeHistoria } from '../../../public/js/catalogo.js';
 import { validarResumen } from '../../../public/js/nota.js';
 import { propuestaCoincide, simular, esDecima } from '../../../public/js/calculos.js';
+import { empresasDeIdea, fotoDatos } from '../../../public/js/ciclo.js';
 import { SELECT_ESCENARIO, formato, fechaValida, MAX_INVALIDACION, MAX_PREGUNTA, ID_HISTORIA, REF_PREGUNTA } from './_comun.js';
 
 const MAX_ESCENARIOS = 100;
@@ -69,12 +70,18 @@ export async function onRequestPost({ request, env }) {
     if (!s.viable) return json({ error: 'La simulación no es viable: ' + s.motivo }, 400);
     const ok = propuestaCoincide(base, { ticker, peso }, b.financiacion, Array.isArray(b.propuesta) ? b.propuesta : []);
     if (!ok.ok) return json({ error: ok.motivo }, 400);
+    // Ronda 30: FOTO de las comprobaciones de las empresas que toca la idea, hecha AQUÍ con los datos del servidor (no los manda el cliente).
+    // Sirve para cerrar el ciclo más adelante («esto ha cambiado en los datos desde que la guardaste»). Sin fila en `ideas` = «sin datos».
+    const tickersFoto = empresasDeIdea(base, s.despues, ticker);
+    const { results: crit } = await env.DB.prepare(`SELECT ticker, criterios_cumplidos FROM ideas WHERE ticker IN (${tickersFoto.map(() => '?').join(',')})`).bind(...tickersFoto).all();
+    const porTicker = {}; for (const f of crit) { try { porTicker[f.ticker] = JSON.parse(f.criterios_cumplidos); } catch { /* fila dañada: cuenta como sin datos */ } }
+    const foto = JSON.stringify(fotoDatos(tickersFoto, porTicker, new Date().toISOString().slice(0, 10)));
     try {
       // El tope se comprueba EN la propia sentencia (no antes): dos guardados simultáneos no pueden superarlo.
       const r = await env.DB.prepare(
-        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, invalidacion, pregunta, revisar_en, historia, pregunta_ref, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json)
-         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
-        .bind(user.id, clave, nombre, nota, invalidacion, pregunta, revisar, historia, ref, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, user.id, MAX_ESCENARIOS).run();
+        `INSERT INTO escenarios (usuario_id, clave, nombre, nota, invalidacion, pregunta, revisar_en, historia, pregunta_ref, metodo, cartera_id, cartera_nombre, base_revision, ticker, peso_objetivo, base_json, propuesta_json, nota_json, foto_datos)
+         SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM escenarios WHERE usuario_id = ?) < ?`)
+        .bind(user.id, clave, nombre, nota, invalidacion, pregunta, revisar, historia, ref, b.financiacion, cartera.id, cartera.nombre, cartera.revision, ticker, peso, JSON.stringify(base), JSON.stringify(s.despues), evaluacion, foto, user.id, MAX_ESCENARIOS).run();
       if (!r.meta?.changes) return json({ error: `Puedes guardar hasta ${MAX_ESCENARIOS} escenarios. Elimina alguno para guardar otro.` }, 400);
     } catch (e) {
       const otro = await env.DB.prepare(`${SELECT_ESCENARIO} WHERE e.usuario_id = ? AND e.clave = ?`).bind(user.id, clave).first(); // carrera entre dos reintentos

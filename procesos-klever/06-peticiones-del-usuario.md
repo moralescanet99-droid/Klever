@@ -2192,3 +2192,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Me parece genial, cumplimenta el cuaderno maestro con los datos que aun quedan (seccion 1 y 2) por realizar para mas adelante cuando te pregunte que nos queda por hacer no lo pierdas
 
 (Anotado en `PENDIENTES.md` § ★ (14.1 y 14.2, más la Ronda 30 propuesta) y en `05-estado-actual.md`. Cuando Javier pregunte «qué nos queda», leer primero `PENDIENTES.md`.)
+
+## C37 · Ronda 30 (2026-11-07) — hacer los puntos 3, 4, 5 y 6, literal
+> Genial ahora haz los puntos 3, 4, 5 y 6 ya
+
+(Los de la propuesta C35 que no necesitan cuentas externas: foto semanal en el servidor, evolución en el tiempo, reto de la semana y cerrar el ciclo de las ideas. Resultado: `ronda30/LEEME.md`.)

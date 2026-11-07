@@ -296,3 +296,28 @@
 .onb-ico{grid-row:1/3;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--surface-2);color:var(--accent-on-soft);font-size:1.25rem}
 .onb-op b{font-size:1rem}
 .onb-op small{color:var(--muted);font-size:.8125rem}
+/* Ronda 30 · evolución, reto de la semana, «Mira atrás» y ciclo de las ideas */
+.evo-bloque{margin:10px 0}
+.evo-titulo{margin:0 0 6px;font-size:.875rem}
+.evo{padding:8px 12px;border:1px solid var(--border);border-radius:12px;margin-bottom:6px}
+.evo-cab{margin:0 0 4px;font-size:.8125rem;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.evo-lista{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.evo-fila{display:grid;grid-template-columns:7.5em auto minmax(0,1fr);gap:8px;align-items:center;font-size:.8125rem}
+.evo-puntos{display:flex;gap:4px}
+.evo-p{display:block;width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.evo-p.evo-ok{background:var(--verde)} .evo-p.evo-medio{background:var(--warn)} .evo-p.evo-alto{background:var(--accent)}
+.evo-txt{color:var(--muted)} .evo-txt.evo-mejora{color:var(--verde);font-weight:600} .evo-txt.evo-empeora{color:var(--alerta);font-weight:600}
+.evo-vacia{margin:8px 0}
+@media(max-width:359px){.evo-fila{grid-template-columns:minmax(0,1fr) auto}.evo-txt{grid-column:1 / -1}}
+.reto-sem{padding:10px 12px;margin-bottom:14px;border:1px solid var(--accent);border-radius:12px;background:linear-gradient(160deg,var(--alerta-bg),transparent 75%),var(--surface)}
+.reto-sem.hecho{border-color:var(--verde);background:var(--verde-bg)}
+.reto-sem-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 10px;margin:0 0 6px;font-size:.875rem}
+.reto-sem-t{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0 0 4px;font-size:.875rem;font-weight:600}
+.reto-sem.hecho .reto-i{background:var(--verde-bg);border-color:var(--verde);color:var(--verde)}
+.mira{margin-top:10px;padding:10px 12px;border-left:3px solid var(--azul);background:var(--surface-2);border-radius:0 12px 12px 0;font-size:.875rem}
+.mira-t{margin:0 0 4px}
+.mira-cambios{margin:4px 0;padding-left:18px;font-size:.8125rem}
+.esc-ciclo .ciclo-lista{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
+.esc-ciclo .ciclo-lista li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:.875rem}
+.ciclo-c{padding:2px 8px;border-radius:99px;background:var(--surface-2);font-size:.8125rem}
+.ciclo-c.ciclo-ok{background:var(--verde-bg);color:var(--verde)} .ciclo-c.ciclo-no{background:var(--alerta-bg);color:var(--alerta)}

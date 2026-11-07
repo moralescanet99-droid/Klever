@@ -1465,6 +1465,31 @@ summary{min-height:44px;align-content:center;cursor:pointer}
 .onb-ico{grid-row:1/3;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--surface-2);color:var(--accent-on-soft);font-size:1.25rem}
 .onb-op b{font-size:1rem}
 .onb-op small{color:var(--muted);font-size:.8125rem}
+/* Ronda 30 · evolución, reto de la semana, «Mira atrás» y ciclo de las ideas */
+.evo-bloque{margin:10px 0}
+.evo-titulo{margin:0 0 6px;font-size:.875rem}
+.evo{padding:8px 12px;border:1px solid var(--border);border-radius:12px;margin-bottom:6px}
+.evo-cab{margin:0 0 4px;font-size:.8125rem;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.evo-lista{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.evo-fila{display:grid;grid-template-columns:7.5em auto minmax(0,1fr);gap:8px;align-items:center;font-size:.8125rem}
+.evo-puntos{display:flex;gap:4px}
+.evo-p{display:block;width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.evo-p.evo-ok{background:var(--verde)} .evo-p.evo-medio{background:var(--warn)} .evo-p.evo-alto{background:var(--accent)}
+.evo-txt{color:var(--muted)} .evo-txt.evo-mejora{color:var(--verde);font-weight:600} .evo-txt.evo-empeora{color:var(--alerta);font-weight:600}
+.evo-vacia{margin:8px 0}
+@media(max-width:359px){.evo-fila{grid-template-columns:minmax(0,1fr) auto}.evo-txt{grid-column:1 / -1}}
+.reto-sem{padding:10px 12px;margin-bottom:14px;border:1px solid var(--accent);border-radius:12px;background:linear-gradient(160deg,var(--alerta-bg),transparent 75%),var(--surface)}
+.reto-sem.hecho{border-color:var(--verde);background:var(--verde-bg)}
+.reto-sem-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 10px;margin:0 0 6px;font-size:.875rem}
+.reto-sem-t{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;margin:0 0 4px;font-size:.875rem;font-weight:600}
+.reto-sem.hecho .reto-i{background:var(--verde-bg);border-color:var(--verde);color:var(--verde)}
+.mira{margin-top:10px;padding:10px 12px;border-left:3px solid var(--azul);background:var(--surface-2);border-radius:0 12px 12px 0;font-size:.875rem}
+.mira-t{margin:0 0 4px}
+.mira-cambios{margin:4px 0;padding-left:18px;font-size:.8125rem}
+.esc-ciclo .ciclo-lista{list-style:none;padding:0;margin:8px 0;display:grid;gap:6px}
+.esc-ciclo .ciclo-lista li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:.875rem}
+.ciclo-c{padding:2px 8px;border-radius:99px;background:var(--surface-2);font-size:.8125rem}
+.ciclo-c.ciclo-ok{background:var(--verde-bg);color:var(--verde)} .ciclo-c.ciclo-no{background:var(--alerta-bg);color:var(--alerta)}
 
 .demo-fallo{display:block;margin-top:8px;font-size:.875rem}
 .demo-banner{background:var(--warn-bg);color:var(--warn);border-radius:var(--r);padding:12px var(--s2);margin-bottom:var(--s2);font-size:.9375rem}
@@ -2055,7 +2080,7 @@ window.fetch=async(url,opts={})=>{
     const sim=simular(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion);if(!sim.viable)return J({error:'La simulación no es viable: '+sim.motivo},400);
     const ok=propuestaCoincide(base,{ticker:body.ticker,peso:Number(body.peso)},body.financiacion,body.propuesta||[]);if(!ok.ok)return J({error:ok.motivo},400);
     const inv=String(body.invalidacion??'').trim();if(inv.length>600)return J({error:'Qué me haría cambiar de opinión admite hasta 600 caracteres.'},400);
-    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),invalidacion:inv,revs:[],estado:'en_estudio',evaluacion:body.evaluacion||null,pregunta:preg,pregunta_ref:body.historia&&body.pregunta_ref||null,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
+    const e={id:DB.nextEsc++,uid,clave:body.clave,nombre,nota:String(body.nota??'').trim(),invalidacion:inv,revs:[],estado:'en_estudio',evaluacion:body.evaluacion||null,pregunta:preg,pregunta_ref:body.historia&&body.pregunta_ref||null,revisar_en:rev,historia:body.historia||null,metodo:body.financiacion,ticker:body.ticker,peso_objetivo:Number(body.peso),cartera_id:c.id,cartera_nombre:c.nombre,base_revision:c.revision,revision:0,base,propuesta:sim.despues,foto_datos:(()=>{const ts=empresasDeIdea(base,sim.despues,body.ticker),cr={};for(const t of ts)if(DB.ideas[t])cr[t]=DB.ideas[t];return fotoDatos(ts,cr,ahora().slice(0,10))})(),creado_en:ahora(),actualizado_en:ahora()};DB.esc.push(e);return J(escV(e),201)}
   if((g=path.match(/^\/escenarios\/(\d+)\/revisiones$/))){const e=DB.esc.find(x=>x.id==g[1]&&x.uid===uid);if(!e)return J({error:'No encontrado'},404);e.revs=e.revs||[];
     if(m==='GET')return J(e.revs.slice().sort((a,b)=>String(b.fecha).localeCompare(String(a.fecha))||b.id-a.id));
     if(m==='POST'){const ya=e.revs.find(r=>r.clave===body.clave);if(ya)return J({...ya,duplicado:true});
@@ -2073,6 +2098,10 @@ window.fetch=async(url,opts={})=>{
     if(m==='PATCH'){if(body.revision!==e.revision)return J({error:'El escenario cambió en tu cuenta después de la versión que ves.',conflicto:true,revision:e.revision},409);
       if(body.estado!==undefined&&!['en_estudio','descartado','archivado'].includes(body.estado))return J({error:'Estado no válido.'},400);
       if(body.nombre!==undefined)e.nombre=String(body.nombre).trim();if(body.nota!==undefined)e.nota=String(body.nota).trim();if(body.invalidacion!==undefined)e.invalidacion=String(body.invalidacion).trim().slice(0,600);if(body.pregunta!==undefined)e.pregunta=String(body.pregunta).trim();if(body.pregunta_ref!==undefined)e.pregunta_ref=body.pregunta_ref||null;if(body.revisar_en!==undefined)e.revisar_en=body.revisar_en||null;if(body.estado!==undefined)e.estado=body.estado;e.revision++;e.actualizado_en=ahora();return J(escV(e))}}
+  if(path==='/semana'&&m==='GET'){const hoy=ahora().slice(0,10),sem=lunesDe(hoy);DB.inst=DB.inst||{};const H=DB.inst[uid]=DB.inst[uid]||{};const act={};for(const a of DB.assets)act[a.ticker]={sector:a.sector,tipo:a.tipo};
+    const cs=DB.ports.filter(p=>p.usuario_id===uid).map(p=>({id:p.id,nombre:p.nombre,foto:fotoCartera(DB.pos[p.id]||[],act)}));for(const k of Object.keys(H))if(!cs.some(c=>String(c.id)===k))delete H[k];
+    for(const c of cs){if(!c.foto)continue;const l=H[c.id]=(H[c.id]||[]).filter(f=>f.semana!==sem);l.push({semana:sem,...c.foto})}
+    return J({hoy,semana:sem,carteras:cs.map(c=>({...c,historial:(H[c.id]||[]).slice().sort((a,b)=>a.semana.localeCompare(b.semana)).slice(-8)}))})}
   if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,revision:p.revision,limite_peso:p.limite_peso??null,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0),posiciones:ps.slice().sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1)).map(x=>({ticker:x.ticker,peso:x.peso}))}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
   if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);const ps=body.posiciones===undefined?[]:body.posiciones,v=valida(ps);if(v.e)return J({error:v.e},400);const id=addPort(uid,body.nombre.trim().slice(0,80),body.plantilla,0,body.tesis?String(body.tesis).trim().slice(0,600):null,ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)})));return J({id,revision:0,actualizado_en:null},201)}
   if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
@@ -2398,6 +2427,138 @@ function resumenSemana(datos, previo = null) {
     }
   }
   return { carteras, tocan, vencidas: tocan.filter(e => e.revisar_en <= hoy).length, cambios, desde: previo?.fecha && previo.fecha < hoy ? previo.fecha : null, instantanea };
+}
+
+// =====================================================================
+// Ronda 30 · el «motor» de volver: FOTO SEMANAL en el servidor, EVOLUCIÓN en el tiempo y RETO DE LA SEMANA. Todo PURO (lo usan el servidor y la interfaz).
+// La foto guarda solo NIVELES (semáforo) y SEÑALES de la cartera con los umbrales de Klever: nada de importes ni de rentabilidad.
+// La semana es la del LUNES (UTC) que la contiene: «AAAA-MM-DD».
+const lunesDe = iso => { const d = new Date(iso + 'T00:00:00Z'); return isoMas(iso, -((d.getUTCDay() + 6) % 7)); };
+const RANGO = { alto: 0, medio: 1, ok: 2 };   // mejor = más alto (concentración baja, variedad amplia)
+const NIVELES_SEMANA = Object.freeze({ concentracion: { ok: 'Baja', medio: 'Media', alto: 'Alta' }, variedad: { ok: 'Amplia', medio: 'Media', alto: 'Poca' } });
+const NIV_OK = v => Object.prototype.hasOwnProperty.call(RANGO, v);
+
+// Foto de UNA composición: { concentracion, variedad, n_categorias, senales:[{ id, nivel, titulo }] } o null si está vacía.
+function fotoCartera(pos, activos = {}) {
+  const r = radiografia(pos || [], activos); if (r.estado === 'vacia') return null;
+  const ind = indicadores(r), niv = id => ind.find(i => i.id === id).nivel;
+  const cats = r.categorias.filter(c => c.conocida && !c.soloFondos).length + (r.categorias.some(c => c.soloFondos) ? 1 : 0);
+  return { concentracion: niv('concentracion'), variedad: niv('variedad'), n_categorias: cats, senales: senales(r, 3).map(q => ({ id: q.id, nivel: q.nivel, titulo: q.titulo })) };
+}
+// Una foto leída de la base (o recibida) se revalida antes de usarla: si no tiene la forma esperada, no se usa.
+function fotoValida(f) {
+  if (!f || typeof f !== 'object' || !/^\d{4}-\d{2}-\d{2}$/.test(f.semana || '') || !NIV_OK(f.concentracion) || !NIV_OK(f.variedad) || !Number.isInteger(f.n_categorias) || f.n_categorias < 0) return null;
+  const s = Array.isArray(f.senales) ? f.senales : null; if (!s || s.length > 3 || s.some(q => !q || typeof q.id !== 'string' || typeof q.titulo !== 'string' || q.titulo.length > 120)) return null;
+  return { semana: f.semana, concentracion: f.concentracion, variedad: f.variedad, n_categorias: f.n_categorias, senales: s.map(q => ({ id: q.id, nivel: String(q.nivel || ''), titulo: q.titulo })) };
+}
+const porSemana = (a, b) => a.semana.localeCompare(b.semana);
+// La foto de la última semana ANTERIOR a `semana` que tenga foto (o null).
+const fotoAnterior = (historial, semana) => (historial || []).map(fotoValida).filter(f => f && f.semana < semana).sort(porSemana).pop() || null;
+
+// EVOLUCIÓN de una cartera: las últimas `max` semanas con foto (hasta la actual) y, si hay al menos dos, cómo ha cambiado cada indicador
+// entre la primera y la última («mejora», «empeora» o «igual»). Con una sola semana no hay evolución todavía (se dice, no se inventa).
+function evolucion(historial, semanaActual, max = 6) {
+  const h = (historial || []).map(fotoValida).filter(f => f && f.semana <= semanaActual).sort(porSemana).slice(-max);
+  if (h.length < 2) return { semanas: h.length, serie: h, desde: null, tendencias: null };
+  const a = h[0], z = h[h.length - 1], t = k => { const d = RANGO[z[k]] - RANGO[a[k]]; return { antes: a[k], ahora: z[k], tendencia: d > 0 ? 'mejora' : d < 0 ? 'empeora' : 'igual' }; };
+  return { semanas: h.length, serie: h, desde: a.semana, tendencias: { concentracion: t('concentracion'), variedad: t('variedad') } };
+}
+// CAMBIOS DE SEÑALES desde la última semana anterior con foto (no del mercado: los cambios salen de la composición guardada).
+// «Sin concentraciones destacadas» no cuenta como señal nueva ni resuelta: no es un aviso.
+function cambiosSemana(historial, semanaActual) {
+  const h = (historial || []).map(fotoValida).filter(Boolean), ahora = h.find(f => f.semana === semanaActual), prev = h.filter(f => f.semana < semanaActual).sort(porSemana).pop();
+  if (!ahora || !prev) return { desde: null, cambios: [] };
+  const ids = f => f.senales.filter(q => q.id !== 'ok').map(q => q.id + ':' + q.titulo), A = ids(prev), Z = ids(ahora), tit = x => x.split(':').slice(1).join(':');
+  return { desde: prev.semana, cambios: [...A.filter(x => !Z.includes(x)).map(x => ({ tipo: 'resuelta', texto: tit(x) })), ...Z.filter(x => !A.includes(x)).map(x => ({ tipo: 'nueva', texto: tit(x) }))] };
+}
+
+// RETO DE LA SEMANA: uno cada semana, rotando por esta lista (el mismo para toda la semana, cambia el lunes). Si el que toca no se puede aplicar
+// (p. ej. aún no hay una semana anterior con la que comparar), se pasa al siguiente. Como los retos fijos: entender y ordenar, NUNCA rentabilidad.
+const RETOS_SEMANA = Object.freeze([
+  { id: 'mejora', titulo: 'Mejora un indicador de una cartera respecto a otra semana', pista: 'Prueba en el laboratorio a bajar la posición o la categoría que más pesa.', ir: '#laboratorio' },
+  { id: 'categoria-nueva', titulo: 'Añade a una cartera una categoría que no tenía', pista: 'En Explorar, filtra por «sectores que no tienes».', ir: '#empresas' },
+  { id: 'idea-semana', titulo: 'Guarda esta semana una idea comparando', pista: 'Simula un cambio y pulsa «Guardar en mi Cuaderno».', ir: '#laboratorio' },
+  { id: 'invalidacion', titulo: 'Escribe en una idea qué te haría cambiar de opinión', pista: 'Abre una idea en estudio, pulsa «Editar» y rellena ese campo.', ir: '#seguimiento' },
+  { id: 'sin-alertas', titulo: 'Deja una cartera sin alertas de concentración', pista: 'Mira su señal principal y prueba la hipótesis que propone.', ir: '#carteras' },
+]);
+const LUNES_0 = Date.parse('2024-01-01T00:00:00Z');   // un lunes: la rotación es la misma para todo el mundo
+const indiceSemana = semana => Math.floor((Date.parse(semana + 'T00:00:00Z') - LUNES_0) / (7 * DIA));
+// datos = { semana, carteras: [{ id, foto }] (foto actual), anteriores: { id: foto de la última semana anterior }, ideas: [...] | null }
+function retoSemana(datos) {
+  const semana = datos.semana, cs = (datos.carteras || []).filter(c => c.foto), prev = datos.anteriores || {}, ideas = datos.ideas;
+  const conPrev = cs.filter(c => prev[c.id]), alerta = f => !!f?.senales?.some(q => q.nivel === 'alerta');
+  const estudio = Array.isArray(ideas) ? ideas.filter(e => e.estado === 'en_estudio') : [];
+  const reglas = {
+    mejora: { aplica: conPrev.length > 0, hecho: () => conPrev.some(c => RANGO[c.foto.concentracion] > RANGO[prev[c.id].concentracion] || RANGO[c.foto.variedad] > RANGO[prev[c.id].variedad]) },
+    'categoria-nueva': { aplica: conPrev.length > 0, hecho: () => conPrev.some(c => c.foto.n_categorias > prev[c.id].n_categorias) },
+    'idea-semana': { aplica: Array.isArray(ideas) && cs.length > 0, hecho: () => ideas.some(e => String(e.creado_en || '').slice(0, 10) >= semana) },
+    invalidacion: { aplica: estudio.some(e => !e.invalidacion || String(e.actualizado_en || '').slice(0, 10) >= semana), hecho: () => estudio.some(e => e.invalidacion && String(e.actualizado_en || '').slice(0, 10) >= semana) },
+    'sin-alertas': { aplica: cs.some(c => alerta(c.foto) || alerta(prev[c.id])), hecho: () => cs.some(c => !alerta(c.foto)) },
+  };
+  const n = RETOS_SEMANA.length, i0 = ((indiceSemana(semana) % n) + n) % n;
+  for (let i = 0; i < n; i++) { const r = RETOS_SEMANA[(i0 + i) % n], g = reglas[r.id]; if (g.aplica) return { ...r, hecho: !!g.hecho(), cambia: isoMas(semana, 7) }; }
+  return null;
+}
+
+// Ronda 30 · CERRAR EL CICLO DE LAS IDEAS. PURO (lo usan el servidor y la interfaz).
+// Al guardar una idea, el SERVIDOR hace una foto de las comprobaciones de las empresas que toca (la que se añade o cambia de peso y las que ceden peso).
+// Después, la interfaz compara esa foto con las comprobaciones de hoy: «Hace 34 días guardaste esta idea; esto ha cambiado en los datos de esas empresas».
+// Solo datos de las empresas (las cinco comprobaciones y el periodo del informe): NUNCA precios ni rentabilidad, y no dice qué hacer.
+const CLAVES_CICLO = Object.freeze(['deuda_ebitda', 'roic', 'margen_neto', 'flujo_caja', 'crecimiento']);
+const ETIQUETAS_CICLO = Object.freeze({ deuda_ebitda: 'Deuda / EBITDA', roic: 'ROIC', margen_neto: 'Margen neto', flujo_caja: 'Caja libre', crecimiento: 'Crecimiento' });
+const ESTADO_CICLO = Object.freeze({ ok: 'superada', no: 'no superada', nd: 'sin datos' });
+const MAX_EMPRESAS_FOTO = 8;
+const estCiclo = x => x?.ok === true ? 'ok' : x?.ok === false ? 'no' : 'nd';
+const TICKER_CICLO = /^[A-Z.]{1,6}$/, FECHA_CICLO = /^\d{4}-\d{2}-\d{2}$/;
+
+// Empresas de una idea: primero la que se añade o cambia de peso; después las que cambian de peso, de más a menos cambio. Como mucho 8.
+function empresasDeIdea(base, propuesta, ticker) {
+  const b = Object.fromEntries((base || []).map(p => [p.ticker, Number(p.peso) || 0])), d = Object.fromEntries((propuesta || []).map(p => [p.ticker, Number(p.peso) || 0]));
+  const otras = [...new Set([...Object.keys(b), ...Object.keys(d)])].filter(t => t !== ticker).map(t => [t, Math.abs((d[t] || 0) - (b[t] || 0))]).filter(([, x]) => x > 1e-9)
+    .sort((x, y) => y[1] - x[1] || (x[0] < y[0] ? -1 : 1)).map(([t]) => t);
+  return [ticker, ...otras].filter(t => TICKER_CICLO.test(t || '')).slice(0, MAX_EMPRESAS_FOTO);
+}
+// Foto: { fecha, empresas: { T: { periodo, c: { clave: 'ok'|'no'|'nd' } } | { periodo: null, c: null } (sin datos) } }. criterios: { T: criterios_cumplidos (con periodo) }.
+function fotoDatos(tickers, criterios, fecha) {
+  const empresas = {};
+  for (const t of tickers) { const c = criterios?.[t]; empresas[t] = c ? { periodo: typeof c.periodo === 'string' ? c.periodo.slice(0, 12) : null, c: Object.fromEntries(CLAVES_CICLO.map(k => [k, estCiclo(c[k])])) } : { periodo: null, c: null }; }
+  return { fecha, empresas };
+}
+// Una foto leída de la base se revalida: si no tiene la forma esperada se descarta (null), nunca se muestra a medias.
+function validarFoto(o) {
+  if (!o || typeof o !== 'object' || !FECHA_CICLO.test(o.fecha || '') || !o.empresas || typeof o.empresas !== 'object') return null;
+  const ks = Object.keys(o.empresas); if (!ks.length || ks.length > MAX_EMPRESAS_FOTO || ks.some(t => !TICKER_CICLO.test(t))) return null;
+  const empresas = {};
+  for (const t of ks) {
+    const e = o.empresas[t]; if (!e || typeof e !== 'object') return null;
+    if (e.periodo != null && (typeof e.periodo !== 'string' || e.periodo.length > 12)) return null;
+    if (e.c === null) { empresas[t] = { periodo: e.periodo ?? null, c: null }; continue; }
+    if (!e.c || typeof e.c !== 'object' || Object.keys(e.c).some(k => !CLAVES_CICLO.includes(k)) || CLAVES_CICLO.some(k => !['ok', 'no', 'nd'].includes(e.c[k]))) return null;
+    empresas[t] = { periodo: e.periodo ?? null, c: { ...e.c } };
+  }
+  return { fecha: o.fecha, empresas };
+}
+// Qué ha cambiado: por empresa, el periodo del informe (si es otro) y cada comprobación que cambia de estado. ahora: { T: criterios de hoy } (de /api/ideas).
+// Una empresa que hoy no aparece se marca «sin_lectura» (no se sabe; no es un cambio). n = número de comprobaciones que han cambiado.
+function cambiosDatos(foto, ahora) {
+  const f = validarFoto(foto); if (!f) return null;
+  const empresas = Object.entries(f.empresas).map(([ticker, e]) => {
+    const hoy = ahora?.[ticker];
+    if (hoy === undefined) return { ticker, sin_lectura: true, periodo: null, cambios: [] };
+    const periodo = hoy && e.periodo !== (hoy.periodo ?? null) ? { antes: e.periodo, ahora: hoy.periodo ?? null } : null;
+    const cambios = CLAVES_CICLO.map(k => ({ clave: k, etiqueta: ETIQUETAS_CICLO[k], antes: e.c ? e.c[k] : 'nd', ahora: hoy ? estCiclo(hoy[k]) : 'nd' })).filter(x => x.antes !== x.ahora);
+    return { ticker, sin_lectura: false, periodo, cambios };
+  });
+  return { desde: f.fecha, empresas, n: empresas.reduce((a, e) => a + e.cambios.length, 0), periodos: empresas.filter(e => e.periodo).length };
+}
+const diasEntre = (desde, hoy) => Math.round((Date.parse(hoy + 'T00:00:00Z') - Date.parse(desde + 'T00:00:00Z')) / 864e5);
+// «Mira atrás» en «Tu semana»: la idea EN ESTUDIO más antigua que tiene foto y al menos `minDias` días. null si no hay ninguna.
+function miraAtras(ideas, hoy, ahora, minDias = 28) {
+  const cand = (ideas || []).filter(e => e.estado === 'en_estudio' && e.foto_datos && validarFoto(e.foto_datos) && diasEntre(e.foto_datos.fecha, hoy) >= minDias)
+    .sort((a, b) => a.foto_datos.fecha.localeCompare(b.foto_datos.fecha) || a.id - b.id);
+  if (!cand.length) return null;
+  const e = cand[0];
+  return { id: e.id, nombre: e.nombre, motivo: e.pregunta || e.nota || '', dias: diasEntre(e.foto_datos.fecha, hoy), cambios: cambiosDatos(e.foto_datos, ahora) };
 }
 
 // Catálogo COMPARTIDO (cliente y servidor) de las cuestiones editoriales que una persona puede seguir. Cada identificador «historia:n» es INMUTABLE: nunca se reutiliza
@@ -3938,13 +4099,28 @@ function pintarEscenario() {
         <p class="fila"><button class="btn btn-primario" type="submit" id="esc-guardar">Guardar cambios</button><button class="btn btn-ghost" type="button" id="esc-cancelar">Cancelar</button></p><p class="error" id="esc-error" role="alert"></p></form>`
         : '<p><button class="btn btn-secundario" type="button" id="esc-editar">Editar pregunta, motivo y fecha</button></p>'}
     </section>
+    <section class="esc-ciclo" id="esc-ciclo" aria-labelledby="esc-ciclo-t" aria-live="polite"><h2 id="esc-ciclo-t">Qué ha cambiado en los datos desde que la guardaste</h2>${e.foto_datos ? '<p class="mut peq">Comparando con los datos de hoy…</p>' : '<p class="mut peq">Esta idea es anterior a la foto de datos: no se puede comparar. Las ideas nuevas la guardan solas.</p>'}</section>
     ${htmlRevisiones(esc, e)}
     <section class="esc-estado" aria-label="Estado dla idea"><h2>Estado</h2><p class="mut peq">«Marcar como descartado» o archivar conservan la idea y su historia; «Eliminar definitivamente» lo borra y no se puede deshacer. En ningún caso se toca tu cartera.</p>
       <p class="fila">${estados} <button class="btn btn-ghost peligro" type="button" id="esc-eliminar">Eliminar definitivamente</button></p><p class="error" id="esc-estado-error" role="alert"></p></section>
     <section class="lab-res"><h2>Comparación guardada</h2>${htmlEvaluacionGuardada(esc, e)}${htmlComparacion(c, cambiosEntre(e.base, e.propuesta), viva?.limite == null ? '<p class="mut">La cartera no tiene un límite personal definido ahora.</p>' : `<p class="mut peq">Con el límite que tiene ahora la cartera (${P(viva.limite)}).</p>${limitesHtml(c, viva.limite)}`)}
       <details class="mini"><summary>Composición guardada</summary><p class="peq">Base: ${esc(e.base.map(p => `${p.ticker} ${p.peso} %`).join(' · ') || 'vacía')}.</p><p class="peq">Propuesta: ${esc(e.propuesta.map(p => `${p.ticker} ${p.peso} %`).join(' · '))}.</p></details></section>`;
-  restaurarFormRev();
+  restaurarFormRev(); pintarCiclo(e);
   if (LAB.abrirRev === e.id) { LAB.abrirRev = null; const d = $('#rev-det'); if (d) { d.open = true; $('#esc-rev-t')?.scrollIntoView({ block: 'start' }); $('#rev-obs')?.focus({ preventScroll: true }); } }   // «Registrar revisión» desde el Cuaderno lleva directamente al formulario
+}
+// Ronda 30 · cerrar el ciclo: la foto de las comprobaciones que hizo el servidor al guardar la idea, frente a las de hoy. Solo datos de las empresas, sin precios ni consejo.
+async function pintarCiclo(e) {
+  if (!e.foto_datos) return;
+  let ahora = null; try { ahora = await x().criteriosAhora(); } catch { ahora = null; }
+  const el = x().$('#esc-ciclo'); if (!el || LAB.esc?.id !== e.id) return;   // se abrió otra idea mientras llegaban los datos
+  const { esc } = x(), c = ahora ? cambiosDatos(e.foto_datos, ahora) : null, hoyD = hoy(), dias = diasEntre(e.foto_datos.fecha, hoyD);
+  const cuando = dias <= 0 ? 'hoy' : dias === 1 ? 'hace 1 día' : `hace ${dias} días`;
+  const cuerpo = !c ? '<p class="mut">No se pudieron leer los datos de hoy. Vuelve a abrir la idea para intentarlo de nuevo.</p>'
+    : `<p>La guardaste ${cuando} (${esc(fechaCorta(e.foto_datos.fecha))}). ${c.n || c.periodos ? `Desde entonces: <b>${c.n} ${c.n === 1 ? 'comprobación ha cambiado' : 'comprobaciones han cambiado'}</b>${c.periodos ? ` y ${c.periodos} ${c.periodos === 1 ? 'empresa tiene' : 'empresas tienen'} un informe nuevo` : ''}.` : 'Desde entonces, <b>los datos de sus empresas no han cambiado</b>.'}</p>
+      <ul class="ciclo-lista">${c.empresas.map(m => `<li><b>${esc(m.ticker)}</b> ${m.sin_lectura ? '<span class="mut">no aparece hoy en los datos (no se puede comparar)</span>' : !m.cambios.length && !m.periodo ? '<span class="mut">sin cambios</span>'
+        : `${m.periodo ? `<span>nuevo informe: ${esc(m.periodo.antes || 'sin periodo')} → ${esc(m.periodo.ahora || 'sin periodo')}</span>` : ''}${m.cambios.map(k => `<span class="ciclo-c ciclo-${k.ahora}">${esc(k.etiqueta)}: ${ESTADO_CICLO[k.antes]} → ${ESTADO_CICLO[k.ahora]}</span>`).join('')}`}</li>`).join('')}</ul>
+      <p class="mut peq">Son las cinco comprobaciones de las fichas, no precios. Un cambio no dice qué hacer: compáralo con lo que escribiste arriba y, si quieres, registra una revisión.</p>`;
+  el.innerHTML = `<h2 id="esc-ciclo-t">Qué ha cambiado en los datos desde que la guardaste</h2>${cuerpo}`;
 }
 // Historial de revisiones (solo se AÑADE: la hipótesis original, la base y la propuesta no se tocan). El texto es un comentario PERSONAL, no un hecho verificado.
 const DECIS = { mantener: 'Mantengo la idea', descartar: 'Descarto la idea', reprogramar: 'Programo otra revisión' };
@@ -4451,24 +4627,59 @@ async function cargarMisCarteras() {
     pintarSemana(list, seq);
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
-// Ronda 29 (fase 2.5) · «Tu semana»: lo que conviene mirar hoy (señal de cada cartera, ideas de los próximos 7 días, cambios desde la última visita) y los retos de aprendizaje.
-// Todo sale de datos leídos: si las ideas no se pueden leer, sus retos se muestran «sin datos» (ni conseguidos ni suspendidos). La instantánea vive solo en este dispositivo.
+// Ronda 29 (fase 2.5) · «Tu semana»: lo que conviene mirar hoy (señal de cada cartera, ideas de los próximos 7 días) y los retos de aprendizaje.
+// Ronda 30: la memoria vive en el SERVIDOR (/api/semana): evolución de los indicadores semana a semana, cambios de señales desde la última semana con foto,
+// el reto de la semana y «Mira atrás» (una idea antigua frente a los datos de hoy). Si algo no se puede leer, esa parte dice «sin datos»: no se inventa.
 const hoyIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+// Los datos «de hoy» para comparar con la foto de una idea se leen del servidor (como mucho una vez por minuto): la lista de Explorar puede ser de cuando se abrió la página.
+let critCache = null;
+const criteriosAhora = () => { if (critCache && Date.now() - critCache.t < 60e3) return critCache.p;
+  const p = getJson('/ideas').then(l => Object.fromEntries(l.map(r => [r.ticker, r.criterios]))); critCache = { t: Date.now(), p }; p.catch(() => { if (critCache?.p === p) critCache = null; }); return p; };
+const fechaSemana = s => `semana del ${fmtFecha(s)}`;
+function htmlEvolucion(c, ev) {
+  const fila = (k, et) => { const t = ev.tendencias[k], txt = NIVELES_SEMANA[k];
+    return `<li class="evo-fila"><span class="evo-et">${et}</span><span class="evo-puntos" aria-hidden="true">${ev.serie.map(f => `<i class="evo-p evo-${f[k]}" title="${esc(fechaSemana(f.semana))}: ${txt[f[k]]}"></i>`).join('')}</span>
+      <span class="evo-txt evo-${t.tendencia}">${txt[t.antes]} → ${txt[t.ahora]}<span class="sr"> (${t.tendencia === 'mejora' ? 'mejora' : t.tendencia === 'empeora' ? 'empeora' : 'sin cambios'})</span></span></li>`; };
+  return `<div class="evo"><p class="evo-cab"><b>${esc(c.nombre)}</b> <span class="mut peq">desde hace ${ev.semanas - 1} ${ev.semanas === 2 ? 'semana' : 'semanas'}</span></p><ul class="evo-lista">${fila('concentracion', 'Concentración')}${fila('variedad', 'Variedad')}</ul></div>`;
+}
+function htmlMiraAtras(m) {
+  if (!m) return '';
+  const c = m.cambios, emp = c ? c.empresas.filter(e => e.cambios.length || e.periodo) : [];
+  const det = !c ? '<p class="mut peq">No se pudieron leer los datos de hoy para compararlos.</p>'
+    : c.n || c.periodos ? `<ul class="mira-cambios">${emp.slice(0, 3).map(e => `<li><b>${esc(e.ticker)}</b>${e.periodo ? ` · nuevo informe (${esc(e.periodo.antes || 'sin periodo')} → ${esc(e.periodo.ahora || 'sin periodo')})` : ''}${e.cambios.slice(0, 2).map(x => ` · ${esc(x.etiqueta)}: ${ESTADO_CICLO[x.antes]} → ${ESTADO_CICLO[x.ahora]}`).join('')}</li>`).join('')}</ul>`
+    : '<p class="mut peq">Los datos de sus empresas no han cambiado desde entonces.</p>';
+  return `<div class="mira"><p class="mira-t"><b>Mira atrás:</b> hace ${m.dias} días guardaste «${esc(m.nombre)}»${m.motivo ? ` (${esc(m.motivo.length > 90 ? m.motivo.slice(0, 89) + '…' : m.motivo)})` : ''}.</p>${det}<a class="reto-pista" href="#escenario-${m.id}">Revisar esta idea →</a></div>`;
+}
 async function pintarSemana(list, seq) {
-  const el = $('#tu-semana'); let ideas = null; try { ideas = await api('/escenarios'); } catch { ideas = null; } if (seq !== misSeq || !logged()) return;   // respuesta tardía tras salir: no se pinta
+  const el = $('#tu-semana');
+  const [rI, rS, rC] = await Promise.allSettled([api('/escenarios'), api('/semana'), criteriosAhora()]);
+  if (seq !== misSeq || !logged()) return;   // respuesta tardía tras salir: no se pinta
+  const ideas = rI.status === 'fulfilled' ? rI.value : null, sem = rS.status === 'fulfilled' ? rS.value : null, ahora = rC.status === 'fulfilled' ? rC.value : null;
+  store.removeItem('klever_semana');         // ronda 30: la foto ya no vive en el dispositivo (la de la ronda 29 se retira)
   let umb = null; try { umb = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ }
-  const datos = { carteras: list.map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones || [] })), activos: by, ideas, sigues: nSeguidas(), umb, hoy: hoyIso() };
-  let g = null; try { g = JSON.parse(store.getItem('klever_semana')); } catch { g = null; }
-  const base = !g ? null : g.fecha < datos.hoy ? { fecha: g.fecha, carteras: g.carteras } : g.anterior || null;
-  const res = resumenSemana(datos, base), rt = retos(datos);
-  try { store.setItem('klever_semana', JSON.stringify({ ...res.instantanea, anterior: base })); } catch { /* sin almacenamiento */ }
-  const lin = c => `<li><a href="#cartera-${c.id}" class="sem-cart"><b>${esc(c.nombre)}</b>${c.senal ? `<span class="ci-senal senal-${c.senal.nivel}"><i aria-hidden="true"></i>${esc(c.senal.titulo)}</span>` : ''}</a></li>`;
-  const cambios = res.cambios.length ? `<p class="sem-desde">Desde el ${esc(fmtFecha(res.desde))}:</p><ul class="sem-cambios">${res.cambios.slice(0, 4).map(x => `<li class="sem-${x.tipo}">${x.tipo === 'resuelta' ? '✓ Ya no' : '● Nueva'}: ${esc(x.texto)} <span class="mut">(${esc(x.cartera)})</span></li>`).join('')}</ul>` : '';
+  const datos = { carteras: list.map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones || [] })), activos: by, ideas, sigues: nSeguidas(), umb, hoy: sem?.hoy || hoyIso() };
+  const res = resumenSemana(datos, null), rt = retos(datos);
+  const porId = Object.fromEntries((sem?.carteras || []).map(c => [c.id, c])), visibles = res.carteras.slice(0, 4);
+  // cambios de señales desde la última semana con foto (servidor)
+  const cambios = [], desdes = [];
+  for (const c of visibles) { const h = porId[c.id]; if (!h) continue; const k = cambiosSemana(h.historial, sem.semana); if (k.cambios.length) { desdes.push(k.desde); k.cambios.forEach(x => cambios.push({ ...x, cartera: c.nombre })); } }
+  const desde = desdes.sort().pop();
+  const htmlCambios = cambios.length ? `<p class="sem-desde">Desde la ${esc(fechaSemana(desde))}:</p><ul class="sem-cambios">${cambios.slice(0, 4).map(x => `<li class="sem-${x.tipo}">${x.tipo === 'resuelta' ? '✓ Ya no' : '● Nueva'}: ${esc(x.texto)} <span class="mut">(${esc(x.cartera)})</span></li>`).join('')}</ul>` : '';
+  // evolución (servidor)
+  const evos = sem ? visibles.map(c => ({ c, ev: porId[c.id] ? evolucion(porId[c.id].historial, sem.semana) : null })).filter(x => x.ev?.tendencias) : [];
+  const htmlEvo = !sem ? '<p class="mut peq evo-vacia">No se pudo leer tu evolución ahora mismo.</p>'
+    : evos.length ? `<div class="evo-bloque"><p class="evo-titulo"><b>Tu evolución</b></p>${evos.slice(0, 3).map(x => htmlEvolucion(x.c, x.ev)).join('')}</div>`
+    : '<p class="mut peq evo-vacia">Tu evolución aparecerá aquí cuando vuelvas la semana que viene: Klever guarda una foto de tus carteras cada semana.</p>';
   const tocan = ideas == null ? '' : res.tocan.length ? `<a class="sem-tocan${res.vencidas ? ' hoy' : ''}" href="#seguimiento"><b>${res.tocan.length}</b> ${res.tocan.length === 1 ? 'idea para revisar' : 'ideas para revisar'} esta semana${res.vencidas ? ` · ${res.vencidas} hoy` : ''} →</a>` : '<p class="mut peq">Ninguna idea por revisar esta semana.</p>';
+  // reto de la semana (rota cada lunes)
+  const rs = sem ? retoSemana({ semana: sem.semana, carteras: sem.carteras.map(c => ({ id: c.id, foto: c.foto })), anteriores: Object.fromEntries(sem.carteras.map(c => [c.id, fotoAnterior(c.historial, sem.semana)]).filter(x => x[1])), ideas }) : null;
+  const htmlRetoSem = rs ? `<div class="reto-sem${rs.hecho ? ' hecho' : ''}"><p class="reto-sem-cab"><b>Reto de la semana</b><span class="mut peq">cambia el ${esc(fmtFecha(rs.cambia))}</span></p>
+      <p class="reto-sem-t"><span class="reto-i" aria-hidden="true">${rs.hecho ? '✓' : '○'}</span> ${esc(rs.titulo)}<span class="sr">${rs.hecho ? ' (conseguido)' : ' (pendiente)'}</span></p>${rs.hecho ? '<p class="mut peq">¡Conseguido! El lunes llega otro.</p>' : `<a href="${rs.ir}" class="reto-pista">${esc(rs.pista)}</a>`}</div>` : '';
+  const lin = c => `<li><a href="#cartera-${c.id}" class="sem-cart"><b>${esc(c.nombre)}</b>${c.senal ? `<span class="ci-senal senal-${c.senal.nivel}"><i aria-hidden="true"></i>${esc(c.senal.titulo)}</span>` : ''}</a></li>`;
   const reto = r => `<li class="reto ${r.hecho === true ? 'hecho' : r.hecho === null ? 'nd' : ''}"><span class="reto-i" aria-hidden="true">${r.hecho === true ? '✓' : '○'}</span><span><b>${esc(r.titulo)}</b>${r.hecho === true ? '' : `<a href="${r.ir}" class="reto-pista">${esc(r.hecho === null ? 'Sin datos ahora mismo' : r.pista)}</a>`}</span><span class="sr">${r.hecho === true ? ' (conseguido)' : r.hecho === null ? ' (sin datos)' : ' (pendiente)'}</span></li>`;
   el.innerHTML = `<div class="sem-cab"><h2 id="semana-t">Tu semana</h2><span class="mut peq">${esc(fmtFecha(datos.hoy))}</span></div>
-    <div class="sem-grid"><div class="sem-col"><ul class="sem-carteras">${res.carteras.slice(0, 4).map(lin).join('')}</ul>${cambios}${tocan}</div>
-    <div class="sem-col"><div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
+    <div class="sem-grid"><div class="sem-col"><ul class="sem-carteras">${visibles.map(lin).join('')}</ul>${htmlCambios}${htmlEvo}${tocan}${htmlMiraAtras(ideas ? miraAtras(ideas, datos.hoy, ahora) : null)}</div>
+    <div class="sem-col">${htmlRetoSem}<div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
       <ul class="retos">${rt.lista.map(reto).join('')}</ul><p class="mut peq">Retos para entender y ordenar tu cartera; no miden rentabilidad.</p></div></div>`;
   el.hidden = false;
 }
@@ -5358,7 +5569,7 @@ async function aplicarDesdeLab(base, lista) {
 document.addEventListener('click', e => { const b = e.target.closest('.sello-mas'); if (!b) return; const t = document.getElementById(b.getAttribute('aria-controls')); if (!t) return; const abrir = t.hidden; t.hidden = !abrir; b.setAttribute('aria-expanded', String(abrir)); b.textContent = abrir ? 'Menos' : 'Más'; });
 function contextoLab() {
   return { idSesion: () => tok(), sesion: () => sesionSeq, universo: cargarUniverso, empresas: () => empresas, origen: origenCodigo, cerrarFicha, abrirEjemplo: () => abrirLab({ carteraId: 'ejemplo' }), $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
-    activos: () => by, verFicha, refrescarEmpresas: () => renderEmpresas(),
+    activos: () => by, criteriosAhora, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
     probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }),
