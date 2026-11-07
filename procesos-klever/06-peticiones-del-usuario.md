@@ -2177,3 +2177,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > No termino de veer una web superior, le faltan muchas para atraer y retener al usuario. ¿Estas descuerdo? ¿Que cambiarias, harias de otra manera o copiarias de otro sitio?
 
 (Respuesta en el chat: de acuerdo; el producto es correcto y honesto pero no engancha. Propuestas ordenadas por impacto y decisiones que necesita Javier.)
+
+## C34 · Ronda 29 (2026-11-07) — hacer la fase 2.5, literal
+> Hazlo
+
+(Responde a la propuesta de C33: fase 2.5 = arranque de 60 segundos, huella de empresa, resumen semanal dentro de la web y retos, sin cuentas externas. Retoma de hecho el punto 14. Las decisiones sobre precios históricos, Brevo y datos reales de la SEC siguen abiertas.)
