@@ -4282,7 +4282,8 @@ let sesionSeq = 0;
 function limpiarPrivado() {
   sesionSeq++; misSeq++; nMis = null;
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
-  for (const s of ['#mis-lista', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  for (const s of ['#mis-lista', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  { const sem = $('#tu-semana'); if (sem) sem.hidden = true; }   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
   document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
   limpiarSesionLab();
@@ -4454,7 +4455,7 @@ async function cargarMisCarteras() {
 // Todo sale de datos leídos: si las ideas no se pueden leer, sus retos se muestran «sin datos» (ni conseguidos ni suspendidos). La instantánea vive solo en este dispositivo.
 const hoyIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 async function pintarSemana(list, seq) {
-  const el = $('#tu-semana'); let ideas = null; try { ideas = await api('/escenarios'); } catch { ideas = null; } if (seq !== misSeq) return;
+  const el = $('#tu-semana'); let ideas = null; try { ideas = await api('/escenarios'); } catch { ideas = null; } if (seq !== misSeq || !logged()) return;   // respuesta tardía tras salir: no se pinta
   let umb = null; try { umb = JSON.parse(localStorage.getItem('klever_umbrales')); } catch { /* sin almacenamiento */ }
   const datos = { carteras: list.map(c => ({ id: c.id, nombre: c.nombre, pos: c.posiciones || [] })), activos: by, ideas, sigues: nSeguidas(), umb, hoy: hoyIso() };
   let g = null; try { g = JSON.parse(store.getItem('klever_semana')); } catch { g = null; }
