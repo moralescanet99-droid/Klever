@@ -29,4 +29,4 @@ Personas (¿se entienden los semáforos?, ¿el botón único reduce la duda inic
 Fase 2 (móvil con barra inferior, tarjetas de empresas, pegar «KO 40, PG 60», varios cambios a la vez, renombrar escenario/radar, sello único de avisos, Revista fuera del menú, señales en tres niveles con umbrales ajustables), fase 3 (personas) y fase 4 (producción). El punto 14 sigue aparcado.
 
 ## Resultado de la pasada completa
-*(pendiente)*
+**Commit `f0334db`, árbol limpio, 2026-11-06 23:48 UTC, local del autor: 1042 correctas, 0 fallos, código de salida 0** (53 baterías con resultado: las 1010 de la ronda 27 + 8 de `unit-claridad28` + 24 de `testX`). Una primera ejecución se cortó por un reinicio del contenedor y se repitió entera. Registro en `resultado-ejecucion.txt` y `logs/`.

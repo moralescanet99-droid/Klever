@@ -1,0 +1,114 @@
+Ejecución: 2026-11-06 23:48 UTC
+Código: commit f0334db2e978a89d6637e9a9907846bcd4621a95; árbol de trabajo limpio
+Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
+
+=== unit-servidor ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-carreras ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-migracion ===
+RESULTADO: 15 correctas, 0 fallos
+=== unit-acceso ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-calculos ===
+RESULTADO: 23 correctas, 0 fallos
+=== unit-r13 ===
+RESULTADO: 30 correctas, 0 fallos
+=== unit-carga ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-r14 ===
+RESULTADO: 14 correctas, 0 fallos
+=== unit-nota ===
+RESULTADO: 35 correctas, 0 fallos
+=== unit-comparador ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-almacen ===
+RESULTADO: 9 correctas, 0 fallos
+=== unit-escenarios16 ===
+RESULTADO: 11 correctas, 0 fallos
+=== unit-procedencia17 ===
+RESULTADO: 13 correctas, 0 fallos
+=== unit-guardada17 ===
+RESULTADO: 20 correctas, 0 fallos
+=== unit-integridad18 ===
+RESULTADO: 18 correctas, 0 fallos
+=== unit-redondeo19 ===
+RESULTADO: 6 correctas, 0 fallos
+=== unit-revision19 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-causas20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cierre20 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-registro21 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-cuaderno21 ===
+RESULTADO: 20 correctas, 0 fallos
+=== unit-cliente-revision22 ===
+RESULTADO: 8 correctas, 0 fallos
+=== unit-senales26 ===
+RESULTADO: 13 correctas, 0 fallos
+=== unit-claridad28 ===
+RESULTADO: 8 correctas, 0 fallos
+=== test-zip ===
+RESULTADO: 8 correctas, 0 fallos
+=== testA ===
+RESULTADO: 31 correctas, 0 fallos
+=== testB ===
+RESULTADO: 54 correctas, 0 fallos
+=== testC ===
+RESULTADO: 50 correctas, 0 fallos
+=== testD ===
+RESULTADO: 29 correctas, 0 fallos
+=== testE ===
+RESULTADO: 15 correctas, 0 fallos
+=== testF ===
+RESULTADO: 10 correctas, 0 fallos
+=== testG ===
+RESULTADO: 3 correctas, 0 fallos
+=== verificar-api ===
+RESULTADO: 8 correctas, 0 fallos
+=== testH ===
+RESULTADO: 25 correctas, 0 fallos
+=== testI ===
+RESULTADO: 16 correctas, 0 fallos
+=== testJ ===
+RESULTADO: 53 correctas, 0 fallos
+=== testK ===
+RESULTADO: 75 correctas, 0 fallos
+=== testL ===
+RESULTADO: 28 correctas, 0 fallos
+=== testM ===
+RESULTADO: 7 correctas, 0 fallos
+=== testN ===
+RESULTADO: 41 correctas, 0 fallos
+=== testO ===
+OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
+OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
+RESULTADO: 19 correctas, 0 fallos
+=== testP ===
+RESULTADO: 28 correctas, 0 fallos
+=== testQ ===
+RESULTADO: 25 correctas, 0 fallos
+=== testR ===
+RESULTADO: 16 correctas, 0 fallos
+=== testS ===
+RESULTADO: 30 correctas, 0 fallos
+=== testT ===
+RESULTADO: 27 correctas, 0 fallos
+=== testU ===
+RESULTADO: 24 correctas, 0 fallos
+=== testV ===
+RESULTADO: 24 correctas, 0 fallos
+=== testW ===
+RESULTADO: 12 correctas, 0 fallos
+=== testX ===
+RESULTADO: 24 correctas, 0 fallos
+=== paridad-demo ===
+RESULTADO: 5 correctas, 0 fallos
+=== seguridad-http (servidor sin enlace de acceso en pantalla) ===
+RESULTADO: 6 correctas, 0 fallos
+=== demo (demotest) ===
+DEMO OK
+RESULTADO: 12 correctas, 0 fallos
+RESUMEN: todo correcto. Código de salida 0.

@@ -1,0 +1,170 @@
+[
+ {
+  "id": "V1-1440",
+  "escenario": "Portada (1440 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas",
+  "esperado": "lead con «antes de invertir» y «sin dinero real»; 5 pasos en orden; en < 960 px #prev queda por encima de .entradas; sin desborde",
+  "observado": "{\"lead\":\"Crea una cartera simulada (sin dinero real, con datos de prueba), mira dónde se concentra y compara tus opciones antes de invertir.\",\"pasos\":[\"Cartera\",\"Descubre\",\"Compara\",\"Decide\",\"Revisa\"],\"prevAntes\":true,\"desb\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V2-1440",
+  "escenario": "Revisión (1440 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
+  "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V3-1440",
+  "escenario": "«Ver qué cambiaría» (1440 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia",
+  "esperado": "ticker NVDA, peso 20, proporcional; resultado presente; cifras clave Mayor posición 40 %→20 %, Sin asignar 0 %→20 %; alternativa con 20 % «libre»; la zona del resultado en pantalla; posiciones del servidor idénticas",
+  "observado": "{\"lab\":{\"t\":\"NVDA\",\"peso\":\"20\",\"fin\":\"proporcional\",\"res\":true,\"kpis\":[\"Mayor posición40 %→20 %MSFT\",\"Tres mayores75 %→55 %\",\"Categorías4→4\",\"Sin asignar0 %→20 %\"],\"alt\":\"Alternativa simulada: MSFT 20 %, NVDA 20 %, AMZN 15 %, KO 15 %, JNJ 10 %\",\"libre\":\"libre\",\"enVista\":true},\"igual\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V4-1440",
+  "escenario": "Deslizador del laboratorio (1440 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta",
+  "esperado": "8 % → campo «8», salida «8 %», alternativa NVDA 8 %, sin asignar 0 % → 32 %; con → 9 %; el foco sigue en el deslizador",
+  "observado": "{\"des\":{\"peso\":\"8\",\"out\":\"8 %\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 8 %\",\"kpi\":\"Sin asignar0 %→32 %\",\"foco\":\"lab-rango\"},\"tecla\":{\"peso\":\"9\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 9 %\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V5-1440",
+  "escenario": "Descubrir (1440 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro",
+  "esperado": "barra de la base; chips sin Tecnología/Consumo básico/Salud y con Energía; Explorar filtrado por Energía con al menos una empresa y ninguna de otro sector",
+  "observado": "{\"chips\":[\"Comunicaciones\",\"Energía\",\"Finanzas\",\"Industria\",\"Inmobiliario\",\"Materiales\",\"Materiales (oro)\",\"Servicios públicos\"],\"espera\":true,\"emp\":{\"sector\":\"Energía\",\"filas\":7,\"otros\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V6-1440",
+  "escenario": "Cuaderno (1440 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
+  "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "V7-1440",
+  "escenario": "Mis carteras (1440 px): cada cartera lleva su señal principal (de la versión guardada)",
+  "esperado": "«Concentrada V» → «Exposición alta: Tecnología»; «Repartida V» → «Sin concentraciones destacadas»",
+  "observado": "{\"Repartida V\":\"Sin concentraciones destacadas\",\"Concentrada V\":\"Exposición alta: Tecnología\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V0-1440",
+  "escenario": "Sin errores de JavaScript ni desbordes horizontales (1440 px)",
+  "esperado": "ningún pageerror; scrollWidth ≤ ancho",
+  "observado": "{\"errs\":[],\"desb\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V1-390",
+  "escenario": "Portada (390 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas",
+  "esperado": "lead con «antes de invertir» y «sin dinero real»; 5 pasos en orden; en < 960 px #prev queda por encima de .entradas; sin desborde",
+  "observado": "{\"lead\":\"Crea una cartera simulada (sin dinero real, con datos de prueba), mira dónde se concentra y compara tus opciones antes de invertir.\",\"pasos\":[\"Cartera\",\"Descubre\",\"Compara\",\"Decide\",\"Revisa\"],\"prevAntes\":true,\"desb\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V2-390",
+  "escenario": "Revisión (390 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
+  "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V3-390",
+  "escenario": "«Ver qué cambiaría» (390 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia",
+  "esperado": "ticker NVDA, peso 20, proporcional; resultado presente; cifras clave Mayor posición 40 %→20 %, Sin asignar 0 %→20 %; alternativa con 20 % «libre»; la zona del resultado en pantalla; posiciones del servidor idénticas",
+  "observado": "{\"lab\":{\"t\":\"NVDA\",\"peso\":\"20\",\"fin\":\"proporcional\",\"res\":true,\"kpis\":[\"Mayor posición40 %→20 %MSFT\",\"Tres mayores75 %→55 %\",\"Categorías4→4\",\"Sin asignar0 %→20 %\"],\"alt\":\"Alternativa simulada: MSFT 20 %, NVDA 20 %, AMZN 15 %, KO 15 %, JNJ 10 %\",\"libre\":\"libre\",\"enVista\":true},\"igual\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V4-390",
+  "escenario": "Deslizador del laboratorio (390 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta",
+  "esperado": "8 % → campo «8», salida «8 %», alternativa NVDA 8 %, sin asignar 0 % → 32 %; con → 9 %; el foco sigue en el deslizador",
+  "observado": "{\"des\":{\"peso\":\"8\",\"out\":\"8 %\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 8 %\",\"kpi\":\"Sin asignar0 %→32 %\",\"foco\":\"lab-rango\"},\"tecla\":{\"peso\":\"9\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 9 %\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V5-390",
+  "escenario": "Descubrir (390 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro",
+  "esperado": "barra de la base; chips sin Tecnología/Consumo básico/Salud y con Energía; Explorar filtrado por Energía con al menos una empresa y ninguna de otro sector",
+  "observado": "{\"chips\":[\"Comunicaciones\",\"Energía\",\"Finanzas\",\"Industria\",\"Inmobiliario\",\"Materiales\",\"Materiales (oro)\",\"Servicios públicos\"],\"espera\":true,\"emp\":{\"sector\":\"Energía\",\"filas\":42,\"otros\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V6-390",
+  "escenario": "Cuaderno (390 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
+  "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "V7-390",
+  "escenario": "Mis carteras (390 px): cada cartera lleva su señal principal (de la versión guardada)",
+  "esperado": "«Concentrada V» → «Exposición alta: Tecnología»; «Repartida V» → «Sin concentraciones destacadas»",
+  "observado": "{\"Repartida V\":\"Sin concentraciones destacadas\",\"Concentrada V\":\"Exposición alta: Tecnología\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V0-390",
+  "escenario": "Sin errores de JavaScript ni desbordes horizontales (390 px)",
+  "esperado": "ningún pageerror; scrollWidth ≤ ancho",
+  "observado": "{\"errs\":[],\"desb\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V1-320",
+  "escenario": "Portada (320 px): propuesta «compara… antes de invertir» con «sin dinero real», recorrido Cartera→Descubre→Compara→Decide→Revisa y, en móvil, el ejemplo interactivo antes de las tres entradas",
+  "esperado": "lead con «antes de invertir» y «sin dinero real»; 5 pasos en orden; en < 960 px #prev queda por encima de .entradas; sin desborde",
+  "observado": "{\"lead\":\"Crea una cartera simulada (sin dinero real, con datos de prueba), mira dónde se concentra y compara tus opciones antes de invertir.\",\"pasos\":[\"Cartera\",\"Descubre\",\"Compara\",\"Decide\",\"Revisa\"],\"prevAntes\":true,\"desb\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V2-320",
+  "escenario": "Revisión (320 px): exposición por categoría en una barra y señales breves; el detalle aparece al pulsar una señal",
+  "esperado": "detalle oculto hasta pulsar; 4 tramos (Tecnología, Consumo básico, Consumo discrecional, Salud); señales «Exposición alta: Tecnología» (alerta) y «NVDA pesa el 40 %» (alerta); al pulsar la segunda queda marcada, conserva el foco y su detalle se ve",
+  "observado": "{\"rv\":{\"senales\":[[\"Exposición alta: Tecnología\",\"alerta\",\"true\"],[\"NVDA pesa el 40 %\",\"alerta\",\"false\"]],\"barra\":4,\"ley\":\"Tecnología 60 %Consumo básico 15 %Consumo discrecional 15 %Salud 10 %\",\"det\":\"none\",\"hipo\":\"¿Y si NVDA pesara menos?\"},\"tras\":{\"pulsada\":\"NVDA pesa el 40 %\",\"det\":\"Una sola posición supera el 25 % de la cartera (referencia orientativa de Klever, no una norma).\",\"visible\":true,\"foco\":\"posicion\",\"hipo\":\"¿Y si NVDA pesara menos?\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V3-320",
+  "escenario": "«Ver qué cambiaría» (320 px): el laboratorio abre con la hipótesis de la señal (NVDA 40 % → 20 %, proporcional) YA simulada y a la vista, sin pulsar «Simular»; la cartera guardada no cambia",
+  "esperado": "ticker NVDA, peso 20, proporcional; resultado presente; cifras clave Mayor posición 40 %→20 %, Sin asignar 0 %→20 %; alternativa con 20 % «libre»; la zona del resultado en pantalla; posiciones del servidor idénticas",
+  "observado": "{\"lab\":{\"t\":\"NVDA\",\"peso\":\"20\",\"fin\":\"proporcional\",\"res\":true,\"kpis\":[\"Mayor posición40 %→20 %MSFT\",\"Tres mayores75 %→55 %\",\"Categorías4→4\",\"Sin asignar0 %→20 %\"],\"alt\":\"Alternativa simulada: MSFT 20 %, NVDA 20 %, AMZN 15 %, KO 15 %, JNJ 10 %\",\"libre\":\"libre\",\"enVista\":true},\"igual\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V4-320",
+  "escenario": "Deslizador del laboratorio (320 px): al moverlo (ratón o teclado) la comparación se recalcula al instante y el foco no salta",
+  "esperado": "8 % → campo «8», salida «8 %», alternativa NVDA 8 %, sin asignar 0 % → 32 %; con → 9 %; el foco sigue en el deslizador",
+  "observado": "{\"des\":{\"peso\":\"8\",\"out\":\"8 %\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 8 %\",\"kpi\":\"Sin asignar0 %→32 %\",\"foco\":\"lab-rango\"},\"tecla\":{\"peso\":\"9\",\"alt\":\"Alternativa simulada: MSFT 20 %, AMZN 15 %, KO 15 %, JNJ 10 %, NVDA 9 %\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V5-320",
+  "escenario": "Descubrir (320 px): sin activo elegido, el laboratorio muestra la cartera base y las categorías que NO tiene; al pulsar una se abre Explorar con ese filtro",
+  "esperado": "barra de la base; chips sin Tecnología/Consumo básico/Salud y con Energía; Explorar filtrado por Energía con al menos una empresa y ninguna de otro sector",
+  "observado": "{\"chips\":[\"Comunicaciones\",\"Energía\",\"Finanzas\",\"Industria\",\"Inmobiliario\",\"Materiales\",\"Materiales (oro)\",\"Servicios públicos\"],\"espera\":true,\"emp\":{\"sector\":\"Energía\",\"filas\":42,\"otros\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V6-320",
+  "escenario": "Cuaderno (320 px): resumen de un vistazo con lo que toca hoy, lo que está en estudio y el radar",
+  "esperado": "escenarios creados (201/201); «1 · Para revisar hoy» destacado; «2 · En estudio» con la próxima fecha; «0 · En tu radar»",
+  "observado": "[[\"1\",\"Para revisar hoy\",true,\"\"],[\"2\",\"En estudio\",false,\"Próxima: 16 nov 2026\"],[\"0\",\"En tu radar\",false,\"\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "V7-320",
+  "escenario": "Mis carteras (320 px): cada cartera lleva su señal principal (de la versión guardada)",
+  "esperado": "«Concentrada V» → «Exposición alta: Tecnología»; «Repartida V» → «Sin concentraciones destacadas»",
+  "observado": "{\"Repartida V\":\"Sin concentraciones destacadas\",\"Concentrada V\":\"Exposición alta: Tecnología\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "V0-320",
+  "escenario": "Sin errores de JavaScript ni desbordes horizontales (320 px)",
+  "esperado": "ningún pageerror; scrollWidth ≤ ancho",
+  "observado": "{\"errs\":[],\"desb\":true}",
+  "resultado": "OK"
+ }
+]

@@ -1,0 +1,90 @@
+[
+ {
+  "id": "P1",
+  "escenario": "18 evaluaciones adjuntas MALAS (marcado en motivo, nota, versión, fecha o bloque; números fuera de rango; fecha inexistente; cobertura insuficiente; campos extra)",
+  "esperado": "Todas se rechazan con HTTP 400 y no se guarda ninguna fila",
+  "observado": "fallos: []; filas 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P2",
+  "escenario": "Un escenario VÁLIDO (nota calculada → nota pendiente) se guarda y se reabre",
+  "esperado": "HTTP 201; al reabrirlo conserva cifra, fecha, cobertura y versión, y declara que el servidor NO la ha recalculado (`evaluacion_verificada` = false)",
+  "observado": "HTTP 201; {\"n\":4.6,\"f\":\"2026-11-04\",\"c\":100,\"v\":\"estructura-v1\"}; verificada false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P3",
+  "escenario": "Fila antigua con una nota manipulada (marcado dentro del campo nota) ya guardada en la base",
+  "esperado": "La lectura NO entrega esa evaluación (`evaluacion` nulo, `evaluacion_invalida`), ni el detalle ni la lista contienen el marcador",
+  "observado": "HTTP 200; invalida true; marcador en detalle false; en lista false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P3b",
+  "escenario": "Fila con JSON corrupto",
+  "esperado": "Se lee sin error 500 y sin contenido",
+  "observado": "HTTP 200; invalida true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P3c",
+  "escenario": "validarResumen no deja pasar nada que no reconstruya",
+  "esperado": "La copia «limpia» no comparte referencias ni campos con la entrada",
+  "observado": "[\"version\",\"fecha\",\"publicada\",\"nota\",\"motivo\",\"cobertura\",\"bloques\",\"fortaleza\",\"limitacion\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P4",
+  "escenario": "Tres escenarios de la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva sin vínculo",
+  "esperado": "Los tres se guardan; el vínculo es el identificador, no el texto",
+  "observado": "201/201/201; refs [\"hidrogeno-norte:1\",\"hidrogeno-norte:1\",null]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P5",
+  "escenario": "Lo que dice el seguimiento de cada caso",
+  "esperado": "original → responde; reformulación → responde (y avisa de que las palabras son otras); pregunta nueva → «otra pregunta»: sigue pendiente y se ofrece ver la revisión",
+  "observado": "responde/responde/otra; reformulación distinta true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P6",
+  "escenario": "Editar la pregunta (un espacio de más) NO rompe el vínculo",
+  "esperado": "El PATCH conserva `pregunta_ref`; el módulo sigue diciendo «responde» (en el módulo, un espacio dejaba la revisión sin vínculo)",
+  "observado": "HTTP 200; ref hidrogeno-norte:1; responde",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P7",
+  "escenario": "Reescribir la pregunta mantiene el vínculo; quitarlo explícitamente la convierte en «otra pregunta»",
+  "esperado": "tras reescribir: vinculado; tras desmarcar: sin vínculo y «otra»",
+  "observado": "hidrogeno-norte:1/null; responde/otra",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P8",
+  "escenario": "Vínculo de otra historia, sin historia o con una forma no válida",
+  "esperado": "HTTP 400 en los tres",
+  "observado": "400/400/400",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P9",
+  "escenario": "Cierro sesión y vuelvo con la misma cuenta; después miro con otra",
+  "esperado": "Con la misma cuenta se conservan texto, vínculo y evaluación; la otra cuenta no ve ninguno de los tres (lista vacía, 404 al abrir y al editar) y no cambia nada",
+  "observado": "vuelta: ¿Al final firmaron C y D?/hidrogeno-norte:1; B lista 0, detalle 404, patch 404; ref intacta hidrogeno-norte:1",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -1,0 +1,86 @@
+[
+ {
+  "id": "W1-1440",
+  "escenario": "Respuesta perdida y RECARGA (1440 px): el reenvío usa la misma clave y no duplica",
+  "esperado": "antes de reenviar ya hay 1 anotación en el servidor; tras recargar el botón dice «Reintentar el mismo envío» con el aviso de envío sin confirmar; al pulsarlo se envía la MISMA clave; sigue habiendo 1 anotación y se avisa de que ya estaba",
+  "observado": "{\"tras1\":[\"Revisión W1\"],\"rec1\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W1\"},\"fin1\":{\"filas\":[\"Revisión W1\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Esa revisión ya estaba registrada.\",\"obs\":\"\"},\"claves\":[\"86881541-85d6-4e6a-8eb3-e5b0a692e2a2\",\"86881541-85d6-4e6a-8eb3-e5b0a692e2a2\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W2-1440",
+  "escenario": "Petición perdida y pestaña CERRADA (1440 px): en otra pestaña se reintenta el mismo intento y se registra una vez",
+  "esperado": "antes: 0 anotaciones; en la pestaña nueva, «Reintentar el mismo envío»; misma clave en los dos envíos; después: exactamente 1 anotación; el formulario queda vacío",
+  "observado": "{\"tras2\":[],\"rec2\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W2\"},\"fin2\":{\"filas\":[\"Revisión W2\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Revisión registrada.\",\"obs\":\"\"},\"claves\":[\"32ab683f-a58a-454e-b8ec-46dc106207b9\",\"32ab683f-a58a-454e-b8ec-46dc106207b9\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W3-1440",
+  "escenario": "Incierto + SESIÓN caducada + misma cuenta (1440 px): el intento vuelve y no duplica",
+  "esperado": "tras volver a entrar, «Reintentar el mismo envío»; el reenvío va con OTRA sesión pero la MISMA clave; 1 sola anotación",
+  "observado": "{\"rec3\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W3\"},\"fin3\":{\"filas\":[\"Revisión W3\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Esa revisión ya estaba registrada.\",\"obs\":\"\"},\"envios\":[{\"clave\":\"4ea92910-4c6d-4273-955d-be93e999b667\",\"tok\":\"01deec91\"},{\"clave\":\"4ea92910-4c6d-4273-955d-be93e999b667\",\"tok\":\"9fdcdf6a\"}]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W4-1440",
+  "escenario": "Texto nuevo escrito tras recargar (1440 px): se envía el intento original y lo nuevo NO se envía",
+  "esperado": "en el servidor solo «Revisión W4 original»; los dos envíos con la misma clave y el texto original; el formulario conserva «Texto nuevo tras recargar» y el aviso dice que NO se ha enviado",
+  "observado": "{\"filas\":[\"Revisión W4 original\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto nuevo tras recargar\"},\"envios\":[[\"7af7fca2-2025-44be-92f7-f0ea413403a2\",\"Revisión W4 original\"],[\"7af7fca2-2025-44be-92f7-f0ea413403a2\",\"Revisión W4 original\"]]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W5-1440",
+  "escenario": "Otra cuenta (1440 px): no ve ni envía el intento ajeno y se purga al cargar su Cuaderno",
+  "esperado": "el intento estaba guardado; la otra cuenta no ve formulario ni texto; ningún POST de revisión; tras su Cuaderno ya no está en el dispositivo",
+  "observado": "{\"antes5\":true,\"vista5\":{\"form\":false,\"texto\":false},\"posts\":0,\"despues5\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W0-1440",
+  "escenario": "Sin errores de JavaScript (1440 px)",
+  "esperado": "ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "W1-390",
+  "escenario": "Respuesta perdida y RECARGA (390 px): el reenvío usa la misma clave y no duplica",
+  "esperado": "antes de reenviar ya hay 1 anotación en el servidor; tras recargar el botón dice «Reintentar el mismo envío» con el aviso de envío sin confirmar; al pulsarlo se envía la MISMA clave; sigue habiendo 1 anotación y se avisa de que ya estaba",
+  "observado": "{\"tras1\":[\"Revisión W1\"],\"rec1\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W1\"},\"fin1\":{\"filas\":[\"Revisión W1\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Esa revisión ya estaba registrada.\",\"obs\":\"\"},\"claves\":[\"25589e19-00ba-4bd4-aa53-27ac2db9c7b7\",\"25589e19-00ba-4bd4-aa53-27ac2db9c7b7\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W2-390",
+  "escenario": "Petición perdida y pestaña CERRADA (390 px): en otra pestaña se reintenta el mismo intento y se registra una vez",
+  "esperado": "antes: 0 anotaciones; en la pestaña nueva, «Reintentar el mismo envío»; misma clave en los dos envíos; después: exactamente 1 anotación; el formulario queda vacío",
+  "observado": "{\"tras2\":[],\"rec2\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W2\"},\"fin2\":{\"filas\":[\"Revisión W2\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Revisión registrada.\",\"obs\":\"\"},\"claves\":[\"0290e90b-fc18-46db-a8d0-cd2f616ff50a\",\"0290e90b-fc18-46db-a8d0-cd2f616ff50a\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W3-390",
+  "escenario": "Incierto + SESIÓN caducada + misma cuenta (390 px): el intento vuelve y no duplica",
+  "esperado": "tras volver a entrar, «Reintentar el mismo envío»; el reenvío va con OTRA sesión pero la MISMA clave; 1 sola anotación",
+  "observado": "{\"rec3\":{\"boton\":\"Reintentar el mismo envío\",\"msg\":\"Un envío anterior de esta revisión quedó sin confirmar. «Reintentar el mismo envío» comprueba si se registró, sin duplicarlo.\",\"obs\":\"Revisión W3\"},\"fin3\":{\"filas\":[\"Revisión W3\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Esa revisión ya estaba registrada.\",\"obs\":\"\"},\"envios\":[{\"clave\":\"e99d755a-ee8f-443d-b42b-98c753704def\",\"tok\":\"d4ebd0e8\"},{\"clave\":\"e99d755a-ee8f-443d-b42b-98c753704def\",\"tok\":\"67cde44b\"}]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W4-390",
+  "escenario": "Texto nuevo escrito tras recargar (390 px): se envía el intento original y lo nuevo NO se envía",
+  "esperado": "en el servidor solo «Revisión W4 original»; los dos envíos con la misma clave y el texto original; el formulario conserva «Texto nuevo tras recargar» y el aviso dice que NO se ha enviado",
+  "observado": "{\"filas\":[\"Revisión W4 original\"],\"est\":{\"boton\":\"Registrar revisión\",\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto nuevo tras recargar\"},\"envios\":[[\"72efa7af-2bb7-4b12-83ec-84af1b4f82c4\",\"Revisión W4 original\"],[\"72efa7af-2bb7-4b12-83ec-84af1b4f82c4\",\"Revisión W4 original\"]]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W5-390",
+  "escenario": "Otra cuenta (390 px): no ve ni envía el intento ajeno y se purga al cargar su Cuaderno",
+  "esperado": "el intento estaba guardado; la otra cuenta no ve formulario ni texto; ningún POST de revisión; tras su Cuaderno ya no está en el dispositivo",
+  "observado": "{\"antes5\":true,\"vista5\":{\"form\":false,\"texto\":false},\"posts\":0,\"despues5\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "W0-390",
+  "escenario": "Sin errores de JavaScript (390 px)",
+  "esperado": "ningún pageerror",
+  "observado": "[]",
+  "resultado": "OK"
+ }
+]

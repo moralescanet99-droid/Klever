@@ -1,0 +1,130 @@
+[
+ {
+  "id": "I1-320",
+  "escenario": "Composición dibujada con los datos reales (320 px)",
+  "esperado": "Un tramo por posición con ancho proporcional a su peso; el color de cada fila coincide con su tramo; con menos de 100 % hay tramo libre del tamaño que falta; con más de 100 % el borde marca el exceso y no hay tramo libre; el nombre accesible lista tickers y pesos",
+  "observado": "100 %: 6 tramos, anchos 16.4/16.0/16.0/16.0/16.0/16.0 vs 17.0/16.6/16.6/16.6/16.6/16.6, colores fila=tramo true; 93.0 %: libre 6.7 % (esperado 7.0); 113.0 %: exceso=true, libre 0.0; aria «Composición de la cartera: SCHD 17 %, JNJ 16,6 %, KO 16,6 %, PG 16,6 %, VYM 16,6 %, XOM 16…»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2-320",
+  "escenario": "Una acción principal y jerarquía composición > ROIC (320 px)",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar cartera»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I3-320",
+  "escenario": "Filas de activos comparables y táctiles (320 px)",
+  "esperado": "Cada fila muestra su peso como deslizador (valor = peso) además del campo numérico; en móvil se ven filas (no la tabla de escritorio); los campos miden ≥ 44 px de alto; sin desbordamiento horizontal",
+  "observado": "6 filas, 6 barras (anchos 15/17/17/17/17/17 % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=false, filas móviles visibles=true; alto mínimo del campo 44 px; ancho 320/320",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4-320",
+  "escenario": "Sin desbordamiento horizontal en pendiente, error y texto ampliado (320 px; ampliado SIMULADO)",
+  "esperado": "La página nunca es más ancha que la ventana",
+  "observado": "pendiente 320, error 320, texto al 200 % 320 (ventana 320)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I5-320",
+  "escenario": "Sin errores de JavaScript (320 px)",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1-390",
+  "escenario": "Composición dibujada con los datos reales (390 px)",
+  "esperado": "Un tramo por posición con ancho proporcional a su peso; el color de cada fila coincide con su tramo; con menos de 100 % hay tramo libre del tamaño que falta; con más de 100 % el borde marca el exceso y no hay tramo libre; el nombre accesible lista tickers y pesos",
+  "observado": "100 %: 6 tramos, anchos 16.5/16.1/16.1/16.1/16.1/16.1 vs 17.0/16.6/16.6/16.6/16.6/16.6, colores fila=tramo true; 93.0 %: libre 6.7 % (esperado 7.0); 113.0 %: exceso=true, libre 0.0; aria «Composición de la cartera: SCHD 17 %, JNJ 16,6 %, KO 16,6 %, PG 16,6 %, VYM 16,6 %, XOM 16…»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2-390",
+  "escenario": "Una acción principal y jerarquía composición > ROIC (390 px)",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar cartera»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 32 px, resumen 28 px, ROIC 24 px",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I3-390",
+  "escenario": "Filas de activos comparables y táctiles (390 px)",
+  "esperado": "Cada fila muestra su peso como deslizador (valor = peso) además del campo numérico; en móvil se ven filas (no la tabla de escritorio); los campos miden ≥ 44 px de alto; sin desbordamiento horizontal",
+  "observado": "6 filas, 6 barras (anchos 15/17/17/17/17/17 % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=false, filas móviles visibles=true; alto mínimo del campo 44 px; ancho 390/390",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4-390",
+  "escenario": "Sin desbordamiento horizontal en pendiente, error y texto ampliado (390 px; ampliado SIMULADO)",
+  "esperado": "La página nunca es más ancha que la ventana",
+  "observado": "pendiente 390, error 390, texto al 200 % 390 (ventana 390)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I5-390",
+  "escenario": "Sin errores de JavaScript (390 px)",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1-1440",
+  "escenario": "Composición dibujada con los datos reales (1440 px)",
+  "esperado": "Un tramo por posición con ancho proporcional a su peso; el color de cada fila coincide con su tramo; con menos de 100 % hay tramo libre del tamaño que falta; con más de 100 % el borde marca el exceso y no hay tramo libre; el nombre accesible lista tickers y pesos",
+  "observado": "100 %: 6 tramos, anchos 16.7/16.3/16.3/16.3/16.3/16.3 vs 17.0/16.6/16.6/16.6/16.6/16.6, colores fila=tramo true; 93.0 %: libre 6.9 % (esperado 7.0); 113.0 %: exceso=true, libre 0.0; aria «Composición de la cartera: SCHD 17 %, JNJ 16,6 %, KO 16,6 %, PG 16,6 %, VYM 16,6 %, XOM 16…»",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2-1440",
+  "escenario": "Una acción principal y jerarquía composición > ROIC (1440 px)",
+  "esperado": "Con cambios pendientes en un portafolio de la cuenta, «Guardar» es el único botón con relleno de acento y está activo (sin cambios pendientes o en un borrador, la principal es «Revisar cartera»: se prueba en testP); la cifra del reparto (composición) es mayor que la del ROIC, y el ROIC no supera 1,75 rem",
+  "observado": "botones con relleno de acento: [js-guardar]; Guardar activo=true y con acento=true; tamaños: asignado 36 px, resumen 28 px, ROIC 28 px",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I3-1440",
+  "escenario": "Filas de activos comparables y táctiles (1440 px)",
+  "esperado": "Cada fila muestra su peso como deslizador (valor = peso) además del campo numérico; en móvil se ven filas (no la tabla de escritorio); los campos miden ≥ 44 px de alto; sin desbordamiento horizontal",
+  "observado": "6 filas, 6 barras (anchos 15/17/17/17/17/17 % vs pesos 15/16.6/16.6/16.6/16.6/16.6); tabla visible=true, filas móviles visibles=false; alto mínimo del campo 44 px; ancho 1440/1440",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I4-1440",
+  "escenario": "Sin desbordamiento horizontal en pendiente, error y texto ampliado (1440 px; ampliado SIMULADO)",
+  "esperado": "La página nunca es más ancha que la ventana",
+  "observado": "pendiente 1440, error 1440, texto al 200 % 1440 (ventana 1440)",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I5-1440",
+  "escenario": "Sin errores de JavaScript (1440 px)",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I6",
+  "escenario": "Contraste de los tokens de color (claro y oscuro), calculado desde el CSS real",
+  "esperado": "Texto y controles ≥ 4,5:1; etiquetas de los tramos ≥ 4,5:1 sobre su color; tramos ≥ 3:1 frente a la superficie",
+  "observado": "light: 26 pares, mínimo 6.9:1 · dark: 26 pares, mínimo 6.9:1",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

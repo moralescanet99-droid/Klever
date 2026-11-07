@@ -1,0 +1,21 @@
+# comando: node tests/ronda8/unit-migracion.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v300 · 2026-11-06 23:48:58 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [M0] La base de partida es de verdad la antigua
+OK    [M1] Aplicar 0007 sobre la base antigua con datos
+OK    [M1b] Aplicar 0008 (ronda 13) tras la 0007 sobre la base antigua con datos
+OK    [M1c] Aplicar 0009 (ronda 14) con filas previas
+OK    [M1d] Aplicar 0010 (ronda 15) con filas previas
+OK    [M1e] Aplicar 0011 (ronda 16) con escenarios antiguos: solo la coincidencia INEQUÍVOCA se vincula
+OK    [M1f] Aplicar 0012 (ronda 21) con escenarios y carteras antiguos
+OK    [M2] La base migrada y la base nueva (schema.sql) tienen la misma tabla portafolios
+OK    [M3] Leer una cartera pública antigua tras migrar
+OK    [M4] Guardar una cartera antigua migrada
+OK    [M5] Aplicar 0007 sobre el esquema NUEVO (que ya tiene las columnas)
+OK    [M6] Aplicar 0008 sobre el esquema NUEVO
+OK    [M7] Aplicar 0009 sobre el esquema NUEVO
+OK    [M8] Aplicar 0010 sobre el esquema NUEVO
+OK    [M9] Aplicar 0011 sobre el esquema NUEVO
+
+RESULTADO: 15 correctas, 0 fallos

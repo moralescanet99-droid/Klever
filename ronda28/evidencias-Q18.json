@@ -1,0 +1,177 @@
+[
+ {
+  "id": "Q1-1440",
+  "escenario": "Distribución: en el VIEWPORT inicial de 1440×900 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (1440 px)",
+  "esperado": "El primer campo y el primer deslizador están dentro del viewport y nada los tapa; «Revisar» está a la vista, sin tapar y habilitado (arriba en escritorio, en la barra inferior en móvil)",
+  "observado": "campo {\"y\":654,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-in\",\"texto\":\"\"}; deslizador {\"y\":598,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-rng\",\"texto\":\"\"}; revisar [{\"y\":215,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"btn btn-primario js-revisar so\",\"texto\":\"Revisar cartera →\"}]; barra null",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q2-1440",
+  "escenario": "Una sola acción dominante visible y habilitada en la distribución de un borrador (1440 px)",
+  "esperado": "Solo «Revisar» tiene el relleno de acento y ninguna otra acción visible tiene un tono parecido",
+  "observado": "{\"acento\":[\"js-revisar\"],\"parecidos\":[\"js-revisar\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q3-1440",
+  "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos (1440 px)",
+  "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en escritorio las dos columnas siguen enteras",
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":true,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":786,\"bottom\":886,\"panelTop\":317,\"alto\":900,\"scrollY\":0,\"docAlto\":3228},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q4-1440",
+  "escenario": "Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (1440 px)",
+  "esperado": "Los pesos (campo y deslizador) son los de antes de revisar; paso 2; foco en el título «Posiciones» (en móvil, en el estado compacto)",
+  "observado": "17,0/16,6/20,0/13,2/16,6/16,6 → 17,0/16,6/20,0/13,2/16,6/16,6; {\"paso\":\"2\",\"foco\":\"h-pos\",\"rng\":\"17/16.6/20/13.2/16.6/16.6\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q5-1440",
+  "escenario": "Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (1440 px)",
+  "esperado": "El orden de tabulación baja por la pantalla sin saltos hacia arriba, aparece el deslizador de la primera posición entre las tres primeras paradas, y el elemento enfocado queda visible y no tapado por la barra",
+  "observado": "btn:Quitar SCHD | peso-rng:Peso de VYM: d | peso-in:Peso de VYM, e | btn:Quitar VYM | peso-rng:Peso de KO: de; saltos hacia arriba 0; {\"visible\":true,\"tapado\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Qx-1440",
+  "escenario": "Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (1440 px)",
+  "esperado": "La página no se desplaza en horizontal; sin errores",
+  "observado": "true; []",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q1-390",
+  "escenario": "Distribución: en el VIEWPORT inicial de 390×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (390 px)",
+  "esperado": "El primer campo y el primer deslizador están dentro del viewport y nada los tapa; «Revisar» está a la vista, sin tapar y habilitado (arriba en escritorio, en la barra inferior en móvil)",
+  "observado": "campo {\"y\":496,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-in\",\"texto\":\"\"}; deslizador {\"y\":549,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-rng\",\"texto\":\"\"}; revisar [{\"y\":326,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"btn btn-primario js-revisar js\",\"texto\":\"Revisar →\"}]; barra 708",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q2-390",
+  "escenario": "Una sola acción dominante visible y habilitada en la distribución de un borrador (390 px)",
+  "esperado": "Solo «Revisar» tiene el relleno de acento y ninguna otra acción visible tiene un tono parecido",
+  "observado": "{\"acento\":[\"js-revisar\"],\"parecidos\":[\"js-revisar\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q3-390",
+  "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (390 px)",
+  "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en móvil las posiciones se ocultan, el orden DOM es anillo (una línea de resumen) → nota → radiografía y hay un botón «Volver a la distribución»",
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":475,\"bottom\":623,\"panelTop\":8,\"alto\":780,\"scrollY\":462,\"docAlto\":2904},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q4-390",
+  "escenario": "Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (390 px)",
+  "esperado": "Los pesos (campo y deslizador) son los de antes de revisar; paso 2; foco en el título «Posiciones» (en móvil, en el estado compacto)",
+  "observado": "17,0/16,6/20,0/13,2/16,6/16,6 → 17,0/16,6/20,0/13,2/16,6/16,6; {\"paso\":\"2\",\"foco\":\"comp\",\"rng\":\"17/16.6/20/13.2/16.6/16.6\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q5-390",
+  "escenario": "Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (390 px)",
+  "esperado": "El orden de tabulación baja por la pantalla sin saltos hacia arriba, aparece el deslizador de la primera posición entre las tres primeras paradas, y el elemento enfocado queda visible y no tapado por la barra",
+  "observado": "btn:Detalles de SC | peso-rng:Peso de SCHD:  | peso-in:Peso de VYM, e | btn:Detalles de VY | peso-rng:Peso de VYM: d; saltos hacia arriba 0; {\"visible\":true,\"tapado\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Qx-390",
+  "escenario": "Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (390 px)",
+  "esperado": "La página no se desplaza en horizontal; sin errores",
+  "observado": "true; []",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q1-320",
+  "escenario": "Distribución: en el VIEWPORT inicial de 320×780 aparecen el primer campo de peso y su deslizador, libres de la barra fija, y una acción para continuar (320 px)",
+  "esperado": "El primer campo y el primer deslizador están dentro del viewport y nada los tapa; «Revisar» está a la vista, sin tapar y habilitado (arriba en escritorio, en la barra inferior en móvil)",
+  "observado": "campo {\"y\":628,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-in\",\"texto\":\"\"}; deslizador {\"y\":681,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"peso-rng\",\"texto\":\"\"}; revisar [{\"y\":458,\"h\":44,\"enViewport\":true,\"libre\":true,\"id\":\"btn btn-primario js-revisar js\",\"texto\":\"Revisar →\"}]; barra 708",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q2-320",
+  "escenario": "Una sola acción dominante visible y habilitada en la distribución de un borrador (320 px)",
+  "esperado": "Solo «Revisar» tiene el relleno de acento y ninguna otra acción visible tiene un tono parecido",
+  "observado": "{\"acento\":[\"js-revisar\"],\"parecidos\":[\"js-revisar\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q3-320",
+  "escenario": "Revisión: abre en el paso 3 con el resultado y su motivo antes de los detalles técnicos y con «Volver a la distribución» (320 px)",
+  "esperado": "Paso 3 marcado; foco en la nota; dentro de la nota: resultado → advertencia breve → «Cómo se calcula»; el RECTÁNGULO del resultado (no solo su panel) queda entre la parte superior y la barra fija; «Revisar» ya no se ofrece; en móvil las posiciones se ocultan, el orden DOM es anillo (una línea de resumen) → nota → radiografía y hay un botón «Volver a la distribución»",
+  "observado": "{\"paso\":\"3\",\"foco\":\"nota-panel\",\"posVisible\":false,\"notaVisible\":true,\"orden\":true,\"resultadoAntesDeAviso\":true,\"avisoAntesDeDetalle\":true,\"notaEnViewport\":true,\"diag\":{\"top\":493,\"bottom\":689,\"panelTop\":8,\"alto\":780,\"scrollY\":663,\"docAlto\":3386},\"resultado\":\"Sin nota global. El método no analiza la composición de los ETF (33,6 %) y no hay comparab\",\"volver\":true,\"revisarOculto\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q4-320",
+  "escenario": "Volver a la distribución conserva cada peso, marca el paso 2 y devuelve el foco a las posiciones (320 px)",
+  "esperado": "Los pesos (campo y deslizador) son los de antes de revisar; paso 2; foco en el título «Posiciones» (en móvil, en el estado compacto)",
+  "observado": "17,0/16,6/20,0/13,2/16,6/16,6 → 17,0/16,6/20,0/13,2/16,6/16,6; {\"paso\":\"2\",\"foco\":\"comp\",\"rng\":\"17/16.6/20/13.2/16.6/16.6\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q5-320",
+  "escenario": "Teclado: doce tabulaciones desde el primer campo recorren campo, detalle y deslizador en el orden visual y el foco nunca queda bajo la barra fija (320 px)",
+  "esperado": "El orden de tabulación baja por la pantalla sin saltos hacia arriba, aparece el deslizador de la primera posición entre las tres primeras paradas, y el elemento enfocado queda visible y no tapado por la barra",
+  "observado": "btn:Detalles de SC | peso-rng:Peso de SCHD:  | peso-in:Peso de VYM, e | btn:Detalles de VY | peso-rng:Peso de VYM: d; saltos hacia arriba 0; {\"visible\":true,\"tapado\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Qx-320",
+  "escenario": "Sin desbordamiento horizontal ni errores de consola/JS/red en el recorrido (320 px)",
+  "esperado": "La página no se desplaza en horizontal; sin errores",
+  "observado": "true; []",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q6-1440",
+  "escenario": "Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (1440 px)",
+  "esperado": "Una sola acción de acento en cada estado y el guardado queda confirmado («Guardada en tu cuenta»)",
+  "observado": "[\"js-revisar\"] → [\"js-guardar\"] → [\"js-guardar\"] → []; Guardada en tu cuenta",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q6-390",
+  "escenario": "Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (390 px)",
+  "esperado": "Una sola acción de acento en cada estado y el guardado queda confirmado («Guardada en tu cuenta»)",
+  "observado": "[\"js-revisar\"] → [\"js-guardar\"] → [\"js-guardar\"] → []; Guardada en tu cuenta",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q6-320",
+  "escenario": "Cuenta: sin cambios → «Revisar»; con cambios → «Guardar»; en la revisión con cambios → «Guardar»; tras guardar → sin principal (320 px)",
+  "esperado": "Una sola acción de acento en cada estado y el guardado queda confirmado («Guardada en tu cuenta»)",
+  "observado": "[\"js-revisar\"] → [\"js-guardar\"] → [\"js-guardar\"] → []; Guardada en tu cuenta",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q8-1440",
+  "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (1440 px)",
+  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 345–576; rf 592; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 900",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q8-390",
+  "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (390 px)",
+  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 447–791; rf 807; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 780",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q8-320",
+  "escenario": "Cuaderno con cuenta: lo que toca volver a revisar va primero, con UNA tarjeta compacta por escenario (320 px)",
+  "esperado": "El primer bloque es «Mis escenarios» y la primera tarjeta empieza dentro del viewport; el bloque editorial duplicado no se muestra con cuenta; las tres tarjetas tienen «Tu seguimiento», «Respuesta editorial» (original y reformulación: la revisión responde; la pregunta distinta: no tiene respuesta editorial) y «Registrar revisión»; ninguna repite el desenlace",
+  "observado": "og 471–835; rf 851; orden [\"Mis escenarios (3)\",\"Mi radar\"]; alto 780",
+  "resultado": "OK"
+ },
+ {
+  "id": "Q7",
+  "escenario": "Referencia e implementación en tamaño comparable",
+  "esperado": "Se genera la imagen lado a lado (misma anchura) para la inspección visual",
+  "observado": "Q7-referencia-vs-implementacion-1440.png",
+  "resultado": "OK"
+ }
+]
