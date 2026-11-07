@@ -73,7 +73,7 @@ const { chromium, B, ok, T, nuevo, entrar, peso, fin } = require('./h.cjs');
   await p.focus('#ir-screener'); await p.keyboard.press('Enter'); await p.waitForTimeout(500); ok('empresas: «Ir a los filtros de precio» salta la lista de 126 filas', await p.evaluate(() => document.activeElement.id) === 'filtros-precio' && await p.evaluate(() => document.querySelector('#filtros-precio').getBoundingClientRect().top < innerHeight));
   await p.keyboard.press('Home'); await p.evaluate(() => window.scrollTo(0, 0)); await p.focus('#emp-buscar');
   let tabs = 0; for (let i = 0; i < 12; i++) { await p.keyboard.press('Tab'); tabs++; }
-  ok('empresas: el foco recorre las filas en orden (Tab)', (await p.evaluate(() => document.activeElement.classList.contains('ver-ficha'))), '');
+  ok('empresas: el foco recorre las filas en orden (Tab)', (await p.evaluate(() => { const e = document.activeElement; return (e.classList.contains('ver-ficha') || e.classList.contains('probar-emp')) && !!e.closest('#empresas-lista tr'); })), '');   // ronda 28: cada fila tiene ahora «Ver ficha» y «Probar» (y hay un glosario antes): el foco debe estar en un control de una FILA
   await p.ctx.close();
 
   // ===== FICHA EN MÓVIL =====

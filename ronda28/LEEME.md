@@ -1,4 +1,4 @@
-# Ronda 28 · Fase 1 del plan: claridad y lenguaje
+# Ronda 28 · Fases 1 y 2 del plan: claridad, lenguaje, móvil y descubrir
 
 **Encargo (Javier, 2026-11-06):** «haz un plan para mejorar todos los aspectos a 10 y empieza ya, todos menos el 14». Plan completo en `PLAN.md` (4 fases). Esta ronda es la **fase 1**: lo que se puede hacer sin cuentas externas ni personas.
 **Piloto:** la versión congelada `piloto-r27` es el commit `f991fd8` (`git checkout f991fd8` antes de abrir el piloto). Esta ronda no la cambia.
@@ -30,3 +30,36 @@ Fase 2 (móvil con barra inferior, tarjetas de empresas, pegar «KO 40, PG 60»,
 
 ## Resultado de la pasada completa
 **Commit `f0334db`, árbol limpio, 2026-11-06 23:48 UTC, local del autor: 1042 correctas, 0 fallos, código de salida 0** (53 baterías con resultado: las 1010 de la ronda 27 + 8 de `unit-claridad28` + 24 de `testX`). Una primera ejecución se cortó por un reinicio del contenedor y se repitió entera. Registro en `resultado-ejecucion.txt` y `logs/`.
+
+---
+
+# Fase 2 del plan: móvil y descubrir
+
+**Encargo (Javier, 2026-11-07):** «sí» a seguir con la fase 2 (`PLAN.md`).
+
+## Qué se ha hecho (implementado)
+| Punto | Cambio |
+|---|---|
+| 10 · Móvil | **Barra inferior** (< 720 px) con tres destinos: Carteras, Descubrir y Cuaderno; marca el actual. No aparece en el editor ni en el laboratorio (tienen su propia barra de acciones). La Revista sale de la barra principal; sigue en el menú. |
+| 3 · Crear cartera | **«Pega tu cartera»:** escribir o pegar «KO 40, PG 60» en el buscador del editor crea o actualiza esas posiciones de una vez (`public/js/pegado.js`, puro). Lo que no está en el universo se dice («sin reconocer: ZZZZ») y no se sustituye; pesos fuera de rango o con más de una decimal se rechazan. |
+| 7 · Descubrir | Botón **«Probar»** en cada empresa de Explorar: abre el laboratorio con esa empresa al 10 % y el deslizador listo. |
+| 5 · Señales | Al pulsar una señal, **tres niveles**: qué es, por qué importa y qué probar. **Umbrales propios** (en «Qué mide»): la persona fija desde qué % una posición o un sector «pesa mucho». Se guardan solo en su navegador, se validan (si no valen, se usan los de Klever) y el detalle dice «tu referencia». «Mis carteras» también los usa. |
+| 8 · Cuaderno | **Renombrados visibles:** «escenario» → «idea» y «radar» → «empresas que sigo» (interfaz, avisos y mensajes del servidor). **Preguntas de ejemplo** al guardar una idea («¿Sigue creciendo NVDA?»…). |
+
+## Qué se ha probado
+- **`tests/ronda28/unit-fase2-28.mjs` (10):** lectura de listas (formatos, símbolo con punto, desconocidos, pesos no válidos, repetidos, «¿parece una lista?») y umbrales propios (cambian las señales, se validan, cada señal trae su «por qué importa»).
+- **`tests/ronda28/testY.cjs` (21, servidor real, 1440/390/320):** barra inferior (y su ausencia en escritorio, editor y laboratorio), pegar una lista, «Probar» desde Explorar, señal en tres niveles y umbrales propios, renombrados (sin «escenario» ni «radar» a la vista en el Cuaderno y la ficha), preguntas de ejemplo, sin errores ni desbordes.
+- **Primera pasada completa de la fase 2** (`d545fca`): 1071 correctas, **2 fallos**, ambos por cambios intencionados: `testN` N9 buscaba «escenario guardado» (ahora «idea guardada») y `testB` exigía que, tras 12 tabulaciones desde el buscador, el foco estuviera en un «Ver ficha»; con el glosario y el botón «Probar» por fila, cae en un control de fila distinto. Se adaptan: N9 al texto nuevo; testB exige un control (Ver ficha o Probar) **de una fila** de la tabla. Ninguna otra condición cambia.
+- **Pruebas antiguas adaptadas a propósito (se declara):** 8 archivos buscaban textos literales que cambian («Aún no has guardado ningún escenario», «Guardar en mi radar», «Mis escenarios», «Mi radar», «No encontramos ese escenario», «★ En tu radar»…). Solo cambia el texto buscado.
+
+## Lo que la fase 2 NO incluye (se declara)
+- **Varios cambios a la vez en el laboratorio** y «aplicar a mi cartera»: el servidor valida cada idea guardada con UNA operación (`propuestaCoincide`). Cambiarlo toca el formato guardado y el servidor: necesita una ronda propia.
+- **Sello único de avisos** (punto 11): los avisos de simulación los comprueban muchas pruebas por su texto; se hará con cuidado en otra ronda.
+- **Línea de tiempo por idea** (punto 8) y **tarjetas de empresas con logotipo** (punto 7): pendientes.
+- **Revista:** sin contenido nuevo (depende de Javier).
+
+## Sin comprobar
+Teléfono real (la barra inferior con zonas seguras de iPhone se ha escrito, no probado), lector de pantalla, Safari/Firefox, personas.
+
+## Resultado de la pasada completa de la fase 2
+*(pendiente)*
