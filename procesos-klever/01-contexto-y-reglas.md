@@ -8,6 +8,8 @@ Web beta, **gratuita y educativa**, para inversores particulares. Permite:
 
 **Sin dinero real. Sin recomendaciones personalizadas. Sin cobrar durante la beta.**
 
+> **Actualización 2026-11-06 (ronda 26, C22):** público prioritario **20–30 años con poca experiencia en bolsa**. Promesa: **«descubre alternativas y compara tus opciones antes de invertir»**. Núcleo: **Cartera → Descubrimiento → Comparación → Decisión → Revisión**. Prioridad: que se entienda de forma visual, interactiva y rápida, con poco texto. Se conserva la estética carbón y cobre; azul solo para lo simulado y verde para estados correctos. Palabras de la interfaz: «cartera», «idea», «empresas que sigo». Plan para llevar cada aspecto a 10: `ronda28/PLAN.md`.
+
 ## Objetivo de la beta
 Validar en **un mes y con coste 0 €** si a inversores particulares les interesa organizar varias carteras y ver ideas de empresas. Meta: unas **200 visitas al día** al cabo de un mes. Decisión con tres datos: registros, carteras creadas por usuario y usuarios que vuelven pasada una semana.
 

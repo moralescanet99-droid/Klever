@@ -77,3 +77,14 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-05 · Ronda 22 (C19): cierre de lo existente (recuperación del registro de revisiones, Cuaderno coherente, recorrido pulido); ver `ronda22/LEEME.md`.
 - 2026-11-05 · Paquete para ChatGPT de la ronda 22 (`revision-chatgpt/ronda-22/INSTRUCCIONES_PARA_CHATGPT.md` + 13 imágenes de viewport; ZIPs e imágenes fuera del repositorio).
 - 2026-11-05 · Ronda 23 (C20): corrección final acotada (borrador de revisión protegido durante el envío, el conflicto y la sesión caducada); ver `ronda23/LEEME.md`.
+
+- 2026-11-06 · Ronda 24: preparación del piloto privado (`piloto-r23`); ver `ronda24/LEEME.md`.
+- 2026-11-06 · Evolución visual 25 integrada en la rama `evolucion-25` (961/0); ver `ronda25/LEEME.md`.
+- 2026-11-06 · Fin del circuito con ChatGPT; el supervisor pasa a ser un Claude Opus (`11-traspaso-supervisor.md`).
+- 2026-11-06 · Ronda 26 (C22): evolución visual e interactiva sobre `evolucion-25` en la rama `claude/klever-visual-interactive-evolution-h6n454` (señales, comparación instantánea, nueva promesa); 998/0. Ver `ronda26/LEEME.md`.
+- 2026-11-06 · Decisiones delegadas (C23): promesa y umbrales confirmados, sin integrar en `main`, piloto de un grupo.
+- 2026-11-06 · Ronda 27 (C24): corregida la duplicación por envío incierto; piloto pasa a `piloto-r27` (commit `f991fd8`); 1010/0. Ver `ronda27/LEEME.md`.
+- 2026-11-06 · Demo publicada como artefacto privado (C25).
+- 2026-11-06 · Valoración experta de 14 aspectos (C26) y propuesta para llegar a 10 (C27).
+- 2026-11-06 · Ronda 28, fase 1 del plan (C28): claridad y lenguaje; 1042/0. Ver `ronda28/PLAN.md` y `ronda28/LEEME.md`.
+- 2026-11-07 · Ronda 28, fase 2 (C29, C30): móvil y descubrir, varios cambios a la vez, sello único, línea de tiempo; 1094/0.

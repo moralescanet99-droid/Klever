@@ -2090,3 +2090,80 @@ El criterio acordado sigue siendo cuatro de cinco completando sin ayuda sustanci
 La próxima revisión se basará en el resultado del piloto y en incidencias reales, no en añadir ideas de manera indefinida. La excepción ya identificada es la conservación del intento pendiente antes de publicar. Aprobar un piloto supervisado con una limitación conocida no equivale a declarar terminada la validación para uso público.
 
 No hemos demostrado todavía demanda, retención espontánea, disposición a pagar ni utilidad con datos financieros reales. Ese aprendizaje empieza ahora; no se obtiene añadiendo más pruebas de código.
+
+
+## C22 · Ronda 26 (2026-11-06) — dirección estratégica de Javier para la evolución visual, literal
+> Quiero que uses este mensaje como dirección estratégica para la siguiente evolución de Klever. No construyas otro producto desde cero ni sustituyas automáticamente lo que ya funciona. Primero analiza el proyecto actual, conserva sus mejores elementos y aplica estas mejoras de forma progresiva.
+>
+> Klever debe convertirse en una aplicación de carteras de inversión simuladas para usuarios de 20–30 años con poca experiencia en bolsa.
+>
+> Su propuesta debe ser: “descubre alternativas y compara tus opciones antes de invertir”.
+>
+> El núcleo de la experiencia debe seguir siendo: Cartera → Descubrimiento → Comparación → Decisión → Revisión.
+>
+> La prioridad principal de esta evolución es que Klever se entienda de forma visual, interactiva y rápida. El usuario no quiere leer grandes cantidades de texto. La aplicación debe captar su atención desde los primeros segundos y explicar la mayoría de las cosas mediante: gráficos; barras de pesos; comparaciones antes/después; tarjetas interactivas; animaciones útiles; simulaciones instantáneas; colores y estados visuales; mensajes cortos; información progresiva al pulsar.
+>
+> Reduce los párrafos largos, las explicaciones repetidas y las pantallas demasiado densas. Cada pantalla debe tener una idea principal y una acción clara.
+>
+> Por ejemplo, en vez de explicar durante un párrafo que una cartera está demasiado concentrada en tecnología, muestra visualmente esa concentración, una alerta breve como “Demasiada tecnología” y un botón como “Ver qué cambiaría”. Al pulsarlo, debe aparecer una simulación visual de la cartera original frente a una alternativa.
+>
+> Queremos que Klever sea: inteligente; moderna; premium; interactiva; futurista de forma controlada; capaz de detectar oportunidades, riesgos y potencial de crecimiento.
+>
+> Sin embargo, no debe prometer rentabilidades garantizadas ni presentar estimaciones como certezas. Debe utilizar conceptos como: potencial; escenarios; riesgo; hipótesis; exposición; equilibrio.
+>
+> La estética actual oscura y naranja/cobre debe conservarse como base. Puedes mejorarla con una sensación más futurista mediante: mejor jerarquía visual; controles más refinados; transiciones suaves; gráficos más expresivos; capas visuales y profundidad; azul eléctrico o verde para estados concretos, sin abusar del neón; tipografía premium; serif solo en titulares importantes; sans-serif limpia para datos y controles.
+>
+> No conviertas Klever en un videojuego, una revista financiera ni una interfaz hiperfuturista difícil de usar. La Revista debe seguir siendo secundaria. El centro debe ser la creación y seguimiento de carteras.
+>
+> Revisa especialmente estas áreas del proyecto existente: 1. La primera impresión y la portada. 2. La claridad de la propuesta en menos de 10 segundos. 3. La creación de una cartera. 4. La visualización de la nota y sus motivos. 5. La barra de reparto y el sistema “Quién cede el peso”. 6. La comparación entre cartera original y alternativa. 7. La sección de ideas y empresas. 8. La sección “Para revisar”. 9. El Cuaderno y el seguimiento personal. 10. La experiencia móvil. 11. La cantidad de texto en cada pantalla. 12. La sensación de valor y de posible retorno semanal.
+>
+> No añadas funcionalidades grandes sin analizar antes si realmente mejoran la experiencia. Prioriza primero el impacto visual, la interacción, la retención y la percepción de valor.
+>
+> La aplicación debería conseguir que el usuario piense: “Ahora veo qué podría mejorar y quiero volver para seguir construyendo mi cartera o más carteras”.
+>
+> Antes de modificar, realiza una auditoría breve del producto actual. Después: indica qué elementos mantienes; indica qué elementos simplificas; indica qué elementos rediseñas; indica qué elementos eliminas; implementa los cambios prioritarios; mantén las funcionalidades que ya funcionan; comprueba que no se rompa la lógica existente; valida especialmente móvil y escritorio; evita añadir texto para solucionar problemas que puedan resolverse visualmente.
+>
+> El objetivo no es hacer una aplicación más cargada, sino una aplicación más clara, atractiva, interactiva y con mayor percepción de valor.
+
+Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
+
+## C23 · Ronda 26 (2026-11-06) — decisiones delegadas, literal
+> Hazlo segun tu criterio
+
+(Respuesta a las cuatro decisiones de `ronda26/LEEME.md` §6. Lo decidido, con motivos, en `03-decisiones.md`.)
+
+## C24 · Ronda 27 (2026-11-06) — corregir la limitación conocida, literal
+> Ok, corrige el problema
+
+(La duplicación de una revisión tras un envío incierto. Resultado: `ronda27/LEEME.md`.)
+
+## C25 · (2026-11-06) — ver la versión e interactuar, literal
+> Puedo ver la ultima version e interactuar?
+
+(Se publicó la demo como artefacto privado: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw — se actualiza con cada fase.)
+
+## C26 · (2026-11-06) — valoración experta, literal
+> Como ves todos los aspectos de la web? Valoralos como un experto en ello, explicalo de forma simple cada punto para poder entenderlo bien
+
+(Respuesta en el chat: 14 aspectos con nota de 1 a 10. Notas de partida: 1 primera impresión 7 · 2 estética 8 · 3 crear cartera 8 · 4 revisión y nota 5 · 5 señales 7 · 6 comparar 7 · 7 descubrir 5 · 8 Cuaderno 6 · 9 Revista 4 · 10 móvil 7 · 11 texto 5 · 12 confianza 9 · 13 técnica 9 · 14 volver y valor 4.)
+
+## C27 · (2026-11-06) — cómo llegar a 10, literal
+> Como mejorarias todos los aspectos para llegar al 10 en cada uno?
+
+(Respuesta en el chat; convertida en plan en C28.)
+
+## C28 · Ronda 28 (2026-11-06) — plan a 10 y empezar, literal
+> Haz un plan o un esquema de trabajo para mejoralros todos a la puntiacion 10 y empieza ya, todos menos el punto 14, este lo guardamos para otro momento
+
+(Plan: `ronda28/PLAN.md`. Fase 1 hecha en la ronda 28.)
+
+## C29 · Ronda 28 (2026-11-07) — seguir con la fase 2, literal
+> Si
+
+## C30 · Ronda 28 (2026-11-07) — terminar la fase 2, literal
+> Termina la fase 2
+
+## C31 · (2026-11-07) — sobre la memoria, literal
+> Estas guardadano toda la informacion del proyecto en una memoria?
+
+(Al comprobarlo faltaban estas entradas de `06-`, la cronología de `04-` y el contexto de `01-`; se añadieron.)

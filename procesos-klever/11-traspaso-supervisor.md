@@ -42,3 +42,10 @@ Beta **gratuita** de carteras **simuladas** (Cloudflare Pages Functions + D1; Ja
 
 ## Qué espera Javier de cada informe
 Corto y verificable: qué se pidió, qué se hizo, qué se probó (con cifras y commit), qué falló por el camino, qué queda sin comprobar y qué decisión necesita. Sin afirmar nada que no se haya ejecutado.
+
+## Actualización 2026-11-07 (rondas 26–28)
+- Rama de trabajo actual: `claude/klever-visual-interactive-evolution-h6n454` (contiene `evolucion-25`). `main` sin cambios. Piloto congelado: `piloto-r27` = commit `f991fd8`.
+- Hecho: evolución visual 26, corrección de la duplicación (27), fases 1 y 2 del plan a 10 (28). Última pasada completa: **1094/0** (`0f5cfc9`).
+- Siguiente: fase 3 (piloto con 5 personas; decidir si sobre `piloto-r27` o una versión `piloto-r28` con las fases 1–2) y fase 4 (producción). Punto 14 (volver y valor) aparcado por Javier.
+- Demo privada: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw
+
