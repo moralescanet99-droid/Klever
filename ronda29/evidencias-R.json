@@ -1,0 +1,66 @@
+[
+ {
+  "id": "R1",
+  "escenario": "PUT: una escritura ajena llega entre el commit y la respuesta",
+  "esperado": "A recibe SU revisión (1), no la de B (2); su siguiente guardado con esa revisión es 409 y no pisa a B",
+  "observado": "HTTP 200, revisión devuelta 1; siguiente guardado HTTP 409; estado {\"nombre\":\"B\",\"tesis\":null,\"publico\":0,\"revision\":2,\"pos\":\"NEM:100\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R2",
+  "escenario": "PATCH: una escritura ajena llega entre el commit y la respuesta",
+  "esperado": "A recibe SU revisión (1); su siguiente cambio con esa revisión es 409",
+  "observado": "HTTP 200, revisión devuelta 1; siguiente HTTP 409; estado {\"nombre\":\"B\",\"tesis\":null,\"publico\":0,\"revision\":2,\"pos\":\"NEM:100\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3",
+  "escenario": "GET: una escritura ajena llega entre la lectura de la cartera y la de sus posiciones",
+  "esperado": "La respuesta es UNA versión que existió (nombre, revisión y posiciones a juego), nunca una mezcla",
+  "observado": "nombre «Prueba», revisión 0, posiciones GLD:60,IAU:40; la escritura ajena sí se aplicó=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4a",
+  "escenario": "Rollback ante un error interno de infraestructura a mitad del lote (PUT)",
+  "esperado": "HTTP 500 con mensaje de reintento (no «ticker desconocido»), nada queda a medias y el detalle técnico se registra en el servidor",
+  "observado": "HTTP 500; «No se pudo guardar por un error del servidor. Inténtalo de nuevo.»; sin cambios=true; registrado=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4b",
+  "escenario": "Ticker desconocido (validación)",
+  "esperado": "HTTP 400 «Algún ticker no está en el universo» y nada cambia",
+  "observado": "HTTP 400; «Algún ticker no está en el universo»; sin cambios=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5",
+  "escenario": "POST: error interno a mitad del lote",
+  "esperado": "HTTP 500 y no queda ninguna cartera",
+  "observado": "HTTP 500; carteras=0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R6a",
+  "escenario": "GET público: la cartera se despublica y cambian sus posiciones entre las lecturas originales",
+  "esperado": "La respuesta es la versión pública anterior COMPLETA (o 404); nunca posiciones, nombre o tesis de una versión que no fue pública",
+  "observado": "HTTP 200; nombre «Prueba», tesis «Tesis pública», posiciones GLD:60,IAU:40; la despublicación sí se aplicó=true; fuga de datos privados=false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R6b",
+  "escenario": "GET público de una cartera ya privada",
+  "esperado": "HTTP 404, sin posiciones",
+  "observado": "HTTP 404; posiciones en la respuesta=false",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

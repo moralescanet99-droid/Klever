@@ -1,0 +1,27 @@
+# comando: node tests/ronda28/testZ.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 19:01:40 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Z1-1440] Dos cambios encadenados (1440 px): la comparación es contra la cartera ORIGINAL
+OK    [Z2-1440] Con varios cambios no se guarda como idea (1440 px)
+OK    [Z4-1440] Sello único de avisos (1440 px)
+OK    [Z3-1440] «Aplicar a mi cartera» (1440 px)
+OK    [Z5-1440] Línea de tiempo de una idea (1440 px)
+OK    [Z6-1440] Monogramas en Explorar (1440 px)
+OK    [Z0-1440] Sin errores ni desbordes (1440 px)
+OK    [Z1-390] Dos cambios encadenados (390 px): la comparación es contra la cartera ORIGINAL
+OK    [Z2-390] Con varios cambios no se guarda como idea (390 px)
+OK    [Z4-390] Sello único de avisos (390 px)
+OK    [Z3-390] «Aplicar a mi cartera» (390 px)
+OK    [Z5-390] Línea de tiempo de una idea (390 px)
+OK    [Z6-390] Monogramas en Explorar (390 px)
+OK    [Z0-390] Sin errores ni desbordes (390 px)
+OK    [Z1-320] Dos cambios encadenados (320 px): la comparación es contra la cartera ORIGINAL
+OK    [Z2-320] Con varios cambios no se guarda como idea (320 px)
+OK    [Z4-320] Sello único de avisos (320 px)
+OK    [Z3-320] «Aplicar a mi cartera» (320 px)
+OK    [Z5-320] Línea de tiempo de una idea (320 px)
+OK    [Z6-320] Monogramas en Explorar (320 px)
+OK    [Z0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 21 correctas, 0 fallos

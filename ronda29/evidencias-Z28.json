@@ -1,0 +1,149 @@
+[
+ {
+  "id": "Z1-1440",
+  "escenario": "Dos cambios encadenados (1440 px): la comparación es contra la cartera ORIGINAL",
+  "esperado": "aviso «Cambios acumulados (1): NVDA → 20 %»; base = NVDA 40, MSFT 20, AMZN 20, KO 20; alternativa con NVDA 20, JNJ 10 y las demás bajan en proporción a 17,5 % (el 20 % liberado por NVDA queda sin asignar: el método proporcional no lo reparte)",
+  "observado": "{\"cad1\":\"Cambios acumulados (1): NVDA → 20 %El siguiente cambio se prueba sobre la cartera con estos cambios; la comparación es siempre contra la original.Deshacer el último · Empezar de nuevo\",\"z1\":{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z2-1440",
+  "escenario": "Con varios cambios no se guarda como idea (1440 px)",
+  "esperado": "sin formulario de guardado; se explica que una idea guarda un solo cambio; se ofrece «Aplicar a mi cartera»",
+  "observado": "{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z4-1440",
+  "escenario": "Sello único de avisos (1440 px)",
+  "esperado": "«Simulación · sin dinero real · no es una recomendación»; detalle oculto hasta pulsar «Más»; al pulsar, «Tu cartera base no cambia» y aria-expanded=true",
+  "observado": "{\"sello0\":{\"breve\":\"Simulación · sin dinero real · no es una recomendación\",\"detalleOculto\":true},\"sello1\":{\"visible\":true,\"txt\":\" Tu cartera base no cambia. Esta alternativa no implica una mayor rentabilidad.\",\"exp\":\"true\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z3-1440",
+  "escenario": "«Aplicar a mi cartera» (1440 px)",
+  "esperado": "confirmación con la composición final; al aceptar, el editor tiene NVDA 17,5 y JNJ 10, suma 80 % (20 % sin asignar, como en la simulación); el borrador se actualiza",
+  "observado": "{\"dlg\":\"Tu cartera «Mi cartera Z» pasará a: AMZN 17,5 % · KO 17,5 % · MSFT 17,5 % · NVDA 17,5 % · JNJ 10 %. No se guarda en tu cuenta hasta que puls\",\"editor\":{\"AMZN\":\"17,5\",\"KO\":\"17,5\",\"MSFT\":\"17,5\",\"NVDA\":\"17,5\",\"JNJ\":\"10,0\"},\"borrador\":\"AMZN,JNJ,KO,MSFT,NVDA\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z5-1440",
+  "escenario": "Línea de tiempo de una idea (1440 px)",
+  "esperado": "arriba «Próxima revisión» con su fecha; sin revisiones aún; abajo «Guardaste la idea» con la pregunta",
+  "observado": "[\"Próxima revisión · 12 nov 2026\",\"Todavía no has registrado ninguna revisión.\",\"Guardaste la idea · 7 nov 2026 · «¿Aporta JNJ?»\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z6-1440",
+  "escenario": "Monogramas en Explorar (1440 px)",
+  "esperado": "cada empresa visible lleva dos letras de su símbolo, ocultas a lectores de pantalla (el nombre ya se lee)",
+  "observado": "{\"n\":126,\"primero\":\"AD\",\"oculto\":\"true\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z1-390",
+  "escenario": "Dos cambios encadenados (390 px): la comparación es contra la cartera ORIGINAL",
+  "esperado": "aviso «Cambios acumulados (1): NVDA → 20 %»; base = NVDA 40, MSFT 20, AMZN 20, KO 20; alternativa con NVDA 20, JNJ 10 y las demás bajan en proporción a 17,5 % (el 20 % liberado por NVDA queda sin asignar: el método proporcional no lo reparte)",
+  "observado": "{\"cad1\":\"Cambios acumulados (1): NVDA → 20 %El siguiente cambio se prueba sobre la cartera con estos cambios; la comparación es siempre contra la original.Deshacer el último · Empezar de nuevo\",\"z1\":{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z2-390",
+  "escenario": "Con varios cambios no se guarda como idea (390 px)",
+  "esperado": "sin formulario de guardado; se explica que una idea guarda un solo cambio; se ofrece «Aplicar a mi cartera»",
+  "observado": "{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z4-390",
+  "escenario": "Sello único de avisos (390 px)",
+  "esperado": "«Simulación · sin dinero real · no es una recomendación»; detalle oculto hasta pulsar «Más»; al pulsar, «Tu cartera base no cambia» y aria-expanded=true",
+  "observado": "{\"sello0\":{\"breve\":\"Simulación · sin dinero real · no es una recomendación\",\"detalleOculto\":true},\"sello1\":{\"visible\":true,\"txt\":\" Tu cartera base no cambia. Esta alternativa no implica una mayor rentabilidad.\",\"exp\":\"true\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z3-390",
+  "escenario": "«Aplicar a mi cartera» (390 px)",
+  "esperado": "confirmación con la composición final; al aceptar, el editor tiene NVDA 17,5 y JNJ 10, suma 80 % (20 % sin asignar, como en la simulación); el borrador se actualiza",
+  "observado": "{\"dlg\":\"Tu cartera «Mi cartera Z» pasará a: AMZN 17,5 % · KO 17,5 % · MSFT 17,5 % · NVDA 17,5 % · JNJ 10 %. No se guarda en tu cuenta hasta que puls\",\"editor\":{\"AMZN\":\"17,5\",\"KO\":\"17,5\",\"MSFT\":\"17,5\",\"NVDA\":\"17,5\",\"JNJ\":\"10,0\"},\"borrador\":\"AMZN,JNJ,KO,MSFT,NVDA\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z5-390",
+  "escenario": "Línea de tiempo de una idea (390 px)",
+  "esperado": "arriba «Próxima revisión» con su fecha; sin revisiones aún; abajo «Guardaste la idea» con la pregunta",
+  "observado": "[\"Próxima revisión · 12 nov 2026\",\"Todavía no has registrado ninguna revisión.\",\"Guardaste la idea · 7 nov 2026 · «¿Aporta JNJ?»\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z6-390",
+  "escenario": "Monogramas en Explorar (390 px)",
+  "esperado": "cada empresa visible lleva dos letras de su símbolo, ocultas a lectores de pantalla (el nombre ya se lee)",
+  "observado": "{\"n\":126,\"primero\":\"AD\",\"oculto\":\"true\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z1-320",
+  "escenario": "Dos cambios encadenados (320 px): la comparación es contra la cartera ORIGINAL",
+  "esperado": "aviso «Cambios acumulados (1): NVDA → 20 %»; base = NVDA 40, MSFT 20, AMZN 20, KO 20; alternativa con NVDA 20, JNJ 10 y las demás bajan en proporción a 17,5 % (el 20 % liberado por NVDA queda sin asignar: el método proporcional no lo reparte)",
+  "observado": "{\"cad1\":\"Cambios acumulados (1): NVDA → 20 %El siguiente cambio se prueba sobre la cartera con estos cambios; la comparación es siempre contra la original.Deshacer el último · Empezar de nuevo\",\"z1\":{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z2-320",
+  "escenario": "Con varios cambios no se guarda como idea (320 px)",
+  "esperado": "sin formulario de guardado; se explica que una idea guarda un solo cambio; se ofrece «Aplicar a mi cartera»",
+  "observado": "{\"base\":\"Cartera base: NVDA 40 %, AMZN 20 %, KO 20 %, MSFT 20 %\",\"alt\":\"Alternativa simulada: AMZN 17.5 %, KO 17.5 %, MSFT 17.5 %, NVDA 17.5 %, JNJ 10 %\",\"guardar\":\"Varios cambiosUna idea del Cuaderno guarda un solo cambio. Con varios, pulsa «Aplicar a mi cartera» y después guarda la cartera.\",\"form\":false,\"aplicar\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z4-320",
+  "escenario": "Sello único de avisos (320 px)",
+  "esperado": "«Simulación · sin dinero real · no es una recomendación»; detalle oculto hasta pulsar «Más»; al pulsar, «Tu cartera base no cambia» y aria-expanded=true",
+  "observado": "{\"sello0\":{\"breve\":\"Simulación · sin dinero real · no es una recomendación\",\"detalleOculto\":true},\"sello1\":{\"visible\":true,\"txt\":\" Tu cartera base no cambia. Esta alternativa no implica una mayor rentabilidad.\",\"exp\":\"true\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z3-320",
+  "escenario": "«Aplicar a mi cartera» (320 px)",
+  "esperado": "confirmación con la composición final; al aceptar, el editor tiene NVDA 17,5 y JNJ 10, suma 80 % (20 % sin asignar, como en la simulación); el borrador se actualiza",
+  "observado": "{\"dlg\":\"Tu cartera «Mi cartera Z» pasará a: AMZN 17,5 % · KO 17,5 % · MSFT 17,5 % · NVDA 17,5 % · JNJ 10 %. No se guarda en tu cuenta hasta que puls\",\"editor\":{\"AMZN\":\"17,5\",\"KO\":\"17,5\",\"MSFT\":\"17,5\",\"NVDA\":\"17,5\",\"JNJ\":\"10,0\"},\"borrador\":\"AMZN,JNJ,KO,MSFT,NVDA\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z5-320",
+  "escenario": "Línea de tiempo de una idea (320 px)",
+  "esperado": "arriba «Próxima revisión» con su fecha; sin revisiones aún; abajo «Guardaste la idea» con la pregunta",
+  "observado": "[\"Próxima revisión · 12 nov 2026\",\"Todavía no has registrado ninguna revisión.\",\"Guardaste la idea · 7 nov 2026 · «¿Aporta JNJ?»\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z6-320",
+  "escenario": "Monogramas en Explorar (320 px)",
+  "esperado": "cada empresa visible lleva dos letras de su símbolo, ocultas a lectores de pantalla (el nombre ya se lee)",
+  "observado": "{\"n\":126,\"primero\":\"AD\",\"oculto\":\"true\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Z0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]

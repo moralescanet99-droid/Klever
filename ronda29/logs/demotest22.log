@@ -1,0 +1,18 @@
+# comando: node tests/ronda22/testDemo22.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 19:02:44 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    D1-390
+OK    D2-390
+OK    D3-390
+OK    D4-390
+OK    D5-390
+OK    D0-390
+OK    D1-1440
+OK    D2-1440
+OK    D3-1440
+OK    D4-1440
+OK    D5-1440
+OK    D0-1440
+
+RESULTADO: 12 correctas, 0 fallos

@@ -48,4 +48,4 @@ Corto y verificable: qué se pidió, qué se hizo, qué se probó (con cifras y 
 - Hecho: evolución visual 26, corrección de la duplicación (27), fases 1 y 2 del plan a 10 (28). Última pasada completa: **1094/0** (`0f5cfc9`).
 - Siguiente: fase 3 (piloto con 5 personas; decidir si sobre `piloto-r27` o una versión `piloto-r28` con las fases 1–2) y fase 4 (producción). Punto 14 (volver y valor) aparcado por Javier.
 - Demo privada: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw
-
+- 2026-11-07 · Ronda 29 (fase 2.5): arranque guiado, huella, «Tu semana» y retos; regresión de privacidad corregida; última pasada **1121/0** (`cd27c09`). Memoria automática con hooks (`.claude/settings.json`).

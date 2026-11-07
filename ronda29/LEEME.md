@@ -21,4 +21,5 @@
 Personas (¿el arranque engancha?, ¿vuelven por «Tu semana»?, ¿los retos motivan o molestan?), teléfono real, lector de pantalla con la huella. **Sigue faltando lo que más retiene y no depende de mí:** datos reales (SEC, fase 4), correo para el resumen semanal (Brevo) y la decisión sobre precios históricos.
 
 ## Resultado de la pasada completa
-*(pendiente)*
+- Primera pasada (`8e22582`): 1114 correctas, **7 fallos** (la regresión de privacidad de arriba).
+- **Pasada tras la corrección (`cd27c09`, árbol limpio, 2026-11-07 18:37 UTC, local del autor): 1121 correctas, 0 fallos, código de salida 0** (58 baterías con resultado: 1094 anteriores + 12 de `unit-semana29` + 15 de `testAA`). Registro en `resultado-ejecucion.txt` y `logs/`.

@@ -1,0 +1,17 @@
+# comando: node tests/ronda16/unit-escenarios16.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 18:37:19 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [P1] 18 evaluaciones adjuntas MALAS (marcado en motivo, nota, versión, fecha o bloque; números fuera de rango; fecha inexistente; cobertura insuficiente; campos extra)
+OK    [P2] Un escenario VÁLIDO (nota calculada → nota pendiente) se guarda y se reabre
+OK    [P3] Fila antigua con una nota manipulada (marcado dentro del campo nota) ya guardada en la base
+OK    [P3b] Fila con JSON corrupto
+OK    [P3c] validarResumen no deja pasar nada que no reconstruya
+OK    [P4] Tres escenarios de la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva sin vínculo
+OK    [P5] Lo que dice el seguimiento de cada caso
+OK    [P6] Editar la pregunta (un espacio de más) NO rompe el vínculo
+OK    [P7] Reescribir la pregunta mantiene el vínculo; quitarlo explícitamente la convierte en «otra pregunta»
+OK    [P8] Vínculo de otra historia, sin historia o con una forma no válida
+OK    [P9] Cierro sesión y vuelvo con la misma cuenta; después miro con otra
+
+RESULTADO: 11 correctas, 0 fallos

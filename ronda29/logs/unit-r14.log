@@ -1,0 +1,20 @@
+# comando: node tests/ronda14/unit-r14.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 18:37:19 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Q1] Peso de 10,04 %
+OK    [Q2] Propuesta con un símbolo duplicado (C dos veces, 5 + 5)
+OK    [Q3] Propuesta con pesos de más de una decimal
+OK    [Q3b] Propuesta con una fila de más (misma posición repetida)
+OK    [Q3c] Un decimal SÍ se acepta (10,5 %)
+OK    [Q4] Pregunta, fecha de revisión e historia vinculada
+OK    [Q4b] Campos no válidos
+OK    [Q4c] Editar la pregunta y quitar la fecha (revisión 0 → 1)
+OK    [Q5] Un escenario anterior (sin los campos nuevos) se abre y se lista
+OK    [Q6] «Marcar como descartado» conserva la historia; «Eliminar» la borra del todo
+OK    [Q7] Dos pestañas: otra escritura se cuela entre la lectura y la actualización
+OK    [Q8] Dos reintentos con la misma clave a la vez (el otro escribe entre la comprobación y el INSERT)
+OK    [Q9] Tope de 100 escenarios con una escritura simultánea
+OK    [Q10] Tope de 200 en el radar con una escritura simultánea
+
+RESULTADO: 14 correctas, 0 fallos

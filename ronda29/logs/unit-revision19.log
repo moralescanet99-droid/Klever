@@ -1,0 +1,16 @@
+# comando: node tests/ronda19/unit-revision19.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 18:37:22 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [V1] Plantilla MIXTA actual (SCHD 17 % y VYM 16,6 % son ETF; KO, PG, JNJ y XOM, acciones)
+OK    [V2] Lo que sí existe, a la vista (fuera del desplegable)
+OK    [V3] Sin repetir un párrafo por activo
+OK    [V4] Las posiciones y los pesos no cambian
+OK    [V5] Cartera SOLO de acciones evaluables (KO 60 % / PG 40 %)
+OK    [V6] Datos INVÁLIDOS (una fila de KO sin fuente)
+OK    [V7] Cartera SOLO de ETF (SCHD 50 % / VYM 50 %)
+OK    [V8] ETF + banco (SCHD 50 % / JPM 50 %): dos instrumentos sin método
+OK    [V9] ETF + datos ausentes en una acción evaluable (KO sin EBITDA)
+OK    [V10] Cobertura insuficiente por pocos comparables (AAPL y MSFT, sector con 18 empresas)
+
+RESULTADO: 10 correctas, 0 fallos

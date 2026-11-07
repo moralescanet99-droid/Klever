@@ -1,0 +1,170 @@
+[
+ {
+  "id": "X1-1440",
+  "escenario": "Portada (1440 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»",
+  "esperado": "#probar visible, primario, «Crear desde cero»; 1 botón primario visible en la portada; 3 entradas; editor sin posiciones al pulsarlo",
+  "observado": "{\"x1\":{\"probar\":true,\"texto\":\"Empieza en 1 minuto\",\"primario\":true,\"entradas\":3,\"primariosVisibles\":1,\"como\":true},\"vacio\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X3-1440",
+  "escenario": "Reparte a partes iguales (1440 px)",
+  "esperado": "visible con pesos distintos; tras pulsar: 16,7 ×4 y 16,6 ×2, total 100 %, y el botón se oculta",
+  "observado": "{\"antes3\":true,\"x3\":{\"pesos\":[\"16,7\",\"16,7\",\"16,7\",\"16,7\",\"16,6\",\"16,6\"],\"total\":\"100 %\",\"oculto\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X4-1440",
+  "escenario": "Revisión (1440 px): tres indicadores en lenguaje llano con semáforo",
+  "esperado": "Concentración baja (16,7 %), Variedad media (3 categorías), Datos con un valor",
+  "observado": "[[\"Concentración\",\"ok\",\"Baja\"],[\"Variedad\",\"medio\",\"Media\"],[\"Datos\",\"alto\",\"Escasos\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X5-1440",
+  "escenario": "Laboratorio (1440 px): opción por defecto y pregunta llana",
+  "esperado": "«Del resto de posiciones» marcada y primera; leyenda «3 · ¿De dónde sale el peso?»; se simula sin elegir nada más",
+  "observado": "{\"x5\":{\"fin\":\"proporcional\",\"leyenda\":\"3 · ¿De dónde sale el peso?\",\"primera\":\"proporcional\"},\"sim5\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X6-1440",
+  "escenario": "Explorar (1440 px): glosario al pulsar y filtro «Solo sectores que no tengo»",
+  "esperado": "ROIC explicado en palabras llanas; el filtro deja empresas y ninguna de Tecnología, Comunicaciones ni Consumo discrecional",
+  "observado": "{\"glosa\":{\"visible\":true,\"txt\":\"ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.\",\"pulsado\":\"true\"},\"total6\":\"126 empresas\",\"x6\":{\"n\":89,\"cuenta\":\"89 de 126 empresas\",\"conMios\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X7-1440",
+  "escenario": "«Cómo funciona Klever» (1440 px)",
+  "esperado": "cuatro pasos: qué hace, qué no hace, datos, qué guardamos",
+  "observado": "{\"pasos\":[\"Qué hace\",\"Qué no hace\",\"De dónde salen los datos\",\"Qué guardamos\"],\"titulo\":\"Klever · Cómo funciona\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X2-1440",
+  "escenario": "Una sola palabra (1440 px): ninguna pantalla principal dice «portafolio»",
+  "esperado": "ninguna",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún pageerror; ninguna pantalla más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desbordes\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X1-390",
+  "escenario": "Portada (390 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»",
+  "esperado": "#probar visible, primario, «Crear desde cero»; 1 botón primario visible en la portada; 3 entradas; editor sin posiciones al pulsarlo",
+  "observado": "{\"x1\":{\"probar\":true,\"texto\":\"Empieza en 1 minuto\",\"primario\":true,\"entradas\":3,\"primariosVisibles\":1,\"como\":true},\"vacio\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X3-390",
+  "escenario": "Reparte a partes iguales (390 px)",
+  "esperado": "visible con pesos distintos; tras pulsar: 16,7 ×4 y 16,6 ×2, total 100 %, y el botón se oculta",
+  "observado": "{\"antes3\":true,\"x3\":{\"pesos\":[\"16,7\",\"16,7\",\"16,7\",\"16,7\",\"16,6\",\"16,6\"],\"total\":\"100 %\",\"oculto\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X4-390",
+  "escenario": "Revisión (390 px): tres indicadores en lenguaje llano con semáforo",
+  "esperado": "Concentración baja (16,7 %), Variedad media (3 categorías), Datos con un valor",
+  "observado": "[[\"Concentración\",\"ok\",\"Baja\"],[\"Variedad\",\"medio\",\"Media\"],[\"Datos\",\"alto\",\"Escasos\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X5-390",
+  "escenario": "Laboratorio (390 px): opción por defecto y pregunta llana",
+  "esperado": "«Del resto de posiciones» marcada y primera; leyenda «3 · ¿De dónde sale el peso?»; se simula sin elegir nada más",
+  "observado": "{\"x5\":{\"fin\":\"proporcional\",\"leyenda\":\"3 · ¿De dónde sale el peso?\",\"primera\":\"proporcional\"},\"sim5\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X6-390",
+  "escenario": "Explorar (390 px): glosario al pulsar y filtro «Solo sectores que no tengo»",
+  "esperado": "ROIC explicado en palabras llanas; el filtro deja empresas y ninguna de Tecnología, Comunicaciones ni Consumo discrecional",
+  "observado": "{\"glosa\":{\"visible\":true,\"txt\":\"ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.\",\"pulsado\":\"true\"},\"total6\":\"126 empresas\",\"x6\":{\"n\":534,\"cuenta\":\"89 de 126 empresas\",\"conMios\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X7-390",
+  "escenario": "«Cómo funciona Klever» (390 px)",
+  "esperado": "cuatro pasos: qué hace, qué no hace, datos, qué guardamos",
+  "observado": "{\"pasos\":[\"Qué hace\",\"Qué no hace\",\"De dónde salen los datos\",\"Qué guardamos\"],\"titulo\":\"Klever · Cómo funciona\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X2-390",
+  "escenario": "Una sola palabra (390 px): ninguna pantalla principal dice «portafolio»",
+  "esperado": "ninguna",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún pageerror; ninguna pantalla más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desbordes\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X1-320",
+  "escenario": "Portada (320 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»",
+  "esperado": "#probar visible, primario, «Crear desde cero»; 1 botón primario visible en la portada; 3 entradas; editor sin posiciones al pulsarlo",
+  "observado": "{\"x1\":{\"probar\":true,\"texto\":\"Empieza en 1 minuto\",\"primario\":true,\"entradas\":3,\"primariosVisibles\":1,\"como\":true},\"vacio\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X3-320",
+  "escenario": "Reparte a partes iguales (320 px)",
+  "esperado": "visible con pesos distintos; tras pulsar: 16,7 ×4 y 16,6 ×2, total 100 %, y el botón se oculta",
+  "observado": "{\"antes3\":true,\"x3\":{\"pesos\":[\"16,7\",\"16,7\",\"16,7\",\"16,7\",\"16,6\",\"16,6\"],\"total\":\"100 %\",\"oculto\":true}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X4-320",
+  "escenario": "Revisión (320 px): tres indicadores en lenguaje llano con semáforo",
+  "esperado": "Concentración baja (16,7 %), Variedad media (3 categorías), Datos con un valor",
+  "observado": "[[\"Concentración\",\"ok\",\"Baja\"],[\"Variedad\",\"medio\",\"Media\"],[\"Datos\",\"alto\",\"Escasos\"]]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X5-320",
+  "escenario": "Laboratorio (320 px): opción por defecto y pregunta llana",
+  "esperado": "«Del resto de posiciones» marcada y primera; leyenda «3 · ¿De dónde sale el peso?»; se simula sin elegir nada más",
+  "observado": "{\"x5\":{\"fin\":\"proporcional\",\"leyenda\":\"3 · ¿De dónde sale el peso?\",\"primera\":\"proporcional\"},\"sim5\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X6-320",
+  "escenario": "Explorar (320 px): glosario al pulsar y filtro «Solo sectores que no tengo»",
+  "esperado": "ROIC explicado en palabras llanas; el filtro deja empresas y ninguna de Tecnología, Comunicaciones ni Consumo discrecional",
+  "observado": "{\"glosa\":{\"visible\":true,\"txt\":\"ROIC: cuánto gana la empresa por cada euro que invierte en su negocio. Se pide más del 10 %.\",\"pulsado\":\"true\"},\"total6\":\"126 empresas\",\"x6\":{\"n\":534,\"cuenta\":\"89 de 126 empresas\",\"conMios\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X7-320",
+  "escenario": "«Cómo funciona Klever» (320 px)",
+  "esperado": "cuatro pasos: qué hace, qué no hace, datos, qué guardamos",
+  "observado": "{\"pasos\":[\"Qué hace\",\"Qué no hace\",\"De dónde salen los datos\",\"Qué guardamos\"],\"titulo\":\"Klever · Cómo funciona\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "X2-320",
+  "escenario": "Una sola palabra (320 px): ninguna pantalla principal dice «portafolio»",
+  "esperado": "ninguna",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "X0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún pageerror; ninguna pantalla más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desbordes\":[]}",
+  "resultado": "OK"
+ }
+]

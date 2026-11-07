@@ -1,0 +1,26 @@
+# comando: node tests/ronda17/unit-guardada17.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-07 18:37:20 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [G0] La evaluación REAL calculada por el módulo se acepta
+OK    [G1] Cambiar SOLO la nota (de la calculada a 10) conservando todos los bloques
+OK    [G2] Cambiar SOLO la versión a «foo»
+OK    [G3] Redondeos válidos y límites
+OK    [G4] Resúmenes incoherentes o fuera de rango
+OK    [G5] Entidad escapada en el motivo (texto «&lt;img…&gt;»)
+OK    [G6] Controles de dirección bidireccionales (U+202E) en el motivo
+OK    [G7] Límite del motivo: 700 caracteres sí, 701 no (por HTTP)
+OK    [G8] Clave JSON propia «__proto__» y propiedades HEREDADAS
+OK    [G9] Fila antigua con la nota cambiada a 10 directamente en la base
+OK    [G10] Fila antigua de una versión que esta pantalla no sabe comprobar («estructura-v9»), bien formada
+OK    [V1] Referencias nuevas: inexistente (hidrogeno-norte:99), de otra historia y válida (hidrogeno-norte:2)
+OK    [V2] La reformulación legítima conserva el vínculo
+OK    [V3] Vínculo histórico inválido (escrito por la ronda 16: hidrogeno-norte:99)
+OK    [V4] Editar un escenario con vínculo histórico inválido
+OK    [V5] Edición concurrente (dos pestañas con la misma revisión)
+OK    [V6] La migración 0011 usa exactamente los textos del catálogo
+OK    [V7] Aviso de que una reformulación parece tratar otro asunto
+OK    [V8] Otra cuenta con sesión VÁLIDA
+OK    [V9] Cerrar sesión por la API revoca el token antiguo; volver con la misma cuenta recupera lo mismo
+
+RESULTADO: 20 correctas, 0 fallos

@@ -1,0 +1,82 @@
+[
+ {
+  "id": "Y1",
+  "escenario": "Éxito real (módulo)",
+  "esperado": "Código 0 y «RESULTADO: 1 correctas, 0 fallos», sin cierre forzado",
+  "observado": "código 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y2",
+  "escenario": "Aserción fallida (módulo)",
+  "esperado": "Código ≠ 0",
+  "observado": "código 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y3",
+  "escenario": "Error previo (código 2 fijado antes) con las aserciones aprobadas — el caso exacto de la revisión de la ronda 20",
+  "esperado": "El código 2 se CONSERVA (la ronda 20 lo borraba con process.exit(0))",
+  "observado": "código 2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y4",
+  "escenario": "Error previo MÁS aserción fallida",
+  "esperado": "Código ≠ 0 (1 o el previo; nunca 0)",
+  "observado": "código 1",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y5",
+  "escenario": "Recurso que mantiene vivo el proceso (módulo)",
+  "esperado": "Tras 10 s: «CIERRE FORZADO» y código 3",
+  "observado": "código 3",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y6",
+  "escenario": "run-all.sh con la fixture de módulo en modo «exito»",
+  "esperado": "Sale con 0 y «todo correcto»",
+  "observado": "código 0; RESUMEN: todo correcto. Código de salida 0.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y7",
+  "escenario": "run-all.sh con la fixture de módulo en modo «fallo»",
+  "esperado": "El ejecutor sale con 1 y nombra el problema",
+  "observado": "código 1; FALLA [x] aserción  [] | FALLA (ejecutor): fixture-registro salió con código 1 | FALLA (ejecutor): fixture-registro tiene 1 fallos | RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y8",
+  "escenario": "run-all.sh con la fixture de módulo en modo «error-previo»",
+  "esperado": "El ejecutor sale con 1 y nombra el problema",
+  "observado": "código 1; FALLA (ejecutor): fixture-registro salió con código 2 | RESUMEN: 1 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y9",
+  "escenario": "run-all.sh con la fixture de módulo en modo «error-previo-y-fallo»",
+  "esperado": "El ejecutor sale con 1 y nombra el problema",
+  "observado": "código 1; FALLA [x] aserción  [] | FALLA (ejecutor): fixture-registro salió con código 1 | FALLA (ejecutor): fixture-registro tiene 1 fallos | RESUMEN: 2 problema(s) en la ejecución. Código de salida 1.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "Y10",
+  "escenario": "run-all.sh con la fixture de módulo en modo «recurso»",
+  "esperado": "El ejecutor sale con 1 y nombra el problema",
+  "observado": "código 1; FALLA (ejecutor): fixture-registro: CIERRE ANÓMALO o forzado (el proceso no terminó solo; ver su registro) | FALLA (ejecutor): fixture-registro salió con código 3 | RESUMEN: 2 problema(s) en la ejecuc",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -1,0 +1,170 @@
+[
+ {
+  "id": "U1-1440",
+  "escenario": "Primer envío lento y edición durante la espera (1440 px)",
+  "esperado": "Solo se registra el intento original (texto A); el texto escrito durante la espera (B) NO se borra: sigue en el formulario, se guarda en el dispositivo y el aviso dice que NO se ha enviado; 1 POST",
+  "observado": "{\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto B escrito mientras se guarda\",\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)\"],\"filas\":[\"Texto A (el que se envía)\"],\"posts\":1,\"local\":[{\"k\":\"klever_rev_1\",\"obs\":\"Texto B escrito mientras se guarda\"}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U2-1440",
+  "escenario": "Reintento lento y edición durante la espera (1440 px)",
+  "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"8bbcd4ee-73ff-49e4-88bf-88fe9060369e\",\"Texto A2 (el intento)\"],[\"8bbcd4ee-73ff-49e4-88bf-88fe9060369e\",\"Texto A2 (el intento)\"]]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U3-1440",
+  "escenario": "Conflicto y lectura posterior fallida (1440 px)",
+  "esperado": "Tras el 409 y una lectura fallida el aviso NO dice «recarga» y ofrece «Reintentar la lectura»; mientras la lectura sigue fallando no hay ningún POST más y el texto se conserva; al recuperarla se ve la versión actual (la revisión de la otra pestaña) sin perder el texto; entonces registrar añade la mía: dos revisiones y solo 2 POST en total (el del 409 y el final)",
+  "observado": "{\"c1\":{\"msg\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión actual. Tu texto sigue aquí: pulsa «Reintentar la lectura» (no se enviará nada hasta que la leamos).\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1},\"c2\":{\"msg\":\"Todavía no podemos leer la versión actual. Tu texto sigue aquí y no se enviará nada hasta que la leamos: pulsa «Reintentar la lectura».\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"filas\":1},\"c3\":{\"msg\":\"Hemos cargado la versión actual. Tu texto sigue aquí: pulsa «Registrar revisión» para añadirlo.\",\"boton\":\"Registrar revisión\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Desde la otra pestaña\"]},\"c4\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\"],\"posts\":2}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U4-1440",
+  "escenario": "Sesión caducada y regreso con la misma cuenta (1440 px)",
+  "esperado": "Al caducar, el envío (401) abre el acceso y NO registra nada; el borrador sigue guardado en el dispositivo; al volver a entrar con la misma cuenta y abrir la idea, el texto está en el formulario",
+  "observado": "{\"trasCaducar\":{\"local\":[{\"k\":\"klever_rev_1\",\"obs\":\"Texto B escrito mientras se guarda\"},{\"k\":\"klever_rev_2\",\"obs\":\"Texto C2 durante el reintento lento\"},{\"k\":\"klever_rev_4\",\"obs\":\"Borrador antes de que caduque la sesión\"}],\"posts\":1},\"vuelve\":{\"obs\":\"Borrador antes de que caduque la sesión\",\"filas\":0}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5-1440",
+  "escenario": "Otra cuenta no ve el borrador (1440 px)",
+  "esperado": "El borrador existía al entrar con otra cuenta, pero esa cuenta no lo ve (404 al abrir la idea, sin formulario ni texto en pantalla) y se purga del dispositivo al cargar su Cuaderno",
+  "observado": "{\"antes\":3,\"trasEntrar\":0,\"restantes\":[],\"trasCuaderno\":[],\"form\":false,\"texto\":false,\"api\":404}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5b-1440",
+  "escenario": "Cerrar sesión a propósito borra los borradores de revisión (1440 px)",
+  "esperado": "Tras salir no queda ninguna clave klever_rev_ en el dispositivo",
+  "observado": "{\"tras\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U6-1440",
+  "escenario": "Base inalterada tras todos los casos (1440 px)",
+  "esperado": "La cartera conserva posiciones y revisión",
+  "observado": "{\"rev\":0,\"antes\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U0-1440",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (1440 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "U1-390",
+  "escenario": "Primer envío lento y edición durante la espera (390 px)",
+  "esperado": "Solo se registra el intento original (texto A); el texto escrito durante la espera (B) NO se borra: sigue en el formulario, se guarda en el dispositivo y el aviso dice que NO se ha enviado; 1 POST",
+  "observado": "{\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto B escrito mientras se guarda\",\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)\"],\"filas\":[\"Texto A (el que se envía)\"],\"posts\":1,\"local\":[{\"k\":\"klever_rev_5\",\"obs\":\"Texto B escrito mientras se guarda\"}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U2-390",
+  "escenario": "Reintento lento y edición durante la espera (390 px)",
+  "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"df5884fd-57d4-4c34-9b01-0c762ebbdff0\",\"Texto A2 (el intento)\"],[\"df5884fd-57d4-4c34-9b01-0c762ebbdff0\",\"Texto A2 (el intento)\"]]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U3-390",
+  "escenario": "Conflicto y lectura posterior fallida (390 px)",
+  "esperado": "Tras el 409 y una lectura fallida el aviso NO dice «recarga» y ofrece «Reintentar la lectura»; mientras la lectura sigue fallando no hay ningún POST más y el texto se conserva; al recuperarla se ve la versión actual (la revisión de la otra pestaña) sin perder el texto; entonces registrar añade la mía: dos revisiones y solo 2 POST en total (el del 409 y el final)",
+  "observado": "{\"c1\":{\"msg\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión actual. Tu texto sigue aquí: pulsa «Reintentar la lectura» (no se enviará nada hasta que la leamos).\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1},\"c2\":{\"msg\":\"Todavía no podemos leer la versión actual. Tu texto sigue aquí y no se enviará nada hasta que la leamos: pulsa «Reintentar la lectura».\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"filas\":1},\"c3\":{\"msg\":\"Hemos cargado la versión actual. Tu texto sigue aquí: pulsa «Registrar revisión» para añadirlo.\",\"boton\":\"Registrar revisión\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Desde la otra pestaña\"]},\"c4\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\"],\"posts\":2}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U4-390",
+  "escenario": "Sesión caducada y regreso con la misma cuenta (390 px)",
+  "esperado": "Al caducar, el envío (401) abre el acceso y NO registra nada; el borrador sigue guardado en el dispositivo; al volver a entrar con la misma cuenta y abrir la idea, el texto está en el formulario",
+  "observado": "{\"trasCaducar\":{\"local\":[{\"k\":\"klever_rev_6\",\"obs\":\"Texto C2 durante el reintento lento\"},{\"k\":\"klever_rev_5\",\"obs\":\"Texto B escrito mientras se guarda\"},{\"k\":\"klever_rev_8\",\"obs\":\"Borrador antes de que caduque la sesión\"}],\"posts\":1},\"vuelve\":{\"obs\":\"Borrador antes de que caduque la sesión\",\"filas\":0}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5-390",
+  "escenario": "Otra cuenta no ve el borrador (390 px)",
+  "esperado": "El borrador existía al entrar con otra cuenta, pero esa cuenta no lo ve (404 al abrir la idea, sin formulario ni texto en pantalla) y se purga del dispositivo al cargar su Cuaderno",
+  "observado": "{\"antes\":3,\"trasEntrar\":0,\"restantes\":[],\"trasCuaderno\":[],\"form\":false,\"texto\":false,\"api\":404}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5b-390",
+  "escenario": "Cerrar sesión a propósito borra los borradores de revisión (390 px)",
+  "esperado": "Tras salir no queda ninguna clave klever_rev_ en el dispositivo",
+  "observado": "{\"tras\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U6-390",
+  "escenario": "Base inalterada tras todos los casos (390 px)",
+  "esperado": "La cartera conserva posiciones y revisión",
+  "observado": "{\"rev\":0,\"antes\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U0-390",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (390 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "U1-320",
+  "escenario": "Primer envío lento y edición durante la espera (320 px)",
+  "esperado": "Solo se registra el intento original (texto A); el texto escrito durante la espera (B) NO se borra: sigue en el formulario, se guarda en el dispositivo y el aviso dice que NO se ha enviado; 1 POST",
+  "observado": "{\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto B escrito mientras se guarda\",\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Texto A (el que se envía)\"],\"filas\":[\"Texto A (el que se envía)\"],\"posts\":1,\"local\":[{\"k\":\"klever_rev_9\",\"obs\":\"Texto B escrito mientras se guarda\"}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U2-320",
+  "escenario": "Reintento lento y edición durante la espera (320 px)",
+  "esperado": "El reintento envía EL INTENTO (misma clave y mismo contenido que el primero); en el servidor solo existe «Texto A2»; el texto C2 escrito durante el reintento sigue en el formulario sin enviar y el aviso lo dice",
+  "observado": "{\"durante2\":\"Texto C2 durante el reintento lento\",\"boton2\":\"Comprobando…\",\"durante2b\":\"Texto C2 durante el reintento lento\",\"incierto\":true,\"msg\":\"Se ha registrado el envío anterior. Lo que has escrito después NO se ha enviado: sigue en el formulario.\",\"obs\":\"Texto C2 durante el reintento lento\",\"filas\":[\"Texto A2 (el intento)\"],\"posts\":[[\"f121e108-69d1-41e2-a636-30631e029fa3\",\"Texto A2 (el intento)\"],[\"f121e108-69d1-41e2-a636-30631e029fa3\",\"Texto A2 (el intento)\"]]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U3-320",
+  "escenario": "Conflicto y lectura posterior fallida (320 px)",
+  "esperado": "Tras el 409 y una lectura fallida el aviso NO dice «recarga» y ofrece «Reintentar la lectura»; mientras la lectura sigue fallando no hay ningún POST más y el texto se conserva; al recuperarla se ve la versión actual (la revisión de la otra pestaña) sin perder el texto; entonces registrar añade la mía: dos revisiones y solo 2 POST en total (el del 409 y el final)",
+  "observado": "{\"c1\":{\"msg\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. No hemos podido cargar la versión actual. Tu texto sigue aquí: pulsa «Reintentar la lectura» (no se enviará nada hasta que la leamos).\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1},\"c2\":{\"msg\":\"Todavía no podemos leer la versión actual. Tu texto sigue aquí y no se enviará nada hasta que la leamos: pulsa «Reintentar la lectura».\",\"boton\":\"Reintentar la lectura\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"filas\":1},\"c3\":{\"msg\":\"Hemos cargado la versión actual. Tu texto sigue aquí: pulsa «Registrar revisión» para añadirlo.\",\"boton\":\"Registrar revisión\",\"obs\":\"Mi texto desde la pestaña antigua\",\"posts\":1,\"items\":[\"7 nov 2026 · Mantengo la ideaTu observación: Desde la otra pestaña\"]},\"c4\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\"],\"posts\":2}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U4-320",
+  "escenario": "Sesión caducada y regreso con la misma cuenta (320 px)",
+  "esperado": "Al caducar, el envío (401) abre el acceso y NO registra nada; el borrador sigue guardado en el dispositivo; al volver a entrar con la misma cuenta y abrir la idea, el texto está en el formulario",
+  "observado": "{\"trasCaducar\":{\"local\":[{\"k\":\"klever_rev_10\",\"obs\":\"Texto C2 durante el reintento lento\"},{\"k\":\"klever_rev_12\",\"obs\":\"Borrador antes de que caduque la sesión\"},{\"k\":\"klever_rev_9\",\"obs\":\"Texto B escrito mientras se guarda\"}],\"posts\":1},\"vuelve\":{\"obs\":\"Borrador antes de que caduque la sesión\",\"filas\":0}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5-320",
+  "escenario": "Otra cuenta no ve el borrador (320 px)",
+  "esperado": "El borrador existía al entrar con otra cuenta, pero esa cuenta no lo ve (404 al abrir la idea, sin formulario ni texto en pantalla) y se purga del dispositivo al cargar su Cuaderno",
+  "observado": "{\"antes\":3,\"trasEntrar\":0,\"restantes\":[],\"trasCuaderno\":[],\"form\":false,\"texto\":false,\"api\":404}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U5b-320",
+  "escenario": "Cerrar sesión a propósito borra los borradores de revisión (320 px)",
+  "esperado": "Tras salir no queda ninguna clave klever_rev_ en el dispositivo",
+  "observado": "{\"tras\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U6-320",
+  "escenario": "Base inalterada tras todos los casos (320 px)",
+  "esperado": "La cartera conserva posiciones y revisión",
+  "observado": "{\"rev\":0,\"antes\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "U0-320",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (320 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ }
+]
