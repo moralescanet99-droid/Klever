@@ -11,6 +11,8 @@
 - No guardar claves, tokens ni correos personales.
 
 ## Mantener la memoria del proyecto (obligatorio al terminar cada tarea)
+**Automático desde 2026-11-07:** los hooks de `.claude/settings.json` lo recuerdan con cada mensaje y bloquean el final de un turno si hay código sin anotar (`scripts/memoria/`). No se desactivan para ir más rápido.
+0. Registrar cada mensaje del usuario LITERAL en `procesos-klever/06-peticiones-del-usuario.md` (siguiente `## C<n>`).
 1. Añadir una fila al final de `procesos-klever/09-registro-de-cambios.md`.
 2. Actualizar `procesos-klever/05-estado-actual.md`.
 3. Decisión nueva → `03-decisiones.md` (con su motivo). Encargo o feedback nuevo → `06-` o `07-` (literal si es largo). Trampa nueva → `08-`.

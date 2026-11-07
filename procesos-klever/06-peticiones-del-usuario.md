@@ -2167,3 +2167,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Estas guardadano toda la informacion del proyecto en una memoria?
 
 (Al comprobarlo faltaban estas entradas de `06-`, la cronología de `04-` y el contexto de `01-`; se añadieron.)
+
+## C32 · (2026-11-07) — que la memoria se mantenga sola, literal
+> Tienes que hacerlo automaticamente
+
+(Se añadieron dos hooks de proyecto en `.claude/settings.json`: `scripts/memoria/aviso-encargo.sh` recuerda con cada mensaje registrar el encargo literal y actualizar la memoria; `scripts/memoria/comprobar-memoria.sh` impide terminar un turno con código sin commitear o con commits de código sin anotar en `09-`.)

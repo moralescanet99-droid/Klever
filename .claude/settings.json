@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/memoria/aviso-encargo.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/memoria/comprobar-memoria.sh\"",
+            "timeout": 20,
+            "statusMessage": "Comprobando la memoria del proyecto…"
+          }
+        ]
+      }
+    ]
+  }
+}
