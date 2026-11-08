@@ -61,6 +61,7 @@ export function pintarHoy(lista) {
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
         <p class="hoy-acc">${boton}<button class="btn btn-secundario hoy-compartir" type="button" data-hoy-compartir><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v11M8 8l4-4 4 4"/><path d="M5 13v6h14v-6"/></svg> Compartir</button></p></div></div>
+      <div id="hoy-liga" hidden></div>
       <p class="hoy-frase" id="hoy-frase" data-cartera="${m.id}" hidden></p>
       <div class="hoy-temporada" id="hoy-temporada" data-cartera="${m.id}" hidden></div>`;
   el.hidden = false;

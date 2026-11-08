@@ -17,7 +17,8 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 ## Hoja de ruta (C43, `ronda33/PLAN.md`)
 - ✅ **Fase 1 (cimientos) hecha** (ronda 33, `ronda33/LEEME.md`): pruebas en paralelo (≈ 15 min) con reintento declarado, hoja de estilo única con tokens fusionados y `DESIGN.md`, embudo anónimo (migración 0014), módulos `base.js`, `explorar.js` y `semana-ui.js`, comparación visual (10 referencias); pasada **1216/0** (`55ea85b`). Mis carteras y el editor se separan en la fase 2; Vite, en la 6.
 - 🟡 **Fase 2 (UX):** ✅ «Hoy» con la cartera principal en grande (ronda 34, pasada **1238/0**). ✅ Portada con rueda de esferas y «Hoy» con frase con iconos y rueda de la temporada (ronda 35, pasada **1254/0**, `6c544f8`). Pendiente: menos texto, Descubrir como feed, editar con los dedos, primer minuto.
-- ⬜ Fases 3 perfil → 4 comunidad → 5 liga → 6 publicar.
+- ✅ **Liga, Temporada 0** adelantada (ronda 36, `ronda36/LIGA.md`): puntos por equilibrio, aprendizaje y constancia; apodos; clasificación general opcional; ligas privadas con código e invitación. ✅ Tarjeta para compartir; solo mayores de 18; embudo sin almacenamiento en el dispositivo.
+- ⬜ Fases 3 perfil → 4 comunidad → 5 liga con precios (índice 100) → 6 publicar.
 
 ## Ronda 32 (C42)
 - ✅ Comparador y tarjetas de Explorar legibles en el móvil (también con el texto ampliado del sistema).

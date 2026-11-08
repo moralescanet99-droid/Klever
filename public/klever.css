@@ -1715,6 +1715,29 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 .hoy-temporada .rueda{min-height:250px}.hoy-temporada .rueda-pista{height:250px}
 .rh-senales{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}.rh-senales li{display:flex;align-items:center;gap:8px;font-weight:600}.rh-senales i{width:10px;height:10px;border-radius:50%;flex:none}
 
+/* ---------- Ronda 36 · LIGA ---------- */
+.lg-mio .lg-juegas{margin:0 0 10px}
+.lg-inscribir{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;margin:0 0 12px}.lg-inscribir label{flex-basis:100%}.lg-inscribir select{flex:1 1 200px;min-width:0}
+.lg-total{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+.lg-num{font-weight:200;font-size:clamp(3rem,8vw,4.5rem);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.lg-semanas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;align-items:end;height:120px}
+.lg-sem{display:grid;grid-template-rows:1fr auto;height:100%;gap:2px;text-align:center}.lg-sem small{font-size:.6875rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.lg-barra{align-self:end;height:var(--h);min-height:3px;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.lg-barra i,.lg-leyenda i{display:block}.lg-eq{background:var(--verde)}.lg-ap{background:var(--azul)}.lg-co{background:var(--accent)}
+.lg-leyenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.8125rem;color:var(--muted);margin:8px 0}.lg-leyenda i{width:10px;height:10px;border-radius:3px}
+.lg-clas{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.lg-clas li{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:var(--surface-2);font-variant-numeric:tabular-nums}
+.lg-clas li.tu{outline:1px solid var(--accent);background:var(--alerta-bg)}.lg-pos{color:var(--muted);font-weight:600}.lg-apodo{overflow-wrap:anywhere}
+.lg-priv{border:1px solid var(--border);border-radius:14px;padding:12px;margin:0 0 12px}
+.lg-priv-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;margin-bottom:8px}.lg-priv-cab h3{margin:0;font-size:1.0625rem}
+.lg-codigo{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.125rem;letter-spacing:.18em;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px dashed var(--border-strong)}
+.lg-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:10px 0 0}
+.lg-forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 18px;margin-top:8px}
+.lg-forms form{display:flex;flex-wrap:wrap;align-items:end;gap:6px 10px}.lg-forms label{flex-basis:100%}.lg-forms input{flex:1 1 140px;min-width:0}
+.lg-perfil .chk{margin:8px 0}
+.hoy-liga{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;margin-top:14px;padding:12px 14px;border-radius:14px;border:1px solid var(--azul-borde);background:var(--azul-bg);color:var(--text);text-decoration:none}
+.hoy-liga-t{grid-column:1;font-size:.75rem;color:var(--muted);letter-spacing:.04em}.hoy-liga b{grid-column:1;font-size:1.0625rem}.hoy-liga-ir{grid-row:1 / span 2;grid-column:2;color:var(--azul);font-size:1.25rem}
+
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
   [data-vista]:not([hidden]),.ind,.reto.hecho .reto-i,.reto-sem.hecho .reto-i,.evo-p,.avisos.on #toast,.esq{animation:none}

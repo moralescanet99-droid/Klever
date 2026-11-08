@@ -16,6 +16,7 @@ import { svgHuella } from './js/huella.js';
 import { iniciarSemanaUI, pintarSemana, criteriosAhora } from './js/semana-ui.js';
 import { iniciarHoy, pintarHoy } from './js/hoy.js';
 import { montarRueda } from './js/rueda.js';
+import { iniciarLiga, mostrarLiga, resumenLigaHoy, limpiarLiga, codigoLigaPendiente } from './js/liga-ui.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarExplorar, empresas, filtrosLeer, filtrosGuardar, loadEmpresas, poblarSectores, renderEmpresas, verFicha } from './js/explorar.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
@@ -219,6 +220,7 @@ function limpiarPrivado() {
   sesionSeq++; misSeq++; nMis = null;
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
   for (const s of ['#mis-lista', '#hoy-hero', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  limpiarLiga();   // ronda 36: la Liga muestra apodos y puntos: es privada
   { const sem = $('#tu-semana'); if (sem) sem.hidden = true; const hh = $('#hoy-hero'); if (hh) hh.hidden = true; }   // ronda 34: «Hoy» muestra nombres y señales: también es privado   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
   document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
@@ -273,11 +275,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar', 'liga'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
+const NAV = { liga: 'mis', inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
+const TITULOS = { liga: 'Liga', inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -312,6 +314,7 @@ function mostrar(v, primera, extra = {}) {
   document.title = 'Klever · ' + TITULOS[v];
   if (v === 'cartera') renderWorkspace();
   if (v === 'carteras') cargarMisCarteras();
+  if (v === 'liga') mostrarLiga();
   if (v === 'seguimiento') mostrarSeguimiento();
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
@@ -384,7 +387,7 @@ async function cargarMisCarteras() {
     $('#btn-nueva').hidden = nMis === 0;
     if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; $('#hoy-hero').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
-    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq);
+    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq); resumenLigaHoy(() => seq === misSeq && logged());
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 // «Tu semana»: public/js/semana-ui.js (fase 1)
@@ -1166,7 +1169,7 @@ async function pintarRuedaPortada() {
 // ---------- reintentos genéricos ----------
 document.addEventListener('click', e => {
   const r = e.target.dataset?.retry; if (!r) return;
-  ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras })[r]?.();
+  ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras, liga: mostrarLiga })[r]?.();
 });
 
 let universoCache = null;                                            // instantánea del universo (nota y comparador); se pide una vez
@@ -1204,6 +1207,7 @@ function contextoLab() {
   await redeem();
   await loadAssets(); activosListos();
   iniciarHoy({ by: () => by, abrirLab, medir, toast });
+  iniciarLiga({ api, logged, go, toast, toastError, medir });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
@@ -1216,4 +1220,5 @@ function contextoLab() {
     await migrarBorrador();
   }
   arrancado = true; route(true);
+  if (logged() && codigoLigaPendiente() && location.hash !== '#liga') go('#liga');   // ronda 36: enlace de invitación a una liga privada
 })();

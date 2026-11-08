@@ -1726,6 +1726,29 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 .hoy-temporada .rueda{min-height:250px}.hoy-temporada .rueda-pista{height:250px}
 .rh-senales{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}.rh-senales li{display:flex;align-items:center;gap:8px;font-weight:600}.rh-senales i{width:10px;height:10px;border-radius:50%;flex:none}
 
+/* ---------- Ronda 36 · LIGA ---------- */
+.lg-mio .lg-juegas{margin:0 0 10px}
+.lg-inscribir{display:flex;flex-wrap:wrap;align-items:end;gap:8px 12px;margin:0 0 12px}.lg-inscribir label{flex-basis:100%}.lg-inscribir select{flex:1 1 200px;min-width:0}
+.lg-total{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:6px 0 10px}
+.lg-num{font-weight:200;font-size:clamp(3rem,8vw,4.5rem);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.lg-semanas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:6px;align-items:end;height:120px}
+.lg-sem{display:grid;grid-template-rows:1fr auto;height:100%;gap:2px;text-align:center}.lg-sem small{font-size:.6875rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.lg-barra{align-self:end;height:var(--h);min-height:3px;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;background:var(--surface-2)}
+.lg-barra i,.lg-leyenda i{display:block}.lg-eq{background:var(--verde)}.lg-ap{background:var(--azul)}.lg-co{background:var(--accent)}
+.lg-leyenda{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:.8125rem;color:var(--muted);margin:8px 0}.lg-leyenda i{width:10px;height:10px;border-radius:3px}
+.lg-clas{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.lg-clas li{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:var(--surface-2);font-variant-numeric:tabular-nums}
+.lg-clas li.tu{outline:1px solid var(--accent);background:var(--alerta-bg)}.lg-pos{color:var(--muted);font-weight:600}.lg-apodo{overflow-wrap:anywhere}
+.lg-priv{border:1px solid var(--border);border-radius:14px;padding:12px;margin:0 0 12px}
+.lg-priv-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 12px;margin-bottom:8px}.lg-priv-cab h3{margin:0;font-size:1.0625rem}
+.lg-codigo{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.125rem;letter-spacing:.18em;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px dashed var(--border-strong)}
+.lg-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:10px 0 0}
+.lg-forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 18px;margin-top:8px}
+.lg-forms form{display:flex;flex-wrap:wrap;align-items:end;gap:6px 10px}.lg-forms label{flex-basis:100%}.lg-forms input{flex:1 1 140px;min-width:0}
+.lg-perfil .chk{margin:8px 0}
+.hoy-liga{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;margin-top:14px;padding:12px 14px;border-radius:14px;border:1px solid var(--azul-borde);background:var(--azul-bg);color:var(--text);text-decoration:none}
+.hoy-liga-t{grid-column:1;font-size:.75rem;color:var(--muted);letter-spacing:.04em}.hoy-liga b{grid-column:1;font-size:1.0625rem}.hoy-liga-ir{grid-row:1 / span 2;grid-column:2;color:var(--azul);font-size:1.25rem}
+
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
   [data-vista]:not([hidden]),.ind,.reto.hecho .reto-i,.reto-sem.hecho .reto-i,.evo-p,.avisos.on #toast,.esq{animation:none}
@@ -1976,6 +1999,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
   <section id="vista-comparar" data-vista="comparar" hidden><div id="comparar-cuerpo"></div></section>
 
   <!-- ===== MI SEGUIMIENTO (radar, escenarios y notas) ===== -->
+  <section id="vista-liga" data-vista="liga" hidden><div id="liga-cuerpo"></div></section>
   <section id="vista-seguimiento" data-vista="seguimiento" hidden>
     <div class="pag-cab">
       <h1>Cuaderno <span class="chip beta" id="seg-beta">En beta</span></h1>
@@ -2348,6 +2372,19 @@ window.fetch=async(url,opts={})=>{
     const cs=DB.ports.filter(p=>p.usuario_id===uid).map(p=>({id:p.id,nombre:p.nombre,foto:fotoCartera(DB.pos[p.id]||[],act)}));for(const k of Object.keys(H))if(!cs.some(c=>String(c.id)===k))delete H[k];
     for(const c of cs){if(!c.foto)continue;const l=H[c.id]=(H[c.id]||[]).filter(f=>f.semana!==sem);l.push({semana:sem,...c.foto})}
     return J({hoy,semana:sem,carteras:cs.map(c=>({...c,historial:(H[c.id]||[]).slice().sort((a,b)=>a.semana.localeCompare(b.semana)).slice(-8)}))})}
+  if(path==='/liga'){const hoy=ahora().slice(0,10),sem=lunesDe(hoy),T=temporada('2026-11-02'),k=Math.max(0,Math.floor((Date.parse(sem)-Date.parse(T.inicio))/(84*864e5))),Tt=temporada(new Date(Date.parse(T.inicio)+k*84*864e5).toISOString().slice(0,10)),n=Tt.semanas.indexOf(sem)+1;
+    DB.liga=DB.liga||{perfil:{},ins:{},ligas:[]};const Lg=DB.liga,yo=Lg.perfil[uid]||{apodo:null,publica:false};
+    const pts=u=>{const i=Lg.ins[u];if(!i)return null;const H=(DB.inst||{})[u]||{},f=(H[i]||[]).find(x=>x.semana===sem)||null,ps=DB.pos[i]||[];return puntosTemporada(Tt.semanas.map(s=>({semana:s,foto:s===sem?f:null,completa:Math.round(ps.reduce((a,x)=>a+x.peso,0))===100,n:ps.length,entro:s===sem,retoHecho:false,ideaSemana:false})),sem)};
+    if(m==='POST'){const a=body.accion;
+      if(a==='perfil'){if(body.apodo&&!apodoValido(body.apodo))return J({error:'El apodo debe tener entre 3 y 20 caracteres (letras, números, espacios, punto o guiones) y no puede ser un correo.'},400);Lg.perfil[uid]={apodo:body.apodo||null,publica:!!body.publica};return J({ok:true})}
+      if(a==='inscribir'){const c=DB.ports.find(p=>p.id===Number(body.cartera_id)&&p.usuario_id===uid);if(!c)return J({error:'No encontrado'},404);Lg.ins[uid]=c.id;return J({ok:true,cartera_id:c.id})}
+      if(a==='crear_liga'){const nombre=String(body.nombre||'').trim();if(nombre.length<3||nombre.length>40)return J({error:'El nombre de la liga debe tener entre 3 y 40 caracteres.'},400);const l={id:Lg.ligas.length+1,codigo:codigoLiga(),nombre,creador:uid,miembros:[uid]};Lg.ligas.push(l);return J({ok:true,id:l.id,codigo:l.codigo,nombre},201)}
+      if(a==='unirse'){const l=Lg.ligas.find(x=>x.codigo===String(body.codigo||'').toUpperCase());if(!l)return J({error:'No hay ninguna liga con ese código.'},404);if(!l.miembros.includes(uid))l.miembros.push(uid);return J({ok:true,id:l.id,nombre:l.nombre})}
+      if(a==='salir'||a==='borrar_liga'){Lg.ligas=a==='borrar_liga'?Lg.ligas.filter(x=>!(x.id===body.liga_id&&x.creador===uid)):Lg.ligas.map(x=>x.id===body.liga_id?{...x,miembros:x.miembros.filter(u=>u!==uid)}:x);return J({ok:true})}
+      return J({error:'Acción no válida'},400)}
+    const p=pts(uid),c=Lg.ins[uid]?DB.ports.find(x=>x.id===Lg.ins[uid]):null,gen=clasificar(Object.keys(Lg.ins).map(Number).filter(u=>Lg.perfil[u]?.publica&&Lg.perfil[u]?.apodo).map(u=>({id:u,apodo:Lg.perfil[u].apodo,...pts(u),inscrito:''})));
+    return J({temporada:{nombre:'Temporada '+k,inicio:Tt.inicio,fin:Tt.fin,semana:n,semanas:12,puede_cambiar:n<=2},yo:{apodo:yo.apodo,publica:yo.publica,inscripcion:c?{cartera_id:c.id,nombre:c.nombre}:null,puntos:p?{total:p.total,detalle:p.detalle}:null,puesto_general:gen.find(f=>f.id===uid)?.puesto??null,en_general:gen.length},
+      general:gen.map(f=>({apodo:f.apodo,total:f.total,puesto:f.puesto,tu:f.id===uid})),privadas:Lg.ligas.filter(l=>l.miembros.includes(uid)).map(l=>({id:l.id,codigo:l.codigo,nombre:l.nombre,mia:l.creador===uid,miembros:l.miembros.length,sin_inscribir:0,clasificacion:clasificar(l.miembros.filter(u=>Lg.ins[u]).map(u=>({id:u,...pts(u),inscrito:''}))).map(f=>({apodo:f.id===uid?'Tú':(Lg.perfil[f.id]?.apodo||'Sin apodo'),tu:f.id===uid,total:f.total,puesto:f.puesto}))}))})}
   if(path==='/portfolios'&&m==='GET')return J(DB.ports.filter(p=>p.usuario_id===uid).map(p=>{const ps=DB.pos[p.id]||[];return {id:p.id,nombre:p.nombre,plantilla:p.plantilla,publico:p.publico,revision:p.revision,limite_peso:p.limite_peso??null,creado_en:p.creado_en,actualizado_en:p.actualizado_en,n_posiciones:ps.length,total:ps.reduce((s,x)=>s+x.peso,0),posiciones:ps.slice().sort((a,b)=>b.peso-a.peso||(a.ticker<b.ticker?-1:1)).map(x=>({ticker:x.ticker,peso:x.peso}))}}).sort((a,b)=>String(b.actualizado_en||b.creado_en).localeCompare(String(a.actualizado_en||a.creado_en))||b.id-a.id));
   if(path==='/portfolios'&&m==='POST'){if(!body.nombre||!['riesgo','oro','dividendos'].includes(body.plantilla))return J({error:'Nombre o plantilla no válidos'},400);const ps=body.posiciones===undefined?[]:body.posiciones,v=valida(ps);if(v.e)return J({error:v.e},400);const id=addPort(uid,body.nombre.trim().slice(0,80),body.plantilla,0,body.tesis?String(body.tesis).trim().slice(0,600):null,ps.map(x=>({ticker:x.ticker,peso:Number(x.peso)})));return J({id,revision:0,actualizado_en:null},201)}
   if((g=path.match(/^\/portfolios\/(\d+)$/))){const p=DB.ports.find(x=>x.id==g[1]&&x.usuario_id===uid);if(!p)return J({error:'No encontrado'},404);
@@ -4778,6 +4815,7 @@ function pintarHoy(lista) {
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
         <p class="hoy-acc">${boton}<button class="btn btn-secundario hoy-compartir" type="button" data-hoy-compartir><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v11M8 8l4-4 4 4"/><path d="M5 13v6h14v-6"/></svg> Compartir</button></p></div></div>
+      <div id="hoy-liga" hidden></div>
       <p class="hoy-frase" id="hoy-frase" data-cartera="${m.id}" hidden></p>
       <div class="hoy-temporada" id="hoy-temporada" data-cartera="${m.id}" hidden></div>`;
   el.hidden = false;
@@ -4879,6 +4917,129 @@ async function compartirTarjeta(m, { url, medir } = {}) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = archivo.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   medir?.('compartir'); return 'descargada';
 }
+
+// Ronda 36 · LIGA, Temporada 0 (sin precios): reglas de ronda36/LIGA.md. PURO (lo usan el servidor y la interfaz).
+// Cada semana, hasta 100 puntos: EQUILIBRIO (50) + APRENDIZAJE (30) + CONSTANCIA (20). La clasificación es la suma de las semanas.
+// Nada mide rentabilidad. La foto semanal (semana.js) es la del lunes que el servidor ya guarda.
+const SEMANAS_TEMPORADA = 12, MIN_POSICIONES_LIGA = 4;
+const P_CONC = { ok: 25, medio: 12, alto: 0 }, P_VAR = { ok: 25, medio: 12, alto: 0 };
+const isoMasL = (iso, d) => new Date(Date.parse(iso + 'T00:00:00Z') + d * 864e5).toISOString().slice(0, 10);
+
+// Temporada que contiene una fecha: empieza el lunes `inicio` y dura 12 semanas. semanas: los 12 lunes.
+function temporada(inicio) { const semanas = [...Array(SEMANAS_TEMPORADA)].map((_, i) => isoMasL(inicio, 7 * i)); return { inicio, fin: isoMasL(inicio, 7 * SEMANAS_TEMPORADA - 1), semanas }; }
+
+// Puntos de UNA semana. d = { foto|null, completa (cartera al 100 %), n (posiciones), retoHecho, ideaSemana, entro, racha (semanas seguidas entrando, incluida esta) }
+function puntosSemana(d) {
+  const valida = !!d.foto && d.completa && d.n >= MIN_POSICIONES_LIGA;
+  const equilibrio = valida ? P_CONC[d.foto.concentracion] + P_VAR[d.foto.variedad] : 0;
+  const aprendizaje = (d.retoHecho ? 20 : 0) + (d.ideaSemana ? 10 : 0);
+  const constancia = d.entro ? 10 + Math.min(10, 2 * Math.max(0, (d.racha || 1) - 1)) : 0;
+  return { equilibrio, aprendizaje, constancia, total: equilibrio + aprendizaje + constancia, valida, motivo: !d.foto ? 'sin foto esa semana' : !d.completa ? 'la cartera no estaba al 100 %' : d.n < MIN_POSICIONES_LIGA ? `menos de ${MIN_POSICIONES_LIGA} posiciones` : '' };
+}
+
+// Toda la temporada de una persona. semanas: [{ semana, foto, completa, n, retoHecho, ideaSemana, entro }] (en orden). hasta: el lunes actual (las futuras no cuentan).
+// La foto que vale para el equilibrio es la de esa semana; si no entró, se usa la última anterior (regla 4), pero no suma constancia.
+function puntosTemporada(semanas, hasta) {
+  let racha = 0, ultima = null; const detalle = [];   // ultima: la última semana CON foto (foto, completa y n), que hereda la semana sin foto
+  for (const s of semanas) {
+    if (s.semana > hasta) break;
+    racha = s.entro ? racha + 1 : 0;
+    if (s.foto) ultima = { foto: s.foto, completa: s.completa, n: s.n };
+    const base = s.foto ? s : ultima || { foto: null, completa: false, n: 0 };
+    const p = puntosSemana({ ...s, foto: base.foto, completa: base.completa, n: base.n, racha });
+    detalle.push({ semana: s.semana, ...p, bajas: base.foto?.concentracion === 'ok' ? 1 : 0 });
+  }
+  return { total: detalle.reduce((a, x) => a + x.total, 0), semanasBajas: detalle.reduce((a, x) => a + x.bajas, 0), detalle };
+}
+
+// Clasificación: más puntos; a igualdad, más semanas con concentración baja; después, quien se inscribió antes (regla 5).
+function clasificar(filas) {
+  return [...filas].sort((a, b) => b.total - a.total || b.semanasBajas - a.semanasBajas || String(a.inscrito).localeCompare(String(b.inscrito)) || a.id - b.id)
+    .map((f, i) => ({ ...f, puesto: i + 1 }));
+}
+
+// Insignia al cerrar la temporada según el tramo (regla 6): oro 10 % mejor, plata 25 %, bronce 50 %, y «completada» para quien llega al final.
+function insignia(puesto, total, completo = true) {
+  if (!total || !puesto) return null; const q = puesto / total;
+  return q <= 0.10 ? 'oro' : q <= 0.25 ? 'plata' : q <= 0.50 ? 'bronce' : completo ? 'completada' : null;
+}
+
+// Código de liga privada: 6 letras sin ambigüedades (sin O, I, L, 0, 1). aleatorio: función que devuelve [0,1).
+const LETRAS_LIGA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const codigoLiga = (aleatorio = Math.random) => [...Array(6)].map(() => LETRAS_LIGA[Math.floor(aleatorio() * LETRAS_LIGA.length)]).join('');
+const codigoValido = c => /^[ABCDEFGHJKMNPQRSTUVWXYZ2-9]{6}$/.test(String(c || ''));
+// Apodo público: 3–20 caracteres, letras (con tildes), números, espacios, punto, guion y guion bajo; nunca un correo.
+const apodoValido = a => { const s = String(a || '').trim(); return s.length >= 3 && s.length <= 20 && /^[\p{L}\p{N} ._-]+$/u.test(s) && !s.includes('@'); };
+
+// Ronda 36 · pantalla de la LIGA (Temporada 0) y su acceso en «Hoy». Reglas: ronda36/LIGA.md. Datos: /api/liga (sin correos ni importes).
+let XL = null;   // contexto: { api, logged, go, toast, toastError, medir }
+const CLAVE_UNIRSE = 'klever_liga_codigo';   // código que llega por un enlace de invitación (?liga=CODIGO), hasta poder usarlo
+function iniciarLiga(ctx) {
+  XL = ctx;
+  try { const c = new URLSearchParams(location.search).get('liga'); if (c) sessionStorage.setItem(CLAVE_UNIRSE, c.toUpperCase().slice(0, 6)); } catch { /* sin almacenamiento */ }
+  const el = $('#liga-cuerpo'); if (!el) return;
+  el.addEventListener('submit', async e => {
+    const f = e.target.closest('form'); if (!f) return; e.preventDefault(); const datos = Object.fromEntries(new FormData(f)), err = f.querySelector('.error'), btn = f.querySelector('button[type=submit]');
+    const cuerpo = f.id === 'liga-perfil' ? { accion: 'perfil', apodo: datos.apodo, publica: !!datos.publica } : f.id === 'liga-inscribir' ? { accion: 'inscribir', cartera_id: +datos.cartera } : f.id === 'liga-crear' ? { accion: 'crear_liga', nombre: datos.nombre } : f.id === 'liga-unirse' ? { accion: 'unirse', codigo: datos.codigo } : null;
+    if (!cuerpo) return; if (btn) btn.disabled = true;
+    try { await XL.api('/liga', { method: 'POST', body: cuerpo }); if (cuerpo.accion === 'unirse') { try { sessionStorage.removeItem(CLAVE_UNIRSE); } catch { /* nada */ } }
+      XL.toast({ perfil: 'Apodo guardado', inscribir: 'Cartera inscrita en la Liga', crear_liga: 'Liga creada: invita con su código', unirse: 'Te has unido a la liga' }[cuerpo.accion]); mostrarLiga(); }
+    catch (x) { if (err) err.textContent = x.message; } finally { if (btn?.isConnected) btn.disabled = false; }
+  });
+  el.addEventListener('click', async e => {
+    const inv = e.target.closest('[data-liga-invitar]');
+    if (inv) { const codigo = inv.dataset.ligaInvitar, url = location.origin + location.pathname + '?liga=' + codigo, texto = `Únete a mi liga «${inv.dataset.nombre}» en Klever (carteras simuladas, sin dinero real). Código: ${codigo}`;
+      try { if (navigator.share) { await navigator.share({ title: 'Liga en Klever', text: texto, url }); XL.medir?.('compartir'); return; } } catch { return; }
+      try { await navigator.clipboard.writeText(texto + ' ' + url); XL.toast('Invitación copiada: pégala donde quieras'); XL.medir?.('compartir'); } catch { XL.toast('Código de la liga: ' + codigo); } return; }
+    const s = e.target.closest('[data-liga-salir], [data-liga-borrar]'); if (!s) return;
+    const borrar = !!s.dataset.ligaBorrar; if (!confirm(borrar ? '¿Borrar la liga para todos sus miembros?' : '¿Salir de esta liga?')) return;
+    try { await XL.api('/liga', { method: 'POST', body: { accion: borrar ? 'borrar_liga' : 'salir', liga_id: +(s.dataset.ligaBorrar || s.dataset.ligaSalir) } }); mostrarLiga(); } catch (x) { XL.toastError(x.message); }
+  });
+}
+const barraLiga = d => { const t = d.total || 0; return `<li class="lg-sem" title="Semana del ${esc(d.semana)}: ${t} puntos"><span class="lg-barra" style="--h:${t}%"><i class="lg-eq" style="flex:${d.equilibrio}"></i><i class="lg-ap" style="flex:${d.aprendizaje}"></i><i class="lg-co" style="flex:${d.constancia}"></i></span><small>${t}</small></li>`; };
+const filaLiga = f => `<li class="${f.tu ? 'tu' : ''}"><span class="lg-pos">${f.puesto}</span><span class="lg-apodo">${esc(f.apodo)}</span><b>${f.total}</b></li>`;
+let ligaSeq = 0;
+async function mostrarLiga() {
+  const el = $('#liga-cuerpo'); if (!el) return; const seq = ++ligaSeq;
+  if (!XL.logged()) { el.innerHTML = '<div class="pag-cab"><h1>Liga</h1><p class="mut">Entra con tu cuenta para jugar la Liga. Es gratis y sin dinero real.</p></div>'; return; }
+  el.innerHTML = '<div class="pag-cab"><h1>Liga</h1></div><div class="esq-lista"><span class="sr">Cargando la Liga…</span><span class="esq"></span><span class="esq"></span></div>';
+  let L, carteras = []; try { [L, carteras] = await Promise.all([XL.api('/liga'), XL.api('/portfolios')]); } catch (x) { if (seq === ligaSeq) el.innerHTML = `<div class="pag-cab"><h1>Liga</h1></div><p class="estado-lista">${esc(x.message)} <button class="enlace" type="button" data-retry="liga">Reintentar</button></p>`; return; }
+  if (seq !== ligaSeq || !XL.logged()) return;
+  const T = L.temporada, yo = L.yo, d = yo.puntos?.detalle || [], actual = d[d.length - 1];
+  let codigoPend = ''; try { codigoPend = sessionStorage.getItem(CLAVE_UNIRSE) || ''; } catch { /* nada */ }
+  const perfil = `<form id="liga-perfil" class="panel lg-perfil"><h2>Tu apodo</h2><p class="mut peq">Es lo único que ven los demás (nunca tu correo).</p>
+      <label for="lg-apodo">Apodo</label><input id="lg-apodo" name="apodo" maxlength="20" minlength="3" value="${esc(yo.apodo || '')}" required>
+      <label class="chk"><input type="checkbox" name="publica" ${yo.publica ? 'checked' : ''}> <span>Aparecer en la clasificación general</span></label>
+      <p><button class="btn btn-secundario" type="submit">Guardar apodo</button></p><p class="error" role="alert"></p></form>`;
+  const validas = carteras.filter(c => (c.posiciones || []).length);
+  const inscr = yo.inscripcion ? `<p class="lg-juegas">Juegas con <b>«${esc(yo.inscripcion.nombre || 'tu cartera')}»</b>${T.puede_cambiar ? ' · puedes cambiarla hasta la semana 2' : ''}.</p>` : '';
+  const formInscr = !yo.inscripcion || T.puede_cambiar ? (validas.length ? `<form id="liga-inscribir" class="lg-inscribir"><label for="lg-cartera">${yo.inscripcion ? 'Cambiar de cartera' : 'Elige la cartera con la que juegas'}</label><select id="lg-cartera" name="cartera">${validas.map(c => `<option value="${c.id}" ${yo.inscripcion?.cartera_id === c.id ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('')}</select><button class="btn ${yo.inscripcion ? 'btn-secundario' : 'btn-primario'}" type="submit">${yo.inscripcion ? 'Cambiar' : 'Inscribir'}</button><p class="error" role="alert"></p></form>` : '<p class="mut">Crea primero una cartera con al menos 4 posiciones para inscribirte. <a href="#inicio">Crear cartera</a></p>') : '';
+  el.innerHTML = `<div class="pag-cab"><p class="eyebrow">${esc(T.nombre)} · semana ${T.semana} de ${T.semanas}</p><h1>Liga</h1><p class="lead">Gana quien mejor construye y cuida su cartera, no quien tiene más suerte. Sin dinero real.</p>
+      <details class="mini lg-reglas"><summary>Cómo se puntúa</summary><ul><li><b>Equilibrio</b> (hasta 50 por semana): concentración baja 25 · media 12; variedad amplia 25 · media 12. Con al menos 4 posiciones y la cartera al 100 %.</li><li><b>Aprendizaje</b> (hasta 30): reto de la semana 20 · una idea guardada o revisada 10.</li><li><b>Constancia</b> (hasta 20): entrar esa semana 10 · +2 por semana seguida (hasta 10).</li></ul><p class="mut peq">Cuenta la foto de cada lunes. 12 semanas por temporada. Simulación · sin dinero real · no es consejo.</p></details></div>
+    <section class="panel lg-mio" aria-labelledby="lg-mio-t"><h2 id="lg-mio-t">Tu temporada</h2>${inscr}${formInscr}
+      ${yo.puntos ? `<div class="lg-total"><b class="lg-num">${yo.puntos.total}</b><span>puntos${yo.puesto_general ? ` · puesto ${yo.puesto_general} de ${yo.en_general}` : ''}</span></div>
+        <ol class="lg-semanas" aria-label="Puntos por semana">${d.map(barraLiga).join('')}</ol>
+        <p class="lg-leyenda"><i class="lg-eq"></i> equilibrio <i class="lg-ap"></i> aprendizaje <i class="lg-co"></i> constancia</p>
+        ${actual ? `<p class="mut peq">Esta semana: equilibrio ${actual.equilibrio}${actual.motivo ? ` (${esc(actual.motivo)})` : ''} · aprendizaje ${actual.aprendizaje} · constancia ${actual.constancia}.</p>` : ''}` : ''}</section>
+    ${yo.apodo ? '' : perfil}
+    <section class="panel" aria-labelledby="lg-gen-t"><h2 id="lg-gen-t">Clasificación general</h2>${L.general.length ? `<ol class="lg-clas">${L.general.map(filaLiga).join('')}</ol>` : '<p class="mut">Aún no hay nadie en la clasificación pública. Activa «Aparecer en la clasificación general» con tu apodo.</p>'}${yo.apodo ? `<details class="mini"><summary>Tu apodo: ${esc(yo.apodo)}</summary>${perfil}</details>` : ''}</section>
+    <section class="panel" aria-labelledby="lg-priv-t"><h2 id="lg-priv-t">Ligas privadas</h2><p class="mut peq">Con tus amigos, tu piso o tu clase. Klever no envía nada a nadie: invitas tú con el código.</p>
+      ${L.privadas.map(l => `<article class="lg-priv"><div class="lg-priv-cab"><h3>${esc(l.nombre)}</h3><span class="lg-codigo" aria-label="Código ${esc(l.codigo.split('').join(' '))}">${esc(l.codigo)}</span></div>
+        <ol class="lg-clas">${l.clasificacion.map(filaLiga).join('')}</ol>${l.sin_inscribir ? `<p class="mut peq">${l.sin_inscribir} ${l.sin_inscribir === 1 ? 'persona aún no ha' : 'personas aún no han'} inscrito su cartera.</p>` : ''}
+        <p class="lg-acc"><button class="btn btn-secundario" type="button" data-liga-invitar="${esc(l.codigo)}" data-nombre="${esc(l.nombre)}">Invitar</button> ${l.mia ? `<button class="enlace" type="button" data-liga-borrar="${l.id}">Borrar liga</button>` : `<button class="enlace" type="button" data-liga-salir="${l.id}">Salir</button>`}</p></article>`).join('')}
+      <div class="lg-forms"><form id="liga-unirse"><label for="lg-codigo">Unirme con un código</label><input id="lg-codigo" name="codigo" maxlength="6" autocapitalize="characters" value="${esc(codigoPend)}" required><button class="btn btn-secundario" type="submit">Unirme</button><p class="error" role="alert"></p></form>
+        <form id="liga-crear"><label for="lg-nombre">Crear una liga</label><input id="lg-nombre" name="nombre" maxlength="40" minlength="3" placeholder="Los del piso" required><button class="btn btn-secundario" type="submit">Crear</button><p class="error" role="alert"></p></form></div></section>
+    <p class="sello-b">Simulación · sin dinero real · no es consejo</p>`;
+}
+// Acceso desde «Hoy»: puesto y puntos (o la invitación a jugar)
+async function resumenLigaHoy(vigente) {
+  const el = $('#hoy-liga'); if (!el) return;
+  let L = null; try { L = await XL.api('/liga'); } catch { return; } if (!vigente()) return;
+  const p = L.yo.puntos;
+  el.innerHTML = `<a class="hoy-liga" href="#liga"><span class="hoy-liga-t">${esc(L.temporada.nombre)} · semana ${L.temporada.semana} de ${L.temporada.semanas}</span><b>${p ? `${p.total} puntos${L.yo.puesto_general ? ` · puesto ${L.yo.puesto_general}` : ''}` : 'Juega la Liga'}</b><span class="hoy-liga-ir" aria-hidden="true">→</span></a>`;
+  el.hidden = false;
+}
+const limpiarLiga = () => { ligaSeq++; for (const s of ['#liga-cuerpo', '#hoy-liga']) { const e = $(s); if (e) { e.innerHTML = ''; if (s === '#hoy-liga') e.hidden = true; } } };
 
 // =====================================================================
 // Klever · interfaz. Sin dependencias.
@@ -5090,6 +5251,7 @@ function limpiarPrivado() {
   sesionSeq++; misSeq++; nMis = null;
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
   for (const s of ['#mis-lista', '#hoy-hero', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  limpiarLiga();   // ronda 36: la Liga muestra apodos y puntos: es privada
   { const sem = $('#tu-semana'); if (sem) sem.hidden = true; const hh = $('#hoy-hero'); if (hh) hh.hidden = true; }   // ronda 34: «Hoy» muestra nombres y señales: también es privado   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
   document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
@@ -5144,11 +5306,11 @@ menuMovil.addEventListener('click', e => { if (e.target.closest('a,button')) men
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !menuMovil.hidden) { menuAbrir(false); btnMenu.focus(); } });
 
 // ---------- rutas ----------
-const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar'];
+const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguimiento', 'lab', 'revista', 'articulo', 'ejemplo', 'comparar', 'como-funciona', 'empezar', 'liga'];
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
-const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
+const NAV = { liga: 'mis', inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
+const TITULOS = { liga: 'Liga', inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -5183,6 +5345,7 @@ function mostrar(v, primera, extra = {}) {
   document.title = 'Klever · ' + TITULOS[v];
   if (v === 'cartera') renderWorkspace();
   if (v === 'carteras') cargarMisCarteras();
+  if (v === 'liga') mostrarLiga();
   if (v === 'seguimiento') mostrarSeguimiento();
   if (v === 'lab') mostrarLab(escenarioId ? 'escenario' : 'nuevo', escenarioId);
   if (v === 'revista') mostrarRevista();
@@ -5255,7 +5418,7 @@ async function cargarMisCarteras() {
     $('#btn-nueva').hidden = nMis === 0;
     if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; $('#hoy-hero').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
-    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq);
+    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq); resumenLigaHoy(() => seq === misSeq && logged());
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 // «Tu semana»: public/js/semana-ui.js (fase 1)
@@ -6033,7 +6196,7 @@ async function pintarRuedaPortada() {
 // ---------- reintentos genéricos ----------
 document.addEventListener('click', e => {
   const r = e.target.dataset?.retry; if (!r) return;
-  ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras })[r]?.();
+  ({ empresas: loadEmpresas, publicas: loadPublicas, mis: cargarMisCarteras, liga: mostrarLiga })[r]?.();
 });
 
 let universoCache = null;                                            // instantánea del universo (nota y comparador); se pide una vez
@@ -6071,6 +6234,7 @@ function contextoLab() {
   await redeem();
   await loadAssets(); activosListos();
   iniciarHoy({ by: () => by, abrirLab, medir, toast });
+  iniciarLiga({ api, logged, go, toast, toastError, medir });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
