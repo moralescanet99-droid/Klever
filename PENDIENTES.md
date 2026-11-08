@@ -5,6 +5,7 @@ Visión: `ronda31/VISION.md` (6 principios y 14 detalles V1–V14). Auditoría: 
 Permiso de Javier: trabajar sin consultar en todo lo que cueste 0 €. **Lo que necesita su aprobación está justo debajo.**
 
 ### Para Javier (revisar mañana)  ⬜
+0. ⬜ **Decidir la propuesta de grandes cambios** (`ronda32/PROPUESTA.md`, C42): camino A (aprender jugando, recomendado), B (liga con el mercado: cambia la regla de precios), C (comunidad) o mezcla; si se cambia la regla de «sin precios ni rentabilidades»; publicar ya en Cloudflare; reordenar el código antes.
 Ninguna bloquea el trabajo; son decisiones tuyas o cosas que solo puedes hacer tú.
 1. ⬜ **Probar la app instalada en tu móvil** (2 minutos): abre la demo o la web local en Safari/Chrome → «Añadir a pantalla de inicio». Dime si el icono, la barra de cristal y la barra de gestos se ven bien. Yo no tengo un teléfono real.
 2. ⬜ **¿Modo sin conexión (service worker)?** Haría que la app abra sin Internet, pero guarda copias de la web en el móvil y complica publicar cambios. **Recomiendo esperar al despliegue real.**

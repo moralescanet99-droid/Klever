@@ -2226,3 +2226,14 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Estoy pendando en que no quiero que sea de licencia  libre
 
 (Se publicó la demo de la ronda 31 como artefacto privado: https://claude.ai/artifact/W7axvW4u7kefDVSkVXhZVp. Sobre la licencia: Klever no tiene licencia libre (no hay archivo LICENSE: todos los derechos reservados), pero **el repositorio de GitHub es público** y cualquiera puede leer el código; solo la fuente Inter es de licencia libre (OFL). Pendiente de su decisión: hacer privado el repositorio y si cambiar la fuente; anotado en `PENDIENTES.md` § ★★.)
+
+## C42 · Ronda 32 (2026-11-08) — arreglos móviles y propuesta de grandes cambios, literal
+> Veo que la web sigue teniendo mucho texto. 
+>
+> Veo que en formato movil tiene estos errores en los que se ve fatal, 1 foto alargamiento de texto y mala orientacion, 2 foto es super dificil poder leer la empresa
+>
+> Arreglalo.
+>
+> Cuando termines quiero que pienese como podriamos mejorar mucho la web, no veo que enganche al usuario no nada, hay cosas muy mejorables tanto de funcionalidad, como de desarrollo, como a nivel de experiencia del usuario..... Proponme grandes cambios en todos los aspectos y explicamelos con detalle. Luego decidimos
+
+(Adjuntó dos capturas de su Android con el texto del sistema ampliado: el comparador AMZN–BKNG con la procedencia repetida y palabras partidas, y las tarjetas de Explorar con el nombre roto letra a letra. Arreglos en `style-r31.css` (§ Ronda 32) e `ideas.js`; propuesta en `ronda32/PROPUESTA.md`.)

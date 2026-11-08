@@ -1584,6 +1584,33 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
   .paso:not([aria-current="step"]) .paso-t{display:inline;position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 }
 
+/* ---------- Ronda 32 · móvil: comparador y tarjetas de Explorar legibles (también con el texto ampliado del sistema) ---------- */
+.cmp-fuente{margin:8px 0 0}
+.tabla-cmp td,.tabla-cmp th,.emp-card .nombre-emp{overflow-wrap:normal;word-break:normal;hyphens:auto}
+@media (max-width:719px){
+  /* comparador: cada cifra es una tarjeta (nombre arriba, las dos empresas lado a lado); la tabla sigue siendo una tabla para el lector */
+  .tabla-cmp,.tabla-cmp tbody{display:block;width:100%}
+  .tabla-cmp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tabla-cmp tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:4px 12px;padding:14px 0;border-bottom:1px solid var(--border)}
+  .tabla-cmp th[scope="row"],.tabla-cmp th:first-child{grid-column:1 / -1;width:auto;padding:0;border:0;font-size:1rem;font-weight:600}
+  .tabla-cmp th[scope="row"] .cmp-def{display:block;font-weight:400;color:var(--muted);font-size:.8125rem;margin-top:2px}
+  .tabla-cmp td{padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);min-width:0}
+  .tabla-cmp th{border-right:0;box-shadow:none;background:none;position:static}
+  .tabla-cmp td::before{content:attr(data-emp);display:block;font-size:.75rem;font-weight:600;letter-spacing:.04em;color:var(--muted);margin-bottom:2px}
+  .tabla-cmp .cmp-valor{font-size:1.375rem;line-height:1.15}
+  .tabla-h:has(.tabla-cmp){overflow:visible}
+  /* tarjetas de Explorar: el nombre tiene su propia fila; la huella y el resultado, debajo; las píldoras quedan en la ficha (la huella las resume) */
+  .emp-card{padding:14px 16px;gap:8px}
+  .emp-card .ec-l1{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"mono nombre" "mono res";align-items:center;gap:2px 12px}
+  .emp-card .ec-l1>:first-child{grid-area:mono}
+  .emp-card .ec-l1 .nombre-emp{grid-area:nombre;flex:none;font-weight:600;font-size:1.0625rem;line-height:1.25}
+  .emp-card .ec-res{grid-area:res;display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;font-size:.875rem;color:var(--muted)}
+  .emp-card .ec-res .huella{width:22px;height:22px}
+  .emp-card .ec-res .marca-n{font-weight:600;color:var(--text)}
+  .emp-card .ec-l2{gap:6px 12px}
+  .emp-card .pil{display:none}
+}
+
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
   [data-vista]:not([hidden]),.ind,.reto.hecho .reto-i,.reto-sem.hecho .reto-i,.evo-p,.avisos.on #toast,.esq{animation:none}
@@ -3351,12 +3378,15 @@ async function mostrarComparar({ a, b }) {
   let A, B; try { [A, B] = await Promise.all([xi().getJson('/assets/' + a), xi().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
   if (g !== xi().sesion()) return;
   const r = compararEmpresas(A, B);
-  const celda = c => `<td>${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
-    ${c.origen ? `<span class="cmp-origen">${esc(c.origen.periodo)} · ${c.origen.fuente === 'sec' ? 'SEC' : c.origen.fuente === 'prueba' ? 'datos de prueba' : c.origen.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${c.origen.fecha ? ' · cargado ' + esc(c.origen.fecha) : ''}</span>` : ''}</td>`;
+  // ronda 32: si todas las cifras salen del mismo periodo, fuente y carga, la procedencia se dice UNA vez (antes se repetía en cada celda)
+  const txtOrigen = o => `${o.periodo} · ${o.fuente === 'sec' ? 'SEC' : o.fuente === 'prueba' ? 'datos de prueba' : o.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${o.fecha ? ' · cargado ' + o.fecha : ''}`;
+  const origenes = r.filas.flatMap(f => [f.a, f.b]).filter(c => c.origen).map(c => txtOrigen(c.origen)), origenUnico = origenes.length && origenes.every(o => o === origenes[0]) ? origenes[0] : null;
+  const celda = (c, emp) => `<td data-emp="${esc(emp)}">${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
+    ${c.origen && !origenUnico ? `<span class="cmp-origen">${esc(txtOrigen(c.origen))}</span>` : ''}</td>`;
   cont.innerHTML = `<p><a class="enlace" href="#comparar-${esc(a)}">← Elegir otra empresa</a></p>
     <div class="pag-cab"><h1>${esc(A.nombre)} frente a ${esc(B.nombre)}</h1><p class="mut">${r.ejercicio ? `Ejercicio comparado: ${esc(r.ejercicio)} (el último que tienen los dos). ` : ''}Importes en ${esc(r.moneda)}. Una cifra distinta no significa «mejor» ni «peor»: depende del negocio y del momento.${r.mismoSector ? '' : ' Atención: no son del mismo sector.'}</p></div>
     <div class="tabla-h" role="region" aria-label="Comparación de tres cifras" tabindex="0"><table class="tabla-lab tabla-cmp"><thead><tr><th scope="col">Cifra</th><th scope="col">${esc(A.nombre)} <span class="simbolo">${esc(a)}</span></th><th scope="col">${esc(B.nombre)} <span class="simbolo">${esc(b)}</span></th></tr></thead><tbody>
-      ${r.filas.map(f => `<tr><th scope="row">${esc(f.nombre)}<small class="cmp-def">${esc(f.definicion)} (${esc(f.unidad)})</small></th>${celda(f.a)}${celda(f.b)}</tr>`).join('')}</tbody></table></div>
+      ${r.filas.map(f => `<tr><th scope="row">${esc(f.nombre)}<small class="cmp-def">${esc(f.definicion)} (${esc(f.unidad)})</small></th>${celda(f.a, a)}${celda(f.b, b)}</tr>`).join('')}</tbody></table></div>${origenUnico ? `<p class="cmp-fuente mut peq">Todas las cifras: ${esc(origenUnico)}</p>` : ''}
     <p class="art-acc"><button class="btn btn-primario" type="button" data-probar="${esc(b)}">Probar ${esc(B.nombre)} en mi cartera</button></p>
     <p class="mut peq">La acción abre el laboratorio con ${esc(B.nombre)} ya elegida: allí verás cuánto espacio ocuparía y quién cedería ese peso.</p>`;
 }

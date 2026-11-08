@@ -47,12 +47,15 @@ export async function mostrarComparar({ a, b }) {
   let A, B; try { [A, B] = await Promise.all([xi().getJson('/assets/' + a), xi().getJson('/assets/' + b)]); } catch { cont.innerHTML = '<p class="estado-lista">No se pudo cargar la comparación. <a href="#comparar-' + esc(a) + '">Reintentar</a></p>'; return; }
   if (g !== xi().sesion()) return;
   const r = compararEmpresas(A, B);
-  const celda = c => `<td>${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
-    ${c.origen ? `<span class="cmp-origen">${esc(c.origen.periodo)} · ${c.origen.fuente === 'sec' ? 'SEC' : c.origen.fuente === 'prueba' ? 'datos de prueba' : c.origen.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${c.origen.fecha ? ' · cargado ' + esc(c.origen.fecha) : ''}</span>` : ''}</td>`;
+  // ronda 32: si todas las cifras salen del mismo periodo, fuente y carga, la procedencia se dice UNA vez (antes se repetía en cada celda)
+  const txtOrigen = o => `${o.periodo} · ${o.fuente === 'sec' ? 'SEC' : o.fuente === 'prueba' ? 'datos de prueba' : o.fuente === 'demo' ? 'datos de demostración' : 'sin fuente verificada'}${o.fecha ? ' · cargado ' + o.fecha : ''}`;
+  const origenes = r.filas.flatMap(f => [f.a, f.b]).filter(c => c.origen).map(c => txtOrigen(c.origen)), origenUnico = origenes.length && origenes.every(o => o === origenes[0]) ? origenes[0] : null;
+  const celda = (c, emp) => `<td data-emp="${esc(emp)}">${c.estado === 'ok' ? `<span class="cmp-valor">${esc(c.texto)}</span>` : `<span class="cmp-estado">${c.estado === 'sin_dato' ? 'Sin dato' : 'No comparable'}</span><span class="cmp-motivo">${esc(c.motivo)}</span>`}
+    ${c.origen && !origenUnico ? `<span class="cmp-origen">${esc(txtOrigen(c.origen))}</span>` : ''}</td>`;
   cont.innerHTML = `<p><a class="enlace" href="#comparar-${esc(a)}">← Elegir otra empresa</a></p>
     <div class="pag-cab"><h1>${esc(A.nombre)} frente a ${esc(B.nombre)}</h1><p class="mut">${r.ejercicio ? `Ejercicio comparado: ${esc(r.ejercicio)} (el último que tienen los dos). ` : ''}Importes en ${esc(r.moneda)}. Una cifra distinta no significa «mejor» ni «peor»: depende del negocio y del momento.${r.mismoSector ? '' : ' Atención: no son del mismo sector.'}</p></div>
     <div class="tabla-h" role="region" aria-label="Comparación de tres cifras" tabindex="0"><table class="tabla-lab tabla-cmp"><thead><tr><th scope="col">Cifra</th><th scope="col">${esc(A.nombre)} <span class="simbolo">${esc(a)}</span></th><th scope="col">${esc(B.nombre)} <span class="simbolo">${esc(b)}</span></th></tr></thead><tbody>
-      ${r.filas.map(f => `<tr><th scope="row">${esc(f.nombre)}<small class="cmp-def">${esc(f.definicion)} (${esc(f.unidad)})</small></th>${celda(f.a)}${celda(f.b)}</tr>`).join('')}</tbody></table></div>
+      ${r.filas.map(f => `<tr><th scope="row">${esc(f.nombre)}<small class="cmp-def">${esc(f.definicion)} (${esc(f.unidad)})</small></th>${celda(f.a, a)}${celda(f.b, b)}</tr>`).join('')}</tbody></table></div>${origenUnico ? `<p class="cmp-fuente mut peq">Todas las cifras: ${esc(origenUnico)}</p>` : ''}
     <p class="art-acc"><button class="btn btn-primario" type="button" data-probar="${esc(b)}">Probar ${esc(B.nombre)} en mi cartera</button></p>
     <p class="mut peq">La acción abre el laboratorio con ${esc(B.nombre)} ya elegida: allí verás cuánto espacio ocuparía y quién cedería ese peso.</p>`;
 }

@@ -14,6 +14,10 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
+## Ronda 32 (C42)
+- ✅ Comparador y tarjetas de Explorar legibles en el móvil (también con el texto ampliado del sistema).
+- ⬜ Propuesta de grandes cambios pendiente de decisión (`ronda32/PROPUESTA.md`).
+
 ## Ronda 31 · última generación (C40)
 - ✅ Visión (`ronda31/VISION.md`) y auditoría (`ronda31/AUDITORIA.md`, 13,5/20) hechas y anotadas en `PENDIENTES.md` § ★★.
 - ✅ Implementado: V2–V10, V12, accesibilidad del editor, texto de la portada; 🟡 V1 (sin View Transitions) y V14; ⛔ V13 descartado. `testAC` (21/0); pasada completa **1194/0** (`33db027`). Ver `ronda31/LEEME.md`. Decisiones de Javier en `PENDIENTES.md` § ★★.
