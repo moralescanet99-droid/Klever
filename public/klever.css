@@ -1670,8 +1670,50 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 .hoy-senal i{width:10px;height:10px;border-radius:50%;flex:none}
 .hoy-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0}
 .hoy-lista-t{font-size:1.125rem;margin:22px 0 10px}
-@media (max-width:479px){.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
+@media (max-width:479px){.hoy-frase{text-align:center}.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
 @media (prefers-reduced-motion:reduce){.hoy-anillo circle{transition:none}}
+
+/* ---------- Fase 2 (ronda 35) · RUEDA DE ESFERAS (portada y, después, «Hoy») ---------- */
+.rueda{position:relative;display:grid;grid-template-columns:168px minmax(0,1fr);align-items:center;gap:8px 18px;min-height:360px;
+  padding:12px 16px;border-radius:var(--r-panel);background:radial-gradient(90% 70% at 20% 50%,rgba(108,180,255,.10),transparent 60%),radial-gradient(70% 60% at 85% 30%,rgba(255,122,47,.10),transparent 60%),#0B0908;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.rueda-pista{height:360px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;outline-offset:-3px;-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.rueda-pista::-webkit-scrollbar{display:none}
+.rueda-lista{list-style:none;margin:0;padding:0 0 0 10px}
+.rueda-item{height:66px;display:flex;align-items:center;gap:10px;scroll-snap-align:center;transform-origin:left center;will-change:transform}
+.orbe{width:44px;height:44px;border-radius:50%;border:0;padding:0;cursor:pointer;flex:none;position:relative;
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95) 0 6%,rgba(255,255,255,.35) 12%,transparent 30%),radial-gradient(circle at 70% 78%,var(--o2),transparent 70%),conic-gradient(from 200deg,var(--o1),var(--o2),var(--o1));
+  box-shadow:inset -6px -8px 14px rgba(0,0,0,.45),inset 4px 4px 10px rgba(255,255,255,.18),0 6px 18px rgba(0,0,0,.5)}
+.rueda-item.centro .orbe{box-shadow:inset -6px -8px 14px rgba(0,0,0,.4),inset 4px 4px 10px rgba(255,255,255,.22),0 0 0 1px rgba(255,255,255,.12),0 0 28px color-mix(in srgb,var(--o1) 45%,transparent)}
+.orbe-et{font-size:.6875rem;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.rueda-item.centro .orbe-et{color:var(--text);font-weight:600}
+.rueda-dato{display:grid;gap:2px;align-content:center;min-width:0}
+.rd-eti{font-size:.8125rem;color:var(--muted)}
+.rd-cifra{font-weight:200;font-size:clamp(3rem,7vw,4.5rem);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--text)}
+.rd-frase{font-size:.875rem;color:var(--muted)}
+.rd-ver{justify-self:start;margin-top:6px}
+.rueda-dato.nuevo .rd-cifra{animation:k35-cifra .32s var(--suave) backwards}
+@keyframes k35-cifra{from{transform:translateY(6px)}}
+.rueda-hoja{position:absolute;left:10px;right:10px;bottom:10px;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(160deg,rgba(201,184,255,.18),rgba(255,122,47,.10) 60%,rgba(20,15,12,.6)),rgba(20,15,12,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 18px 40px rgba(0,0,0,.5);animation:k35-hoja .3s var(--suave) backwards}
+@keyframes k35-hoja{from{transform:translateY(24px) scale(.98)}}
+.rueda-cerrar{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.3);color:var(--text);font-size:1.2rem;cursor:pointer}
+.rh-eti{margin:0;font-size:.75rem;color:var(--muted)} .rh-t{margin:2px 0 6px;font-size:1.125rem}
+.rh-huella{display:flex;justify-content:center} .rh-huella .huella{width:150px;height:auto}
+.rh-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:6px 0 4px}
+.rueda.con-hoja .rueda-dato{visibility:hidden}
+/* en la portada: a la derecha en escritorio; el ejemplo interactivo pasa debajo a todo lo ancho */
+.hero-rueda{min-width:0}
+@media (min-width:960px){.hero .hero-prev{grid-column:1 / -1;max-width:760px;justify-self:center;width:100%}.hero .hero-rueda{align-self:start;margin-top:40px}.hero .rueda{height:560px;min-height:0}.hero .rueda-pista{height:536px}}
+@media (max-width:959px){.hero .hero-rueda{order:3;margin:6px 0 18px}}
+@media (max-width:479px){.rueda{grid-template-columns:138px minmax(0,1fr);gap:6px 10px;min-height:300px;padding:8px 12px}.rueda-pista{height:300px}.rd-cifra{font-size:3rem}}
+@media (prefers-reduced-motion:reduce){.rueda-dato.nuevo .rd-cifra,.rueda-hoja{animation:none}.rueda-pista{scroll-behavior:auto}}
+
+/* ---------- Ronda 35 · «Hoy»: frase con iconos y rueda de la temporada ---------- */
+.hoy-frase{margin:14px 0 0;font-size:1.0625rem;line-height:1.5;color:var(--muted)} .hoy-frase b{color:var(--text);font-weight:600}
+.hoy-frase .ico{width:1.1em;height:1.1em;color:var(--accent-on-soft);vertical-align:-.18em}
+.hoy-temporada{margin-top:14px}
+.hoy-temporada .rueda{min-height:250px}.hoy-temporada .rueda-pista{height:250px}
+.rh-senales{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}.rh-senales li{display:flex;align-items:center;gap:8px;font-weight:600}.rh-senales i{width:10px;height:10px;border-radius:50%;flex:none}
 
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){

@@ -1681,8 +1681,50 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 .hoy-senal i{width:10px;height:10px;border-radius:50%;flex:none}
 .hoy-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0}
 .hoy-lista-t{font-size:1.125rem;margin:22px 0 10px}
-@media (max-width:479px){.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
+@media (max-width:479px){.hoy-frase{text-align:center}.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
 @media (prefers-reduced-motion:reduce){.hoy-anillo circle{transition:none}}
+
+/* ---------- Fase 2 (ronda 35) · RUEDA DE ESFERAS (portada y, después, «Hoy») ---------- */
+.rueda{position:relative;display:grid;grid-template-columns:168px minmax(0,1fr);align-items:center;gap:8px 18px;min-height:360px;
+  padding:12px 16px;border-radius:var(--r-panel);background:radial-gradient(90% 70% at 20% 50%,rgba(108,180,255,.10),transparent 60%),radial-gradient(70% 60% at 85% 30%,rgba(255,122,47,.10),transparent 60%),#0B0908;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.rueda-pista{height:360px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;outline-offset:-3px;-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.rueda-pista::-webkit-scrollbar{display:none}
+.rueda-lista{list-style:none;margin:0;padding:0 0 0 10px}
+.rueda-item{height:66px;display:flex;align-items:center;gap:10px;scroll-snap-align:center;transform-origin:left center;will-change:transform}
+.orbe{width:44px;height:44px;border-radius:50%;border:0;padding:0;cursor:pointer;flex:none;position:relative;
+  background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95) 0 6%,rgba(255,255,255,.35) 12%,transparent 30%),radial-gradient(circle at 70% 78%,var(--o2),transparent 70%),conic-gradient(from 200deg,var(--o1),var(--o2),var(--o1));
+  box-shadow:inset -6px -8px 14px rgba(0,0,0,.45),inset 4px 4px 10px rgba(255,255,255,.18),0 6px 18px rgba(0,0,0,.5)}
+.rueda-item.centro .orbe{box-shadow:inset -6px -8px 14px rgba(0,0,0,.4),inset 4px 4px 10px rgba(255,255,255,.22),0 0 0 1px rgba(255,255,255,.12),0 0 28px color-mix(in srgb,var(--o1) 45%,transparent)}
+.orbe-et{font-size:.6875rem;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums}
+.rueda-item.centro .orbe-et{color:var(--text);font-weight:600}
+.rueda-dato{display:grid;gap:2px;align-content:center;min-width:0}
+.rd-eti{font-size:.8125rem;color:var(--muted)}
+.rd-cifra{font-weight:200;font-size:clamp(3rem,7vw,4.5rem);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums;color:var(--text)}
+.rd-frase{font-size:.875rem;color:var(--muted)}
+.rd-ver{justify-self:start;margin-top:6px}
+.rueda-dato.nuevo .rd-cifra{animation:k35-cifra .32s var(--suave) backwards}
+@keyframes k35-cifra{from{transform:translateY(6px)}}
+.rueda-hoja{position:absolute;left:10px;right:10px;bottom:10px;padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(160deg,rgba(201,184,255,.18),rgba(255,122,47,.10) 60%,rgba(20,15,12,.6)),rgba(20,15,12,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);box-shadow:0 18px 40px rgba(0,0,0,.5);animation:k35-hoja .3s var(--suave) backwards}
+@keyframes k35-hoja{from{transform:translateY(24px) scale(.98)}}
+.rueda-cerrar{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.3);color:var(--text);font-size:1.2rem;cursor:pointer}
+.rh-eti{margin:0;font-size:.75rem;color:var(--muted)} .rh-t{margin:2px 0 6px;font-size:1.125rem}
+.rh-huella{display:flex;justify-content:center} .rh-huella .huella{width:150px;height:auto}
+.rh-acc{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:6px 0 4px}
+.rueda.con-hoja .rueda-dato{visibility:hidden}
+/* en la portada: a la derecha en escritorio; el ejemplo interactivo pasa debajo a todo lo ancho */
+.hero-rueda{min-width:0}
+@media (min-width:960px){.hero .hero-prev{grid-column:1 / -1;max-width:760px;justify-self:center;width:100%}.hero .hero-rueda{align-self:start;margin-top:40px}.hero .rueda{height:560px;min-height:0}.hero .rueda-pista{height:536px}}
+@media (max-width:959px){.hero .hero-rueda{order:3;margin:6px 0 18px}}
+@media (max-width:479px){.rueda{grid-template-columns:138px minmax(0,1fr);gap:6px 10px;min-height:300px;padding:8px 12px}.rueda-pista{height:300px}.rd-cifra{font-size:3rem}}
+@media (prefers-reduced-motion:reduce){.rueda-dato.nuevo .rd-cifra,.rueda-hoja{animation:none}.rueda-pista{scroll-behavior:auto}}
+
+/* ---------- Ronda 35 · «Hoy»: frase con iconos y rueda de la temporada ---------- */
+.hoy-frase{margin:14px 0 0;font-size:1.0625rem;line-height:1.5;color:var(--muted)} .hoy-frase b{color:var(--text);font-weight:600}
+.hoy-frase .ico{width:1.1em;height:1.1em;color:var(--accent-on-soft);vertical-align:-.18em}
+.hoy-temporada{margin-top:14px}
+.hoy-temporada .rueda{min-height:250px}.hoy-temporada .rueda-pista{height:250px}
+.rh-senales{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}.rh-senales li{display:flex;align-items:center;gap:8px;font-weight:600}.rh-senales i{width:10px;height:10px;border-radius:50%;flex:none}
 
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
@@ -1753,6 +1795,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
         <p class="peq"><a class="enlace" href="#como-funciona">Cómo funciona Klever →</a></p>
         <p class="fuentes" data-origen="linea">Datos de las empresas: consulta el origen en cada ficha.</p>
       </div>
+      <div class="hero-rueda" id="rueda-portada" aria-label="Empresas conocidas, de un vistazo"></div>
       <div class="hero-prev" id="prev" aria-label="Ejemplo interactivo de reparto simulado"></div>
     </div>
 
@@ -4651,6 +4694,29 @@ async function pintarSemana(list, seq, vigente) {
     <div class="sem-col">${htmlRetoSem}<div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
       <ul class="retos">${rt.lista.map(reto).join('')}</ul><p class="mut peq">Retos para entender y ordenar tu cartera; no miden rentabilidad.</p></div></div>`;
   el.hidden = false;
+  pintarTemporada(sem);
+}
+
+// Ronda 35 · en «Hoy», bajo la cartera principal: la FRASE CON ICONOS y la RUEDA DE SU TEMPORADA (una esfera por semana con foto en el servidor).
+// El color de cada esfera sale de su concentración (verde baja · ámbar media · cobre alta); el dato grande es ese nivel. Sin importes ni rentabilidad.
+const TONO_SEM = { ok: ['#7FF0D0', '#2E8F9E'], medio: ['#FFE3A1', '#C98A2E'], alto: ['#FFB27A', '#C2462B'] };
+const ICO = { sectores: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 4"/></svg>', chispa: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6.5 6.5l3 3M14.5 14.5l3 3M17.5 6.5l-3 3M9.5 14.5l-3 3"/></svg>' };
+function pintarTemporada(sem) {
+  const fr = $('#hoy-frase'), cont = $('#hoy-temporada'); if (!fr || !cont || !sem) return;
+  const c = sem.carteras.find(x => String(x.id) === cont.dataset.cartera); if (!c || !c.foto) return;
+  const h = (c.historial || []).map(fotoValida).filter(Boolean).sort((a, b) => a.semana.localeCompare(b.semana)).slice(-8), ev = evolucion(h, sem.semana);
+  const t = ev.tendencias?.concentracion?.tendencia, v = ev.tendencias?.variedad?.tendencia;
+  const como = !ev.tendencias ? 'estrena su temporada esta semana' : t === 'mejora' || v === 'mejora' ? `ha mejorado desde la ${'semana del ' + XS.fmtFecha(ev.desde)}` : t === 'empeora' || v === 'empeora' ? `está más concentrada que la ${'semana del ' + XS.fmtFecha(ev.desde)}` : 'se mantiene estable';
+  fr.innerHTML = `Tu cartera ${ICO.sectores} reparte en <b>${c.foto.n_categorias} ${c.foto.n_categorias === 1 ? 'categoría' : 'categorías'}</b> y ${ICO.chispa} <b>${esc(como)}</b>.`;
+  fr.hidden = false;
+  if (!h.length) return;
+  const items = h.map(f => ({ etiqueta: XS.fmtFecha(f.semana).replace(/ \d{4}$/, ''), tono: TONO_SEM[f.concentracion], cifra: NIVELES_SEMANA.concentracion[f.concentracion],
+    eti: `Semana del ${XS.fmtFecha(f.semana)} · concentración`, frase: `Variedad ${NIVELES_SEMANA.variedad[f.variedad].toLowerCase()} · ${f.n_categorias} ${f.n_categorias === 1 ? 'categoría' : 'categorías'}`,
+    aria: `Semana del ${XS.fmtFecha(f.semana)}: concentración ${NIVELES_SEMANA.concentracion[f.concentracion].toLowerCase()}` }));
+  let primera = true; try { primera = !sessionStorage.getItem('klever_rueda_vista'); sessionStorage.setItem('klever_rueda_vista', '1'); } catch { /* sin almacenamiento */ }
+  cont.hidden = false;
+  montarRueda(cont, items, { titulo: 'Tu temporada, semana a semana', inicio: items.length - 1, auto: primera && items.length > 1,
+    alAbrir: i => { const f = h[i], s = f.senales.filter(q => q.id !== 'ok'); return `<p class="rh-eti">Semana del ${esc(XS.fmtFecha(f.semana))}</p><h3 class="rh-t">${s.length ? 'Señales de esa semana' : 'Sin concentraciones destacadas'}</h3>${s.length ? `<ul class="rh-senales">${s.map(q => `<li class="senal-${esc(q.nivel)}"><i aria-hidden="true"></i>${esc(q.titulo)}</li>`).join('')}</ul>` : ''}<p class="mut peq">Foto semanal de tu cartera (niveles y señales). No mide rentabilidad.</p>`; } });
 }
 
 // Fase 2 (ronda 34) · pantalla «HOY» (antes «Mis carteras»): tu cartera principal en grande, con su anillo, sus dos semáforos y UNA acción.
@@ -4705,8 +4771,64 @@ function pintarHoy(lista) {
       <div class="hoy-info"><p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2>
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
-        <p class="hoy-acc">${boton}</p></div></div>`;
+        <p class="hoy-acc">${boton}</p></div></div>
+      <p class="hoy-frase" id="hoy-frase" data-cartera="${m.id}" hidden></p>
+      <div class="hoy-temporada" id="hoy-temporada" data-cartera="${m.id}" hidden></div>`;
   el.hidden = false;
+}
+
+// Fase 2 (ronda 35) · RUEDA DE ESFERAS (inspirada en el vídeo de C48): una lista vertical en arco; la esfera del centro crece y a su lado aparece
+// su dato en una cifra grande y fina con una frase corta. Se gira con el dedo, la rueda del ratón o las flechas; al tocar la del centro se abre una
+// hoja de cristal con el detalle. Con «reducir movimiento» no gira sola ni anima: es una lista con el mismo contenido.
+// items: [{ etiqueta, tono: [colorA, colorB], aria, cifra, eti, frase }]. opciones: { titulo, alAbrir(i) → html, inicio, auto }.
+const ALTO = 66;   // alto de cada fila (px)
+const quieto = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Esfera iridiscente solo con CSS: dos tonos, brillo especular y un borde de luz (sin imágenes ni WebGL).
+const estiloEsfera = ([a, b]) => `--o1:${a};--o2:${b}`;
+
+function montarRueda(cont, items, { titulo = '', alAbrir = null, inicio = 0, auto = true } = {}) {
+  if (!cont || !items.length) return null;
+  cont.classList.add('rueda');
+  cont.innerHTML = `<div class="rueda-pista" tabindex="0" role="listbox" aria-label="${esc(titulo)}" aria-activedescendant="">
+      <ul class="rueda-lista">${items.map((x, i) => `<li class="rueda-item" id="${cont.id}-o${i}" role="option" aria-selected="false" data-i="${i}"><button class="orbe" type="button" tabindex="-1" style="${estiloEsfera(x.tono)}" aria-label="${esc(x.aria)}"><span class="orbe-in"></span></button><span class="orbe-et">${esc(x.etiqueta)}</span></li>`).join('')}</ul></div>
+    <div class="rueda-dato" aria-live="polite"><span class="rd-eti"></span><b class="rd-cifra"></b><span class="rd-frase"></span>${alAbrir ? '<button class="enlace rd-ver" type="button">Ver detalle</button>' : ''}</div>
+    <div class="rueda-hoja" role="dialog" aria-modal="false" aria-label="Detalle" hidden><button class="rueda-cerrar" type="button" aria-label="Cerrar el detalle">×</button><div class="rueda-hoja-in"></div></div>`;
+  const pista = cont.querySelector('.rueda-pista'), lis = [...cont.querySelectorAll('.rueda-item')], dato = cont.querySelector('.rueda-dato'), hoja = cont.querySelector('.rueda-hoja');
+  let actual = -1, pendiente = false, objetivo = inicio;   // objetivo: la esfera a la que se va (al redimensionar se vuelve a ella, no a la que pasaba)
+  const relleno = () => { const m = Math.max(0, pista.clientHeight / 2 - ALTO / 2); pista.firstElementChild.style.paddingBlock = m + 'px'; };
+  const centrar = (i, suave = true) => { objetivo = i; pista.scrollTo({ top: i * ALTO, behavior: suave && !quieto() ? 'smooth' : 'auto' }); };
+  const pintar = () => {
+    pendiente = false;
+    const c = pista.scrollTop / ALTO, i = Math.max(0, Math.min(items.length - 1, Math.round(c)));
+    if (!quieto()) lis.forEach((li, k) => { const d = k - c, a = Math.min(Math.abs(d), 3.2);
+      li.style.transform = `translateX(${(a * a * 7).toFixed(1)}px) scale(${(1.18 - a * 0.16).toFixed(3)})`; li.style.opacity = (1 - a * 0.22).toFixed(2); });
+    if (i !== actual) {
+      actual = i; const x = items[i];
+      lis.forEach((li, k) => { li.classList.toggle('centro', k === i); li.setAttribute('aria-selected', String(k === i)); });
+      pista.setAttribute('aria-activedescendant', lis[i].id);
+      dato.querySelector('.rd-eti').textContent = x.eti || ''; dato.querySelector('.rd-cifra').textContent = x.cifra || ''; dato.querySelector('.rd-frase').textContent = x.frase || '';
+      dato.classList.remove('nuevo'); void dato.offsetWidth; dato.classList.add('nuevo');
+      if (!hoja.hidden) abrir();
+    }
+  };
+  const abrir = () => { if (!alAbrir || actual < 0) return; hoja.querySelector('.rueda-hoja-in').innerHTML = alAbrir(actual); hoja.hidden = false; cont.classList.add('con-hoja'); };
+  const cerrar = () => { hoja.hidden = true; cont.classList.remove('con-hoja'); pista.focus({ preventScroll: true }); };
+  pista.addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(pintar); } }, { passive: true });
+  pista.addEventListener('click', e => { const li = e.target.closest('.rueda-item'); if (!li) return; const i = +li.dataset.i; if (i === actual) abrir(); else centrar(i); });
+  pista.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); centrar(Math.min(items.length - 1, actual + 1)); }
+    else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); centrar(Math.max(0, actual - 1)); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); }
+    else if (e.key === 'Escape' && !hoja.hidden) cerrar();
+  });
+  dato.querySelector('.rd-ver')?.addEventListener('click', abrir);
+  hoja.querySelector('.rueda-cerrar').addEventListener('click', cerrar);
+  relleno(); if ('ResizeObserver' in window) new ResizeObserver(() => { relleno(); centrar(objetivo, false); }).observe(pista);
+  // primer giro: desde el final hasta la esfera de inicio (una sola vez y solo si se permite el movimiento)
+  if (auto && !quieto()) { pista.scrollTop = (items.length - 1) * ALTO; requestAnimationFrame(() => setTimeout(() => centrar(inicio), 250)); }
+  else centrar(inicio, false);
+  pintar();
+  return { centrar, abrir, cerrar, actual: () => actual };
 }
 
 // =====================================================================
@@ -5834,6 +5956,31 @@ function renderPreview() {
   $('#preview-peso').addEventListener('input', pintar); pintar();
 }
 
+// ---------- portada: RUEDA DE ESFERAS (fase 2, ronda 35; inspirada en el vídeo de C48) ----------
+// Nueve empresas conocidas de sectores distintos. Cada esfera dice cuántas de las cinco comprobaciones supera (no es rentabilidad ni una recomendación);
+// su color sale de ese resultado. Al tocar la del centro, su huella y dos acciones: ver la ficha o probarla en una cartera.
+const RUEDA_TICKERS = ['NVDA', 'MSFT', 'KO', 'PG', 'JNJ', 'XOM', 'JPM', 'AMZN', 'GOOGL'];
+const TONO_RUEDA = n => n >= 5 ? ['#7FF0D0', '#2E8F9E'] : n >= 4 ? ['#C9B8FF', '#6A4FD8'] : n >= 3 ? ['#FFC7A1', '#C2569B'] : ['#FF9D93', '#B4322A'];
+const CLAVES_R = { deuda_ebitda: 'deuda', roic: 'ROIC', margen_neto: 'margen', flujo_caja: 'caja libre', crecimiento: 'crecimiento' };
+let ruedaPortada = null;
+async function pintarRuedaPortada() {
+  const cont = $('#rueda-portada'); if (!cont || ruedaPortada) return;
+  let crit = null; try { crit = await criteriosAhora(); } catch { crit = null; }
+  if (!crit) { cont.hidden = true; return; }
+  const filas = RUEDA_TICKERS.filter(t => by[t] && crit[t]).map(t => { const c = crit[t], ks = Object.keys(CLAVES_R), ok = ks.filter(k => c[k]?.ok === true), nd = ks.filter(k => c[k]?.ok == null), no = ks.filter(k => c[k]?.ok === false);
+    return { t, nombre: by[t].nombre, sector: by[t].sector, c, ok: ok.length, nd: nd.length, falta: no.map(k => CLAVES_R[k]) }; });
+  if (filas.length < 3) { cont.hidden = true; return; }
+  const items = filas.map(f => ({ etiqueta: f.t, tono: TONO_RUEDA(f.ok), cifra: `${f.ok}/5`, eti: `${f.nombre} · ${f.sector}`,
+    frase: f.falta.length ? `No supera: ${f.falta.join(', ')}` : f.nd ? `${f.nd} sin datos` : 'Supera las cinco comprobaciones',
+    aria: `${f.nombre}: ${f.ok} de 5 comprobaciones superadas` }));
+  const medio = Math.floor(filas.length / 2);
+  ruedaPortada = montarRueda(cont, items, { titulo: 'Empresas conocidas: cuántas comprobaciones supera cada una', inicio: medio,
+    alAbrir: i => { const f = filas[i]; return `<p class="rh-eti">${esc(f.sector)} · datos de prueba</p><h3 class="rh-t">${esc(f.nombre)} <span class="simbolo">${esc(f.t)}</span></h3>
+      <div class="rh-huella">${svgHuella(f.c, { tam: 120, etiquetas: true, titulo: `Huella de ${f.nombre}: ${f.ok} de 5 comprobaciones superadas` })}</div>
+      <p class="rh-acc"><button class="btn btn-primario" type="button" data-probar-emp="${esc(f.t)}">Probar en una cartera</button> <button class="enlace" type="button" data-rueda-ficha="${esc(f.t)}">Ver ficha</button></p>
+      <p class="mut peq">Comprobaciones de las fichas, no una recomendación.</p>`; } });
+  cont.addEventListener('click', e => { const b = e.target.closest('[data-rueda-ficha]'); if (b) verFicha(b.dataset.ruedaFicha); });
+}
 // ---------- reintentos genéricos ----------
 document.addEventListener('click', e => {
   const r = e.target.dataset?.retry; if (!r) return;
@@ -5878,7 +6025,7 @@ function contextoLab() {
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
-  actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
+  actualizarCabecera(); renderPreview(); pintarRuedaPortada(); loadScreener(); loadPublicas(); cargarOrigenDatos();
   purgarCopias();                                    // las copias locales caducan a los 7 días
   if (logged()) { try { purgarCopias((await api('/portfolios')).map(c => c.id)); } catch { /* sin conexión: se purgará en la próxima carga */ } }   // y las de OTRA cuenta se borran al entrar esta
   if (logged()) await migrarRadarLocal();            // el radar de este dispositivo pasa a la cuenta (idempotente)

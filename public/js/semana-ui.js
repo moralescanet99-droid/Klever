@@ -1,9 +1,10 @@
 // Fase 1 (ronda 33) · «TU SEMANA» en Mis carteras (antes, dentro de app.js): señal de cada cartera, evolución, cambios desde la última semana,
 // reto de la semana, retos fijos y «Mira atrás». La memoria vive en el servidor (/api/semana). Recibe lo que necesita con iniciarSemanaUI(ctx).
 import { $, esc, store } from './base.js';
-import { retos, resumenSemana, evolucion, cambiosSemana, retoSemana, fotoAnterior, NIVELES_SEMANA } from './semana.js';
+import { retos, resumenSemana, evolucion, cambiosSemana, retoSemana, fotoAnterior, NIVELES_SEMANA, fotoValida } from './semana.js';
 import { miraAtras, ESTADO_CICLO } from './ciclo.js';
 import { nSeguidas } from './lab.js';
+import { montarRueda } from './rueda.js';
 let XS = null;   // contexto: { api, getJson, logged, by, fmtFecha }
 export const iniciarSemanaUI = ctx => { XS = ctx; };
 // Ronda 29 (fase 2.5) · «Tu semana»: lo que conviene mirar hoy (señal de cada cartera, ideas de los próximos 7 días) y los retos de aprendizaje.
@@ -61,4 +62,27 @@ export async function pintarSemana(list, seq, vigente) {
     <div class="sem-col">${htmlRetoSem}<div class="retos-cab"><b>Retos</b><span class="retos-n">${rt.hechos} de ${rt.total}</span></div><div class="retos-barra" role="progressbar" aria-label="Retos conseguidos" aria-valuemin="0" aria-valuemax="${rt.total}" aria-valuenow="${rt.hechos}"><i style="width:${rt.hechos / rt.total * 100}%"></i></div>
       <ul class="retos">${rt.lista.map(reto).join('')}</ul><p class="mut peq">Retos para entender y ordenar tu cartera; no miden rentabilidad.</p></div></div>`;
   el.hidden = false;
+  pintarTemporada(sem);
+}
+
+// Ronda 35 · en «Hoy», bajo la cartera principal: la FRASE CON ICONOS y la RUEDA DE SU TEMPORADA (una esfera por semana con foto en el servidor).
+// El color de cada esfera sale de su concentración (verde baja · ámbar media · cobre alta); el dato grande es ese nivel. Sin importes ni rentabilidad.
+const TONO_SEM = { ok: ['#7FF0D0', '#2E8F9E'], medio: ['#FFE3A1', '#C98A2E'], alto: ['#FFB27A', '#C2462B'] };
+const ICO = { sectores: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><path d="M12 4v8l6 4"/></svg>', chispa: '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3v5M12 16v5M3 12h5M16 12h5M6.5 6.5l3 3M14.5 14.5l3 3M17.5 6.5l-3 3M9.5 14.5l-3 3"/></svg>' };
+function pintarTemporada(sem) {
+  const fr = $('#hoy-frase'), cont = $('#hoy-temporada'); if (!fr || !cont || !sem) return;
+  const c = sem.carteras.find(x => String(x.id) === cont.dataset.cartera); if (!c || !c.foto) return;
+  const h = (c.historial || []).map(fotoValida).filter(Boolean).sort((a, b) => a.semana.localeCompare(b.semana)).slice(-8), ev = evolucion(h, sem.semana);
+  const t = ev.tendencias?.concentracion?.tendencia, v = ev.tendencias?.variedad?.tendencia;
+  const como = !ev.tendencias ? 'estrena su temporada esta semana' : t === 'mejora' || v === 'mejora' ? `ha mejorado desde la ${'semana del ' + XS.fmtFecha(ev.desde)}` : t === 'empeora' || v === 'empeora' ? `está más concentrada que la ${'semana del ' + XS.fmtFecha(ev.desde)}` : 'se mantiene estable';
+  fr.innerHTML = `Tu cartera ${ICO.sectores} reparte en <b>${c.foto.n_categorias} ${c.foto.n_categorias === 1 ? 'categoría' : 'categorías'}</b> y ${ICO.chispa} <b>${esc(como)}</b>.`;
+  fr.hidden = false;
+  if (!h.length) return;
+  const items = h.map(f => ({ etiqueta: XS.fmtFecha(f.semana).replace(/ \d{4}$/, ''), tono: TONO_SEM[f.concentracion], cifra: NIVELES_SEMANA.concentracion[f.concentracion],
+    eti: `Semana del ${XS.fmtFecha(f.semana)} · concentración`, frase: `Variedad ${NIVELES_SEMANA.variedad[f.variedad].toLowerCase()} · ${f.n_categorias} ${f.n_categorias === 1 ? 'categoría' : 'categorías'}`,
+    aria: `Semana del ${XS.fmtFecha(f.semana)}: concentración ${NIVELES_SEMANA.concentracion[f.concentracion].toLowerCase()}` }));
+  let primera = true; try { primera = !sessionStorage.getItem('klever_rueda_vista'); sessionStorage.setItem('klever_rueda_vista', '1'); } catch { /* sin almacenamiento */ }
+  cont.hidden = false;
+  montarRueda(cont, items, { titulo: 'Tu temporada, semana a semana', inicio: items.length - 1, auto: primera && items.length > 1,
+    alAbrir: i => { const f = h[i], s = f.senales.filter(q => q.id !== 'ok'); return `<p class="rh-eti">Semana del ${esc(XS.fmtFecha(f.semana))}</p><h3 class="rh-t">${s.length ? 'Señales de esa semana' : 'Sin concentraciones destacadas'}</h3>${s.length ? `<ul class="rh-senales">${s.map(q => `<li class="senal-${esc(q.nivel)}"><i aria-hidden="true"></i>${esc(q.titulo)}</li>`).join('')}</ul>` : ''}<p class="mut peq">Foto semanal de tu cartera (niveles y señales). No mide rentabilidad.</p>`; } });
 }

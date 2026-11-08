@@ -15,6 +15,7 @@ import { leerPegado, pareceLista } from './js/pegado.js';
 import { svgHuella } from './js/huella.js';
 import { iniciarSemanaUI, pintarSemana, criteriosAhora } from './js/semana-ui.js';
 import { iniciarHoy, pintarHoy } from './js/hoy.js';
+import { montarRueda } from './js/rueda.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarExplorar, empresas, filtrosLeer, filtrosGuardar, loadEmpresas, poblarSectores, renderEmpresas, verFicha } from './js/explorar.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
@@ -1137,6 +1138,31 @@ function renderPreview() {
   $('#preview-peso').addEventListener('input', pintar); pintar();
 }
 
+// ---------- portada: RUEDA DE ESFERAS (fase 2, ronda 35; inspirada en el vídeo de C48) ----------
+// Nueve empresas conocidas de sectores distintos. Cada esfera dice cuántas de las cinco comprobaciones supera (no es rentabilidad ni una recomendación);
+// su color sale de ese resultado. Al tocar la del centro, su huella y dos acciones: ver la ficha o probarla en una cartera.
+const RUEDA_TICKERS = ['NVDA', 'MSFT', 'KO', 'PG', 'JNJ', 'XOM', 'JPM', 'AMZN', 'GOOGL'];
+const TONO_RUEDA = n => n >= 5 ? ['#7FF0D0', '#2E8F9E'] : n >= 4 ? ['#C9B8FF', '#6A4FD8'] : n >= 3 ? ['#FFC7A1', '#C2569B'] : ['#FF9D93', '#B4322A'];
+const CLAVES_R = { deuda_ebitda: 'deuda', roic: 'ROIC', margen_neto: 'margen', flujo_caja: 'caja libre', crecimiento: 'crecimiento' };
+let ruedaPortada = null;
+async function pintarRuedaPortada() {
+  const cont = $('#rueda-portada'); if (!cont || ruedaPortada) return;
+  let crit = null; try { crit = await criteriosAhora(); } catch { crit = null; }
+  if (!crit) { cont.hidden = true; return; }
+  const filas = RUEDA_TICKERS.filter(t => by[t] && crit[t]).map(t => { const c = crit[t], ks = Object.keys(CLAVES_R), ok = ks.filter(k => c[k]?.ok === true), nd = ks.filter(k => c[k]?.ok == null), no = ks.filter(k => c[k]?.ok === false);
+    return { t, nombre: by[t].nombre, sector: by[t].sector, c, ok: ok.length, nd: nd.length, falta: no.map(k => CLAVES_R[k]) }; });
+  if (filas.length < 3) { cont.hidden = true; return; }
+  const items = filas.map(f => ({ etiqueta: f.t, tono: TONO_RUEDA(f.ok), cifra: `${f.ok}/5`, eti: `${f.nombre} · ${f.sector}`,
+    frase: f.falta.length ? `No supera: ${f.falta.join(', ')}` : f.nd ? `${f.nd} sin datos` : 'Supera las cinco comprobaciones',
+    aria: `${f.nombre}: ${f.ok} de 5 comprobaciones superadas` }));
+  const medio = Math.floor(filas.length / 2);
+  ruedaPortada = montarRueda(cont, items, { titulo: 'Empresas conocidas: cuántas comprobaciones supera cada una', inicio: medio,
+    alAbrir: i => { const f = filas[i]; return `<p class="rh-eti">${esc(f.sector)} · datos de prueba</p><h3 class="rh-t">${esc(f.nombre)} <span class="simbolo">${esc(f.t)}</span></h3>
+      <div class="rh-huella">${svgHuella(f.c, { tam: 120, etiquetas: true, titulo: `Huella de ${f.nombre}: ${f.ok} de 5 comprobaciones superadas` })}</div>
+      <p class="rh-acc"><button class="btn btn-primario" type="button" data-probar-emp="${esc(f.t)}">Probar en una cartera</button> <button class="enlace" type="button" data-rueda-ficha="${esc(f.t)}">Ver ficha</button></p>
+      <p class="mut peq">Comprobaciones de las fichas, no una recomendación.</p>`; } });
+  cont.addEventListener('click', e => { const b = e.target.closest('[data-rueda-ficha]'); if (b) verFicha(b.dataset.ruedaFicha); });
+}
 // ---------- reintentos genéricos ----------
 document.addEventListener('click', e => {
   const r = e.target.dataset?.retry; if (!r) return;
@@ -1181,7 +1207,7 @@ function contextoLab() {
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
-  actualizarCabecera(); renderPreview(); loadScreener(); loadPublicas(); cargarOrigenDatos();
+  actualizarCabecera(); renderPreview(); pintarRuedaPortada(); loadScreener(); loadPublicas(); cargarOrigenDatos();
   purgarCopias();                                    // las copias locales caducan a los 7 días
   if (logged()) { try { purgarCopias((await api('/portfolios')).map(c => c.id)); } catch { /* sin conexión: se purgará en la próxima carga */ } }   // y las de OTRA cuenta se borran al entrar esta
   if (logged()) await migrarRadarLocal();            // el radar de este dispositivo pasa a la cuenta (idempotente)
