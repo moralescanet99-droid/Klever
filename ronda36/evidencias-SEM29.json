@@ -1,0 +1,98 @@
+[
+ {
+  "id": "H1",
+  "escenario": "Huella: superada en el borde, no superada al 40 %, sin datos en el centro (y distinta de «no superada»)",
+  "esperado": "radios 36 · 14,4 · 36 · 0 · 36; estados ok/no/ok/nd/ok",
+  "observado": "[[\"ok\",36],[\"no\",14.4],[\"ok\",36],[\"nd\",0],[\"ok\",36]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H2",
+  "escenario": "SVG: accesible con título o decorativo sin él; marca 3 superadas y un punto hueco por el dato que falta",
+  "esperado": "role=img + aria-label / aria-hidden; data-superadas=3; un h-nd",
+  "observado": "<svg class=\"huella\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Huella de X: 3 de 5\" data-superadas=\"3\"><polygon class=…",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3",
+  "escenario": "Un título con comillas no rompe el SVG",
+  "esperado": "comillas escapadas",
+  "observado": "<svg class=\"huella\" viewBox=\"0 0 100 100\" role=\"img\" aria-label=\"Coca-Cola &quot;KO&quot;\" data-superadas=\"3\">",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R1",
+  "escenario": "Cartera concentrada y sin ideas: ningún reto conseguido",
+  "esperado": "0 de 5; cada uno con su pista",
+  "observado": "[[\"concentracion\",false],[\"variedad\",false],[\"idea\",false],[\"seguir\",false],[\"revisar\",false]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R2",
+  "escenario": "Repartida en 5 categorías, una idea revisada y 3 empresas seguidas: 5 de 5",
+  "esperado": "5 de 5",
+  "observado": "[[\"concentracion\",true],[\"variedad\",true],[\"idea\",true],[\"seguir\",true],[\"revisar\",true]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R3",
+  "escenario": "Sin poder leer ideas ni empresas seguidas: esos retos quedan «sin datos» (null), nunca conseguidos ni suspendidos",
+  "esperado": "idea/seguir/revisar = null; 2 conseguidos",
+  "observado": "[[\"concentracion\",true],[\"variedad\",true],[\"idea\",null],[\"seguir\",null],[\"revisar\",null]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R4",
+  "escenario": "Sin carteras: nada conseguido y la pista invita a crear la primera",
+  "esperado": "pista «Crea tu primera cartera»",
+  "observado": "[{\"id\":\"concentracion\",\"titulo\":\"Que ninguna posición pese más del 25 %\",\"hecho\":false,\"ir\":\"#inicio\",\"pista\":\"Crea tu primera cartera.\"},{\"id\":\"variedad\",\"titulo\":\"Reparte en 5 categorías o más\",\"hecho\":false,\"ir\":\"#empresas\",\"pista\":\"Crea tu primera cartera.\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "R5",
+  "escenario": "El reto de concentración usa los umbrales PROPIOS (70 %): KO 60 % lo cumple",
+  "esperado": "concentracion hecho; título «más del 70 %»",
+  "observado": "{\"id\":\"concentracion\",\"titulo\":\"Que ninguna posición pese más del 70 %\",\"hecho\":true,\"ir\":\"#laboratorio\",\"pista\":\"Prueba en el laboratorio a bajar la mayor.\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S1",
+  "escenario": "Ideas de los próximos 7 días (en estudio): 2, una de ellas hoy; la descartada no cuenta",
+  "esperado": "tocan 2, vencidas 1",
+  "observado": "{\"tocan\":[\"2026-11-07\",\"2026-11-12\"],\"vencidas\":1}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S2",
+  "escenario": "Señal principal de cada cartera y sin «cambios» la primera vez (no hay instantánea anterior)",
+  "esperado": "Exposición alta: Tecnología; sin cambios; desde null",
+  "observado": "{\"s\":\"Exposición alta: Tecnología\",\"c\":[],\"d\":null}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S3",
+  "escenario": "Desde la última visita: la exposición alta se resolvió (cambio de la persona, no del mercado)",
+  "esperado": "una «resuelta» con el texto de la señal; desde 2026-11-01",
+  "observado": "{\"c\":[{\"cartera\":\"Concentrada\",\"tipo\":\"resuelta\",\"texto\":\"Exposición alta: Tecnología\"},{\"cartera\":\"Concentrada\",\"tipo\":\"resuelta\",\"texto\":\"NVDA pesa el 40 %\"},{\"cartera\":\"Concentrada\",\"tipo\":\"nueva\",\"texto\":\"Sin concentraciones destacadas\"}],\"d\":\"2026-11-01\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "S4",
+  "escenario": "Una instantánea del MISMO día no se usa como «última visita»",
+  "esperado": "sin cambios, desde null",
+  "observado": "{\"c\":[],\"d\":null}",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

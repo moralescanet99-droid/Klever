@@ -1,0 +1,114 @@
+[
+ {
+  "id": "AF1-1440",
+  "escenario": "Portada: rueda de esferas (1440 px)",
+  "esperado": "9 esferas; la del centro con «N/5», el nombre y sector y una frase; sin «%» ni «rentabilidad»",
+  "observado": "{\"n\":9,\"centro\":\"JNJ\",\"cifra\":\"5/5\",\"frase\":\"Supera las cinco comprobaciones\",\"eti\":\"Johnson & Johnson · Salud\",\"aria\":\"rueda-portada-o4\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF2-1440",
+  "escenario": "La rueda con el teclado (1440 px)",
+  "esperado": "flecha abajo cambia la del centro; Intro abre la hoja con la huella accesible; Escape la cierra",
+  "observado": "{\"antes\":\"JNJ\",\"tras\":\"XOM\",\"hoja\":{\"abierta\":true,\"huella\":true,\"t\":\"Exxon Mobil XOM\"},\"cerrada\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF3-1440",
+  "escenario": "«Probar en una cartera» desde la rueda (1440 px)",
+  "esperado": "laboratorio con XOM",
+  "observado": "{\"hash\":\"#laboratorio\",\"t\":\"XOM\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF4-1440",
+  "escenario": "«Hoy»: frase con iconos y rueda de la temporada (1440 px)",
+  "esperado": "«Tu cartera reparte en 3 categorías y estrena su temporada esta semana» con 2 iconos; una esfera (esta semana) con su nivel de concentración",
+  "observado": "{\"frase\":\"Tu cartera reparte en 3 categorías y estrena su temporada esta semana.\",\"iconos\":2,\"esferas\":1,\"cifra\":\"Alta\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF1-390",
+  "escenario": "Portada: rueda de esferas (390 px)",
+  "esperado": "9 esferas; la del centro con «N/5», el nombre y sector y una frase; sin «%» ni «rentabilidad»",
+  "observado": "{\"n\":9,\"centro\":\"JNJ\",\"cifra\":\"5/5\",\"frase\":\"Supera las cinco comprobaciones\",\"eti\":\"Johnson & Johnson · Salud\",\"aria\":\"rueda-portada-o4\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF2-390",
+  "escenario": "La rueda con el teclado (390 px)",
+  "esperado": "flecha abajo cambia la del centro; Intro abre la hoja con la huella accesible; Escape la cierra",
+  "observado": "{\"antes\":\"JNJ\",\"tras\":\"XOM\",\"hoja\":{\"abierta\":true,\"huella\":true,\"t\":\"Exxon Mobil XOM\"},\"cerrada\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF3-390",
+  "escenario": "«Probar en una cartera» desde la rueda (390 px)",
+  "esperado": "laboratorio con XOM",
+  "observado": "{\"hash\":\"#laboratorio\",\"t\":\"XOM\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF4-390",
+  "escenario": "«Hoy»: frase con iconos y rueda de la temporada (390 px)",
+  "esperado": "«Tu cartera reparte en 3 categorías y estrena su temporada esta semana» con 2 iconos; una esfera (esta semana) con su nivel de concentración",
+  "observado": "{\"frase\":\"Tu cartera reparte en 3 categorías y estrena su temporada esta semana.\",\"iconos\":2,\"esferas\":1,\"cifra\":\"Alta\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF1-320",
+  "escenario": "Portada: rueda de esferas (320 px)",
+  "esperado": "9 esferas; la del centro con «N/5», el nombre y sector y una frase; sin «%» ni «rentabilidad»",
+  "observado": "{\"n\":9,\"centro\":\"JNJ\",\"cifra\":\"5/5\",\"frase\":\"Supera las cinco comprobaciones\",\"eti\":\"Johnson & Johnson · Salud\",\"aria\":\"rueda-portada-o4\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF2-320",
+  "escenario": "La rueda con el teclado (320 px)",
+  "esperado": "flecha abajo cambia la del centro; Intro abre la hoja con la huella accesible; Escape la cierra",
+  "observado": "{\"antes\":\"JNJ\",\"tras\":\"XOM\",\"hoja\":{\"abierta\":true,\"huella\":true,\"t\":\"Exxon Mobil XOM\"},\"cerrada\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF3-320",
+  "escenario": "«Probar en una cartera» desde la rueda (320 px)",
+  "esperado": "laboratorio con XOM",
+  "observado": "{\"hash\":\"#laboratorio\",\"t\":\"XOM\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF4-320",
+  "escenario": "«Hoy»: frase con iconos y rueda de la temporada (320 px)",
+  "esperado": "«Tu cartera reparte en 3 categorías y estrena su temporada esta semana» con 2 iconos; una esfera (esta semana) con su nivel de concentración",
+  "observado": "{\"frase\":\"Tu cartera reparte en 3 categorías y estrena su temporada esta semana.\",\"iconos\":2,\"esferas\":1,\"cifra\":\"Alta\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AF5",
+  "escenario": "«Reducir movimiento»: la rueda queda quieta",
+  "esperado": "ninguna esfera transformada ni animaciones en marcha",
+  "observado": "{\"trans\":0,\"anims\":0}",
+  "resultado": "OK"
+ }
+]

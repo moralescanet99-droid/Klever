@@ -1,0 +1,36 @@
+# comando: node tests/ronda21/testS.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:50:48 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [S1-1440] Portada (1440 px): promesa de producto y TRES entradas claras, con la transparencia de simulación visible desde el principio
+OK    [S2-1440] Crear desde cero (1440 px): cartera vacía con su aviso, primer activo, reparto al 100 %
+OK    [S3-1440] Guardar pidiendo acceso (1440 px): el borrador no se pierde
+OK    [S4-1440] Revisión de la cartera guardada (1440 px): «Tu cartera de un vistazo», estado de guardado inequívoco y acción «Probar un cambio»
+OK    [S5-1440] Comparación (1440 px): «Cartera base» frente a «Alternativa simulada», con el origen del peso añadido y sin afirmar que sea mejor
+OK    [S6-1440] Guardar en mi Cuaderno (1440 px): pregunta, motivo, qué me haría cambiar de opinión y fecha; la cartera base NO cambia
+OK    [S7b-1440] Usuario recurrente (1440 px): la portada le lleva a lo que toca revisar
+OK    [S7-1440] Cerrar sesión y volver con la misma cuenta (1440 px): la idea reaparece en «Para revisar»
+OK    [S8-1440] Registrar revisión (1440 px): se suma al historial; la pregunta y la invalidación originales siguen; persiste tras recargar
+OK    [S9-1440] Idea reprogramada y aislamiento (1440 px)
+OK    [S0-1440] Sin errores de JavaScript ni diálogos inesperados en el recorrido (1440 px)
+OK    [S1-390] Portada (390 px): promesa de producto y TRES entradas claras, con la transparencia de simulación visible desde el principio
+OK    [S2-390] Crear desde cero (390 px): cartera vacía con su aviso, primer activo, reparto al 100 %
+OK    [S3-390] Guardar pidiendo acceso (390 px): el borrador no se pierde
+OK    [S4-390] Revisión de la cartera guardada (390 px): «Tu cartera de un vistazo», estado de guardado inequívoco y acción «Probar un cambio»
+OK    [S5-390] Comparación (390 px): «Cartera base» frente a «Alternativa simulada», con el origen del peso añadido y sin afirmar que sea mejor
+OK    [S6-390] Guardar en mi Cuaderno (390 px): pregunta, motivo, qué me haría cambiar de opinión y fecha; la cartera base NO cambia
+OK    [S7b-390] Usuario recurrente (390 px): la portada le lleva a lo que toca revisar
+OK    [S7-390] Cerrar sesión y volver con la misma cuenta (390 px): la idea reaparece en «Para revisar»
+OK    [S8-390] Registrar revisión (390 px): se suma al historial; la pregunta y la invalidación originales siguen; persiste tras recargar
+OK    [S9-390] Idea reprogramada y aislamiento (390 px)
+OK    [S0-390] Sin errores de JavaScript ni diálogos inesperados en el recorrido (390 px)
+OK    [S10-1440] Explorar un ejemplo (1440 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación
+OK    [S11-1440] Recrear mi cartera (1440 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio
+OK    [S12-1440] Teclado real (1440 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío
+OK    [S13-1440] Sin errores de JavaScript ni desbordes en las otras entradas (1440 px)
+OK    [S10-390] Explorar un ejemplo (390 px): copia editable rotulada como ejemplo simulado; SIN nota global el recorrido sigue siendo útil y llega a la comparación
+OK    [S11-390] Recrear mi cartera (390 px): representación manual, sin conexión con bróker; un activo que no existe NO se sustituye en silencio
+OK    [S12-390] Teclado real (390 px): se llega con Tab a «Crear desde cero» y Enter abre el editor vacío
+OK    [S13-390] Sin errores de JavaScript ni desbordes en las otras entradas (390 px)
+
+RESULTADO: 30 correctas, 0 fallos

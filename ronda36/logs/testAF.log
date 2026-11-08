@@ -1,0 +1,22 @@
+# comando: node tests/ronda35/testAF.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:50:49 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AF1-1440] Portada: rueda de esferas (1440 px)
+OK    [AF2-1440] La rueda con el teclado (1440 px)
+OK    [AF3-1440] «Probar en una cartera» desde la rueda (1440 px)
+OK    [AF4-1440] «Hoy»: frase con iconos y rueda de la temporada (1440 px)
+OK    [AF0-1440] Sin errores ni desbordes (1440 px)
+OK    [AF1-390] Portada: rueda de esferas (390 px)
+OK    [AF2-390] La rueda con el teclado (390 px)
+OK    [AF3-390] «Probar en una cartera» desde la rueda (390 px)
+OK    [AF4-390] «Hoy»: frase con iconos y rueda de la temporada (390 px)
+OK    [AF0-390] Sin errores ni desbordes (390 px)
+OK    [AF1-320] Portada: rueda de esferas (320 px)
+OK    [AF2-320] La rueda con el teclado (320 px)
+OK    [AF3-320] «Probar en una cartera» desde la rueda (320 px)
+OK    [AF4-320] «Hoy»: frase con iconos y rueda de la temporada (320 px)
+OK    [AF0-320] Sin errores ni desbordes (320 px)
+OK    [AF5] «Reducir movimiento»: la rueda queda quieta
+
+RESULTADO: 16 correctas, 0 fallos

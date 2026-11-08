@@ -1,0 +1,9 @@
+# comando: node tests/ronda33/testAD.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:50:49 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AD1] Cada carga avisa una «visita» y no se guarda nada en el dispositivo
+OK    [AD2] Llegar desde un enlace compartido
+OK    [AD3] Hoja de estilo única con los tokens aplicados
+
+RESULTADO: 3 correctas, 0 fallos

@@ -1,0 +1,12 @@
+# comando: node tests/ronda36/testAG.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:50:49 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AG1-390] Solo mayores de 18 (390 px)
+OK    [AG2-390] Tarjeta para compartir (390 px)
+OK    [AG0-390] Sin errores ni desbordes (390 px)
+OK    [AG1-1440] Solo mayores de 18 (1440 px)
+OK    [AG2-1440] Tarjeta para compartir (1440 px)
+OK    [AG0-1440] Sin errores ni desbordes (1440 px)
+
+RESULTADO: 6 correctas, 0 fallos

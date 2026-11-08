@@ -1,0 +1,48 @@
+# comando: node tests/ronda30/unit-ronda30.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:40:46 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [S1] lunesDe: la semana es la del lunes (UTC) que contiene el día
+OK    [S2] fotoCartera: solo niveles, número de categorías y señales (sin pesos sueltos ni importes)
+OK    [S3] fotoValida descarta formas inesperadas
+OK    [E1] Evolución con tres semanas: de Alta/Poca a Baja/Amplia
+OK    [E2] Orden indiferente y empeorar también se dice
+OK    [E3] Con una sola semana NO hay evolución (no se inventa)
+OK    [E4] Evolución: como mucho 6 semanas y nunca semanas futuras; filas dañadas fuera
+OK    [C1] Cambios de señales desde la última semana con foto
+OK    [C2] Sin semana anterior o sin foto de esta semana: sin cambios
+OK    [C3] fotoAnterior: la última semana ANTERIOR a la actual
+OK    [W1] Reto de la semana: rota cada lunes por los cinco y es el mismo toda la semana
+OK    [W2] Si el que toca necesita una semana anterior y no la hay, se pasa al siguiente
+OK    [W3] «Mejora un indicador»: conseguido solo si sube respecto a la semana anterior
+OK    [W4] «Guarda esta semana una idea»: cuenta solo lo guardado desde el lunes; sin poder leer ideas se salta
+OK    [W5] Nunca hay un reto de rentabilidad ni de precio
+OK    [W6] Sin carteras ni ideas: no hay reto que aplicar
+OK    [I1] Empresas de una idea: la que se añade primero y luego las que ceden peso (como mucho 8)
+OK    [I2] Foto de datos: estados ok/no/nd por comprobación y periodo; sin fila = sin datos
+OK    [I3] validarFoto descarta formas inesperadas
+OK    [I4] Qué ha cambiado: ROIC de «no superada» a «superada» y un informe nuevo
+OK    [I5] Sin cambios se dice; una empresa que hoy no aparece es «no se puede comparar», no un cambio
+OK    [I6] «Mira atrás»: la idea en estudio más antigua con foto y al menos 28 días
+OK    [V1] /api/semana sin sesión
+OK    [V2] Primera visita: registra la foto de ESTA semana de cada cartera con posiciones (no la vacía) y la devuelve
+OK    [V3] Lo guardado: niveles, categorías y señales; NUNCA importes ni la composición
+OK    [V4] Otra visita la misma semana: actualiza la foto de la semana (no añade otra)
+OK    [V5] Con una semana anterior: evolución y cambios salen del servidor; lo de hace más de medio año y lo de carteras borradas se elimina
+OK    [V6] Una fila dañada en la base no se entrega (ni rompe la respuesta)
+OK    [V7] Aislamiento: la otra cuenta solo ve y escribe lo suyo
+semana: Error: fallo simulado de infraestructura
+    at file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:77
+    at Array.map (<anonymous>)
+    at Object.batch (file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:22)
+    at onRequestGet (file:///home/user/Klever/functions/api/semana.js:20:35)
+    at async llama (file:///home/user/Klever/tests/ronda30/unit-ronda30.mjs:90:13)
+    at async file:///home/user/Klever/tests/ronda30/unit-ronda30.mjs:117:32
+OK    [V8] Fallo de la base: error claro y nada a medias
+OK    [V9] Borrar una cartera borra también su foto semanal (es privada)
+OK    [F1] Guardar una idea: el servidor hace la foto (no la acepta del cliente)
+OK    [F2] Leer la idea más tarde: conserva su foto y se compara con los datos de hoy
+OK    [F3] Una foto manipulada en la base no se entrega
+OK    [F4] Un reintento con la misma clave no duplica la idea
+
+RESULTADO: 35 correctas, 0 fallos
