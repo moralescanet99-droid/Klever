@@ -1,0 +1,58 @@
+[
+ {
+  "id": "H1",
+  "escenario": "Cartera principal: la última tocada CON posiciones",
+  "esperado": "«Tocada ayer» (no la vacía más reciente)",
+  "observado": "Tocada ayer",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H2",
+  "escenario": "Si ninguna tiene posiciones, la última tocada; sin carteras, nada",
+  "esperado": "«Nueva vacía»; null",
+  "observado": "[2,null]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3",
+  "escenario": "Concentrada: semáforos, señal y la acción «Ver qué cambiaría» con la hipótesis de la señal",
+  "esperado": "Concentración y Variedad (sin «Datos»); señal de alerta; acción lab con NVDA y un peso menor que 40",
+  "observado": "{\"id\":3,\"nombre\":\"Tocada ayer\",\"pos\":[{\"ticker\":\"NVDA\",\"peso\":40},{\"ticker\":\"MSFT\",\"peso\":20},{\"ticker\":\"KO\",\"peso\":20},{\"ticker\":\"JNJ\",\"peso\":20}],\"n\":4,\"indicadores\":[{\"id\":\"concentracion\",\"etiqueta\":\"Concentración\",\"nivel\":\"alto\",\"valor\":\"Alta\"},{\"id\":\"variedad\",\"etiqueta\":\"Variedad\",\"nivel\":\"medio\",\"valor\":\"Media\"}],\"senal\":{\"nivel\":\"alerta\",\"titulo\":\"Exposición alta: Tecnología\"},\"accion\":{\"tipo\":\"lab\",\"texto\":\"Ver qué cambiaría\",\"ticker\":\"NVDA\",\"peso\":20,\"fin\":\"proporcional\",\"pregunta\":\"¿Y si NVDA pesara menos?\"}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H4",
+  "escenario": "Sin alertas: la acción es abrir la cartera (no se inventa un cambio)",
+  "esperado": "acción «Abrir mi cartera»",
+  "observado": "{\"tipo\":\"abrir\",\"texto\":\"Abrir mi cartera\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H5",
+  "escenario": "Cartera vacía: invita a añadir empresas",
+  "esperado": "vacia y «Añadir empresas»",
+  "observado": "{\"id\":2,\"nombre\":\"Nueva vacía\",\"vacia\":true,\"accion\":{\"tipo\":\"abrir\",\"texto\":\"Añadir empresas\"}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H6",
+  "escenario": "Anillo: un tramo por posición con el color por orden (como la lista y el editor) y decorativo",
+  "esperado": "var(--c0), var(--c1), var(--c2); aria-hidden",
+  "observado": "<svg class=\"hoy-anillo\" viewBox=\"0 0 132 132\" aria-hidden=\"true\" focusable=\"false\"><g transform=\"rotate(-90 66 66)\"><circle cx=\"66\" cy=\"66\" r=\"59.00\" fill=\"none",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H7",
+  "escenario": "Nada de importes ni rentabilidad en el modelo",
+  "esperado": "sin «€», «rentab» ni «ganan»",
+  "observado": "",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

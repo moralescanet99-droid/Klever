@@ -1,0 +1,14 @@
+# comando: node tests/ronda10/unit-acceso.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:38:15 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [A1] Acceso con envío de correo (configuración pública, sin DEV_RETURN_LINK)
+OK    [A2] Enlace de un solo uso
+OK    [A3] Tokens guardados solo como hash
+OK    [A4] Caducidad del enlace
+OK    [A5] Si el correo no se puede enviar (proveedor caído o sin configurar)
+OK    [A6] El enlace en pantalla solo con DEV_RETURN_LINK exactamente «1»
+OK    [A7] Límites de envío por correo
+OK    [A8] La configuración desplegable no activa el enlace en pantalla ni guarda secretos (modo repositorio)
+
+RESULTADO: 8 correctas, 0 fallos

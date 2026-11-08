@@ -1,0 +1,82 @@
+[
+ {
+  "id": "C1",
+  "escenario": "JPM 50 % + KO 50 %, KO sin EBITDA (caso 1 de la revisión)",
+  "esperado": "Coexisten las dos causas: método no aplicable (banco, 50 %) Y dato ausente (KO). El resumen dice las dos y no sustituye una por otra",
+  "observado": "Evaluación parcial · El método no analiza la deuda y los beneficios del banco (50 %) y faltan datos de KO. · JPM metodo_no_aplicable@deuda,metodo_no_aplicable@deuda,metodo_no_aplicable@rentabilidad,metodo_no_aplicable@rentabilidad,metodo_no_aplicable@rentabilidad · KO dato_ausente@deuda",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "SCHD 1 % + AAPL 99 %, sin tocar la semilla (caso 2)",
+  "esperado": "La causa es la población de comparables de AAPL (no un «dato ausente» ni el ETF del 1 %): el ETF solo se menciona al final, como otra limitación, sin culparle del umbral de cobertura",
+  "observado": "No hay comparables suficientes en su sector para valorar «deuda y caja» y «rentabilidad y crecimiento» de AAPL (99 %). Además, el método no analiza la composición de los ETF (1 %). · AAPL comparables_insuficientes@deuda,comparables_insuficientes@rentabilidad",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3",
+  "escenario": "JPM 50 % + PG 50 %, JPM sin capitalización (caso 3)",
+  "esperado": "La falta de capitalización YA NO queda relegada al detalle: el resumen menciona el método bancario y los datos de JPM; JPM conserva las dos causas (método y dato ausente en «tamaño y liquidez»)",
+  "observado": "El método no analiza la deuda y los beneficios del banco (50 %) y faltan datos de JPM. · JPM dato_ausente@tamano,metodo_no_aplicable@deuda,metodo_no_aplicable@deuda,metodo_no_aplicable@rentabilidad,metodo_no_aplicable@rentabilidad,metodo_no_aplicable@rentabilidad",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4",
+  "escenario": "Caso conjunto ETF 20 % + banco 40 % + dato ausente de KO 40 %",
+  "esperado": "Una sola frase con las tres causas, cada porcentaje una vez y ninguno sumado a otro (20 + 40 + 40 no se mezcla)",
+  "observado": "El método no analiza la composición de los ETF (20 %) ni la deuda y los beneficios del banco (40 %) y faltan datos de KO.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5",
+  "escenario": "Plantilla mixta actual (con ETF)",
+  "esperado": "JNJ y XOM tienen datos, pero su sector no alcanza los comparables exigidos: se dice «no hay comparables suficientes», no «faltan datos». El encabezado es «Sin nota global», no «pendiente»; encabezado y texto en el HTML",
+  "observado": "Sin nota global · El método no analiza la composición de los ETF (33,6 %) y no hay comparables suficientes en su sector para valorar «deuda y caja» y «rentabilidad y crecimiento» de JNJ y XOM (33,2 %).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C6",
+  "escenario": "Solo ETF",
+  "esperado": "Todo el peso son ETF; sin cifra; «Sin nota global»; sin culpar a datos",
+  "observado": "Sin nota global · Todo el peso son ETF y el método no analiza su composición.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C7",
+  "escenario": "Cartera con nota (KO 60 % / PG 40 %)",
+  "esperado": "Se conserva la nota 4,4, el titular y los pesos; sin estado de «sin nota»",
+  "observado": "nota 4.4 · Toda la cartera está en Consumo básico y Coca-Cola concentra el 60 %. · estado null",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8",
+  "escenario": "KO 50 % + JPM 50 % (evaluación parcial con un banco)",
+  "esperado": "Se conserva la explicación del banco («Podemos medir cómo repartes tu cartera…») y el encabezado pasa a «Evaluación parcial»",
+  "observado": "Evaluación parcial · Podemos medir cómo repartes tu cartera. La mitad está en un banco y este método todavía no evalúa bien la deuda y los be",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C9",
+  "escenario": "Espera real (procedencia incompleta)",
+  "esperado": "Sin bloques calculados: el único caso en que se conserva «Nota pendiente»",
+  "observado": "Nota pendiente",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C10",
+  "escenario": "Cuatro familias a la vez (ETF 20 %, banco 30 %, KO 20 % sin EBITDA, AAPL 30 %)",
+  "esperado": "Todas las causas llevan un código estable; el resumen nombra cada familia una vez; los pesos de cada una aparecen una vez y sin sumarse entre sí",
+  "observado": "El método no analiza la composición de los ETF (20 %) ni la deuda y los beneficios del banco (30 %), no hay comparables suficientes en su sector para valorar «deuda y caja» y «rentabilidad y crecimiento» de AAPL (30 %) y faltan datos de KO.",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

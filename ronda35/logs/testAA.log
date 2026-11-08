@@ -1,0 +1,21 @@
+# comando: node tests/ronda29/testAA.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:53:32 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AA1-1440] Arranque guiado (1440 px): dos preguntas y la cartera de ejemplo ya revisada
+OK    [AA2-1440] Ya tengo cartera / empezar de cero (1440 px)
+OK    [AA3-1440] Huella de empresa (1440 px)
+OK    [AA4-1440] «Tu semana» en Mis carteras (1440 px)
+OK    [AA0-1440] Sin errores ni desbordes (1440 px)
+OK    [AA1-390] Arranque guiado (390 px): dos preguntas y la cartera de ejemplo ya revisada
+OK    [AA2-390] Ya tengo cartera / empezar de cero (390 px)
+OK    [AA3-390] Huella de empresa (390 px)
+OK    [AA4-390] «Tu semana» en Mis carteras (390 px)
+OK    [AA0-390] Sin errores ni desbordes (390 px)
+OK    [AA1-320] Arranque guiado (320 px): dos preguntas y la cartera de ejemplo ya revisada
+OK    [AA2-320] Ya tengo cartera / empezar de cero (320 px)
+OK    [AA3-320] Huella de empresa (320 px)
+OK    [AA4-320] «Tu semana» en Mis carteras (320 px)
+OK    [AA0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 15 correctas, 0 fallos

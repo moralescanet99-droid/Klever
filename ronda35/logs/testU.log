@@ -1,0 +1,30 @@
+# comando: node tests/ronda23/testU.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:53:32 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [U1-1440] Primer envío lento y edición durante la espera (1440 px)
+OK    [U2-1440] Reintento lento y edición durante la espera (1440 px)
+OK    [U3-1440] Conflicto y lectura posterior fallida (1440 px)
+OK    [U4-1440] Sesión caducada y regreso con la misma cuenta (1440 px)
+OK    [U5-1440] Otra cuenta no ve el borrador (1440 px)
+OK    [U5b-1440] Cerrar sesión a propósito borra los borradores de revisión (1440 px)
+OK    [U6-1440] Base inalterada tras todos los casos (1440 px)
+OK    [U0-1440] Sin errores de JavaScript ni diálogos inesperados (1440 px)
+OK    [U1-390] Primer envío lento y edición durante la espera (390 px)
+OK    [U2-390] Reintento lento y edición durante la espera (390 px)
+OK    [U3-390] Conflicto y lectura posterior fallida (390 px)
+OK    [U4-390] Sesión caducada y regreso con la misma cuenta (390 px)
+OK    [U5-390] Otra cuenta no ve el borrador (390 px)
+OK    [U5b-390] Cerrar sesión a propósito borra los borradores de revisión (390 px)
+OK    [U6-390] Base inalterada tras todos los casos (390 px)
+OK    [U0-390] Sin errores de JavaScript ni diálogos inesperados (390 px)
+OK    [U1-320] Primer envío lento y edición durante la espera (320 px)
+OK    [U2-320] Reintento lento y edición durante la espera (320 px)
+OK    [U3-320] Conflicto y lectura posterior fallida (320 px)
+OK    [U4-320] Sesión caducada y regreso con la misma cuenta (320 px)
+OK    [U5-320] Otra cuenta no ve el borrador (320 px)
+OK    [U5b-320] Cerrar sesión a propósito borra los borradores de revisión (320 px)
+OK    [U6-320] Base inalterada tras todos los casos (320 px)
+OK    [U0-320] Sin errores de JavaScript ni diálogos inesperados (320 px)
+
+RESULTADO: 24 correctas, 0 fallos

@@ -4,7 +4,7 @@
 | Fase | Estado |
 |---|---|
 | 1 · Cimientos: código por pantallas, un sistema de diseño, pruebas rápidas, medición | ✅ ronda 33 (1216/0). Mis carteras y editor en módulos → fase 2; Vite → fase 6 |
-| 2 · UX: «Hoy», menos texto, Descubrir como feed, editar con los dedos, primer minuto (+ portada futurista y rueda de la temporada, C49) | 🟡 «Hoy» hecho (ronda 34) |
+| 2 · UX: «Hoy», menos texto, Descubrir como feed, editar con los dedos, primer minuto (+ portada futurista y rueda de la temporada, C49) | 🟡 «Hoy» (ronda 34) y portada con rueda + temporada (ronda 35) hechos; faltan menos texto, Descubrir como feed, editar con los dedos y primer minuto |
 | 3 · Perfil y objetivo | ⬜ |
 | 4 · Comunidad | ⬜ |
 | 5 · Liga (bloqueo: fuente de precios legal y gratuita) | ⬜ |

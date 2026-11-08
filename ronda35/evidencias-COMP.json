@@ -1,0 +1,74 @@
+[
+ {
+  "id": "P1",
+  "escenario": "Caso base: A crece +20 %, B cae −10 %",
+  "esperado": "Crecimiento A 20,0 % y B −10,0 %; margen operativo A 20,0 % y B 10,0 % (resultado operativo / ventas); deuda A 2,0 veces y B «Caja neta (−0,5 veces)»",
+  "observado": "[[\"20,0 %\",\"-10,0 %\"],[\"20,0 %\",\"10,0 %\"],[\"2,0 veces\",\"Caja neta (-0,5 veces)\"]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P1b",
+  "escenario": "Solo tres filas y ninguna clasificación de «ganadores»",
+  "esperado": "3 filas; ninguna propiedad ganador/mejor/puntuación",
+  "observado": "[\"id\",\"nombre\",\"definicion\",\"unidad\",\"a\",\"b\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P2",
+  "escenario": "Sin resultado operativo (aunque haya beneficio neto)",
+  "esperado": "sin_dato con motivo; NO se sustituye por el margen neto (50 %)",
+  "observado": "sin_dato: Sin dato de resultado operativo (no se sustituye por el margen neto).",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P3",
+  "escenario": "EBITDA cero o negativo",
+  "esperado": "no_comparable con el motivo (la ratio no se interpreta)",
+  "observado": "no_comparable / no_comparable",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P4",
+  "escenario": "EBITDA o deuda sin dato",
+  "esperado": "sin_dato en ambos casos",
+  "observado": "sin_dato / sin_dato",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P5",
+  "escenario": "Ejercicios desalineados (A llega a FY2024; B a FY2023)",
+  "esperado": "Se alinea en FY2023, el último en común; crecimiento de A: 100/100−1 = 0 pero necesita FY2022 (A no lo tiene) → sin_dato",
+  "observado": "ejercicio FY2023; sin_dato; B 100,0 %",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P6",
+  "escenario": "Sin ningún ejercicio en común",
+  "esperado": "Las tres filas no_comparable con motivo",
+  "observado": "[\"no_comparable\",\"no_comparable\",\"no_comparable\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P7",
+  "escenario": "Ventas del ejercicio anterior iguales a 0",
+  "esperado": "no_comparable (no se divide por cero)",
+  "observado": "no_comparable",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P8",
+  "escenario": "Fuente, periodo y fecha por cifra; sector distinto",
+  "esperado": "A: sec · FY2024 · 2026-11-02; B: prueba; mismoSector = false",
+  "observado": "[{\"periodo\":\"FY2024\",\"fuente\":\"sec\",\"fecha\":\"2026-11-02\"},{\"periodo\":\"FY2024\",\"fuente\":\"prueba\",\"fecha\":\"2026-11-04\"},false]",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

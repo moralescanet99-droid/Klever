@@ -1,0 +1,21 @@
+# comando: node tests/ronda34/testAE.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:53:32 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AE1-1440] «Hoy»: la cartera principal en grande (1440 px)
+OK    [AE3-1440] Nombre «Hoy» y lo que hay debajo (1440 px)
+OK    [AE2-1440] «Ver qué cambiaría» abre el laboratorio ya simulado (1440 px)
+OK    [AE4-1440] Al salir, «Hoy» se vacía (1440 px)
+OK    [AE0-1440] Sin errores ni desbordes (1440 px)
+OK    [AE1-390] «Hoy»: la cartera principal en grande (390 px)
+OK    [AE3-390] Nombre «Hoy» y lo que hay debajo (390 px)
+OK    [AE2-390] «Ver qué cambiaría» abre el laboratorio ya simulado (390 px)
+OK    [AE4-390] Al salir, «Hoy» se vacía (390 px)
+OK    [AE0-390] Sin errores ni desbordes (390 px)
+OK    [AE1-320] «Hoy»: la cartera principal en grande (320 px)
+OK    [AE3-320] Nombre «Hoy» y lo que hay debajo (320 px)
+OK    [AE2-320] «Ver qué cambiaría» abre el laboratorio ya simulado (320 px)
+OK    [AE4-320] Al salir, «Hoy» se vacía (320 px)
+OK    [AE0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 15 correctas, 0 fallos

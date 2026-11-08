@@ -1,0 +1,26 @@
+[
+ {
+  "id": "H1",
+  "escenario": "Guardado lento de A que termina cuando ya se ha abierto B",
+  "esperado": "La respuesta de A no modifica B (nombre, estado, revisión ni copia local); A queda guardada; B se puede editar y guardar después sin falso conflicto",
+  "observado": "durante: B «Cartera B» / «Guardada en tu cuenta»; tras la respuesta de A: B «Cartera B» / «Guardada en tu cuenta», pesos 50,0 50,0; A en la cuenta: «Nombre de A guardado», revisión 1; copia local de A=false, de B=false; guardar B después: botón Guardar activo=true, diálogo de conflicto=0, estado «Guardada en tu cuenta», cuenta B «Cartera B» KO:40,PG:60",
+  "resultado": "OK",
+  "evidencia": "H1-respuesta-tardia-1440.png"
+ },
+ {
+  "id": "H2",
+  "escenario": "Publicación lenta de A que termina cuando ya se ha abierto B",
+  "esperado": "A queda pública en el servidor; B sigue privada en pantalla («Privada», botón «Publicar cartera») y se guarda sin conflicto",
+  "observado": "B «Cartera B2»: chip «Privada», botón «Publicar cartera»; A pública en la cuenta=1; guardar B después: botón Guardar activo=true, estado «Guardada en tu cuenta», diálogo de conflicto=0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "H3",
+  "escenario": "Sin errores de JavaScript en la batería G",
+  "esperado": "Ninguno",
+  "observado": "ninguno",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

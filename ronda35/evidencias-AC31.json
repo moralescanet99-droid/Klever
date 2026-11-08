@@ -1,0 +1,149 @@
+[
+ {
+  "id": "AC1",
+  "escenario": "Instalable como app",
+  "esperado": "manifiesto «Klever» standalone con 4 iconos que existen; theme-color; viewport-fit=cover; icono, icono de Apple y Open Graph",
+  "observado": "{\"man\":{\"name\":\"Klever · carteras simuladas\",\"short\":\"Klever\",\"display\":\"standalone\",\"start\":\"/#inicio\",\"n\":4},\"iconos\":[true,true,true,true],\"theme\":\"#13100E\",\"vp\":\"width=device-width, initial-scale=1, viewport-fit=cover\",\"icono\":true,\"apple\":true,\"og\":\"Klever · carteras simuladas\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC2",
+  "escenario": "Tipografía propia autoalojada",
+  "esperado": "la fuente «Inter Klever» se carga desde /fonts y es la del cuerpo; ninguna petición a dominios externos (salvo TradingView, bloqueado en pruebas)",
+  "observado": "{\"fuente\":{\"cargada\":true,\"usada\":true},\"externas\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC3-1440",
+  "escenario": "Iconos SVG y barra inferior (1440 px)",
+  "esperado": "las 3 pestañas y el menú con icono SVG y su texto; ningún carácter de icono; en el móvil, barra translúcida",
+  "observado": "{\"tab\":[{\"svg\":true,\"txt\":\"Hoy\"},{\"svg\":true,\"txt\":\"Descubrir\"},{\"svg\":true,\"txt\":\"Cuaderno\"}],\"menu\":true,\"glifos\":false,\"fondo\":\"rgba(0, 0, 0, 0)\",\"visible\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC5-1440",
+  "escenario": "Explorar por tandas en el móvil (1440 px)",
+  "esperado": "en escritorio la tabla tiene todas las empresas",
+  "observado": "{\"e1\":{\"cards\":24,\"mas\":\"Mostrar 24 más (quedan 102)\",\"filas\":126,\"cuenta\":\"126 empresas\"},\"e2\":null,\"e3\":null}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC4-1440",
+  "escenario": "Accesibilidad del editor (1440 px)",
+  "esperado": "los tres pasos con nombre («Objetivo», «Distribución», «Revisión») aunque en el móvil solo se vea el número; barra de guardar = región «Guardar la cartera»",
+  "observado": "{\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"region\":\"region:Guardar la cartera\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC6-1440",
+  "escenario": "La barra de reparto se transforma, no se repinta (1440 px)",
+  "esperado": "el mismo elemento cambia de anchura (50 % → otra) con transición de «width»",
+  "observado": "{\"antes\":\"50%\",\"despues\":{\"mismo\":true,\"ancho\":\"54.55%\",\"trans\":\"width\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC7-1440",
+  "escenario": "Aviso de éxito dentro de la paleta (1440 px)",
+  "esperado": "fondo oscuro y texto claro (antes: franja beige con texto oscuro)",
+  "observado": "{\"txt\":\"Cartera guardada\",\"fondo\":\"rgb(36, 29, 24)\",\"color\":\"rgb(244, 237, 224)\",\"lf\":0.11814588235294118,\"lc\":0.9315670588235294}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún pageerror; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC3-390",
+  "escenario": "Iconos SVG y barra inferior (390 px)",
+  "esperado": "las 3 pestañas y el menú con icono SVG y su texto; ningún carácter de icono; en el móvil, barra translúcida",
+  "observado": "{\"tab\":[{\"svg\":true,\"txt\":\"Hoy\"},{\"svg\":true,\"txt\":\"Descubrir\"},{\"svg\":true,\"txt\":\"Cuaderno\"}],\"menu\":true,\"glifos\":false,\"fondo\":\"rgba(19, 16, 14, 0.72)\",\"visible\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC5-390",
+  "escenario": "Explorar por tandas en el móvil (390 px)",
+  "esperado": "24 tarjetas y «Mostrar 24 más (quedan …)»; tras pulsar, 48 y el foco en la primera nueva; «Coca» encuentra KO aunque no estuviera en la tanda",
+  "observado": "{\"e1\":{\"cards\":24,\"mas\":\"Mostrar 24 más (quedan 102)\",\"filas\":126,\"cuenta\":\"126 empresas\"},\"e2\":{\"cards\":48,\"foco\":true},\"e3\":{\"cards\":[\"KO\"],\"mas\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC4-390",
+  "escenario": "Accesibilidad del editor (390 px)",
+  "esperado": "los tres pasos con nombre («Objetivo», «Distribución», «Revisión») aunque en el móvil solo se vea el número; barra de guardar = región «Guardar la cartera»",
+  "observado": "{\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"region\":\"region:Guardar la cartera\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC6-390",
+  "escenario": "La barra de reparto se transforma, no se repinta (390 px)",
+  "esperado": "el mismo elemento cambia de anchura (50 % → otra) con transición de «width»",
+  "observado": "{\"antes\":\"50%\",\"despues\":{\"mismo\":true,\"ancho\":\"54.55%\",\"trans\":\"width\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC7-390",
+  "escenario": "Aviso de éxito dentro de la paleta (390 px)",
+  "esperado": "fondo oscuro y texto claro (antes: franja beige con texto oscuro)",
+  "observado": "{\"txt\":\"Cartera guardada\",\"fondo\":\"rgb(36, 29, 24)\",\"color\":\"rgb(244, 237, 224)\",\"lf\":0.11814588235294118,\"lc\":0.9315670588235294}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún pageerror; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC3-320",
+  "escenario": "Iconos SVG y barra inferior (320 px)",
+  "esperado": "las 3 pestañas y el menú con icono SVG y su texto; ningún carácter de icono; en el móvil, barra translúcida",
+  "observado": "{\"tab\":[{\"svg\":true,\"txt\":\"Hoy\"},{\"svg\":true,\"txt\":\"Descubrir\"},{\"svg\":true,\"txt\":\"Cuaderno\"}],\"menu\":true,\"glifos\":false,\"fondo\":\"rgba(19, 16, 14, 0.72)\",\"visible\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC5-320",
+  "escenario": "Explorar por tandas en el móvil (320 px)",
+  "esperado": "24 tarjetas y «Mostrar 24 más (quedan …)»; tras pulsar, 48 y el foco en la primera nueva; «Coca» encuentra KO aunque no estuviera en la tanda",
+  "observado": "{\"e1\":{\"cards\":24,\"mas\":\"Mostrar 24 más (quedan 102)\",\"filas\":126,\"cuenta\":\"126 empresas\"},\"e2\":{\"cards\":48,\"foco\":true},\"e3\":{\"cards\":[\"KO\"],\"mas\":false}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC4-320",
+  "escenario": "Accesibilidad del editor (320 px)",
+  "esperado": "los tres pasos con nombre («Objetivo», «Distribución», «Revisión») aunque en el móvil solo se vea el número; barra de guardar = región «Guardar la cartera»",
+  "observado": "{\"pasos\":[\"1 Objetivo\",\"2 Distribución\",\"3 Revisión\"],\"region\":\"region:Guardar la cartera\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC6-320",
+  "escenario": "La barra de reparto se transforma, no se repinta (320 px)",
+  "esperado": "el mismo elemento cambia de anchura (50 % → otra) con transición de «width»",
+  "observado": "{\"antes\":\"50%\",\"despues\":{\"mismo\":true,\"ancho\":\"54.55%\",\"trans\":\"width\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC7-320",
+  "escenario": "Aviso de éxito dentro de la paleta (320 px)",
+  "esperado": "fondo oscuro y texto claro (antes: franja beige con texto oscuro)",
+  "observado": "{\"txt\":\"Cartera guardada\",\"fondo\":\"rgb(36, 29, 24)\",\"color\":\"rgb(244, 237, 224)\",\"lf\":0.11814588235294118,\"lc\":0.9315670588235294}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún pageerror; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AC8",
+  "escenario": "«Reducir movimiento»: nada se mueve",
+  "esperado": "ninguna animación ni transición en marcha justo después de cambiar de vista",
+  "observado": "[]",
+  "resultado": "OK"
+ }
+]

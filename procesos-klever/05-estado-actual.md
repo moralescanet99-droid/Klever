@@ -16,7 +16,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Hoja de ruta (C43, `ronda33/PLAN.md`)
 - ✅ **Fase 1 (cimientos) hecha** (ronda 33, `ronda33/LEEME.md`): pruebas en paralelo (≈ 15 min) con reintento declarado, hoja de estilo única con tokens fusionados y `DESIGN.md`, embudo anónimo (migración 0014), módulos `base.js`, `explorar.js` y `semana-ui.js`, comparación visual (10 referencias); pasada **1216/0** (`55ea85b`). Mis carteras y el editor se separan en la fase 2; Vite, en la 6.
-- 🟡 **Fase 2 (UX):** ✅ «Hoy» con la cartera principal en grande (ronda 34, pasada **1238/0**). En curso: portada futurista con rueda de esferas y rueda de la temporada en «Hoy» (C49, `ronda35/INSPIRACION.md`). Pendiente: menos texto, Descubrir como feed, editar con los dedos, primer minuto.
+- 🟡 **Fase 2 (UX):** ✅ «Hoy» con la cartera principal en grande (ronda 34, pasada **1238/0**). ✅ Portada con rueda de esferas y «Hoy» con frase con iconos y rueda de la temporada (ronda 35, pasada **1254/0**, `6c544f8`). Pendiente: menos texto, Descubrir como feed, editar con los dedos, primer minuto.
 - ⬜ Fases 3 perfil → 4 comunidad → 5 liga → 6 publicar.
 
 ## Ronda 32 (C42)
