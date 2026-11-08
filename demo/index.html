@@ -4657,7 +4657,7 @@ async function pintarSemana(list, seq, vigente) {
 // La cartera principal es la última que has tocado (modificada o creada) que tiene posiciones. Nada de importes ni rentabilidad.
 // PURO en lo que calcula (eleccion y modelo); pintarHoy() solo dibuja con lo que recibe.
 
-let XH = null;   // contexto: { by, colorDe, abrirLab, go }
+let XH = null;   // contexto: { by, abrirLab }
 const iniciarHoy = ctx => {
   XH = ctx;
   $('#hoy-hero')?.addEventListener('click', e => {
@@ -4684,8 +4684,9 @@ function modeloHoy(c, activos = {}) {
     : { tipo: 'abrir', texto: 'Abrir mi cartera' };
   return { id: c.id, nombre: c.nombre, pos, n: r.n, indicadores: ind.map(i => ({ id: i.id, etiqueta: i.etiqueta, nivel: i.nivel, valor: i.valor })), senal: s && { nivel: s.nivel, titulo: s.titulo }, accion };
 }
-// Anillo SVG con un tramo por posición (los colores los da la app, estables por activo).
-function svgAnillo(pos, colorDe, { tam = 132, grosor = 14 } = {}) {
+// Anillo SVG con un tramo por posición. Color por ORDEN de la posición (como la barra de la lista y el editor al abrirla: los mismos colores).
+function svgAnillo(pos, { tam = 132, grosor = 14 } = {}) {
+  const colorDe = t => pos.findIndex(p => p.ticker === t) % 8;
   const r = (tam - grosor) / 2, C = 2 * Math.PI * r, total = Math.max(100, pos.reduce((a, p) => a + p.peso, 0));
   let acum = 0;
   const arcos = pos.map(p => { const l = p.peso / total * C, a = `<circle cx="${tam / 2}" cy="${tam / 2}" r="${r.toFixed(2)}" fill="none" stroke="var(--c${colorDe(p.ticker)})" stroke-width="${grosor}" stroke-dasharray="${Math.max(0, l - 1.5).toFixed(2)} ${(C - Math.max(0, l - 1.5)).toFixed(2)}" stroke-dashoffset="${(-acum).toFixed(2)}"/>`; acum += l; return a; }).join('');
@@ -4700,7 +4701,7 @@ function pintarHoy(lista) {
     : `<a class="btn btn-primario" href="#cartera-${m.id}">${esc(m.accion.texto)} →</a>`;
   el.innerHTML = m.vacia
     ? `<p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2><p class="mut">Aún no tiene empresas.</p><p class="hoy-acc">${boton}</p>`
-    : `<div class="hoy-grid"><div class="hoy-anillo-w">${svgAnillo(m.pos, XH.colorDe)}<span class="hoy-centro"><b>${m.n}</b><small>${m.n === 1 ? 'posición' : 'posiciones'}</small></span></div>
+    : `<div class="hoy-grid"><div class="hoy-anillo-w">${svgAnillo(m.pos)}<span class="hoy-centro"><b>${m.n}</b><small>${m.n === 1 ? 'posición' : 'posiciones'}</small></span></div>
       <div class="hoy-info"><p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2>
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
@@ -5873,7 +5874,7 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets(); activosListos();
-  iniciarHoy({ by: () => by, colorDe, abrirLab, go });
+  iniciarHoy({ by: () => by, abrirLab });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
