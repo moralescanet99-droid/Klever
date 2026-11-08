@@ -2272,3 +2272,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > ejecutarse lo que estás haciendo, me gustaría que un agente tuyo elabore un plan de marketing para hacer viral esta app, con el objetivo de que la gente se lo descargue y lo tenga y se registre en la página de forma gratuita. Por favor, mírtelo bien, quiero que sea minucioso y con toda la intención del mundo. Gracias.
 
 (Encargado a un agente en segundo plano; resultado en `ronda36/PLAN-MARKETING.md`.)
+
+## C51 · (2026-11-08) — aprobar el plan de marketing y aclarar las ligas, literal
+> Me gusta todo, solo que lo de las ligas, tiene que estar más claras su funcionamiento. Dicho esto empeiza ya con todo lo puedas
+
+(Aprueba las recomendaciones del plan: tarjeta para compartir en la fase 2, Temporada 0 sin rentabilidad, mayores de 18, revisión legal antes del día D. Funcionamiento de la Liga explicado en `ronda36/LIGA.md`.)
