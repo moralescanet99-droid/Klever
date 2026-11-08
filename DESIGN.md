@@ -45,3 +45,6 @@ Una sola hoja de estilo: `public/klever.css` (fase 1, ronda 33). Empieza con **u
 
 ## Deuda conocida (para las fases siguientes)
 La hoja única conserva, en sus secciones, reglas antiguas que luego se pisan (≈ 34 `!important`). Al rehacer cada pantalla en la fase 2 se eliminan las reglas muertas de esa pantalla, con su prueba visual.
+
+## Comprobación visual
+Las pantallas clave tienen una **captura de referencia aprobada** (`tests/visual/referencias/`): portada, Explorar, comparador y «Cómo funciona» a 390 y 1440 px, y Explorar y comparador a 345 px con el texto del sistema al 118 %. `tests/ronda33/testVisual.cjs` falla si alguna cambia más de un 0,1 %. Un cambio visual intencionado se aprueba con `ACTUALIZAR=1` y revisando las imágenes.
