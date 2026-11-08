@@ -92,6 +92,7 @@ const T10 = ['AAPL', 'MSFT', 'KO', 'PG', 'JNJ', 'XOM', 'NVDA', 'AMZN', 'GOOGL', 
 
     // --- Explorar empresas: resultados comparables, criterios y recorrido con búsqueda conservada
     const q = await nuevo(b, w, h); await q.goto(B + '#empresas'); await q.waitForSelector('.ver-ficha >> visible=true'); await q.waitForTimeout(500);
+    while (await q.locator('[data-emp-mas]').count()) { await q.click('[data-emp-mas]'); await q.waitForTimeout(80); }   // ronda 31: en el móvil la lista va por tandas; se despliega entera para comprobar TODAS
     const cmp = await q.evaluate(async esc => {
       const ideas = await (await fetch('/api/ideas')).json(), filas = [...document.querySelectorAll(esc ? '#empresas-lista tr' : '#empresas-cards li')].filter(e => e.querySelector('.pil'));
       const malas = []; let sinDat = 0, noSup = 0;
