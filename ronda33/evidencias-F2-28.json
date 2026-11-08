@@ -1,0 +1,82 @@
+[
+ {
+  "id": "P1",
+  "escenario": "Lista simple «KO 40, PG 60»",
+  "esperado": "dos pares exactos, nada desconocido",
+  "observado": "{\"pares\":[{\"ticker\":\"KO\",\"peso\":40},{\"ticker\":\"PG\",\"peso\":60}],\"desconocidos\":[],\"invalidos\":[]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P2",
+  "escenario": "Minúsculas, «:», «=», coma decimal, «%», saltos de línea y símbolo con punto",
+  "esperado": "AAPL 25,5 · MSFT 30 · BRK.B 10",
+  "observado": "[{\"ticker\":\"AAPL\",\"peso\":25.5},{\"ticker\":\"MSFT\",\"peso\":30},{\"ticker\":\"BRK.B\",\"peso\":10}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P3",
+  "escenario": "Un símbolo fuera del universo se declara y NO se sustituye por otro",
+  "esperado": "ZZZZ en desconocidos; KO y PG sí",
+  "observado": "{\"pares\":[{\"ticker\":\"KO\",\"peso\":40},{\"ticker\":\"PG\",\"peso\":60}],\"desconocidos\":[\"ZZZZ\"],\"invalidos\":[]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P4",
+  "escenario": "Pesos fuera de rango o con más de una decimal se rechazan (no se redondean en silencio)",
+  "esperado": "ningún par; tres inválidos",
+  "observado": "{\"pares\":[],\"desconocidos\":[],\"invalidos\":[\"KO 0\",\"PG 150\",\"AAPL 10,55\"]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P5",
+  "escenario": "Un símbolo repetido conserva el ÚLTIMO peso (una sola posición)",
+  "esperado": "KO 30",
+  "observado": "[{\"ticker\":\"KO\",\"peso\":30}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P6",
+  "escenario": "¿Parece una lista? Una búsqueda normal no; dos pares sí",
+  "esperado": "Apple / KO / «KO 40, PG 60»",
+  "observado": "[false,false,false,true]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "U1",
+  "escenario": "Sin umbrales propios: NVDA 35 % se señala (25 % de Klever)",
+  "esperado": "posicion",
+  "observado": "[\"categoria\",\"posicion\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "U2",
+  "escenario": "Con umbral propio de posición 50 %: NVDA 35 % ya no se señala y el detalle habla de «tu referencia»",
+  "esperado": "sin posicion; Tecnología 40 % sigue siendo categoría (40 de Klever)",
+  "observado": "[[\"categoria\",\"Tecnología suma el 40 % (NVDA, MSFT). Tu referencia: más del 40 % en una categoría.\"]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "U3",
+  "escenario": "Umbrales no válidos (texto, 0, 200) se ignoran y se usan los de Klever",
+  "esperado": "{\"posicion\":25,\"categoria\":40,\"sectores\":3,\"posiciones\":4}",
+  "observado": "[{\"posicion\":25,\"categoria\":40,\"sectores\":3,\"posiciones\":4},{\"posicion\":25,\"categoria\":40,\"sectores\":3,\"posiciones\":4}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "U4",
+  "escenario": "Cada señal trae su «por qué importa» (segundo nivel del detalle)",
+  "esperado": "todas con porque",
+  "observado": "[true,true]",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-08, ronda 31 (última generación, `ronda31/`); antes, 2026-11-07, ronda 30 (puntos 3–6 del punto 14, `ronda30/`); antes, pendientes del punto 14 anotados (C35–C36); antes, la ronda 29 (fase 2.5, `ronda29/`); antes, la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
+**Última actualización:** 2026-11-08, ronda 33 (fase 1, primera parte); antes, ronda 31 (última generación, `ronda31/`); antes, 2026-11-07, ronda 30 (puntos 3–6 del punto 14, `ronda30/`); antes, pendientes del punto 14 anotados (C35–C36); antes, la ronda 29 (fase 2.5, `ronda29/`); antes, la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
@@ -15,7 +15,8 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
 ## Hoja de ruta (C43, `ronda33/PLAN.md`)
-- ⬜ Fases 1 cimientos → 2 UX → 3 perfil → 4 comunidad → 5 liga → 6 publicar. Ninguna empezada.
+- 🟡 **Fase 1 (cimientos), primera parte hecha** (ronda 33, `ronda33/LEEME.md`): pruebas en paralelo (≈ 15 min), hoja de estilo única con tokens fusionados y `DESIGN.md`, embudo anónimo (migración 0014), utilidades en `base.js`; pasada **1206/0** (`ad1989b`). Falta: pantallas en módulos y comparación visual de capturas (Vite, en la fase 6).
+- ⬜ Fases 2 UX → 3 perfil → 4 comunidad → 5 liga → 6 publicar.
 
 ## Ronda 32 (C42)
 - ✅ Comparador y tarjetas de Explorar legibles en el móvil (también con el texto ampliado del sistema).

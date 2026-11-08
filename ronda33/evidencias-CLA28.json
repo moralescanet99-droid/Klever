@@ -1,0 +1,66 @@
+[
+ {
+  "id": "C1",
+  "escenario": "Repartida (5 × 20 %, 5 categorías): concentración baja y variedad amplia",
+  "esperado": "ok / ok",
+  "observado": "{\"concentracion\":\"ok\",\"variedad\":\"ok\",\"datos\":\"na\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "Bordes de concentración por posición: 24,9 % → baja; 25 % → media; 39,9 % → media; 40 % → alta",
+  "esperado": "ok · medio · medio · alto",
+  "observado": "[\"ok\",\"medio\",\"medio\",\"alto\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3",
+  "escenario": "Concentración por CATEGORÍA aunque ninguna posición llegue al 25 %: Tecnología 44 % (22 + 22) → media",
+  "esperado": "medio",
+  "observado": "medio",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4",
+  "escenario": "Los ETF cuentan como UNA variedad (dos ETF de dividendos + 2 acciones = 3)",
+  "esperado": "variedad media con «3 categorías»",
+  "observado": "{\"id\":\"variedad\",\"etiqueta\":\"Variedad\",\"nivel\":\"medio\",\"valor\":\"Media\",\"dato\":\"3 categorías\",\"detalle\":\"4 posiciones en 3 categorías (los ETF cuentan como una).\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5",
+  "escenario": "Sin evaluación disponible, «Datos» dice «Calculando» y no inventa un porcentaje",
+  "esperado": "nivel na, sin dato",
+  "observado": "{\"id\":\"datos\",\"etiqueta\":\"Datos\",\"nivel\":\"na\",\"valor\":\"Calculando\",\"dato\":\"\",\"detalle\":\"La información de las empresas aún no está disponible.\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C6",
+  "escenario": "«Datos» con evaluación: 50 % del peso analizable → parciales; 100 % → completos; 30 % → escasos",
+  "esperado": "medio · ok · alto",
+  "observado": "[\"medio\",\"ok\",\"alto\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C7",
+  "escenario": "Cartera vacía: ningún indicador",
+  "esperado": "[]",
+  "observado": "[]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8",
+  "escenario": "Reparto a partes iguales: suma EXACTAMENTE 100 %, una decimal, diferencia máxima de 0,1 entre posiciones",
+  "esperado": "para n = 1, 2, 3, 6, 7, 9, 11 y 30",
+  "observado": "[[1,[100]],[2,[50,50]],[3,[33.4,33.3,33.3]],[6,[16.7,16.7,16.7]],[7,[14.3,14.3,14.3]],[9,[11.2,11.1,11.1]],[11,[9.1,9.1,9.1]],[30,[3.4,3.4,3.4]]]",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

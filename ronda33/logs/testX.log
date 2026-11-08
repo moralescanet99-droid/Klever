@@ -1,0 +1,30 @@
+# comando: node tests/ronda28/testX.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 13:45:17 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [X1-1440] Portada (1440 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»
+OK    [X3-1440] Reparte a partes iguales (1440 px)
+OK    [X4-1440] Revisión (1440 px): tres indicadores en lenguaje llano con semáforo
+OK    [X5-1440] Laboratorio (1440 px): opción por defecto y pregunta llana
+OK    [X6-1440] Explorar (1440 px): glosario al pulsar y filtro «Solo sectores que no tengo»
+OK    [X7-1440] «Cómo funciona Klever» (1440 px)
+OK    [X2-1440] Una sola palabra (1440 px): ninguna pantalla principal dice «portafolio»
+OK    [X0-1440] Sin errores ni desbordes (1440 px)
+OK    [X1-390] Portada (390 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»
+OK    [X3-390] Reparte a partes iguales (390 px)
+OK    [X4-390] Revisión (390 px): tres indicadores en lenguaje llano con semáforo
+OK    [X5-390] Laboratorio (390 px): opción por defecto y pregunta llana
+OK    [X6-390] Explorar (390 px): glosario al pulsar y filtro «Solo sectores que no tengo»
+OK    [X7-390] «Cómo funciona Klever» (390 px)
+OK    [X2-390] Una sola palabra (390 px): ninguna pantalla principal dice «portafolio»
+OK    [X0-390] Sin errores ni desbordes (390 px)
+OK    [X1-320] Portada (320 px): un único botón principal visible que abre el editor vacío; las tres entradas siguen; enlace a «Cómo funciona»
+OK    [X3-320] Reparte a partes iguales (320 px)
+OK    [X4-320] Revisión (320 px): tres indicadores en lenguaje llano con semáforo
+OK    [X5-320] Laboratorio (320 px): opción por defecto y pregunta llana
+OK    [X6-320] Explorar (320 px): glosario al pulsar y filtro «Solo sectores que no tengo»
+OK    [X7-320] «Cómo funciona Klever» (320 px)
+OK    [X2-320] Una sola palabra (320 px): ninguna pantalla principal dice «portafolio»
+OK    [X0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 24 correctas, 0 fallos

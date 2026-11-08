@@ -1,0 +1,21 @@
+# comando: node tests/ronda26/unit-senales26.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 13:35:28 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [S1] Tecnología 60 % y NVDA 40 %: dos alertas distintas, la de categoría primero
+OK    [S2] La hipótesis propuesta se puede simular y deja el peso liberado sin asignar (no lo reparte en otra empresa)
+OK    [S3] Una categoría alta con UNA sola empresa (KO 50 %): no se repite la idea como «KO pesa el 50 %»
+OK    [S4] Los ETF no cuentan como exposición sectorial (ETF dividendos 80 % no es «Exposición alta»)
+OK    [S5] Plantilla Crecimiento (3 categorías de ~33 %): aviso «Solo 3 categorías», sin alertas inventadas
+OK    [S6] Cartera incompleta (85 %): se declara lo que falta y la acción usa el porcentaje sin asignar
+OK    [S7] Exceso (120 %): la primera señal es el exceso y no tiene acción de laboratorio (no se puede simular)
+OK    [S8] Reparto sin concentraciones (5 × 20 %, 5 categorías): estado correcto, sin alarmas
+OK    [S9] Una sola posición: alerta propia (no «Exposición alta» ni «KO pesa el 100 %»)
+OK    [S10] Cartera vacía: ninguna señal
+OK    [S11] El peso hipotético siempre es MENOR que el actual, ≥ 0,1 %, como mucho 20 % y con una decimal
+OK    [S12] Ninguna hipótesis propone un activo que no esté ya en la cartera (sin recomendaciones)
+OK    [S13] Los umbrales son los declarados en la interfaz (25 % posición, 40 % categoría, ≤ 3 categorías, < 4 posiciones) y no se pueden cambiar en tiempo de ejecución
+
+RESULTADO: 13 correctas, 0 fallos
+(node:10333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
