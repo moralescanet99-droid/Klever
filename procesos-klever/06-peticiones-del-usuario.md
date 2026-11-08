@@ -2267,3 +2267,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Cuando termine la ejecucion que falta, aitomaticamente empieza
 
 (Aprueba el encaje de `ronda35/INSPIRACION.md`: empezar, tras la pasada pendiente, por la portada futurista con la rueda de esferas, la rueda de la temporada en «Hoy» y la frase con iconos.)
+
+## C50 · (2026-11-08) — plan de marketing para hacer viral la app, literal
+> ejecutarse lo que estás haciendo, me gustaría que un agente tuyo elabore un plan de marketing para hacer viral esta app, con el objetivo de que la gente se lo descargue y lo tenga y se registre en la página de forma gratuita. Por favor, mírtelo bien, quiero que sea minucioso y con toda la intención del mundo. Gracias.
+
+(Encargado a un agente en segundo plano; resultado en `ronda36/PLAN-MARKETING.md`.)
