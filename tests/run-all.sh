@@ -22,9 +22,9 @@ trap 'fallo "interrumpido"; exit 130' INT TERM
 con_limite() {
   local seg="$1"; shift; CMD_LOG="$*"; local tmp; tmp="$(mktemp)"
   "$@" >"$tmp" 2>&1 & local pid=$!
-  ( sleep "$seg"; : >"$tmp.agotado"; matar_arbol "$pid" ) & local vig=$!
+  ( sleep "$seg"; kill -0 "$pid" 2>/dev/null && { : >"$tmp.agotado"; matar_arbol "$pid"; } ) & local vig=$!   # ronda 33: solo marca «agotado» si la batería sigue viva
   wait "$pid" 2>/dev/null; CODIGO=$?
-  matar_arbol "$vig"; wait "$vig" 2>/dev/null
+  local hijos; hijos="$(pgrep -P "$vig" 2>/dev/null || true)"; kill "$vig" 2>/dev/null; for h in $hijos; do matar_arbol "$h"; done; wait "$vig" 2>/dev/null   # el vigilante se detiene ANTES que su sleep (si no, podía marcar un falso «tiempo agotado»)
   SALIDA_T="$(cat "$tmp")"; if [ -f "$tmp.agotado" ]; then TIEMPO_AGOTADO=1; else TIEMPO_AGOTADO=0; fi; rm -f "$tmp" "$tmp.agotado"
 }
 guardar_log() { # nombre — registro ÍNTEGRO (también para la demo): comando, entorno, código, tiempo agotado y toda la salida
