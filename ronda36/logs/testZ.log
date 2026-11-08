@@ -1,5 +1,5 @@
 # comando: node tests/ronda28/testZ.cjs (PARALELO=3)
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:50:48 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 22:13:42 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [Z1-1440] Dos cambios encadenados (1440 px): la comparación es contra la cartera ORIGINAL

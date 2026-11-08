@@ -1,5 +1,5 @@
 # comando: node tests/ronda29/unit-semana29.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:40:46 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 22:03:31 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [H1] Huella: superada en el borde, no superada al 40 %, sin datos en el centro (y distinta de «no superada»)
@@ -16,5 +16,5 @@ OK    [S3] Desde la última visita: la exposición alta se resolvió (cambio de 
 OK    [S4] Una instantánea del MISMO día no se usa como «última visita»
 
 RESULTADO: 12 correctas, 0 fallos
-(node:4255) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:27297) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)

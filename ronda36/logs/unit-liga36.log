@@ -1,0 +1,18 @@
+# comando: node tests/ronda36/unit-liga36.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 22:03:32 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [L1] El ejemplo de LIGA.md: Lucía
+OK    [L2] Máximo semanal: 100 (la racha suma como mucho 10)
+OK    [L3] Equilibrio solo con la cartera al 100 % y al menos 4 posiciones
+OK    [L4] Una temporada son 12 lunes seguidos
+OK    [L5] Temporada: suma semanas hasta hoy; sin entrar cuenta la última foto pero no la constancia, y la racha se rompe
+OK    [L6] Clasificación y desempates
+OK    [L7] Insignias por tramo
+OK    [L8] Códigos de liga privada: 6 caracteres sin letras ambiguas
+OK    [L9] Apodos: 3–20 caracteres, sin correos ni marcado
+OK    [L10] Nada mide rentabilidad ni euros
+
+RESULTADO: 10 correctas, 0 fallos
+(node:27445) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

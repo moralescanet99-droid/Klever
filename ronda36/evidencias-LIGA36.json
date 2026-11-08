@@ -1,0 +1,82 @@
+[
+ {
+  "id": "L1",
+  "escenario": "El ejemplo de LIGA.md: Lucía",
+  "esperado": "equilibrio 25+12, reto 20, sin idea, entra (10) y 3 semanas seguidas antes (+6) = 73",
+  "observado": "{\"equilibrio\":37,\"aprendizaje\":20,\"constancia\":16,\"total\":73,\"valida\":true,\"motivo\":\"\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L2",
+  "escenario": "Máximo semanal: 100 (la racha suma como mucho 10)",
+  "esperado": "50 + 30 + 20",
+  "observado": "{\"equilibrio\":50,\"aprendizaje\":30,\"constancia\":20,\"total\":100,\"valida\":true,\"motivo\":\"\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L3",
+  "escenario": "Equilibrio solo con la cartera al 100 % y al menos 4 posiciones",
+  "esperado": "sin equilibrio y con su motivo; sin entrar, sin constancia",
+  "observado": "[[0,10,\"la cartera no estaba al 100 %\"],[0,10,\"menos de 4 posiciones\"],[0,0,\"sin foto esa semana\"]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L4",
+  "escenario": "Una temporada son 12 lunes seguidos",
+  "esperado": "12 semanas, del 2 nov al 2027-01-24",
+  "observado": "{\"inicio\":\"2026-11-02\",\"fin\":\"2027-01-24\",\"semanas\":[\"2026-11-02\",\"2026-11-09\",\"2026-11-16\",\"2026-11-23\",\"2026-11-30\",\"2026-12-07\",\"2026-12-14\",\"2026-12-21\",\"2026-12-28\",\"2027-01-04\",\"2027-01-11\",\"2027-01-18\"]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L5",
+  "escenario": "Temporada: suma semanas hasta hoy; sin entrar cuenta la última foto pero no la constancia, y la racha se rompe",
+  "esperado": "semana 1: 12+0+10=22; semana 2: 12 (última foto) sin constancia; semana 3: 50+30+10=90 (racha reiniciada); la semana futura no cuenta",
+  "observado": "[22,12,90]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L6",
+  "escenario": "Clasificación y desempates",
+  "esperado": "2 (más puntos), 4 y 3 (más semanas bajas; 4 se inscribió antes), 1",
+  "observado": "[2,4,3,1]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L7",
+  "escenario": "Insignias por tramo",
+  "esperado": "1/20 oro, 5/20 plata, 10/20 bronce, 15/20 completada",
+  "observado": "[\"oro\",\"plata\",\"bronce\",\"completada\",null]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L8",
+  "escenario": "Códigos de liga privada: 6 caracteres sin letras ambiguas",
+  "esperado": "todos válidos; sin O, I, L, 0, 1",
+  "observado": "AE2RTG,BYY7NT,4BBTXA,NCPYV7,5TCXPY",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L9",
+  "escenario": "Apodos: 3–20 caracteres, sin correos ni marcado",
+  "esperado": "válidos: «Lucía_23», «Los del piso»; no: «ab», «yo@correo.es», «<b>x</b>»",
+  "observado": "",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10",
+  "escenario": "Nada mide rentabilidad ni euros",
+  "esperado": "los bloques son equilibrio, aprendizaje y constancia",
+  "observado": "[\"equilibrio\",\"aprendizaje\",\"constancia\",\"total\",\"valida\",\"motivo\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

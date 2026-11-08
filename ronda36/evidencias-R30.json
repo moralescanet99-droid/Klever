@@ -195,7 +195,7 @@
   "id": "V3",
   "escenario": "Lo guardado: niveles, categorías y señales; NUNCA importes ni la composición",
   "esperado": "columnas sin pesos de posiciones ni dinero",
-  "observado": "[\"usuario_id\",\"cartera_id\",\"semana\",\"concentracion\",\"variedad\",\"n_categorias\",\"senales\",\"actualizado_en\"]",
+  "observado": "[\"usuario_id\",\"cartera_id\",\"semana\",\"concentracion\",\"variedad\",\"n_categorias\",\"senales\",\"actualizado_en\",\"n_posiciones\",\"completa\"]",
   "resultado": "OK",
   "evidencia": ""
  },

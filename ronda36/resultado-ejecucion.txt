@@ -1,5 +1,5 @@
-Ejecución: 2026-11-08 21:35 UTC
-Código: commit 5eea0a750eee8388e781619dfef762ad740583f8; árbol de trabajo limpio
+Ejecución: 2026-11-08 21:58 UTC
+Código: commit ebdf141ff2d64cffdaede51b154eaaaefe839adb; árbol de trabajo limpio
 Node v22.23.4 · wrangler 3.114.17 · playwright 1.63.0
 
 === unit-servidor ===
@@ -7,7 +7,7 @@ RESULTADO: 11 correctas, 0 fallos
 === unit-carreras ===
 RESULTADO: 8 correctas, 0 fallos
 === unit-migracion ===
-RESULTADO: 17 correctas, 0 fallos
+RESULTADO: 19 correctas, 0 fallos
 === unit-acceso ===
 RESULTADO: 8 correctas, 0 fallos
 === unit-calculos ===
@@ -60,6 +60,10 @@ RESULTADO: 35 correctas, 0 fallos
 RESULTADO: 10 correctas, 0 fallos
 === unit-hoy34 ===
 RESULTADO: 7 correctas, 0 fallos
+=== unit-liga36 ===
+RESULTADO: 10 correctas, 0 fallos
+=== unit-liga-servidor36 ===
+RESULTADO: 17 correctas, 0 fallos
 === test-zip ===
 RESULTADO: 8 correctas, 0 fallos
 === testA ===
@@ -134,6 +138,8 @@ RESULTADO: 15 correctas, 0 fallos
 RESULTADO: 16 correctas, 0 fallos
 === testAG ===
 RESULTADO: 6 correctas, 0 fallos
+=== testAH ===
+RESULTADO: 15 correctas, 0 fallos
 === paridad-demo ===
 RESULTADO: 5 correctas, 0 fallos
 === seguridad-http (servidor sin enlace de acceso en pantalla) ===

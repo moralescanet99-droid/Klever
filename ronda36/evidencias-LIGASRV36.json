@@ -1,0 +1,138 @@
+[
+ {
+  "id": "G1",
+  "escenario": "Sin sesión",
+  "esperado": "HTTP 401",
+  "observado": "HTTP 401",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "G2",
+  "escenario": "Temporada 0: semana 3 de 12; sin inscribir no hay puntos",
+  "esperado": "Temporada 0, del 2 nov al 24 ene, semana 3; inscripción y puntos vacíos; aún se puede cambiar de cartera… no (semana 3 > 2)",
+  "observado": "{\"nombre\":\"Temporada 0\",\"inicio\":\"2026-11-02\",\"fin\":\"2027-01-24\",\"semana\":3,\"semanas\":12,\"puede_cambiar\":false}{\"apodo\":null,\"publica\":false,\"inscripcion\":null,\"puntos\":null,\"puesto_general\":null,\"en_general\":0}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I1",
+  "escenario": "No se puede inscribir la cartera de otra persona",
+  "esperado": "HTTP 404",
+  "observado": "HTTP 404",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "I2",
+  "escenario": "Inscribirse; cambiar de cartera después de la semana 2 no se puede",
+  "esperado": "HTTP 200 y después HTTP 409 con el motivo",
+  "observado": "200 / 409: Solo se puede cambiar de cartera en las 2 primeras semanas de la temporada.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P1",
+  "escenario": "Puntos por semana desde las fotos (reglas de LIGA.md)",
+  "esperado": "semana 1: 0+12 equilibrio, entra 10 = 22 (+ reto si lo hubo); semana 2: sin entrar, hereda la última foto (12) sin constancia; semana 3: 50 equilibrio + 10 idea + 10 entra (racha rota) ≥ 70",
+  "observado": "[[\"2026-11-02\",12,0,10],[\"2026-11-09\",12,0,0],[\"2026-11-16\",50,30,10]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "P2",
+  "escenario": "Cartera con menos de 4 posiciones: sin puntos de equilibrio (y se dice por qué)",
+  "esperado": "equilibrio 0 las tres semanas, con su motivo; constancia sí",
+  "observado": "[[0,10,\"menos de 4 posiciones\"],[0,12,\"menos de 4 posiciones\"],[0,14,\"menos de 4 posiciones\"]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A1",
+  "escenario": "Apodo: nunca un correo; para ser pública hace falta apodo",
+  "esperado": "HTTP 400 los dos",
+  "observado": "[400,400]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "A2",
+  "escenario": "Apodo único (sin distinguir mayúsculas)",
+  "esperado": "HTTP 200 y después HTTP 409",
+  "observado": "200 / 409",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C1",
+  "escenario": "Clasificación general: solo quien la hace pública y está inscrito; nunca correos",
+  "esperado": "aparece «Lucía_23» (pública), no «Dani» (privada); sin «@» en la respuesta",
+  "observado": "[{\"apodo\":\"Lucía_23\",\"total\":124,\"puesto\":1,\"tu\":false}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L1",
+  "escenario": "Crear una liga privada",
+  "esperado": "HTTP 201 con un código de 6 caracteres; quien la crea ya es miembro",
+  "observado": "{\"ok\":true,\"id\":1,\"codigo\":\"M79PZJ\",\"nombre\":\"Los del piso\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L2",
+  "escenario": "Unirse con el código (sin distinguir mayúsculas); repetir no duplica; código inexistente",
+  "esperado": "200 nuevo / 200 no nuevo / 404",
+  "observado": "200:true 200:false 404",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L3",
+  "escenario": "Clasificación privada: apodos y «Tú», nunca correos; la ven sus miembros",
+  "esperado": "«Los del piso», 2 miembros; «Tú» (Dani) y «Lucía_23»; sin «@»",
+  "observado": "{\"id\":1,\"codigo\":\"M79PZJ\",\"nombre\":\"Los del piso\",\"mia\":false,\"miembros\":2,\"clasificacion\":[{\"apodo\":\"Lucía_23\",\"tu\":false,\"total\":124,\"puesto\":1},{\"apodo\":\"Tú\",\"tu\":true,\"total\":36,\"puesto\":2}],\"sin_inscribir\":0}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L4",
+  "escenario": "Quien no es miembro no ve la liga privada",
+  "esperado": "usuario 3 sin ligas privadas",
+  "observado": "[]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L5",
+  "escenario": "Salir y borrar",
+  "esperado": "quien no la creó no puede borrarla (403) pero puede salir (200); quien la creó la borra (200)",
+  "observado": "403 200 200",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L6",
+  "escenario": "Entradas no válidas",
+  "esperado": "nombre corto, código mal formado y acción desconocida: HTTP 400",
+  "observado": "[400,400,400]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "B1",
+  "escenario": "Borrar la cartera inscrita borra su inscripción",
+  "esperado": "HTTP 200; sin inscripción del usuario 1",
+  "observado": "HTTP 200; 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E1",
+  "escenario": "Fallo de la base: error claro",
+  "esperado": "HTTP 500 con mensaje",
+  "observado": "HTTP 500: No se pudo leer la Liga. Inténtalo de nuevo.",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

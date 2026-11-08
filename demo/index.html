@@ -5039,6 +5039,7 @@ async function resumenLigaHoy(vigente) {
   el.innerHTML = `<a class="hoy-liga" href="#liga"><span class="hoy-liga-t">${esc(L.temporada.nombre)} · semana ${L.temporada.semana} de ${L.temporada.semanas}</span><b>${p ? `${p.total} puntos${L.yo.puesto_general ? ` · puesto ${L.yo.puesto_general}` : ''}` : 'Juega la Liga'}</b><span class="hoy-liga-ir" aria-hidden="true">→</span></a>`;
   el.hidden = false;
 }
+const codigoLigaPendiente = () => { try { return sessionStorage.getItem(CLAVE_UNIRSE) || ''; } catch { return ''; } };
 const limpiarLiga = () => { ligaSeq++; for (const s of ['#liga-cuerpo', '#hoy-liga']) { const e = $(s); if (e) { e.innerHTML = ''; if (s === '#hoy-liga') e.hidden = true; } } };
 
 // =====================================================================
@@ -6247,6 +6248,7 @@ function contextoLab() {
     await migrarBorrador();
   }
   arrancado = true; route(true);
+  if (logged() && codigoLigaPendiente() && location.hash !== '#liga') go('#liga');   // ronda 36: enlace de invitación a una liga privada
 })();
 
 </script>

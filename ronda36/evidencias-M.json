@@ -64,6 +64,22 @@
   "evidencia": ""
  },
  {
+  "id": "M1i",
+  "escenario": "Aplicar 0014–0016 (rondas 33–36) sobre una base antigua",
+  "esperado": "usuarios, instantaneas, eventos_dia, ligas, liga_miembros y liga_inscripciones iguales a schema.sql; usuarios sin apodo y fuera de la clasificación pública",
+  "observado": "usuarios=true,instantaneas=true,eventos_dia=true,ligas=true,liga_miembros=true,liga_inscripciones=true",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1j",
+  "escenario": "Aplicar 0016 sobre el esquema NUEVO",
+  "esperado": "Falla con «duplicate column»: solo se aplica a bases anteriores",
+  "observado": "error: duplicate column name: apodo",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
   "id": "M1h",
   "escenario": "Aplicar 0013 sobre el esquema NUEVO",
   "esperado": "Falla con «duplicate column»: solo se aplica a bases anteriores",

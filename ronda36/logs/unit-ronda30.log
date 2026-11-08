@@ -1,5 +1,5 @@
 # comando: node tests/ronda30/unit-ronda30.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 21:40:46 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 22:03:31 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [S1] lunesDe: la semana es la del lunes (UTC) que contiene el día
@@ -35,7 +35,7 @@ semana: Error: fallo simulado de infraestructura
     at file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:77
     at Array.map (<anonymous>)
     at Object.batch (file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:22)
-    at onRequestGet (file:///home/user/Klever/functions/api/semana.js:20:35)
+    at onRequestGet (file:///home/user/Klever/functions/api/semana.js:21:35)
     at async llama (file:///home/user/Klever/tests/ronda30/unit-ronda30.mjs:90:13)
     at async file:///home/user/Klever/tests/ronda30/unit-ronda30.mjs:117:32
 OK    [V8] Fallo de la base: error claro y nada a medias

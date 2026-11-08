@@ -1,0 +1,31 @@
+# comando: node tests/ronda36/unit-liga-servidor36.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 22:03:32 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [G1] Sin sesión
+OK    [G2] Temporada 0: semana 3 de 12; sin inscribir no hay puntos
+OK    [I1] No se puede inscribir la cartera de otra persona
+OK    [I2] Inscribirse; cambiar de cartera después de la semana 2 no se puede
+OK    [P1] Puntos por semana desde las fotos (reglas de LIGA.md)
+OK    [P2] Cartera con menos de 4 posiciones: sin puntos de equilibrio (y se dice por qué)
+OK    [A1] Apodo: nunca un correo; para ser pública hace falta apodo
+OK    [A2] Apodo único (sin distinguir mayúsculas)
+OK    [C1] Clasificación general: solo quien la hace pública y está inscrito; nunca correos
+OK    [L1] Crear una liga privada
+OK    [L2] Unirse con el código (sin distinguir mayúsculas); repetir no duplica; código inexistente
+OK    [L3] Clasificación privada: apodos y «Tú», nunca correos; la ven sus miembros
+OK    [L4] Quien no es miembro no ve la liga privada
+OK    [L5] Salir y borrar
+OK    [L6] Entradas no válidas
+OK    [B1] Borrar la cartera inscrita borra su inscripción
+liga: Error: fallo simulado de infraestructura
+    at file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:77
+    at Array.map (<anonymous>)
+    at Object.batch (file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:22)
+    at puntosDe (file:///home/user/Klever/functions/api/liga/index.js:21:50)
+    at onRequestGet (file:///home/user/Klever/functions/api/liga/index.js:53:24)
+    at async llama (file:///home/user/Klever/tests/ronda36/unit-liga-servidor36.mjs:15:13)
+    at async file:///home/user/Klever/tests/ronda36/unit-liga-servidor36.mjs:68:32
+OK    [E1] Fallo de la base: error claro
+
+RESULTADO: 17 correctas, 0 fallos

@@ -1,0 +1,107 @@
+[
+ {
+  "id": "AH1-390",
+  "escenario": "Inscribirse en la Liga (390 px)",
+  "esperado": "#liga, «Klever · Liga»; 60 puntos esta semana (equilibrio 50 + constancia 10); una barra; desglose; «Juegas con «Repartida»»",
+  "observado": "{\"hash\":\"#liga\",\"titulo\":\"Klever · Liga\",\"total\":\"60\",\"barras\":1,\"desglose\":\"Esta semana: equilibrio 50 · aprendizaje 0 · constancia 10.\",\"juegas\":\"Juegas con «Repartida» · puedes cambiarla hasta la semana 2.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH2-390",
+  "escenario": "Apodo y clasificación general (390 px)",
+  "esperado": "un correo como apodo se rechaza; con apodo y «aparecer» activado, sales en la clasificación general marcado como tú",
+  "observado": "{\"errApodo\":\"El apodo debe tener entre 3 y 20 caracteres (letras, números, espacios, punto o guiones) y no puede ser un correo.\",\"gen\":[\"1Ana39060\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH3-390",
+  "escenario": "Liga privada con invitación (390 px)",
+  "esperado": "el enlace ?liga=9F7D2R lleva a la Liga tras entrar, con el código ya escrito; tras unirse e inscribirse, la clasificación privada tiene «Tú» y «Ana390»; sin correos",
+  "observado": "{\"pre\":\"9F7D2R\",\"priv\":[\"1Ana39060\",\"2Tú60\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH4-390",
+  "escenario": "Al salir, la Liga desaparece (390 px)",
+  "esperado": "ni la liga privada ni el apodo en la página",
+  "observado": "{\"cuerpo\":false,\"apodo\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH1-1440",
+  "escenario": "Inscribirse en la Liga (1440 px)",
+  "esperado": "#liga, «Klever · Liga»; 60 puntos esta semana (equilibrio 50 + constancia 10); una barra; desglose; «Juegas con «Repartida»»",
+  "observado": "{\"hash\":\"#liga\",\"titulo\":\"Klever · Liga\",\"total\":\"60\",\"barras\":1,\"desglose\":\"Esta semana: equilibrio 50 · aprendizaje 0 · constancia 10.\",\"juegas\":\"Juegas con «Repartida» · puedes cambiarla hasta la semana 2.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH2-1440",
+  "escenario": "Apodo y clasificación general (1440 px)",
+  "esperado": "un correo como apodo se rechaza; con apodo y «aparecer» activado, sales en la clasificación general marcado como tú",
+  "observado": "{\"errApodo\":\"El apodo debe tener entre 3 y 20 caracteres (letras, números, espacios, punto o guiones) y no puede ser un correo.\",\"gen\":[\"1Ana39060\",\"2Ana144060\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH3-1440",
+  "escenario": "Liga privada con invitación (1440 px)",
+  "esperado": "el enlace ?liga=B2ZK29 lleva a la Liga tras entrar, con el código ya escrito; tras unirse e inscribirse, la clasificación privada tiene «Tú» y «Ana1440»; sin correos",
+  "observado": "{\"pre\":\"B2ZK29\",\"priv\":[\"1Ana144060\",\"2Tú60\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH4-1440",
+  "escenario": "Al salir, la Liga desaparece (1440 px)",
+  "esperado": "ni la liga privada ni el apodo en la página",
+  "observado": "{\"cuerpo\":false,\"apodo\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH1-320",
+  "escenario": "Inscribirse en la Liga (320 px)",
+  "esperado": "#liga, «Klever · Liga»; 60 puntos esta semana (equilibrio 50 + constancia 10); una barra; desglose; «Juegas con «Repartida»»",
+  "observado": "{\"hash\":\"#liga\",\"titulo\":\"Klever · Liga\",\"total\":\"60\",\"barras\":1,\"desglose\":\"Esta semana: equilibrio 50 · aprendizaje 0 · constancia 10.\",\"juegas\":\"Juegas con «Repartida» · puedes cambiarla hasta la semana 2.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH2-320",
+  "escenario": "Apodo y clasificación general (320 px)",
+  "esperado": "un correo como apodo se rechaza; con apodo y «aparecer» activado, sales en la clasificación general marcado como tú",
+  "observado": "{\"errApodo\":\"El apodo debe tener entre 3 y 20 caracteres (letras, números, espacios, punto o guiones) y no puede ser un correo.\",\"gen\":[\"1Ana39060\",\"2Ana144060\",\"3Ana32060\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH3-320",
+  "escenario": "Liga privada con invitación (320 px)",
+  "esperado": "el enlace ?liga=9MD96W lleva a la Liga tras entrar, con el código ya escrito; tras unirse e inscribirse, la clasificación privada tiene «Tú» y «Ana320»; sin correos",
+  "observado": "{\"pre\":\"9MD96W\",\"priv\":[\"1Ana32060\",\"2Tú60\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH4-320",
+  "escenario": "Al salir, la Liga desaparece (320 px)",
+  "esperado": "ni la liga privada ni el apodo en la página",
+  "observado": "{\"cuerpo\":false,\"apodo\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AH0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]
