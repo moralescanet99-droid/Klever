@@ -15,7 +15,7 @@ import { leerPegado, pareceLista } from './js/pegado.js';
 import { svgHuella } from './js/huella.js';
 import { iniciarSemanaUI, pintarSemana, criteriosAhora } from './js/semana-ui.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
-import { iniciarExplorar, empresas, filtrosGuardar, loadEmpresas, poblarSectores, renderEmpresas, verFicha } from './js/explorar.js';
+import { iniciarExplorar, empresas, filtrosLeer, filtrosGuardar, loadEmpresas, poblarSectores, renderEmpresas, verFicha } from './js/explorar.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
 import { store, $, $$, esc, NB, nf, pct, pesoTxt, pesoCorto, miles, r1, parsePeso, norm, reducido } from './js/base.js';
 

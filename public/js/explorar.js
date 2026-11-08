@@ -35,7 +35,7 @@ const BUSQ = 'klever_busqueda_emp'; // la búsqueda sobrevive a abrir la ficha, 
 const busqLeer = () => { try { return sessionStorage.getItem(BUSQ) || ''; } catch { return ''; } };
 const busqGuardar = v => { try { v ? sessionStorage.setItem(BUSQ, v) : sessionStorage.removeItem(BUSQ); } catch { /* sin almacenamiento: la búsqueda sigue en el campo */ } };
 const FILT = 'klever_filtros_emp'; // filtros de Explorar: se conservan como la búsqueda (solo esta pestaña)
-const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, faltan: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
+export const filtrosLeer = () => { try { return { sector: '', crit: '', estado: '', radar: false, faltan: false, ...JSON.parse(sessionStorage.getItem(FILT)) }; } catch { return { sector: '', crit: '', estado: '', radar: false }; } };
 export const filtrosGuardar = f => { try { (f.sector || f.crit || f.estado || f.radar || f.faltan) ? sessionStorage.setItem(FILT, JSON.stringify(f)) : sessionStorage.removeItem(FILT); } catch { /* sin almacenamiento */ } };
 const filtrosActuales = () => ({ sector: $('#emp-sector').value, crit: $('#emp-crit').value, estado: $('#emp-estado').value, radar: $('#emp-radar').checked, faltan: $('#emp-faltan').checked });
 const pasaFiltros = (r, f) => {
