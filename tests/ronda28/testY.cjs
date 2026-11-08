@@ -61,7 +61,7 @@ const J = JSON.stringify;
     // ---- Y5 renombrados
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#seg-escenarios'); await p.waitForTimeout(800);
     const seg = await p.evaluate(() => ({ h2: [...document.querySelectorAll('#vista-seguimiento h2')].map(h => h.textContent.replace(/\s*\(\d+\)\s*/, '').trim()), texto: document.querySelector('#vista-seguimiento').innerText }));
-    await p.evaluate(() => { location.hash = '#empresas'; }); await p.waitForTimeout(500); await p.locator('.ver-ficha[data-t="KO"] >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open]'); await p.waitForTimeout(600);
+    await p.evaluate(() => { location.hash = '#empresas'; }); await p.waitForTimeout(500); await p.fill('#emp-buscar', 'KO'); await p.waitForTimeout(200); /* ronda 31: en el móvil la lista va por tandas; se busca la empresa */ await p.locator('.ver-ficha[data-t="KO"] >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open]'); await p.waitForTimeout(600);
     const ficha = await p.evaluate(() => document.querySelector('#dlg-ficha').innerText); await p.click('#dlg-ficha [data-cerrar]');
     ev('Y5-' + w, `Renombrados (${w} px): «idea» y «empresas que sigo»`, 'el Cuaderno tiene «Mis ideas» y «Empresas que sigo»; la ficha ofrece «Seguir esta empresa»; ni «escenario» ni «radar» a la vista', J({ h2: seg.h2, ficha: /Seguir esta empresa/.test(ficha) }),
       seg.h2.includes('Mis ideas') && seg.h2.includes('Empresas que sigo') && /Seguir esta empresa/.test(ficha) && !/escenario|radar/i.test(seg.texto + ficha)); await mira('cuaderno');

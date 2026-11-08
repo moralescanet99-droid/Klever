@@ -16,7 +16,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Ronda 31 · última generación (C40)
 - ✅ Visión (`ronda31/VISION.md`) y auditoría (`ronda31/AUDITORIA.md`, 13,5/20) hechas y anotadas en `PENDIENTES.md` § ★★.
-- 🟡 Implementación en curso (ver `ronda31/LEEME.md`).
+- ✅ Implementado: V2–V10, V12, accesibilidad del editor, texto de la portada; 🟡 V1 (sin View Transitions) y V14; ⛔ V13 descartado. `testAC` (21/0). Ver `ronda31/LEEME.md`. Decisiones de Javier en `PENDIENTES.md` § ★★.
 
 ## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
 - ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).

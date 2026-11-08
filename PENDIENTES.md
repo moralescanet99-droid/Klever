@@ -5,7 +5,13 @@ Visión: `ronda31/VISION.md` (6 principios y 14 detalles V1–V14). Auditoría: 
 Permiso de Javier: trabajar sin consultar en todo lo que cueste 0 €. **Lo que necesita su aprobación está justo debajo.**
 
 ### Para Javier (revisar mañana)  ⬜
-*(se completa al terminar la ronda 31)*
+Ninguna bloquea el trabajo; son decisiones tuyas o cosas que solo puedes hacer tú.
+1. ⬜ **Probar la app instalada en tu móvil** (2 minutos): abre la demo o la web local en Safari/Chrome → «Añadir a pantalla de inicio». Dime si el icono, la barra de cristal y la barra de gestos se ven bien. Yo no tengo un teléfono real.
+2. ⬜ **¿Modo sin conexión (service worker)?** Haría que la app abra sin Internet, pero guarda copias de la web en el móvil y complica publicar cambios. **Recomiendo esperar al despliegue real.**
+3. ⬜ **¿Integramos todo en `main`?** Desde la ronda 26 todo vive en ramas sin integrar porque falta el piloto con personas. Recomiendo integrarlo **después** del piloto.
+4. ⬜ **¿Versión congelada para el piloto?** Si el piloto va a ser con lo último, congelo una `piloto-r31` (hoy está congelada la `piloto-r27`, sin las rondas 28–31).
+5. ⬜ **Actualizar wrangler 3 → 4** (avisa de que está anticuado). Es gratis, pero cambia la herramienta de despliegue: mejor hacerlo el día del despliegue, con las cuentas delante.
+6. ⬜ **Lo que ya estaba pendiente y solo puedes hacer tú:** cuentas de Cloudflare y Brevo, secretos de GitHub, carga real de la SEC y revisión legal (secciones 0–3 de este archivo).
 
 ## ★ Punto 14 «volver y valor»: lo que falta para que valga la pena (anotado 2026-11-07, C35–C36)
 La ronda 29 puso el «escaparate» (arranque guiado, huella, «Tu semana», retos). Falta el **motor** y el **aviso**. Estos dos bloques dependen de cuentas externas y **no están hechos**:

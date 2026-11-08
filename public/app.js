@@ -387,7 +387,7 @@ function itemCartera(p) {
 let misSeq = 0;
 async function cargarMisCarteras() {
   pintarAviso(); const seq = ++misSeq;
-  const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista">Cargando tus carteras…</li>';
+  const ul = $('#mis-lista'); ul.innerHTML = '<li class="estado-lista esq-lista"><span class="sr">Cargando tus carteras…</span><span class="esq"></span><span class="esq"></span></li>';
   try {
     const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
     nMis = list.length;
@@ -650,7 +650,13 @@ function pintarComposicion(r) { // datos reales de la cartera: el ancho de cada 
   const total = r.total, escala = Math.max(100, total), cab = $('#comp'), barra = $('#comp-barra');
   $('#comp-total').textContent = pesoCorto(total); $('#comp-n').textContent = r.n ? `${r.n} ${r.n === 1 ? 'posición' : 'posiciones'}` : '';
   const seg = pos.map((p, i) => ({ t: p.ticker, w: Math.max(0, p.peso || 0), i })).filter(x => x.w > 0);
-  barra.innerHTML = seg.map(x => `<i style="--c:var(--c${colorDe(x.t)});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
+  { const firma = seg.map(x => x.t).join(',') + (total < 100 ? '|libre' : ''), hijos = [...barra.children];   // ronda 31: mismos tramos → se actualizan en su sitio y la anchura se anima
+    if (barra.dataset.firma === firma && hijos.length === seg.length + (total < 100 ? 1 : 0)) {
+      seg.forEach((x, k) => { hijos[k].style.width = (x.w / escala * 100).toFixed(2) + '%'; hijos[k].textContent = x.w / escala >= .09 ? x.t : ''; });
+      if (total < 100) hijos[seg.length].style.width = ((100 - total) / escala * 100).toFixed(2) + '%';
+    } else {
+      barra.innerHTML = seg.map(x => `<i style="--c:var(--c${colorDe(x.t)});width:${(x.w / escala * 100).toFixed(2)}%" aria-hidden="true">${x.w / escala >= .09 ? esc(x.t) : ''}</i>`).join('') + (total < 100 ? `<i class="libre" style="width:${((100 - total) / escala * 100).toFixed(2)}%" aria-hidden="true"></i>` : '');
+      barra.dataset.firma = firma; } }
   barra.classList.toggle('exceso', total > 100); barra.classList.toggle('vacia', !seg.length);
   barra.setAttribute('aria-label', 'Composición de la cartera: ' + (seg.length ? seg.map(x => `${x.t} ${pesoCorto(x.w)}`).join(', ') : 'sin posiciones') + (total < 100 && seg.length ? `; sin asignar ${pesoCorto(r1(100 - total))}` : '') + (total > 100 ? `; exceso de ${pesoCorto(r1(total - 100))}` : ''));
   $('#repartir-igual').hidden = r.n < 2 || repartoIgual(r.n).every((w, k) => pos[k]?.peso === w);   // solo cuando aporta algo
@@ -1145,6 +1151,7 @@ function poblarSectores() {
   sel.innerHTML = '<option value="">Todos</option>' + sectores.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   sel.value = sectores.includes(f.sector) ? f.sector : ''; $('#emp-crit').value = f.crit; $('#emp-estado').value = f.estado; $('#emp-radar').checked = !!f.radar; $('#emp-faltan').checked = !!f.faltan;
 }
+const TANDA_EMP = 24; let empTanda = TANDA_EMP, empFirma = null;
 function renderEmpresas() {
   const bruto = $('#emp-buscar').value.trim(), q = norm(bruto), tb = $('#empresas-lista'), ul = $('#empresas-cards'), filt = filtrosActuales(), hayFiltro = !!(filt.sector || filt.estado || filt.radar || filt.faltan);
   const vistas = empresas.filter(r => (!q || norm(r.ticker + ' ' + r.nombre + ' ' + r.sector).includes(q)) && pasaFiltros(r, filt));
@@ -1155,9 +1162,12 @@ function renderEmpresas() {
       <td class="num"><span class="emp-res">${svgHuella(r.criterios, { tam: 30 })}${resultado(r)}</span>${pildoras(r)}</td>
       <td><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</td></tr>`).join('')
     : `<tr><td colspan="4" class="estado-lista">${vacio}</td></tr>`;
-  ul.innerHTML = vistas.length ? vistas.map(r => `<li class="emp-card">
+  // ronda 31: en el móvil, las tarjetas van por tandas (la búsqueda y los filtros siempre buscan en todas); la tabla de escritorio las muestra todas
+  const firmaQ = bruto + '|' + JSON.stringify(filt); if (firmaQ !== empFirma) { empFirma = firmaQ; empTanda = TANDA_EMP; }
+  const enTanda = vistas.slice(0, empTanda), quedan = vistas.length - enTanda.length;
+  ul.innerHTML = vistas.length ? enTanda.map(r => `<li class="emp-card">
       <div class="ec-l1">${monograma(r)}<span class="nombre-emp">${esc(r.nombre)}${marcaRadar(r.ticker)}</span><span class="ec-res">${svgHuella(r.criterios, { tam: 34 })}${resultado(r)}</span></div>
-      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('')
+      <div class="ec-l2"><span class="simbolo">${esc(r.ticker)}</span><span class="ec-sector">${esc(r.sector)}</span><button class="ver-ficha" type="button" data-t="${esc(r.ticker)}">Ver ficha<span class="sr"> de ${esc(r.nombre)}</span></button>${botonProbar(r)}</div>${pildoras(r)}</li>`).join('') + (quedan > 0 ? `<li class="emp-mas"><button class="btn btn-secundario" type="button" data-emp-mas>Mostrar ${Math.min(TANDA_EMP, quedan)} más <span class="mut">(quedan ${quedan})</span></button></li>` : '')
     : `<li class="estado-lista">${vacio}</li>`;
   $('#emp-cuenta').textContent = empresas.length ? (q || hayFiltro ? `${vistas.length} de ${empresas.length} empresas` : `${empresas.length} empresas`) : '';
   const nf = [filt.sector, filt.estado, filt.radar, filt.faltan].filter(Boolean).length; $('#emp-filtros-n').textContent = nf ? `(${nf} activo${nf > 1 ? 's' : ''})` : ''; if (nf) $('#emp-filtros-det').open = true;
@@ -1165,11 +1175,12 @@ function renderEmpresas() {
 }
 async function loadEmpresas() {
   $('#empresas-lista').innerHTML = '<tr><td colspan="4" class="estado-lista">Cargando empresas…</td></tr>';
-  $('#empresas-cards').innerHTML = '<li class="estado-lista">Cargando empresas…</li>';
+  $('#empresas-cards').innerHTML = '<li class="estado-lista esq-lista"><span class="sr">Cargando empresas…</span><span class="esq bajo"></span><span class="esq bajo"></span><span class="esq bajo"></span></li>';
   try { empresas = await getJson('/ideas'); }
   catch { const m = 'No se pudieron cargar las empresas. <button class="enlace" data-retry="empresas" type="button">Reintentar</button>'; $('#empresas-lista').innerHTML = `<tr><td colspan="4" class="estado-lista">${m}</td></tr>`; $('#empresas-cards').innerHTML = `<li class="estado-lista">${m}</li>`; return; }
   poblarSectores(); renderEmpresas();
 }
+$('#empresas-cards').addEventListener('click', e => { const b = e.target.closest('[data-emp-mas]'); if (!b) return; const n = $$('#empresas-cards .emp-card').length; empTanda += TANDA_EMP; renderEmpresas(); $$('#empresas-cards .emp-card')[n]?.querySelector('.ver-ficha')?.focus({ preventScroll: true }); });
 $('#emp-buscar').addEventListener('input', () => { busqGuardar($('#emp-buscar').value.trim()); renderEmpresas(); });
 const borrarBusqueda = () => { $('#emp-buscar').value = ''; busqGuardar(''); $('#emp-sector').value = ''; $('#emp-crit').value = ''; $('#emp-estado').value = ''; $('#emp-radar').checked = false; $('#emp-faltan').checked = false; filtrosGuardar(filtrosActuales()); renderEmpresas(); $('#emp-buscar').focus(); };
 $('#emp-borrar').addEventListener('click', borrarBusqueda);

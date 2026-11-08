@@ -9,7 +9,11 @@ El mock.js se formatea con % (dos %s: universo y semilla): dentro de él, un % l
 import re
 import pathlib
 HERE=pathlib.Path(__file__).resolve().parent; R=str(HERE.parent.parent)+'/'; SP=str(HERE)+'/'
-html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read()+'\n'+open(R+'public/style-r13.css').read()+'\n'+open(R+'public/style-r17.css').read()+'\n'+open(R+'public/style-r26.css').read()
+html=open(R+'public/index.html').read(); css=open(R+'public/style.css').read()+'\n'+open(R+'public/style-r13.css').read()+'\n'+open(R+'public/style-r17.css').read()+'\n'+open(R+'public/style-r26.css').read()+'\n'+open(R+'public/style-r31.css').read()
+# ronda 31: la demo es un solo archivo: la fuente autoalojada va incrustada (data URI) en vez de en public/fonts/
+import base64
+_fuente='data:font/woff2;base64,'+base64.b64encode(open(R+'public/fonts/inter-latin-wght.woff2','rb').read()).decode()
+css=css.replace('url("fonts/inter-latin-wght.woff2")','url("'+_fuente+'")')
 def quitar_modulos(txt):  # los módulos ES se concatenan en un solo script clásico: sin import/export (los nombres no chocan entre archivos)
     txt=re.sub(r"^import [^\n]*from '[^']+';\n",'',txt,flags=re.M); return re.sub(r'^export (async function|function|const|let)',r'\1',txt,flags=re.M)
 js=''.join(quitar_modulos(open(R+'public/js/'+f).read())+'\n' for f in ('calculos.js','senales.js','pegado.js','huella.js','semana.js','ciclo.js','catalogo.js','nota.js','comparador.js','almacen.js','contenido.js','nota-ui.js','ideas.js','revista.js','revisiones.js','lab.js'))+quitar_modulos(open(R+'public/app.js').read())

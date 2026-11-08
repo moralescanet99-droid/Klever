@@ -34,7 +34,7 @@ const J = JSON.stringify;
     // ---- AA3 huella
     await p.evaluate(() => { location.hash = '#empresas'; }); await p.waitForSelector('#vista-empresas:not([hidden])'); await p.waitForTimeout(500);
     const lista = await p.evaluate(() => { const h = [...document.querySelectorAll('#empresas-lista .huella, #empresas-cards .huella')].filter(x => x.getBoundingClientRect().width > 0); return { n: h.length, filas: [...document.querySelectorAll('#empresas-lista tr, #empresas-cards li.emp-card')].filter(x => x.getBoundingClientRect().width > 0).length, oculta: h[0]?.getAttribute('aria-hidden') }; });
-    await p.locator('.ver-ficha[data-t="KO"] >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open] .ficha-huella'); await p.waitForTimeout(200);
+    await p.fill('#emp-buscar', 'KO'); await p.waitForTimeout(200); /* ronda 31: en el móvil la lista va por tandas; se busca la empresa */ await p.locator('.ver-ficha[data-t="KO"] >> visible=true').first().click(); await p.waitForSelector('#dlg-ficha[open] .ficha-huella'); await p.waitForTimeout(200);
     const ficha = await p.evaluate(() => { const s = document.querySelector('.ficha-huella svg'); return { label: s.getAttribute('aria-label'), sup: s.dataset.superadas, ancho: Math.round(s.getBoundingClientRect().width) }; });
     await p.click('#dlg-ficha [data-cerrar]');
     ev('AA3-' + w, `Huella de empresa (${w} px)`, 'una huella decorativa por empresa visible en la lista; en la ficha, grande y con texto accesible que dice cuántas supera', J({ lista, ficha }),

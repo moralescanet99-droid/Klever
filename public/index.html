@@ -2,13 +2,28 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#13100E">
+<meta name="color-scheme" content="dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Klever">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icono.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icono-180.png">
+<link rel="preload" href="fonts/inter-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klever · carteras simuladas">
+<meta property="og:description" content="Crea una cartera simulada, mira dónde se concentra y compara alternativas antes de invertir. Sin dinero real.">
+<meta property="og:image" content="icono-512.png">
 <title>Klever · Crea y entiende tu cartera simulada</title>
 <meta name="description" content="Prueba un reparto de activos y consulta los datos de las empresas. Sin invertir dinero real. Beta gratuita y educativa.">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="style-r13.css">
 <link rel="stylesheet" href="style-r17.css">
 <link rel="stylesheet" href="style-r26.css">
+<link rel="stylesheet" href="style-r31.css">
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -25,7 +40,7 @@
     <div class="cab-acc">
       <button id="entrar" class="btn btn-secundario" type="button">Entrar</button>
       <button id="salir" class="btn btn-ghost solo-escritorio" type="button" hidden>Salir</button>
-      <button id="btn-menu" class="btn btn-secundario btn-icono solo-movil" type="button" aria-expanded="false" aria-controls="menu-movil"><span aria-hidden="true">☰</span><span class="sr">Menú</span></button>
+      <button id="btn-menu" class="btn btn-secundario btn-icono solo-movil" type="button" aria-expanded="false" aria-controls="menu-movil"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="sr">Menú</span></button>
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
@@ -53,7 +68,7 @@
       <div class="hero-txt">
         <p class="eyebrow">CARTERAS SIMULADAS · SIN DINERO REAL</p>
         <h1>Descubre alternativas.<br><em>Compáralas antes de invertir.</em></h1>
-        <p class="lead">Crea una cartera simulada (sin dinero real, con datos de prueba), mira dónde se concentra y compara tus opciones antes de invertir.</p>
+        <p class="lead">Crea una cartera simulada, mira dónde se concentra y compara tus opciones antes de invertir.</p>
         <ol class="recorrido" aria-label="Cómo funciona Klever"><li><b>Cartera</b></li><li><b>Descubre</b></li><li><b>Compara</b></li><li><b>Decide</b></li><li><b>Revisa</b></li></ol>
         <p class="inicio-revisar" id="inicio-revisar" hidden><a href="#seguimiento"></a></p>
         <p class="mut peq" id="entrada-demo" hidden>Esto es una demo: lo que crees se pierde al recargar la página.</p>
@@ -440,11 +455,11 @@
 
 <!-- Ronda 28 (fase 2) · barra inferior en móvil con los tres destinos principales (no aparece en el editor ni en el laboratorio, que tienen su propia barra de acciones) -->
 <nav id="tabbar" class="tabbar" aria-label="Principal (barra inferior)">
-  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico" aria-hidden="true">◧</span>Carteras</a>
-  <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico" aria-hidden="true">◎</span>Descubrir</a>
-  <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico" aria-hidden="true">✎</span>Cuaderno</a>
+  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M3.5 9.5h17"/><path d="M15.5 14h2"/></svg></span>Carteras</a>
+  <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></span>Descubrir</a>
+  <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3.5h9l3 3v14H6z"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/></svg></span>Cuaderno</a>
 </nav>
-<div id="barra-guardar" class="barra-guardar" hidden>
+<div id="barra-guardar" class="barra-guardar" role="region" aria-label="Guardar la cartera" hidden>
   <div class="bg-info">
     <div class="bg-total"><b id="b-total" class="num">Asignado: 0&nbsp;%</b></div>
     <button id="b-estado" class="bg-estado estado-btn" type="button" aria-haspopup="dialog"></button>
