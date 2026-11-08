@@ -138,7 +138,7 @@ const EV = EVDIR;
   const ideas = await p.evaluate(async () => (await fetch('/api/ideas')).json());
   const esperado = [...ideas].sort((a, c) => c.cumplidos - a.cumplidos || (a.evaluados - a.cumplidos) - (c.evaluados - c.cumplidos) || a.ticker.localeCompare(c.ticker)).map(r => r.ticker);
   const real = ideas.map(r => r.ticker), parciales = ideas.filter(r => r.sin_datos > 0);
-  while (await p.locator('[data-emp-mas]').count()) { await p.click('[data-emp-mas]'); await p.waitForTimeout(100); }   // ronda 31: en el móvil la lista va por tandas; se despliega entera
+  while (await p.locator('[data-emp-mas] >> visible=true').count()) { await p.click('[data-emp-mas] >> visible=true'); await p.waitForTimeout(100); }   // ronda 31: en el móvil la lista va por tandas; se despliega entera
   const tarjetas = await p.evaluate(() => [...document.querySelectorAll('#empresas-cards .emp-card')].map(c => c.querySelector('.simbolo').textContent + ': ' + c.querySelector('.ec-res').innerText.replace(/\s+/g, ' ')));
   const conDatos = tarjetas.find(t => /de 5 superadas/.test(t)), parcial = tarjetas.find(t => /sin datos/.test(t));
   // un parcial no se trata como fallo: junto a otra con las mismas superadas, la que tiene sin datos NO queda detrás por ello
