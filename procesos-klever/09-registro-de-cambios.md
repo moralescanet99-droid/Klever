@@ -87,3 +87,4 @@
 | 2026-11-08 | *(commit de esta corrección)* | Ronda 31: se restaura la frase principal de la portada con «sin dinero real, con datos de prueba» (`testB` lo exige desde la ronda 21; el recorte era un error mío). | — |
 | 2026-11-08 | *(commit de esta adaptación)* | Ronda 31: `testE` F7a despliega todas las tandas de Explorar en el móvil antes de buscar una tarjeta con datos parciales (adaptación declarada: la lista móvil va por tandas de 24). | Repetir `testE` tras la pasada. |
 | 2026-11-08 | *(commit de esta adaptación)* | Ronda 31: `testJ` J9 despliega todas las tandas de Explorar en el móvil para seguir comprobando las 126 empresas (adaptación declarada). | — |
+| 2026-11-08 | *(commit de esta adaptación)* | Ronda 31: `testAA` espera 600 ms tras cerrar la ficha (el cierre vuelve atrás en el historial y la navegación siguiente se abortaba tras la búsqueda añadida en AA3). | — |
