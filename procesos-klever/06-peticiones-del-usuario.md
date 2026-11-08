@@ -2252,3 +2252,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 (C45 · 2026-11-08: «Si» — seguir con la segunda parte de la fase 1: pantallas en módulos y comparación visual.)
 
 (C46 · 2026-11-08: «si» — empezar la fase 2 (experiencia de usuario).)
+
+## C47 · (2026-11-08) — inspiración: Darwinex Zero y un vídeo (en espera), literal
+> quiero que anilixes esta empresa como inspiraciion par saber si te da ideas que implementar o cambiar de la app https://www.darwinexzero.com/es . Luego tambien quiero que analices el seguiente video poara que te inspires en una portada mucho más futurista para el efecto wow en los usuarios. No hagas nada hasta que no te envie el video, espera un momento
+
+(En espera del vídeo antes de empezar.)
