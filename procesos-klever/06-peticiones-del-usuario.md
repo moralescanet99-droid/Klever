@@ -2207,3 +2207,16 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Con todos la nuevas skills instaladas como mejorarias todos los aspectos?
 
 (Respuesta en el chat: qué skill aporta a cada uno de los 14 aspectos, qué no pueden sustituir (personas, teléfono real, datos reales) y un orden propuesto: primero auditorías sin tocar código, después rondas de cambios. Sin cambios de código.)
+
+## C40 · Ronda 31 (2026-11-08) — web de última generación, auditoría y trabajo autónomo, literal
+> Primero quiero que pienses en que la web/app quiero que se vea como una de ultima generacion, asi que piensa en que detalles cambiarias y lo dejas apuntado. 
+>
+> Luego empieza por la auditoría
+>
+> Una vez la tengas quiero que lo apuntes todo en el cuaderno maestro.
+>
+> Seguidamente con todo claro, te pones s trabajar en todas las modificaciones y mejoras.
+>
+> "Cuando te arroje esto quiero que trabajes sin consultarme nada, doy por buenos todos tu cambios y mejoras siempre que tengan un coste 0€. Si hay alguna cosa que necesita mi consentimiento porque es super importante o requiere mi aprobacion, dejamelas anotadas y mañana la veo, pero en las partes que puedas avanzar hazlo"
+
+(Permiso permanente para esta tarea: trabajar sin consultar en todo lo que cueste 0 €; lo que necesite su aprobación se anota en `PENDIENTES.md` § «Para Javier». Resultado: `ronda31/`.)
