@@ -99,3 +99,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-08 · Ronda 33 (C45): fase 1, segunda parte: Explorar y «Tu semana» en módulos, comparación visual de capturas y reintento declarado; fase 1 cerrada con 1216/0.
 - 2026-11-08 · Ronda 34 (C46): fase 2, primera parte: pantalla «Hoy» con la cartera principal en grande y una sola acción.
 - 2026-11-08 · Ronda 35 (C47–C49): inspiración (Darwinex Zero y vídeo); portada con rueda de esferas y «Hoy» con frase con iconos y rueda de la temporada.
+- 2026-11-08 · C50: plan de marketing para hacer viral la app (`ronda36/PLAN-MARKETING.md`).
