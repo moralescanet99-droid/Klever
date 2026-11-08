@@ -2140,7 +2140,7 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 ## C25 · (2026-11-06) — ver la versión e interactuar, literal
 > Puedo ver la ultima version e interactuar?
 
-(Se publicó la demo como artefacto privado: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw — se actualiza con cada fase.)
+(Se publicó la demo como artefacto privado: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw — se actualiza con cada fase. Desde la ronda 31 la demo vigente es https://claude.ai/artifact/W7axvW4u7kefDVSkVXhZVp.)
 
 ## C26 · (2026-11-06) — valoración experta, literal
 > Como ves todos los aspectos de la web? Valoralos como un experto en ello, explicalo de forma simple cada punto para poder entenderlo bien
@@ -2220,3 +2220,9 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > "Cuando te arroje esto quiero que trabajes sin consultarme nada, doy por buenos todos tu cambios y mejoras siempre que tengan un coste 0€. Si hay alguna cosa que necesita mi consentimiento porque es super importante o requiere mi aprobacion, dejamelas anotadas y mañana la veo, pero en las partes que puedas avanzar hazlo"
 
 (Permiso permanente para esta tarea: trabajar sin consultar en todo lo que cueste 0 €; lo que necesite su aprobación se anota en `PENDIENTES.md` § «Para Javier». Resultado: `ronda31/`.)
+
+## C41 · (2026-11-08) — enlace para probar y licencia, literal
+> Dame un enlace donde pueda probarlo. 
+> Estoy pendando en que no quiero que sea de licencia  libre
+
+(Se publicó la demo de la ronda 31 como artefacto privado: https://claude.ai/artifact/W7axvW4u7kefDVSkVXhZVp. Sobre la licencia: Klever no tiene licencia libre (no hay archivo LICENSE: todos los derechos reservados), pero **el repositorio de GitHub es público** y cualquiera puede leer el código; solo la fuente Inter es de licencia libre (OFL). Pendiente de su decisión: hacer privado el repositorio y si cambiar la fuente; anotado en `PENDIENTES.md` § ★★.)
