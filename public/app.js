@@ -17,25 +17,7 @@ import { retos, resumenSemana, evolucion, cambiosSemana, retoSemana, fotoAnterio
 import { miraAtras, ESTADO_CICLO } from './js/ciclo.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
-const store = (() => { const m = {}; let ok = true; try { localStorage.setItem('__k', '1'); localStorage.removeItem('__k'); } catch { ok = false; } return { ok, // ok: ¿persiste de verdad en este dispositivo?
-  getItem: k => { try { return localStorage.getItem(k); } catch { return m[k] ?? null; } },
-  setItem: (k, v) => { try { localStorage.setItem(k, v); } catch { m[k] = v; } },
-  removeItem: k => { try { localStorage.removeItem(k); } catch { delete m[k]; } },
-  // Variantes ESTRICTAS (radar del visitante): lanzan si el almacenamiento falla, en vez de caer en silencio a la memoria y devolver después el valor anterior.
-  setItemEstricto: (k, v) => localStorage.setItem(k, v), getItemEstricto: k => localStorage.getItem(k), removeItemEstricto: k => localStorage.removeItem(k) }; })();
-const $ = s => document.querySelector(s);
-const $$ = s => document.querySelectorAll(s);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const NB = ' '; // espacio duro: número y unidad nunca se separan
-const nf = (v, d = 1) => new Intl.NumberFormat('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
-const pct = v => v == null ? '—' : nf(v * 100) + NB + '%';   // fracción: 0,12 → 12,0 %
-const pesoTxt = v => nf(v) + NB + '%';                          // ya en puntos porcentuales (1 decimal)
-const pesoCorto = v => (Number.isInteger(r1(v)) ? nf(v, 0) : nf(v, 1)) + NB + '%'; // 12 % · 12,5 %
-const miles = v => v == null ? '—' : nf(v / 1e9);               // miles de millones
-const r1 = v => Math.round(v * 10) / 10;
-const parsePeso = s => { const n = parseFloat(String(s).trim().replace(/\s/g, '').replace(',', '.')); return Number.isFinite(n) ? n : NaN; };
-const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-const reducido = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { store, $, $$, esc, NB, nf, pct, pesoTxt, pesoCorto, miles, r1, parsePeso, norm, reducido } from './js/base.js';
 
 // Avisos: zona reservada bajo la cabecera (no flotan sobre nada). Los de éxito se cierran solos; los ERRORES que requieren actuar
 // permanecen hasta que se cierran («Cerrar aviso») y se anuncian como alerta.
@@ -56,6 +38,12 @@ function hideToast() { if (!$('#toast').classList.contains('error')) cerrarAviso
 $('#toast-x').addEventListener('click', cerrarAviso);
 
 const API = '/api';
+// Fase 1 (ronda 33) · embudo anónimo: un aviso al servidor sin datos de la persona (nunca bloquea ni muestra errores).
+const medir = evento => { try { fetch(API + '/evento', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ evento }), keepalive: true }).catch(() => {}); } catch { /* sin red */ } };
+// «visita» una vez por dispositivo y día; «vuelve_7d» si la primera visita de este dispositivo fue hace 7 días o más (una vez al día). Solo fechas en este dispositivo.
+(() => { try { const hoy = new Date().toISOString().slice(0, 10), ult = localStorage.getItem('klever_visita'); if (ult === hoy) return;
+  let pri = localStorage.getItem('klever_primera'); if (!pri) { pri = hoy; localStorage.setItem('klever_primera', hoy); }
+  localStorage.setItem('klever_visita', hoy); medir('visita'); if (Date.parse(hoy) - Date.parse(pri) >= 7 * 864e5) medir('vuelve_7d'); } catch { /* sin almacenamiento: no se mide */ } })();
 const tok = () => store.getItem('klever_token');
 const logged = () => !!tok();
 
@@ -217,7 +205,7 @@ async function redeem() { // canje del enlace mágico (?login=TOKEN)
   const t = new URLSearchParams(location.search).get('login'); if (!t) return;
   try { history.replaceState(null, '', location.pathname + location.hash); } catch {}
   try {
-    const r = await api('/verify', { method: 'POST', body: { token: t } });
+    const r = await api('/verify', { method: 'POST', body: { token: t } }); medir('cuenta_iniciada');
     store.setItem('klever_token', r.token);
     // El enlace se pidió con un borrador local. Si se abre en otro dispositivo/navegador, el borrador no está aquí.
     if (r.con_borrador && !hayBorrador()) store.setItem(AVISO, '1'); else store.removeItem(AVISO);
@@ -458,7 +446,7 @@ $('#btn-nueva').addEventListener('click', () => formNuevo($('#form-nueva').hidde
 // Con cuenta, las otras dos entradas crean la cartera VACÍA en la cuenta y abren el MISMO editor (ronda 22: «Mis carteras» ya no ofrece solo una plantilla)
 async function crearVaciaEnCuenta(origen) {
   const b = $(origen === 'manual' ? '#nueva-manual' : '#nueva-vacia'); b.disabled = true;
-  try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); go('#cartera-' + id); }
+  try { const { id } = await api('/portfolios', { method: 'POST', body: { nombre: origen === 'manual' ? 'Mi cartera (la que ya tengo)' : 'Mi cartera nueva', plantilla: 'dividendos', origen, posiciones: [] } }); medir('cartera_creada'); go('#cartera-' + id); }
   catch (err) { toastError(err.message || 'No se pudo crear la cartera. Inténtalo de nuevo.'); } finally { b.disabled = false; }
 }
 $('#nueva-vacia').addEventListener('click', () => crearVaciaEnCuenta('vacia'));
@@ -467,7 +455,7 @@ $('#nueva-cancelar').addEventListener('click', () => { formNuevo(false); $('#btn
 $('#form-nueva').addEventListener('submit', async e => {
   e.preventDefault(); const f = new FormData(e.target), btn = e.target.querySelector('button.btn-primario'); btn.disabled = true;
   try {
-    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla'), posiciones: repartoPlantilla(f.get('plantilla')) } }); // una sola operación: sin carteras vacías a medias
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: f.get('nombre'), plantilla: f.get('plantilla'), posiciones: repartoPlantilla(f.get('plantilla')) } }); medir('cartera_creada'); // una sola operación: sin carteras vacías a medias
     e.target.reset(); go('#cartera-' + id);
   } catch (err) { toastError(err.message); } finally { btn.disabled = false; }
 });
@@ -556,7 +544,7 @@ async function migrarBorrador() { // al entrar, el borrador pasa a la cuenta SI 
     location.hash = '#cartera'; return;
   }
   try {
-    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', posiciones: d.pos } }); // una sola operación: todo o nada
+    const { id } = await api('/portfolios', { method: 'POST', body: { nombre: d.nombre || 'Mi cartera de ' + nombrePlantilla(d.plantilla), plantilla: d.plantilla, origen: d.origen || 'plantilla', posiciones: d.pos } }); medir('cartera_creada'); // una sola operación: todo o nada
     store.removeItem(DRAFT); // el borrador solo se borra cuando todo se ha guardado
     toast('Cartera guardada'); location.hash = '#cartera-' + id;
   } catch (err) {
@@ -827,6 +815,7 @@ async function guardar() {
     u = cur.id
       ? await api('/portfolios/' + cur.id, { method: 'PUT', body: { posiciones: pos, nombre, tesis: $('#tesis').value, revision: cur.revision } })
       : await api('/portfolios', { method: 'POST', body: { nombre, plantilla: cur.plantilla, origen: cur.origen || 'plantilla', tesis: $('#tesis').value, posiciones: pos } });
+    if (!cur.id) medir('cartera_creada');
   } catch (err) { if (err.status === 409 && err.data?.conflicto) conflicto = true; else fallo = err.message; } // un fallo nunca muestra «guardada»; los cambios siguen en local
   const vigente = current === cur;           // ¿sigue abierta la misma cartera?
   if (vigente) saving = false;
@@ -1354,7 +1343,7 @@ async function aplicarDesdeLab(base, lista) {
 document.addEventListener('click', e => { const b = e.target.closest('.sello-mas'); if (!b) return; const t = document.getElementById(b.getAttribute('aria-controls')); if (!t) return; const abrir = t.hidden; t.hidden = !abrir; b.setAttribute('aria-expanded', String(abrir)); b.textContent = abrir ? 'Menos' : 'Más'; });
 function contextoLab() {
   return { idSesion: () => tok(), sesion: () => sesionSeq, universo: cargarUniverso, empresas: () => empresas, origen: origenCodigo, cerrarFicha, abrirEjemplo: () => abrirLab({ carteraId: 'ejemplo' }), $, $$, esc, pesoCorto, nf, api, getJson, logged, store, go, toast, toastError, abrirAcceso, fmtFecha, fmtFechaHora, leerBorrador,
-    activos: () => by, criteriosAhora, verFicha, refrescarEmpresas: () => renderEmpresas(),
+    activos: () => by, criteriosAhora, medir, verFicha, refrescarEmpresas: () => renderEmpresas(),
     editor: () => ({ current, pos, posGuardada, dirty: !!current?.id && rev !== savedRev }),
     fijarLimite: v => { if (current) current.limite_peso = v; },
     probar: ({ ticker, historia }) => abrirLab({ carteraId: null, ticker, historia }),

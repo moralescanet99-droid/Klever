@@ -2,20 +2,20 @@
 # Ejecuta TODAS las pruebas con un servidor LIMPIO entre baterías. SALE CON CÓDIGO ≠ 0 si ALGO falla:
 # fallo de arranque, límite de tiempo, batería sin resultado, código de salida ≠ 0 o «N fallos» > 0. Limpia procesos con trap.
 # Requisitos: Node >= 22.13, «npm ci», «npx playwright install chromium»; sistema: bash, curl, git, python3, pgrep (Linux o macOS).
-# Variables: RONDA (carpeta de resultados, ronda15), LIMITE_BATERIA (segundos por batería, 900), PORT (8788),
+# Variables: RONDA (carpeta de resultados, ronda15), LIMITE_BATERIA (segundos por batería, 900), PORT (8788), PARALELO (trabajadores de las baterías de navegador, 3; 1 = secuencial),
 #            BATERIAS / UNIDAD / DEMO_TEST / DEMO_DIR / DEMO_PORT / DEMO_SERVIDOR (para probar el propio ejecutor), OMITIR_DEMO=1.
 set -uo pipefail
 cd "$(dirname "$0")/.."
-export RONDA="${RONDA:-ronda31}"; LIMITE="${LIMITE_BATERIA:-900}"
-BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs tests/ronda16/testO.cjs tests/ronda17/testP.cjs tests/ronda18/testQ.cjs tests/ronda19/testR.cjs tests/ronda21/testS.cjs tests/ronda22/testT.cjs tests/ronda23/testU.cjs tests/ronda26/testV.cjs tests/ronda27/testW.cjs tests/ronda28/testX.cjs tests/ronda28/testY.cjs tests/ronda28/testZ.cjs tests/ronda29/testAA.cjs tests/ronda30/testAB.cjs tests/ronda31/testAC.cjs tests/ronda18/paridad-demo.cjs}"
-UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs tests/ronda19/unit-redondeo19.mjs tests/ronda19/unit-revision19.mjs tests/ronda20/unit-causas20.mjs tests/ronda20/unit-cierre20.mjs tests/ronda21/unit-registro21.mjs tests/ronda21/unit-cuaderno21.mjs tests/ronda22/unit-cliente-revision22.mjs tests/ronda26/unit-senales26.mjs tests/ronda28/unit-claridad28.mjs tests/ronda28/unit-fase2-28.mjs tests/ronda29/unit-semana29.mjs tests/ronda30/unit-ronda30.mjs}"
+export RONDA="${RONDA:-ronda33}"; LIMITE="${LIMITE_BATERIA:-900}"
+BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5/testC.cjs tests/ronda5/testD.cjs tests/ronda5/testE.cjs tests/ronda7/testF.cjs tests/ronda8/testG.cjs tests/ronda9/verificar-api.mjs tests/ronda10/testH.cjs tests/ronda11/testI.cjs tests/ronda12/testJ.cjs tests/ronda13/testK.cjs tests/ronda14/testL.cjs tests/ronda15/testM.cjs tests/ronda15/testN.cjs tests/ronda16/testO.cjs tests/ronda17/testP.cjs tests/ronda18/testQ.cjs tests/ronda19/testR.cjs tests/ronda21/testS.cjs tests/ronda22/testT.cjs tests/ronda23/testU.cjs tests/ronda26/testV.cjs tests/ronda27/testW.cjs tests/ronda28/testX.cjs tests/ronda28/testY.cjs tests/ronda28/testZ.cjs tests/ronda29/testAA.cjs tests/ronda30/testAB.cjs tests/ronda31/testAC.cjs tests/ronda33/testAD.cjs tests/ronda18/paridad-demo.cjs}"
+UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs tests/ronda19/unit-redondeo19.mjs tests/ronda19/unit-revision19.mjs tests/ronda20/unit-causas20.mjs tests/ronda20/unit-cierre20.mjs tests/ronda21/unit-registro21.mjs tests/ronda21/unit-cuaderno21.mjs tests/ronda22/unit-cliente-revision22.mjs tests/ronda26/unit-senales26.mjs tests/ronda28/unit-claridad28.mjs tests/ronda28/unit-fase2-28.mjs tests/ronda29/unit-semana29.mjs tests/ronda30/unit-ronda30.mjs tests/ronda33/unit-fase1.mjs}"
 PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
 mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
 reg() { echo "$@" | tee -a "$SALIDA"; }
 fallo() { FALLOS=$((FALLOS + 1)); reg "FALLA (ejecutor): $*"; }
 matar_arbol() { local h; for h in $(pgrep -P "$1" 2>/dev/null || true); do matar_arbol "$h"; done; kill "$1" 2>/dev/null || true; }
-limpiar() { bash scripts/local/servidor.sh stop >/dev/null 2>&1 || true; [ -f .wrangler/demo.pid ] && { matar_arbol "$(cat .wrangler/demo.pid)"; rm -f .wrangler/demo.pid; }; }
+limpiar() { bash scripts/local/servidor.sh stop >/dev/null 2>&1 || true; for k in 0 1 2 3 4 5 6 7; do PORT=$((8800 + k)) bash scripts/local/servidor.sh stop >/dev/null 2>&1 || true; done; [ -f .wrangler/demo.pid ] && { matar_arbol "$(cat .wrangler/demo.pid)"; rm -f .wrangler/demo.pid; }; }
 trap limpiar EXIT
 trap 'fallo "interrumpido"; exit 130' INT TERM
 # Ejecuta «node RUTA» con límite de tiempo portable (sin timeout). Deja SALIDA_T, CODIGO y TIEMPO_AGOTADO.
@@ -58,12 +58,46 @@ for t in $PRUEBAS_SH; do
   n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
   con_limite "$LIMITE" bash "$t"; evaluar "$n"
 done
+PARALELO="${PARALELO:-3}"
+if [ "$PARALELO" -le 1 ]; then
 for t in $BATERIAS; do
   n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
   if ! bash scripts/local/servidor.sh start >.wrangler/arranque.log 2>&1; then fallo "el servidor no arrancó para $n: $(tail -1 .wrangler/arranque.log)"; continue; fi
   con_limite "$LIMITE" node "$t"; evaluar "$n"
 done
 bash scripts/local/servidor.sh stop >/dev/null 2>&1 || fallo "no se pudo parar el servidor"
+else
+  # Fase 1 (ronda 33): PARALELO trabajadores, cada uno con SU servidor (puerto 8800+k) y SU base limpia por batería.
+  # Cada trabajador toma la siguiente batería de una cola común (cerrojo con mkdir, portable). Los resultados se evalúan
+  # DESPUÉS y en el orden de siempre, así el registro es idéntico al secuencial.
+  TMPP="$(mktemp -d)"; set -- $BATERIAS; NB=$#; echo 0 > "$TMPP/siguiente"
+  trabajador() {
+    local k="$1" port=$((8800 + $1)) i t
+    export PORT="$port" BASE_URL="http://localhost:$port/" KLEVER_ESTADO=".wrangler/pruebas-auto-$port"
+    while :; do
+      until mkdir "$TMPP/cerrojo" 2>/dev/null; do sleep 0.1; done
+      i="$(cat "$TMPP/siguiente")"; echo $((i + 1)) > "$TMPP/siguiente"; rmdir "$TMPP/cerrojo"
+      [ "$i" -ge "$NB" ] && break
+      t="$(echo $BATERIAS | tr ' ' '\n' | sed -n "$((i + 1))p")"
+      if ! bash scripts/local/servidor.sh start >"$TMPP/$i.arranque" 2>&1; then : >"$TMPP/$i.noarranca"; continue; fi
+      con_limite "$LIMITE" node "$t"
+      printf '%s' "$SALIDA_T" >"$TMPP/$i.out"; echo "$CODIGO $TIEMPO_AGOTADO" >"$TMPP/$i.rc"; printf '%s' "$CMD_LOG" >"$TMPP/$i.cmd"
+      bash scripts/local/servidor.sh stop >/dev/null 2>&1
+    done
+  }
+  PIDS=""; for k in $(seq 0 $((PARALELO - 1))); do trabajador "$k" & PIDS="$PIDS $!"; done
+  for pid in $PIDS; do wait "$pid"; done
+  i=0
+  for t in $BATERIAS; do
+    n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
+    if [ -f "$TMPP/$i.noarranca" ]; then fallo "el servidor no arrancó para $n: $(tail -1 "$TMPP/$i.arranque")"
+    elif [ ! -f "$TMPP/$i.rc" ]; then fallo "$n no llegó a ejecutarse"
+    else SALIDA_T="$(cat "$TMPP/$i.out")"; read -r CODIGO TIEMPO_AGOTADO <"$TMPP/$i.rc"; CMD_LOG="$(cat "$TMPP/$i.cmd") (PARALELO=$PARALELO)"; evaluar "$n"; fi
+    i=$((i + 1))
+  done
+  for k in $(seq 0 $((PARALELO - 1))); do PORT=$((8800 + k)) bash scripts/local/servidor.sh stop >/dev/null 2>&1; done
+  rm -rf "$TMPP"
+fi
 for t in $SEGURIDAD; do
   n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n (servidor sin enlace de acceso en pantalla) ==="
   if ! SIN_ENLACE_DEV=1 bash scripts/local/servidor.sh start >.wrangler/arranque.log 2>&1; then fallo "el servidor sin enlace de desarrollo no arrancó para $n: $(tail -1 .wrangler/arranque.log)"; continue; fi

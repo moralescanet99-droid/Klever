@@ -9,7 +9,7 @@ const { chromium, B, ev, nuevo, mail, fin } = require('../ronda5/h.cjs');
 const fs = require('fs'), path = require('path');
 const J = JSON.stringify;
 const RAIZ = path.resolve(__dirname, '..', '..');
-const baseLocal = () => { const d = path.join(RAIZ, '.wrangler/pruebas-auto/v3/d1/miniflare-D1DatabaseObject'); const f = fs.readdirSync(d).filter(x => x.endsWith('.sqlite') && x !== 'metadata.sqlite'); if (f.length !== 1) throw new Error('base local no encontrada: ' + f); return path.join(d, f[0]); };
+const baseLocal = () => { const d = path.join(RAIZ, (process.env.KLEVER_ESTADO || '.wrangler/pruebas-auto') + '/v3/d1/miniflare-D1DatabaseObject'); const f = fs.readdirSync(d).filter(x => x.endsWith('.sqlite') && x !== 'metadata.sqlite'); if (f.length !== 1) throw new Error('base local no encontrada: ' + f); return path.join(d, f[0]); };
 const sql = (q, ...a) => { const { DatabaseSync } = require('node:sqlite'); const db = new DatabaseSync(baseLocal()); try { return /^\s*SELECT/i.test(q) ? db.prepare(q).all(...a) : db.prepare(q).run(...a); } finally { db.close(); } };
 const isoUtc = ms => new Date(ms).toISOString().slice(0, 10);
 (async () => {

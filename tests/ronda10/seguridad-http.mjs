@@ -18,7 +18,7 @@ const lista = await j('GET', '/api/public'); const ids = JSON.parse(lista.txt).m
 const detalles = await Promise.all(ids.slice(0, 5).map(id => j('GET', '/api/public/' + id)));
 const publico = lista.txt + detalles.map(d => d.txt).join('');
 t('S5', 'Lo público no expone datos personales', ids.length > 0 && !/@|email|usuario_id|token_escritura|revision/.test(publico), `${ids.length} carteras públicas, ${detalles.length} detalles; contiene «@», email, usuario_id, token_escritura o revisión=${/@|email|usuario_id|token_escritura|revision/.test(publico)}`);
-const estaticos = await Promise.all(['/', '/app.js', '/index.html', '/style.css'].map(p => j('GET', p)));
+const estaticos = await Promise.all(['/', '/app.js', '/index.html', '/klever.css'].map(p => j('GET', p)));
 t('S6', 'Los ficheros públicos no contienen claves ni el valor de DEV_RETURN_LINK', estaticos.every(e => e.s === 200 && !/BREVO_API_KEY\s*[:=]|api-key|xkeysib|DEV_RETURN_LINK/i.test(e.txt)), `estados ${estaticos.map(e => e.s).join(',')}`);
 console.log(`\nRESULTADO: ${ok} correctas, ${fallos.length} fallos${fallos.length ? '\nFALLOS:\n- ' + fallos.join('\n- ') : ''}`);
 process.exit(fallos.length ? 1 : 0);

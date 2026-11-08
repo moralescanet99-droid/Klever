@@ -656,6 +656,7 @@ async function guardarEscenario() {
     const r = await LAB.alm.escenarios.crear({ clave: s.clave, nombre: $('#lab-nombre').value, nota: $('#lab-nota').value, invalidacion: $('#lab-invalidacion').value, pregunta: $('#lab-pregunta').value, revisar_en: $('#lab-revisar').value || null, historia: s.historia || null, pregunta_ref: ($('#lab-ref')?.checked && s.historia) ? refPregunta(s.historia, 1) : null,
       cartera_id: base.id, base_revision: base.revision, ticker: sim.ticker, peso: Number(s.peso), financiacion: sim.financiacion, propuesta: sim.despues, evaluacion: s.evaluacion || undefined });
     if (!vigente(g)) return;
+    if (!r.duplicado) x().medir?.('idea_guardada');
     toast(r.duplicado ? 'Esa comparación ya estaba guardada en tu Cuaderno' : 'Comparación guardada en tu Cuaderno'); x().go('#escenario-' + r.id);
   } catch (e) {
     if (!vigente(g)) return;

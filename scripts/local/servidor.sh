@@ -7,7 +7,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 PORT="${PORT:-8788}"
-ESTADO=".wrangler/pruebas-auto"; PID=".wrangler/servidor.pid"; LOG=".wrangler/servidor.log"
+SUF=""; [ "$PORT" != 8788 ] && SUF="-$PORT"   # fase 1 (ronda 33): varios servidores a la vez, uno por puerto, cada uno con su base
+ESTADO=".wrangler/pruebas-auto$SUF"; PID=".wrangler/servidor$SUF.pid"; LOG=".wrangler/servidor$SUF.log"
 WR="./node_modules/.bin/wrangler"
 [ -x "$WR" ] || { echo "Falta wrangler: ejecuta antes «npm ci»." >&2; exit 1; }
 matar_arbol() { local h; for h in $(pgrep -P "$1" 2>/dev/null || true); do matar_arbol "$h"; done; kill "$1" 2>/dev/null || true; }
@@ -17,7 +18,7 @@ parar() {
   echo "El puerto $PORT sigue ocupado por otro programa: ciérralo o usa PORT=otro." >&2; exit 1
 }
 sembrar() {
-  rm -rf .wrangler/pruebas-auto
+  rm -rf "./$ESTADO"
   "$WR" d1 execute klever --local --persist-to "$ESTADO" --file=schema.sql           >/dev/null
   "$WR" d1 execute klever --local --persist-to "$ESTADO" --file=data/seed-prueba.sql >/dev/null
   "$WR" d1 execute klever --local --persist-to "$ESTADO" --file=data/demo.sql        >/dev/null

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Prueba del PROPIO ejecutor (tests/run-all.sh): fallos y timeouts deliberados deben dar código ≠ 0 y limpiar los procesos.
 # Uso: bash tests/ronda8/test-ejecutor.sh   (necesita «npm ci»; unos 2 minutos: arranca el servidor local en cada escenario)
+export PARALELO="${PARALELO:-1}"   # ronda 33: este ejecutor prueba el modo secuencial (puertos y casos fijos)
 set -uo pipefail
 cd "$(dirname "$0")/../.."
 export PORT="${PORT:-8799}" OMITIR_DEMO=1 UNIDAD=" " SEGURIDAD=" " PRUEBAS_SH=" "

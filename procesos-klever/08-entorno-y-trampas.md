@@ -200,3 +200,4 @@ Demo: `python3 scripts/demo/build_demo.py` regenera `demo/index.html` (y `build/
 - **Cerrar la ficha (`#dlg-ficha`) hace `history.back()`:** un `page.goto` inmediatamente después se aborta (`net::ERR_ABORTED`). Esperar ~600 ms tras cerrarla.
 - **Explorar en el móvil va por tandas de 24** (`[data-emp-mas]`): una prueba que necesite una empresa concreta debe buscarla, y una que compruebe TODAS debe pulsar «Mostrar más» hasta que desaparezca.
 - **El comprobador de seguridad del entorno puede bloquear un heredoc de Python largo sin ningún borrado** («could not be checked for dangerous rm»): guardar el script con la herramienta de escritura y ejecutarlo aparte.
+- **Pruebas en paralelo (ronda 33):** cada trabajador usa el puerto 8800+k y su base `.wrangler/pruebas-auto-<puerto>`; las pruebas que abren la base local leen la ruta de `KLEVER_ESTADO`. Una batería nueva que abra la base debe usar esa variable. Para depurar una a una: `PARALELO=1`.

@@ -14,3 +14,7 @@ SELECT COUNT(*) AS vuelven_tras_7_dias FROM (
   WHERE u.email != 'demo@klever.invalid'
   GROUP BY u.id
   HAVING MAX(COALESCE(s.ultimo_acceso, s.creado_en)) >= datetime(u.creado_en, '+7 days'));
+
+-- 4) Embudo anónimo (fase 1, ronda 33): contadores por evento en los últimos 28 días
+SELECT evento, SUM(n) AS total FROM eventos_dia WHERE fecha >= date('now', '-28 days') GROUP BY evento
+  ORDER BY CASE evento WHEN 'visita' THEN 1 WHEN 'cartera_creada' THEN 2 WHEN 'cuenta_iniciada' THEN 3 WHEN 'idea_guardada' THEN 4 WHEN 'vuelve_7d' THEN 5 END;
