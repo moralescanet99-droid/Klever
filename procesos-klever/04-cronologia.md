@@ -102,3 +102,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-08 · C50: plan de marketing para hacer viral la app (`ronda36/PLAN-MARKETING.md`).
 - 2026-11-08 · Ronda 36 (C50–C51): plan de marketing aprobado; reglas de la Liga; tarjeta para compartir, mayores de 18 y embudo sin almacenamiento en el dispositivo.
 - 2026-11-08 · Ronda 36: Liga, Temporada 0 (servidor y pantalla), con ligas privadas e invitación por enlace.
+- 2026-11-08 · Ronda 37 (C53): propuesta de refundación «futurista y viva» y prototipo interactivo (`ronda37/`), pendiente de decisión de Javier.

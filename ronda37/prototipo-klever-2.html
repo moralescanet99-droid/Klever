@@ -1,0 +1,666 @@
+<title>Klever Órbita</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Concepto: un sistema solar de tu cartera en el centro; todo lo demás orbita alrededor (escenarios, feed, liga). Un único mundo oscuro, cobre como luz. */
+:root{
+  color-scheme:dark;
+  --vacio:#07090d;        /* fondo del espacio */
+  --casco:#0e1219;        /* paneles */
+  --casco-2:#151b25;
+  --linea:#232c3a;
+  --texto:#eef1f6;
+  --tenue:#9aa6b8;
+  --cobre:#e8945a;        /* luz principal, herencia Klever */
+  --cobre-2:#ffc49a;
+  --plasma:#7cc4ff;       /* lo simulado / alternativo */
+  --ok:#5fd39a; --medio:#f2c14e; --alto:#ff7a59;
+  --f-disp:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-cuerpo:"Onest",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-dato:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:16px; --r-s:10px;
+  --muelle:cubic-bezier(.2,.9,.25,1.15);
+  --suave:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box}
+body{background:var(--vacio);color:var(--texto);font:16px/1.55 var(--f-cuerpo);margin:0;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--vacio)}
+.envoltura{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cobre-2);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-disp);font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0}
+.dato{font-family:var(--f-dato);font-variant-numeric:tabular-nums}
+.eti{font-family:var(--f-dato);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tenue)}
+
+/* Barra superior */
+.barra{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:color-mix(in srgb,var(--vacio) 78%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--linea)}
+.barra .envoltura{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:wrap}
+.marca{font-family:var(--f-disp);font-weight:800;font-size:1.05rem;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
+.marca i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--cobre-2),var(--cobre) 55%,#7a3f1c);box-shadow:0 0 14px var(--cobre)}
+.sello{margin-left:auto;font-family:var(--f-dato);font-size:.7rem;letter-spacing:.06em;color:var(--plasma);border:1px solid color-mix(in srgb,var(--plasma) 45%,transparent);padding:4px 10px;border-radius:999px;white-space:nowrap}
+nav.saltos{display:flex;gap:4px;flex-wrap:wrap}
+nav.saltos a{color:var(--tenue);text-decoration:none;font-size:.85rem;padding:4px 10px;border-radius:999px}
+nav.saltos a:hover{color:var(--texto);background:var(--casco-2)}
+
+/* Héroe: el sistema */
+.heroe{padding-block:28px 12px}
+.heroe-txt{display:grid;gap:10px;max-width:760px}
+.heroe h1{font-size:clamp(1.9rem,5.4vw,3.6rem);line-height:1.02;font-weight:800}
+.heroe h1 em{font-style:normal;background:linear-gradient(90deg,var(--cobre-2),var(--cobre) 50%,var(--plasma));-webkit-background-clip:text;background-clip:text;color:transparent}
+.heroe p{color:var(--tenue);margin:0;max-width:58ch}
+.sistema{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;margin-top:20px}
+@media (max-width:860px){.sistema{grid-template-columns:minmax(0,1fr)}}
+.lienzo-caja{position:relative;border:1px solid var(--linea);border-radius:var(--r);overflow:hidden;background:radial-gradient(ellipse at 50% 55%,#131a26 0%,var(--vacio) 70%);aspect-ratio:1.15;max-width:100%;touch-action:pan-y}
+#orbita{width:100%;height:100%;display:block;cursor:grab}
+#orbita:active{cursor:grabbing}
+.hud{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;flex-wrap:wrap}
+.hud .pild{pointer-events:auto;background:color-mix(in srgb,var(--casco) 80%,transparent);border:1px solid var(--linea);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:999px;padding:5px 12px;font-size:.8rem;color:var(--tenue)}
+.hud .pild b{color:var(--texto);font-weight:600}
+.estab{position:absolute;top:12px;left:12px;font-family:var(--f-dato);font-size:.72rem;color:var(--tenue);letter-spacing:.08em}
+.estab b{display:block;font-family:var(--f-disp);font-size:1.4rem;letter-spacing:0;color:var(--texto)}
+
+.panel{background:var(--casco);border:1px solid var(--linea);border-radius:var(--r);padding:16px;display:grid;gap:14px;align-content:start;min-width:0}
+.semaf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ind{background:var(--casco-2);border-radius:var(--r-s);padding:10px;display:grid;gap:2px;position:relative;overflow:hidden}
+.ind::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c,var(--linea));transition:background .3s}
+.ind b{font-family:var(--f-disp);font-size:1rem;font-weight:600}
+.ind span{font-size:.72rem;color:var(--tenue)}
+.posiciones{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.pos{display:grid;grid-template-columns:12px minmax(0,1fr) 52px 28px;align-items:center;gap:10px;padding:6px 4px;border-radius:var(--r-s);transition:background .2s}
+.pos.sel{background:var(--casco-2)}
+.pos .pt{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.pos .nom{min-width:0;display:grid}
+.pos .nom b{font-weight:600;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pos .nom small{color:var(--tenue);font-size:.72rem}
+.pos input[type=range]{grid-column:2/4;width:100%;accent-color:var(--c);margin:0;height:22px}
+.pos .pct{text-align:right;font-size:.85rem}
+.quitar{background:none;border:0;color:var(--tenue);cursor:pointer;width:28px;height:28px;border-radius:50%;font-size:1.1rem;line-height:1}
+.quitar:hover{color:var(--alto);background:var(--casco-2)}
+.fila-btn{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--linea);background:var(--casco-2);border-radius:999px;padding:8px 14px;cursor:pointer;font-size:.88rem;transition:transform .15s var(--muelle),border-color .2s}
+.btn:hover{border-color:var(--cobre)}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:var(--cobre);color:#1b0e05;border-color:var(--cobre);font-weight:600}
+.btn[aria-pressed=true]{border-color:var(--plasma);color:var(--plasma)}
+
+/* Secciones */
+section.bloque{padding-block:44px 8px}
+.cab{display:grid;gap:6px;margin-bottom:18px;max-width:720px}
+.cab h2{font-size:clamp(1.35rem,3.2vw,2rem)}
+.cab p{color:var(--tenue);margin:0}
+
+/* Escenarios */
+.escen{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
+@media (max-width:860px){.escen{grid-template-columns:minmax(0,1fr)}}
+.lista-esc{display:grid;gap:8px}
+.esc{text-align:left;background:var(--casco);border:1px solid var(--linea);border-radius:var(--r-s);padding:12px 14px;cursor:pointer;display:grid;gap:2px;transition:border-color .2s,transform .2s var(--muelle)}
+.esc:hover{transform:translateX(4px)}
+.esc[aria-pressed=true]{border-color:var(--plasma);background:color-mix(in srgb,var(--plasma) 8%,var(--casco))}
+.esc b{font-weight:600}
+.esc small{color:var(--tenue)}
+.graf{background:var(--casco);border:1px solid var(--linea);border-radius:var(--r);padding:16px;display:grid;gap:10px;min-width:0}
+.graf svg{width:100%;height:auto;display:block}
+.cifras{display:flex;gap:20px;flex-wrap:wrap}
+.cifras div{display:grid}
+.cifras b{font-family:var(--f-disp);font-size:1.6rem;font-weight:600}
+.nota{font-size:.78rem;color:var(--tenue)}
+
+/* Feed */
+.feed{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:center}
+@media (max-width:760px){.feed{grid-template-columns:minmax(0,1fr)}}
+.mazo{position:relative;height:440px;max-width:380px;width:100%;margin:0 auto}
+.carta{position:absolute;inset:0;background:linear-gradient(160deg,var(--casco-2),var(--casco) 60%);border:1px solid var(--linea);border-radius:22px;padding:18px;display:grid;grid-template-rows:auto 1fr auto;gap:8px;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;will-change:transform;box-shadow:0 20px 50px -20px #000}
+.carta .sector{display:inline-flex;align-items:center;gap:6px}
+.carta .sector i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.carta h3{font-size:1.35rem;margin-top:6px}
+.carta .huella{width:100%;max-width:240px;margin:0 auto;display:block}
+.carta .checks{display:flex;flex-wrap:wrap;gap:6px}
+.chk{font-size:.72rem;border-radius:999px;padding:3px 9px;border:1px solid var(--linea);color:var(--tenue)}
+.chk.si{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.sello-carta{position:absolute;top:22px;font-family:var(--f-disp);font-weight:800;font-size:1.1rem;padding:4px 10px;border:2px solid;border-radius:8px;opacity:0;pointer-events:none}
+.sello-carta.si{right:18px;color:var(--ok);transform:rotate(10deg)}
+.sello-carta.no{left:18px;color:var(--tenue);transform:rotate(-10deg)}
+.feed-ayuda{display:grid;gap:12px}
+.feed-ayuda .fila-btn .btn{min-width:120px}
+.vacio-mazo{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--tenue);border:1px dashed var(--linea);border-radius:22px;padding:20px}
+
+/* Liga */
+.liga{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+@media (max-width:860px){.liga{grid-template-columns:minmax(0,1fr)}}
+.tabla{list-style:none;margin:0;padding:0;position:relative;display:grid;gap:6px}
+.fila{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;background:var(--casco);border:1px solid var(--linea);border-radius:var(--r-s);padding:10px 12px;will-change:transform}
+.fila.tu{border-color:var(--cobre);background:color-mix(in srgb,var(--cobre) 9%,var(--casco))}
+.fila .pos-n{font-family:var(--f-disp);color:var(--tenue)}
+.fila .apodo{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fila .barra-p{grid-column:2/4;height:4px;border-radius:4px;background:var(--casco-2);overflow:hidden}
+.fila .barra-p i{display:block;height:100%;background:linear-gradient(90deg,var(--cobre),var(--cobre-2));transition:width .6s var(--suave)}
+.desglose{background:var(--casco);border:1px solid var(--linea);border-radius:var(--r);padding:16px;display:grid;gap:12px;align-content:start}
+.desglose .linea{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--linea);padding-bottom:8px}
+.desglose label{display:flex;gap:10px;align-items:center;cursor:pointer}
+.desglose input{accent-color:var(--cobre);width:18px;height:18px}
+.total{font-family:var(--f-disp);font-size:2.4rem;font-weight:800;line-height:1}
+
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;list-style:none;margin:0;padding:0}
+.ideas li{background:var(--casco);border:1px solid var(--linea);border-radius:var(--r-s);padding:14px;display:grid;gap:4px;min-width:0}
+.ideas li b{font-weight:600}
+.ideas li span{color:var(--tenue);font-size:.88rem}
+.ideas .riesgo{font-family:var(--f-dato);font-size:.7rem;letter-spacing:.06em;color:var(--ok)}
+.ideas .riesgo.m{color:var(--medio)} .ideas .riesgo.a{color:var(--alto)}
+.pasos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.pasos div{border-top:2px solid var(--cobre);padding-top:10px;display:grid;gap:4px}
+.pasos div span{color:var(--tenue);font-size:.88rem}
+
+/* Pie */
+footer{padding-block:48px 40px;color:var(--tenue);font-size:.85rem}
+footer .envoltura{display:grid;gap:8px;border-top:1px solid var(--linea);padding-top:20px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--casco-2);border:1px solid var(--cobre);border-radius:999px;padding:8px 16px;font-size:.88rem;transition:transform .35s var(--muelle);z-index:20;max-width:calc(100% - 32px);text-align:center}
+.toast.ver{transform:translate(-50%,0)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+
+<header class="barra">
+  <div class="envoltura">
+    <div class="marca"><i aria-hidden="true"></i>klever</div>
+    <nav class="saltos" aria-label="Secciones">
+      <a href="#sistema">Tu sistema</a><a href="#escenarios">Escenarios</a><a href="#descubrir">Descubrir</a><a href="#liga">Liga</a><a href="#cambios">Qué cambiaría</a>
+    </nav>
+    <span class="sello">Simulación · sin dinero real · no es consejo</span>
+  </div>
+</header>
+
+<main>
+  <div class="envoltura">
+    <section class="heroe" id="sistema" aria-labelledby="t-heroe">
+      <div class="heroe-txt">
+        <span class="eti">Prototipo de concepto · Klever 2 · datos de ejemplo</span>
+        <h1 id="t-heroe">Tu cartera, como un <em>sistema vivo</em>.</h1>
+        <p>Cada empresa es un planeta. Su tamaño es lo que pesa; su color, su sector. Si una pesa demasiado, el sistema se tambalea. Mueve los controles y míralo reaccionar.</p>
+      </div>
+
+      <div class="sistema">
+        <div class="lienzo-caja">
+          <canvas id="orbita" aria-label="Sistema planetario de tu cartera de ejemplo. Arrastra para girar; toca un planeta para seleccionarlo."></canvas>
+          <div class="estab"><span>ESTABILIDAD</span><b id="estab-v">—</b></div>
+          <div class="hud">
+            <span class="pild">Mayor: <b id="hud-mayor">—</b></span>
+            <span class="pild">Sectores: <b id="hud-sect">—</b></span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="semaf" aria-live="polite">
+            <div class="ind" id="ind-conc"><span>Concentración</span><b>—</b><span class="det">—</span></div>
+            <div class="ind" id="ind-var"><span>Variedad</span><b>—</b><span class="det">—</span></div>
+            <div class="ind" id="ind-liga"><span>Equilibrio</span><b>—</b><span class="det">puntos de Liga</span></div>
+          </div>
+          <ul class="posiciones" id="posiciones"></ul>
+          <div class="fila-btn">
+            <button class="btn" id="b-igual" type="button">Repartir a partes iguales</button>
+            <button class="btn" id="b-concentrar" type="button">Probar: todo en una</button>
+          </div>
+          <p class="nota">Los pesos se reparten solos hasta sumar el 100 %. Referencias orientativas de Klever (una posición por encima del 25 %, un sector por encima del 40 %), no normas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloque" id="escenarios" aria-labelledby="t-esc">
+      <div class="cab">
+        <span class="eti">Máquina de escenarios</span>
+        <h2 id="t-esc">¿Y si pasara esto?</h2>
+        <p>Elige un golpe hipotético y mira cómo respondería tu cartera de ejemplo frente a una igualada. Es aritmética sobre tus pesos, no una predicción.</p>
+      </div>
+      <div class="escen">
+        <div class="lista-esc" id="lista-esc" role="group" aria-label="Escenarios hipotéticos"></div>
+        <div class="graf">
+          <div class="cifras">
+            <div><span class="eti">Tu cartera</span><b class="dato" id="c-tu">100,0</b></div>
+            <div><span class="eti">Igualada</span><b class="dato" id="c-igual" style="color:var(--plasma)">100,0</b></div>
+          </div>
+          <svg id="graf" viewBox="0 0 600 260" role="img" aria-label="Índice que empieza en 100 para tu cartera y para una igualada"></svg>
+          <p class="nota" id="esc-expl">Índice que empieza en 100. Escenario ilustrativo: no son datos históricos ni lo que vaya a pasar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloque" id="descubrir" aria-labelledby="t-desc">
+      <div class="cab">
+        <span class="eti">Descubrir</span>
+        <h2 id="t-desc">Desliza empresas como quien pasa historias</h2>
+        <p>Derecha: a tu sistema. Izquierda: siguiente. Cada carta muestra su huella, cinco comprobaciones de un vistazo.</p>
+      </div>
+      <div class="feed">
+        <div class="mazo" id="mazo" aria-live="polite"></div>
+        <div class="feed-ayuda">
+          <div class="fila-btn">
+            <button class="btn" id="b-pasar" type="button">← Siguiente</button>
+            <button class="btn pri" id="b-anadir" type="button">Añadir →</button>
+          </div>
+          <p class="nota">También con el teclado: flechas izquierda y derecha cuando el mazo tiene el foco. Las huellas usan datos de ejemplo de empresas inventadas.</p>
+          <div>
+            <span class="eti">Las cinco comprobaciones</span>
+            <p class="nota" style="margin:.4em 0 0">Deuda manejable · Rentabilidad sobre el capital (ROIC) · Margen · Genera caja libre · Crece. Un vértice lleno es que la cumple.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloque" id="liga" aria-labelledby="t-liga">
+      <div class="cab">
+        <span class="eti">Liga · semana 3 de 12</span>
+        <h2 id="t-liga">Gana quien mejor cuida su cartera, no quien más arriesga</h2>
+        <p>La clasificación se mueve en directo con tu sistema. Apodos de ejemplo; en la real, solo apodos.</p>
+      </div>
+      <div class="liga">
+        <ol class="tabla" id="tabla"></ol>
+        <div class="desglose">
+          <span class="eti">Tus puntos esta semana</span>
+          <div class="total dato" id="l-total">0</div>
+          <div class="linea"><span>Equilibrio (hasta 50)</span><b class="dato" id="l-eq">0</b></div>
+          <div class="linea"><span>Aprendizaje (hasta 30)</span><b class="dato" id="l-ap">0</b></div>
+          <div class="linea"><span>Constancia (hasta 20)</span><b class="dato" id="l-co">0</b></div>
+          <label><input type="checkbox" id="l-reto" checked> Reto de la semana hecho (+20)</label>
+          <label><input type="checkbox" id="l-idea"> Idea guardada o revisada (+10)</label>
+          <label><input type="checkbox" id="l-racha" checked> Entré esta semana y la anterior (+12)</label>
+        </div>
+      </div>
+    </section>
+
+    <section class="bloque" id="cambios" aria-labelledby="t-camb">
+      <div class="cab">
+        <span class="eti">Si rehiciera Klever</span>
+        <h2 id="t-camb">De 20 conceptos a 5 pantallas y un solo bucle</h2>
+        <p>El lunes, tu cartera vive un escenario. Decides en dos minutos si aguantas, reequilibras o vendes. Ves tu Temple y tu equilibrio, te comparas con tus amigos y compartes la tarjeta.</p>
+      </div>
+      <ul class="ideas">
+        <li><span class="riesgo">RIESGO BAJO</span><b>Máquina del tiempo a ciegas</b><span>Tu cartera revive una crisis real sin saber cuál es.</span></li>
+        <li><span class="riesgo">RIESGO BAJO</span><b>Temple</b><span>Mide si te dejas llevar por el pánico, no al mercado.</span></li>
+        <li><span class="riesgo">RIESGO BAJO</span><b>Duelos por enlace</b><span>El mismo escenario y dos carteras. Sin cuenta, en 60 segundos.</span></li>
+        <li><span class="riesgo">RIESGO BAJO</span><b>Resumen de temporada</b><span>Al estilo «Wrapped», con tarjeta para compartir.</span></li>
+        <li><span class="riesgo">RIESGO BAJO</span><b>Ligas de clase</b><span>Con panel para el profesor. También es el modelo de negocio.</span></li>
+        <li><span class="riesgo">RIESGO BAJO</span><b>Primer minuto sin cuenta</b><span>Eliges esferas, se reparten solas y aparece la primera señal.</span></li>
+        <li><span class="riesgo m">RIESGO MEDIO</span><b>«Si hubiera empezado a los 18»</b><span>Siempre con el peor caso a la vista.</span></li>
+        <li><span class="riesgo m">RIESGO MEDIO</span><b>Ligas de creadores</b><span>Con contrato que prohíba recomendar.</span></li>
+        <li><span class="riesgo a">RIESGO ALTO</span><b>Coach con IA</b><span>Explica y nunca recomienda. Solo tras la revisión legal.</span></li>
+      </ul>
+      <div class="pasos">
+        <div><b>Repositorio nuevo y privado</b><span>Solo producto. Se llevan calculos, señales, huella y liga, que son sólidos.</span></div>
+        <div><b>Vite + Svelte, a 0 €</b><span>Componentes, rutas reales y pruebas en menos de 3 minutos.</span></div>
+        <div><b>Datos reales</b><span>SEC EDGAR y BCE gratuitos. Precios de cierre con un trabajo nocturno.</span></div>
+        <div><b>Publicar pronto</b><span>Piloto con 5 personas y beta con 100 fundadores en 60 días.</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="envoltura">
+    <b style="color:var(--texto)">Prototipo de concepto para Javier · ronda 37</b>
+    <span>Empresas, huellas y apodos inventados. Los escenarios son hipotéticos. Klever no recomienda comprar ni vender nada y no usa dinero real.</span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = s => document.querySelector(s);
+const fmt = (n, d = 0) => n.toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
+
+/* ── Datos de ejemplo (empresas inventadas) ── */
+const SECT = {
+  'Tecnología': '#7cc4ff', 'Energía': '#f2c14e', 'Salud': '#5fd39a', 'Finanzas': '#b79cff',
+  'Consumo': '#ff9bb3', 'Industria': '#9fb4c8', 'Servicios públicos': '#4fd1c5', 'Comunicación': '#ff8a5c'
+};
+// huella: [deuda, roic, margen, caja, crecimiento] 1 = cumple
+const CAT = [
+  { t: 'NUBE', n: 'Nimbus Cloud', s: 'Tecnología', h: [1,1,1,1,1] },
+  { t: 'SILI', n: 'Silicia Chips', s: 'Tecnología', h: [1,1,1,0,1] },
+  { t: 'SOLR', n: 'Solara Energía', s: 'Energía', h: [0,0,1,1,1] },
+  { t: 'VITA', n: 'Vitalis Farma', s: 'Salud', h: [1,1,1,1,0] },
+  { t: 'IBER', n: 'Ibérica Banca', s: 'Finanzas', h: [0,1,0,1,0] },
+  { t: 'HOGR', n: 'Hogar & Co', s: 'Consumo', h: [1,1,1,1,0] },
+  { t: 'FERR', n: 'Ferrovía', s: 'Industria', h: [0,0,1,1,1] },
+  { t: 'AQUA', n: 'Aqualis', s: 'Servicios públicos', h: [0,0,1,0,0] },
+  { t: 'PIXL', n: 'Pixelforge', s: 'Comunicación', h: [1,0,0,0,1] },
+  { t: 'RUTA', n: 'Ruta Moda', s: 'Consumo', h: [1,1,1,1,1] },
+  { t: 'ORBE', n: 'Orbe Satélites', s: 'Comunicación', h: [0,0,0,0,1] },
+  { t: 'TERM', n: 'Termia Redes', s: 'Servicios públicos', h: [0,1,1,0,0] }
+];
+const porT = Object.fromEntries(CAT.map(c => [c.t, c]));
+let cartera = [ { t: 'NUBE', w: 46 }, { t: 'SILI', w: 22 }, { t: 'VITA', w: 18 }, { t: 'HOGR', w: 14 } ];
+let seleccion = null;
+
+/* ── Cálculos (mismas reglas que Klever hoy) ── */
+function analisis() {
+  const tot = cartera.reduce((a, p) => a + p.w, 0) || 1;
+  const pos = cartera.map(p => ({ ...p, pct: p.w / tot * 100, c: porT[p.t] }));
+  const sect = {};
+  pos.forEach(p => sect[p.c.s] = (sect[p.c.s] || 0) + p.pct);
+  const cats = Object.entries(sect).sort((a, b) => b[1] - a[1]);
+  const mayor = pos.slice().sort((a, b) => b.pct - a.pct)[0];
+  const may = mayor ? mayor.pct : 0, top = cats[0] ? cats[0][1] : 0, n = pos.length;
+  const conc = !n ? 'na' : (may >= 40 || top >= 60 || n === 1) ? 'alto' : (may >= 25 || top >= 40) ? 'medio' : 'ok';
+  const vari = cats.length >= 5 ? 'ok' : cats.length >= 3 ? 'medio' : 'alto';
+  let eq = 0;
+  if (n >= 4) eq = ({ ok: 25, medio: 12, alto: 0 })[conc] + ({ ok: 25, medio: 12, alto: 0 })[vari];
+  // Estabilidad (solo visual): resta por la mayor posición sobre el 20 %, el mayor sector sobre el 35 %, pocos sectores y pocas posiciones.
+  const estab = n ? Math.round(100 - Math.max(0, may - 20) * 1.6 - Math.max(0, top - 35) * .8 - Math.max(0, 5 - cats.length) * 7 - Math.max(0, 4 - n) * 10) : 0;
+  return { pos, cats, mayor, may, top, n, conc, vari, eq, estab: Math.max(0, Math.min(100, n === 1 ? 3 : estab)) };
+}
+const COL = { ok: 'var(--ok)', medio: 'var(--medio)', alto: 'var(--alto)', na: 'var(--linea)' };
+const TXT_C = { ok: 'Baja', medio: 'Media', alto: 'Alta', na: '—' };
+const TXT_V = { ok: 'Amplia', medio: 'Media', alto: 'Poca' };
+
+/* ── Panel de posiciones ── */
+const ul = $('#posiciones');
+function pintarPanel() {
+  const A = analisis();
+  ul.innerHTML = '';
+  A.pos.forEach(p => {
+    const li = document.createElement('li');
+    li.className = 'pos' + (seleccion === p.t ? ' sel' : '');
+    li.style.setProperty('--c', SECT[p.c.s]);
+    li.innerHTML = `<span class="pt" aria-hidden="true"></span><span class="nom"><b>${p.c.n}</b><small>${p.t} · ${p.c.s}</small></span><span class="pct dato">${fmt(p.pct, 1)} %</span><button class="quitar" type="button" aria-label="Quitar ${p.c.n}">×</button><input type="range" min="1" max="100" value="${Math.round(p.w)}" id="w-${p.t}" aria-label="Peso de ${p.c.n}">`;
+    li.querySelector('input').addEventListener('input', e => { p.w; const q = cartera.find(x => x.t === p.t); q.w = +e.target.value; seleccion = p.t; actualizar(false); });
+    li.querySelector('.quitar').addEventListener('click', () => { cartera = cartera.filter(x => x.t !== p.t); toast(`${p.c.n} sale de tu sistema`); actualizar(true); });
+    ul.appendChild(li);
+  });
+  if (!A.pos.length) ul.innerHTML = '<li class="nota">Tu sistema está vacío. Añade empresas desde Descubrir.</li>';
+}
+function pintarIndicadores(A) {
+  const set = (id, nivel, b, det) => { const el = $(id); el.style.setProperty('--c', COL[nivel]); el.querySelector('b').textContent = b; el.querySelector('.det').textContent = det; };
+  set('#ind-conc', A.conc, TXT_C[A.conc], A.mayor ? `${A.mayor.t} ${fmt(A.may, 0)} %` : '—');
+  set('#ind-var', A.vari, TXT_V[A.vari], `${A.cats.length} sector${A.cats.length === 1 ? '' : 'es'}`);
+  set('#ind-liga', A.eq >= 37 ? 'ok' : A.eq >= 12 ? 'medio' : 'alto', `${A.eq}/50`, A.n < 4 ? 'mín. 4 posiciones' : 'puntos de Liga');
+  $('#estab-v').textContent = A.n ? `${A.estab} %` : '—';
+  $('#hud-mayor').textContent = A.mayor ? `${A.mayor.t} · ${fmt(A.may, 0)} %` : '—';
+  $('#hud-sect').textContent = A.cats.length;
+  // las filas existentes: solo actualiza el porcentaje (no rehace el DOM mientras se arrastra)
+  A.pos.forEach(p => { const li = document.getElementById('w-' + p.t)?.closest('li'); if (li) { li.querySelector('.pct').textContent = `${fmt(p.pct, 1)} %`; li.classList.toggle('sel', seleccion === p.t); } });
+}
+function actualizar(rehacer) {
+  if (rehacer) pintarPanel();
+  const A = analisis();
+  pintarIndicadores(A);
+  sistema.objetivo(A);
+  pintarEscenario(false);
+  liga.recalcular(A);
+}
+$('#b-igual').addEventListener('click', () => { cartera.forEach(p => p.w = 50); actualizar(true); toast('Repartido a partes iguales'); });
+$('#b-concentrar').addEventListener('click', () => { if (!cartera.length) return; cartera.forEach((p, i) => p.w = i ? 3 : 100); actualizar(true); toast('Mira cómo se tambalea'); });
+
+/* ── El sistema planetario (Canvas 2D, ligero para móviles) ── */
+const sistema = (() => {
+  const cv = $('#orbita'), cx = cv.getContext('2d');
+  let W = 0, H = 0, dpr = 1, giro = 0.6, inclin = 0.38, t = 0, arrastre = null, vel = 0.0016;
+  let objetivoA = null, plan = [], wob = 0, wobObj = 0;
+  const estrellas = Array.from({ length: 140 }, () => ({ x: Math.random(), y: Math.random(), z: Math.random() * .8 + .2, p: Math.random() * 6 }));
+  function medir() {
+    const r = cv.getBoundingClientRect(); dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  new ResizeObserver(() => { medir(); if (reduce) dibujar(); }).observe(cv);
+  function objetivo(A) {
+    objetivoA = A;
+    const orden = A.pos.slice().sort((a, b) => b.pct - a.pct);
+    plan = orden.map((p, i) => {
+      const prev = plan.find(q => q.t === p.t);
+      const radio = 0.30 + i * (0.42 / Math.max(orden.length, 1)) + 0.04;
+      return { t: p.t, c: SECT[p.c.s], pct: p.pct, radioObj: radio, radio: prev ? prev.radio : radio + .3, tam: prev ? prev.tam : 0, ang: prev ? prev.ang : Math.random() * Math.PI * 2, velA: 0.9 / Math.pow(radio, 1.5) };
+    });
+    wobObj = A.n ? Math.max(0, (A.may - 25) / 75) + (A.vari === 'alto' ? .15 : 0) : 0;
+    if (reduce) { plan.forEach(p => { p.radio = p.radioObj; p.tam = Math.sqrt(p.pct) ; }); wob = wobObj; dibujar(); }
+  }
+  function proyectar(r, a) {
+    const R = Math.min(W, H) * 0.5;
+    const x = Math.cos(a + giro) * r * R, z = Math.sin(a + giro) * r * R;
+    const tiltW = inclin + Math.sin(t * 2.3) * wob * 0.22;
+    return { x: W / 2 + x + Math.sin(t * 3.1) * wob * 10, y: H / 2 + z * tiltW, z };
+  }
+  function dibujar() {
+    cx.clearRect(0, 0, W, H);
+    // estrellas con paralaje
+    estrellas.forEach(s => {
+      const x = ((s.x + giro * 0.02 * s.z) % 1 + 1) % 1 * W, y = s.y * H;
+      cx.globalAlpha = 0.25 + 0.5 * s.z * (0.6 + 0.4 * Math.sin(t * 2 + s.p));
+      cx.fillStyle = '#cfe3ff'; cx.fillRect(x, y, s.z * 1.6, s.z * 1.6);
+    });
+    cx.globalAlpha = 1;
+    const R = Math.min(W, H) * 0.5;
+    // órbitas
+    plan.forEach(p => {
+      cx.beginPath();
+      for (let k = 0; k <= 64; k++) { const q = proyectar(p.radio, k / 64 * Math.PI * 2 - giro); k ? cx.lineTo(q.x, q.y) : cx.moveTo(q.x, q.y); }
+      cx.strokeStyle = 'rgba(160,180,210,' + (p.t === seleccion ? .45 : .12) + ')'; cx.lineWidth = 1; cx.stroke();
+    });
+    // planetas detrás, núcleo, planetas delante
+    const cuerpos = plan.map(p => ({ p, q: proyectar(p.radio, p.ang) })).sort((a, b) => a.q.z - b.q.z);
+    const nucleo = () => {
+      const cxn = W / 2 + Math.sin(t * 3.1) * wob * 10, cyn = H / 2, rn = R * 0.13 * (1 + wob * 0.08 * Math.sin(t * 5));
+      const g = cx.createRadialGradient(cxn, cyn, 0, cxn, cyn, rn * 3.2);
+      g.addColorStop(0, 'rgba(255,196,154,.55)'); g.addColorStop(1, 'rgba(232,148,90,0)');
+      cx.fillStyle = g; cx.beginPath(); cx.arc(cxn, cyn, rn * 3.2, 0, 7); cx.fill();
+      const g2 = cx.createRadialGradient(cxn - rn * .35, cyn - rn * .4, rn * .1, cxn, cyn, rn);
+      g2.addColorStop(0, '#ffe2c9'); g2.addColorStop(.5, '#e8945a'); g2.addColorStop(1, '#6d3415');
+      cx.fillStyle = g2; cx.beginPath(); cx.arc(cxn, cyn, rn, 0, 7); cx.fill();
+    };
+    let nucleoHecho = false;
+    cuerpos.forEach(({ p, q }) => {
+      if (!nucleoHecho && q.z > 0) { nucleo(); nucleoHecho = true; }
+      const r = Math.max(3, p.tam * R * 0.022) * (1 + q.z / (R * 6));
+      const g = cx.createRadialGradient(q.x - r * .35, q.y - r * .35, r * .1, q.x, q.y, r);
+      g.addColorStop(0, '#ffffff'); g.addColorStop(.25, p.c); g.addColorStop(1, 'rgba(0,0,0,.85)');
+      cx.globalAlpha = q.z < 0 ? .75 : 1;
+      cx.shadowColor = p.c; cx.shadowBlur = p.t === seleccion ? 26 : 12;
+      cx.fillStyle = g; cx.beginPath(); cx.arc(q.x, q.y, r, 0, 7); cx.fill();
+      cx.shadowBlur = 0; cx.globalAlpha = 1;
+      if (r > 9 || p.t === seleccion) { cx.font = '600 11px "JetBrains Mono", monospace'; cx.fillStyle = 'rgba(238,241,246,.85)'; cx.textAlign = 'center'; cx.fillText(p.t, q.x, q.y + r + 14); }
+      p._q = q; p._r = r;
+    });
+    if (!nucleoHecho) nucleo();
+  }
+  function paso() {
+    t += 0.016;
+    if (!arrastre) giro += vel;
+    wob += (wobObj - wob) * 0.04;
+    plan.forEach(p => {
+      p.radio += (p.radioObj - p.radio) * 0.07;
+      p.tam += (Math.sqrt(p.pct) - p.tam) * 0.09;
+      p.ang += p.velA * 0.004;
+    });
+    dibujar();
+    requestAnimationFrame(paso);
+  }
+  // Arrastrar para girar y tocar para seleccionar
+  cv.addEventListener('pointerdown', e => { arrastre = { x: e.clientX, y: e.clientY, g: giro, i: inclin, mov: 0 }; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', e => {
+    if (!arrastre) return;
+    const dx = e.clientX - arrastre.x, dy = e.clientY - arrastre.y; arrastre.mov = Math.max(arrastre.mov, Math.abs(dx) + Math.abs(dy));
+    giro = arrastre.g + dx * 0.008; inclin = Math.max(0.12, Math.min(0.9, arrastre.i + dy * 0.003));
+    if (reduce) dibujar();
+  });
+  cv.addEventListener('pointerup', e => {
+    if (arrastre && arrastre.mov < 6) {
+      const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+      const hit = plan.filter(p => p._q).sort((a, b) => b._q.z - a._q.z).find(p => Math.hypot(p._q.x - x, p._q.y - y) < p._r + 8);
+      seleccion = hit ? hit.t : null;
+      if (hit) { toast(`${porT[hit.t].n}: ${fmt(hit.pct, 1)} % del total`); document.getElementById('w-' + hit.t)?.focus({ preventScroll: true }); }
+      pintarIndicadores(analisis()); if (reduce) dibujar();
+    }
+    arrastre = null;
+  });
+  medir();
+  if (!reduce) requestAnimationFrame(paso);
+  return { objetivo };
+})();
+
+/* ── Escenarios hipotéticos ── */
+const ESC = [
+  { id: 'tec', n: 'Tecnología −30 %', d: 'Un mal año para el sector tecnológico', g: { 'Tecnología': -.30 } },
+  { id: 'ene', n: 'Energía +25 %, Consumo −10 %', d: 'Sube la energía y se encarece la vida', g: { 'Energía': .25, 'Consumo': -.10, 'Industria': -.05 } },
+  { id: 'tip', n: 'Tipos altos', d: 'Bancos +10 %, Servicios públicos −15 %, Tecnología −12 %', g: { 'Finanzas': .10, 'Servicios públicos': -.15, 'Tecnología': -.12 } },
+  { id: 'gen', n: 'Todo el mercado −20 %', d: 'Una caída general, igual para todos', g: Object.fromEntries(Object.keys(SECT).map(s => [s, -.20])) }
+];
+let escActivo = ESC[0];
+const listaEsc = $('#lista-esc');
+ESC.forEach(e => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'esc'; b.setAttribute('aria-pressed', e === escActivo);
+  b.innerHTML = `<b>${e.n}</b><small>${e.d}</small>`;
+  b.addEventListener('click', () => { escActivo = e; listaEsc.querySelectorAll('.esc').forEach(x => x.setAttribute('aria-pressed', x === b)); pintarEscenario(true); });
+  listaEsc.appendChild(b);
+});
+let animEsc = null;
+function finales() {
+  const A = analisis();
+  const tu = 100 * (1 + A.pos.reduce((a, p) => a + p.pct / 100 * (escActivo.g[p.c.s] || 0), 0));
+  const ig = 100 * (1 + CAT.reduce((a, c) => a + (escActivo.g[c.s] || 0) / CAT.length, 0));
+  return { tu, ig };
+}
+function pintarEscenario(animar) {
+  const svg = $('#graf'), { tu, ig } = finales();
+  const W = 600, H = 260, pad = { l: 44, r: 14, t: 14, b: 26 };
+  const vals = [100, tu, ig], min = Math.min(...vals) - 4, max = Math.max(...vals) + 4;
+  const y = v => pad.t + (max - v) / (max - min) * (H - pad.t - pad.b);
+  const x = k => pad.l + k * (W - pad.l - pad.r);
+  const curva = (fin, k) => 100 + (fin - 100) * (1 - Math.pow(1 - k, 3)); // trayectoria suave e ilustrativa
+  const camino = (fin, hasta) => { let d = ''; for (let i = 0; i <= 60 * hasta; i++) { const k = i / 60; d += (i ? 'L' : 'M') + x(k).toFixed(1) + ',' + y(curva(fin, k)).toFixed(1); } return d; };
+  const marcas = [];
+  const paso = (max - min) > 30 ? 10 : 5;
+  for (let v = Math.ceil(min / paso) * paso; v <= max; v += paso) marcas.push(v);
+  const dibujo = h => {
+    svg.innerHTML = marcas.map(v => `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(v)}" y2="${y(v)}" stroke="var(--linea)" stroke-width="1"/><text x="${pad.l - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="var(--tenue)" font-family="JetBrains Mono, monospace">${v}</text>`).join('') +
+      `<line x1="${pad.l}" x2="${W - pad.r}" y1="${y(100)}" y2="${y(100)}" stroke="var(--tenue)" stroke-dasharray="3 4" stroke-width="1"/>` +
+      `<text x="${pad.l}" y="${H - 6}" font-size="11" fill="var(--tenue)" font-family="JetBrains Mono, monospace">antes</text><text x="${W - pad.r}" y="${H - 6}" text-anchor="end" font-size="11" fill="var(--tenue)" font-family="JetBrains Mono, monospace">después</text>` +
+      `<path d="${camino(ig, h)}" fill="none" stroke="var(--plasma)" stroke-width="2.5" stroke-linecap="round"/>` +
+      `<path d="${camino(tu, h)}" fill="none" stroke="var(--cobre)" stroke-width="3" stroke-linecap="round"/>` +
+      `<circle cx="${x(h)}" cy="${y(curva(tu, h))}" r="5" fill="var(--cobre)"/><circle cx="${x(h)}" cy="${y(curva(ig, h))}" r="4" fill="var(--plasma)"/>`;
+    $('#c-tu').textContent = fmt(curva(tu, h), 1); $('#c-igual').textContent = fmt(curva(ig, h), 1);
+  };
+  cancelAnimationFrame(animEsc);
+  if (!animar || reduce) { dibujo(1); return; }
+  const t0 = performance.now();
+  const f = now => { const h = Math.min(1, (now - t0) / 900); dibujo(h); if (h < 1) animEsc = requestAnimationFrame(f); };
+  animEsc = requestAnimationFrame(f);
+  const dif = tu - ig;
+  $('#esc-expl').textContent = `Con este escenario, tu cartera de ejemplo acabaría ${Math.abs(dif) < .5 ? 'casi igual que' : dif > 0 ? 'por encima de' : 'por debajo de'} la igualada (${fmt(tu, 1)} frente a ${fmt(ig, 1)}). Escenario ilustrativo: no son datos históricos ni lo que vaya a pasar.`;
+}
+
+/* ── Descubrir: mazo deslizable ── */
+const mazo = $('#mazo');
+let cola = [];
+const LBL = ['Deuda', 'ROIC', 'Margen', 'Caja', 'Crece'];
+function huellaSVG(h, color) {
+  const cxp = 120, cyp = 105, R = 78;
+  const pt = (i, r) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; return [cxp + Math.cos(a) * r, cyp + Math.sin(a) * r]; };
+  const anillo = r => Array.from({ length: 5 }, (_, i) => pt(i, r).join(',')).join(' ');
+  const forma = h.map((v, i) => pt(i, v ? R : R * .28).join(',')).join(' ');
+  return `<svg class="huella" viewBox="0 0 240 215" aria-hidden="true">
+    <polygon points="${anillo(R)}" fill="none" stroke="var(--linea)"/><polygon points="${anillo(R * .55)}" fill="none" stroke="var(--linea)"/>
+    <polygon points="${forma}" fill="${color}" fill-opacity=".22" stroke="${color}" stroke-width="2" stroke-linejoin="round">${reduce ? '' : '<animate attributeName="stroke-dasharray" from="0 600" to="600 0" dur=".9s" fill="freeze"/>'}</polygon>
+    ${h.map((v, i) => { const [a, b] = pt(i, R); const [lx, ly] = pt(i, R + 16); return `<circle cx="${a}" cy="${b}" r="4.5" fill="${v ? color : 'var(--vacio)'}" stroke="${color}"/><text x="${lx}" y="${ly + 4}" text-anchor="middle" font-size="10" fill="var(--tenue)" font-family="JetBrains Mono, monospace">${LBL[i]}</text>`; }).join('')}
+  </svg>`;
+}
+function rellenarCola() { cola = CAT.filter(c => !cartera.some(p => p.t === c.t)).map(c => c.t); }
+function pintarMazo() {
+  mazo.innerHTML = '';
+  if (!cola.length) { mazo.innerHTML = '<div class="vacio-mazo">Has visto todas las empresas de ejemplo.<br>Quita alguna de tu sistema para volver a verla.</div>'; return; }
+  cola.slice(0, 3).reverse().forEach((t, idx, arr) => {
+    const c = porT[t], prof = arr.length - 1 - idx;
+    const el = document.createElement('article');
+    el.className = 'carta'; el.style.setProperty('--c', SECT[c.s]);
+    el.style.transform = `translateY(${prof * 10}px) scale(${1 - prof * .04})`;
+    el.style.zIndex = 10 - prof;
+    const n = c.h.reduce((a, b) => a + b, 0);
+    el.innerHTML = `<div><span class="sector eti"><i></i>${c.s}</span><h3>${c.n}</h3><span class="dato" style="color:var(--tenue);font-size:.85rem">${c.t} · supera ${n}/5</span></div>
+      ${huellaSVG(c.h, SECT[c.s])}
+      <div class="checks">${c.h.map((v, i) => `<span class="chk ${v ? 'si' : ''}">${v ? '✓' : '·'} ${LBL[i]}</span>`).join('')}</div>
+      <span class="sello-carta si">AÑADIR</span><span class="sello-carta no">PASAR</span>`;
+    if (!prof) { el.tabIndex = 0; el.setAttribute('aria-label', `${c.n}, ${c.s}, supera ${n} de 5 comprobaciones. Flecha derecha para añadir, izquierda para pasar.`); arrastrable(el, t); }
+    mazo.appendChild(el);
+  });
+}
+function decidir(t, si, el) {
+  const salir = () => {
+    cola = cola.filter(x => x !== t);
+    if (si) { cartera.push({ t, w: 15 }); toast(`${porT[t].n} entra en tu sistema`); try { navigator.vibrate && navigator.vibrate(12); } catch (e) {} actualizar(true); }
+    else cola.push(t);
+    pintarMazo(); mazo.querySelector('.carta[tabindex]')?.focus({ preventScroll: true });
+  };
+  if (!el || reduce) return salir();
+  el.style.transition = 'transform .38s cubic-bezier(.3,.7,.3,1), opacity .38s';
+  el.style.transform = `translateX(${si ? 140 : -140}%) rotate(${si ? 22 : -22}deg)`; el.style.opacity = '0';
+  setTimeout(salir, 300);
+}
+function arrastrable(el, t) {
+  let x0 = 0, dx = 0, activo = false;
+  const si = el.querySelector('.sello-carta.si'), no = el.querySelector('.sello-carta.no');
+  el.addEventListener('pointerdown', e => { activo = true; x0 = e.clientX; dx = 0; el.setPointerCapture(e.pointerId); el.style.transition = 'none'; });
+  el.addEventListener('pointermove', e => {
+    if (!activo) return; dx = e.clientX - x0;
+    el.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
+    si.style.opacity = Math.max(0, Math.min(1, dx / 90)); no.style.opacity = Math.max(0, Math.min(1, -dx / 90));
+  });
+  const soltar = () => {
+    if (!activo) return; activo = false;
+    if (Math.abs(dx) > 100) return decidir(t, dx > 0, el);
+    el.style.transition = 'transform .45s var(--muelle)'; el.style.transform = ''; si.style.opacity = 0; no.style.opacity = 0;
+  };
+  el.addEventListener('pointerup', soltar); el.addEventListener('pointercancel', soltar);
+  el.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); decidir(t, true, el); } if (e.key === 'ArrowLeft') { e.preventDefault(); decidir(t, false, el); } });
+}
+$('#b-anadir').addEventListener('click', () => { const el = mazo.querySelector('.carta[tabindex]'); if (el) decidir(cola[0], true, el); });
+$('#b-pasar').addEventListener('click', () => { const el = mazo.querySelector('.carta[tabindex]'); if (el) decidir(cola[0], false, el); });
+
+/* ── Liga en directo (reglas de la Temporada 0) ── */
+const liga = (() => {
+  const otros = [ ['luna_indexada', 168], ['ardilla.prudente', 151], ['NoSoyBroker', 139], ['marta_dividendos', 122], ['el_del_excel', 104], ['pixel_bull', 88] ];
+  const tabla = $('#tabla');
+  let tuAntes = 92, A = null;
+  function puntos() {
+    const eq = A ? A.eq : 0;
+    const ap = ($('#l-reto').checked ? 20 : 0) + ($('#l-idea').checked ? 10 : 0);
+    const co = $('#l-racha').checked ? 12 : 10;
+    return { eq, ap, co, sem: eq + ap + co };
+  }
+  function pintar() {
+    const p = puntos();
+    $('#l-eq').textContent = p.eq; $('#l-ap').textContent = p.ap; $('#l-co').textContent = p.co; $('#l-total').textContent = p.sem;
+    const filas = otros.map(([n, pt]) => ({ n, pt, tu: false })).concat([{ n: 'tú', pt: tuAntes + p.sem, tu: true }]).sort((a, b) => b.pt - a.pt);
+    const maxP = Math.max(...filas.map(f => f.pt));
+    // FLIP: recuerda posiciones antes de reordenar
+    const antes = {}; tabla.querySelectorAll('.fila').forEach(li => antes[li.dataset.n] = li.getBoundingClientRect().top);
+    tabla.innerHTML = '';
+    filas.forEach((f, i) => {
+      const li = document.createElement('li'); li.className = 'fila' + (f.tu ? ' tu' : ''); li.dataset.n = f.n;
+      li.innerHTML = `<span class="pos-n">${i + 1}</span><span class="apodo">${f.tu ? '<b>Tú</b> · tu sistema' : '@' + f.n}</span><b class="dato">${f.pt}</b><span class="barra-p"><i style="width:${f.pt / maxP * 100}%"></i></span>`;
+      tabla.appendChild(li);
+    });
+    if (reduce) return;
+    tabla.querySelectorAll('.fila').forEach(li => {
+      const a = antes[li.dataset.n]; if (a == null) return;
+      const d = a - li.getBoundingClientRect().top; if (!d) return;
+      li.animate([{ transform: `translateY(${d}px)` }, { transform: 'none' }], { duration: 520, easing: 'cubic-bezier(.2,.9,.25,1.1)' });
+    });
+  }
+  ['#l-reto', '#l-idea', '#l-racha'].forEach(s => $(s).addEventListener('change', pintar));
+  return { recalcular(a) { A = a; pintar(); } };
+})();
+
+/* ── Aviso breve ── */
+let tt = null;
+function toast(m) { const el = $('#toast'); el.textContent = m; el.classList.add('ver'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('ver'), 2200); }
+
+rellenarCola();
+pintarMazo();
+actualizar(true);
+pintarEscenario(false);
+$('#esc-expl').textContent = (() => { const { tu, ig } = finales(); return `Con este escenario, tu cartera de ejemplo acabaría ${tu > ig ? 'por encima de' : 'por debajo de'} la igualada (${fmt(tu, 1)} frente a ${fmt(ig, 1)}). Escenario ilustrativo: no son datos históricos ni lo que vaya a pasar.`; })();
+})();
+</script>
