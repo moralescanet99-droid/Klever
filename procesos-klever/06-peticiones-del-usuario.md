@@ -2277,3 +2277,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Me gusta todo, solo que lo de las ligas, tiene que estar más claras su funcionamiento. Dicho esto empeiza ya con todo lo puedas
 
 (Aprueba las recomendaciones del plan: tarjeta para compartir en la fase 2, Temporada 0 sin rentabilidad, mayores de 18, revisión legal antes del día D. Funcionamiento de la Liga explicado en `ronda36/LIGA.md`.)
+
+## C52 · (2026-11-08) — contexto para otra conversación, literal
+> Quiero poder hablar de este proyecto en otro partado, hazme un resumen o dame el rpomt o archivo que encesites para que la conversacion pueda tener todo el contexto necesario
+
+(Archivo `CONTEXTO-KLEVER.md` en la raíz del repositorio: resumen autosuficiente para pegar o subir en otra conversación.)
