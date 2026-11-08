@@ -1,5 +1,5 @@
 # comando: node tests/ronda14/testL.cjs (PARALELO=3)
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 13:45:17 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 15:34:11 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [L1-1440] Privacidad al salir: la nota y la cartera de A no quedan en pantalla ni en memoria (1440 px)

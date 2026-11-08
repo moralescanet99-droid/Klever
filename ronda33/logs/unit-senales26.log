@@ -1,5 +1,5 @@
 # comando: node tests/ronda26/unit-senales26.mjs
-# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 13:35:28 UTC
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 15:24:33 UTC
 # código de salida: 0 · tiempo agotado: 0
 
 OK    [S1] Tecnología 60 % y NVDA 40 %: dos alertas distintas, la de categoría primero
@@ -17,5 +17,5 @@ OK    [S12] Ninguna hipótesis propone un activo que no esté ya en la cartera (
 OK    [S13] Los umbrales son los declarados en la interfaz (25 % posición, 40 % categoría, ≤ 3 categorías, < 4 posiciones) y no se pueden cambiar en tiempo de ejecución
 
 RESULTADO: 13 correctas, 0 fallos
-(node:10333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:16410) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)

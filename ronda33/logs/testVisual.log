@@ -1,0 +1,16 @@
+# comando: node tests/ronda33/testVisual.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 15:34:11 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [VIS-portada-390.png] Captura igual a su referencia: portada-390.png
+OK    [VIS-explorar-390.png] Captura igual a su referencia: explorar-390.png
+OK    [VIS-comparador-390.png] Captura igual a su referencia: comparador-390.png
+OK    [VIS-como-funciona-390.png] Captura igual a su referencia: como-funciona-390.png
+OK    [VIS-portada-1440.png] Captura igual a su referencia: portada-1440.png
+OK    [VIS-explorar-1440.png] Captura igual a su referencia: explorar-1440.png
+OK    [VIS-comparador-1440.png] Captura igual a su referencia: comparador-1440.png
+OK    [VIS-como-funciona-1440.png] Captura igual a su referencia: como-funciona-1440.png
+OK    [VIS-explorar-345-texto118.png] Captura igual a su referencia: explorar-345-texto118.png
+OK    [VIS-comparador-345-texto118.png] Captura igual a su referencia: comparador-345-texto118.png
+
+RESULTADO: 10 correctas, 0 fallos

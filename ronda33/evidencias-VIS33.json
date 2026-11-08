@@ -2,70 +2,70 @@
  {
   "id": "VIS-portada-390.png",
   "escenario": "Captura igual a su referencia: portada-390.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-explorar-390.png",
   "escenario": "Captura igual a su referencia: explorar-390.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-comparador-390.png",
   "escenario": "Captura igual a su referencia: comparador-390.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-como-funciona-390.png",
   "escenario": "Captura igual a su referencia: como-funciona-390.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-portada-1440.png",
   "escenario": "Captura igual a su referencia: portada-1440.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-explorar-1440.png",
   "escenario": "Captura igual a su referencia: explorar-1440.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-comparador-1440.png",
   "escenario": "Captura igual a su referencia: comparador-1440.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-como-funciona-1440.png",
   "escenario": "Captura igual a su referencia: como-funciona-1440.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-explorar-345-texto118.png",
   "escenario": "Captura igual a su referencia: explorar-345-texto118.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  },
  {
   "id": "VIS-comparador-345-texto118.png",
   "escenario": "Captura igual a su referencia: comparador-345-texto118.png",
-  "esperado": "≤ 0.5 % de píxeles distintos",
+  "esperado": "≤ 0.1 % de píxeles distintos",
   "observado": "0.000 % (0 píxeles)",
   "resultado": "OK"
  }

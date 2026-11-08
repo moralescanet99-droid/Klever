@@ -15,7 +15,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
 ## Hoja de ruta (C43, `ronda33/PLAN.md`)
-- 🟡 **Fase 1 (cimientos), primera parte hecha** (ronda 33, `ronda33/LEEME.md`): pruebas en paralelo (≈ 15 min), hoja de estilo única con tokens fusionados y `DESIGN.md`, embudo anónimo (migración 0014), utilidades en `base.js`; pasada **1206/0** (`ad1989b`). Falta: pantallas en módulos y comparación visual de capturas (Vite, en la fase 6).
+- ✅ **Fase 1 (cimientos) hecha** (ronda 33, `ronda33/LEEME.md`): pruebas en paralelo (≈ 15 min) con reintento declarado, hoja de estilo única con tokens fusionados y `DESIGN.md`, embudo anónimo (migración 0014), módulos `base.js`, `explorar.js` y `semana-ui.js`, comparación visual (10 referencias); pasada **1216/0** (`55ea85b`). Mis carteras y el editor se separan en la fase 2; Vite, en la 6.
 - ⬜ Fases 2 UX → 3 perfil → 4 comunidad → 5 liga → 6 publicar.
 
 ## Ronda 32 (C42)

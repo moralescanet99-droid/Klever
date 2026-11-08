@@ -3,7 +3,7 @@
 ## ★★★ Hoja de ruta (C43): `ronda33/PLAN.md`
 | Fase | Estado |
 |---|---|
-| 1 · Cimientos: código por pantallas, un sistema de diseño, pruebas rápidas, medición | 🟡 primera parte hecha (ronda 33): pruebas en paralelo, hoja única + DESIGN.md, embudo anónimo; falta: pantallas en módulos y comparación visual |
+| 1 · Cimientos: código por pantallas, un sistema de diseño, pruebas rápidas, medición | ✅ ronda 33 (1216/0). Mis carteras y editor en módulos → fase 2; Vite → fase 6 |
 | 2 · UX: «Hoy», menos texto, Descubrir como feed, editar con los dedos, primer minuto | ⬜ |
 | 3 · Perfil y objetivo | ⬜ |
 | 4 · Comunidad | ⬜ |
