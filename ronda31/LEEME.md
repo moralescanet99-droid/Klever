@@ -23,7 +23,7 @@
 | V14 Desplazamiento | 🟡 | Barras finas en paneles con ratón. `scrollbar-gutter` no se aplicó (cambiaría anchos medidos por las pruebas sin beneficio claro). |
 | V13 Portada que se reparte sola | ⛔ decidido no hacerlo | Un ejemplo que se mueve solo al cargar puede leerse como reclamo comercial y hace inestables las cifras que se leen al entrar. Se mantiene el ejemplo que mueve la persona. |
 | Accesibilidad (axe) | ✅ | Los pasos del editor conservan su nombre en el móvil (se ocultan solo a la vista); la barra de guardar es una región con nombre. |
-| Texto de la portada | ✅ | Se quita una de las tres repeticiones de «sin dinero real / datos de prueba» (el sello y la línea de confianza se mantienen). |
+| Texto de la portada | ↩️ deshecho | Se quitó una repetición de «sin dinero real / datos de prueba» en la frase principal, pero `testB` exige esa transparencia en la frase principal (regla de la ronda 21): se restauró. |
 | «Reducir movimiento» | ✅ | Todas las animaciones y transiciones nuevas se desactivan. |
 
 ## Qué se ha probado
