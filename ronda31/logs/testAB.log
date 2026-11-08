@@ -1,0 +1,21 @@
+# comando: node tests/ronda30/testAB.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 03:58:42 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AB1-1440] Primera visita a «Tu semana» (1440 px)
+OK    [AB2-1440] Con una semana anterior: evolución y cambios (1440 px)
+OK    [AB3-1440] Cerrar el ciclo de una idea (1440 px)
+OK    [AB4-1440] Al salir, «Tu semana» desaparece (1440 px)
+OK    [AB0-1440] Sin errores ni desbordes (1440 px)
+OK    [AB1-390] Primera visita a «Tu semana» (390 px)
+OK    [AB2-390] Con una semana anterior: evolución y cambios (390 px)
+OK    [AB3-390] Cerrar el ciclo de una idea (390 px)
+OK    [AB4-390] Al salir, «Tu semana» desaparece (390 px)
+OK    [AB0-390] Sin errores ni desbordes (390 px)
+OK    [AB1-320] Primera visita a «Tu semana» (320 px)
+OK    [AB2-320] Con una semana anterior: evolución y cambios (320 px)
+OK    [AB3-320] Cerrar el ciclo de una idea (320 px)
+OK    [AB4-320] Al salir, «Tu semana» desaparece (320 px)
+OK    [AB0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 15 correctas, 0 fallos

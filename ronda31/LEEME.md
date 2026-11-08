@@ -27,7 +27,10 @@
 | «Reducir movimiento» | ✅ | Todas las animaciones y transiciones nuevas se desactivan. |
 
 ## Qué se ha probado
-*(se completa con la batería `tests/ronda31/testAC.cjs` y la pasada completa)*
+- **`tests/ronda31/testAC.cjs` (21, servidor real, 1440/390/320):** instalable (manifiesto, 4 iconos que existen, theme-color, viewport-fit, Open Graph); fuente propia cargada y usada sin peticiones externas; iconos SVG y barra translúcida; pasos del editor con nombre accesible y región de guardar; Explorar por tandas (24 → 48, foco en la primera nueva, la búsqueda encuentra KO fuera de la tanda; tabla completa en escritorio); barra de reparto que se transforma (mismo elemento, transición de anchura); aviso en la paleta; «reducir movimiento» sin animaciones; sin errores ni desbordes.
+- **Pruebas adaptadas a propósito (se declara):** `testAA` AA3 y `testY` Y5 buscan KO (la lista móvil va por tandas) y `testAA` espera tras cerrar la ficha; `testE` F7a y `testJ` J9 despliegan todas las tandas para comprobar todas las empresas (solo si el botón es visible); `testH` H2 lanza el aviso con un clic del DOM y exige seguir arriba de la página (con la fuente nueva el enlace del pie quedaba fuera de la pantalla y Playwright desplazaba la página, con lo que la prueba dejaba de medir lo que pretende).
+- **Error mío detectado por las pruebas y deshecho:** recortar la frase principal de la portada quitaba la transparencia «sin dinero real, con datos de prueba» que exige `testB` desde la ronda 21.
+- **Pasada completa final (`33db027`, árbol limpio, 2026-11-08 03:32 UTC, local): 1194 correctas, 0 fallos, código de salida 0** (61 baterías con resultado). Registro en `resultado-ejecucion.txt` y `logs/`. Antes hubo dos pasadas con fallos (10 problemas en `833add9`; 1 en `19cabeb`), todos por pruebas que dependían de la lista completa o de la geometría, corregidos y declarados arriba.
 
 ## Sin comprobar
 Teléfono real (instalación desde Safari/Chrome, muesca, barra de gestos, desenfoque real), lector de pantalla real, Safari y Firefox, rendimiento del desenfoque en un móvil de gama baja, personas.

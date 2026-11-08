@@ -1,6 +1,6 @@
 # 05 · Estado actual
 
-**Última actualización:** 2026-11-07, ronda 30 (puntos 3–6 del punto 14, `ronda30/`); antes, pendientes del punto 14 anotados (C35–C36); antes, la ronda 29 (fase 2.5, `ronda29/`); antes, la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
+**Última actualización:** 2026-11-08, ronda 31 (última generación, `ronda31/`); antes, 2026-11-07, ronda 30 (puntos 3–6 del punto 14, `ronda30/`); antes, pendientes del punto 14 anotados (C35–C36); antes, la ronda 29 (fase 2.5, `ronda29/`); antes, la ronda 28 (fase 1 del plan a 10, `ronda28/`); antes, ronda 27 (corrección de la duplicación por envío incierto, `ronda27/LEEME.md`; antes, ronda 26: evolución visual e interactiva). El piloto sigue siendo `piloto-r23` (ronda 24).
 Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de forma aproximada · ⬜ pendiente · ⛔ no probado.
 
 ## Resumen en cinco líneas
@@ -16,7 +16,7 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Ronda 31 · última generación (C40)
 - ✅ Visión (`ronda31/VISION.md`) y auditoría (`ronda31/AUDITORIA.md`, 13,5/20) hechas y anotadas en `PENDIENTES.md` § ★★.
-- ✅ Implementado: V2–V10, V12, accesibilidad del editor, texto de la portada; 🟡 V1 (sin View Transitions) y V14; ⛔ V13 descartado. `testAC` (21/0). Ver `ronda31/LEEME.md`. Decisiones de Javier en `PENDIENTES.md` § ★★.
+- ✅ Implementado: V2–V10, V12, accesibilidad del editor, texto de la portada; 🟡 V1 (sin View Transitions) y V14; ⛔ V13 descartado. `testAC` (21/0); pasada completa **1194/0** (`33db027`). Ver `ronda31/LEEME.md`. Decisiones de Javier en `PENDIENTES.md` § ★★.
 
 ## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
 - ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).

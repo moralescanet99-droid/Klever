@@ -1,0 +1,107 @@
+[
+ {
+  "id": "AB1-1440",
+  "escenario": "Primera visita a «Tu semana» (1440 px)",
+  "esperado": "sin evolución todavía («aparecerá cuando vuelvas la semana que viene»); un reto de la semana con «cambia el…»; la foto de esta semana en el servidor (Baja/Amplia, 5 categorías) y nada en el dispositivo",
+  "observado": "{\"ab1\":{\"vacia\":\"Tu evolución aparecerá aquí cuando vuelvas la semana que viene: Klever guarda una foto de tus carteras cada semana.\",\"evo\":0,\"reto\":\"○ Guarda esta semana una idea comparando (pendiente)\",\"cambia\":\"cambia el 9 nov 2026\",\"local\":null},\"f1\":[{\"semana\":\"2026-11-02\",\"concentracion\":\"ok\",\"variedad\":\"ok\",\"n_categorias\":5}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB2-1440",
+  "escenario": "Con una semana anterior: evolución y cambios (1440 px)",
+  "esperado": "«Tu evolución» con «Repartida AB · desde hace 1 semana»; Concentración «Alta → Baja» y Variedad «Media → Amplia», las dos «mejora», con 2 puntos; «Desde la semana del…» con «✓ Ya no: NVDA pesa el 60 %»",
+  "observado": "{\"titulo\":\"Tu evolución\",\"cab\":\"Repartida AB desde hace 1 semana\",\"filas\":[\"Concentración Alta → Baja (mejora)\",\"Variedad Media → Amplia (mejora)\"],\"mejora\":2,\"puntos\":2,\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 60 % (Repartida AB)\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB3-1440",
+  "escenario": "Cerrar el ciclo de una idea (1440 px)",
+  "esperado": "foto hecha por el servidor (KO con sus 5 comprobaciones); en la ficha: «La guardaste hace 40 días… 1 comprobación ha cambiado» y «ROIC: … → …»; en «Tu semana», «Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?)» con el cambio de KO",
+  "observado": "{\"fotoKO\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"ok\",\"margen_neto\":\"ok\",\"flujo_caja\":\"ok\",\"crecimiento\":\"no\"}},\"ficha\":{\"txt\":\"Qué ha cambiado en los datos desde que la guardasteLa guardaste hace 40 días (29 sept 2026). Desde entonces: 1 comprobación ha cambiado. KO ROIC: superada → no superada Son las cinco comprobaciones de las fichas, no precios. Un cambio no dice qué hacer: compáralo con lo que escribiste arriba y, si quieres, registra una revisión.\",\"cambio\":\"ROIC: superada → no superada\"},\"miraTxt\":\"Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?).KO · ROIC: superada → no superadaRevisar esta idea →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB4-1440",
+  "escenario": "Al salir, «Tu semana» desaparece (1440 px)",
+  "esperado": "oculta; sin evolución, «Mira atrás» ni reto en la página; sin el nombre de la cartera",
+  "observado": "{\"oculta\":true,\"evo\":0,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún error de JavaScript; ancho de página = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB1-390",
+  "escenario": "Primera visita a «Tu semana» (390 px)",
+  "esperado": "sin evolución todavía («aparecerá cuando vuelvas la semana que viene»); un reto de la semana con «cambia el…»; la foto de esta semana en el servidor (Baja/Amplia, 5 categorías) y nada en el dispositivo",
+  "observado": "{\"ab1\":{\"vacia\":\"Tu evolución aparecerá aquí cuando vuelvas la semana que viene: Klever guarda una foto de tus carteras cada semana.\",\"evo\":0,\"reto\":\"○ Guarda esta semana una idea comparando (pendiente)\",\"cambia\":\"cambia el 9 nov 2026\",\"local\":null},\"f1\":[{\"semana\":\"2026-11-02\",\"concentracion\":\"ok\",\"variedad\":\"ok\",\"n_categorias\":5}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB2-390",
+  "escenario": "Con una semana anterior: evolución y cambios (390 px)",
+  "esperado": "«Tu evolución» con «Repartida AB · desde hace 1 semana»; Concentración «Alta → Baja» y Variedad «Media → Amplia», las dos «mejora», con 2 puntos; «Desde la semana del…» con «✓ Ya no: NVDA pesa el 60 %»",
+  "observado": "{\"titulo\":\"Tu evolución\",\"cab\":\"Repartida AB desde hace 1 semana\",\"filas\":[\"Concentración Alta → Baja (mejora)\",\"Variedad Media → Amplia (mejora)\"],\"mejora\":2,\"puntos\":2,\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 60 % (Repartida AB)\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB3-390",
+  "escenario": "Cerrar el ciclo de una idea (390 px)",
+  "esperado": "foto hecha por el servidor (KO con sus 5 comprobaciones); en la ficha: «La guardaste hace 40 días… 1 comprobación ha cambiado» y «ROIC: … → …»; en «Tu semana», «Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?)» con el cambio de KO",
+  "observado": "{\"fotoKO\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"ok\",\"margen_neto\":\"ok\",\"flujo_caja\":\"ok\",\"crecimiento\":\"no\"}},\"ficha\":{\"txt\":\"Qué ha cambiado en los datos desde que la guardasteLa guardaste hace 40 días (29 sept 2026). Desde entonces: 1 comprobación ha cambiado. KO ROIC: superada → no superada Son las cinco comprobaciones de las fichas, no precios. Un cambio no dice qué hacer: compáralo con lo que escribiste arriba y, si quieres, registra una revisión.\",\"cambio\":\"ROIC: superada → no superada\"},\"miraTxt\":\"Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?).KO · ROIC: superada → no superadaRevisar esta idea →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB4-390",
+  "escenario": "Al salir, «Tu semana» desaparece (390 px)",
+  "esperado": "oculta; sin evolución, «Mira atrás» ni reto en la página; sin el nombre de la cartera",
+  "observado": "{\"oculta\":true,\"evo\":0,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún error de JavaScript; ancho de página = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB1-320",
+  "escenario": "Primera visita a «Tu semana» (320 px)",
+  "esperado": "sin evolución todavía («aparecerá cuando vuelvas la semana que viene»); un reto de la semana con «cambia el…»; la foto de esta semana en el servidor (Baja/Amplia, 5 categorías) y nada en el dispositivo",
+  "observado": "{\"ab1\":{\"vacia\":\"Tu evolución aparecerá aquí cuando vuelvas la semana que viene: Klever guarda una foto de tus carteras cada semana.\",\"evo\":0,\"reto\":\"○ Guarda esta semana una idea comparando (pendiente)\",\"cambia\":\"cambia el 9 nov 2026\",\"local\":null},\"f1\":[{\"semana\":\"2026-11-02\",\"concentracion\":\"ok\",\"variedad\":\"ok\",\"n_categorias\":5}]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB2-320",
+  "escenario": "Con una semana anterior: evolución y cambios (320 px)",
+  "esperado": "«Tu evolución» con «Repartida AB · desde hace 1 semana»; Concentración «Alta → Baja» y Variedad «Media → Amplia», las dos «mejora», con 2 puntos; «Desde la semana del…» con «✓ Ya no: NVDA pesa el 60 %»",
+  "observado": "{\"titulo\":\"Tu evolución\",\"cab\":\"Repartida AB desde hace 1 semana\",\"filas\":[\"Concentración Alta → Baja (mejora)\",\"Variedad Media → Amplia (mejora)\"],\"mejora\":2,\"puntos\":2,\"desde\":\"Desde la semana del 26 oct 2026:\",\"cambios\":[\"✓ Ya no: NVDA pesa el 60 % (Repartida AB)\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB3-320",
+  "escenario": "Cerrar el ciclo de una idea (320 px)",
+  "esperado": "foto hecha por el servidor (KO con sus 5 comprobaciones); en la ficha: «La guardaste hace 40 días… 1 comprobación ha cambiado» y «ROIC: … → …»; en «Tu semana», «Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?)» con el cambio de KO",
+  "observado": "{\"fotoKO\":{\"periodo\":\"FY2024\",\"c\":{\"deuda_ebitda\":\"ok\",\"roic\":\"ok\",\"margen_neto\":\"ok\",\"flujo_caja\":\"ok\",\"crecimiento\":\"no\"}},\"ficha\":{\"txt\":\"Qué ha cambiado en los datos desde que la guardasteLa guardaste hace 40 días (29 sept 2026). Desde entonces: 1 comprobación ha cambiado. KO ROIC: superada → no superada Son las cinco comprobaciones de las fichas, no precios. Un cambio no dice qué hacer: compáralo con lo que escribiste arriba y, si quieres, registra una revisión.\",\"cambio\":\"ROIC: superada → no superada\"},\"miraTxt\":\"Mira atrás: hace 40 días guardaste «Idea AB» (¿Mejora el ROIC de KO?).KO · ROIC: superada → no superadaRevisar esta idea →\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB4-320",
+  "escenario": "Al salir, «Tu semana» desaparece (320 px)",
+  "esperado": "oculta; sin evolución, «Mira atrás» ni reto en la página; sin el nombre de la cartera",
+  "observado": "{\"oculta\":true,\"evo\":0,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AB0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún error de JavaScript; ancho de página = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]

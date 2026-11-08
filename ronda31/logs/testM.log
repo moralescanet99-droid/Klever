@@ -1,0 +1,13 @@
+# comando: node tests/ronda15/testM.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 03:46:33 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [M1] Salir con el detalle de la cartera de A todavía en vuelo (llega 2,5 s después)
+OK    [M2] Diálogo de conflicto de A que habría salido DESPUÉS de salir (respuesta tardía)
+OK    [M3] Un 401 retrasado de la petición de A llega cuando B ya tiene la sesión
+OK    [M4] Salir con cambios sin guardar: se avisa y se puede volver a guardarlos
+OK    [M5] Salir descartando los cambios locales
+OK    [M6] Caducidad involuntaria y entrada de otra cuenta en el mismo navegador
+OK    [M7] Copia local de hace 8 días
+
+RESULTADO: 7 correctas, 0 fallos

@@ -50,3 +50,4 @@ Corto y verificable: qué se pidió, qué se hizo, qué se probó (con cifras y 
 - Demo privada: https://claude.ai/artifact/TiRC9VLhtzt3ComjiYNyUw
 - 2026-11-07 · Ronda 29 (fase 2.5): arranque guiado, huella, «Tu semana» y retos; regresión de privacidad corregida; última pasada **1121/0** (`cd27c09`). Memoria automática con hooks (`.claude/settings.json`).
 - 2026-11-07 · Ronda 30 (C37): foto semanal en el servidor (migración 0013), evolución, reto de la semana y ciclo de las ideas. Ver `ronda30/LEEME.md`.
+- 2026-11-08 · Ronda 31 (C40): visión de última generación, auditoría (13,5/20) y mejoras (tipografía propia, iconos SVG, cristal, instalable, movimiento, accesibilidad, Explorar por tandas); pasada **1194/0** (`33db027`). Decisiones pendientes de Javier en `PENDIENTES.md` § ★★.

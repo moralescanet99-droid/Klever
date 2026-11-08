@@ -1,0 +1,149 @@
+[
+ {
+  "id": "Y1-1440",
+  "escenario": "Barra inferior (1440 px): no se muestra en escritorio",
+  "esperado": "oculta en todas las vistas",
+  "observado": "{\"enInicio\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"},\"enEmp\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Descubrir\"},\"enEditor\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"},\"enLab\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y2-1440",
+  "escenario": "Pegar «KO 40, PG 60, ZZZZ 5» en el editor (1440 px)",
+  "esperado": "ayuda «Pulsa Intro» visible; KO 40 y PG 60 creadas (total 100 %); el aviso dice que ZZZZ no se reconoce; el campo queda vacío",
+  "observado": "{\"ayuda\":true,\"y2\":{\"pesos\":{\"KO\":\"40,0\",\"PG\":\"60,0\"},\"total\":\"100 %\",\"res\":\"Añadidas KO 40 % · PG 60 % · sin reconocer: ZZZZ\",\"campo\":\"\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y3-1440",
+  "escenario": "Explorar → «Probar» (1440 px)",
+  "esperado": "el laboratorio llega con JNJ y 10 %, con el deslizador listo",
+  "observado": "{\"t\":\"JNJ\",\"peso\":\"10\",\"rango\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y4-1440",
+  "escenario": "Señal en tres niveles y umbrales propios (1440 px)",
+  "esperado": "antes: categoria + posicion; al pulsar: «Qué es / Por qué importa / Qué probar»; con posición 50 %: ya no hay «posicion» y el detalle dice «Tu referencia»",
+  "observado": "{\"antes4\":[\"categoria\",\"posicion\"],\"niveles\":[\"Qué es:\",\"Por qué importa:\",\"Qué probar:\"],\"despues4\":[\"categoria\"],\"catTxt\":\"Qué es: Tecnología suma el 40 % (NVDA, MSFT). Tu referencia: más del 40 % en una categoría.Por qué importa: Si a ese sec\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y6-1440",
+  "escenario": "Preguntas de ejemplo al guardar una idea (1440 px)",
+  "esperado": "pulsar la primera rellena «¿Sigue creciendo NVDA?»",
+  "observado": "\"¿Sigue creciendo NVDA?\"",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y5-1440",
+  "escenario": "Renombrados (1440 px): «idea» y «empresas que sigo»",
+  "esperado": "el Cuaderno tiene «Mis ideas» y «Empresas que sigo»; la ficha ofrece «Seguir esta empresa»; ni «escenario» ni «radar» a la vista",
+  "observado": "{\"h2\":[\"Mis ideas\",\"Tus preguntas\",\"Empresas que sigo\"],\"ficha\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y1-390",
+  "escenario": "Barra inferior (390 px): tres destinos y el actual marcado; oculta en el editor y el laboratorio",
+  "esperado": "Carteras · Descubrir · Cuaderno; portada → Carteras; Explorar → Descubrir; editor y laboratorio sin barra",
+  "observado": "{\"enInicio\":{\"visible\":true,\"enlaces\":[\"Carteras\",\"Descubrir\",\"Cuaderno\"],\"actual\":\"Carteras\"},\"enEmp\":{\"visible\":true,\"enlaces\":[\"Carteras\",\"Descubrir\",\"Cuaderno\"],\"actual\":\"Descubrir\"},\"enEditor\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"},\"enLab\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y2-390",
+  "escenario": "Pegar «KO 40, PG 60, ZZZZ 5» en el editor (390 px)",
+  "esperado": "ayuda «Pulsa Intro» visible; KO 40 y PG 60 creadas (total 100 %); el aviso dice que ZZZZ no se reconoce; el campo queda vacío",
+  "observado": "{\"ayuda\":true,\"y2\":{\"pesos\":{\"KO\":\"40,0\",\"PG\":\"60,0\"},\"total\":\"100 %\",\"res\":\"Añadidas KO 40 % · PG 60 % · sin reconocer: ZZZZ\",\"campo\":\"\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y3-390",
+  "escenario": "Explorar → «Probar» (390 px)",
+  "esperado": "el laboratorio llega con JNJ y 10 %, con el deslizador listo",
+  "observado": "{\"t\":\"JNJ\",\"peso\":\"10\",\"rango\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y4-390",
+  "escenario": "Señal en tres niveles y umbrales propios (390 px)",
+  "esperado": "antes: categoria + posicion; al pulsar: «Qué es / Por qué importa / Qué probar»; con posición 50 %: ya no hay «posicion» y el detalle dice «Tu referencia»",
+  "observado": "{\"antes4\":[\"categoria\",\"posicion\"],\"niveles\":[\"Qué es:\",\"Por qué importa:\",\"Qué probar:\"],\"despues4\":[\"categoria\"],\"catTxt\":\"Qué es: Tecnología suma el 40 % (NVDA, MSFT). Tu referencia: más del 40 % en una categoría.Por qué importa: Si a ese sec\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y6-390",
+  "escenario": "Preguntas de ejemplo al guardar una idea (390 px)",
+  "esperado": "pulsar la primera rellena «¿Sigue creciendo NVDA?»",
+  "observado": "\"¿Sigue creciendo NVDA?\"",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y5-390",
+  "escenario": "Renombrados (390 px): «idea» y «empresas que sigo»",
+  "esperado": "el Cuaderno tiene «Mis ideas» y «Empresas que sigo»; la ficha ofrece «Seguir esta empresa»; ni «escenario» ni «radar» a la vista",
+  "observado": "{\"h2\":[\"Mis ideas\",\"Tus preguntas\",\"Empresas que sigo\"],\"ficha\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y1-320",
+  "escenario": "Barra inferior (320 px): tres destinos y el actual marcado; oculta en el editor y el laboratorio",
+  "esperado": "Carteras · Descubrir · Cuaderno; portada → Carteras; Explorar → Descubrir; editor y laboratorio sin barra",
+  "observado": "{\"enInicio\":{\"visible\":true,\"enlaces\":[\"Carteras\",\"Descubrir\",\"Cuaderno\"],\"actual\":\"Carteras\"},\"enEmp\":{\"visible\":true,\"enlaces\":[\"Carteras\",\"Descubrir\",\"Cuaderno\"],\"actual\":\"Descubrir\"},\"enEditor\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"},\"enLab\":{\"visible\":false,\"enlaces\":[],\"actual\":\"Carteras\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y2-320",
+  "escenario": "Pegar «KO 40, PG 60, ZZZZ 5» en el editor (320 px)",
+  "esperado": "ayuda «Pulsa Intro» visible; KO 40 y PG 60 creadas (total 100 %); el aviso dice que ZZZZ no se reconoce; el campo queda vacío",
+  "observado": "{\"ayuda\":true,\"y2\":{\"pesos\":{\"KO\":\"40,0\",\"PG\":\"60,0\"},\"total\":\"100 %\",\"res\":\"Añadidas KO 40 % · PG 60 % · sin reconocer: ZZZZ\",\"campo\":\"\"}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y3-320",
+  "escenario": "Explorar → «Probar» (320 px)",
+  "esperado": "el laboratorio llega con JNJ y 10 %, con el deslizador listo",
+  "observado": "{\"t\":\"JNJ\",\"peso\":\"10\",\"rango\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y4-320",
+  "escenario": "Señal en tres niveles y umbrales propios (320 px)",
+  "esperado": "antes: categoria + posicion; al pulsar: «Qué es / Por qué importa / Qué probar»; con posición 50 %: ya no hay «posicion» y el detalle dice «Tu referencia»",
+  "observado": "{\"antes4\":[\"categoria\",\"posicion\"],\"niveles\":[\"Qué es:\",\"Por qué importa:\",\"Qué probar:\"],\"despues4\":[\"categoria\"],\"catTxt\":\"Qué es: Tecnología suma el 40 % (NVDA, MSFT). Tu referencia: más del 40 % en una categoría.Por qué importa: Si a ese sec\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y6-320",
+  "escenario": "Preguntas de ejemplo al guardar una idea (320 px)",
+  "esperado": "pulsar la primera rellena «¿Sigue creciendo NVDA?»",
+  "observado": "\"¿Sigue creciendo NVDA?\"",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y5-320",
+  "escenario": "Renombrados (320 px): «idea» y «empresas que sigo»",
+  "esperado": "el Cuaderno tiene «Mis ideas» y «Empresas que sigo»; la ficha ofrece «Seguir esta empresa»; ni «escenario» ni «radar» a la vista",
+  "observado": "{\"h2\":[\"Mis ideas\",\"Tus preguntas\",\"Empresas que sigo\"],\"ficha\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "Y0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún pageerror; ninguna vista más ancha que la ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]

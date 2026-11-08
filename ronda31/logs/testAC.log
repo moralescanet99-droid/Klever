@@ -1,0 +1,27 @@
+# comando: node tests/ronda31/testAC.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 03:59:07 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [AC1] Instalable como app
+OK    [AC2] Tipografía propia autoalojada
+OK    [AC3-1440] Iconos SVG y barra inferior (1440 px)
+OK    [AC5-1440] Explorar por tandas en el móvil (1440 px)
+OK    [AC4-1440] Accesibilidad del editor (1440 px)
+OK    [AC6-1440] La barra de reparto se transforma, no se repinta (1440 px)
+OK    [AC7-1440] Aviso de éxito dentro de la paleta (1440 px)
+OK    [AC0-1440] Sin errores ni desbordes (1440 px)
+OK    [AC3-390] Iconos SVG y barra inferior (390 px)
+OK    [AC5-390] Explorar por tandas en el móvil (390 px)
+OK    [AC4-390] Accesibilidad del editor (390 px)
+OK    [AC6-390] La barra de reparto se transforma, no se repinta (390 px)
+OK    [AC7-390] Aviso de éxito dentro de la paleta (390 px)
+OK    [AC0-390] Sin errores ni desbordes (390 px)
+OK    [AC3-320] Iconos SVG y barra inferior (320 px)
+OK    [AC5-320] Explorar por tandas en el móvil (320 px)
+OK    [AC4-320] Accesibilidad del editor (320 px)
+OK    [AC6-320] La barra de reparto se transforma, no se repinta (320 px)
+OK    [AC7-320] Aviso de éxito dentro de la paleta (320 px)
+OK    [AC0-320] Sin errores ni desbordes (320 px)
+OK    [AC8] «Reducir movimiento»: nada se mueve
+
+RESULTADO: 21 correctas, 0 fallos

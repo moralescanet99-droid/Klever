@@ -1,0 +1,34 @@
+# comando: node tests/ronda17/testP.cjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 03:48:11 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [P1-1440] Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar cartera» (1440 px)
+OK    [P2-1440] Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (1440 px)
+OK    [P3-1440] Reparto no válido: dice cuánto falta o sobra con las reglas existentes (1440 px)
+OK    [P4-1440] Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (1440 px)
+OK    [P5-1440] «Revisar cartera» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (1440 px)
+OK    [P6-1440] Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (1440 px)
+OK    [P6b-1440] Sin errores de JavaScript en el creador (1440 px)
+OK    [P1-390] Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar cartera» (390 px)
+OK    [P2-390] Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (390 px)
+OK    [P3-390] Reparto no válido: dice cuánto falta o sobra con las reglas existentes (390 px)
+OK    [P4-390] Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (390 px)
+OK    [P5-390] «Revisar cartera» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (390 px)
+OK    [P6-390] Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (390 px)
+OK    [P6b-390] Sin errores de JavaScript en el creador (390 px)
+OK    [P1-320] Creador: título serif, tres pasos con «Distribución» activo, anillo accesible, «Volver» y «Revisar cartera» (320 px)
+OK    [P2-320] Deslizador y campo numérico: una sola entrada, y el importe y la leyenda se actualizan en el mismo paso (320 px)
+OK    [P3-320] Reparto no válido: dice cuánto falta o sobra con las reglas existentes (320 px)
+OK    [P4-320] Hipótesis: con 10.000 € simulados y 2.000 € en una empresa, una caída del 25 % supone 500 € menos; se recalcula al editar (320 px)
+OK    [P5-320] «Revisar cartera» pasa al paso 3 y lleva el foco al resultado; editar un peso vuelve al paso 2 (320 px)
+OK    [P6-320] Un único botón naranja (Revisar) en un borrador, sin desplazamiento horizontal y con el texto al 200 % (320 px)
+OK    [P6b-320] Sin errores de JavaScript en el creador (320 px)
+OK    [P7a] Entrada sin cuenta: crear el primero; con borrador en el dispositivo, retomarlo con los pesos intactos
+OK    [P7b] Entrada con sesión: la portada lleva a «Mis carteras» para elegir uno
+OK    [P8] Con un portafolio de la cuenta: sin cambios → «Revisar»; con cambios pendientes → «Guardar»; tras guardar → «Revisar»
+OK    [P9] Teclado: el deslizador se ajusta con flechas y sigue al campo numérico; todos los controles tienen nombre accesible; el foco se ve
+OK    [P10] Escritorio: navegación en columna izquierda, fondo carbón con resplandor, Revista como entrada secundaria y Cuaderno con la etiqueta «En beta» (sin prometer un plan de pago)
+OK    [P11-390] Móvil: menú con cuatro entradas y acceso a Revista (390 px)
+OK    [P11-320] Móvil: menú con cuatro entradas y acceso a Revista (320 px)
+
+RESULTADO: 28 correctas, 0 fallos

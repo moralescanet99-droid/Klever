@@ -1,0 +1,186 @@
+[
+ {
+  "id": "C1",
+  "escenario": "Ejemplo del encargo: A 60 / B 40 + C 10 reduciendo proporcionalmente",
+  "esperado": "A 54, B 36, C 10; total 100",
+  "observado": "{\"A\":54,\"B\":36,\"C\":10} total 100",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C1b",
+  "escenario": "Los pasos explican el método ANTES del resultado",
+  "esperado": "Menciona el factor 90/100 = 0,9000 y el redondeo",
+  "observado": "Peso actual de C: 0 %. Peso propuesto: 10 %. Hay que financiar 10 puntos. | Las otras posiciones suman 100 % y deben bajar a 90 %: cada una se multiplica por 90/100 = 0,9000. | Redondeo a una décima: se reparten las décimas sobrantes por mayor resto y, a igualdad, por orden de símbolo. | Total tras el cambio: 100 %. La cartera no se normaliza.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "Base incompleta (80 %) + C 10 proporcional: sigue incompleta, sin normalizar",
+  "esperado": "Total 80; A 43,8 y B 26,2 (la décima sobrante a A por el símbolo en el empate)",
+  "observado": "{\"A\":43.8,\"B\":26.2,\"C\":10} total 80",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3a",
+  "escenario": "Sin asignar suficiente (20 %): C 15 → A y B no cambian",
+  "esperado": "A 60, B 20, C 15; total 95",
+  "observado": "{\"A\":60,\"B\":20,\"C\":15} total 95",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3b",
+  "escenario": "Sin asignar insuficiente: C 25 con 20 % libre",
+  "esperado": "Inviable con el motivo; sin pesos",
+  "observado": "No hay suficiente porcentaje sin asignar: hay 20 % y el cambio necesita 25 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3c",
+  "escenario": "Cartera completa y financiación con lo sin asignar: inviable",
+  "esperado": "Inviable: hay 0 %",
+  "observado": "No hay suficiente porcentaje sin asignar: hay 0 % y el cambio necesita 5 %. Prueba a reducir proporcionalmente las otras posiciones.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4a",
+  "escenario": "Bajar el peso de un activo existente: lo liberado queda SIN asignar (no se reparte al alza)",
+  "esperado": "A 30, B 40; total 70",
+  "observado": "{\"B\":40,\"A\":30} total 70",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4b",
+  "escenario": "Subir el peso de un activo existente financiado por las demás",
+  "esperado": "A 80, B 20; total 100",
+  "observado": "{\"A\":80,\"B\":20} total 100",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C4c",
+  "escenario": "Mismo peso que ya tiene: nada que simular",
+  "esperado": "Inviable con motivo",
+  "observado": "A ya tiene el 60 % en la cartera base: no hay nada que simular.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5a",
+  "escenario": "Las demás no bastan (10 % frente a 20 %)",
+  "esperado": "Inviable: pesos negativos imposibles",
+  "observado": "Las otras posiciones suman 10 % y el cambio necesita 20 %: no se puede financiar sin dejar pesos negativos.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5b",
+  "escenario": "Dejaría una posición en 0 %",
+  "esperado": "Inviable: «por debajo del 0,1 %»",
+  "observado": "La reducción dejaría A por debajo del 0,1 %. Elige un peso menor.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5c",
+  "escenario": "Base con exceso (110 %)",
+  "esperado": "Inviable: corrígela antes",
+  "observado": "La cartera base suma 110 % (exceso de 10 %). Corrígela antes de simular.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C5d",
+  "escenario": "Peso fuera de rango o activo vacío",
+  "esperado": "Inviables con motivo",
+  "observado": "El peso propuesto debe estar entre 0,1 y 100 %. | El peso propuesto debe estar entre 0,1 y 100 %. | Elige un activo. | Elige cómo se financia el cambio.",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C6a",
+  "escenario": "Base vacía + A 50 con lo sin asignar",
+  "esperado": "Viable: total 50 (incompleta)",
+  "observado": "{\"A\":50} total 50",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C6b",
+  "escenario": "Peso pequeño (0,1 %) con redondeo",
+  "esperado": "C 0,1; A y B suman 99,9; total 100; ninguna por debajo de 0,1",
+  "observado": "{\"A\":59.9,\"B\":40,\"C\":0.1}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C7",
+  "escenario": "Propiedades en 2000 bases y operaciones al azar (semilla fija)",
+  "esperado": "Si es viable: totales cuadran, ≤ 100 %, ningún peso < 0,1 %, el activo queda en su peso y el resultado es determinista",
+  "observado": "4000 simulaciones, 2574 viables, fallos: 0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8a",
+  "escenario": "Radiografía: mayor, tres mayores, pendiente y límite",
+  "esperado": "Mayor A 35; tres mayores 80; 95 % asignado (pendiente 5); A y B superan el 20 % (C está en el límite, no lo supera)",
+  "observado": "{\"mayor\":{\"ticker\":\"A\",\"peso\":35},\"top3\":80,\"estado\":\"incompleta\",\"pendiente\":5,\"sup\":[\"A\",\"B\"]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8b",
+  "escenario": "Categorías comerciales: los ETF se marcan, no se interpretan como exposición",
+  "esperado": "Tecnología 40 (A+E), Salud 25, «ETF oro» 30 con soloFondos",
+  "observado": "[[\"Tecnología\",40,false],[\"ETF oro\",30,true],[\"Salud\",25,false]]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8c",
+  "escenario": "Con menos de tres posiciones se indica",
+  "esperado": "top3.n = 2, completo = false, peso 100; sin límite no hay superados",
+  "observado": "{\"n\":2,\"peso\":100,\"tickers\":[\"A\",\"B\"],\"completo\":false} []",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8d",
+  "escenario": "Cartera vacía y cartera con exceso",
+  "esperado": "vacía: sin mayor; exceso 10",
+  "observado": "[\"vacia\",null,10]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C8e",
+  "escenario": "Un activo sin categoría conocida se declara, no se rellena",
+  "esperado": "«Sin categoría conocida» 50 y Q en la cobertura",
+  "observado": "[[\"Sin categoría conocida\",50,false],[\"Tecnología\",50,true]] [\"Q\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C9",
+  "escenario": "Comparar antes/después con un límite personal del 35 %",
+  "esperado": "Antes: A (40 %) supera el límite; después A baja a 30 y se resuelve; sin asignar 0 en ambos",
+  "observado": "{\"nuevos\":[],\"resueltos\":[\"A\"],\"mayorA\":{\"ticker\":\"A\",\"peso\":40},\"mayorD\":{\"ticker\":\"A\",\"peso\":30}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C10",
+  "escenario": "Una propuesta manipulada no coincide con el método",
+  "esperado": "ok=false; la correcta, ok=true",
+  "observado": "[false,true]",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

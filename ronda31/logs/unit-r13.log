@@ -1,0 +1,43 @@
+# comando: node tests/ronda13/unit-r13.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 03:32:53 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [R1a] Radar sin sesión
+OK    [R1b] Guardar en el radar es idempotente
+OK    [R1c] Sin «nota» en el cuerpo se conserva la nota
+OK    [R1d] Actualizar la nota
+OK    [R1e] Ticker desconocido, mal formado o nota demasiado larga
+OK    [R2a] Aislamiento: cada usuario solo ve su radar (mismo activo, notas distintas)
+OK    [R2b] Quitar de MI radar no afecta al de otro usuario
+OK    [R1f] Quitar algo que no estaba es idempotente
+OK    [R3a] Definir un límite personal
+OK    [R3b] Límites no válidos
+OK    [R3c] Aislamiento: otro usuario no puede poner límite a mi cartera
+OK    [R3d] El límite es privado: lo ve su dueño, no la vista pública
+OK    [R3e] Quitar el límite
+OK    [R4a] Guardar un escenario válido
+OK    [R4b] Guardar un escenario NO modifica la cartera base ni su versión pública
+OK    [R4c] Reintento con la misma clave: no duplica
+OK    [R4d] Propuesta manipulada (cifras distintas a las del método)
+OK    [R4e] Base que ya no es la vigente al guardar
+OK    [R4f] Simulación inviable (cartera completa, financiar con lo sin asignar)
+OK    [R4g] Datos inválidos (nombre vacío, clave corta, ticker raro)
+OK    [R5a] Aislamiento: otro usuario no puede crear un escenario sobre MI cartera
+OK    [R5b] Aislamiento: otro usuario no lista, lee, edita ni borra mi escenario
+OK    [R5c] Sin sesión no hay escenarios
+OK    [R6a] Editar la nota con revisión; la revisión sube y una pestaña vieja recibe 409
+OK    [R6b] Estado no válido y base/propuesta inmutables
+OK    [R7a] Si cambia la cartera original, el escenario conserva su base y avisa de la versión posterior
+OK    [R7b] Si se borra la cartera, el escenario sigue y lo dice
+guardar escenario: Error: fallo simulado de infraestructura
+    at file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:77
+    at Array.map (<anonymous>)
+    at Object.batch (file:///home/user/Klever/tests/lib/d1-sqlite.mjs:28:22)
+    at onRequestPost (file:///home/user/Klever/functions/api/escenarios/index.js:61:35)
+    at async llama (file:///home/user/Klever/tests/ronda13/unit-r13.mjs:22:13)
+    at async file:///home/user/Klever/tests/ronda13/unit-r13.mjs:102:5
+OK    [R8] Fallo de infraestructura al guardar y reintento
+OK    [R9] Descartar un escenario lo borra sin tocar la cartera
+OK    [R10] Origen de los datos (derivado de las filas)
+
+RESULTADO: 30 correctas, 0 fallos
