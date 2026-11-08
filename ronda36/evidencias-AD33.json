@@ -1,0 +1,23 @@
+[
+ {
+  "id": "AD1",
+  "escenario": "Cada carga avisa una «visita» y no se guarda nada en el dispositivo",
+  "esperado": "un POST {\"evento\":\"visita\"} por carga (sin más campos); ni «klever_visita» ni «klever_primera» en el almacenamiento",
+  "observado": "{\"primera\":[\"{\\\"evento\\\":\\\"visita\\\"}\"],\"recarga\":[\"{\\\"evento\\\":\\\"visita\\\"}\"],\"guardado\":[null,null]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AD2",
+  "escenario": "Llegar desde un enlace compartido",
+  "esperado": "«visita» y «visita_enlace»",
+  "observado": "[\"{\\\"evento\\\":\\\"visita\\\"}\",\"{\\\"evento\\\":\\\"visita_enlace\\\"}\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "AD3",
+  "escenario": "Hoja de estilo única con los tokens aplicados",
+  "esperado": "solo klever.css; fondo carbón rgb(19, 16, 14); fuente «Inter Klever»",
+  "observado": "{\"hojas\":[\"klever.css\"],\"bg\":\"rgb(19, 16, 14)\",\"fuente\":\"\\\"Inter Klever\\\"\"}",
+  "resultado": "OK"
+ }
+]

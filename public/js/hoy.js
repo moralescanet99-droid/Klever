@@ -4,13 +4,19 @@
 import { $, esc } from './base.js';
 import { radiografia } from './calculos.js';
 import { senales, indicadores, hipotesis } from './senales.js';
+import { compartirTarjeta } from './compartir.js';
 
-let XH = null;   // contexto: { by, abrirLab }
+let XH = null, ULTIMO = null;   // contexto: { by, abrirLab, medir, toast }; ULTIMO: el modelo pintado (para la tarjeta)
 export const iniciarHoy = ctx => {
   XH = ctx;
   $('#hoy-hero')?.addEventListener('click', e => {
     const b = e.target.closest('[data-hoy-lab]'); if (!b) return;
     XH.abrirLab({ carteraId: +b.dataset.hoyLab, ticker: b.dataset.ticker || '', peso: b.dataset.peso || '', fin: b.dataset.fin || 'proporcional', auto: !!b.dataset.ticker });
+  });
+  $('#hoy-hero')?.addEventListener('click', async e => {   // ronda 36: tarjeta para compartir
+    const b = e.target.closest('[data-hoy-compartir]'); if (!b || !ULTIMO) return;
+    b.disabled = true; try { const r = await compartirTarjeta(ULTIMO, { url: location.origin + location.pathname + '?ref=compartir', medir: XH.medir }); if (r === 'descargada') XH.toast?.('Imagen descargada: compártela donde quieras'); }
+    catch { XH.toast?.('No se pudo crear la imagen'); } finally { b.disabled = false; }
   });
 };
 
@@ -43,6 +49,7 @@ export function svgAnillo(pos, { tam = 132, grosor = 14 } = {}) {
 export function pintarHoy(lista) {
   const el = $('#hoy-hero'); if (!el) return;
   const m = modeloHoy(carteraPrincipal(lista), XH.by());
+  ULTIMO = m && !m.vacia ? m : null;
   if (!m) { el.hidden = true; el.innerHTML = ''; return; }
   const boton = m.accion.tipo === 'lab'
     ? `<button class="btn btn-primario" type="button" data-hoy-lab="${m.id}" data-ticker="${esc(m.accion.ticker)}" data-peso="${m.accion.peso}" data-fin="${esc(m.accion.fin)}">${esc(m.accion.texto)} →</button><a class="enlace hoy-abrir" href="#cartera-${m.id}">Abrir</a>`
@@ -53,7 +60,7 @@ export function pintarHoy(lista) {
       <div class="hoy-info"><p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2>
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
-        <p class="hoy-acc">${boton}</p></div></div>
+        <p class="hoy-acc">${boton}<button class="btn btn-secundario hoy-compartir" type="button" data-hoy-compartir><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v11M8 8l4-4 4 4"/><path d="M5 13v6h14v-6"/></svg> Compartir</button></p></div></div>
       <p class="hoy-frase" id="hoy-frase" data-cartera="${m.id}" hidden></p>
       <div class="hoy-temporada" id="hoy-temporada" data-cartera="${m.id}" hidden></div>`;
   el.hidden = false;

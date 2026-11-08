@@ -2191,7 +2191,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
     <form id="form-acceso">
       <div class="campo"><label for="acc-email">Tu email</label>
         <input id="acc-email" type="email" name="email" required autocomplete="email" inputmode="email"></div>
-      <label class="chk" for="acc-acepto"><input id="acc-acepto" type="checkbox" name="acepto" required> <span>He leído el aviso legal y la privacidad</span></label>
+      <label class="chk" for="acc-acepto"><input id="acc-acepto" type="checkbox" name="acepto" required> <span>Tengo 18 años o más y he leído el aviso legal y la privacidad</span></label>
       <p id="acc-error" class="msg-error" role="alert"></p>
       <button class="btn btn-primario btn-bloque">Enviarme el enlace</button>
     </form>
@@ -4723,12 +4723,17 @@ function pintarTemporada(sem) {
 // La cartera principal es la última que has tocado (modificada o creada) que tiene posiciones. Nada de importes ni rentabilidad.
 // PURO en lo que calcula (eleccion y modelo); pintarHoy() solo dibuja con lo que recibe.
 
-let XH = null;   // contexto: { by, abrirLab }
+let XH = null, ULTIMO = null;   // contexto: { by, abrirLab, medir, toast }; ULTIMO: el modelo pintado (para la tarjeta)
 const iniciarHoy = ctx => {
   XH = ctx;
   $('#hoy-hero')?.addEventListener('click', e => {
     const b = e.target.closest('[data-hoy-lab]'); if (!b) return;
     XH.abrirLab({ carteraId: +b.dataset.hoyLab, ticker: b.dataset.ticker || '', peso: b.dataset.peso || '', fin: b.dataset.fin || 'proporcional', auto: !!b.dataset.ticker });
+  });
+  $('#hoy-hero')?.addEventListener('click', async e => {   // ronda 36: tarjeta para compartir
+    const b = e.target.closest('[data-hoy-compartir]'); if (!b || !ULTIMO) return;
+    b.disabled = true; try { const r = await compartirTarjeta(ULTIMO, { url: location.origin + location.pathname + '?ref=compartir', medir: XH.medir }); if (r === 'descargada') XH.toast?.('Imagen descargada: compártela donde quieras'); }
+    catch { XH.toast?.('No se pudo crear la imagen'); } finally { b.disabled = false; }
   });
 };
 
@@ -4761,6 +4766,7 @@ function svgAnillo(pos, { tam = 132, grosor = 14 } = {}) {
 function pintarHoy(lista) {
   const el = $('#hoy-hero'); if (!el) return;
   const m = modeloHoy(carteraPrincipal(lista), XH.by());
+  ULTIMO = m && !m.vacia ? m : null;
   if (!m) { el.hidden = true; el.innerHTML = ''; return; }
   const boton = m.accion.tipo === 'lab'
     ? `<button class="btn btn-primario" type="button" data-hoy-lab="${m.id}" data-ticker="${esc(m.accion.ticker)}" data-peso="${m.accion.peso}" data-fin="${esc(m.accion.fin)}">${esc(m.accion.texto)} →</button><a class="enlace hoy-abrir" href="#cartera-${m.id}">Abrir</a>`
@@ -4771,7 +4777,7 @@ function pintarHoy(lista) {
       <div class="hoy-info"><p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2>
         <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
         ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
-        <p class="hoy-acc">${boton}</p></div></div>
+        <p class="hoy-acc">${boton}<button class="btn btn-secundario hoy-compartir" type="button" data-hoy-compartir><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 4v11M8 8l4-4 4 4"/><path d="M5 13v6h14v-6"/></svg> Compartir</button></p></div></div>
       <p class="hoy-frase" id="hoy-frase" data-cartera="${m.id}" hidden></p>
       <div class="hoy-temporada" id="hoy-temporada" data-cartera="${m.id}" hidden></div>`;
   el.hidden = false;
@@ -4831,6 +4837,49 @@ function montarRueda(cont, items, { titulo = '', alAbrir = null, inicio = 0, aut
   return { centrar, abrir, cerrar, actual: () => actual };
 }
 
+// Ronda 36 · TARJETA PARA COMPARTIR (bucle 1 del plan de marketing, C50–C51). Dibuja una imagen vertical 1080×1350 de tu cartera principal:
+// anillo, semáforos, señal principal y el sello «Simulación · sin dinero real · no es consejo». NUNCA euros ni rentabilidad.
+// Se comparte con el menú del propio dispositivo (Web Share con archivo) o, si no se puede, se descarga. Klever no envía nada a nadie.
+const ANCHO = 1080, ALTO_T = 1350;
+const NIV_TXT = { ok: 'Baja', medio: 'Media', alto: 'Alta' }, NIV_VAR = { ok: 'Amplia', medio: 'Media', alto: 'Poca' };
+const colorVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#888';
+// Dibuja la tarjeta y devuelve el lienzo. m: el modelo de «Hoy» (hoy.js: modeloHoy).
+async function dibujarTarjeta(m) {
+  try { await document.fonts.load('600 40px "Inter Klever"'); await document.fonts.load('300 40px "Inter Klever"'); } catch { /* sin la fuente: la del sistema */ }
+  const cv = document.createElement('canvas'); cv.width = ANCHO; cv.height = ALTO_T; const g = cv.getContext('2d'), F = (p, t) => `${p} ${t}px "Inter Klever", system-ui, sans-serif`;
+  const fondo = g.createLinearGradient(0, 0, ANCHO, ALTO_T); fondo.addColorStop(0, '#1b1411'); fondo.addColorStop(1, '#0b0908'); g.fillStyle = fondo; g.fillRect(0, 0, ANCHO, ALTO_T);
+  const halo = g.createRadialGradient(860, 160, 0, 860, 160, 620); halo.addColorStop(0, 'rgba(255,122,47,.28)'); halo.addColorStop(1, 'rgba(255,122,47,0)'); g.fillStyle = halo; g.fillRect(0, 0, ANCHO, ALTO_T);
+  g.fillStyle = '#F4EDE0'; g.font = F('300', 34); g.letterSpacing = '12px'; g.fillText('KLEVER', 90, 130); g.letterSpacing = '0px';
+  g.fillStyle = '#BDB0A0'; g.font = F('500', 34); g.fillText('Mi cartera simulada', 90, 210);
+  g.fillStyle = '#F4EDE0'; g.font = F('600', 64); g.fillText(recortar(g, m.nombre, 900), 90, 290);
+  // anillo
+  const cx = ANCHO / 2, cy = 620, r = 230, total = Math.max(100, m.pos.reduce((a, p) => a + p.peso, 0)); let a0 = -Math.PI / 2;
+  g.lineWidth = 64; g.lineCap = 'butt'; g.strokeStyle = '#241D18'; g.beginPath(); g.arc(cx, cy, r, 0, 2 * Math.PI); g.stroke();
+  m.pos.forEach((p, i) => { const ang = p.peso / total * 2 * Math.PI; g.strokeStyle = colorVar(`--c${i % 8}`); g.beginPath(); g.arc(cx, cy, r, a0 + 0.012, a0 + ang - 0.012); g.stroke(); a0 += ang; });
+  g.textAlign = 'center'; g.fillStyle = '#F4EDE0'; g.font = F('200', 150); g.fillText(String(m.n), cx, cy + 40); g.fillStyle = '#BDB0A0'; g.font = F('500', 36); g.fillText(m.n === 1 ? 'posición' : 'posiciones', cx, cy + 100);
+  // semáforos
+  const ind = m.indicadores || [], col = { ok: '#8FD6A4', medio: '#F2C26B', alto: '#FF7A2F' };
+  ind.forEach((it, k) => { const x = k === 0 ? ANCHO / 2 - 230 : ANCHO / 2 + 230, y = 960; g.fillStyle = col[it.nivel] || '#BDB0A0'; g.beginPath(); g.arc(x - 120, y - 14, 14, 0, 2 * Math.PI); g.fill();
+    g.textAlign = 'left'; g.fillStyle = '#BDB0A0'; g.font = F('500', 32); g.fillText(it.etiqueta, x - 92, y - 26); g.fillStyle = '#F4EDE0'; g.font = F('600', 44); g.fillText(it.id === 'variedad' ? NIV_VAR[it.nivel] : NIV_TXT[it.nivel], x - 92, y + 26); });
+  g.textAlign = 'center';
+  if (m.senal) { g.fillStyle = '#FFB27A'; g.font = F('600', 40); g.fillText(recortar(g, m.senal.titulo, 900), cx, 1090); }
+  g.fillStyle = '#BDB0A0'; g.font = F('500', 30); g.fillText('Simulación · sin dinero real · no es consejo', cx, 1220);
+  g.fillStyle = '#FFB88A'; g.font = F('600', 34); g.fillText('Crea la tuya gratis en Klever', cx, 1275);
+  return cv;
+}
+function recortar(g, t, max) { let s = String(t); if (g.measureText(s).width <= max) return s; while (s.length > 1 && g.measureText(s + '…').width > max) s = s.slice(0, -1); return s + '…'; }
+// Comparte (o descarga) la tarjeta. Devuelve 'compartida' | 'descargada' | 'cancelada'.
+async function compartirTarjeta(m, { url, medir } = {}) {
+  const cv = await dibujarTarjeta(m), blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  const archivo = new File([blob], 'mi-cartera-klever.png', { type: 'image/png' });
+  const datos = { files: [archivo], title: 'Mi cartera en Klever', text: 'Así reparto mi cartera simulada en Klever (sin dinero real). ¿Y tú?', url };
+  if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+    try { await navigator.share(datos); medir?.('compartir'); return 'compartida'; } catch { return 'cancelada'; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = archivo.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  medir?.('compartir'); return 'descargada';
+}
+
 // =====================================================================
 // Klever · interfaz. Sin dependencias.
 // Vistas (hash): inicio · empresas · publicas · carteras · cartera / cartera-<id>
@@ -4863,10 +4912,10 @@ $('#toast-x').addEventListener('click', cerrarAviso);
 const API = '/api';
 // Fase 1 (ronda 33) · embudo anónimo: un aviso al servidor sin datos de la persona (nunca bloquea ni muestra errores).
 const medir = evento => { try { fetch(API + '/evento', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ evento }), keepalive: true }).catch(() => {}); } catch { /* sin red */ } };
-// «visita» una vez por dispositivo y día; «vuelve_7d» si la primera visita de este dispositivo fue hace 7 días o más (una vez al día). Solo fechas en este dispositivo.
-(() => { try { const hoy = new Date().toISOString().slice(0, 10), ult = localStorage.getItem('klever_visita'); if (ult === hoy) return;
-  let pri = localStorage.getItem('klever_primera'); if (!pri) { pri = hoy; localStorage.setItem('klever_primera', hoy); }
-  localStorage.setItem('klever_visita', hoy); medir('visita'); if (Date.parse(hoy) - Date.parse(pri) >= 7 * 864e5) medir('vuelve_7d'); } catch { /* sin almacenamiento: no se mide */ } })();
+// «visita» en cada carga de la página, SIN guardar nada en el dispositivo (ronda 36: el art. 22.2 de la LSSI exigiría consentimiento para guardar fechas).
+// Quién vuelve a los 7 días se mide en el servidor con las sesiones (scripts/metrics.sql, consulta 3). «visita_enlace»: la página se abrió desde un enlace compartido (?ref=compartir).
+medir('visita'); try { if (new URLSearchParams(location.search).get('ref') === 'compartir') medir('visita_enlace'); } catch { /* sin URL */ }
+try { localStorage.removeItem('klever_visita'); localStorage.removeItem('klever_primera'); } catch { /* sin almacenamiento */ }   // se retiran las de la ronda 33
 const tok = () => store.getItem('klever_token');
 const logged = () => !!tok();
 
@@ -6021,7 +6070,7 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets(); activosListos();
-  iniciarHoy({ by: () => by, abrirLab });
+  iniciarHoy({ by: () => by, abrirLab, medir, toast });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);

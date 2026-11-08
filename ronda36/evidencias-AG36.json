@@ -1,0 +1,44 @@
+[
+ {
+  "id": "AG1-390",
+  "escenario": "Solo mayores de 18 (390 px)",
+  "esperado": "la casilla dice «Tengo 18 años o más…»; sin aceptarla, HTTP 400 con el motivo de la edad",
+  "observado": "{\"etiqueta\":\"Tengo 18 años o más y he leído el aviso legal y la privacidad\",\"sin\":{\"s\":400,\"j\":{\"error\":\"Para crear una cuenta debes tener 18 años o más y aceptar el aviso legal y la privacidad\"}}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AG2-390",
+  "escenario": "Tarjeta para compartir (390 px)",
+  "esperado": "PNG de 1080×1350 «mi-cartera-klever.png» (sin el menú de compartir del sistema, se descarga) y un aviso «compartir» al embudo",
+  "observado": "{\"png\":{\"firma\":\"PNG\",\"ancho\":1080,\"alto\":1350,\"nombre\":\"mi-cartera-klever.png\",\"kb\":1211},\"env\":[\"compartir\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AG0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "[]",
+  "resultado": "OK"
+ },
+ {
+  "id": "AG1-1440",
+  "escenario": "Solo mayores de 18 (1440 px)",
+  "esperado": "la casilla dice «Tengo 18 años o más…»; sin aceptarla, HTTP 400 con el motivo de la edad",
+  "observado": "{\"etiqueta\":\"Tengo 18 años o más y he leído el aviso legal y la privacidad\",\"sin\":{\"s\":400,\"j\":{\"error\":\"Para crear una cuenta debes tener 18 años o más y aceptar el aviso legal y la privacidad\"}}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AG2-1440",
+  "escenario": "Tarjeta para compartir (1440 px)",
+  "esperado": "PNG de 1080×1350 «mi-cartera-klever.png» (sin el menú de compartir del sistema, se descarga) y un aviso «compartir» al embudo",
+  "observado": "{\"png\":{\"firma\":\"PNG\",\"ancho\":1080,\"alto\":1350,\"nombre\":\"mi-cartera-klever.png\",\"kb\":1211},\"env\":[\"compartir\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AG0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "[]",
+  "resultado": "OK"
+ }
+]

@@ -1,0 +1,82 @@
+[
+ {
+  "id": "E1",
+  "escenario": "Embudo: suma por día y evento, sin sesión",
+  "esperado": "HTTP 200; visita 2 y cartera_creada 1 en una fila por evento",
+  "observado": "200 cartera_creada:1,visita:2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E2",
+  "escenario": "Eventos fuera de la lista cerrada",
+  "esperado": "HTTP 400 los tres y nada escrito",
+  "observado": "[400,400,400] cartera_creada:1,visita:2",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E3",
+  "escenario": "No se guarda nada de la persona",
+  "esperado": "solo fecha, evento y n (sin usuario, IP, dispositivo ni hora)",
+  "observado": "[\"fecha\",\"evento\",\"n\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E4",
+  "escenario": "La lista de eventos es la del cliente",
+  "esperado": "visita, vuelve_7d, cuenta_iniciada, cartera_creada, idea_guardada y (ronda 36) compartir, visita_enlace",
+  "observado": "[\"visita\",\"vuelve_7d\",\"cuenta_iniciada\",\"cartera_creada\",\"idea_guardada\",\"compartir\",\"visita_enlace\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "E5",
+  "escenario": "Fallo de la base: error claro, nunca un éxito falso",
+  "esperado": "HTTP 500",
+  "observado": "500 No se pudo registrar",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M1",
+  "escenario": "Migración 0014 sobre un esquema nuevo",
+  "esperado": "no falla (idempotente)",
+  "observado": "sin error",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C1",
+  "escenario": "Una sola hoja de estilo",
+  "esperado": "index.html enlaza solo klever.css; las cinco antiguas ya no existen",
+  "observado": "[\"klever.css\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C2",
+  "escenario": "Un único bloque de tokens",
+  "esperado": "un :root de primer nivel (al principio) y solo los dos de @media del margen lateral",
+  "observado": "[false,true,true]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "C3",
+  "escenario": "Documento del sistema de diseño",
+  "esperado": "DESIGN.md con identidad, tokens, componentes y reglas",
+  "observado": "existe",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "M2",
+  "escenario": "Migración 0015: admite «compartir» y «visita_enlace» y conserva los contadores",
+  "esperado": "antes rechaza «compartir»; después lo admite; filas intactas; misma tabla que schema.sql",
+  "observado": "rechazado; 2026-11-01:cartera_creada:2,2026-11-01:visita:7,2026-11-02:compartir:1; igual=true",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

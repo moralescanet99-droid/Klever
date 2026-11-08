@@ -27,7 +27,7 @@ Ninguna bloquea el trabajo; son decisiones tuyas o cosas que solo puedes hacer t
 5. ⬜ **Actualizar wrangler 3 → 4** (avisa de que está anticuado). Es gratis, pero cambia la herramienta de despliegue: mejor hacerlo el día del despliegue, con las cuentas delante.
 7. ⬜ **Licencia (C41).** Klever **no** tiene licencia libre (sin archivo LICENSE = todos los derechos reservados), **pero el repositorio de GitHub es PÚBLICO**: cualquiera puede ver y copiar el código, aunque legalmente no pueda usarlo. Para cerrarlo: GitHub → Klever → Settings → «Change visibility» → Private (gratis). Ojo: con el repositorio privado, el flujo nocturno de GitHub Actions sigue siendo gratis dentro del cupo mensual de las cuentas gratuitas. ¿Quieres además un aviso de «Todos los derechos reservados» en la web y en el repositorio? Lo añado en cuanto me lo digas.
 8. ⬜ **Fuente Inter (licencia libre OFL).** Solo la letra es libre; no hace libre a Klever. Si no la quieres: (a) volver a la letra del sistema de cada dispositivo (0 €, se pierde que se vea igual en todos), o (b) comprar una fuente comercial (cuesta dinero: necesita tu aprobación).
-9. ⬜ **Al desplegar:** aplicar también las migraciones `0013` y `0014` en la D1 real (o `schema.sql` en una base nueva).
+9. ⬜ **Al desplegar:** aplicar también las migraciones `0013`, `0014` y `0015` en la D1 real (o `schema.sql` en una base nueva).
 6. ⬜ **Lo que ya estaba pendiente y solo puedes hacer tú:** cuentas de Cloudflare y Brevo, secretos de GitHub, carga real de la SEC y revisión legal (secciones 0–3 de este archivo).
 
 ## ★ Punto 14 «volver y valor»: lo que falta para que valga la pena (anotado 2026-11-07, C35–C36)

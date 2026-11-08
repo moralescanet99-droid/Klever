@@ -15,7 +15,7 @@ const malos = await Promise.all([post({ evento: 'compra' }), post({}), post({ ev
 t('E2', 'Eventos fuera de la lista cerrada', 'HTTP 400 los tres y nada escrito', J(malos.map(x => x.s)) + ' ' + filas(), malos.every(x => x.s === 400) && filas() === 'cartera_creada:1,visita:2');
 const cols = env.sql.prepare('PRAGMA table_info(eventos_dia)').all().map(c => c.name);
 t('E3', 'No se guarda nada de la persona', 'solo fecha, evento y n (sin usuario, IP, dispositivo ni hora)', J(cols), J(cols) === J(['fecha', 'evento', 'n']));
-t('E4', 'La lista de eventos es la del cliente', 'visita, vuelve_7d, cuenta_iniciada, cartera_creada, idea_guardada', J(EV.EVENTOS), J(EV.EVENTOS) === J(['visita', 'vuelve_7d', 'cuenta_iniciada', 'cartera_creada', 'idea_guardada']));
+t('E4', 'La lista de eventos es la del cliente', 'visita, vuelve_7d, cuenta_iniciada, cartera_creada, idea_guardada y (ronda 36) compartir, visita_enlace', J(EV.EVENTOS), J(EV.EVENTOS) === J(['visita', 'vuelve_7d', 'cuenta_iniciada', 'cartera_creada', 'idea_guardada', 'compartir', 'visita_enlace']));
 env.fallarEnSentencia = null; env.sql.exec('DROP TABLE eventos_dia'); r = await post({ evento: 'visita' });
 t('E5', 'Fallo de la base: error claro, nunca un éxito falso', 'HTTP 500', `${r.s} ${r.j.error}`, r.s === 500);
 let err = ''; try { crearEnv().sql.exec(readFileSync(path.join(RAIZ, 'migrations/0014_eventos.sql'), 'utf8')); } catch (e) { err = e.message; }
@@ -26,4 +26,13 @@ t('C1', 'Una sola hoja de estilo', 'index.html enlaza solo klever.css; las cinco
 const roots = [...css.matchAll(/(^|\n)(@media[^{]*\{)?:root\s*\{/g)].map(m => !!m[2]);
 t('C2', 'Un único bloque de tokens', 'un :root de primer nivel (al principio) y solo los dos de @media del margen lateral', J(roots), roots.filter(x => !x).length === 1 && roots.filter(Boolean).length === 2 && css.indexOf(':root{') < css.indexOf('body'));
 t('C3', 'Documento del sistema de diseño', 'DESIGN.md con identidad, tokens, componentes y reglas', existsSync(path.join(RAIZ, 'DESIGN.md')) ? 'existe' : 'falta', existsSync(path.join(RAIZ, 'DESIGN.md')) && /## Tokens/.test(readFileSync(path.join(RAIZ, 'DESIGN.md'), 'utf8')));
+// ronda 36: la 0015 amplía la lista de eventos conservando los contadores
+{ const { DatabaseSync } = await import('node:sqlite'); const db = new DatabaseSync(':memory:');
+  db.exec(readFileSync(path.join(RAIZ, 'migrations/0014_eventos.sql'), 'utf8')); db.exec("INSERT INTO eventos_dia VALUES ('2026-11-01','visita',7),('2026-11-01','cartera_creada',2)");
+  let antes = ''; try { db.exec("INSERT INTO eventos_dia VALUES ('2026-11-02','compartir',1)"); } catch (e) { antes = 'rechazado'; }
+  db.exec(readFileSync(path.join(RAIZ, 'migrations/0015_eventos_compartir.sql'), 'utf8')); db.exec("INSERT INTO eventos_dia VALUES ('2026-11-02','compartir',1)");
+  const filas = db.prepare('SELECT fecha, evento, n FROM eventos_dia ORDER BY fecha, evento').all().map(x => `${x.fecha}:${x.evento}:${x.n}`).join(',');
+  const igual = crearEnv().sql.prepare('PRAGMA table_info(eventos_dia)').all().map(c => c.name + c.type + c.notnull).join() === db.prepare('PRAGMA table_info(eventos_dia)').all().map(c => c.name + c.type + c.notnull).join();
+  t('M2', 'Migración 0015: admite «compartir» y «visita_enlace» y conserva los contadores', 'antes rechaza «compartir»; después lo admite; filas intactas; misma tabla que schema.sql', `${antes}; ${filas}; igual=${igual}`,
+    antes === 'rechazado' && filas === '2026-11-01:cartera_creada:2,2026-11-01:visita:7,2026-11-02:compartir:1' && igual); }
 await fin();

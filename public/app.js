@@ -42,10 +42,10 @@ $('#toast-x').addEventListener('click', cerrarAviso);
 const API = '/api';
 // Fase 1 (ronda 33) · embudo anónimo: un aviso al servidor sin datos de la persona (nunca bloquea ni muestra errores).
 const medir = evento => { try { fetch(API + '/evento', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ evento }), keepalive: true }).catch(() => {}); } catch { /* sin red */ } };
-// «visita» una vez por dispositivo y día; «vuelve_7d» si la primera visita de este dispositivo fue hace 7 días o más (una vez al día). Solo fechas en este dispositivo.
-(() => { try { const hoy = new Date().toISOString().slice(0, 10), ult = localStorage.getItem('klever_visita'); if (ult === hoy) return;
-  let pri = localStorage.getItem('klever_primera'); if (!pri) { pri = hoy; localStorage.setItem('klever_primera', hoy); }
-  localStorage.setItem('klever_visita', hoy); medir('visita'); if (Date.parse(hoy) - Date.parse(pri) >= 7 * 864e5) medir('vuelve_7d'); } catch { /* sin almacenamiento: no se mide */ } })();
+// «visita» en cada carga de la página, SIN guardar nada en el dispositivo (ronda 36: el art. 22.2 de la LSSI exigiría consentimiento para guardar fechas).
+// Quién vuelve a los 7 días se mide en el servidor con las sesiones (scripts/metrics.sql, consulta 3). «visita_enlace»: la página se abrió desde un enlace compartido (?ref=compartir).
+medir('visita'); try { if (new URLSearchParams(location.search).get('ref') === 'compartir') medir('visita_enlace'); } catch { /* sin URL */ }
+try { localStorage.removeItem('klever_visita'); localStorage.removeItem('klever_primera'); } catch { /* sin almacenamiento */ }   // se retiran las de la ronda 33
 const tok = () => store.getItem('klever_token');
 const logged = () => !!tok();
 
@@ -1203,7 +1203,7 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets(); activosListos();
-  iniciarHoy({ by: () => by, abrirLab });
+  iniciarHoy({ by: () => by, abrirLab, medir, toast });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);
