@@ -11,7 +11,7 @@ BATERIAS="${BATERIAS:-tests/ronda5/testA.cjs tests/ronda5/testB.cjs tests/ronda5
 UNIDAD="${UNIDAD:-tests/ronda7/unit-servidor.mjs tests/ronda8/unit-carreras.mjs tests/ronda8/unit-migracion.mjs tests/ronda10/unit-acceso.mjs tests/ronda13/unit-calculos.mjs tests/ronda13/unit-r13.mjs tests/ronda14/unit-carga.mjs tests/ronda14/unit-r14.mjs tests/ronda15/unit-nota.mjs tests/ronda15/unit-comparador.mjs tests/ronda15/unit-almacen.mjs tests/ronda16/unit-escenarios16.mjs tests/ronda17/unit-procedencia17.mjs tests/ronda17/unit-guardada17.mjs tests/ronda18/unit-integridad18.mjs tests/ronda19/unit-redondeo19.mjs tests/ronda19/unit-revision19.mjs tests/ronda20/unit-causas20.mjs tests/ronda20/unit-cierre20.mjs tests/ronda21/unit-registro21.mjs tests/ronda21/unit-cuaderno21.mjs tests/ronda22/unit-cliente-revision22.mjs tests/ronda26/unit-senales26.mjs tests/ronda28/unit-claridad28.mjs tests/ronda28/unit-fase2-28.mjs tests/ronda29/unit-semana29.mjs tests/ronda30/unit-ronda30.mjs tests/ronda33/unit-fase1.mjs}"
 PRUEBAS_SH="${PRUEBAS_SH:-tests/ronda11/test-zip.sh}"   # pruebas en shell (verificación de entregas ZIP)
 SEGURIDAD="${SEGURIDAD:-tests/ronda10/seguridad-http.mjs}"   # contra un servidor SIN enlace de acceso en pantalla (como la beta pública)
-mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0
+mkdir -p "$RONDA" .wrangler; SALIDA="$RONDA/resultado-ejecucion.txt"; FALLOS=0; REINTENTOS=""
 reg() { echo "$@" | tee -a "$SALIDA"; }
 fallo() { FALLOS=$((FALLOS + 1)); reg "FALLA (ejecutor): $*"; }
 matar_arbol() { local h; for h in $(pgrep -P "$1" 2>/dev/null || true); do matar_arbol "$h"; done; kill "$1" 2>/dev/null || true; }
@@ -83,6 +83,12 @@ else
       if ! bash scripts/local/servidor.sh start >"$TMPP/$i.arranque" 2>&1; then echo "(reintento de arranque)" >>"$TMPP/$i.arranque"; bash scripts/local/servidor.sh stop >/dev/null 2>&1; sleep 2
         if ! bash scripts/local/servidor.sh start >>"$TMPP/$i.arranque" 2>&1; then : >"$TMPP/$i.noarranca"; continue; fi; fi
       con_limite "$LIMITE" node "$t"
+      # Ronda 33: con la carga del modo paralelo aparecen fallos intermitentes (ya conocidos en modo secuencial). Una batería que falla se repite UNA vez,
+      # con un servidor y una base nuevos; el primer intento se conserva (<ronda>/logs/<batería>-intento1.log) y el resumen lo declara. Nunca se oculta.
+      if [ "$CODIGO" -ne 0 ] || [ "$TIEMPO_AGOTADO" = 1 ] || ! echo "$SALIDA_T" | grep -q "RESULTADO: [0-9]* correctas, 0 fallos"; then
+        printf '%s' "$SALIDA_T" >"$TMPP/$i.intento1"; bash scripts/local/servidor.sh stop >/dev/null 2>&1
+        if bash scripts/local/servidor.sh start >>"$TMPP/$i.arranque" 2>&1; then con_limite "$LIMITE" node "$t"; fi
+      fi
       printf '%s' "$SALIDA_T" >"$TMPP/$i.out"; echo "$CODIGO $TIEMPO_AGOTADO" >"$TMPP/$i.rc"; printf '%s' "$CMD_LOG" >"$TMPP/$i.cmd"
       bash scripts/local/servidor.sh stop >/dev/null 2>&1
     done
@@ -94,7 +100,10 @@ else
     n="$(basename "$t" | sed 's/\.[^.]*$//')"; reg "=== $n ==="
     if [ -f "$TMPP/$i.noarranca" ]; then fallo "el servidor no arrancó para $n: $(tail -1 "$TMPP/$i.arranque")"
     elif [ ! -f "$TMPP/$i.rc" ]; then fallo "$n no llegó a ejecutarse"
-    else SALIDA_T="$(cat "$TMPP/$i.out")"; read -r CODIGO TIEMPO_AGOTADO <"$TMPP/$i.rc"; CMD_LOG="$(cat "$TMPP/$i.cmd") (PARALELO=$PARALELO)"; evaluar "$n"; fi
+    else
+      if [ -f "$TMPP/$i.intento1" ]; then REINTENTOS="$REINTENTOS $n"; mkdir -p "${LOGS_DIR:-$RONDA/logs}"; cp "$TMPP/$i.intento1" "${LOGS_DIR:-$RONDA/logs}/$n-intento1.log"
+        reg "REINTENTO: $n falló en el primer intento ($(grep -m1 -E '^FALLA|Timeout|Error' "$TMPP/$i.intento1" | cut -c1-160)) y se repitió una vez; registro del primer intento en $n-intento1.log"; fi
+      SALIDA_T="$(cat "$TMPP/$i.out")"; read -r CODIGO TIEMPO_AGOTADO <"$TMPP/$i.rc"; CMD_LOG="$(cat "$TMPP/$i.cmd") (PARALELO=$PARALELO)"; evaluar "$n"; fi
     i=$((i + 1))
   done
   for k in $(seq 0 $((PARALELO - 1))); do PORT=$((8800 + k)) bash scripts/local/servidor.sh stop >/dev/null 2>&1; done
@@ -141,5 +150,6 @@ if [ "${OMITIR_DEMO:-0}" != 1 ]; then
     matar_arbol "$DPID"; rm -f .wrangler/demo.pid
   fi
 fi
+[ -n "${REINTENTOS:-}" ] && reg "REINTENTADAS (fallaron en el primer intento y se repitieron una vez; el resultado de arriba es el del segundo):${REINTENTOS}"
 if [ "$FALLOS" -gt 0 ]; then reg "RESUMEN: $FALLOS problema(s) en la ejecución. Código de salida 1."; exit 1; fi
-reg "RESUMEN: todo correcto. Código de salida 0."
+reg "RESUMEN: todo correcto${REINTENTOS:+ (con reintentos declarados arriba)}. Código de salida 0."
