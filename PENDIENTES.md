@@ -1,5 +1,12 @@
 # Tareas pendientes (lo que solo puedes hacer tú)
 
+## ★★ Ronda 31 · Klever de última generación (C40, 2026-11-08)
+Visión: `ronda31/VISION.md` (6 principios y 14 detalles V1–V14). Auditoría: `ronda31/AUDITORIA.md` (13,5/20; hallazgos P0–P3). Estado de cada punto: `ronda31/LEEME.md`.
+Permiso de Javier: trabajar sin consultar en todo lo que cueste 0 €. **Lo que necesita su aprobación está justo debajo.**
+
+### Para Javier (revisar mañana)  ⬜
+*(se completa al terminar la ronda 31)*
+
 ## ★ Punto 14 «volver y valor»: lo que falta para que valga la pena (anotado 2026-11-07, C35–C36)
 La ronda 29 puso el «escaparate» (arranque guiado, huella, «Tu semana», retos). Falta el **motor** y el **aviso**. Estos dos bloques dependen de cuentas externas y **no están hechos**:
 

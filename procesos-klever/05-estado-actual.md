@@ -14,6 +14,10 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
+## Ronda 31 · última generación (C40)
+- ✅ Visión (`ronda31/VISION.md`) y auditoría (`ronda31/AUDITORIA.md`, 13,5/20) hechas y anotadas en `PENDIENTES.md` § ★★.
+- 🟡 Implementación en curso (ver `ronda31/LEEME.md`).
+
 ## Plan a 10 (ronda 28, `ronda28/PLAN.md`)
 - ✅ Fase 1 (claridad y lenguaje): implementada y probada (`unit-claridad28`, `testX`; ver `ronda28/LEEME.md`).
 - ✅ Fase 2 (móvil y descubrir): barra inferior, pegar cartera, «Probar» desde Explorar, señales en tres niveles con umbrales propios, «idea» / «empresas que sigo». Cerrada con varios cambios a la vez y «Aplicar a mi cartera», sello único, línea de tiempo y monogramas (`testZ`).

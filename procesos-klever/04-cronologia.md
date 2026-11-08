@@ -92,3 +92,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-07 · Opinión pedida por Javier (C33): por qué la web aún no atrae ni retiene y qué cambiar o tomar como referencia.
 - 2026-11-07 · Ronda 29 (C34): fase 2.5 — arranque guiado, huella de empresa, «Tu semana» y retos.
 - 2026-11-07 · Ronda 30 (C35–C37): pendientes del punto 14 anotados y hechos los puntos 3–6 (foto semanal en el servidor, evolución, reto de la semana y ciclo de las ideas). Ver `ronda30/LEEME.md`.
+- 2026-11-08 · Ronda 31 (C40): visión de «última generación», auditoría (13,5/20) y trabajo autónomo sobre sus hallazgos. Ver `ronda31/`.
