@@ -24,6 +24,7 @@ Principio de diseño (tomado de Administrea y la app de recordatorios de WhatsAp
 - No usar APIs gratuitas de precios (Tiingo, FMP): su plan gratuito es de uso interno.
 - **Legal**: contenido educativo, no asesoramiento; consultar a un abogado antes de permitir copiar carteras con dinero real (MiFID II, CNMV). Las cookies de TradingView se piden **donde se usan**.
 - **Futuro plan de pago (NO implementar en la beta):** conexiones con Revolut y Trade Republic, artículo diario personalizado y consejo diario de inversión.
+- **Cambio aprobado por Javier (C43, 2026-11-08):** la **Liga** podrá mostrar la **rentabilidad simulada** de una cartera con precios de cierre, siempre rotulada como simulación, sin consejo y premiando también el equilibrio. Requiere una fuente de precios gratuita cuyas condiciones lo permitan (la regla de TradingView y la de no usar APIs de uso interno siguen vigentes hasta encontrarla) y la revisión legal antes de abrir al público.
 - Prohibido: testimonios inventados, rentabilidades ficticias, dependencias de pago, funciones nuevas que distraigan de la beta.
 - Idioma: **español de España** en toda la interfaz y documentación.
 

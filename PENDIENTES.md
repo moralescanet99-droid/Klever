@@ -1,11 +1,23 @@
 # Tareas pendientes (lo que solo puedes hacer tú)
 
+## ★★★ Hoja de ruta (C43): `ronda33/PLAN.md`
+| Fase | Estado |
+|---|---|
+| 1 · Cimientos: código por pantallas, un sistema de diseño, pruebas rápidas, medición | ⬜ |
+| 2 · UX: «Hoy», menos texto, Descubrir como feed, editar con los dedos, primer minuto | ⬜ |
+| 3 · Perfil y objetivo | ⬜ |
+| 4 · Comunidad | ⬜ |
+| 5 · Liga (bloqueo: fuente de precios legal y gratuita) | ⬜ |
+| 6 · Publicar la web | ⬜ (lo último) |
+
+**Funcionalidad aplazada (C43):** SEC real, correo semanal y push, calendario de resultados, importar CSV, comparar hasta 4 empresas, sin conexión, compartir imagen, páginas indexables. Detalle en `ronda33/PLAN.md`.
+
 ## ★★ Ronda 31 · Klever de última generación (C40, 2026-11-08)
 Visión: `ronda31/VISION.md` (6 principios y 14 detalles V1–V14). Auditoría: `ronda31/AUDITORIA.md` (13,5/20; hallazgos P0–P3). Estado de cada punto: `ronda31/LEEME.md`.
 Permiso de Javier: trabajar sin consultar en todo lo que cueste 0 €. **Lo que necesita su aprobación está justo debajo.**
 
 ### Para Javier (revisar mañana)  ⬜
-0. ⬜ **Decidir la propuesta de grandes cambios** (`ronda32/PROPUESTA.md`, C42): camino A (aprender jugando, recomendado), B (liga con el mercado: cambia la regla de precios), C (comunidad) o mezcla; si se cambia la regla de «sin precios ni rentabilidades»; publicar ya en Cloudflare; reordenar el código antes.
+0. ✅ **Propuesta decidida (C43):** Liga + Comunidad + Perfil; toda la UX y el desarrollo; funcionalidad después; publicar al final. Hoja de ruta: `ronda33/PLAN.md`. ⬜ Pendiente tuyo más adelante: aprobar la **fuente de precios** de la Liga cuando te presente las opciones.
 Ninguna bloquea el trabajo; son decisiones tuyas o cosas que solo puedes hacer tú.
 1. ⬜ **Probar la app instalada en tu móvil** (2 minutos): abre la demo o la web local en Safari/Chrome → «Añadir a pantalla de inicio». Dime si el icono, la barra de cristal y la barra de gestos se ven bien. Yo no tengo un teléfono real.
 2. ⬜ **¿Modo sin conexión (service worker)?** Haría que la app abra sin Internet, pero guarda copias de la web en el móvil y complica publicar cambios. **Recomiendo esperar al despliegue real.**

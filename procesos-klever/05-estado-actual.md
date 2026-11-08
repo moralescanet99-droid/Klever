@@ -14,9 +14,12 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 - ✅ Versión identificable `piloto-r23` con verificación de hashes; ✅ entorno privado con persistencia (`scripts/piloto/abrir-piloto.sh`) comprobado en el lado servidor; ✅ guion con la incidencia del intento incierto y registro **vacío**.
 - ⬜ Verificación previa en el dispositivo previsto y piloto con personas: **no realizados**. ⬜ Limitación conocida (intento incierto + pérdida de sesión) pendiente de corregir antes de una beta pública.
 
+## Hoja de ruta (C43, `ronda33/PLAN.md`)
+- ⬜ Fases 1 cimientos → 2 UX → 3 perfil → 4 comunidad → 5 liga → 6 publicar. Ninguna empezada.
+
 ## Ronda 32 (C42)
 - ✅ Comparador y tarjetas de Explorar legibles en el móvil (también con el texto ampliado del sistema).
-- ⬜ Propuesta de grandes cambios pendiente de decisión (`ronda32/PROPUESTA.md`).
+- ✅ Propuesta decidida por Javier (C43).
 
 ## Ronda 31 · última generación (C40)
 - ✅ Visión (`ronda31/VISION.md`) y auditoría (`ronda31/AUDITORIA.md`, 13,5/20) hechas y anotadas en `PENDIENTES.md` § ★★.

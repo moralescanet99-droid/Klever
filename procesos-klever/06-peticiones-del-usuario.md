@@ -2237,3 +2237,12 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Cuando termines quiero que pienese como podriamos mejorar mucho la web, no veo que enganche al usuario no nada, hay cosas muy mejorables tanto de funcionalidad, como de desarrollo, como a nivel de experiencia del usuario..... Proponme grandes cambios en todos los aspectos y explicamelos con detalle. Luego decidimos
 
 (Adjuntó dos capturas de su Android con el texto del sistema ampliado: el comparador AMZN–BKNG con la procedencia repetida y palabras partidas, y las tarjetas de Explorar con el nombre roto letra a letra. Arreglos en `style-r31.css` (§ Ronda 32) e `ideas.js`; propuesta en `ronda32/PROPUESTA.md`.)
+
+## C43 · (2026-11-08) — decisión sobre la propuesta, literal
+> El producto quiero que sea una mezcla de: Liga, Comunidad, perfil y objetivo 
+> La experiencia de usuario todas las descritas.
+> La funcionalidad: la dejamos para mas tarde, apuntalo.
+> Desarrollo: todo lo descrito.
+> Deja como ultimo punto publicar la web
+
+(Hoja de ruta en `ronda33/PLAN.md`: fases 1 cimientos → 2 UX → 3 perfil → 4 comunidad → 5 liga → 6 publicar; funcionalidad aplazada apuntada.)

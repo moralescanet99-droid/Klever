@@ -94,3 +94,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-07 · Ronda 30 (C35–C37): pendientes del punto 14 anotados y hechos los puntos 3–6 (foto semanal en el servidor, evolución, reto de la semana y ciclo de las ideas). Ver `ronda30/LEEME.md`.
 - 2026-11-08 · Ronda 31 (C40): visión de «última generación», auditoría (13,5/20) y trabajo autónomo sobre sus hallazgos. Ver `ronda31/`.
 - 2026-11-08 · Ronda 32 (C42): arreglos móviles (comparador y tarjetas de Explorar) y propuesta de grandes cambios (`ronda32/PROPUESTA.md`).
+- 2026-11-08 · C43: Javier decide la hoja de ruta (Liga + Comunidad + Perfil; toda la UX y el desarrollo; funcionalidad después; publicar al final). Ver `ronda33/PLAN.md`.
