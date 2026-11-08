@@ -1,0 +1,25 @@
+// Ronda 36 · Liga, Temporada 0: puntuación PURA según ronda36/LIGA.md. Uso: node tests/ronda36/unit-liga36.mjs
+import { temporada, puntosSemana, puntosTemporada, clasificar, insignia, codigoLiga, codigoValido, apodoValido, SEMANAS_TEMPORADA } from '../../public/js/liga.js';
+import { registro } from '../lib/d1-sqlite.mjs';
+const { t, fin } = registro('evidencias-LIGA36.json');
+const J = JSON.stringify;
+const F = (c, v) => ({ concentracion: c, variedad: v });
+let p = puntosSemana({ foto: F('ok', 'medio'), completa: true, n: 5, retoHecho: true, ideaSemana: false, entro: true, racha: 4 });
+t('L1', 'El ejemplo de LIGA.md: Lucía', 'equilibrio 25+12, reto 20, sin idea, entra (10) y 3 semanas seguidas antes (+6) = 73', J(p), p.equilibrio === 37 && p.aprendizaje === 20 && p.constancia === 16 && p.total === 73);
+p = puntosSemana({ foto: F('ok', 'ok'), completa: true, n: 6, retoHecho: true, ideaSemana: true, entro: true, racha: 9 });
+t('L2', 'Máximo semanal: 100 (la racha suma como mucho 10)', '50 + 30 + 20', J(p), p.total === 100 && p.constancia === 20);
+const malas = [puntosSemana({ foto: F('ok', 'ok'), completa: false, n: 6, entro: true, racha: 1 }), puntosSemana({ foto: F('ok', 'ok'), completa: true, n: 3, entro: true, racha: 1 }), puntosSemana({ foto: null, completa: true, n: 6, entro: false })];
+t('L3', 'Equilibrio solo con la cartera al 100 % y al menos 4 posiciones', 'sin equilibrio y con su motivo; sin entrar, sin constancia', J(malas.map(x => [x.equilibrio, x.constancia, x.motivo])), malas.every(x => x.equilibrio === 0) && /100/.test(malas[0].motivo) && /4 posiciones/.test(malas[1].motivo) && malas[2].constancia === 0);
+const T = temporada('2026-11-02');
+t('L4', 'Una temporada son 12 lunes seguidos', `12 semanas, del 2 nov al ${T.fin}`, J(T), T.semanas.length === SEMANAS_TEMPORADA && T.semanas[1] === '2026-11-09' && T.fin === '2027-01-24');
+const sem = [{ semana: '2026-11-02', foto: F('alto', 'medio'), completa: true, n: 4, entro: true, retoHecho: false }, { semana: '2026-11-09', foto: null, completa: true, n: 4, entro: false }, { semana: '2026-11-16', foto: F('ok', 'ok'), completa: true, n: 5, entro: true, retoHecho: true, ideaSemana: true }, { semana: '2026-11-23', foto: F('ok', 'ok'), completa: true, n: 5, entro: true }];
+const pt = puntosTemporada(sem, '2026-11-16');
+t('L5', 'Temporada: suma semanas hasta hoy; sin entrar cuenta la última foto pero no la constancia, y la racha se rompe', 'semana 1: 12+0+10=22; semana 2: 12 (última foto) sin constancia; semana 3: 50+30+10=90 (racha reiniciada); la semana futura no cuenta', J(pt.detalle.map(x => x.total)), J(pt.detalle.map(x => x.total)) === J([22, 12, 90]) && pt.total === 124 && pt.semanasBajas === 1);
+const cl = clasificar([{ id: 1, total: 120, semanasBajas: 2, inscrito: '2026-11-03' }, { id: 2, total: 150, semanasBajas: 1, inscrito: '2026-11-04' }, { id: 3, total: 120, semanasBajas: 3, inscrito: '2026-11-05' }, { id: 4, total: 120, semanasBajas: 3, inscrito: '2026-11-02' }]);
+t('L6', 'Clasificación y desempates', '2 (más puntos), 4 y 3 (más semanas bajas; 4 se inscribió antes), 1', J(cl.map(x => x.id)), J(cl.map(x => x.id)) === J([2, 4, 3, 1]) && cl[0].puesto === 1);
+t('L7', 'Insignias por tramo', '1/20 oro, 5/20 plata, 10/20 bronce, 15/20 completada', J([insignia(1, 20), insignia(5, 20), insignia(10, 20), insignia(15, 20), insignia(15, 20, false)]), J([insignia(1, 20), insignia(5, 20), insignia(10, 20), insignia(15, 20), insignia(15, 20, false)]) === J(['oro', 'plata', 'bronce', 'completada', null]));
+let semilla = 1; const al = () => (semilla = (semilla * 16807) % 2147483647) / 2147483647, cods = [...Array(200)].map(() => codigoLiga(al));
+t('L8', 'Códigos de liga privada: 6 caracteres sin letras ambiguas', 'todos válidos; sin O, I, L, 0, 1', cods.slice(0, 5).join(','), cods.every(codigoValido) && !cods.some(c => /[OIL01]/.test(c)) && !codigoValido('ABC12O'));
+t('L9', 'Apodos: 3–20 caracteres, sin correos ni marcado', 'válidos: «Lucía_23», «Los del piso»; no: «ab», «yo@correo.es», «<b>x</b>»', '', apodoValido('Lucía_23') && apodoValido('Los del piso') && !apodoValido('ab') && !apodoValido('yo@correo.es') && !apodoValido('<b>xx</b>') && !apodoValido('x'.repeat(21)));
+t('L10', 'Nada mide rentabilidad ni euros', 'los bloques son equilibrio, aprendizaje y constancia', J(Object.keys(puntosSemana({ foto: F('ok', 'ok'), completa: true, n: 5 }))), !/rentab|euro|precio/i.test(J(puntosSemana({ foto: F('ok', 'ok'), completa: true, n: 5 }))));
+await fin();
