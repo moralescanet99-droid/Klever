@@ -1,0 +1,1694 @@
+<title>Klever Organismo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:opsz,wght,SOFT@9..144,400..700,0..100&display=swap">
+<style>
+/* Klever · Prototipo B «Organismo»: la cartera como un ser vivo. Mundo claro de nácar, cristal líquido y física de muelle. */
+:root{
+  color-scheme:light;
+  --perla:#f5efe7; --perla-2:#fbf8f4; --nacar:#ece3d8;
+  --tinta:#15213a; --tinta-2:#45506b; --tinta-3:#5c6582;
+  --linea:rgba(21,33,58,.10); --linea-2:rgba(21,33,58,.18);
+  --cobre:#b8644c; --cobre-claro:#f3c3b1; --lila:#7a63e0; --lila-claro:#dcd3fd; --agua:#23927f; --agua-claro:#bfeee3;
+  --foco:#5a41d8;
+  --ok:#157552; --ok-f:#d9f2e6; --medio:#8f5806; --medio-f:#fcecd2; --alto:#b0352c; --alto-f:#fbe0db;
+  --cristal:rgba(255,255,255,.62); --cristal-2:rgba(255,255,255,.84); --borde-luz:rgba(255,255,255,.95);
+  --sombra:0 26px 50px -28px rgba(40,30,90,.32),0 6px 14px -8px rgba(40,30,90,.14);
+  --irid:linear-gradient(115deg,#f4bfa9 0%,#d9c6ff 42%,#b2ecdf 78%,#f7d9b8 100%);
+  --s-tec:#8f7cf0; --s-sal:#33b59f; --s-con:#e8876f; --s-ene:#efab45; --s-fin:#5b86e5; --s-ind:#b0946a; --s-ser:#4fbcd9; --s-com:#d672b5;
+  --f-disp:"Fraunces",ui-serif,Georgia,"Times New Roman",serif;
+  --f-txt:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --muelle:cubic-bezier(.34,1.56,.64,1);
+  --suave:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--perla)}
+body{margin:0;background:var(--perla);color:var(--tinta);font:16px/1.45 var(--f-txt);overflow-x:hidden;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased}
+.sin-gl body,.sin-gl{background:radial-gradient(60% 50% at 20% 20%,#f6d9cc 0%,transparent 70%),radial-gradient(50% 50% at 80% 30%,#e3dafc 0%,transparent 70%),radial-gradient(60% 60% at 60% 90%,#cdeee6 0%,transparent 70%),var(--perla)}
+#fondo{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block;pointer-events:none}
+.sin-gl #fondo{display:none}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2.5px solid var(--foco);outline-offset:3px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:-1px}
+h1,h2,h3{margin:0;font-family:var(--f-disp);font-weight:560;letter-spacing:-.02em;font-variation-settings:"SOFT" 100,"opsz" 72;text-wrap:balance}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+
+/* ───── Escena de escritorio ───── */
+.escena{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:clamp(28px,4.5vw,72px);padding:16px max(28px,env(safe-area-inset-right,0px)) 16px max(28px,env(safe-area-inset-left,0px))}
+.ctx{max-width:350px;display:grid;gap:18px}
+.ctx-izq{justify-self:end}
+.ctx-der{justify-self:start;max-width:320px}
+.ctx .ceja{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-3)}
+.ctx h1{font-size:clamp(52px,5.4vw,84px);line-height:.92;font-weight:500;letter-spacing:-.035em;font-variation-settings:"SOFT" 100,"opsz" 144}
+.ctx h1 em{font-style:italic;background:linear-gradient(100deg,#c26a50,#8a6be8 55%,#2d9e8a);-webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.06em}
+.ctx p.lead{font-size:17px;line-height:1.5;color:var(--tinta-2)}
+.pasos{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:p}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;font-size:15px;color:var(--tinta-2);line-height:1.4}
+.pasos li::before{content:counter(p);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--tinta);background:rgba(255,255,255,.75);border:1px solid var(--borde-luz);box-shadow:0 4px 10px -6px rgba(40,30,90,.4)}
+.pasos b{color:var(--tinta)}
+.sello-grande{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--tinta);padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid var(--borde-luz);box-shadow:var(--sombra);width:max-content;max-width:100%}
+.sello-grande svg{flex:none}
+.reglas-ctx{display:grid;gap:12px}
+.regla-ctx{padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid var(--borde-luz)}
+.regla-ctx h3{font-size:17px;margin-bottom:4px}
+.regla-ctx p{font-size:13.5px;color:var(--tinta-2);line-height:1.45}
+.ctx small{font-size:12.5px;color:var(--tinta-3)}
+
+/* ───── Teléfono ───── */
+.telefono{position:relative;width:414px;height:min(868px,calc(100vh - 32px));height:min(868px,calc(100dvh - 32px));min-height:600px;padding:12px;border-radius:62px;background:linear-gradient(150deg,#fffdfa 0%,#ece3d7 45%,#f8f2ea 70%,#e2d7ca 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.95),0 0 0 1.5px rgba(120,96,86,.16),0 70px 100px -50px rgba(50,35,90,.5),0 30px 50px -36px rgba(50,35,90,.35)}
+.telefono::after{content:"";position:absolute;right:-3px;top:180px;width:4px;height:86px;border-radius:0 3px 3px 0;background:linear-gradient(#e7ded2,#cfc3b4)}
+.isla{position:absolute;top:23px;left:50%;width:120px;height:34px;margin-left:-60px;border-radius:20px;background:#14121a;z-index:30;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.app{position:relative;width:100%;height:100%;border-radius:50px;overflow:hidden;background:rgba(251,248,244,.5);isolation:isolate;
+  --top:44px;--bot:10px;--gl:16px;--gr:16px;--cab-h:calc(var(--top) + 58px);--tab-h:calc(var(--bot) + 86px)}
+.barra-estado{position:absolute;z-index:7;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:6px 34px 0 38px;font-weight:700;font-size:15px;color:var(--tinta);pointer-events:none}
+.barra-estado svg{display:block}
+.inicio-ind{position:absolute;z-index:7;bottom:7px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:rgba(21,33,58,.82);pointer-events:none}
+
+@media (max-width:1180px){.escena{grid-template-columns:minmax(0,1fr) auto}.ctx-der{display:none}}
+@media (max-width:760px){
+  .escena{display:block;padding:0}
+  .ctx{display:none}
+  .telefono{width:100%;height:100vh;height:100dvh;min-height:0;padding:0;border-radius:0;background:none;box-shadow:none}
+  .telefono::after,.isla,.barra-estado,.inicio-ind{display:none}
+  .app{border-radius:0;--top:env(safe-area-inset-top,0px);--bot:env(safe-area-inset-bottom,0px);--gl:max(16px,env(safe-area-inset-left,0px));--gr:max(16px,env(safe-area-inset-right,0px))}
+}
+
+/* ───── Cabecera de la app ───── */
+.cab{position:absolute;z-index:6;top:0;left:0;right:0;height:var(--cab-h);padding:calc(var(--top) + 6px) var(--gr) 8px var(--gl);display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(180deg,rgba(251,248,244,.86),rgba(251,248,244,.6));-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.75);box-shadow:0 1px 0 rgba(21,33,58,.05)}
+.marca{display:flex;align-items:center;gap:7px;font-family:var(--f-disp);font-weight:600;font-size:23px;letter-spacing:-.03em;font-variation-settings:"SOFT" 100,"opsz" 48;background:none;border:0;padding:4px 2px;color:var(--tinta)}
+.marca svg{width:26px;height:26px}
+.sello{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.01em;color:var(--tinta-2);padding:6px 10px 6px 8px;border-radius:999px;background:rgba(255,255,255,.78);border:1px solid var(--linea);white-space:nowrap}
+.sello i{width:7px;height:7px;border-radius:50%;background:var(--irid);box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 0 3px rgba(122,99,224,.35)}
+
+/* ───── Pantallas ───── */
+.pantallas{position:absolute;inset:0;z-index:1}
+.pantalla{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateY(16px) scale(.985);transition:opacity .34s var(--suave),transform .55s var(--suave),visibility 0s linear .55s}
+.pantalla.activa{opacity:1;visibility:visible;transform:none;transition:opacity .4s var(--suave) .06s,transform .6s var(--suave),visibility 0s}
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:calc(var(--cab-h) + 14px) var(--gr) calc(var(--tab-h) + 28px) var(--gl);overscroll-behavior:contain;scrollbar-width:none;display:flex;flex-direction:column;gap:16px}
+.scroll::-webkit-scrollbar{display:none}
+.scroll>*{flex:none}
+
+.ceja{font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-3)}
+.mini{font-size:12.5px;color:var(--tinta-3);line-height:1.4}
+.eti{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3)}
+.cab-pant{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.cab-pant h1{font-size:32px;line-height:1}
+.cab-pant p{font-size:13.5px;color:var(--tinta-2);font-weight:600}
+
+.tarjeta{position:relative;padding:18px;border-radius:28px;background:linear-gradient(165deg,rgba(255,255,255,.88),rgba(255,255,255,.62));border:1px solid var(--borde-luz);box-shadow:var(--sombra),inset 0 1px 0 #fff,0 0 0 1px rgba(150,130,220,.08);display:grid;gap:12px}
+.tarjeta h2{font-size:22px;line-height:1.1}
+.tarjeta-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:999px;border:1px solid var(--linea-2);background:rgba(255,255,255,.8);font-weight:700;font-size:15px;color:var(--tinta);transition:transform .45s var(--muelle),background .2s,box-shadow .25s,opacity .2s;touch-action:manipulation;position:relative;overflow:hidden;text-decoration:none}
+.btn:active{transform:scale(.95);transition-duration:.12s}
+.btn[disabled]{opacity:.45;cursor:default}
+.btn[disabled]:active{transform:none}
+.btn.primario{background:linear-gradient(180deg,#24325a,var(--tinta));color:#fff;border-color:transparent;box-shadow:0 12px 26px -12px rgba(21,33,58,.7),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn.primario::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.22) 45%,rgba(220,200,255,.25) 50%,transparent 62%);transform:translateX(-120%);animation:brillo 5.5s var(--suave) 2.5s infinite}
+@keyframes brillo{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.btn.ancho{width:100%}
+.btn.peq{min-height:40px;padding:0 14px;font-size:14px}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.icono{width:48px;padding:0}
+.btn-texto{background:none;border:0;padding:6px 2px;font-weight:700;font-size:14px;color:var(--lila);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px}
+
+/* chips semánticos */
+.signos{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.signo{display:inline-flex;align-items:center;gap:7px;padding:7px 12px 7px 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--tinta-2);background:rgba(255,255,255,.72);border:1px solid var(--borde-luz);box-shadow:0 4px 12px -8px rgba(40,30,90,.3)}
+.signo b{color:var(--tinta);font-weight:800}
+.punto{width:9px;height:9px;border-radius:50%;background:var(--c,#999);flex:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--c,#999) 22%,transparent)}
+[data-n="alto"]{--c:var(--alto);--cf:var(--alto-f)}
+[data-n="medio"]{--c:var(--medio);--cf:var(--medio-f)}
+[data-n="ok"]{--c:var(--ok);--cf:var(--ok-f)}
+
+/* ───── HOY ───── */
+.hoy-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chip-racha{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--borde-luz);background:rgba(255,255,255,.75);border-radius:999px;padding:6px 12px 6px 8px;font-size:13px;font-weight:700;box-shadow:0 4px 12px -8px rgba(40,30,90,.35);transition:transform .4s var(--muelle)}
+.chip-racha:active{transform:scale(.94)}
+.chip-racha svg{width:18px;height:18px}
+.titular{font-size:35px;line-height:1.02;font-weight:540;letter-spacing:-.03em;font-variation-settings:"SOFT" 100,"opsz" 96}
+.titular .l{display:inline-block;animation:letra .6s var(--suave) both;animation-delay:calc(var(--i) * 32ms + var(--d0,0ms))}
+.titular .esp{display:inline}
+@keyframes letra{from{opacity:0;transform:translateY(.35em) scale(.9);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
+.sub{font-size:15.5px;color:var(--tinta-2);margin-top:-6px}
+.slot{position:relative;border-radius:50%;touch-action:none;cursor:grab;outline-offset:-6px}
+.slot:active{cursor:grabbing}
+.slot-hoy{width:min(100%,340px);aspect-ratio:1/.86;margin:-4px auto -10px;border-radius:44%}
+.pista{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--tinta-3);font-weight:600}
+.pista svg{width:16px;height:16px}
+
+.preg h2{font-size:21px}
+.preg h2 em{font-style:italic;color:var(--lila)}
+.reloj{position:relative;width:44px;height:44px;flex:none}
+.reloj svg{width:44px;height:44px;transform:rotate(-90deg)}
+.reloj span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:14px}
+.regla{display:grid;gap:8px}
+.regla output{font-family:var(--f-disp);font-size:44px;line-height:1;font-weight:500;letter-spacing:-.03em;font-variation-settings:"SOFT" 100,"opsz" 144;text-align:center}
+.rango{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;margin:0;cursor:pointer;touch-action:pan-y}
+.rango::-webkit-slider-runnable-track{height:12px;border-radius:8px;background:linear-gradient(90deg,#bfeee3,#dcd3fd 45%,#f3c3b1 80%,#f1a497);box-shadow:inset 0 1px 2px rgba(21,33,58,.15)}
+.rango::-moz-range-track{height:12px;border-radius:8px;background:linear-gradient(90deg,#bfeee3,#dcd3fd 45%,#f3c3b1 80%,#f1a497)}
+.rango::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#efe8f4 60%,#d9cfe6);border:1px solid #fff;box-shadow:0 6px 14px -4px rgba(40,30,90,.45),0 0 0 4px rgba(255,255,255,.6);transition:transform .35s var(--muelle)}
+.rango:active::-webkit-slider-thumb{transform:scale(1.22)}
+.rango::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#efe8f4 60%,#d9cfe6);border:1px solid #fff;box-shadow:0 6px 14px -4px rgba(40,30,90,.45)}
+.regla-esc{display:flex;justify-content:space-between;font-size:12px;color:var(--tinta-3);font-weight:600;margin-top:-6px}
+.preg-fin{display:grid;gap:10px;padding:14px;border-radius:20px;background:rgba(255,255,255,.6);border:1px dashed var(--linea-2);font-size:14px;color:var(--tinta-2)}
+.preg-fin.hecho{border-style:solid;border-color:var(--borde-luz);background:linear-gradient(140deg,rgba(220,211,253,.45),rgba(191,238,227,.45))}
+.comp{position:relative;height:46px;margin:6px 4px 0}
+.comp-pista{position:absolute;left:0;right:0;top:20px;height:6px;border-radius:4px;background:rgba(21,33,58,.1)}
+.comp-hueco{position:absolute;top:20px;height:6px;border-radius:4px;background:var(--irid)}
+.marca-c{position:absolute;top:0;transform:translateX(-50%);display:grid;justify-items:center;gap:2px;font-size:11.5px;font-weight:800;white-space:nowrap;transition:left .9s var(--muelle)}
+.marca-c i{width:14px;height:14px;border-radius:50%;margin-top:16px;border:3px solid #fff;box-shadow:0 2px 6px rgba(21,33,58,.35)}
+.marca-c.tu i{background:var(--lila)}
+.marca-c.ej i{background:var(--cobre)}
+.marca-c span{position:absolute;top:-2px}
+.calib{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.calib-puntos{display:flex;gap:5px}
+.calib-puntos i{width:22px;height:8px;border-radius:5px;background:rgba(21,33,58,.12);position:relative;overflow:hidden}
+.calib-puntos i b{position:absolute;inset:0;right:auto;background:linear-gradient(90deg,var(--agua),var(--lila))}
+
+.semana-pts{grid-template-columns:auto 1fr;align-items:center;gap:16px}
+.gran-num{font-family:var(--f-disp);font-size:56px;line-height:.9;font-weight:500;letter-spacing:-.04em;font-variation-settings:"SOFT" 100,"opsz" 144}
+.gran-num small{font-family:var(--f-txt);font-size:14px;letter-spacing:0;color:var(--tinta-3);font-weight:700;margin-left:2px}
+.barras{display:grid;gap:8px}
+.barra-pt{display:grid;grid-template-columns:86px 1fr 40px;gap:8px;align-items:center;font-size:12.5px;font-weight:700;color:var(--tinta-2)}
+.barra-pt .pista-b{height:8px;border-radius:5px;background:rgba(21,33,58,.09);overflow:hidden}
+.barra-pt .pista-b b{display:block;height:100%;border-radius:5px;background:var(--bc,var(--lila));transform-origin:left;transition:transform .9s var(--muelle)}
+.barra-pt span{text-align:right;color:var(--tinta)}
+.semillas{grid-column:1/-1;display:grid;grid-template-columns:repeat(12,1fr);gap:5px;align-items:center}
+.semilla-s{aspect-ratio:1;border-radius:50%;background:rgba(21,33,58,.08);border:1px solid rgba(21,33,58,.06)}
+.semilla-s.hecha{background:var(--irid);border-color:#fff;box-shadow:0 3px 8px -4px rgba(122,99,224,.6)}
+.semilla-s.hoy{background:radial-gradient(circle,#fff 30%,transparent 32%),var(--irid);box-shadow:0 0 0 3px rgba(122,99,224,.25);animation:latido 2.4s ease-in-out infinite}
+@keyframes latido{50%{box-shadow:0 0 0 6px rgba(122,99,224,.08)}}
+.semana-pts .pie{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--tinta-2);font-weight:600}
+
+.pie-legal{font-size:12px;color:var(--tinta-3);text-align:center;line-height:1.45;padding:0 8px}
+
+/* ───── MI CARTERA ───── */
+.anillo-caja{position:relative;width:min(100%,330px);aspect-ratio:1;margin:0 auto}
+#anillo{position:absolute;inset:0;width:100%;height:100%;overflow:visible;touch-action:none}
+#anillo .seg{fill:none;stroke-linecap:round;cursor:pointer;transition:stroke-width .45s var(--muelle),opacity .3s;filter:drop-shadow(0 4px 6px rgba(40,30,90,.18))}
+#anillo .seg.no-sel{opacity:.82}
+#anillo .pista-anillo{fill:none;stroke:rgba(21,33,58,.06);stroke-width:30}
+#tirador{cursor:grab;outline:none}
+#tirador:focus-visible .tir-foco{stroke:var(--foco);stroke-width:3}
+#tirador .tir-halo{transition:r .4s var(--muelle)}
+#tirador.activo .tir-halo{r:24}
+.slot-cartera{position:absolute;inset:17%}
+.sel-pill{display:flex;align-items:center;justify-content:center;gap:10px;margin:-6px auto 0;padding:8px 16px 8px 12px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid var(--borde-luz);box-shadow:var(--sombra);width:max-content;max-width:100%}
+.sel-pill i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.sel-pill b{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.sel-pill span{font-family:var(--f-disp);font-size:24px;font-weight:600;font-variation-settings:"SOFT" 100;min-width:2.6em;text-align:right}
+.semaforos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.semaf{position:relative;padding:12px 10px 11px;border-radius:20px;background:linear-gradient(170deg,rgba(255,255,255,.9),var(--cf,#fff));border:1px solid var(--borde-luz);box-shadow:0 10px 20px -16px rgba(40,30,90,.45);display:grid;gap:2px;transition:background .5s;overflow:hidden}
+.semaf .eti{font-size:10px;letter-spacing:.08em}
+.semaf b{font-family:var(--f-disp);font-size:21px;font-weight:600;color:var(--c);font-variation-settings:"SOFT" 100;line-height:1.1}
+.semaf span{font-size:12px;color:var(--tinta-2);font-weight:600}
+.semaf.pulso{animation:pulso .7s var(--muelle)}
+@keyframes pulso{40%{transform:scale(1.06)}}
+.ysi-chips{display:flex;flex-direction:column;gap:8px}
+.chip-ysi{display:flex;align-items:center;gap:10px;text-align:left;padding:11px 14px;border-radius:18px;border:1px solid var(--borde-luz);background:linear-gradient(120deg,rgba(255,255,255,.95),rgba(236,230,255,.7));font-weight:700;font-size:14.5px;min-height:48px;transition:transform .45s var(--muelle),opacity .2s}
+.chip-ysi:active{transform:scale(.97)}
+.chip-ysi[disabled]{opacity:.5;cursor:default}
+.chip-ysi svg{width:22px;height:22px;flex:none}
+.chip-ysi small{display:block;font-weight:600;font-size:12px;color:var(--tinta-3)}
+.compara{display:grid;gap:6px;padding:12px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid var(--linea)}
+.compara-fila{display:grid;grid-template-columns:1fr auto 18px auto;gap:8px;align-items:center;font-size:13.5px;color:var(--tinta-2);font-weight:600}
+.compara-fila .a{color:var(--tinta-3);text-decoration:line-through;text-decoration-color:rgba(21,33,58,.3)}
+.compara-fila .b{color:var(--tinta);font-weight:800}
+.compara-fila svg{width:16px;height:16px;color:var(--tinta-3)}
+.compara-vacio{font-size:13.5px;color:var(--tinta-3);text-align:center;padding:6px}
+.acc-fila{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lista-pos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.pos{position:relative;border-radius:20px;overflow:hidden}
+.pos-quitar{position:absolute;right:0;top:0;bottom:0;width:110px;padding-left:14px;border:0;border-radius:0 20px 20px 0;background:var(--alto);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center;opacity:0;transition:opacity .2s}
+.pos.abierta .pos-quitar,.pos.deslizando .pos-quitar{opacity:1}
+.pos-quitar:focus-visible{outline-offset:-4px;outline-color:#fff}
+.pos-cuerpo{position:relative;display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 14px;background:linear-gradient(170deg,#fff,#fbf8fd);border:1px solid #fff;box-shadow:0 8px 18px -14px rgba(40,30,90,.4);border-radius:20px;touch-action:pan-y;cursor:pointer;transition:transform .5s var(--muelle),box-shadow .2s;width:100%;text-align:left;font:inherit;color:inherit}
+.pos-cuerpo.arrastra{transition:none}
+.pos.sel .pos-cuerpo{box-shadow:inset 0 0 0 2px var(--c)}
+.pos-cuerpo i{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.pos-cuerpo b{display:block;font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pos-cuerpo small{display:block;font-size:12.5px;color:var(--tinta-3);font-weight:600}
+.pos-cuerpo .pct{font-family:var(--f-disp);font-size:22px;font-weight:600;font-variation-settings:"SOFT" 100}
+.desliza-nota{font-size:12px;color:var(--tinta-3);text-align:center}
+
+/* ───── DESCUBRIR ───── */
+.desc-top{position:absolute;left:0;right:0;top:var(--cab-h);height:72px;padding:10px var(--gr) 6px var(--gl);display:flex;align-items:center;gap:10px;z-index:2}
+.desc-top .tit{flex:1;min-width:0}
+.desc-top h1{font-size:28px;line-height:1}
+.desc-top p{font-size:12.5px;color:var(--tinta-3);font-weight:600;margin-top:3px}
+.feed-ctrl{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:var(--tinta-2)}
+.feed-ctrl button{width:38px;height:38px;border-radius:50%;border:1px solid var(--borde-luz);background:rgba(255,255,255,.8);display:grid;place-items:center;transition:transform .4s var(--muelle)}
+.feed-ctrl button:active{transform:scale(.9)}
+.feed-ctrl svg{width:18px;height:18px}
+.feed-ctrl span{min-width:34px;text-align:center}
+.slot-mini{width:52px;height:52px;flex:none;cursor:pointer;touch-action:manipulation;background:radial-gradient(circle,rgba(255,255,255,.75) 40%,rgba(255,255,255,0) 72%)}
+.feed{position:absolute;left:0;right:0;top:calc(var(--cab-h) + 72px);bottom:calc(var(--tab-h) + 2px);overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none}
+.feed::-webkit-scrollbar{display:none}
+.carta{height:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:4px var(--gr) 8px var(--gl)}
+.carta-in{position:relative;height:100%;border-radius:34px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px;background:radial-gradient(120% 70% at 50% 42%,color-mix(in srgb,var(--c) 18%,#fff) 0%,rgba(255,255,255,.88) 60%),#fff;border:1px solid var(--borde-luz);box-shadow:var(--sombra),inset 0 1px 0 #fff;overflow:hidden}
+.carta-in::before{content:"";position:absolute;inset:-40% -30% auto auto;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 30%,transparent),transparent 70%);pointer-events:none}
+.carta-cab{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--tinta-2);position:relative}
+.carta-cab .sector{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 8px;border-radius:999px;background:rgba(255,255,255,.85)}
+.carta-cab .sector i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.carta-cab .tick{letter-spacing:.12em}
+.carta h2{font-size:31px;line-height:1.02;margin-top:6px;position:relative}
+.carta-d{font-size:15px;color:var(--tinta-2);position:relative}
+.flor-caja{flex:1;min-height:110px;display:grid;place-items:center;position:relative}
+.flor{height:100%;max-height:270px;width:auto;max-width:100%;overflow:visible;animation:mecer 7s ease-in-out infinite}
+@keyframes mecer{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.flor .brote{transform-box:fill-box;transform-origin:50% 100%}
+.flor.brota .brote{animation:brotar .9s var(--muelle) both;animation-delay:calc(var(--i) * 90ms + 80ms)}
+@keyframes brotar{from{transform:scale(.05)}to{transform:scale(1)}}
+.flor .lbl{font:700 13px var(--f-txt);fill:var(--tinta-2)}
+.flor .lbl-e{font:600 10.5px var(--f-txt);fill:var(--tinta-3)}
+.flor .centro-n{font:600 26px var(--f-disp);fill:var(--tinta)}
+.flor .centro-s{font:700 9px var(--f-txt);fill:var(--tinta-3);letter-spacing:.06em}
+.flor-res{text-align:center;font-weight:800;font-size:14px;position:relative}
+.ley{display:flex;justify-content:center;gap:12px;font-size:12px;color:var(--tinta-3);font-weight:600;flex-wrap:wrap}
+.ley span{display:inline-flex;align-items:center;gap:5px}
+.ley i{width:11px;height:11px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:inline-block}
+.ley .l1{background:var(--c)}
+.ley .l2{border:1.5px dashed var(--c);background:#fff}
+.ley .l3{background:rgba(21,33,58,.14);width:8px;height:8px}
+.carta-acc{display:grid;grid-template-columns:1fr 48px;gap:8px;margin-top:4px;position:relative}
+.carta-pie{font-size:11.5px;color:var(--tinta-3);text-align:center;font-weight:600}
+.guardar[aria-pressed="true"]{background:var(--lila-claro);border-color:#fff}
+.guardar[aria-pressed="true"] path{fill:var(--lila)}
+.carta-fin .carta-in{align-items:center;justify-content:center;text-align:center;gap:14px;background:var(--irid)}
+.carta-fin svg{width:120px;height:120px}
+
+/* ───── LIGA ───── */
+.duelo-ring{display:grid;grid-template-columns:1fr 36px 1fr;align-items:center;gap:4px}
+.lado{display:grid;justify-items:center;gap:4px;text-align:center;min-width:0}
+.slot-duelo{width:100%;max-width:140px;aspect-ratio:1}
+.lado b{font-weight:800;font-size:14.5px}
+.lado small{font-size:12px;color:var(--tinta-3);font-weight:600}
+.vs{font-family:var(--f-disp);font-style:italic;font-size:22px;color:var(--tinta-3);text-align:center;font-variation-settings:"SOFT" 100}
+.esc-chips{display:flex;gap:6px;flex-wrap:wrap}
+.esc-chip{border:1px solid var(--linea-2);background:rgba(255,255,255,.7);border-radius:999px;padding:8px 13px;font-size:13px;font-weight:700;min-height:40px;transition:transform .4s var(--muelle),background .2s}
+.esc-chip[aria-pressed="true"]{background:var(--tinta);color:#fff;border-color:transparent}
+.esc-chip:active{transform:scale(.94)}
+.indices{display:grid;gap:10px}
+.indice{display:grid;grid-template-columns:76px 1fr 54px;gap:10px;align-items:center;font-size:13px;font-weight:700}
+.indice .pista-i{position:relative;height:14px;border-radius:8px;background:rgba(21,33,58,.08)}
+.indice .pista-i b{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,var(--lila-claro),var(--lila));transition:width 1.4s var(--suave)}
+.indice.rival .pista-i b{background:linear-gradient(90deg,var(--agua-claro),var(--agua))}
+.indice .pista-i::after{content:"";position:absolute;left:83.33%;top:-4px;bottom:-4px;width:2px;border-radius:1px;background:var(--tinta-3)}
+.indice span{text-align:right;font-family:var(--f-disp);font-size:20px;font-weight:600;font-variation-settings:"SOFT" 100}
+.marcador{width:100%;border-collapse:collapse;font-size:13.5px}
+.marcador th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-3);font-weight:800;text-align:right;padding:4px 0 4px 12px}
+.marcador th:first-child,.marcador td:first-child{text-align:left}
+.marcador td{padding:7px 0 7px 12px;border-top:1px solid var(--linea);text-align:right;font-weight:700;color:var(--tinta-2)}
+.marcador td small{display:block;font-weight:600;font-size:11.5px;color:var(--tinta-3)}
+.marcador tr.total td{font-size:16px;color:var(--tinta);font-weight:800}
+.marcador td.gana{color:var(--ok)}
+.veredicto{padding:12px 14px;border-radius:18px;background:linear-gradient(120deg,rgba(220,211,253,.5),rgba(191,238,227,.5));font-weight:700;font-size:14px;line-height:1.4}
+.veredicto small{display:block;font-weight:600;color:var(--tinta-2);font-size:12.5px;margin-top:2px}
+.clasif ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fila-l{display:grid;grid-template-columns:22px 30px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:16px;font-weight:700;font-size:14.5px}
+.fila-l.yo{background:linear-gradient(120deg,rgba(220,211,253,.7),rgba(255,255,255,.7));box-shadow:inset 0 0 0 1.5px rgba(122,99,224,.35)}
+.fila-l .pos-n{color:var(--tinta-3);font-size:13px;text-align:center}
+.avatar{width:30px;height:30px;border-radius:46% 54% 50% 50%/55% 45% 55% 45%;background:var(--av);box-shadow:inset -3px -4px 6px rgba(0,0,0,.12),inset 3px 3px 5px rgba(255,255,255,.7)}
+.fila-l .pts{font-family:var(--f-disp);font-size:18px;font-weight:600;font-variation-settings:"SOFT" 100}
+.resumen{position:relative;border-radius:32px;padding:20px;overflow:hidden;background:var(--irid);border:1px solid #fff;box-shadow:var(--sombra);display:grid;gap:10px;color:var(--tinta)}
+.resumen::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 60% at 80% 0%,rgba(255,255,255,.75),transparent 60%),radial-gradient(60% 50% at 0% 100%,rgba(255,255,255,.5),transparent 70%);pointer-events:none}
+.resumen>*{position:relative}
+.res-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.res-top h2{font-size:26px;line-height:1.02}
+.res-cuerpo{display:grid;grid-template-columns:128px 1fr;gap:12px;align-items:center}
+.res-cuerpo canvas{width:128px;height:128px}
+.res-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.res-stat{padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.62)}
+.res-stat b{display:block;font-family:var(--f-disp);font-size:22px;font-weight:600;line-height:1.1;font-variation-settings:"SOFT" 100}
+.res-stat span{font-size:11px;font-weight:700;color:var(--tinta-2)}
+.res-sello{font-size:11px;font-weight:800;color:var(--tinta-2);letter-spacing:.02em;text-align:center;padding-top:4px;border-top:1px solid rgba(255,255,255,.7)}
+
+/* ───── Barra de pestañas ───── */
+.pestanas{position:absolute;z-index:6;left:12px;right:12px;bottom:calc(var(--bot) + 10px);height:68px;border-radius:28px;display:grid;grid-template-columns:repeat(4,1fr);padding:6px;background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 44px -20px rgba(40,30,90,.42),inset 0 1px 0 #fff}
+.indicador{position:absolute;z-index:0;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 4);border-radius:22px;background:linear-gradient(180deg,#fff,#f6f2fb);box-shadow:0 6px 16px -8px rgba(40,30,90,.45),inset 0 -2px 0 rgba(122,99,224,.18);will-change:transform}
+.indicador::after{content:"";position:absolute;left:30%;right:30%;bottom:5px;height:3px;border-radius:2px;background:var(--irid)}
+.pest{position:relative;z-index:1;border:0;background:none;display:grid;place-items:center;align-content:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--tinta-3);border-radius:22px;padding:0;min-height:44px;transition:color .25s,transform .45s var(--muelle)}
+.pest:active{transform:scale(.9)}
+.pest[aria-current="page"]{color:var(--tinta)}
+.pest svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .5s var(--muelle)}
+.pest[aria-current="page"] svg{transform:translateY(-1px) scale(1.08)}
+.pest[aria-current="page"] svg .rel{fill:currentColor;fill-opacity:.16}
+
+/* ───── Capa, lienzo, toast, hojas ───── */
+#vida{position:absolute;inset:0;z-index:3;pointer-events:none;width:100%;height:100%}
+.capa{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.burbuja{position:absolute;pointer-events:auto;transform:translate(-50%,-100%) scale(.6);opacity:0;transition:transform .45s var(--muelle),opacity .2s;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 10px;border-radius:16px;background:rgba(255,255,255,.95);border:1px solid #fff;box-shadow:0 14px 30px -12px rgba(40,30,90,.5);font-weight:800;font-size:13.5px;white-space:nowrap;color:var(--tinta)}
+.burbuja.on{transform:translate(-50%,calc(-100% - 10px)) scale(1);opacity:1}
+.burbuja i{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.burbuja small{font-weight:600;color:var(--tinta-3)}
+.burbuja::after{content:"";position:absolute;left:50%;bottom:-6px;width:12px;height:12px;margin-left:-6px;background:#fff;transform:rotate(45deg);border-radius:2px}
+.vuela{position:absolute;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,var(--c) 55%,color-mix(in srgb,var(--c) 70%,#000) 100%);box-shadow:0 10px 24px -8px var(--c),0 0 0 6px rgba(255,255,255,.5)}
+.toast{position:absolute;z-index:7;left:14px;right:14px;bottom:calc(var(--tab-h) + 6px);display:flex;align-items:center;gap:10px;padding:10px 10px 10px 16px;border-radius:20px;background:rgba(21,33,58,.94);color:#fff;font-size:14px;font-weight:600;box-shadow:0 20px 40px -16px rgba(21,33,58,.6);transform:translateY(24px) scale(.96);opacity:0;pointer-events:none;transition:transform .5s var(--muelle),opacity .25s}
+.toast.on{transform:none;opacity:1;pointer-events:auto}
+.toast p{flex:1;line-height:1.35}
+.toast button{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13.5px;min-height:38px}
+.velo{position:absolute;inset:0;z-index:8;background:rgba(21,33,58,.3);opacity:0;pointer-events:none;transition:opacity .3s}
+.velo.on{pointer-events:auto}
+.hoja{position:absolute;z-index:9;left:0;right:0;bottom:0;max-height:90%;display:flex;flex-direction:column;border-radius:34px 34px 0 0;background:rgba(251,248,244,.94);-webkit-backdrop-filter:blur(26px) saturate(1.4);backdrop-filter:blur(26px) saturate(1.4);border-top:1px solid #fff;box-shadow:0 -24px 60px -24px rgba(40,30,90,.45);transform:translateY(110%);visibility:hidden;will-change:transform}
+.hoja.abierta{visibility:visible}
+.hoja-asa{flex:none;display:grid;place-items:center;height:30px;cursor:grab;touch-action:none;border:0;background:none;width:100%}
+.hoja-asa i{width:44px;height:5px;border-radius:3px;background:rgba(21,33,58,.22)}
+.hoja-cuerpo{overflow-y:auto;padding:0 var(--gr) calc(var(--bot) + 22px) var(--gl);display:grid;gap:14px;overscroll-behavior:contain}
+.hoja-cuerpo h2{font-size:26px;line-height:1.05}
+.hoja-cab{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;touch-action:none}
+.cerrar{width:40px;height:40px;border-radius:50%;border:1px solid var(--linea);background:rgba(255,255,255,.8);display:grid;place-items:center;flex:none}
+.cerrar svg{width:18px;height:18px}
+.enlace{display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:16px;background:#fff;border:1px dashed var(--linea-2);font-weight:700;font-size:14.5px;word-break:break-all}
+.lista-reglas{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.lista-reglas li{padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.75);border:1px solid #fff;font-size:14px;color:var(--tinta-2);line-height:1.45}
+.lista-reglas b{color:var(--tinta)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+  .btn.primario::after{display:none}
+}
+</style>
+
+<canvas id="fondo" aria-hidden="true"></canvas>
+
+<div class="escena">
+  <aside class="ctx ctx-izq" aria-label="Sobre este prototipo">
+    <p class="ceja">Klever · prototipo B</p>
+    <h1>Tu cartera, <em>viva</em>.</h1>
+    <p class="lead">Una cartera simulada que respira. Si una parte pesa demasiado, se inclina y se agita. Con variedad, florece.</p>
+    <ol class="pasos">
+      <li><span><b>Empújalo</b> con el ratón o el dedo: rebota.</span></li>
+      <li><span>En <b>Mi cartera</b>, arrastra el tirador del anillo.</span></li>
+      <li><span>En <b>Descubrir</b>, prueba una empresa inventada.</span></li>
+      <li><span>En <b>Liga</b>, lanza un escenario contra Lince_27.</span></li>
+    </ol>
+    <button class="btn peq" id="renacer" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v4h4"/></svg>Verlo nacer otra vez</button>
+    <span class="sello-grande"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg>Simulación · sin dinero real · no es consejo</span>
+  </aside>
+
+  <div class="telefono">
+    <div class="isla" aria-hidden="true"></div>
+    <div class="app" id="app">
+      <div class="barra-estado" aria-hidden="true"><span>9:41</span><span style="display:flex;gap:6px;align-items:center"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#15213a"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#15213a"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#15213a"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#15213a"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#15213a" opacity=".5"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#15213a"/><rect x="24" y="4" width="1.6" height="4" rx=".8" fill="#15213a" opacity=".5"/></svg></span></div>
+
+      <header class="cab">
+        <button class="marca" type="button" data-ir="hoy" aria-label="Klever, ir a Hoy">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg-logo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2a98f"/><stop offset=".5" stop-color="#a48cf5"/><stop offset="1" stop-color="#5fcab6"/></linearGradient></defs><path d="M16 3c6.5 0 12 4.6 12 11.4 0 7.4-5.4 14.6-12.3 14.6C9 29 4 23.6 4 17 4 9.3 9.4 3 16 3z" fill="url(#lg-logo)"/><ellipse cx="12" cy="11" rx="4" ry="2.6" fill="#fff" opacity=".75"/></svg>
+          klever
+        </button>
+        <span class="sello" role="note"><i aria-hidden="true"></i>Simulación · sin dinero real · no es consejo</span>
+      </header>
+
+      <main class="pantallas" id="pantallas">
+        <!-- ═════ HOY ═════ -->
+        <section class="pantalla activa" id="p-hoy" data-tab="hoy" aria-labelledby="frase">
+          <div class="scroll">
+            <div class="hoy-top">
+              <p class="ceja">Lunes 9 nov · semana 3 de 12</p>
+              <button class="chip-racha" type="button" data-ir="liga" aria-label="Racha: 3 semanas seguidas. Ir a Liga">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="lg-r" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e8876f"/><stop offset="1" stop-color="#a48cf5"/></linearGradient></defs><path d="M12 2.5c3.6 4.2 6.5 7.4 6.5 11A6.5 6.5 0 0 1 5.5 13.5C5.5 9.9 8.4 6.7 12 2.5z" fill="url(#lg-r)"/><path d="M12 11c1.4 1.6 2.4 2.8 2.4 4.1a2.4 2.4 0 0 1-4.8 0c0-1.3 1-2.5 2.4-4.1z" fill="#fff" opacity=".8"/></svg>
+                <span class="num" id="racha-n">3</span> semanas
+              </button>
+            </div>
+            <h1 class="titular" id="frase" aria-live="polite">Una parte pesa demasiado</h1>
+            <p class="sub" id="frase-sub">Nimbus Cloud es el 46 % de tu cartera.</p>
+            <div class="slot slot-hoy" data-slot="hoy" tabindex="0" role="img" id="slot-hoy" aria-label="Organismo de tu cartera"></div>
+            <p class="pista" id="pista-hoy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L5 14.6a1.6 1.6 0 0 1 2.5-2L9 14"/></svg><span>Tócalo o empújalo: es tu cartera</span></p>
+            <div class="signos" id="signos-hoy" aria-live="polite"></div>
+            <button class="btn primario ancho" type="button" id="cta-hoy" data-ir="cartera">Equilibrarlo en Mi cartera</button>
+
+            <article class="tarjeta preg" id="preg" aria-labelledby="preg-t">
+              <div class="tarjeta-cab">
+                <span class="eti">Pregunta de 20 segundos</span>
+                <div class="reloj" aria-hidden="true"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="rgba(21,33,58,.1)" stroke-width="4"/><circle id="reloj-arco" cx="22" cy="22" r="18" fill="none" stroke="url(#lg-r2)" stroke-width="4" stroke-linecap="round" stroke-dasharray="113.1" stroke-dashoffset="0"/><defs><linearGradient id="lg-r2"><stop offset="0" stop-color="#a48cf5"/><stop offset="1" stop-color="#5fcab6"/></linearGradient></defs></svg><span id="reloj-n" class="num">20</span></div>
+              </div>
+              <h2 id="preg-t">¿Cuánto crees que cayó <em>Tecnología</em> en el escenario inspirado en 2008?</h2>
+              <p class="mini">Cifras aproximadas de ejemplo, no datos históricos.</p>
+              <div class="regla">
+                <output id="preg-out" for="preg-r" class="num">−20 %</output>
+                <input class="rango" type="range" id="preg-r" min="0" max="80" step="1" value="20" aria-label="Tu estimación de la caída, en porcentaje">
+                <div class="regla-esc" aria-hidden="true"><span>0 %</span><span>−40 %</span><span>−80 %</span></div>
+              </div>
+              <button class="btn primario" type="button" id="preg-ok">Comprobar</button>
+              <div class="preg-fin" id="preg-fin" aria-live="polite">Responde y verás la respuesta de ejemplo y tu calibración. Cuenta para el reto de la semana.</div>
+            </article>
+
+            <article class="tarjeta semana-pts" aria-labelledby="sem-t">
+              <div>
+                <span class="eti" id="sem-t">Tu semana</span>
+                <div class="gran-num num"><span id="hoy-total">26</span><small>/100</small></div>
+              </div>
+              <div class="barras" id="hoy-barras"></div>
+              <div class="semillas" id="semillas" role="img" aria-label="Temporada: semana 3 de 12, tres semanas seguidas"></div>
+              <div class="pie"><span id="racha-txt">3 semanas seguidas · constancia +4</span><button class="btn-texto" type="button" data-ir="liga">Ver Liga</button></div>
+            </article>
+            <p class="pie-legal">Todo es de ejemplo: empresas inventadas y cifras ilustrativas. Klever propone pesos, nunca empresas. Solo mayores de 18.</p>
+          </div>
+        </section>
+
+        <!-- ═════ MI CARTERA ═════ -->
+        <section class="pantalla" id="p-cartera" data-tab="cartera" aria-labelledby="t-cartera" inert>
+          <div class="scroll" id="scroll-cartera">
+            <div class="cab-pant"><h1 id="t-cartera">Mi cartera</h1><p id="mc-res" class="num">4 órganos · 3 sectores</p></div>
+            <div class="anillo-caja">
+              <svg id="anillo" viewBox="0 0 320 320" aria-label="Anillo de pesos">
+                <circle class="pista-anillo" cx="160" cy="160" r="140"/>
+                <g id="segs"></g>
+                <g id="tirador" role="slider" tabindex="0" aria-label="Peso de la posición seleccionada" aria-valuemin="1" aria-valuemax="97" aria-valuenow="46">
+                  <circle class="tir-halo" r="20" fill="rgba(255,255,255,.55)"/>
+                  <circle r="14" fill="#fff" stroke="var(--c,#8f7cf0)" stroke-width="5" class="tir-foco" style="filter:drop-shadow(0 4px 6px rgba(40,30,90,.35))"/>
+                  <circle r="3.2" fill="#15213a"/>
+                </g>
+              </svg>
+              <div class="slot slot-cartera" data-slot="cartera" role="img" id="slot-cartera" aria-label="Organismo de tu cartera"></div>
+            </div>
+            <div class="sel-pill" id="sel-pill" aria-live="polite"><i></i><b id="sel-nom">Nimbus Cloud</b><span id="sel-pct" class="num">46 %</span></div>
+            <p class="pista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3-6.2"/><path d="M17 2.5v3.6h-3.6"/></svg><span>Toca un color y arrastra el tirador blanco</span></p>
+            <div class="semaforos" id="semaforos" aria-live="polite"></div>
+            <article class="tarjeta" aria-labelledby="ysi-t">
+              <div class="tarjeta-cab"><h2 id="ysi-t">¿Y si…?</h2><span class="eti">Orientativo</span></div>
+              <div class="ysi-chips" id="ysi-chips"></div>
+              <div class="compara" id="compara" aria-live="polite"></div>
+              <div class="acc-fila"><button class="btn" type="button" id="deshacer">Deshacer</button><button class="btn primario" type="button" id="fijar">Quedármelo</button></div>
+              <p class="mini">Klever propone pesos, nunca empresas. Referencias orientativas, no normas.</p>
+            </article>
+            <div class="cab-pant"><h2 style="font-size:22px">Órganos</h2><p class="desliza-nota">Desliza a la izquierda para quitar</p></div>
+            <ul class="lista-pos" id="lista-pos"></ul>
+          </div>
+        </section>
+
+        <!-- ═════ DESCUBRIR ═════ -->
+        <section class="pantalla" id="p-descubrir" data-tab="descubrir" aria-labelledby="t-desc" inert>
+          <div class="desc-top">
+            <div class="tit"><h1 id="t-desc">Descubrir</h1><p>Empresas inventadas · desliza</p></div>
+            <div class="feed-ctrl">
+              <button type="button" id="feed-arr" aria-label="Tarjeta anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg></button>
+              <span id="feed-n" class="num" aria-live="polite">1/7</span>
+              <button type="button" id="feed-aba" aria-label="Tarjeta siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            </div>
+            <button class="slot slot-mini" type="button" data-slot="mini" aria-label="Tu organismo: ir a Mi cartera"></button>
+          </div>
+          <div class="feed" id="feed" aria-label="Tarjetas de empresas inventadas"></div>
+        </section>
+
+        <!-- ═════ LIGA ═════ -->
+        <section class="pantalla" id="p-liga" data-tab="liga" aria-labelledby="t-liga" inert>
+          <div class="scroll">
+            <div class="cab-pant"><h1 id="t-liga">Liga</h1><p>Temporada 0 · semana 3 de 12</p></div>
+            <article class="tarjeta duelo" aria-labelledby="duelo-t">
+              <div class="tarjeta-cab"><h2 id="duelo-t">Duelo de la semana</h2><button class="btn-texto" type="button" id="ver-reglas">Cómo se puntúa</button></div>
+              <div class="duelo-ring">
+                <div class="lado"><div class="slot slot-duelo" data-slot="yo" role="img" aria-label="Tu organismo"></div><b>Nácar <small>(tú)</small></b></div>
+                <div class="vs" aria-hidden="true">vs</div>
+                <div class="lado"><div class="slot slot-duelo" data-slot="rival" role="img" aria-label="Organismo de Lince_27: 6 órganos, concentración baja, variedad amplia"></div><b>Lince_27</b></div>
+              </div>
+              <div class="esc-chips" id="esc-chips" role="group" aria-label="Escenario"></div>
+              <p class="mini" id="esc-nota"></p>
+              <button class="btn primario ancho" type="button" id="lanzar">Lanzar escenario</button>
+              <div class="indices" aria-live="polite">
+                <div class="indice"><span style="font:inherit;text-align:left">Nácar</span><div class="pista-i"><b id="idx-yo-b" style="width:83.33%"></b></div><span id="idx-yo" class="num">100</span></div>
+                <div class="indice rival"><span style="font:inherit;text-align:left">Lince_27</span><div class="pista-i"><b id="idx-ri-b" style="width:83.33%"></b></div><span id="idx-ri" class="num">100</span></div>
+                <p class="mini">Índice que empieza en 100. La raya marca el punto de partida.</p>
+              </div>
+              <table class="marcador" id="marcador" aria-label="Puntos de la semana"></table>
+              <div class="veredicto" id="veredicto" aria-live="polite"></div>
+              <button class="btn ancho" type="button" id="retar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Retar a un amigo por enlace</button>
+            </article>
+            <article class="tarjeta clasif" aria-labelledby="clasif-t">
+              <div class="tarjeta-cab"><h2 id="clasif-t">Liga Los de la Biblio</h2><span class="eti">Esta semana</span></div>
+              <ol id="clasif"></ol>
+              <p class="mini">Solo apodos. Gana quien cuida el equilibrio, no quien arriesga.</p>
+            </article>
+            <article class="resumen" id="resumen" aria-labelledby="res-t"></article>
+            <button class="btn ancho" type="button" id="compartir-res"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>Compartir resumen de temporada</button>
+            <p class="pie-legal">Apodos y puntos de ejemplo. Escenarios ilustrativos: no predicen nada.</p>
+          </div>
+        </section>
+      </main>
+
+      <canvas id="vida" aria-hidden="true"></canvas>
+      <div class="capa" id="capa"></div>
+
+      <nav class="pestanas" id="pestanas" aria-label="Secciones">
+        <div class="indicador" id="indicador" aria-hidden="true"></div>
+        <button class="pest" type="button" data-tab="hoy" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rel" d="M12 3c3.6 4.1 6.4 7.3 6.4 10.6a6.4 6.4 0 0 1-12.8 0C5.6 10.3 8.4 7.1 12 3z"/></svg>Hoy</button>
+        <button class="pest" type="button" data-tab="cartera"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M12 3.8a8.2 8.2 0 0 1 8.2 8.2" stroke-width="3.4"/><circle class="rel" cx="12" cy="12" r="3.4"/></svg>Mi cartera</button>
+        <button class="pest" type="button" data-tab="descubrir"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rel" d="M12 11c-2-1.6-2.4-4.4-.1-7.4 2.3 3 2 5.8.1 7.4zM13 12.2c1.1-2.3 3.8-3.4 7.3-2.1-1.8 3.3-4.6 4.1-7.3 2.1zM11 12.2c-1.1-2.3-3.8-3.4-7.3-2.1 1.8 3.3 4.6 4.1 7.3 2.1zM12.6 13.3c2.3 1 3.5 3.6 2.3 7.1-3.3-1.7-4.3-4.5-2.3-7.1zM11.4 13.3c-2.3 1-3.5 3.6-2.3 7.1 3.3-1.7 4.3-4.5 2.3-7.1z"/></svg>Descubrir</button>
+        <button class="pest" type="button" data-tab="liga"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="rel" cx="8.6" cy="12" r="5.4"/><circle cx="15.4" cy="12" r="5.4"/></svg>Liga</button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"><p id="toast-t"></p><button type="button" id="toast-b">Deshacer</button></div>
+      <div class="velo" id="velo"></div>
+      <div class="hoja" id="hoja" role="dialog" aria-modal="true" aria-labelledby="hoja-t">
+        <button class="hoja-asa" type="button" id="hoja-asa" aria-label="Arrastra o pulsa para cerrar"><i></i></button>
+        <div class="hoja-cuerpo" id="hoja-cuerpo"></div>
+      </div>
+      <div class="inicio-ind" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <aside class="ctx ctx-der" aria-label="Las reglas que usa Klever">
+    <p class="ceja">Lo que mira Klever</p>
+    <div class="reglas-ctx">
+      <div class="regla-ctx"><h3>Concentración</h3><p>Alta si la mayor posición llega al 40 % o un sector al 60 %. Media desde 25 % y 40 %.</p></div>
+      <div class="regla-ctx"><h3>Variedad</h3><p>Amplia con 5 sectores o más. Media con 3 o 4. El organismo florece con variedad amplia.</p></div>
+      <div class="regla-ctx"><h3>Liga, hasta 100 puntos</h3><p>Equilibrio 50, Aprendizaje 30 y Constancia 20. Desempate: semanas con concentración baja.</p></div>
+      <div class="regla-ctx"><h3>Escenarios</h3><p>Índice que empieza en 100: 100 × (1 + Σ peso × golpe del sector). Ilustrativo.</p></div>
+    </div>
+    <small>Referencias orientativas, no normas. Empresas y apodos inventados.</small>
+  </aside>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const mq = matchMedia('(prefers-reduced-motion: reduce)');
+let RM = mq.matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const TAU = Math.PI * 2;
+const vibrar = p => { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} };
+const fmt = v => Math.round(v).toLocaleString('es-ES');
+const app = $('#app');
+
+/* ═════════ Datos de ejemplo (todo inventado) ═════════ */
+const SECT = { 'Tecnología': '#8f7cf0', 'Salud': '#33b59f', 'Consumo': '#e8876f', 'Energía': '#efab45', 'Finanzas': '#5b86e5', 'Industria': '#b0946a', 'Servicios públicos': '#4fbcd9', 'Comunicación': '#d672b5' };
+const CHECKS = ['Deuda manejable', 'ROIC', 'Margen', 'Caja libre', 'Crecimiento'];
+const CHECKS_C = ['Deuda', 'ROIC', 'Margen', 'Caja', 'Crece'];
+const CAT = [
+  { t: 'NUBE', n: 'Nimbus Cloud', s: 'Tecnología', d: 'Servidores en la nube para tiendas pequeñas.', h: [1, 1, 1, 1, 1] },
+  { t: 'SILI', n: 'Silicia Chips', s: 'Tecnología', d: 'Chips de bajo consumo para coches.', h: [1, 1, 1, 0, 1] },
+  { t: 'VITA', n: 'Vitalis Farma', s: 'Salud', d: 'Medicamentos genéricos y vacunas.', h: [1, 1, 1, 1, null] },
+  { t: 'HOGR', n: 'Hogar & Co', s: 'Consumo', d: 'Muebles y menaje a buen precio.', h: [1, 1, 1, 1, 0] },
+  { t: 'SOLR', n: 'Solara Energía', s: 'Energía', d: 'Parques solares y baterías para pueblos.', h: [0, null, 1, 1, 1] },
+  { t: 'IBER', n: 'Ibérica Banca', s: 'Finanzas', d: 'Un banco regional con muchas sucursales.', h: [null, 1, 0, null, 0] },
+  { t: 'FERR', n: 'Ferrovía', s: 'Industria', d: 'Fabrica trenes de cercanías.', h: [0, 0, 1, 1, 1] },
+  { t: 'AQUA', n: 'Aqualis', s: 'Servicios públicos', d: 'Agua potable para ciudades medianas.', h: [0, null, 1, 0, 0] },
+  { t: 'PIXL', n: 'Pixelforge', s: 'Comunicación', d: 'Estudio de videojuegos para móvil.', h: [1, 0, null, 0, 1] },
+  { t: 'TERM', n: 'Termia Redes', s: 'Servicios públicos', d: 'Redes de calor para barrios enteros.', h: [0, 1, 1, null, 0] },
+  { t: 'ORBE', n: 'Orbe Satélites', s: 'Comunicación', d: 'Internet por satélite para barcos.', h: [null, null, 0, 0, 1] }
+];
+const porT = Object.fromEntries(CAT.map(c => [c.t, c]));
+const FEED = ['SOLR', 'IBER', 'FERR', 'AQUA', 'PIXL', 'ORBE'];
+const ESC = {
+  c2008: { n: 'Inspirado en 2008', nota: 'Escenario inspirado en 2008 · cifras aproximadas de ejemplo, no datos históricos.', g: { 'Tecnología': -.45, 'Finanzas': -.55, 'Consumo': -.30, 'Salud': -.20, 'Energía': -.40, 'Industria': -.42, 'Servicios públicos': -.25, 'Comunicación': -.38 } },
+  tipos: { n: 'Tipos altos', nota: 'Escenario hipotético · ilustrativo. No predice nada.', g: { 'Tecnología': -.25, 'Finanzas': .05, 'Consumo': -.10, 'Salud': -.05, 'Energía': .04, 'Industria': -.12, 'Servicios públicos': -.15, 'Comunicación': -.18 } },
+  tec: { n: 'Tecnología −30 %', nota: 'Escenario hipotético · ilustrativo. No predice nada.', g: { 'Tecnología': -.30, 'Comunicación': -.10 } }
+};
+const RIVAL = [{ t: 'VITA', w: 20 }, { t: 'FERR', w: 18 }, { t: 'IBER', w: 16 }, { t: 'HOGR', w: 16 }, { t: 'AQUA', w: 15 }, { t: 'PIXL', w: 15 }];
+const LIGA = [{ a: 'Lince_27', p: 82, av: 'linear-gradient(135deg,#bfeee3,#33b59f)' }, { a: 'Bruma', p: 74, av: 'linear-gradient(135deg,#dcd3fd,#8f7cf0)' }, { a: 'Kiwi_9', p: 41, av: 'linear-gradient(135deg,#fde6b8,#efab45)' }, { a: 'Orca', p: 33, av: 'linear-gradient(135deg,#cfe0ff,#5b86e5)' }, { a: 'Sauce', p: 28, av: 'linear-gradient(135deg,#f6d2c8,#e8876f)' }];
+
+const copia = c => c.map(p => ({ ...p }));
+const S = {
+  cart: [{ t: 'NUBE', w: 46 }, { t: 'SILI', w: 22 }, { t: 'VITA', w: 18 }, { t: 'HOGR', w: 14 }],
+  base: null, retoHechas: 2, retoHoy: false, ideas: new Set(), racha: 3, semBajasPrev: 1, previas: [58, 61],
+  tab: 'hoy', esc: 'c2008', sel: 'NUBE', duelos: 0
+};
+S.base = copia(S.cart);
+
+/* ═════════ Lógica real de Klever ═════════ */
+function analisis(cart) {
+  const tot = cart.reduce((a, p) => a + p.w, 0) || 1;
+  const pos = cart.map(p => ({ ...p, pct: p.w / tot * 100, c: porT[p.t] }));
+  const sec = {};
+  pos.forEach(p => { sec[p.c.s] = (sec[p.c.s] || 0) + p.pct; });
+  const sects = Object.entries(sec).sort((a, b) => b[1] - a[1]);
+  const mayor = pos.reduce((m, p) => (!m || p.pct > m.pct) ? p : m, null);
+  const may = mayor ? Math.round(mayor.pct) : 0, top = sects[0] ? Math.round(sects[0][1]) : 0, n = pos.length;
+  const conc = !n ? 'na' : (may >= 40 || top >= 60 || n === 1) ? 'alto' : (may >= 25 || top >= 40) ? 'medio' : 'ok';
+  const ns = sects.length;
+  const vari = ns >= 5 ? 'ok' : ns >= 3 ? 'medio' : 'alto';
+  const P = { ok: 25, medio: 12, alto: 0 };
+  const eq = n >= 4 ? P[conc] + P[vari] : 0;
+  return { pos, sects, mayor, may, top, n, conc, vari, ns, eq };
+}
+const TXT_C = { ok: 'Baja', medio: 'Media', alto: 'Alta', na: '—' };
+const TXT_V = { ok: 'Amplia', medio: 'Media', alto: 'Poca' };
+function puntosYo(an) {
+  const apr = (S.retoHoy ? 20 : 0) + (S.ideas.size ? 10 : 0);
+  const con = 10 + Math.min(10, 2 * (S.racha - 1));
+  return { eq: an.eq, apr, con, total: an.eq + apr + con };
+}
+const AN_RIVAL = analisis(RIVAL);
+const PT_RIVAL = { eq: AN_RIVAL.eq, apr: 20, con: 12, total: AN_RIVAL.eq + 32 };
+function escenario(cart, id) {
+  const tot = cart.reduce((a, p) => a + p.w, 0) || 1;
+  let s = 0;
+  cart.forEach(p => { s += p.w / tot * (ESC[id].g[porT[p.t].s] || 0); });
+  return 100 * (1 + s);
+}
+
+/* ═════════ Muelles ═════════ */
+const M = (v, k = 170, c = 18) => ({ x: v, t: v, vv: 0, k, c });
+function paso(m, dt) {
+  if (RM) { m.x = m.t; m.vv = 0; return; }
+  const a = -m.k * (m.x - m.t) - m.c * m.vv;
+  m.vv += a * dt; m.x += m.vv * dt;
+}
+const quieto = m => Math.abs(m.x - m.t) < 1e-3 && Math.abs(m.vv) < 1e-3;
+const easeMuelle = t => t >= 1 ? 1 : 1 - Math.exp(-6.2 * t) * Math.cos(7.2 * t);
+const hexRgb = h => { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; };
+const PERLA = [244, 238, 246];
+
+/* ═════════ El organismo ═════════ */
+class Organismo {
+  constructor(o = {}) {
+    const N = this.N = 96;
+    this.r = new Float32Array(N); this.v = new Float32Array(N); this.tg = new Float32Array(N); this.tmp = new Float32Array(N);
+    this.lobos = new Map(); this.reloj = 0; this.fase = 0; this.circ = [];
+    this.nacer = !!o.nacer && !RM; this.calma = !!o.calma;
+    this.core = M(this.nacer ? 0 : .4, 150, 10); this.core.t = .4;
+    this.ox = M(0, 190, 12); this.oy = M(this.nacer ? -1.5 : 0, 95, 7.5); this.oy.t = 0;
+    this.agit = M(0, 16, 8); this.tilt = M(0, 26, 7); this.bloom = M(0, 14, 6);
+    this.dir = 1; this.dedo = null; this.seed = Math.random() * 100;
+    if (!this.nacer) this.r.fill(.5);
+    this.pos = { x: 0, y: 0, R: 1 };
+  }
+  set(cart, rotDeg, an) {
+    const tot = cart.reduce((a, p) => a + p.w, 0) || 1, n = cart.length;
+    let cum = 0; const vivos = new Set(); let pesado = null;
+    cart.forEach((p, i) => {
+      const f = p.w / tot; let ang = ((cum + f / 2) * 360 + rotDeg - 90) * Math.PI / 180; cum += f;
+      let L = this.lobos.get(p.t);
+      if (!L) {
+        const c = porT[p.t];
+        L = { t: p.t, col: hexRgb(SECT[c.s]), ang: M(ang, 80, 13), dist: M(0, 130, 11), rad: M(0, 130, 10), mix: M(this.nacer ? 0 : (this.lobos.size ? 0 : 1), 30, 11), golpe: M(0, 70, 7), puls: M(0, 260, 7), retardo: this.nacer ? 1.0 + i * .17 : 0, sem: Math.random() * TAU };
+        this.lobos.set(p.t, L);
+      }
+      while (ang - L.ang.t > Math.PI) ang -= TAU;
+      while (ang - L.ang.t < -Math.PI) ang += TAU;
+      L.ang.t = ang; L.f = f; L.muere = false;
+      L.td = n === 1 ? .3 : .3 + .3 * Math.sqrt(f);
+      L.tr = n === 1 ? .6 : .15 + .37 * Math.sqrt(f);
+      vivos.add(p.t);
+      if (!pesado || f > pesado.f) pesado = L;
+    });
+    for (const [k, L] of this.lobos) if (!vivos.has(k)) L.muere = true;
+    if (an) {
+      this.agit.t = an.conc === 'alto' ? 1 : an.conc === 'medio' ? .42 : .05;
+      this.tilt.t = an.conc === 'alto' ? .2 : an.conc === 'medio' ? .07 : 0;
+      this.bloom.t = an.vari === 'ok' ? 1 : 0;
+      if (pesado) this.dir = Math.cos(pesado.ang.t) >= 0 ? 1 : -1;
+    }
+  }
+  step(dt) {
+    this.reloj += dt; const T = this.reloj, nac = this.nacer;
+    for (const s of [this.core, this.ox, this.oy, this.agit, this.tilt, this.bloom]) paso(s, dt);
+    let amp = (this.calma || RM) ? 0 : 1;
+    if (nac) amp *= clamp((T - 2.1) / 1.4, 0, 1);
+    this.amp = amp;
+    const ag = this.agit.x, fr = .2 + ag * .72;
+    this.fase += dt * fr * TAU;
+    const resp = amp * ((.022 + ag * .018) * Math.sin(this.fase) + ag * .012 * Math.sin(this.fase * 2.3 + 1.3));
+    const circ = this.circ; circ.length = 0;
+    circ.push(0, 0, this.core.x * (1 + resp));
+    for (const [k, L] of this.lobos) {
+      const activo = !nac || T >= L.retardo;
+      L.dist.t = L.muere ? 0 : (activo ? L.td : 0);
+      L.rad.t = L.muere ? 0 : (activo ? L.tr : .1);
+      L.mix.t = (!nac || T >= L.retardo + .35) ? 1 : 0;
+      paso(L.ang, dt); paso(L.dist, dt); paso(L.rad, dt); paso(L.mix, dt); paso(L.golpe, dt); paso(L.puls, dt);
+      if (L.muere && L.rad.x < .012) { this.lobos.delete(k); continue; }
+      const lb = amp * (.028 + ag * .02) * Math.sin(this.fase + L.sem);
+      L.rr = Math.max(0, L.rad.x * (1 + lb + L.golpe.x + L.puls.x) + resp * .5);
+      circ.push(Math.cos(L.ang.x) * L.dist.x, Math.sin(L.ang.x) * L.dist.x, L.rr);
+    }
+    const N = this.N, tg = this.tg, P = 6;
+    for (let i = 0; i < N; i++) {
+      const a = i / N * TAU, ux = Math.cos(a), uy = Math.sin(a);
+      let acc = 0;
+      for (let j = 0; j < circ.length; j += 3) {
+        const cx = circ[j], cy = circ[j + 1], cr = circ[j + 2];
+        const b = ux * cx + uy * cy, d = b * b - (cx * cx + cy * cy) + cr * cr;
+        if (d > 0) { const t = b + Math.sqrt(d); if (t > 0) acc += t ** P; }
+      }
+      let t = acc > 0 ? acc ** (1 / P) : .02;
+      t *= 1 + amp * ag * (.016 * Math.sin(5 * a + 3.1 * T) + .011 * Math.sin(9 * a - 4.3 * T)) + amp * .009 * Math.sin(3 * a + T * .8 + this.seed);
+      tg[i] = t;
+    }
+    for (let k = 0; k < 1; k++) {
+      const tmp = this.tmp;
+      for (let i = 0; i < N; i++) tmp[i] = (tg[(i - 1 + N) % N] + 2 * tg[i] + tg[(i + 1) % N]) / 4;
+      tg.set(tmp);
+    }
+    const r = this.r, v = this.v;
+    if (RM) { r.set(tg); v.fill(0); }
+    else {
+      const K = 230, C = 12, KN = 70;
+      for (let i = 0; i < N; i++) {
+        const lap = r[(i - 1 + N) % N] + r[(i + 1) % N] - 2 * r[i];
+        v[i] += (-K * (r[i] - tg[i]) - C * v[i] + KN * lap) * dt;
+      }
+      for (let i = 0; i < N; i++) r[i] += v[i] * dt;
+    }
+    if (this.dedo) {
+      const { ang, d } = this.dedo;
+      for (let i = 0; i < N; i++) {
+        let da = Math.abs(i / N * TAU - ang); da = Math.min(da, TAU - da);
+        const w = Math.exp(-((da / .4) ** 2)); if (w < .03) continue;
+        const lim = Math.max(d, .2);
+        if (r[i] > lim) { r[i] = lerp(r[i], lim, w * .45); v[i] *= 1 - w * .5; }
+      }
+    }
+  }
+  impulso(f = 1) { for (let i = 0; i < this.N; i++) this.v[i] += f * (0.6 + Math.sin(i * 1.7 + this.seed) * .5); }
+  camino(R) {
+    const N = this.N, r = this.r, p = new Path2D();
+    const X = i => Math.cos((i % N) / N * TAU) * r[i % N] * R, Y = i => Math.sin((i % N) / N * TAU) * r[i % N] * R;
+    p.moveTo((X(N - 1) + X(0)) / 2, (Y(N - 1) + Y(0)) / 2);
+    for (let i = 0; i < N; i++) p.quadraticCurveTo(X(i), Y(i), (X(i) + X(i + 1)) / 2, (Y(i) + Y(i + 1)) / 2);
+    p.closePath(); return p;
+  }
+  transformar(ctx, R) {
+    const ag = this.agit.x, sway = this.amp ? ag * .05 * Math.sin(this.reloj * 1.7) : 0;
+    ctx.rotate(this.tilt.x * this.dir + sway);
+    ctx.scale(1 + ag * .025, 1 - ag * .045);
+  }
+  dibujar(ctx, cx, cy, R, o = {}) {
+    const al = o.alfa ?? 1; if (al <= .01 || R < 2) return;
+    const x0 = cx + this.ox.x * R, y0 = cy + this.oy.x * R;
+    this.pos = { x: x0, y: y0, R };
+    ctx.save(); ctx.globalAlpha = al; ctx.translate(x0, y0);
+    if (o.halo) {
+      const g = ctx.createRadialGradient(0, 0, R * .4, 0, 0, R * 1.9);
+      g.addColorStop(0, `rgba(${o.halo},.26)`); g.addColorStop(1, `rgba(${o.halo},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, R * 1.9, 0, TAU); ctx.fill();
+    }
+    if (!o.sinSombra) {
+      ctx.save(); ctx.translate(-this.ox.x * R * .5, R * 1.2 - this.oy.x * R * .9); ctx.scale(1, .2);
+      const g = ctx.createRadialGradient(0, 0, 0, 0, 0, R * 1.15);
+      g.addColorStop(0, 'rgba(52,38,100,.26)'); g.addColorStop(1, 'rgba(52,38,100,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, R * 1.15, 0, TAU); ctx.fill(); ctx.restore();
+    }
+    this.transformar(ctx, R);
+    if (this.bloom.x > .02) this.filamentos(ctx, R);
+    const p = this.camino(R);
+    let g = ctx.createRadialGradient(-R * .3, -R * .35, R * .05, 0, 0, R * 1.5);
+    g.addColorStop(0, '#ffffff'); g.addColorStop(.5, '#f5eff8'); g.addColorStop(1, '#e0d5ec');
+    ctx.fillStyle = g; ctx.fill(p);
+    ctx.save(); ctx.clip(p);
+    if (this.lobos.size) {
+      const m = [0, 0, 0]; let tw = 0;
+      for (const L of this.lobos.values()) { const w = (L.f || .1) * L.mix.x; tw += w; for (let i = 0; i < 3; i++) m[i] += L.col[i] * w; }
+      if (tw > 0) {
+        const gc = ctx.createRadialGradient(0, 0, 0, 0, 0, R * .55);
+        gc.addColorStop(0, `rgba(${m.map(v => Math.round(v / tw)).join(',')},.38)`); gc.addColorStop(1, `rgba(${m.map(v => Math.round(v / tw)).join(',')},0)`);
+        ctx.fillStyle = gc; ctx.fillRect(-R, -R, R * 2, R * 2);
+      }
+    }
+    for (const L of this.lobos.values()) {
+      const lx = Math.cos(L.ang.x) * L.dist.x * R, ly = Math.sin(L.ang.x) * L.dist.x * R;
+      const rr = Math.max(1, (L.rr ?? L.rad.x) * R * 1.32), m = clamp(L.mix.x, 0, 1);
+      const c = [0, 1, 2].map(i => Math.round(lerp(PERLA[i], L.col[i], m))).join(',');
+      const gg = ctx.createRadialGradient(lx - rr * .12, ly - rr * .18, 0, lx, ly, rr);
+      gg.addColorStop(0, `rgba(${c},.96)`); gg.addColorStop(.55, `rgba(${c},.8)`); gg.addColorStop(1, `rgba(${c},0)`);
+      ctx.fillStyle = gg; ctx.fillRect(lx - rr, ly - rr, rr * 2, rr * 2);
+    }
+    for (const L of this.lobos.values()) {
+      if (L.mix.x < .2 || R < 14) continue;
+      const lx = Math.cos(L.ang.x) * L.dist.x * R * 1.08, ly = Math.sin(L.ang.x) * L.dist.x * R * 1.08;
+      const nr = Math.max(1.5, (L.rr ?? L.rad.x) * R * .2);
+      ctx.fillStyle = `rgba(255,255,255,${.5 * L.mix.x})`;
+      ctx.beginPath(); ctx.ellipse(lx - nr * .3, ly - nr * .35, nr, nr * .78, .5, 0, TAU); ctx.fill();
+      ctx.fillStyle = `rgba(${L.col.map(v => Math.round(v * .55)).join(',')},${.28 * L.mix.x})`;
+      ctx.beginPath(); ctx.arc(lx + nr * .25, ly + nr * .3, nr * .42, 0, TAU); ctx.fill();
+    }
+    g = ctx.createRadialGradient(-R * .38, -R * .5, 0, -R * .38, -R * .5, R * .95);
+    g.addColorStop(0, 'rgba(255,255,255,.82)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(-R * 2.2, -R * 2.2, R * 4.4, R * 4.4);
+    g = ctx.createLinearGradient(0, -R, 0, R * 1.3);
+    g.addColorStop(.5, 'rgba(40,28,90,0)'); g.addColorStop(1, 'rgba(40,28,90,.18)');
+    ctx.fillStyle = g; ctx.fillRect(-R * 2.2, -R * 2.2, R * 4.4, R * 4.4);
+    ctx.restore();
+    g = ctx.createLinearGradient(-R, -R, R, R);
+    g.addColorStop(0, 'rgba(255,255,255,.98)'); g.addColorStop(.45, 'rgba(196,176,255,.75)'); g.addColorStop(.75, 'rgba(240,168,148,.65)'); g.addColorStop(1, 'rgba(120,214,196,.75)');
+    ctx.lineWidth = Math.max(1, R * .02); ctx.strokeStyle = g; ctx.stroke(p);
+    ctx.restore();
+  }
+  filamentos(ctx, R) {
+    const b = this.bloom.x, T = this.reloj;
+    for (const L of this.lobos.values()) {
+      if (L.mix.x < .5 || L.muere) continue;
+      const brotes = (L.f > .14 && R > 60) ? [[0, 1], [.42, .62]] : [[0, R > 60 ? .85 : .7]];
+      for (const [off, esc] of brotes) {
+        const a0 = L.ang.x + off;
+        const idx = ((Math.round(a0 / TAU * this.N) % this.N) + this.N) % this.N;
+        const r0 = this.r[idx] * R * .9;
+        const sway = this.amp ? .2 * Math.sin(T * .8 + L.sem + off * 5) : .12;
+        const len = R * b * esc * (.4 + .08 * Math.sin(L.sem * 3));
+        const am = a0 + sway, a1 = a0 + sway * 1.6;
+        const P0 = [Math.cos(a0) * r0, Math.sin(a0) * r0];
+        const P1 = [Math.cos(am) * (r0 + len * .55), Math.sin(am) * (r0 + len * .55)];
+        const P2 = [Math.cos(a1) * (r0 + len), Math.sin(a1) * (r0 + len)];
+        const w0 = R * .085 * b * esc, izq = [], der = [];
+        for (let i = 0; i <= 10; i++) {
+          const t = i / 10, u = 1 - t;
+          const x = u * u * P0[0] + 2 * u * t * P1[0] + t * t * P2[0], y = u * u * P0[1] + 2 * u * t * P1[1] + t * t * P2[1];
+          const dx = 2 * u * (P1[0] - P0[0]) + 2 * t * (P2[0] - P1[0]), dy = 2 * u * (P1[1] - P0[1]) + 2 * t * (P2[1] - P1[1]);
+          const l = Math.hypot(dx, dy) || 1, w = w0 * (1 - t * .78);
+          izq.push([x - dy / l * w, y + dx / l * w]); der.push([x + dy / l * w, y - dx / l * w]);
+        }
+        const g = ctx.createLinearGradient(P0[0], P0[1], P2[0], P2[1]);
+        g.addColorStop(0, `rgba(${L.col.join(',')},${.2 * b})`); g.addColorStop(1, `rgba(${L.col.join(',')},${.62 * b})`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(izq[0][0], izq[0][1]);
+        izq.forEach(p => ctx.lineTo(p[0], p[1])); der.reverse().forEach(p => ctx.lineTo(p[0], p[1])); ctx.closePath(); ctx.fill();
+        const br = Math.max(1.8, R * .085 * b * esc);
+        const gb = ctx.createRadialGradient(P2[0] - br * .35, P2[1] - br * .35, 0, P2[0], P2[1], br);
+        gb.addColorStop(0, '#fff'); gb.addColorStop(.55, `rgba(${L.col.join(',')},.8)`); gb.addColorStop(1, `rgba(${L.col.join(',')},.95)`);
+        ctx.fillStyle = gb; ctx.beginPath(); ctx.arc(P2[0], P2[1], br, 0, TAU); ctx.fill();
+      }
+    }
+  }
+  dibujarFantasma(ctx, cx, cy, R, al) {
+    if (al < .02) return;
+    ctx.save(); ctx.globalAlpha = al; ctx.translate(cx, cy); this.transformar(ctx, R);
+    const p = this.camino(R);
+    ctx.fillStyle = 'rgba(21,33,58,.05)'; ctx.fill(p);
+    ctx.setLineDash([5, 6]); ctx.lineWidth = 1.6; ctx.strokeStyle = 'rgba(21,33,58,.5)'; ctx.stroke(p);
+    ctx.restore();
+  }
+  asentar() { const rm = RM; RM = true; for (let i = 0; i < 3; i++) this.step(1 / 60); RM = rm; }
+  loboEn(px, py) {
+    const { x, y, R } = this.pos; if (!R) return null;
+    let dx = (px - x) / R, dy = (py - y) / R;
+    const a = -(this.tilt.x * this.dir); const c = Math.cos(a), s = Math.sin(a);
+    [dx, dy] = [dx * c - dy * s, dx * s + dy * c];
+    let mejor = null, md = 1e9;
+    for (const L of this.lobos.values()) {
+      if (L.muere) continue;
+      const lx = Math.cos(L.ang.x) * L.dist.x, ly = Math.sin(L.ang.x) * L.dist.x;
+      const d = Math.hypot(dx - lx, dy - ly) - L.rad.x * .6;
+      if (d < md) { md = d; mejor = L; }
+    }
+    return { L: mejor, ang: (Math.atan2(dy, dx) + TAU) % TAU, d: Math.hypot(dx, dy) };
+  }
+}
+
+/* ═════════ Fondo nacarado (WebGL) ═════════ */
+const fondo = (() => {
+  const cv = $('#fondo'); let gl = null;
+  try { gl = cv.getContext('webgl', { antialias: false, alpha: false, preserveDrawingBuffer: false }); } catch (e) {}
+  if (!gl) { document.documentElement.classList.add('sin-gl'); return { dibujar() {}, ok: false }; }
+  const vs = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs = `precision mediump float;uniform vec2 res;uniform float t;
+  float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+  float n(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*n(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
+  void main(){vec2 uv=gl_FragCoord.xy/res;vec2 p=uv*vec2(res.x/res.y,1.)*1.5;
+    float a=fbm(p+vec2(t*.022,t*.015));float b=fbm(p*1.25+vec2(-t*.018,t*.012)+a*1.6);float c=fbm(p*.8-b*.9+vec2(t*.01,-t*.02));
+    vec3 col=vec3(.962,.938,.912);
+    col=mix(col,vec3(.957,.80,.74),smoothstep(.42,.78,b)*.62);
+    col=mix(col,vec3(.86,.82,.985),smoothstep(.40,.74,a)*.6);
+    col=mix(col,vec3(.78,.94,.905),smoothstep(.52,.84,c)*.62);
+    float band=sin((uv.x*1.2+uv.y*.7+b*.9)*7.+t*.06)*.5+.5;
+    col+=vec3(.025,.012,.03)*band; col+=vec3(.03)*(1.-uv.y);
+    gl_FragColor=vec4(col,1.);}`;
+  const sh = (tp, src) => { const s = gl.createShader(tp); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { document.documentElement.classList.add('sin-gl'); return { dibujar() {}, ok: false }; }
+  gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const uR = gl.getUniformLocation(pr, 'res'), uT = gl.getUniformLocation(pr, 't');
+  function tam() { const s = .32; cv.width = Math.max(2, Math.round(innerWidth * s)); cv.height = Math.max(2, Math.round(innerHeight * s)); gl.viewport(0, 0, cv.width, cv.height); }
+  tam(); addEventListener('resize', tam);
+  return { ok: true, dibujar(t) { gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, t + 40); gl.drawArrays(gl.TRIANGLES, 0, 3); } };
+})();
+
+/* ═════════ Lienzo de vida ═════════ */
+const vida = $('#vida'), vctx = vida.getContext('2d');
+let DPR = Math.min(2, devicePixelRatio || 1), W = 0, H = 0;
+function ajustarVida() {
+  const r = app.getBoundingClientRect(); W = r.width; H = r.height; DPR = Math.min(2, devicePixelRatio || 1);
+  vida.width = Math.round(W * DPR); vida.height = Math.round(H * DPR);
+}
+ajustarVida();
+try { new ResizeObserver(ajustarVida).observe(app); } catch (e) { addEventListener('resize', ajustarVida); }
+
+let org = new Organismo({ nacer: true });
+const rival = new Organismo({});
+const fantasma = new Organismo({ calma: true });
+const miniatura = new Organismo({ calma: true });
+let alfaRival = M(0, 120, 20), alfaFantasma = M(0, 120, 20);
+const slotEl = {}; $$('[data-slot]').forEach(e => { slotEl[e.dataset.slot] = e; });
+const SLOT_TAB = { hoy: 'hoy', cartera: 'cartera', descubrir: 'mini', liga: 'yo' };
+let vuelo = null, posOrg = null;
+function rectSlot(nombre, ar) {
+  const r = slotEl[nombre].getBoundingClientRect();
+  return { x: r.left - ar.left + r.width / 2, y: r.top - ar.top + r.height / 2, s: Math.min(r.width, r.height) };
+}
+const R_DE = s => s / 2 / 1.36;
+
+/* ═════════ Anillo de pesos ═════════ */
+const anillo = { rot: M(0, 110, 17), arrastre: null, sucio: true, ultW: 0 };
+const segsG = $('#segs'), tirador = $('#tirador');
+const CX = 160, RA = 140;
+const polar = (a, r) => { const t = (a - 90) * Math.PI / 180; return [CX + r * Math.cos(t), CX + r * Math.sin(t)]; };
+function arco(a0, a1, r) {
+  if (a1 - a0 >= 359.5) a1 = a0 + 359.5;
+  const [x0, y0] = polar(a0, r), [x1, y1] = polar(a1, r);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+const cumAntes = t => { const tot = S.cart.reduce((a, p) => a + p.w, 0); let c = 0; for (const p of S.cart) { if (p.t === t) break; c += p.w; } return c / tot * 360; };
+function rotObjetivo(t) {
+  let obj = -cumAntes(t);
+  while (obj - anillo.rot.x > 180) obj -= 360;
+  while (obj - anillo.rot.x < -180) obj += 360;
+  return obj;
+}
+function dibujarAnillo() {
+  const tot = S.cart.reduce((a, p) => a + p.w, 0) || 1, n = S.cart.length, rot = anillo.rot.x;
+  const vivos = new Set(); let cum = 0;
+  S.cart.forEach(p => {
+    let el = segsG.querySelector(`[data-t="${p.t}"]`);
+    if (!el) {
+      el = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      el.setAttribute('class', 'seg'); el.dataset.t = p.t; el.setAttribute('stroke', SECT[porT[p.t].s]);
+      segsG.appendChild(el);
+    }
+    vivos.add(p.t);
+    const span = p.w / tot * 360, gap = n > 1 ? Math.min(5.2, span / 2 - .05) : 0;
+    const a0 = cum + rot + gap, a1 = cum + rot + span - gap; cum += span;
+    el.setAttribute('d', arco(a0, Math.max(a0 + .1, a1), RA));
+    const sel = p.t === S.sel;
+    el.style.strokeWidth = sel ? 28 : 19;
+    el.classList.toggle('no-sel', !sel);
+  });
+  $$('.seg', segsG).forEach(el => { if (!vivos.has(el.dataset.t)) el.remove(); });
+  const selEl = segsG.querySelector(`[data-t="${S.sel}"]`); if (selEl) segsG.appendChild(selEl);
+  const ps = S.cart.find(p => p.t === S.sel);
+  if (ps) {
+    const fin = cumAntes(S.sel) + ps.w / tot * 360 + rot - (n > 1 ? 5.2 : 0);
+    const [hx, hy] = polar(fin, RA);
+    tirador.setAttribute('transform', `translate(${hx.toFixed(2)} ${hy.toFixed(2)})`);
+    tirador.style.setProperty('--c', SECT[porT[S.sel].s]);
+    tirador.setAttribute('aria-valuenow', Math.round(ps.w / tot * 100));
+    tirador.setAttribute('aria-valuetext', `${porT[S.sel].n}: ${Math.round(ps.w / tot * 100)} %`);
+    tirador.style.display = n > 1 ? '' : 'none';
+  }
+}
+function seleccionar(t, rotar = true) {
+  if (!S.cart.some(p => p.t === t)) return;
+  S.sel = t; if (rotar) anillo.rot.t = rotObjetivo(t);
+  anillo.sucio = true; pintarSel(); pintarLista();
+}
+function setPeso(t, w) {
+  const n = S.cart.length; if (n < 2) return;
+  const otros = S.cart.filter(p => p.t !== t), suma = otros.reduce((a, p) => a + p.w, 0) || 1;
+  w = clamp(w, 1, 100 - n + 1);
+  const f = (100 - w) / suma;
+  otros.forEach(p => { p.w = Math.max(.6, p.w * f); });
+  const sOtros = otros.reduce((a, p) => a + p.w, 0);
+  S.cart.find(p => p.t === t).w = 100 - sOtros;
+}
+function normalizar() { const tot = S.cart.reduce((a, p) => a + p.w, 0) || 1; S.cart.forEach(p => { p.w = p.w / tot * 100; }); }
+function anguloPuntero(e) {
+  const r = $('#anillo').getBoundingClientRect();
+  const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+  return (Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360;
+}
+let concPrev = null;
+function detectarUmbral() {
+  const an = analisis(S.cart);
+  if (concPrev && an.conc !== concPrev) { vibrar(14); const el = $('#semaf-c'); if (el) { el.classList.remove('pulso'); void el.offsetWidth; el.classList.add('pulso'); } }
+  concPrev = an.conc;
+}
+function empezarArrastre(e) {
+  e.preventDefault();
+  anillo.arrastre = { id: e.pointerId };
+  tirador.classList.add('activo');
+  try { $('#anillo').setPointerCapture(e.pointerId); } catch (er) {}
+  const ps = S.cart.find(p => p.t === S.sel); anillo.ultW = ps ? ps.w : 0;
+  vibrar(6);
+}
+$('#anillo').addEventListener('pointerdown', e => {
+  const seg = e.target.closest('.seg');
+  if (e.target.closest('#tirador')) { empezarArrastre(e); return; }
+  if (seg) {
+    if (seg.dataset.t === S.sel && S.cart.length > 1) { empezarArrastre(e); moverArrastre(e); }
+    else { seleccionar(seg.dataset.t); vibrar(5); }
+  }
+});
+function moverArrastre(e) {
+  if (!anillo.arrastre) return;
+  const a = (anguloPuntero(e) - anillo.rot.x + 720) % 360;
+  let w = a / 3.6; const prev = anillo.ultW;
+  if (prev > 70 && w < 30) w = 100; if (prev < 30 && w > 70) w = 0;
+  setPeso(S.sel, w); anillo.ultW = S.cart.find(p => p.t === S.sel).w;
+  anillo.rot.t = anillo.rot.x = -cumAntes(S.sel); anillo.rot.vv = 0;
+  detectarUmbral(); pedirActualizar();
+}
+$('#anillo').addEventListener('pointermove', moverArrastre);
+const finArrastre = () => { if (!anillo.arrastre) return; anillo.arrastre = null; tirador.classList.remove('activo'); vibrar(8); pedirActualizar(); };
+$('#anillo').addEventListener('pointerup', finArrastre);
+$('#anillo').addEventListener('pointercancel', finArrastre);
+tirador.addEventListener('keydown', e => {
+  const ps = S.cart.find(p => p.t === S.sel); if (!ps) return;
+  const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: 5, PageDown: -5 }[e.key];
+  if (d === undefined) return; e.preventDefault();
+  setPeso(S.sel, Math.round(ps.w) + d); anillo.rot.t = -cumAntes(S.sel); detectarUmbral(); pedirActualizar();
+});
+
+/* Pesos animados (propuestas «¿y si…?») */
+let tween = null;
+function animarPesos(obj) {
+  const desde = Object.fromEntries(S.cart.map(p => [p.t, p.w]));
+  if (RM) { S.cart.forEach(p => { p.w = obj[p.t] ?? p.w; }); pedirActualizar(); return; }
+  tween = { desde, obj, t: 0 };
+}
+
+/* ═════════ Pestañas y transiciones ═════════ */
+const TABS = ['hoy', 'cartera', 'descubrir', 'liga'];
+const ind = { x: M(0, 260, 24) };
+function irA(tab, foco = false) {
+  if (!TABS.includes(tab)) return;
+  if (tab === S.tab) { if (tab !== 'descubrir') { const sc = $(`#p-${tab} .scroll`); sc && sc.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); } return; }
+  const ar = app.getBoundingClientRect();
+  if (posOrg) vuelo = { de: { ...posOrg }, t: 0 };
+  $$('.pantalla').forEach(p => { const on = p.dataset.tab === tab; p.classList.toggle('activa', on); p.inert = !on; });
+  $$('.pest').forEach(b => { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  S.tab = tab; ind.x.t = TABS.indexOf(tab);
+  ocultarBurbuja();
+  if (tab === 'cartera') { anillo.sucio = true; }
+  if (tab === 'liga') pintarResumen();
+  vibrar(4);
+  if (foco) { const h = $(`#p-${tab} h1`); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }
+}
+$('#pestanas').addEventListener('click', e => { const b = e.target.closest('.pest'); if (b) irA(b.dataset.tab, e.detail === 0); });
+document.addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if (b) { irA(b.dataset.ir); } });
+
+/* ═════════ Interacción con el organismo ═════════ */
+let toque = null;
+function orgDeSlot(n) { return n === 'rival' ? rival : org; }
+function localDe(o, e) { const ar = app.getBoundingClientRect(); return { x: e.clientX - ar.left, y: e.clientY - ar.top }; }
+Object.entries(slotEl).forEach(([nombre, el]) => {
+  if (nombre === 'mini') { el.addEventListener('click', () => { org.impulso(1.5); irA('cartera'); }); return; }
+  el.addEventListener('pointerdown', e => {
+    const o = orgDeSlot(nombre); const p = localDe(o, e);
+    toque = { o, nombre, x0: p.x, y0: p.y, t0: performance.now(), id: e.pointerId, movido: 0 };
+    try { el.setPointerCapture(e.pointerId); } catch (er) {}
+    const h = o.loboEn(p.x, p.y); if (h) o.dedo = { ang: h.ang, d: h.d };
+  });
+  el.addEventListener('pointermove', e => {
+    if (!toque || toque.id !== e.pointerId) return;
+    const o = toque.o, p = localDe(o, e), R = o.pos.R || 50;
+    const dx = p.x - toque.x0, dy = p.y - toque.y0; toque.movido = Math.max(toque.movido, Math.hypot(dx, dy));
+    const k = .45 / (1 + Math.hypot(dx, dy) / (R * 1.6));
+    o.ox.t = dx * k / R; o.oy.t = dy * k / R;
+    const h = o.loboEn(p.x, p.y); if (h) o.dedo = { ang: h.ang, d: h.d };
+  });
+  const fin = e => {
+    if (!toque || toque.id !== e.pointerId) return;
+    const o = toque.o; o.dedo = null; o.ox.t = 0; o.oy.t = 0;
+    const p = localDe(o, e);
+    if (toque.movido < 8 && performance.now() - toque.t0 < 450) tocarOrgano(toque.nombre, o, p.x, p.y);
+    else { vibrar(10); o.impulso(.6); if (toque.nombre === 'hoy') $('#pista-hoy span').textContent = 'Rebota. Está vivo.'; }
+    toque = null;
+  };
+  el.addEventListener('pointerup', fin); el.addEventListener('pointercancel', fin);
+  el.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault();
+    const o = orgDeSlot(nombre); const ls = [...o.lobos.values()].filter(l => !l.muere); if (!ls.length) return;
+    el._i = ((el._i ?? -1) + 1) % ls.length; const L = ls[el._i];
+    const { x, y, R } = o.pos; mostrarBurbuja(L, x + Math.cos(L.ang.x) * L.dist.x * R, y + Math.sin(L.ang.x) * L.dist.x * R - R * .3, nombre === 'rival');
+    L.puls.vv += 3;
+  });
+});
+function tocarOrgano(nombre, o, x, y) {
+  const h = o.loboEn(x, y); if (!h || !h.L) return;
+  const L = h.L; L.puls.vv += 3.2; vibrar(8);
+  if (nombre === 'cartera') { seleccionar(L.t); return; }
+  const { x: ox, y: oy, R } = o.pos;
+  mostrarBurbuja(L, ox + Math.cos(L.ang.x) * L.dist.x * R, oy + Math.sin(L.ang.x) * L.dist.x * R - R * .25, nombre === 'rival');
+}
+let burbuja = null, burbujaT = 0;
+function mostrarBurbuja(L, x, y, esRival) {
+  ocultarBurbuja();
+  const c = porT[L.t], cart = esRival ? RIVAL : S.cart, tot = cart.reduce((a, p) => a + p.w, 0);
+  const p = cart.find(q => q.t === L.t); if (!p) return;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'burbuja'; b.style.setProperty('--c', SECT[c.s]);
+  b.innerHTML = `<i></i><span>${c.n} · <span class="num">${Math.round(p.w / tot * 100)} %</span> <small>${esRival ? 'de Lince_27' : 'Ver huella'}</small></span>`;
+  b.style.left = clamp(x, 110, W - 110) + 'px'; b.style.top = clamp(y, 140, H) + 'px';
+  if (!esRival) b.addEventListener('click', () => abrirHoja('organo', L.t));
+  $('#capa').appendChild(b); burbuja = b;
+  requestAnimationFrame(() => b.classList.add('on'));
+  clearTimeout(burbujaT); burbujaT = setTimeout(ocultarBurbuja, 3200);
+}
+function ocultarBurbuja() { if (!burbuja) return; const b = burbuja; burbuja = null; b.classList.remove('on'); setTimeout(() => b.remove(), 300); }
+
+/* ═════════ HOY ═════════ */
+let fraseActual = '';
+function teclear(el, txt, d0 = 0) {
+  if (txt === fraseActual) return; fraseActual = txt;
+  if (RM) { el.textContent = txt; return; }
+  el.textContent = ''; el.setAttribute('aria-label', txt);
+  let i = 0;
+  txt.split(' ').forEach((pal, k, arr) => {
+    const w = document.createElement('span'); w.style.whiteSpace = 'nowrap'; w.setAttribute('aria-hidden', 'true');
+    [...pal].forEach(ch => { const s = document.createElement('span'); s.className = 'l'; s.style.setProperty('--i', i++); s.style.setProperty('--d0', d0 + 'ms'); s.textContent = ch; w.appendChild(s); });
+    el.appendChild(w); if (k < arr.length - 1) { el.appendChild(document.createTextNode(' ')); i++; }
+  });
+}
+function frase(an) {
+  if (an.conc === 'alto') return 'Una parte pesa demasiado';
+  if (an.conc === 'medio') return an.vari === 'ok' ? 'Florece, pero algo pesa' : 'Respira, pero algo pesa';
+  return an.vari === 'ok' ? 'Tu cartera respira tranquila y florece' : 'Tu cartera respira tranquila';
+}
+function subFrase(an) {
+  const mayor = an.mayor ? an.mayor.c.n : '';
+  const [sn, sp] = an.sects[0] || ['', 0];
+  if (an.conc === 'alto') return an.may >= 40 ? `${mayor} es el ${an.may} % de tu cartera.` : `${sn} ocupa el ${Math.round(sp)} % de tu cartera.`;
+  if (an.conc === 'medio') return an.may >= 25 ? `La mayor, ${mayor}, pesa un ${an.may} %.` : `${sn} reúne el ${Math.round(sp)} %.`;
+  return `Ninguna parte manda. ${an.ns} sectores conviven.`;
+}
+function signo(n, et, val) { return `<span class="signo" data-n="${n}"><i class="punto"></i>${et} <b>${val}</b></span>`; }
+function pintarHoy(an, pt) {
+  teclear($('#frase'), frase(an), primeraVez ? 1500 : 0);
+  $('#frase-sub').textContent = subFrase(an);
+  $('#signos-hoy').innerHTML = signo(an.conc, 'Concentración', TXT_C[an.conc]) + signo(an.vari, 'Variedad', TXT_V[an.vari]) + `<span class="signo"><i class="punto" style="--c:var(--lila)"></i>Órganos <b class="num">${an.n}</b></span>`;
+  const cta = $('#cta-hoy');
+  if (an.conc === 'ok') { cta.textContent = 'Ver tu duelo de la semana'; cta.dataset.ir = 'liga'; }
+  else { cta.textContent = 'Equilibrarlo en Mi cartera'; cta.dataset.ir = 'cartera'; }
+  $('#slot-hoy').setAttribute('aria-label', `Organismo de tu cartera: ${an.n} órganos. Concentración ${TXT_C[an.conc].toLowerCase()}, variedad ${TXT_V[an.vari].toLowerCase()}. Pulsa Intro para recorrer sus órganos.`);
+  contar($('#hoy-total'), pt.total);
+  const bar = (et, v, max, c) => `<div class="barra-pt"><span style="text-align:left;color:var(--tinta-2)">${et}</span><div class="pista-b"><b style="transform:scaleX(${v / max});--bc:${c}"></b></div><span class="num">${v}/${max}</span></div>`;
+  const hb = $('#hoy-barras');
+  if (!hb.children.length) hb.innerHTML = bar('Equilibrio', pt.eq, 50, 'linear-gradient(90deg,#a48cf5,#8f7cf0)') + bar('Aprendizaje', pt.apr, 30, 'linear-gradient(90deg,#5fcab6,#23927f)') + bar('Constancia', pt.con, 20, 'linear-gradient(90deg,#f3c3b1,#e8876f)');
+  else[[pt.eq, 50], [pt.apr, 30], [pt.con, 20]].forEach(([v, m], i) => { const f = hb.children[i]; f.querySelector('b').style.transform = `scaleX(${v / m})`; f.querySelector('span.num').textContent = `${v}/${m}`; });
+}
+function pintarSemillas() {
+  $('#semillas').innerHTML = Array.from({ length: 12 }, (_, i) => `<i class="semilla-s ${i < 2 ? 'hecha' : i === 2 ? 'hoy' : ''}"></i>`).join('');
+}
+/* Pregunta de 20 s */
+const preg = { t: 20, activo: false, hecho: false, int: 0, resp: 45 };
+const rango = $('#preg-r');
+function pintarRango() { $('#preg-out').textContent = `−${rango.value} %`; }
+rango.addEventListener('input', () => { pintarRango(); if (!preg.activo && !preg.hecho) iniciarReloj(); });
+function iniciarReloj() {
+  preg.activo = true; const arco = $('#reloj-arco'), t0 = performance.now();
+  preg.int = setInterval(() => {
+    const rest = Math.max(0, 20 - (performance.now() - t0) / 1000);
+    $('#reloj-n').textContent = Math.ceil(rest); arco.setAttribute('stroke-dashoffset', (113.1 * (1 - rest / 20)).toFixed(1));
+    if (rest <= 0) comprobar();
+  }, 200);
+}
+function comprobar() {
+  if (preg.hecho) return; preg.hecho = true; clearInterval(preg.int);
+  const tu = +rango.value, d = Math.abs(tu - preg.resp), nota = Math.max(0, 10 - Math.round(d / 3));
+  const et = d <= 5 ? 'Muy afinado' : d <= 15 ? 'Cerca' : 'Lejos, pero ya lo sabes';
+  const fin = $('#preg-fin'); fin.classList.add('hecho');
+  const L = v => `${v / 80 * 100}%`;
+  fin.innerHTML = `<div class="comp" aria-hidden="true"><div class="comp-pista"></div><div class="comp-hueco" style="left:${L(Math.min(tu, preg.resp))};width:${Math.abs(tu - preg.resp) / 80 * 100}%"></div>
+    <div class="marca-c tu" style="left:${L(tu)}"><span>Tú −${tu} %</span><i></i></div><div class="marca-c ej" style="left:${L(preg.resp)};top:22px"><i style="margin-top:0"></i><span style="top:16px">Ejemplo −${preg.resp} %</span></div></div>
+    <p style="margin-top:14px"><b style="color:var(--tinta)">Respuesta de ejemplo: −${preg.resp} %.</b> Cifra aproximada, no es un dato histórico.</p>
+    <div class="calib"><b style="color:var(--tinta)">Calibración ${nota}/10 · ${et}</b><span class="calib-puntos" aria-label="Últimas calibraciones: 7, 5 y ${nota} sobre 10"><i><b style="width:70%"></b></i><i><b style="width:50%"></b></i><i><b style="width:${nota * 10}%"></b></i></span></div>
+    <p><b style="color:var(--ok)">Reto de la semana completado:</b> 3 de 3 preguntas · +20 de Aprendizaje.</p>`;
+  $('#preg-ok').textContent = 'Hecho · vuelve mañana'; $('#preg-ok').disabled = true; rango.disabled = true;
+  S.retoHoy = true; vibrar([10, 40, 16]); pedirActualizar();
+  toast('Reto completado: +20 puntos de Aprendizaje');
+}
+$('#preg-ok').addEventListener('click', comprobar);
+
+/* ═════════ MI CARTERA ═════════ */
+function pintarSel() {
+  const ps = S.cart.find(p => p.t === S.sel) || S.cart[0]; if (!ps) return;
+  if (ps.t !== S.sel) S.sel = ps.t;
+  const c = porT[ps.t], tot = S.cart.reduce((a, p) => a + p.w, 0);
+  $('#sel-pill').style.setProperty('--c', SECT[c.s]);
+  $('#sel-nom').textContent = c.n;
+  $('#sel-pct').textContent = `${Math.round(ps.w / tot * 100)} %`;
+}
+function pintarSemaforos(an) {
+  const el = $('#semaforos');
+  if (!el.children.length) el.innerHTML = `<div class="semaf" id="semaf-c"><span class="eti">Concentración</span><b></b><span></span></div><div class="semaf" id="semaf-v"><span class="eti">Variedad</span><b></b><span></span></div><div class="semaf" id="semaf-e"><span class="eti">Equilibrio</span><b class="num"></b><span>de 50 en Liga</span></div>`;
+  const c = $('#semaf-c'), v = $('#semaf-v'), e = $('#semaf-e');
+  c.dataset.n = an.conc; c.querySelector('b').textContent = TXT_C[an.conc]; c.querySelector('span:last-child').textContent = `La mayor: ${an.may} %`;
+  v.dataset.n = an.vari; v.querySelector('b').textContent = TXT_V[an.vari]; v.querySelector('span:last-child').textContent = `${an.ns} sector${an.ns === 1 ? '' : 'es'}`;
+  e.dataset.n = an.eq >= 37 ? 'ok' : an.eq >= 12 ? 'medio' : 'alto'; e.querySelector('b').textContent = `${an.eq} pts`;
+}
+const PROP = [
+  { id: 'mayor', t: '¿Y si la mayor bajara al 25 %?', ok: an => an.may > 26, s: an => an.may > 26 ? `Hoy pesa un ${an.may} %` : 'Ya está en el 25 % o menos' },
+  { id: 'sector', t: '¿Y si ningún sector pasara del 40 %?', ok: an => an.top > 41 && an.ns > 1, s: an => an.ns < 2 ? 'Necesitas al menos dos sectores' : an.top > 41 ? `${an.sects[0][0]} suma un ${an.top} %` : 'Ningún sector pasa del 40 %' },
+  { id: 'igual', t: '¿Y si repartieras a partes iguales?', ok: an => an.n > 1 && an.pos.some(p => Math.abs(p.pct - 100 / an.n) > 1), s: an => `${an.n} órganos al ${Math.round(100 / an.n)} %` }
+];
+function pintarYsi(an) {
+  const el = $('#ysi-chips');
+  if (!el.children.length) el.innerHTML = PROP.map(p => `<button class="chip-ysi" type="button" data-p="${p.id}"><svg viewBox="0 0 24 24" fill="none" stroke="url(#lg-logo)" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>${p.t}<small></small></span></button>`).join('');
+  PROP.forEach(p => { const b = el.querySelector(`[data-p="${p.id}"]`); b.disabled = !p.ok(an); b.querySelector('small').textContent = p.s(an); });
+}
+$('#ysi-chips').addEventListener('click', e => {
+  const b = e.target.closest('.chip-ysi'); if (!b || b.disabled) return;
+  const an = analisis(S.cart); const obj = Object.fromEntries(S.cart.map(p => [p.t, p.w]));
+  if (b.dataset.p === 'mayor') {
+    const may = an.mayor.t, resto = 100 - obj[may], f = 75 / resto;
+    for (const k in obj) obj[k] = k === may ? 25 : obj[k] * f;
+  } else if (b.dataset.p === 'sector') {
+    const sn = an.sects[0][0], sp = an.sects[0][1];
+    for (const p of an.pos) obj[p.t] = p.c.s === sn ? p.pct * 40 / sp : p.pct * 60 / (100 - sp);
+  } else { for (const k in obj) obj[k] = 100 / S.cart.length; }
+  animarPesos(obj); vibrar(10);
+});
+function igualBase() {
+  if (S.base.length !== S.cart.length) return false;
+  return S.cart.every(p => { const q = S.base.find(b => b.t === p.t); return q && Math.abs(q.w - p.w) < .5; });
+}
+function pintarCompara(an) {
+  const el = $('#compara'), igual = igualBase();
+  $('#deshacer').disabled = igual; $('#fijar').disabled = igual;
+  if (igual) { el.innerHTML = '<p class="compara-vacio">Mueve el anillo o toca una idea: verás el antes y el después.</p>'; return; }
+  const ab = analisis(S.base);
+  const flecha = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const fila = (et, a, b) => `<div class="compara-fila"><span>${et}</span><span class="a">${a}</span>${flecha}<span class="b">${b}</span></div>`;
+  el.innerHTML = `<span class="eti">Antes <span style="font-weight:600;letter-spacing:0;text-transform:none">(línea discontinua)</span> → ahora</span>`
+    + fila('Concentración', TXT_C[ab.conc], TXT_C[an.conc]) + fila('Variedad', TXT_V[ab.vari], TXT_V[an.vari])
+    + fila('Equilibrio (Liga)', `${ab.eq} pts`, `${an.eq} pts`)
+    + fila('Escenario 2008 · ejemplo', fmt(escenario(S.base, 'c2008')), fmt(escenario(S.cart, 'c2008')));
+}
+$('#deshacer').addEventListener('click', () => {
+  const tsBase = new Set(S.base.map(p => p.t));
+  if (S.cart.length !== S.base.length || S.cart.some(p => !tsBase.has(p.t))) { S.cart = copia(S.base); if (!S.cart.some(p => p.t === S.sel)) S.sel = S.cart[0].t; anillo.rot.t = rotObjetivo(S.sel); pedirActualizar(); pintarLista(); }
+  else animarPesos(Object.fromEntries(S.base.map(p => [p.t, p.w])));
+  toast('Has vuelto al estado anterior');
+});
+$('#fijar').addEventListener('click', () => {
+  S.base = copia(S.cart); vibrar([8, 30, 12]); org.impulso(1.2); pedirActualizar();
+  const an = analisis(S.cart); toast(an.conc === 'ok' ? 'Fijado. Tu organismo respira tranquilo.' : 'Fijado. Puedes seguir ajustando.');
+});
+function pintarLista() {
+  const ul = $('#lista-pos'), tot = S.cart.reduce((a, p) => a + p.w, 0);
+  const tsVivos = S.cart.map(p => p.t).join();
+  if (ul.dataset.ts !== tsVivos) {
+    ul.dataset.ts = tsVivos;
+    ul.innerHTML = S.cart.map(p => { const c = porT[p.t]; return `<li class="pos" data-t="${p.t}" style="--c:${SECT[c.s]}"><button class="pos-quitar" type="button" tabindex="-1" aria-hidden="true">Quitar</button><button class="pos-cuerpo" type="button" aria-label="${c.n}, ${c.s}"><i></i><span style="min-width:0"><b>${c.n}</b><small>${c.s} · ${c.t}</small></span><span class="pct num"></span></button></li>`; }).join('')
+      + `<li><button class="btn ancho" type="button" data-ir="descubrir">Añadir desde Descubrir</button></li>`;
+    $$('.pos', ul).forEach(li => montarDeslizar(li));
+  }
+  $$('.pos', ul).forEach(li => {
+    const p = S.cart.find(q => q.t === li.dataset.t); if (!p) return;
+    li.querySelector('.pct').textContent = `${Math.round(p.w / tot * 100)} %`;
+    li.classList.toggle('sel', p.t === S.sel);
+  });
+}
+function montarDeslizar(li) {
+  const cu = li.querySelector('.pos-cuerpo'), qb = li.querySelector('.pos-quitar');
+  let d = null, abierto = false;
+  const poner = (x, anim) => { cu.classList.toggle('arrastra', !anim); li.classList.toggle('deslizando', x < -2); cu.style.transform = `translateX(${x}px)`; };
+  const abrir = v => { abierto = v; li.classList.toggle('abierta', v); poner(v ? -96 : 0, true); qb.tabIndex = v ? 0 : -1; qb.setAttribute('aria-hidden', v ? 'false' : 'true'); };
+  cu.addEventListener('pointerdown', e => { d = { x: e.clientX, y: e.clientY, dx: 0, h: null, id: e.pointerId }; });
+  cu.addEventListener('pointermove', e => {
+    if (!d || d.id !== e.pointerId) return;
+    const dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (d.h === null && Math.hypot(dx, dy) > 8) { d.h = Math.abs(dx) > Math.abs(dy); if (d.h) try { cu.setPointerCapture(e.pointerId); } catch (er) {} }
+    if (!d.h) return;
+    let x = (abierto ? -96 : 0) + dx; if (x > 0) x = x * .25; if (x < -96) x = -96 + (x + 96) * .3;
+    d.dx = dx; poner(x, false);
+  });
+  const fin = e => {
+    if (!d) return; const { h, dx } = d; d = null;
+    if (h) { abrir(abierto ? dx < 40 : dx < -40); cu._ignorar = true; setTimeout(() => { cu._ignorar = false; }, 50); }
+  };
+  cu.addEventListener('pointerup', fin); cu.addEventListener('pointercancel', fin);
+  cu.addEventListener('click', () => { if (cu._ignorar) return; if (abierto) { abrir(false); return; } seleccionar(li.dataset.t); });
+  cu.addEventListener('keydown', e => { if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); quitar(li.dataset.t); } if (e.key === 'ArrowLeft') abrir(true); if (e.key === 'ArrowRight') abrir(false); });
+  qb.addEventListener('click', () => quitar(li.dataset.t));
+}
+function quitar(t) {
+  if (S.cart.length <= 1) { toast('Tu organismo necesita al menos un órgano'); return; }
+  const antes = copia(S.cart);
+  S.cart = S.cart.filter(p => p.t !== t); normalizar();
+  if (S.sel === t) S.sel = S.cart[0].t;
+  anillo.rot.t = rotObjetivo(S.sel); vibrar(12); pedirActualizar(); pintarLista();
+  toast(`${porT[t].n} sale de tu cartera`, 'Deshacer', () => { S.cart = antes; anillo.rot.t = rotObjetivo(S.sel); pedirActualizar(); pintarLista(); });
+}
+
+/* ═════════ DESCUBRIR ═════════ */
+function florSVG(c, tam = 'grande') {
+  const col = SECT[c.s], id = `pg-${c.t}-${tam}`;
+  const PET = 'M0,-16 C26,-34 32,-80 0,-108 C-32,-80 -26,-34 0,-16Z';
+  const cumple = c.h.filter(v => v === 1).length, sin = c.h.filter(v => v === null).length;
+  const pet = c.h.map((v, k) => {
+    const a = k * 72;
+    const inner = v === 1 ? `<path d="${PET}" fill="url(#${id})" stroke="#fff" stroke-width="1.5"/>`
+      : v === 0 ? `<path d="${PET}" transform="scale(.5)" fill="rgba(21,33,58,.13)" stroke="rgba(21,33,58,.28)" stroke-width="2"/>`
+        : `<path d="${PET}" fill="rgba(255,255,255,.55)" stroke="${col}" stroke-width="1.8" stroke-dasharray="5 4"/>`;
+    const [lx, ly] = [Math.sin(a * Math.PI / 180) * 124, -Math.cos(a * Math.PI / 180) * 122];
+    return `<g transform="rotate(${a})"><g class="brote" style="--i:${k}">${inner}</g></g>`
+      + (tam === 'grande' ? `<text class="lbl" x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="middle">${CHECKS_C[k]}</text>` : '');
+  }).join('');
+  const desc = c.h.map((v, k) => `${CHECKS[k]}: ${v === 1 ? 'cumple' : v === 0 ? 'no cumple' : 'sin datos'}`).join('; ');
+  return `<svg class="flor" viewBox="-146 -138 292 282" role="img" aria-label="Huella de ${c.n}. ${desc}.">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="-1" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="${col}"/><stop offset="1" stop-color="${col}" stop-opacity=".55"/></linearGradient>
+    <radialGradient id="${id}-c"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="${col}" stop-opacity=".35"/></radialGradient></defs>
+    ${pet}<circle r="24" fill="url(#${id}-c)" stroke="#fff" stroke-width="2"/>
+    <text class="centro-n" y="6" text-anchor="middle">${cumple}</text><text class="centro-s" y="17" text-anchor="middle">DE 5</text></svg>`;
+}
+function resumenHuella(c) { const cu = c.h.filter(v => v === 1).length, si = c.h.filter(v => v === null).length; return `Cumple ${cu} de 5${si ? ` · ${si} sin datos` : ''}`; }
+function pintarFeed() {
+  const feed = $('#feed');
+  feed.innerHTML = FEED.map((t, i) => {
+    const c = porT[t];
+    return `<article class="carta" data-t="${t}" style="--c:${SECT[c.s]}" aria-label="Tarjeta ${i + 1} de ${FEED.length + 1}: ${c.n}"><div class="carta-in">
+      <div class="carta-cab"><span class="sector"><i></i>${c.s}</span><span class="tick">${c.t}</span></div>
+      <h2>${c.n}</h2><p class="carta-d">${c.d}</p>
+      <div class="flor-caja">${florSVG(c)}</div>
+      <p class="flor-res">${resumenHuella(c)}</p>
+      <div class="ley" aria-hidden="true"><span><i class="l1"></i>Cumple</span><span><i class="l2"></i>Sin datos</span><span><i class="l3"></i>No cumple</span></div>
+      <div class="carta-acc"><button class="btn primario probar" type="button">Probar en mi cartera</button><button class="btn icono guardar" type="button" aria-pressed="false" aria-label="Guardar idea"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3.5h12v17l-6-4.2-6 4.2z"/></svg></button></div>
+      <p class="carta-pie">Inventada · datos de ejemplo · no es una recomendación</p></div></article>`;
+  }).join('') + `<article class="carta carta-fin" aria-label="Final del feed"><div class="carta-in">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="fin-g" cx=".35" cy=".3"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#a48cf5"/></radialGradient></defs><path d="M60 14c22 0 42 16 42 40 0 26-19 52-44 52-24 0-40-20-40-44 0-28 19-48 42-48z" fill="url(#fin-g)"/><path d="M42 62l12 12 24-26" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2>Has visto todas por hoy</h2><p class="carta-d">El lunes llegan tarjetas nuevas. Mientras, mira cómo respira tu organismo.</p>
+      <button class="btn primario" type="button" data-ir="cartera">Ir a Mi cartera</button></div></article>`;
+  pintarBotonesFeed();
+  let io;
+  try {
+    io = new IntersectionObserver(ents => ents.forEach(en => {
+      if (en.isIntersecting && en.intersectionRatio > .6) {
+        const i = [...feed.children].indexOf(en.target); feedIdx = i;
+        $('#feed-n').textContent = `${i + 1}/${feed.children.length}`;
+        const f = en.target.querySelector('.flor');
+        if (f && !RM) { f.classList.remove('brota'); void f.getBoundingClientRect(); f.classList.add('brota'); }
+      }
+    }), { root: feed, threshold: [.6] });
+    [...feed.children].forEach(c => io.observe(c));
+  } catch (e) {}
+  $('#feed-n').textContent = `1/${feed.children.length}`;
+}
+let feedIdx = 0;
+function irCarta(d) { const feed = $('#feed'); const i = clamp(feedIdx + d, 0, feed.children.length - 1); feed.scrollTo({ top: feed.children[i].offsetTop, behavior: RM ? 'auto' : 'smooth' }); }
+$('#feed-arr').addEventListener('click', () => irCarta(-1));
+$('#feed-aba').addEventListener('click', () => irCarta(1));
+$('#feed').addEventListener('keydown', e => { if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); irCarta(1); } if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); irCarta(-1); } });
+function pintarBotonesFeed() {
+  $$('#feed .carta[data-t]').forEach(c => {
+    const b = c.querySelector('.probar'), dentro = S.cart.some(p => p.t === c.dataset.t);
+    b.disabled = dentro; b.innerHTML = dentro ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Ya está en tu cartera' : 'Probar en mi cartera';
+    const g = c.querySelector('.guardar'); g.setAttribute('aria-pressed', S.ideas.has(c.dataset.t) ? 'true' : 'false');
+  });
+}
+$('#feed').addEventListener('click', e => {
+  const carta = e.target.closest('.carta[data-t]'); if (!carta) return;
+  const t = carta.dataset.t;
+  if (e.target.closest('.probar')) volarAlOrganismo(carta, t);
+  if (e.target.closest('.guardar')) {
+    const primera = S.ideas.size === 0;
+    if (S.ideas.has(t)) { S.ideas.delete(t); toast('Idea quitada de Guardado'); }
+    else { S.ideas.add(t); vibrar(8); toast(primera ? 'Idea guardada · +10 de Aprendizaje' : 'Idea guardada'); }
+    pintarBotonesFeed(); pedirActualizar();
+  }
+});
+function volarAlOrganismo(carta, t) {
+  if (S.cart.some(p => p.t === t)) return;
+  if (S.cart.length >= 10) { toast('Máximo 10 órganos en este prototipo'); return; }
+  const c = porT[t], ar = app.getBoundingClientRect(), fr = carta.querySelector('.flor').getBoundingClientRect();
+  const x0 = fr.left - ar.left + fr.width / 2, y0 = fr.top - ar.top + fr.height / 2;
+  const dest = org.pos; const x1 = dest.x || W - 40, y1 = dest.y || 120;
+  const terminar = () => { anadir(t); };
+  if (RM) { terminar(); return; }
+  const v = document.createElement('div'); v.className = 'vuela'; v.style.setProperty('--c', SECT[c.s]); v.style.left = '0px'; v.style.top = '0px';
+  $('#capa').appendChild(v);
+  const flor = carta.querySelector('.flor'); flor.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(.4)', opacity: .2 }, { transform: 'scale(1)', opacity: 1 }], { duration: 900, easing: 'cubic-bezier(.22,1,.36,1)' });
+  const cx = (x0 + x1) / 2 - 60, cy = Math.min(y0, y1) - 120, fr2 = [];
+  for (let i = 0; i <= 24; i++) {
+    const s = i / 24, e = 1 - Math.pow(1 - s, 2.2);
+    const x = (1 - e) ** 2 * x0 + 2 * (1 - e) * e * cx + e * e * x1, y = (1 - e) ** 2 * y0 + 2 * (1 - e) * e * cy + e * e * y1;
+    const sc = s < .15 ? lerp(.3, 1.15, s / .15) : lerp(1.15, .3, (s - .15) / .85);
+    fr2.push({ transform: `translate(${x}px,${y}px) scale(${sc})`, offset: s });
+  }
+  const an = v.animate(fr2, { duration: 820, easing: 'linear', fill: 'forwards' });
+  vibrar(6);
+  an.onfinish = () => { v.remove(); terminar(); };
+}
+function anadir(t) {
+  const antes = copia(S.cart), s = porT[t].s;
+  S.cart.forEach(p => { p.w *= .9; });
+  let idx = -1; S.cart.forEach((p, i) => { if (porT[p.t].s === s) idx = i; });
+  const nuevo = { t, w: 10 };
+  if (idx >= 0) S.cart.splice(idx + 1, 0, nuevo); else S.cart.push(nuevo);
+  org.impulso(2.2); vibrar([10, 30, 16]);
+  pedirActualizar(); pintarLista(); pintarBotonesFeed();
+  toast(`${porT[t].n} entra con un 10 %. El resto se reajusta.`, 'Deshacer', () => { S.cart = antes; if (!S.cart.some(p => p.t === S.sel)) S.sel = S.cart[0].t; pedirActualizar(); pintarLista(); pintarBotonesFeed(); });
+}
+
+/* ═════════ LIGA ═════════ */
+function pintarEscChips() {
+  $('#esc-chips').innerHTML = Object.entries(ESC).map(([k, e]) => `<button class="esc-chip" type="button" data-e="${k}" aria-pressed="${k === S.esc}">${e.n}</button>`).join('');
+  $('#esc-nota').textContent = ESC[S.esc].nota;
+}
+$('#esc-chips').addEventListener('click', e => { const b = e.target.closest('.esc-chip'); if (!b) return; S.esc = b.dataset.e; pintarEscChips(); vibrar(5); });
+function contar(el, to, dur = 700, dec = 0) {
+  const from = el._v ?? to; el._v = to;
+  const f = v => dec ? v.toFixed(dec).replace('.', ',') : Math.round(v);
+  if (RM || from === to) { el.textContent = f(to); return; }
+  const t0 = performance.now();
+  const tick = now => { const s = clamp((now - t0) / dur, 0, 1), e = 1 - Math.pow(1 - s, 3); el.textContent = f(lerp(from, to, e)); if (s < 1) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+$('#lanzar').addEventListener('click', () => {
+  const y = escenario(S.cart, S.esc), r = escenario(RIVAL, S.esc), g = ESC[S.esc].g;
+  $('#idx-yo').textContent = '100'; $('#idx-yo')._v = 100; $('#idx-ri').textContent = '100'; $('#idx-ri')._v = 100;
+  contar($('#idx-yo'), y, 1500, 1); contar($('#idx-ri'), r, 1500, 1);
+  $('#idx-yo-b').style.width = `${clamp(y / 120 * 100, 2, 100)}%`; $('#idx-ri-b').style.width = `${clamp(r / 120 * 100, 2, 100)}%`;
+  for (const o of [org, rival]) {
+    for (const L of o.lobos.values()) { const gg = g[porT[L.t].s] || 0; L.golpe.t = gg * .7; L.golpe.vv = gg * 6; }
+    o.impulso(-1.6);
+    setTimeout(() => { for (const L of o.lobos.values()) L.golpe.t = 0; }, 2600);
+  }
+  vibrar([20, 50, 20]); S.duelos = 1;
+  const dif = y - r;
+  $('#veredicto').dataset.esc = `<b>${ESC[S.esc].n}:</b> tu índice queda en ${fmt(y)} y el de Lince_27 en ${fmt(r)}. ${Math.abs(dif) < .5 ? 'Casi igual.' : dif > 0 ? 'Aguantas mejor.' : 'Lince_27 aguanta mejor.'}`;
+  pedirActualizar();
+});
+function pintarLiga(an, pt) {
+  const pr = PT_RIVAL;
+  const td = (a, b) => [a > b ? ' class="gana"' : '', b > a ? ' class="gana"' : ''];
+  const fila = (et, sub, a, b, max, cls = '') => { const [ca, cb] = td(a, b); return `<tr class="${cls}"><td>${et}<small>${sub}</small></td><td${ca}>${a}/${max}</td><td${cb}>${b}/${max}</td></tr>`; };
+  $('#marcador').innerHTML = `<thead><tr><th scope="col">Puntos de la semana</th><th scope="col">Tú</th><th scope="col">Lince_27</th></tr></thead><tbody>`
+    + fila('Equilibrio', `Concentración ${TXT_C[an.conc].toLowerCase()} · variedad ${TXT_V[an.vari].toLowerCase()}${an.n < 4 ? ' · faltan posiciones' : ''}`, pt.eq, pr.eq, 50)
+    + fila('Aprendizaje', S.retoHoy ? 'Reto hecho' + (S.ideas.size ? ' · idea guardada' : '') : (S.ideas.size ? 'Idea guardada · falta el reto' : 'Falta el reto de la semana'), pt.apr, pr.apr, 30)
+    + fila('Constancia', `Entrar 10 · racha +${pt.con - 10}`, pt.con, pr.con, 20)
+    + fila('Total', '', pt.total, pr.total, 100, 'total') + '</tbody>';
+  const bajasYo = S.semBajasPrev + (an.conc === 'ok' ? 1 : 0), bajasRi = 3;
+  let txt;
+  if (pt.total > pr.total) { const d = pt.total - pr.total; txt = `Vas ganando el duelo por ${d} punto${d === 1 ? '' : 's'}.`; }
+  else if (pt.total < pr.total) { const d = pr.total - pt.total; txt = `Lince_27 va ${d} punto${d === 1 ? '' : 's'} por delante.`; }
+  else txt = bajasYo > bajasRi ? 'Empate: ganas por semanas con concentración baja.' : 'Empate: Lince_27 gana por semanas con concentración baja.';
+  const esc = $('#veredicto').dataset.esc;
+  $('#veredicto').innerHTML = `${txt}<small>${esc ? esc + ' ' : ''}El escenario no da puntos: la Liga premia el equilibrio, no la suerte.</small>`;
+  pintarClasif(pt.total);
+}
+function pintarClasif(miPts) {
+  const ol = $('#clasif');
+  const filas = [...LIGA.map(l => ({ ...l })), { a: 'Nácar', p: miPts, yo: true, av: 'var(--irid)' }].sort((a, b) => b.p - a.p || (a.yo ? 1 : -1));
+  const antes = new Map($$('.fila-l', ol).map(li => [li.dataset.a, li.getBoundingClientRect().top]));
+  ol.innerHTML = filas.map((f, i) => `<li class="fila-l${f.yo ? ' yo' : ''}" data-a="${f.a}"><span class="pos-n num">${i + 1}</span><span class="avatar" style="--av:${f.av}"></span><span>${f.a}${f.yo ? ' <small style="color:var(--tinta-3);font-weight:600">(tú)</small>' : ''}</span><span class="pts num">${f.p}</span></li>`).join('');
+  if (RM || !antes.size) return;
+  $$('.fila-l', ol).forEach(li => { const a = antes.get(li.dataset.a); if (a === undefined) return; const d = a - li.getBoundingClientRect().top; if (Math.abs(d) > 1) li.animate([{ transform: `translateY(${d}px)` }, { transform: 'none' }], { duration: 650, easing: 'cubic-bezier(.34,1.4,.64,1)' }); });
+}
+function datosResumen() {
+  const an = analisis(S.cart), pt = puntosYo(an);
+  const total = S.previas.reduce((a, b) => a + b, 0) + pt.total;
+  const bajas = S.semBajasPrev + (an.conc === 'ok' ? 1 : 0);
+  return { an, pt, total, bajas, sector: an.sects[0] ? an.sects[0][0] : '—' };
+}
+function htmlResumen(idc) {
+  const d = datosResumen();
+  return `<div class="res-top"><div><span class="eti" style="color:var(--tinta-2)">Temporada 0 · resumen</span><h2 id="${idc}-t">El año de Nácar <span style="font-style:italic">(por ahora)</span></h2></div></div>
+   <div class="res-cuerpo"><canvas id="${idc}" width="256" height="256" aria-hidden="true"></canvas>
+   <div class="res-stats"><div class="res-stat"><b class="num">${d.total}</b><span>puntos en 3 semanas</span></div><div class="res-stat"><b class="num">${d.bajas}</b><span>semanas de concentración baja</span></div><div class="res-stat"><b class="num">3</b><span>semanas seguidas de 12</span></div><div class="res-stat"><b style="font-size:16px">${TXT_V[d.an.vari]}</b><span>variedad · ${d.an.ns} sectores</span></div></div></div>
+   <p class="res-sello">Simulación · sin dinero real · no es consejo · datos de ejemplo</p>`;
+}
+function pintarMiniatura(cv) {
+  if (!cv) return; const c = cv.getContext('2d');
+  const an = analisis(S.cart);
+  miniatura.set(S.cart, anillo.rot.t, an); for (let i = 0; i < 40; i++) { const rm = RM; RM = true; miniatura.step(1 / 60); RM = rm; }
+  miniatura.bloom.x = miniatura.bloom.t; miniatura.tilt.x = miniatura.tilt.t; miniatura.agit.x = miniatura.agit.t;
+  for (const L of miniatura.lobos.values()) { L.mix.x = 1; }
+  c.clearRect(0, 0, cv.width, cv.height); miniatura.dibujar(c, cv.width / 2, cv.height / 2 - 10, cv.width / 2 / 1.45);
+}
+function pintarResumen() {
+  const el = $('#resumen'); el.innerHTML = htmlResumen('res-cv'); el.setAttribute('aria-labelledby', 'res-cv-t'); pintarMiniatura($('#res-cv'));
+}
+$('#ver-reglas').addEventListener('click', () => abrirHoja('reglas'));
+$('#retar').addEventListener('click', () => abrirHoja('retar'));
+$('#compartir-res').addEventListener('click', () => abrirHoja('resumen'));
+
+/* ═════════ Hoja inferior arrastrable ═════════ */
+const hoja = $('#hoja'), velo = $('#velo'), hojaC = $('#hoja-cuerpo');
+const sh = { y: M(1, 230, 26), abierta: false, arr: null, previo: null, alto: 1 };
+const X_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+function cabHoja(t, sub = '') { return `<div class="hoja-cab"><div><h2 id="hoja-t">${t}</h2>${sub ? `<p class="mini" style="margin-top:4px">${sub}</p>` : ''}</div><button class="cerrar" type="button" data-cerrar aria-label="Cerrar">${X_SVG}</button></div>`; }
+function abrirHoja(tipo, arg) {
+  sh.previo = document.activeElement;
+  if (tipo === 'organo') {
+    const c = porT[arg], tot = S.cart.reduce((a, p) => a + p.w, 0), p = S.cart.find(q => q.t === arg);
+    hojaC.innerHTML = cabHoja(c.n, `${c.s} · ${c.t} · empresa inventada`)
+      + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center"><div style="height:190px;display:grid;place-items:center;--c:${SECT[c.s]}">${florSVG(c, 'hoja')}</div><div style="display:grid;gap:8px"><div class="res-stat" style="background:#fff"><b class="num">${p ? Math.round(p.w / tot * 100) : 0} %</b><span>de tu cartera</span></div><div class="res-stat" style="background:#fff"><b style="font-size:16px">${resumenHuella(c)}</b><span>en su huella</span></div></div></div>`
+      + `<ul class="lista-reglas">${c.h.map((v, k) => `<li><b>${CHECKS[k]}:</b> ${v === 1 ? 'cumple' : v === 0 ? 'no cumple' : 'sin datos (no es lo mismo que no cumplir)'}</li>`).join('')}</ul>`
+      + `<button class="btn primario ancho" type="button" data-ajustar="${c.t}">Ajustar su peso en Mi cartera</button><p class="mini">Datos de ejemplo. No es una recomendación.</p>`;
+  } else if (tipo === 'reglas') {
+    hojaC.innerHTML = cabHoja('Cómo se puntúa', 'Temporada 0 · 12 semanas · hasta 100 puntos por semana')
+      + `<ul class="lista-reglas"><li><b>Equilibrio, 50.</b> Concentración baja 25 o media 12. Variedad amplia 25 o media 12. Requiere al menos 4 posiciones.</li><li><b>Aprendizaje, 30.</b> Reto de la semana 20. Guardar o revisar una idea 10.</li><li><b>Constancia, 20.</b> Entrar esa semana 10, y +2 por cada semana seguida, hasta 10.</li><li><b>Desempate:</b> gana quien tenga más semanas con concentración baja.</li><li><b>Los escenarios no puntúan.</b> Sirven para ver cómo aguanta tu cartera. Son ilustrativos.</li></ul><p class="mini">Referencias orientativas de Klever, no normas. Sin premios en dinero.</p>`;
+  } else if (tipo === 'retar') {
+    hojaC.innerHTML = cabHoja('Reta a un amigo', 'Duelo 1 contra 1 · mismo escenario · 7 días')
+      + `<p style="color:var(--tinta-2);font-size:15px">Tu amigo entra sin cuenta, elige un apodo y monta su organismo. Los dos vivís el mismo escenario.</p>
+        <div class="enlace"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span id="enlace-t">klever.app/d/NACAR-7Q2K</span></div>
+        <div class="acc-fila"><button class="btn" type="button" id="copiar-enl">Copiar enlace</button><button class="btn primario" type="button" id="compartir-enl">Compartir</button></div>
+        <p class="mini">Enlace simulado: en este prototipo no se envía nada. Solo apodos, solo mayores de 18.</p>`;
+  } else if (tipo === 'resumen') {
+    hojaC.innerHTML = cabHoja('Tu resumen de temporada', 'Listo para compartir en historias')
+      + `<div class="resumen">${htmlResumen('res-cv2')}</div><div class="acc-fila"><button class="btn" type="button" id="copiar-res">Copiar texto</button><button class="btn primario" type="button" id="compartir-res2">Compartir</button></div><p class="mini">Solo se comparte tu apodo y tus puntos. Nada de dinero.</p>`;
+    pintarMiniatura($('#res-cv2'));
+  }
+  hoja.classList.add('abierta'); sh.abierta = true; sh.y.t = 0; velo.classList.add('on');
+  requestAnimationFrame(() => { sh.alto = hoja.offsetHeight || 500; const b = hojaC.querySelector('[data-cerrar]'); b && b.focus({ preventScroll: true }); });
+}
+function cerrarHoja() {
+  if (!sh.abierta) return; sh.abierta = false; sh.y.t = 1; velo.classList.remove('on');
+  if (sh.previo && sh.previo.focus) try { sh.previo.focus({ preventScroll: true }); } catch (e) {}
+}
+velo.addEventListener('click', cerrarHoja);
+$('#hoja-asa').addEventListener('click', e => { if (!sh.movida) cerrarHoja(); });
+hoja.addEventListener('click', e => {
+  if (e.target.closest('[data-cerrar]')) cerrarHoja();
+  const aj = e.target.closest('[data-ajustar]'); if (aj) { cerrarHoja(); irA('cartera'); seleccionar(aj.dataset.ajustar); }
+  const texto = `Mi organismo de Klever: ${datosResumen().total} puntos en la Temporada 0. ¿Te atreves a un duelo? (Simulación · sin dinero real · no es consejo)`;
+  if (e.target.closest('#copiar-enl')) copiarTexto('klever.app/d/NACAR-7Q2K', 'Enlace copiado (simulado)');
+  if (e.target.closest('#copiar-res')) copiarTexto(texto, 'Texto copiado');
+  if (e.target.closest('#compartir-enl') || e.target.closest('#compartir-res2')) compartir(texto);
+});
+function copiarTexto(t, msg) {
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(() => toast(msg), () => toast('Listo para compartir (simulado)')); else toast('Listo para compartir (simulado)'); }
+  catch (e) { toast('Listo para compartir (simulado)'); }
+}
+function compartir(t) {
+  try { if (navigator.share) { navigator.share({ title: 'Klever', text: t }).catch(() => {}); return; } } catch (e) {}
+  copiarTexto(t, 'Copiado para compartir (simulado)');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sh.abierta) cerrarHoja(); });
+const arrHoja = e => {
+  sh.arr = { y0: e.clientY, t0: performance.now(), base: sh.y.x, id: e.pointerId, ult: e.clientY, ultT: performance.now(), vel: 0 }; sh.movida = false;
+  try { e.currentTarget.setPointerCapture(e.pointerId); } catch (er) {}
+};
+const movHoja = e => {
+  if (!sh.arr || sh.arr.id !== e.pointerId) return;
+  const dy = e.clientY - sh.arr.y0; if (Math.abs(dy) > 4) sh.movida = true;
+  let y = sh.arr.base + dy / sh.alto; if (y < 0) y = y * .25;
+  sh.y.x = sh.y.t = y; sh.y.vv = 0;
+  const now = performance.now(); sh.arr.vel = (e.clientY - sh.arr.ult) / Math.max(1, now - sh.arr.ultT); sh.arr.ult = e.clientY; sh.arr.ultT = now;
+};
+const finHoja = e => {
+  if (!sh.arr) return; const v = sh.arr.vel; sh.arr = null;
+  if (sh.y.x > .32 || v > .6) { sh.y.vv = v * 1000 / sh.alto; cerrarHoja(); } else { sh.y.t = 0; sh.y.vv = v * 1000 / sh.alto; }
+  setTimeout(() => { sh.movida = false; }, 0);
+};
+[$('#hoja-asa'), hojaC].forEach(el => {
+  const f = el === hojaC ? (e => { if (e.target.closest('.hoja-cab') && !e.target.closest('button')) arrHoja(e); }) : arrHoja;
+  el.addEventListener('pointerdown', f); el.addEventListener('pointermove', movHoja); el.addEventListener('pointerup', finHoja); el.addEventListener('pointercancel', finHoja);
+});
+
+/* ═════════ Toast ═════════ */
+let toastT = 0, toastAcc = null;
+function toast(msg, accion, fn) {
+  const el = $('#toast'); $('#toast-t').textContent = msg;
+  const b = $('#toast-b'); b.style.display = accion ? '' : 'none'; b.textContent = accion || ''; toastAcc = fn || null;
+  el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove("on"), accion ? 4200 : 2300);
+}
+$('#toast-b').addEventListener('click', () => { if (toastAcc) toastAcc(); toastAcc = null; $('#toast').classList.remove('on'); });
+
+/* ═════════ Actualización general ═════════ */
+let pendiente = false, primeraVez = true;
+function pedirActualizar() { pendiente = true; }
+function actualizar() {
+  pendiente = false;
+  const an = analisis(S.cart), pt = puntosYo(an);
+  pintarHoy(an, pt); pintarSel(); pintarSemaforos(an); pintarYsi(an); pintarCompara(an); pintarLista(); pintarLiga(an, pt);
+  $('#mc-res').textContent = `${an.n} órgano${an.n === 1 ? '' : 's'} · ${an.ns} sector${an.ns === 1 ? '' : 'es'}`;
+  $('#slot-cartera').setAttribute('aria-label', `Organismo: concentración ${TXT_C[an.conc].toLowerCase()}, variedad ${TXT_V[an.vari].toLowerCase()}`);
+  if (S.tab === 'liga') pintarResumen();
+  anillo.sucio = true; primeraVez = false;
+}
+
+/* ═════════ Bucle principal ═════════ */
+let ultimo = performance.now(), rafId = 0, visible = true, tFondo = 0, cuadro = 0;
+function bucle(now) {
+  rafId = requestAnimationFrame(bucle);
+  const dt = Math.min(1 / 30, Math.max(0, (now - ultimo) / 1000)); ultimo = now; cuadro++;
+  if (pendiente) actualizar();
+  if (fondo.ok && (!RM || cuadro < 3) && cuadro % 2 === 0) { tFondo += dt * 2; fondo.dibujar(tFondo); }
+  if (tween) {
+    tween.t = Math.min(1, tween.t + dt / .75); const e = easeMuelle(tween.t);
+    S.cart.forEach(p => { const a = tween.desde[p.t], b = tween.obj[p.t]; if (a !== undefined && b !== undefined) p.w = Math.max(.6, lerp(a, b, e)); });
+    if (tween.t >= 1) { S.cart.forEach(p => { if (tween.obj[p.t] !== undefined) p.w = tween.obj[p.t]; }); tween = null; }
+    if (!anillo.arrastre) anillo.rot.t = rotObjetivo(S.sel);
+    detectarUmbral(); actualizar();
+  }
+  // Muelles de interfaz
+  paso(ind.x, dt);
+  const indEl = $('#indicador'); const wInd = indEl.offsetWidth;
+  indEl.style.transform = `translateX(${ind.x.x * wInd}px) scaleX(${1 + Math.min(.28, Math.abs(ind.x.vv) * .05)})`;
+  if (!anillo.arrastre) paso(anillo.rot, dt);
+  if (S.tab === 'cartera' && (anillo.sucio || !quieto(anillo.rot) || anillo.arrastre)) { dibujarAnillo(); anillo.sucio = false; }
+  paso(sh.y, dt);
+  if (sh.abierta || sh.y.x < 1.05) {
+    const y = Math.max(-0.05, sh.y.x);
+    hoja.style.transform = `translateY(${(y * 100).toFixed(2)}%)`; velo.style.opacity = clamp(1 - y, 0, 1);
+    if (!sh.abierta && sh.y.x > .99) { hoja.classList.remove('abierta'); sh.y.x = 1.1; }
+  }
+  // Organismos
+  const an = analisis(S.cart);
+  org.set(S.cart, anillo.rot.x, an); org.step(dt);
+  const ar = app.getBoundingClientRect();
+  vctx.setTransform(DPR, 0, 0, DPR, 0, 0); vctx.clearRect(0, 0, W, H);
+  const tgt = rectSlot(SLOT_TAB[S.tab], ar);
+  let pos = tgt;
+  if (vuelo) {
+    vuelo.t += dt / .8; const e = RM ? 1 : easeMuelle(Math.min(1, vuelo.t));
+    const arcY = RM ? 0 : Math.sin(Math.min(1, vuelo.t) * Math.PI) * -30;
+    pos = { x: lerp(vuelo.de.x, tgt.x, e), y: lerp(vuelo.de.y, tgt.y, e) + arcY, s: Math.max(10, lerp(vuelo.de.s, tgt.s, Math.min(1, e))) };
+    if (vuelo.t >= 1) vuelo = null;
+  }
+  posOrg = pos;
+  // fantasma (antes) en Mi cartera
+  const hayFantasma = S.tab === 'cartera' && !igualBase();
+  alfaFantasma.t = hayFantasma ? 1 : 0; paso(alfaFantasma, dt);
+  if (alfaFantasma.x > .02) { fantasma.set(S.base, anillo.rot.x, analisis(S.base)); fantasma.step(dt); }
+  const R = R_DE(pos.s);
+  const halo = an.conc === 'alto' ? '236,120,100' : an.conc === 'medio' ? '240,180,90' : '90,200,180';
+  org.dibujar(vctx, pos.x, pos.y, R, { halo: S.tab === 'hoy' ? halo : null, sinSombra: S.tab === 'descubrir' && !vuelo });
+  if (alfaFantasma.x > .02) {
+    fantasma.dibujarFantasma(vctx, pos.x, pos.y, R, alfaFantasma.x);
+    vctx.save(); vctx.globalAlpha = alfaFantasma.x * .9; vctx.font = '700 11px Figtree, system-ui, sans-serif'; vctx.fillStyle = '#45506b'; vctx.textAlign = 'center';
+    vctx.fillText('ANTES', pos.x, pos.y - R * 1.28); vctx.restore();
+  }
+  alfaRival.t = S.tab === 'liga' ? 1 : 0; paso(alfaRival, dt);
+  if (alfaRival.x > .02) {
+    rival.set(RIVAL, 0, AN_RIVAL); rival.step(dt);
+    const rr = rectSlot('rival', ar); rival.dibujar(vctx, rr.x, rr.y, R_DE(rr.s), { alfa: alfaRival.x });
+  }
+}
+function arrancar() { if (rafId) return; ultimo = performance.now(); rafId = requestAnimationFrame(bucle); }
+function parar() { cancelAnimationFrame(rafId); rafId = 0; }
+document.addEventListener('visibilitychange', () => { if (document.hidden) parar(); else if (visible) arrancar(); });
+try { new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !document.hidden) arrancar(); else parar(); }).observe(app); } catch (e) {}
+mq.addEventListener && mq.addEventListener('change', e => { RM = e.matches; });
+
+/* ═════════ Inicio ═════════ */
+$('#renacer').addEventListener('click', () => {
+  irA('hoy'); org = new Organismo({ nacer: true }); fraseActual = ''; primeraVez = true; actualizar();
+});
+pintarRango(); pintarSemillas(); pintarEscChips(); pintarFeed();
+anillo.rot.t = anillo.rot.x = 0;
+concPrev = analisis(S.cart).conc;
+actualizar();
+dibujarAnillo();
+arrancar();
+})();
+</script>
