@@ -79,13 +79,15 @@ else
       i="$(cat "$TMPP/siguiente")"; echo $((i + 1)) > "$TMPP/siguiente"; rmdir "$TMPP/cerrojo"
       [ "$i" -ge "$NB" ] && break
       t="$(echo $BATERIAS | tr ' ' '\n' | sed -n "$((i + 1))p")"
-      if ! bash scripts/local/servidor.sh start >"$TMPP/$i.arranque" 2>&1; then : >"$TMPP/$i.noarranca"; continue; fi
+      # el arranque simultáneo de varios servidores puede tardar: un reintento (y se declara en el registro de la batería)
+      if ! bash scripts/local/servidor.sh start >"$TMPP/$i.arranque" 2>&1; then echo "(reintento de arranque)" >>"$TMPP/$i.arranque"; bash scripts/local/servidor.sh stop >/dev/null 2>&1; sleep 2
+        if ! bash scripts/local/servidor.sh start >>"$TMPP/$i.arranque" 2>&1; then : >"$TMPP/$i.noarranca"; continue; fi; fi
       con_limite "$LIMITE" node "$t"
       printf '%s' "$SALIDA_T" >"$TMPP/$i.out"; echo "$CODIGO $TIEMPO_AGOTADO" >"$TMPP/$i.rc"; printf '%s' "$CMD_LOG" >"$TMPP/$i.cmd"
       bash scripts/local/servidor.sh stop >/dev/null 2>&1
     done
   }
-  PIDS=""; for k in $(seq 0 $((PARALELO - 1))); do trabajador "$k" & PIDS="$PIDS $!"; done
+  PIDS=""; for k in $(seq 0 $((PARALELO - 1))); do trabajador "$k" & PIDS="$PIDS $!"; sleep 8; done   # arranques escalonados
   for pid in $PIDS; do wait "$pid"; done
   i=0
   for t in $BATERIAS; do
