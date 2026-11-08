@@ -1663,6 +1663,27 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
   .emp-card .pil{display:none}
 }
 
+/* ---------- Fase 2 (ronda 34) · «Hoy»: tu cartera principal en grande y una sola acción ---------- */
+.hoy-hero{margin:0 0 18px;padding:18px;border:1px solid var(--border);border-radius:var(--r-panel);background:radial-gradient(120% 140% at 0% 0%,var(--alerta-bg),transparent 55%),var(--surface);box-shadow:var(--sombra-1)}
+.hoy-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.hoy-anillo-w{position:relative;width:132px;height:132px}
+.hoy-anillo{width:100%;height:100%;display:block}
+.hoy-anillo circle{transition:stroke-dasharray var(--t-medio) var(--suave)}
+.hoy-centro{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.1}
+.hoy-centro b{font-size:1.75rem;font-variant-numeric:tabular-nums}.hoy-centro small{color:var(--muted);font-size:.75rem}
+.hoy-eti{margin:0;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hoy-nombre{margin:2px 0 8px;font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.15}
+.hoy-ind{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.hoy-i{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;background:var(--surface-2);font-size:.8125rem}
+.hoy-i i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.hoy-i.hoy-ok i{background:var(--verde)} .hoy-i.hoy-medio i{background:var(--warn)} .hoy-i.hoy-alto i{background:var(--accent)}
+.hoy-senal{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-weight:600}
+.hoy-senal i{width:10px;height:10px;border-radius:50%;flex:none}
+.hoy-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0}
+.hoy-lista-t{font-size:1.125rem;margin:22px 0 10px}
+@media (max-width:479px){.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
+@media (prefers-reduced-motion:reduce){.hoy-anillo circle{transition:none}}
+
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
   [data-vista]:not([hidden]),.ind,.reto.hecho .reto-i,.reto-sem.hecho .reto-i,.evo-p,.avisos.on #toast,.esq{animation:none}
@@ -1680,7 +1701,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#carteras" data-nav="mis">Mis carteras</a>
+      <a href="#carteras" data-nav="mis">Hoy</a>
       <a href="#inicio" data-nav="crear">Crear cartera</a>
       <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
       <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
@@ -1692,7 +1713,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#carteras" data-nav="mis">Mis carteras</a>
+    <a href="#carteras" data-nav="mis">Hoy</a>
     <a href="#inicio" data-nav="crear">Crear cartera</a>
     <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
     <a href="#revista" data-nav="revista">Revista</a>
@@ -1834,7 +1855,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Hoy</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -1854,8 +1875,10 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
       </div>
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
+    <section id="hoy-hero" class="hoy-hero" aria-label="Tu cartera principal" hidden></section>
     <section id="tu-semana" class="semana" aria-labelledby="semana-t" hidden></section>
-    <ul id="mis-lista" class="lista-carteras"></ul>
+    <h2 class="hoy-lista-t" id="hoy-lista-t">Tus carteras</h2>
+    <ul id="mis-lista" class="lista-carteras" aria-labelledby="hoy-lista-t"></ul>
   </section>
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
@@ -2104,7 +2127,7 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
 
 <!-- Ronda 28 (fase 2) · barra inferior en móvil con los tres destinos principales (no aparece en el editor ni en el laboratorio, que tienen su propia barra de acciones) -->
 <nav id="tabbar" class="tabbar" aria-label="Principal (barra inferior)">
-  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M3.5 9.5h17"/><path d="M15.5 14h2"/></svg></span>Carteras</a>
+  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 10v9h11v-9"/><path d="M10 19v-5h4v5"/></svg></span>Hoy</a>
   <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></span>Descubrir</a>
   <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3.5h9l3 3v14H6z"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/></svg></span>Cuaderno</a>
 </nav>
@@ -4630,6 +4653,61 @@ async function pintarSemana(list, seq, vigente) {
   el.hidden = false;
 }
 
+// Fase 2 (ronda 34) · pantalla «HOY» (antes «Mis carteras»): tu cartera principal en grande, con su anillo, sus dos semáforos y UNA acción.
+// La cartera principal es la última que has tocado (modificada o creada) que tiene posiciones. Nada de importes ni rentabilidad.
+// PURO en lo que calcula (eleccion y modelo); pintarHoy() solo dibuja con lo que recibe.
+
+let XH = null;   // contexto: { by, colorDe, abrirLab, go }
+const iniciarHoy = ctx => {
+  XH = ctx;
+  $('#hoy-hero')?.addEventListener('click', e => {
+    const b = e.target.closest('[data-hoy-lab]'); if (!b) return;
+    XH.abrirLab({ carteraId: +b.dataset.hoyLab, ticker: b.dataset.ticker || '', peso: b.dataset.peso || '', fin: b.dataset.fin || 'proporcional', auto: !!b.dataset.ticker });
+  });
+};
+
+const fecha = c => String(c.actualizado_en || c.creado_en || '');
+// La cartera principal: la última tocada con al menos una posición (si ninguna tiene, la última tocada).
+function carteraPrincipal(lista) {
+  const conPos = (lista || []).filter(c => (c.posiciones || []).some(p => p.peso > 0));
+  const orden = l => [...l].sort((a, b) => fecha(b).localeCompare(fecha(a)) || b.id - a.id);
+  return orden(conPos)[0] || orden(lista || [])[0] || null;
+}
+// Modelo de la tarjeta: anillo (tramos), semáforos de Concentración y Variedad, señal principal y la acción.
+function modeloHoy(c, activos = {}) {
+  if (!c) return null;
+  const pos = (c.posiciones || []).filter(p => p.peso > 0).map(p => ({ ticker: p.ticker, peso: p.peso }));
+  if (!pos.length) return { id: c.id, nombre: c.nombre, vacia: true, accion: { tipo: 'abrir', texto: 'Añadir empresas' } };
+  const r = radiografia(pos, activos), ind = indicadores(r).filter(i => i.id !== 'datos'), s = senales(r, 1)[0] || null;
+  const h = s ? hipotesis(s, r, pos) : null;
+  const accion = s && s.nivel !== 'ok' && h?.ticker ? { tipo: 'lab', texto: 'Ver qué cambiaría', ticker: h.ticker, peso: h.peso, fin: h.fin, pregunta: s.accion?.pregunta || '' }
+    : { tipo: 'abrir', texto: 'Abrir mi cartera' };
+  return { id: c.id, nombre: c.nombre, pos, n: r.n, indicadores: ind.map(i => ({ id: i.id, etiqueta: i.etiqueta, nivel: i.nivel, valor: i.valor })), senal: s && { nivel: s.nivel, titulo: s.titulo }, accion };
+}
+// Anillo SVG con un tramo por posición (los colores los da la app, estables por activo).
+function svgAnillo(pos, colorDe, { tam = 132, grosor = 14 } = {}) {
+  const r = (tam - grosor) / 2, C = 2 * Math.PI * r, total = Math.max(100, pos.reduce((a, p) => a + p.peso, 0));
+  let acum = 0;
+  const arcos = pos.map(p => { const l = p.peso / total * C, a = `<circle cx="${tam / 2}" cy="${tam / 2}" r="${r.toFixed(2)}" fill="none" stroke="var(--c${colorDe(p.ticker)})" stroke-width="${grosor}" stroke-dasharray="${Math.max(0, l - 1.5).toFixed(2)} ${(C - Math.max(0, l - 1.5)).toFixed(2)}" stroke-dashoffset="${(-acum).toFixed(2)}"/>`; acum += l; return a; }).join('');
+  return `<svg class="hoy-anillo" viewBox="0 0 ${tam} ${tam}" aria-hidden="true" focusable="false"><g transform="rotate(-90 ${tam / 2} ${tam / 2})"><circle cx="${tam / 2}" cy="${tam / 2}" r="${r.toFixed(2)}" fill="none" stroke="var(--surface-2)" stroke-width="${grosor}"/>${arcos}</g></svg>`;
+}
+function pintarHoy(lista) {
+  const el = $('#hoy-hero'); if (!el) return;
+  const m = modeloHoy(carteraPrincipal(lista), XH.by());
+  if (!m) { el.hidden = true; el.innerHTML = ''; return; }
+  const boton = m.accion.tipo === 'lab'
+    ? `<button class="btn btn-primario" type="button" data-hoy-lab="${m.id}" data-ticker="${esc(m.accion.ticker)}" data-peso="${m.accion.peso}" data-fin="${esc(m.accion.fin)}">${esc(m.accion.texto)} →</button><a class="enlace hoy-abrir" href="#cartera-${m.id}">Abrir</a>`
+    : `<a class="btn btn-primario" href="#cartera-${m.id}">${esc(m.accion.texto)} →</a>`;
+  el.innerHTML = m.vacia
+    ? `<p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2><p class="mut">Aún no tiene empresas.</p><p class="hoy-acc">${boton}</p>`
+    : `<div class="hoy-grid"><div class="hoy-anillo-w">${svgAnillo(m.pos, XH.colorDe)}<span class="hoy-centro"><b>${m.n}</b><small>${m.n === 1 ? 'posición' : 'posiciones'}</small></span></div>
+      <div class="hoy-info"><p class="hoy-eti">Tu cartera principal</p><h2 class="hoy-nombre">${esc(m.nombre)}</h2>
+        <ul class="hoy-ind" aria-label="Cómo está">${m.indicadores.map(i => `<li class="hoy-i hoy-${i.nivel}"><i aria-hidden="true"></i>${esc(i.etiqueta)}: <b>${esc(i.valor)}</b></li>`).join('')}</ul>
+        ${m.senal ? `<p class="hoy-senal senal-${m.senal.nivel}"><i aria-hidden="true"></i>${esc(m.senal.titulo)}</p>` : ''}
+        <p class="hoy-acc">${boton}</p></div></div>`;
+  el.hidden = false;
+}
+
 // =====================================================================
 // Klever · interfaz. Sin dependencias.
 // Vistas (hash): inicio · empresas · publicas · carteras · cartera / cartera-<id>
@@ -4839,8 +4917,8 @@ let sesionSeq = 0;
 function limpiarPrivado() {
   sesionSeq++; misSeq++; nMis = null;
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
-  for (const s of ['#mis-lista', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
-  { const sem = $('#tu-semana'); if (sem) sem.hidden = true; }   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
+  for (const s of ['#mis-lista', '#hoy-hero', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  { const sem = $('#tu-semana'); if (sem) sem.hidden = true; const hh = $('#hoy-hero'); if (hh) hh.hidden = true; }   // ronda 34: «Hoy» muestra nombres y señales: también es privado   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
   document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
   limpiarSesionLab();
@@ -4898,7 +4976,7 @@ const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguim
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
 const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -5003,9 +5081,9 @@ async function cargarMisCarteras() {
     const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
     nMis = list.length;
     $('#btn-nueva').hidden = nMis === 0;
-    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; formNuevo(true, false); return; }
+    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; $('#hoy-hero').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
-    pintarSemana(list, seq, q => q === misSeq);
+    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq);
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 // «Tu semana»: public/js/semana-ui.js (fase 1)
@@ -5795,6 +5873,7 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets(); activosListos();
+  iniciarHoy({ by: () => by, colorDe, abrirLab, go });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);

@@ -97,3 +97,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-08 · C43: Javier decide la hoja de ruta (Liga + Comunidad + Perfil; toda la UX y el desarrollo; funcionalidad después; publicar al final). Ver `ronda33/PLAN.md`.
 - 2026-11-08 · Ronda 33 (C44): fase 1 (cimientos), primera parte: pruebas en paralelo, hoja de estilo única con tokens fusionados y DESIGN.md, embudo anónimo, utilidades a `base.js`.
 - 2026-11-08 · Ronda 33 (C45): fase 1, segunda parte: Explorar y «Tu semana» en módulos, comparación visual de capturas y reintento declarado; fase 1 cerrada con 1216/0.
+- 2026-11-08 · Ronda 34 (C46): fase 2, primera parte: pantalla «Hoy» con la cartera principal en grande y una sola acción.

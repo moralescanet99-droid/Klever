@@ -28,7 +28,7 @@
   <div class="cab-in">
     <a class="marca" href="#inicio" id="marca">Klever</a><span class="tag">beta</span>
     <nav class="menu menu-escritorio" aria-label="Principal">
-      <a href="#carteras" data-nav="mis">Mis carteras</a>
+      <a href="#carteras" data-nav="mis">Hoy</a>
       <a href="#inicio" data-nav="crear">Crear cartera</a>
       <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
       <a href="#revista" data-nav="revista" class="nav-sec">Revista</a>
@@ -40,7 +40,7 @@
     </div>
   </div>
   <nav id="menu-movil" class="menu-movil" aria-label="Principal (móvil)" hidden>
-    <a href="#carteras" data-nav="mis">Mis carteras</a>
+    <a href="#carteras" data-nav="mis">Hoy</a>
     <a href="#inicio" data-nav="crear">Crear cartera</a>
     <a href="#seguimiento" data-nav="cuaderno">Cuaderno</a>
     <a href="#revista" data-nav="revista">Revista</a>
@@ -181,7 +181,7 @@
 
   <!-- ===== MIS CARTERAS ===== -->
   <section id="vista-carteras" data-vista="carteras" hidden>
-    <div class="pag-cab pag-cab-fila"><h1>Mis carteras</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
+    <div class="pag-cab pag-cab-fila"><h1>Hoy</h1><button id="btn-nueva" class="btn btn-secundario" type="button" aria-expanded="false" aria-controls="form-nueva">Nueva cartera</button></div>
     <div id="aviso-cuenta" class="aviso-panel" role="status" hidden>
       <div><b>Tu cartera todavía no se ha guardado en la cuenta.</b>
         <p>El borrador no está disponible en este navegador. Vuelve al navegador donde lo creaste para guardarlo.</p></div>
@@ -201,8 +201,10 @@
       </div>
       <div class="fila"><button class="btn btn-primario">Crear cartera</button><button id="nueva-cancelar" class="btn btn-ghost" type="button">Cancelar</button></div>
     </form>
+    <section id="hoy-hero" class="hoy-hero" aria-label="Tu cartera principal" hidden></section>
     <section id="tu-semana" class="semana" aria-labelledby="semana-t" hidden></section>
-    <ul id="mis-lista" class="lista-carteras"></ul>
+    <h2 class="hoy-lista-t" id="hoy-lista-t">Tus carteras</h2>
+    <ul id="mis-lista" class="lista-carteras" aria-labelledby="hoy-lista-t"></ul>
   </section>
 
   <!-- ===== REVISTA (historia, opinión y revisión; legible sin cuenta) ===== -->
@@ -451,7 +453,7 @@
 
 <!-- Ronda 28 (fase 2) · barra inferior en móvil con los tres destinos principales (no aparece en el editor ni en el laboratorio, que tienen su propia barra de acciones) -->
 <nav id="tabbar" class="tabbar" aria-label="Principal (barra inferior)">
-  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M3.5 9.5h17"/><path d="M15.5 14h2"/></svg></span>Carteras</a>
+  <a href="#carteras" data-nav="mis" data-tab="mis"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 10v9h11v-9"/><path d="M10 19v-5h4v5"/></svg></span>Hoy</a>
   <a href="#empresas" data-nav="revista" data-tab="descubrir"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg></span>Descubrir</a>
   <a href="#seguimiento" data-nav="cuaderno" data-tab="cuaderno"><span class="tab-ico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3.5h9l3 3v14H6z"/><path d="M9 10h6M9 13.5h6M9 17h3.5"/></svg></span>Cuaderno</a>
 </nav>

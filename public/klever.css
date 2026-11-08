@@ -1652,6 +1652,27 @@ a,button,input,select,textarea,label,summary,[role="button"]{touch-action:manipu
   .emp-card .pil{display:none}
 }
 
+/* ---------- Fase 2 (ronda 34) · «Hoy»: tu cartera principal en grande y una sola acción ---------- */
+.hoy-hero{margin:0 0 18px;padding:18px;border:1px solid var(--border);border-radius:var(--r-panel);background:radial-gradient(120% 140% at 0% 0%,var(--alerta-bg),transparent 55%),var(--surface);box-shadow:var(--sombra-1)}
+.hoy-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.hoy-anillo-w{position:relative;width:132px;height:132px}
+.hoy-anillo{width:100%;height:100%;display:block}
+.hoy-anillo circle{transition:stroke-dasharray var(--t-medio) var(--suave)}
+.hoy-centro{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1.1}
+.hoy-centro b{font-size:1.75rem;font-variant-numeric:tabular-nums}.hoy-centro small{color:var(--muted);font-size:.75rem}
+.hoy-eti{margin:0;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hoy-nombre{margin:2px 0 8px;font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.15}
+.hoy-ind{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.hoy-i{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:99px;background:var(--surface-2);font-size:.8125rem}
+.hoy-i i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.hoy-i.hoy-ok i{background:var(--verde)} .hoy-i.hoy-medio i{background:var(--warn)} .hoy-i.hoy-alto i{background:var(--accent)}
+.hoy-senal{display:flex;align-items:center;gap:8px;margin:0 0 12px;font-weight:600}
+.hoy-senal i{width:10px;height:10px;border-radius:50%;flex:none}
+.hoy-acc{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0}
+.hoy-lista-t{font-size:1.125rem;margin:22px 0 10px}
+@media (max-width:479px){.hoy-grid{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}.hoy-ind,.hoy-senal,.hoy-acc{justify-content:center}}
+@media (prefers-reduced-motion:reduce){.hoy-anillo circle{transition:none}}
+
 /* ---------- reducir movimiento: nada se mueve ---------- */
 @media (prefers-reduced-motion:reduce){
   [data-vista]:not([hidden]),.ind,.reto.hecho .reto-i,.reto-sem.hecho .reto-i,.evo-p,.avisos.on #toast,.esq{animation:none}

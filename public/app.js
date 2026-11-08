@@ -14,6 +14,7 @@ import { senales } from './js/senales.js';
 import { leerPegado, pareceLista } from './js/pegado.js';
 import { svgHuella } from './js/huella.js';
 import { iniciarSemanaUI, pintarSemana, criteriosAhora } from './js/semana-ui.js';
+import { iniciarHoy, pintarHoy } from './js/hoy.js';
 import { iniciarIdeas, mostrarEjemplo, mostrarComparar } from './js/ideas.js';
 import { iniciarExplorar, empresas, filtrosLeer, filtrosGuardar, loadEmpresas, poblarSectores, renderEmpresas, verFicha } from './js/explorar.js';
 import { iniciarRevista, mostrarRevista, mostrarArticulo } from './js/revista.js';
@@ -216,8 +217,8 @@ let sesionSeq = 0;
 function limpiarPrivado() {
   sesionSeq++; misSeq++; nMis = null;
   current = null; pos = []; posGuardada = []; rev = savedRev = 0; saving = false; saveErr = null; copiaLocal = false; chartEls.clear();
-  for (const s of ['#mis-lista', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
-  { const sem = $('#tu-semana'); if (sem) sem.hidden = true; }   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
+  for (const s of ['#mis-lista', '#hoy-hero', '#tu-semana', '#pos-tabla tbody', '#pos-cards', '#graficos', '#r-sectores', '#comp-barra']) { const e = $(s); if (e) e.innerHTML = ''; }
+  { const sem = $('#tu-semana'); if (sem) sem.hidden = true; const hh = $('#hoy-hero'); if (hh) hh.hidden = true; }   // ronda 34: «Hoy» muestra nombres y señales: también es privado   // ronda 29: «Tu semana» lleva nombres de carteras y señales: es privado
   for (const s of ['#nombre', '#tesis']) { const e = $(s); if (e) e.value = ''; }
   document.querySelectorAll('dialog[open]').forEach(d => { try { d.close(); } catch { /* ya cerrado */ } });   // un diálogo de conflicto o de ficha de la sesión anterior no se queda abierto
   limpiarSesionLab();
@@ -275,7 +276,7 @@ const VISTAS = ['inicio', 'empresas', 'publicas', 'carteras', 'cartera', 'seguim
 // Navegación principal de TRES destinos: Cartera, Ideas (historias, empresas y carteras públicas) y Seguimiento.
 const NAV = { inicio: 'crear', cartera: 'crear', lab: 'crear', ejemplo: 'crear', carteras: 'mis', comparar: 'revista', revista: 'revista', articulo: 'revista', empresas: 'revista', publicas: 'revista', seguimiento: 'cuaderno', 'como-funciona': 'crear', empezar: 'crear' };
 const IDEAS = { revista: 'revista', articulo: 'revista', empresas: 'empresas', publicas: 'publicas' };
-const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Mis carteras', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
+const TITULOS = { inicio: 'Crea, entiende y sigue tu cartera', empresas: 'Explorar empresas', publicas: 'Carteras públicas', carteras: 'Hoy', cartera: 'Editor de cartera', seguimiento: 'Cuaderno', lab: 'Laboratorio', revista: 'Ideas', articulo: 'Ideas', ejemplo: 'Cartera de ejemplo', comparar: 'Comparar empresas', 'como-funciona': 'Cómo funciona', empezar: 'Empieza en 1 minuto' };
 let routeSeq = 0;
 function go(h) { if (location.hash === h) route(); else location.hash = h; }
 
@@ -380,9 +381,9 @@ async function cargarMisCarteras() {
     const list = await api('/portfolios'); if (seq !== misSeq) return;   // la sesión cambió mientras llegaba la respuesta: no se pinta
     nMis = list.length;
     $('#btn-nueva').hidden = nMis === 0;
-    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; formNuevo(true, false); return; }
+    if (nMis === 0) { ul.innerHTML = ''; $('#tu-semana').hidden = true; $('#hoy-hero').hidden = true; formNuevo(true, false); return; }
     formNuevo(false); ul.innerHTML = list.map(itemCartera).join('');
-    pintarSemana(list, seq, q => q === misSeq);
+    pintarHoy(list); pintarSemana(list, seq, q => q === misSeq);
   } catch (err) { if (seq !== misSeq) return; ul.innerHTML = `<li class="estado-lista">No se pudieron cargar tus carteras. <button class="enlace" data-retry="mis" type="button">Reintentar</button></li>`; }
 }
 // «Tu semana»: public/js/semana-ui.js (fase 1)
@@ -1176,6 +1177,7 @@ function contextoLab() {
 (async () => {
   await redeem();
   await loadAssets(); activosListos();
+  iniciarHoy({ by: () => by, abrirLab });
   iniciarSemanaUI({ api, getJson, logged, by: () => by, fmtFecha });
   iniciarExplorar({ current: () => current, pos: () => pos, by: () => by, leerBorrador, getJson, toastError });
   const ctxLab = contextoLab(); iniciarLab(ctxLab); iniciarRevista(ctxLab); iniciarIdeas(ctxLab);

@@ -66,7 +66,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.ctx.close(); }
   { const p = await nuevo(b, 390, 780); await entrarCon(p, mail('PE')); await p.evaluate(() => { location.hash = '#inicio'; }); await p.waitForTimeout(900);
     const h = await p.evaluate(() => ({ hash: location.hash, h1: document.querySelector('[data-vista]:not([hidden]) h1')?.textContent.trim(), actual: document.querySelector('#menu-movil [aria-current=page]')?.textContent.trim() ?? null, mis: document.querySelector('.menu-movil a[data-nav=mis]')?.textContent.trim() }));
-    ev('P7b', 'Entrada con sesión: la portada lleva a «Mis carteras» para elegir uno', 'Con sesión, #inicio muestra «Mis carteras» con su título y la entrada del menú marcada', JSON.stringify(h), h.h1 === 'Mis carteras' && h.actual === 'Mis carteras');
+    ev('P7b', 'Entrada con sesión: la portada lleva a «Mis carteras» para elegir uno', 'Con sesión, #inicio muestra «Mis carteras» con su título y la entrada del menú marcada', JSON.stringify(h), h.h1 === 'Hoy' && h.actual === 'Hoy'   /* ronda 34: «Mis carteras» → «Hoy» */);
     await p.ctx.close(); }
   // ---- P8. con cuenta: la acción principal se invierte con cambios pendientes
   { const p = await nuevo(b, 1440, 900); await entrarCon(p, mail('PG'));
@@ -91,12 +91,12 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.evaluate(() => { location.hash = '#seguimiento'; }); await p.waitForSelector('#seg-casos'); await p.waitForTimeout(500);
     const cu = await p.evaluate(() => ({ h1: document.querySelector('#vista-seguimiento h1').childNodes[0].textContent.trim(), actual: document.querySelector('.menu-escritorio [aria-current=page]')?.textContent.trim(), beta: /^En beta$/.test(document.querySelector('#seg-beta').textContent) })); await p.screenshot({ path: CAP + 'C15-cuaderno-1440.png' });
     ev('P10', 'Escritorio: navegación en columna izquierda, fondo carbón con resplandor, Revista como entrada secundaria y Cuaderno con la etiqueta «En beta» (sin prometer un plan de pago)', 'Cabecera fija de 248 px a toda la altura; contenido desplazado; Mis carteras · Crear cartera · Cuaderno · Revista (marcada «nav-sec»); la entrada activa sigue a la vista; fondo #13100E y degradado radial', JSON.stringify({ nav, rv, cu }),
-      nav.pos === 'fixed' && nav.ancho === 248 && nav.alto >= 880 && nav.mainIzq >= 248 && JSON.stringify(nav.items) === JSON.stringify(['Mis carteras', 'Crear cartera', 'Cuaderno', 'Revista']) && nav.sec === 'Revista' && nav.resplandor && nav.fondo === '#13100E' && rv.actual === 'Revista' && /Revista/.test(rv.h1) && cu.h1 === 'Cuaderno' && cu.actual === 'Cuaderno' && cu.beta);
+      nav.pos === 'fixed' && nav.ancho === 248 && nav.alto >= 880 && nav.mainIzq >= 248 && JSON.stringify(nav.items) === JSON.stringify(['Hoy', 'Crear cartera', 'Cuaderno', 'Revista']) && nav.sec === 'Revista' && nav.resplandor && nav.fondo === '#13100E' && rv.actual === 'Revista' && /Revista/.test(rv.h1) && cu.h1 === 'Cuaderno' && cu.actual === 'Cuaderno' && cu.beta);
     await p.ctx.close(); }
   for (const w of [390, 320]) { const p = await nuevo(b, w, 780); await p.goto(B); await p.waitForSelector('.hero'); await p.click('#btn-menu'); await p.waitForTimeout(250);
     const m = await p.evaluate(() => [...document.querySelectorAll('#menu-movil a')].filter(a => a.offsetParent !== null).map(a => a.textContent.trim())); const ok = await sinDesborde(p);
     await p.click('#menu-movil a[data-nav=revista]'); await p.waitForSelector('#vista-revista:not([hidden])'); await p.waitForTimeout(400); await p.screenshot({ path: CAP + `C16-revista-acceso-${w}.png` });
-    ev('P11-' + w, `Móvil: menú con cuatro entradas y acceso a Revista (${w} px)`, '«Mis carteras», «Crear cartera», «Cuaderno» y «Revista»; sin desplazamiento horizontal', `${JSON.stringify(m)}; ${ok}`, JSON.stringify(m) === JSON.stringify(['Mis carteras', 'Crear cartera', 'Cuaderno', 'Revista']) && ok);
+    ev('P11-' + w, `Móvil: menú con cuatro entradas y acceso a Revista (${w} px)`, '«Mis carteras», «Crear cartera», «Cuaderno» y «Revista»; sin desplazamiento horizontal', `${JSON.stringify(m)}; ${ok}`, JSON.stringify(m) === JSON.stringify(['Hoy', 'Crear cartera', 'Cuaderno', 'Revista']) && ok);
     await p.ctx.close(); }
   await b.close(); fin('evidencias-P17');
 })();

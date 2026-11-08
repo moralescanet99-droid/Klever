@@ -20,7 +20,7 @@ const N = s => String(s).replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
     await p.goto(B); await p.waitForSelector('.hero');
     const movil = w < 720; if (movil) await p.click('#btn-menu');
     const nav = await p.evaluate(m => [...document.querySelectorAll(m ? '#menu-movil a' : '.menu-escritorio a')].filter(e => e.offsetParent !== null).map(e => e.textContent.trim()), movil);
-    ev('N1-' + w, `Navegación principal de cuatro entradas (${w} px)`, '«Mis carteras», «Crear cartera», «Cuaderno» y «Revista» (secundaria)', JSON.stringify(nav), JSON.stringify(nav) === JSON.stringify(['Mis carteras', 'Crear cartera', 'Cuaderno', 'Revista']));
+    ev('N1-' + w, `Navegación principal de cuatro entradas (${w} px)`, '«Mis carteras», «Crear cartera», «Cuaderno» y «Revista» (secundaria)', JSON.stringify(nav), JSON.stringify(nav) === JSON.stringify(['Hoy', 'Crear cartera', 'Cuaderno', 'Revista'])   /* ronda 34: «Mis carteras» pasa a llamarse «Hoy» */);
     if (movil) await p.click('#btn-menu');
     const tabs = [];
     for (const [hash, id] of [['#revista', 'revista'], ['#empresas', 'empresas'], ['#publicas', 'publicas']]) { await p.evaluate(h2 => { location.hash = h2; }, hash); await p.waitForTimeout(350); tabs.push(await p.evaluate(i => ({ tabs: [...document.querySelectorAll('.ideas-tabs:not([hidden])')].filter(e => e.offsetParent !== null).length, actual: document.querySelector(`.ideas-tabs a[data-ideas=${i}][aria-current=page]`) !== null, nav: document.querySelector('[data-nav][aria-current=page]')?.dataset.nav }), id)); }

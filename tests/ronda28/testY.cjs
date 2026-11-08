@@ -23,7 +23,7 @@ const J = JSON.stringify;
     await p.goto(B + '#inicio'); await p.waitForSelector('.plantilla'); await p.click('[data-plantilla="riesgo"]'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(300); const enEditor = await tab();
     await p.evaluate(() => { location.hash = '#laboratorio'; }); await p.waitForSelector('#lab-form'); await p.waitForTimeout(300); const enLab = await tab();
     ev('Y1-' + w, `Barra inferior (${w} px): ${movil ? 'tres destinos y el actual marcado; oculta en el editor y el laboratorio' : 'no se muestra en escritorio'}`, movil ? 'Carteras · Descubrir · Cuaderno; portada → Carteras; Explorar → Descubrir; editor y laboratorio sin barra' : 'oculta en todas las vistas',
-      J({ enInicio, enEmp, enEditor, enLab }), movil ? (J(enInicio.enlaces.map(x => x.replace(/^\W+/, ''))) === J(['Carteras', 'Descubrir', 'Cuaderno']) && /Carteras/.test(enInicio.actual) && /Descubrir/.test(enEmp.actual) && !enEditor.visible && !enLab.visible) : (!enInicio.visible && !enEmp.visible && !enEditor.visible));
+      J({ enInicio, enEmp, enEditor, enLab }), movil ? (J(enInicio.enlaces.map(x => x.replace(/^\W+/, ''))) === J(['Hoy', 'Descubrir', 'Cuaderno']) && /Hoy/.test(enInicio.actual) && /Descubrir/.test(enEmp.actual) && !enEditor.visible && !enLab.visible) : (!enInicio.visible && !enEmp.visible && !enEditor.visible));
 
     // ---- Y2 pegar una lista
     await p.goto(B + '#inicio'); await p.waitForSelector('#entrada-manual'); await p.click('#entrada-manual'); await p.waitForSelector('#vista-cartera:not([hidden])'); await p.waitForTimeout(300);

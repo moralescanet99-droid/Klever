@@ -1,0 +1,107 @@
+[
+ {
+  "id": "AE1-1440",
+  "escenario": "«Hoy»: la cartera principal en grande (1440 px)",
+  "esperado": "«Concentrada AE» (la última tocada); anillo de 4 tramos; Concentración y Variedad; señal; UN botón principal «Ver qué cambiaría»",
+  "observado": "{\"nombre\":\"Concentrada AE\",\"tramos\":4,\"ind\":[\"Concentración: Alta\",\"Variedad: Media\"],\"senal\":\"Exposición alta: Tecnología\",\"primarios\":1,\"accion\":\"Ver qué cambiaría →\",\"orden\":[\"hoy-hero\",\"tu-semana\",\"hoy-lista-t\",\"mis-lista\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE3-1440",
+  "escenario": "Nombre «Hoy» y lo que hay debajo (1440 px)",
+  "esperado": "título «Hoy», menú y pestaña «Hoy», título de la página «Klever · Hoy»; «Tu semana» y «Tus carteras» (2) debajo",
+  "observado": "{\"h1\":\"Hoy\",\"menu\":2,\"tab\":\"Hoy\",\"semana\":true,\"lista\":\"Tus carteras\",\"items\":2,\"titulo\":\"Klever · Hoy\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE2-1440",
+  "escenario": "«Ver qué cambiaría» abre el laboratorio ya simulado (1440 px)",
+  "esperado": "#laboratorio con NVDA y un peso menor que 40, y el resultado a la vista",
+  "observado": "{\"hash\":\"#laboratorio\",\"ticker\":\"NVDA\",\"peso\":\"20\",\"res\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE4-1440",
+  "escenario": "Al salir, «Hoy» se vacía (1440 px)",
+  "esperado": "oculta y vacía; sin el nombre de la cartera en la página",
+  "observado": "{\"oculta\":true,\"vacia\":true,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE0-1440",
+  "escenario": "Sin errores ni desbordes (1440 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE1-390",
+  "escenario": "«Hoy»: la cartera principal en grande (390 px)",
+  "esperado": "«Concentrada AE» (la última tocada); anillo de 4 tramos; Concentración y Variedad; señal; UN botón principal «Ver qué cambiaría»",
+  "observado": "{\"nombre\":\"Concentrada AE\",\"tramos\":4,\"ind\":[\"Concentración: Alta\",\"Variedad: Media\"],\"senal\":\"Exposición alta: Tecnología\",\"primarios\":1,\"accion\":\"Ver qué cambiaría →\",\"orden\":[\"hoy-hero\",\"tu-semana\",\"hoy-lista-t\",\"mis-lista\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE3-390",
+  "escenario": "Nombre «Hoy» y lo que hay debajo (390 px)",
+  "esperado": "título «Hoy», menú y pestaña «Hoy», título de la página «Klever · Hoy»; «Tu semana» y «Tus carteras» (2) debajo",
+  "observado": "{\"h1\":\"Hoy\",\"menu\":2,\"tab\":\"Hoy\",\"semana\":true,\"lista\":\"Tus carteras\",\"items\":2,\"titulo\":\"Klever · Hoy\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE2-390",
+  "escenario": "«Ver qué cambiaría» abre el laboratorio ya simulado (390 px)",
+  "esperado": "#laboratorio con NVDA y un peso menor que 40, y el resultado a la vista",
+  "observado": "{\"hash\":\"#laboratorio\",\"ticker\":\"NVDA\",\"peso\":\"20\",\"res\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE4-390",
+  "escenario": "Al salir, «Hoy» se vacía (390 px)",
+  "esperado": "oculta y vacía; sin el nombre de la cartera en la página",
+  "observado": "{\"oculta\":true,\"vacia\":true,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE0-390",
+  "escenario": "Sin errores ni desbordes (390 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE1-320",
+  "escenario": "«Hoy»: la cartera principal en grande (320 px)",
+  "esperado": "«Concentrada AE» (la última tocada); anillo de 4 tramos; Concentración y Variedad; señal; UN botón principal «Ver qué cambiaría»",
+  "observado": "{\"nombre\":\"Concentrada AE\",\"tramos\":4,\"ind\":[\"Concentración: Alta\",\"Variedad: Media\"],\"senal\":\"Exposición alta: Tecnología\",\"primarios\":1,\"accion\":\"Ver qué cambiaría →\",\"orden\":[\"hoy-hero\",\"tu-semana\",\"hoy-lista-t\",\"mis-lista\"]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE3-320",
+  "escenario": "Nombre «Hoy» y lo que hay debajo (320 px)",
+  "esperado": "título «Hoy», menú y pestaña «Hoy», título de la página «Klever · Hoy»; «Tu semana» y «Tus carteras» (2) debajo",
+  "observado": "{\"h1\":\"Hoy\",\"menu\":2,\"tab\":\"Hoy\",\"semana\":true,\"lista\":\"Tus carteras\",\"items\":2,\"titulo\":\"Klever · Hoy\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE2-320",
+  "escenario": "«Ver qué cambiaría» abre el laboratorio ya simulado (320 px)",
+  "esperado": "#laboratorio con NVDA y un peso menor que 40, y el resultado a la vista",
+  "observado": "{\"hash\":\"#laboratorio\",\"ticker\":\"NVDA\",\"peso\":\"20\",\"res\":true}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE4-320",
+  "escenario": "Al salir, «Hoy» se vacía (320 px)",
+  "esperado": "oculta y vacía; sin el nombre de la cartera en la página",
+  "observado": "{\"oculta\":true,\"vacia\":true,\"nombre\":false}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AE0-320",
+  "escenario": "Sin errores ni desbordes (320 px)",
+  "esperado": "ningún error; ancho = ventana",
+  "observado": "{\"errs\":[],\"desb\":[]}",
+  "resultado": "OK"
+ }
+]
