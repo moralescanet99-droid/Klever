@@ -1,5 +1,6 @@
 import { json, auth } from '../_lib.js';
 import { fotoCartera, fotoValida, lunesDe } from '../../public/js/semana.js';
+import { radiografia } from '../../public/js/calculos.js';
 
 // Ronda 30 · «Tu semana» con memoria en el SERVIDOR. GET: calcula la foto de HOY de cada cartera del usuario (desde su composición GUARDADA y los
 // umbrales de Klever), la registra como la foto de ESTA semana (una por cartera y semana: la última visita de la semana manda) y devuelve el historial.
@@ -23,12 +24,12 @@ export async function onRequestGet({ request, env }) {
                       JOIN activos a ON a.ticker = po.ticker WHERE p.usuario_id = ?`).bind(user.id)]);
     const activos = {}, pos = {};
     for (const x of rp.results) { activos[x.ticker] = { sector: x.sector, tipo: x.tipo }; (pos[x.id] ||= []).push({ ticker: x.ticker, peso: x.peso }); }
-    const actuales = rc.results.map(c => ({ id: c.id, nombre: c.nombre, foto: fotoCartera(pos[c.id] || [], activos) }));
+    const actuales = rc.results.map(c => { const r = radiografia(pos[c.id] || [], activos); return { id: c.id, nombre: c.nombre, foto: fotoCartera(pos[c.id] || [], activos), n: r.n, completa: r.estado === 'completa' ? 1 : 0 }; });   // n y completa: para la Liga (ronda 36)
     const escr = actuales.filter(c => c.foto).map(c => env.DB.prepare(
-      `INSERT INTO instantaneas (usuario_id, cartera_id, semana, concentracion, variedad, n_categorias, senales) VALUES (?, ?, ?, ?, ?, ?, ?)
+      `INSERT INTO instantaneas (usuario_id, cartera_id, semana, concentracion, variedad, n_categorias, senales, n_posiciones, completa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT (usuario_id, cartera_id, semana) DO UPDATE SET concentracion = excluded.concentracion, variedad = excluded.variedad,
-         n_categorias = excluded.n_categorias, senales = excluded.senales, actualizado_en = datetime('now')`)
-      .bind(user.id, c.id, semana, c.foto.concentracion, c.foto.variedad, c.foto.n_categorias, JSON.stringify(c.foto.senales)));
+         n_categorias = excluded.n_categorias, senales = excluded.senales, n_posiciones = excluded.n_posiciones, completa = excluded.completa, actualizado_en = datetime('now')`)
+      .bind(user.id, c.id, semana, c.foto.concentracion, c.foto.variedad, c.foto.n_categorias, JSON.stringify(c.foto.senales), c.n, c.completa));
     // Escritura de la semana + limpieza de lo antiguo (y de fotos de carteras que ya no existen) + lectura del historial, en UN lote transaccional.
     const res = await env.DB.batch([...escr,
       env.DB.prepare('DELETE FROM instantaneas WHERE usuario_id = ? AND (semana < ? OR cartera_id NOT IN (SELECT id FROM portafolios WHERE usuario_id = ?))').bind(user.id, corte, user.id),

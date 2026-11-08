@@ -53,6 +53,8 @@ const volcEsc = () => J(db.prepare('SELECT id,usuario_id,clave,nombre,nota,estad
 const antes12e = volcEsc(), antes12c = volcCar(); db.exec(readFileSync(path.join(RAIZ, 'migrations/0012_cuaderno_revisiones.sql'), 'utf8'));
 // Ronda 30: la 0013 (foto semanal y foto de datos de las ideas) se encadena justo después: es aditiva y deja `escenarios` igual que schema.sql (comprobado en M1e/M1f y M1g).
 const antes13e = volcEsc(); db.exec(readFileSync(path.join(RAIZ, 'migrations/0013_instantaneas_y_foto.sql'), 'utf8'));
+// Ronda 36: 0014 (embudo), 0015 (eventos ampliados) y 0016 (Liga) encadenadas: aditivas; las tablas comparadas siguen iguales a schema.sql
+for (const m of ['0014_eventos.sql', '0015_eventos_compartir.sql', '0016_liga.sql']) db.exec(readFileSync(path.join(RAIZ, 'migrations', m), 'utf8'));
 const nuevo11 = crearEnv().sql, r11 = Object.fromEntries(db.prepare("SELECT clave, pregunta_ref FROM escenarios WHERE clave LIKE 'mig11-%' OR clave='antiguo-0001'").all().map(x => [x.clave, x.pregunta_ref]));
 t('M1e', 'Aplicar 0011 (ronda 16) con escenarios antiguos: solo la coincidencia INEQUÍVOCA se vincula', '; escenarios idéntico a schema.sql', `${J(r11)}; escenarios iguales=${colsDe(db, 'escenarios') === colsDe(nuevo11, 'escenarios')}`,
   r11['mig11-igual-01'] === 'hidrogeno-norte:1' && r11['mig11-igual-02'] === 'hidrogeno-norte:2' && r11['mig11-otra-001'] === null && r11['mig11-sinhis-01'] === null && r11['mig11-casi-0001'] === null && r11['antiguo-0001'] === null && colsDe(db, 'escenarios') === colsDe(nuevo11, 'escenarios'));
@@ -64,6 +66,10 @@ t('M1f', 'Aplicar 0012 (ronda 21) con escenarios y carteras antiguos', 'Datos in
     `intactos=${volcEsc() === antes13e}; fotos ${J([...new Set(db.prepare('SELECT foto_datos FROM escenarios').all().map(x => x.foto_datos))])}; instantaneas ${db.prepare('SELECT COUNT(*) n FROM instantaneas').get().n}; iguales ${colsDe(db, 'escenarios') === colsDe(nuevo13, 'escenarios')}/${colsDe(db, 'instantaneas') === colsDe(nuevo13, 'instantaneas')}`,
     volcEsc() === antes13e && db.prepare('SELECT foto_datos FROM escenarios').all().every(x => x.foto_datos === null) && db.prepare('SELECT COUNT(*) n FROM instantaneas').get().n === 0 && colsDe(db, 'escenarios') === colsDe(nuevo13, 'escenarios') && colsDe(db, 'instantaneas') === colsDe(nuevo13, 'instantaneas'));
   let e13 = ''; try { crearEnv().sql.exec(readFileSync(path.join(RAIZ, 'migrations/0013_instantaneas_y_foto.sql'), 'utf8')); } catch (e) { e13 = e.message; }
+  t('M1i', 'Aplicar 0014–0016 (rondas 33–36) sobre una base antigua', 'usuarios, instantaneas, eventos_dia, ligas, liga_miembros y liga_inscripciones iguales a schema.sql; usuarios sin apodo y fuera de la clasificación pública', ['usuarios', 'instantaneas', 'eventos_dia', 'ligas', 'liga_miembros', 'liga_inscripciones'].map(x => x + '=' + (colsDe(db, x) === colsDe(nuevo13, x))).join(','),
+    ['usuarios', 'instantaneas', 'eventos_dia', 'ligas', 'liga_miembros', 'liga_inscripciones'].every(x => colsDe(db, x) === colsDe(nuevo13, x)) && db.prepare('SELECT COUNT(*) n FROM usuarios WHERE apodo IS NOT NULL OR liga_publica != 0').get().n === 0);
+  let e16 = ''; try { crearEnv().sql.exec(readFileSync(path.join(RAIZ, 'migrations/0016_liga.sql'), 'utf8')); } catch (e) { e16 = e.message; }
+  t('M1j', 'Aplicar 0016 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${e16}`, /duplicate column/i.test(e16));
   t('M1h', 'Aplicar 0013 sobre el esquema NUEVO', 'Falla con «duplicate column»: solo se aplica a bases anteriores', `error: ${e13}`, /duplicate column/i.test(e13)); }
 const nuevoCols = crearEnv().sql.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');
 const migCols = db.prepare('PRAGMA table_info(portafolios)').all().map(c => `${c.name}:${c.type}:${c.notnull}:${c.dflt_value}`).sort().join('|');

@@ -3,7 +3,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT NOT NULL UNIQUE,
   creado_en TEXT NOT NULL DEFAULT (datetime('now')),
-  acepto_en TEXT                -- cuándo aceptó aviso legal y privacidad
+  acepto_en TEXT,               -- cuándo aceptó aviso legal y privacidad
+  apodo TEXT CHECK (apodo IS NULL OR length(apodo) BETWEEN 3 AND 20),   -- ronda 36 (migración 0016): nombre visible en la Liga (nunca el correo)
+  liga_publica INTEGER NOT NULL DEFAULT 0 CHECK (liga_publica IN (0, 1))   -- aparecer en la clasificación general
 );
 -- Enlaces mágicos de un solo uso (se guarda el hash, nunca el token).
 CREATE TABLE IF NOT EXISTS enlaces (
@@ -153,6 +155,8 @@ CREATE TABLE IF NOT EXISTS instantaneas (
   n_categorias INTEGER NOT NULL CHECK (n_categorias >= 0),
   senales TEXT NOT NULL CHECK (length(senales) <= 1000),           -- JSON [{ id, nivel, titulo }] (como mucho 3); NUNCA importes
   actualizado_en TEXT NOT NULL DEFAULT (datetime('now')),
+  n_posiciones INTEGER,                                          -- ronda 36 (migración 0016): para la Liga
+  completa INTEGER CHECK (completa IS NULL OR completa IN (0, 1)),
   PRIMARY KEY (usuario_id, cartera_id, semana)
 );
 -- Fase 1 (ronda 33, migración 0014): embudo anónimo; solo contadores por día y evento (sin usuario, IP ni dispositivo)
@@ -162,3 +166,26 @@ CREATE TABLE IF NOT EXISTS eventos_dia (
   n INTEGER NOT NULL DEFAULT 0 CHECK (n >= 0),
   PRIMARY KEY (fecha, evento)
 );
+-- Ronda 36 (migración 0016): Liga, Temporada 0
+CREATE TABLE IF NOT EXISTS liga_inscripciones (
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+  temporada TEXT NOT NULL CHECK (temporada GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'),   -- lunes en que empieza la temporada
+  cartera_id INTEGER NOT NULL,
+  inscrito_en TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (usuario_id, temporada)
+);
+CREATE TABLE IF NOT EXISTS ligas (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  codigo TEXT NOT NULL UNIQUE CHECK (length(codigo) = 6),
+  nombre TEXT NOT NULL CHECK (length(nombre) BETWEEN 3 AND 40),
+  creador_id INTEGER NOT NULL REFERENCES usuarios(id),
+  creado_en TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS liga_miembros (
+  liga_id INTEGER NOT NULL REFERENCES ligas(id) ON DELETE CASCADE,
+  usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+  unido_en TEXT NOT NULL DEFAULT (datetime('now')),
+  PRIMARY KEY (liga_id, usuario_id)
+);
+CREATE INDEX IF NOT EXISTS idx_liga_miembros_usuario ON liga_miembros (usuario_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_usuarios_apodo ON usuarios (lower(apodo)) WHERE apodo IS NOT NULL;
