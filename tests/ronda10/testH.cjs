@@ -64,11 +64,11 @@ const { chromium, B, EVDIR, ev, T, nuevo, entrar, peso, fin , revision, distribu
 
     // ===== H2: aviso sobre «Mis carteras»: no tapa el título ni «Nueva cartera» (muestras elegibles obligatorias; en móvil el éxito no se fija) =====
     p = await nuevo(b, w, h); await entrar(p, 'oro', 'H2' + w); await p.waitForTimeout(4600); await p.evaluate(() => { location.hash = '#carteras'; }); await p.waitForSelector('.cartera-item'); await p.evaluate(() => window.scrollTo(0, 0));
-    await p.click('#cookies-link'); await p.waitForSelector('#toast.on'); const mc = await muestrear(p, 14, 35), eleg3 = mc.filter(m => m.area > 0);
+    const sy0 = await p.evaluate(() => scrollY); await p.evaluate(() => document.querySelector('#cookies-link').click()); await p.waitForSelector('#toast.on'); const sy1 = await p.evaluate(() => scrollY);   /* ronda 31: clic del DOM, sin el desplazamiento automático de Playwright hasta el pie (con la fuente nueva el enlace queda fuera de la pantalla y el escenario dejaba de ser «al principio de la página») */ const mc = await muestrear(p, 14, 35), eleg3 = mc.filter(m => m.area > 0);
     const tit = await p.evaluate(() => { const t = document.querySelector('#toast').getBoundingClientRect(), hh = document.querySelector('#vista-carteras h1').getBoundingClientRect(), nb = document.querySelector('#btn-nueva').getBoundingClientRect(); return { sobreTitulo: t.bottom > hh.top && t.top < hh.bottom && t.height > 0, sobreBoton: t.bottom > nb.top && t.top < nb.bottom && t.height > 0 }; });
     ev('H2-' + w, `Aviso sobre «Mis carteras» (${w} px)`, `≥ ${MIN} muestras elegibles; el aviso no solapa ninguna acción ni el título y queda bajo la cabecera`,
-      `${eleg3.length} muestras elegibles; solapes: ${[...new Set(eleg3.flatMap(m => m.solapa))].join(',') || 'ninguno'}; sobre el título=${tit.sobreTitulo}, sobre «Nueva cartera»=${tit.sobreBoton}; fija=${eleg3[0]?.fija}`,
-      eleg3.length >= MIN && eleg3.every(m => m.solapa.length === 0 && m.top >= m.cabBottom - 1) && !tit.sobreTitulo && !tit.sobreBoton, '');
+      `${eleg3.length} muestras elegibles; solapes: ${[...new Set(eleg3.flatMap(m => m.solapa))].join(',') || 'ninguno'}; sobre el título=${tit.sobreTitulo}, sobre «Nueva cartera»=${tit.sobreBoton}; desplazamiento ${sy0}→${sy1}; fija=${eleg3[0]?.fija}`,
+      eleg3.length >= MIN && eleg3.every(m => m.solapa.length === 0 && m.top >= m.cabBottom - 1) && !tit.sobreTitulo && !tit.sobreBoton && sy1 === 0, '');
     await p.ctx.close();
 
     // ===== H3: errores accesibles y avisos de éxito fugaces =====
