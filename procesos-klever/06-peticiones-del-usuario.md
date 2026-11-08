@@ -2257,3 +2257,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > quiero que anilixes esta empresa como inspiraciion par saber si te da ideas que implementar o cambiar de la app https://www.darwinexzero.com/es . Luego tambien quiero que analices el seguiente video poara que te inspires en una portada mucho más futurista para el efecto wow en los usuarios. No hagas nada hasta que no te envie el video, espera un momento
 
 (En espera del vídeo antes de empezar.)
+
+## C48 · (2026-11-08) — el vídeo para la portada, literal
+> @"/root/.claude/uploads/56ca79a4-94e7-58be-aa83-20859ec3a701/70e85b5d-InShot_20261108_171328837.mp4"
+
+(Vídeo de 8 s de un concepto de app «Wallet»: rueda vertical de esferas iridiscentes por mes, cifra enorme y fina, frase con iconos y tarjeta de cristal. Análisis junto con Darwinex Zero en `ronda35/INSPIRACION.md`.)
