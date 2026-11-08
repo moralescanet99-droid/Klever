@@ -1,0 +1,15 @@
+# comando: node tests/ronda34/unit-hoy34.mjs
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:19:57 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [H1] Cartera principal: la última tocada CON posiciones
+OK    [H2] Si ninguna tiene posiciones, la última tocada; sin carteras, nada
+OK    [H3] Concentrada: semáforos, señal y la acción «Ver qué cambiaría» con la hipótesis de la señal
+OK    [H4] Sin alertas: la acción es abrir la cartera (no se inventa un cambio)
+OK    [H5] Cartera vacía: invita a añadir empresas
+OK    [H6] Anillo: un tramo por posición con el color por orden (como la lista y el editor) y decorativo
+OK    [H7] Nada de importes ni rentabilidad en el modelo
+
+RESULTADO: 7 correctas, 0 fallos
+(node:26877) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

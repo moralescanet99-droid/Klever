@@ -1,0 +1,191 @@
+[
+ {
+  "id": "T1-1440",
+  "escenario": "Cuaderno (1440 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista",
+  "esperado": "Grupos «Para revisar», «Próximas revisiones» y «Sin fecha» en ese orden; 4 tarjetas para 4 escenarios (sin tarjeta editorial repetida); la primera tarjeta está dentro del viewport y trae «Registrar revisión»",
+  "observado": "{\"grupos\":[\"Para revisar (1)\",\"Próximas revisiones (2)\",\"Sin fecha de revisión (1)\"],\"tarjetas\":4,\"casos\":0,\"casosOculto\":true,\"primera\":{\"top\":372,\"t\":\"«¿Aporta JNJ estabilidad?» Simulación En estudio Toca revisar: 7 nov 2026 (la fecha ya ha pasado).Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Mi cartera T» Registrar revisión de Idea aaa Abrir Idea aaa\",\"acc\":true},\"alto\":900,\"primerBloque\":\"Mis ideas (4)\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2b-1440",
+  "escenario": "Formulario de revisión (1440 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2-1440",
+  "escenario": "Registrar desde el Cuaderno (1440 px)",
+  "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
+  "observado": "{\"foco\":\"rev-obs\",\"abierto\":true,\"hash\":\"#escenario-1\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T3-1440",
+  "escenario": "Respuesta perdida, relectura fallida y texto modificado (1440 px)",
+  "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":1,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:07\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"8 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":1,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:07\"}]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T4-1440",
+  "escenario": "Dos pestañas con versión antigua (1440 px)",
+  "esperado": "La segunda pestaña recibe «cambió en otra pestaña»; NO afirma «no se ha registrado nada» sin base, conserva el texto, ya muestra la versión actual (2 revisiones) y, al pulsar de nuevo, añade la tercera sin pisar ninguna",
+  "observado": "{\"t4a\":{\"aviso\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. Hemos cargado la versión actual: pulsa «Registrar revisión» para añadirla.\",\"obs\":\"Mi texto desde la pestaña antigua\",\"items\":2,\"filas\":2},\"t4b\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\",\"Observación del primer envío\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T5-1440",
+  "escenario": "Revisión personal con historia editorial (1440 px)",
+  "esperado": "Tras registrar una revisión personal, la tarjeta dice «1 revisión personal registrada» y la nueva fecha; la «Respuesta editorial» es IDÉNTICA a la de antes (no se resuelve ni se verifica por un comentario personal); la ficha las separa",
+  "observado": "{\"edAntes\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"edDespues\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"seg\":\"Tu seguimiento: 1 revisión personal registrada.\",\"fecha\":\"Próxima revisión: 28 nov 2026.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T6-1440",
+  "escenario": "Archivar y descartar (1440 px)",
+  "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
+  "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-1440",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (1440 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-5\"} {\"origen\":\"manual\",\"n\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T0-1440",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (1440 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "T1-390",
+  "escenario": "Cuaderno (390 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista",
+  "esperado": "Grupos «Para revisar», «Próximas revisiones» y «Sin fecha» en ese orden; 4 tarjetas para 4 escenarios (sin tarjeta editorial repetida); la primera tarjeta está dentro del viewport y trae «Registrar revisión»",
+  "observado": "{\"grupos\":[\"Para revisar (1)\",\"Próximas revisiones (2)\",\"Sin fecha de revisión (1)\"],\"tarjetas\":4,\"casos\":0,\"casosOculto\":true,\"primera\":{\"top\":463,\"t\":\"«¿Aporta JNJ estabilidad?» Simulación En estudio Toca revisar: 7 nov 2026 (la fecha ya ha pasado).Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Mi cartera T» Registrar revisión de Idea aaa Abrir Idea aaa\",\"acc\":true},\"alto\":780,\"primerBloque\":\"Mis ideas (4)\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2b-390",
+  "escenario": "Formulario de revisión (390 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2-390",
+  "escenario": "Registrar desde el Cuaderno (390 px)",
+  "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
+  "observado": "{\"foco\":\"rev-obs\",\"abierto\":true,\"hash\":\"#escenario-5\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T3-390",
+  "escenario": "Respuesta perdida, relectura fallida y texto modificado (390 px)",
+  "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":5,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:21\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"8 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":5,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:21\"}]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T4-390",
+  "escenario": "Dos pestañas con versión antigua (390 px)",
+  "esperado": "La segunda pestaña recibe «cambió en otra pestaña»; NO afirma «no se ha registrado nada» sin base, conserva el texto, ya muestra la versión actual (2 revisiones) y, al pulsar de nuevo, añade la tercera sin pisar ninguna",
+  "observado": "{\"t4a\":{\"aviso\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. Hemos cargado la versión actual: pulsa «Registrar revisión» para añadirla.\",\"obs\":\"Mi texto desde la pestaña antigua\",\"items\":2,\"filas\":2},\"t4b\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\",\"Observación del primer envío\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T5-390",
+  "escenario": "Revisión personal con historia editorial (390 px)",
+  "esperado": "Tras registrar una revisión personal, la tarjeta dice «1 revisión personal registrada» y la nueva fecha; la «Respuesta editorial» es IDÉNTICA a la de antes (no se resuelve ni se verifica por un comentario personal); la ficha las separa",
+  "observado": "{\"edAntes\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"edDespues\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"seg\":\"Tu seguimiento: 1 revisión personal registrada.\",\"fecha\":\"Próxima revisión: 28 nov 2026.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T6-390",
+  "escenario": "Archivar y descartar (390 px)",
+  "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
+  "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-390",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (390 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-7\"} {\"origen\":\"manual\",\"n\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T0-390",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (390 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ },
+ {
+  "id": "T1-320",
+  "escenario": "Cuaderno (320 px): «Para revisar» primero, UNA tarjeta por escenario y la acción de registrar a la vista",
+  "esperado": "Grupos «Para revisar», «Próximas revisiones» y «Sin fecha» en ese orden; 4 tarjetas para 4 escenarios (sin tarjeta editorial repetida); la primera tarjeta está dentro del viewport y trae «Registrar revisión»",
+  "observado": "{\"grupos\":[\"Para revisar (1)\",\"Próximas revisiones (2)\",\"Sin fecha de revisión (1)\"],\"tarjetas\":4,\"casos\":0,\"casosOculto\":true,\"primera\":{\"top\":519,\"t\":\"«¿Aporta JNJ estabilidad?» Simulación En estudio Toca revisar: 7 nov 2026 (la fecha ya ha pasado).Tu seguimiento: sin revisiones personales todavía. JNJ al 10 % en la alternativa · cartera «Mi cartera T» Registrar revisión de Idea aaa Abrir Idea aaa\",\"acc\":true},\"alto\":780,\"primerBloque\":\"Mis ideas (4)\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2b-320",
+  "escenario": "Formulario de revisión (320 px): los botones de opción tienen un tamaño normal",
+  "esperado": "Las tres opciones miden ≤ 24 px de alto (antes heredaban el campo de 44 px y salían como un círculo enorme)",
+  "observado": "[20,20,20]",
+  "resultado": "OK"
+ },
+ {
+  "id": "T2-320",
+  "escenario": "Registrar desde el Cuaderno (320 px)",
+  "esperado": "Abre la ficha de la idea con el formulario ya abierto y el foco en «Tu observación»",
+  "observado": "{\"foco\":\"rev-obs\",\"abierto\":true,\"hash\":\"#escenario-9\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T3-320",
+  "escenario": "Respuesta perdida, relectura fallida y texto modificado (320 px)",
+  "esperado": "Primero «no hemos podido confirmar» (sin decir «no se ha registrado nada»; el servidor ya tiene 1 fila); con texto nuevo escrito, reintentar envía EL MISMO envío (mismo contenido y clave) y, al fallar la relectura, dice que SÍ está guardada y ofrece «Actualizar la vista»; recuperar la vista NO hace otro POST; al final 1 sola revisión visible con el texto del primer envío, y el texto nuevo sigue en el formulario sin enviar",
+  "observado": "{\"t3a\":{\"aviso\":\"No hemos podido confirmar si la revisión se registró (sin conexión o sin respuesta del servidor). Tu texto se conserva. «Reintentar el mismo envío» lo comprueba sin duplicarlo.\",\"boton\":\"Reintentar el mismo envío\",\"filas\":1,\"obs\":\"Observación del primer envío\"},\"t3b\":{\"aviso\":\"Tu revisión SÍ está guardada. No hemos podido actualizar la vista: pulsa «Actualizar la vista». No hace falta volver a escribirla.\",\"boton\":\"Actualizar la vista\",\"filas\":[{\"id\":9,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:35\"}],\"posts\":2,\"obs\":\"Observación del primer envío + texto NUEVO escrito después\"},\"t3c\":{\"aviso\":\"Vista actualizada: tu revisión aparece en el historial.\",\"items\":[\"8 nov 2026 · Mantengo la ideaTu observación: Observación del primer envíoLo que aprendiste: Aprendizaje A\"],\"obs\":\"Observación del primer envío + texto NUEVO escrito después\",\"nuevosPosts\":0,\"filas\":[{\"id\":9,\"fecha\":\"2026-11-08\",\"observacion\":\"Observación del primer envío\",\"aprendizaje\":\"Aprendizaje A\",\"decision\":\"mantener\",\"proxima_fecha\":null,\"creado_en\":\"2026-11-08 16:26:35\"}]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T4-320",
+  "escenario": "Dos pestañas con versión antigua (320 px)",
+  "esperado": "La segunda pestaña recibe «cambió en otra pestaña»; NO afirma «no se ha registrado nada» sin base, conserva el texto, ya muestra la versión actual (2 revisiones) y, al pulsar de nuevo, añade la tercera sin pisar ninguna",
+  "observado": "{\"t4a\":{\"aviso\":\"Esta idea cambió en otra pestaña o dispositivo después de la versión que ves. No se ha registrado esta revisión; tu texto sigue aquí. Hemos cargado la versión actual: pulsa «Registrar revisión» para añadirla.\",\"obs\":\"Mi texto desde la pestaña antigua\",\"items\":2,\"filas\":2},\"t4b\":{\"filas\":[\"Mi texto desde la pestaña antigua\",\"Desde la otra pestaña\",\"Observación del primer envío\"]}}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T5-320",
+  "escenario": "Revisión personal con historia editorial (320 px)",
+  "esperado": "Tras registrar una revisión personal, la tarjeta dice «1 revisión personal registrada» y la nueva fecha; la «Respuesta editorial» es IDÉNTICA a la de antes (no se resuelve ni se verifica por un comentario personal); la ficha las separa",
+  "observado": "{\"edAntes\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"edDespues\":\"Respuesta editorial: la revisión de la historia responde a la cuestión que sigues.\",\"seg\":\"Tu seguimiento: 1 revisión personal registrada.\",\"fecha\":\"Próxima revisión: 28 nov 2026.\"}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T6-320",
+  "escenario": "Archivar y descartar (320 px)",
+  "esperado": "La idea archivada y la descartada ya no aparecen en lo pendiente (solo quedan las 2 en estudio), aparecen en sus filtros (la archivada sin botón de registrar) y la cartera conserva sus posiciones y su revisión",
+  "observado": "{\"pend\":2,\"arch\":1,\"desc\":1,\"revBase\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T7-320",
+  "escenario": "Con cuenta: «Recrear la que ya tengo» (320 px)",
+  "esperado": "Crea en la cuenta una cartera vacía con origen «manual», abre el editor con el aviso VISIBLE (sin conexión con bróker) y un texto que no ofrece plantillas ni «Más acciones»; la opción de plantilla no está",
+  "observado": "{\"aviso\":\"Tu cartera, a mano · sin conexión con bróker. MásEs la representación que tú introduces: Klever no se conecta a ningún banco ni bróker, no custodia nada y no envía órdenes. Solo se pueden usar los activos del universo disponible; si el tuyo no está, te lo diremos y no lo sustituiremos por otro.\",\"avisoArriba\":true,\"vacio\":\"Busca un activo abajo, por nombre o símbolo, y reparte hasta el 100 %.\",\"plantilla\":false,\"id\":\"#cartera-9\"} {\"origen\":\"manual\",\"n\":0}",
+  "resultado": "OK"
+ },
+ {
+  "id": "T0-320",
+  "escenario": "Sin errores de JavaScript ni diálogos inesperados (320 px)",
+  "esperado": "Ningún pageerror; sin diálogos inesperados",
+  "observado": "errores []; inesperados []",
+  "resultado": "OK"
+ }
+]

@@ -1,0 +1,27 @@
+# comando: node tests/ronda28/testY.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:29:51 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [Y1-1440] Barra inferior (1440 px): no se muestra en escritorio
+OK    [Y2-1440] Pegar «KO 40, PG 60, ZZZZ 5» en el editor (1440 px)
+OK    [Y3-1440] Explorar → «Probar» (1440 px)
+OK    [Y4-1440] Señal en tres niveles y umbrales propios (1440 px)
+OK    [Y6-1440] Preguntas de ejemplo al guardar una idea (1440 px)
+OK    [Y5-1440] Renombrados (1440 px): «idea» y «empresas que sigo»
+OK    [Y0-1440] Sin errores ni desbordes (1440 px)
+OK    [Y1-390] Barra inferior (390 px): tres destinos y el actual marcado; oculta en el editor y el laboratorio
+OK    [Y2-390] Pegar «KO 40, PG 60, ZZZZ 5» en el editor (390 px)
+OK    [Y3-390] Explorar → «Probar» (390 px)
+OK    [Y4-390] Señal en tres niveles y umbrales propios (390 px)
+OK    [Y6-390] Preguntas de ejemplo al guardar una idea (390 px)
+OK    [Y5-390] Renombrados (390 px): «idea» y «empresas que sigo»
+OK    [Y0-390] Sin errores ni desbordes (390 px)
+OK    [Y1-320] Barra inferior (320 px): tres destinos y el actual marcado; oculta en el editor y el laboratorio
+OK    [Y2-320] Pegar «KO 40, PG 60, ZZZZ 5» en el editor (320 px)
+OK    [Y3-320] Explorar → «Probar» (320 px)
+OK    [Y4-320] Señal en tres niveles y umbrales propios (320 px)
+OK    [Y6-320] Preguntas de ejemplo al guardar una idea (320 px)
+OK    [Y5-320] Renombrados (320 px): «idea» y «empresas que sigo»
+OK    [Y0-320] Sin errores ni desbordes (320 px)
+
+RESULTADO: 21 correctas, 0 fallos

@@ -1,0 +1,10 @@
+OK    [AA1-1440] Arranque guiado (1440 px): dos preguntas y la cartera de ejemplo ya revisada
+OK    [AA2-1440] Ya tengo cartera / empezar de cero (1440 px)
+OK    [AA3-1440] Huella de empresa (1440 px)
+FALLA (excepción) page.goto: Timeout 30000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:8800/", waiting until "load"[22m
+
+
+RESULTADO: 3 correctas, 0 fallos
+CIERRE ANÓMALO: 1 navegador(es) seguían abiertos al terminar la batería y se cerraron al final (la batería debe cerrarlos ella).

@@ -1,0 +1,25 @@
+# comando: node tests/ronda16/testO.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:29:51 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [O1-320] Ejemplo con la nota CALCULADA (320 px)
+OK    [O1b-320] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (320 px)
+OK    [O1c-320] Cambiar de ejemplo conserva el foco en el selector y la región se anuncia (320 px)
+OK    [O2-320] Ejemplo INCOMPLETO: evaluación parcial con su motivo en lenguaje claro (320 px)
+OK    [O2b-320] Sin errores de JavaScript en los dos ejemplos (320 px)
+OK    [O1-390] Ejemplo con la nota CALCULADA (390 px)
+OK    [O1b-390] Orden en el móvil: selector, barra de pesos, RESULTADO y solo después los botones (390 px)
+OK    [O1c-390] Cambiar de ejemplo conserva el foco en el selector y la región se anuncia (390 px)
+OK    [O2-390] Ejemplo INCOMPLETO: evaluación parcial con su motivo en lenguaje claro (390 px)
+OK    [O2b-390] Sin errores de JavaScript en los dos ejemplos (390 px)
+OK    [O3] Comparador: deuda neta / EBITDA en veces y qué cantidades se comparan
+OK    [O4] Laboratorio: quién cede el peso justo al calcular, y el desarrollo debajo
+OK    [O5a] Guardar desde la historia: la casilla «Sigo la pregunta de la historia» viene marcada y la pregunta propia, con las palabras de la historia
+OK    [O5b] Editar la pregunta con otras palabras: se conserva el vínculo y la ficha lo dice
+OK    [O5c] Tres escenarios con la MISMA empresa: texto original, reformulación que conserva el vínculo y pregunta nueva
+OK    [O5c2] La ficha del escenario original muestra la respuesta editorial completa, una sola vez, separada de las revisiones personales
+OK    [O5d] Cierro sesión y vuelvo con la misma cuenta
+OK    [O5e] Otra cuenta, AUTENTICADA, en otro navegador
+OK    [O6] RESPUESTA INTERCEPTADA (no es una fila corrupta real; esa se prueba en unit-escenarios16 P3/P3b y unit-guardada17 G9): el servidor «entrega» la evaluación con marcado en la nota
+
+RESULTADO: 19 correctas, 0 fallos

@@ -1,0 +1,15 @@
+OK    [VIS-portada-390.png] Captura igual a su referencia: portada-390.png
+OK    [VIS-explorar-390.png] Captura igual a su referencia: explorar-390.png
+OK    [VIS-comparador-390.png] Captura igual a su referencia: comparador-390.png
+OK    [VIS-como-funciona-390.png] Captura igual a su referencia: como-funciona-390.png
+OK    [VIS-portada-1440.png] Captura igual a su referencia: portada-1440.png
+OK    [VIS-explorar-1440.png] Captura igual a su referencia: explorar-1440.png
+OK    [VIS-comparador-1440.png] Captura igual a su referencia: comparador-1440.png
+OK    [VIS-como-funciona-1440.png] Captura igual a su referencia: como-funciona-1440.png
+FALLA [VIS-explorar-345-texto118.png] Captura igual a su referencia: explorar-345-texto118.png  [0.160 % (420 píxeles)]
+FALLA [VIS-comparador-345-texto118.png] Captura igual a su referencia: comparador-345-texto118.png  [0.157 % (412 píxeles)]
+
+RESULTADO: 8 correctas, 2 fallos
+FALLOS:
+- [VIS-explorar-345-texto118.png] Captura igual a su referencia: explorar-345-texto118.png → 0.160 % (420 píxeles)
+- [VIS-comparador-345-texto118.png] Captura igual a su referencia: comparador-345-texto118.png → 0.157 % (412 píxeles)

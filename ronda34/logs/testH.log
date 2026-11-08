@@ -1,0 +1,31 @@
+# comando: node tests/ronda10/testH.cjs (PARALELO=3)
+# entorno: Node v22.23.4 · Linux 6.18.44-fc-v310 · 2026-11-08 16:29:51 UTC
+# código de salida: 0 · tiempo agotado: 0
+
+OK    [H1a-320] Aviso de éxito al INICIO de la página (320 px)
+OK    [H1b-320] Legibilidad del aviso durante toda la animación (320 px), con la opacidad real
+OK    [H1c-320] Aviso fijo tras desplazarse (320 px, desplazado 924 px)
+OK    [H2-320] Aviso sobre «Mis carteras» (320 px)
+OK    [H3-320] Errores accesibles y avisos de éxito fugaces (320 px, título largo)
+OK    [H1a-390] Aviso de éxito al INICIO de la página (390 px)
+OK    [H1b-390] Legibilidad del aviso durante toda la animación (390 px), con la opacidad real
+OK    [H1c-390] Aviso fijo tras desplazarse (390 px, desplazado 924 px)
+OK    [H2-390] Aviso sobre «Mis carteras» (390 px)
+OK    [H3-390] Errores accesibles y avisos de éxito fugaces (390 px, título largo)
+OK    [H1a-1440] Aviso de éxito al INICIO de la página (1440 px)
+OK    [H1b-1440] Legibilidad del aviso durante toda la animación (1440 px), con la opacidad real
+OK    [H1c-1440] Aviso fijo tras desplazarse (1440 px, desplazado 353 px)
+OK    [H2-1440] Aviso sobre «Mis carteras» (1440 px)
+OK    [H3-1440] Errores accesibles y avisos de éxito fugaces (1440 px, título largo)
+OK    [H7-320] 320×568, texto ampliado al 200 % (SIMULADO): espacio útil con aviso de error y barra, sin cerrar el aviso
+OK    [H7-390] 390×844, texto ampliado al 200 % (SIMULADO): espacio útil con aviso de error y barra, sin cerrar el aviso
+OK    [H8] Con «reducir movimiento» el aviso aparece sin animar
+OK    [H4-320] Resumen de ROIC (320 px): composición primero, ROIC secundario con cobertura y advertencia; explicación en desplegable
+OK    [H4-390] Resumen de ROIC (390 px): composición primero, ROIC secundario con cobertura y advertencia; explicación en desplegable
+OK    [H4-1440] Resumen de ROIC (1440 px): composición primero, ROIC secundario con cobertura y advertencia; explicación en desplegable
+OK    [H5-320] Móvil 320×568: estado claro y acciones alcanzables (texto ampliado SIMULADO, título largo, teclado SIMULADO)
+OK    [H6-320] Sin errores de JavaScript (320 px)
+OK    [H5-390] Móvil 390×844: estado claro y acciones alcanzables (texto ampliado SIMULADO, título largo, teclado SIMULADO)
+OK    [H6-390] Sin errores de JavaScript (390 px)
+
+RESULTADO: 25 correctas, 0 fallos

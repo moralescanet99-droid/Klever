@@ -1,0 +1,146 @@
+[
+ {
+  "id": "L1",
+  "escenario": "Carga VACÍA (catálogo sin empresas) sobre datos previos",
+  "esperado": "No cambia ninguna fila ni su fecha; solo queda el lote «vacia» con 0 empresas; el origen sigue siendo el real de cada fila (mixto: sec + prueba), no «sec actualizado hoy»",
+  "observado": "filas intactas; lote vacia ok=0; origen mixto; grupos [{\"fuente\":\"prueba\",\"n\":1,\"desde\":\"2026-09-15\",\"hasta\":\"2026-09-15\"},{\"fuente\":\"sec\",\"n\":2,\"desde\":\"2026-10-01\",\"hasta\":\"2026-10-01\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L2",
+  "escenario": "Carga donde TODAS fallan o vienen sin años",
+  "esperado": "No se toca ninguna fila; lote «vacia» con 2 fallidas y 1 vacía",
+  "observado": "intactas; {\"id\":1,\"origen\":\"sec\",\"fecha\":\"2026-11-04\",\"n_ok\":0,\"n_vacias\":1,\"n_fallidas\":2,\"estado\":\"vacia\",\"creado_en\":\"2026-11-08 16:14:43\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L3",
+  "escenario": "Carga PARCIAL: una empresa falla",
+  "esperado": "AAA y CCC pasan a «sec» con la fecha nueva; BBB (fallida) CONSERVA su fuente y su fecha anteriores; lote «parcial» 2 ok / 1 fallida",
+  "observado": "AAA:FY2023:sec:2026-11-04:90 | AAA:FY2024:sec:2026-11-04:110 | BBB:FY2024:prueba:2026-09-15:200 | CCC:FY2024:sec:2026-11-04:55; lote parcial 2/1; origen mixto",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L3b",
+  "escenario": "La ficha lleva la procedencia de CADA dato",
+  "esperado": "La ficha de BBB dice prueba/2026-09-15; la de AAA, sec/2026-11-04",
+  "observado": "[\"prueba\",\"2026-09-15\"] [\"sec\",\"2026-11-04\"]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L4",
+  "escenario": "Carga CORRECTA (y repetida: idempotente)",
+  "esperado": "Todas «sec» con fecha 2026-11-04; el origen pasa a «sec» con rango de fechas; dos lotes «correcta»",
+  "observado": "[{\"fuente\":\"sec\",\"n\":3,\"desde\":\"2026-11-04\",\"hasta\":\"2026-11-04\"}]; origen sec; lotes [{\"estado\":\"correcta\",\"n_ok\":3},{\"estado\":\"correcta\",\"n_ok\":3}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L5",
+  "escenario": "Sin ninguna fila: no se atribuye a nadie",
+  "esperado": "origen null, 0 empresas",
+  "observado": "{\"origen\":null,\"empresas\":0,\"grupos\":[],\"ultima_carga\":null}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L5b",
+  "escenario": "Filas anteriores sin fuente registrada (datos antiguos)",
+  "esperado": "origen null: «sin fuente verificada»",
+  "observado": "[{\"fuente\":\"sin_fuente\",\"n\":3,\"desde\":null,\"hasta\":null}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L6",
+  "escenario": "Métricas derivadas: ausencia ≠ cero",
+  "esperado": "Sin amortizaciones → EBITDA desconocido (NO el EBIT); sin capex → caja libre desconocida; capex = 0 declarado SÍ cuenta; deuda LP = 0 declarada SÍ cuenta; sin impuesto → ROIC desconocido (sin tipo supuesto)",
+  "observado": "{\"ebitda\":null,\"fcfSinCapex\":null,\"fcfCapex0\":30,\"deuda0\":-10,\"roicSinTax\":null,\"completo\":[25,20,30,0.1231]}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L7",
+  "escenario": "Criterios: beneficio 0 ≠ beneficio ausente; EBITDA ausente → deuda sin datos",
+  "esperado": "ni = 0 → margen 0 y «no superada» (false); ni ausente → «sin datos» (null); EBITDA ausente → deuda/EBITDA «sin datos», no 0",
+  "observado": "{\"margen0\":{\"ok\":false,\"valor\":0},\"margenAusente\":{\"ok\":null,\"valor\":null},\"deudaSinEbitda\":{\"ok\":null,\"valor\":null}}",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L8",
+  "escenario": "Crecimiento con año anterior ausente o con ingresos 0",
+  "esperado": "«sin datos» en ambos casos; con ingresos previos válidos, el signo real",
+  "observado": "[null,null,true]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L9",
+  "escenario": "El SQL no escribe ningún origen global",
+  "esperado": "Sin referencias a datos_meta en el SQL generado",
+  "observado": "datos_meta ausente",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10",
+  "escenario": "Flujo anual: un acumulado de 9 meses con el mismo ejercicio NO se confunde con el año completo",
+  "esperado": "Gana el dato de 12 meses (100) y su informe",
+  "observado": "[{\"val\":100,\"end\":\"2024-12-31\",\"filed\":\"2025-02-10\",\"accn\":\"0001-25-000001\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10b",
+  "escenario": "Un flujo sin duración de ~12 meses se descarta (no hay dato en lugar de un dato falso)",
+  "esperado": "Sin ejercicio 2024",
+  "observado": "0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10c",
+  "escenario": "Un SALDO (deuda, caja, patrimonio) no tiene duración y sí se acepta",
+  "esperado": "Ejercicio 2024 = 55",
+  "observado": "[{\"val\":55,\"end\":\"2024-12-31\",\"filed\":\"2025-02-10\",\"accn\":\"0001-25-000001\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10d",
+  "escenario": "Revisión del mismo cierre: gana la presentación más reciente y se conserva su informe",
+  "esperado": "val 98 y accn «revision»",
+  "observado": "[{\"val\":98,\"end\":\"2024-12-31\",\"filed\":\"2025-05-02\",\"accn\":\"revision\"}]",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L10e",
+  "escenario": "Trimestrales (10-Q) y hechos sin ejercicio no cuentan",
+  "esperado": "Sin datos",
+  "observado": "0",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L11",
+  "escenario": "La carga exige declarar su fuente: no existe «sec» por defecto",
+  "esperado": "Lanza un error si falta la fuente; con «prueba» no escribe «sec»",
+  "observado": "La carga exige declarar su fuente (sec | prueba | demo): no …; con prueba: false",
+  "resultado": "OK",
+  "evidencia": ""
+ },
+ {
+  "id": "L12",
+  "escenario": "La carga guarda el resultado operativo (para el margen operativo) y el informe de origen",
+  "esperado": "resultado_operativo = ingresos/5 = 22; informe «0001-25-000009»",
+  "observado": "{\"resultado_operativo\":22,\"informe\":\"0001-25-000009\"}",
+  "resultado": "OK",
+  "evidencia": ""
+ }
+]

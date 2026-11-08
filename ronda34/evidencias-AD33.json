@@ -1,0 +1,23 @@
+[
+ {
+  "id": "AD1",
+  "escenario": "Primera visita del día y recarga",
+  "esperado": "un solo POST {\"evento\":\"visita\"} sin más campos; al recargar el mismo día, ninguno",
+  "observado": "{\"primera\":[\"{\\\"evento\\\":\\\"visita\\\"}\"],\"recarga\":[]}",
+  "resultado": "OK"
+ },
+ {
+  "id": "AD2",
+  "escenario": "Vuelve a los 7 días",
+  "esperado": "«visita» y «vuelve_7d»",
+  "observado": "[\"{\\\"evento\\\":\\\"visita\\\"}\",\"{\\\"evento\\\":\\\"vuelve_7d\\\"}\"]",
+  "resultado": "OK"
+ },
+ {
+  "id": "AD3",
+  "escenario": "Hoja de estilo única con los tokens aplicados",
+  "esperado": "solo klever.css; fondo carbón rgb(19, 16, 14); fuente «Inter Klever»",
+  "observado": "{\"hojas\":[\"klever.css\"],\"bg\":\"rgb(19, 16, 14)\",\"fuente\":\"\\\"Inter Klever\\\"\"}",
+  "resultado": "OK"
+ }
+]
