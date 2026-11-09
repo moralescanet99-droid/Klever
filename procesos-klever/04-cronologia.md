@@ -104,3 +104,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-08 · Ronda 36: Liga, Temporada 0 (servidor y pantalla), con ligas privadas e invitación por enlace.
 - 2026-11-08 · Ronda 37 (C53): propuesta de refundación «futurista y viva» y prototipo interactivo (`ronda37/`), pendiente de decisión de Javier.
 - 2026-11-09 · Ronda 38 (C54): tres prototipos (Órbita, Organismo, Arena) para que Javier elija con cuál refundar Klever.
+- 2026-11-09 · Ronda 39 (C56): prototipo D «Tu fantasma»; «Cartera en equipo» y «Tu cartera en el mapa» en los cuatro prototipos.
