@@ -2322,3 +2322,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Si. Tambien quiero que me hagas 3 prototipo de la app para ver como seria (solo fotos)
 
 («Si» responde a: meter las ideas de juego y legales de LaLiga Fantasy (`ronda41/LIGA-FANTASY.md`) en el paquete de validación de C58 y lanzarlo. Respuesta: `ronda42/validacion/` y `ronda42/fotos/`.)
+
+## C61 · (2026-11-09) — ¿el proyecto es público o privado?, literal
+> Esta este proyecto esta en publico o en privado?
+
+(Respuesta: el repositorio de GitHub `moralescanet99-droid/Klever` es **público** (comprobado con la API de GitHub el 2026-11-09). Los artefactos de claude.ai son privados. Recomendado de nuevo: hacerlo privado (decisión pendiente desde C43).)
