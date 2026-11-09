@@ -84,7 +84,7 @@ npx wrangler pages deploy dist --project-name klever --branch main
 ```
 *Verás* «✨ Deployment complete! Take a peek over at https://….klever.pages.dev». Abre **`https://klever.pages.dev`**.
 
-**Entra tú el primero:** escribe tu correo (el de `ADMIN_EMAIL`), sin código, y pulsa «Enviarme el enlace». En modo pruebas *verás* «Tu enlace está listo» → **Entrar ahora** → elige tu apodo, marca «Tengo 18 años o más» y acepta las condiciones. Ya eres administrador: en **tu cuenta** (círculo con tus iniciales, arriba a la derecha) aparece «Panel de administración».
+**Entra tú el primero:** escribe tu correo (el de `ADMIN_EMAIL`), sin código, y pulsa «Enviarme el enlace». En modo pruebas *verás* «Tu enlace está listo» → **Entrar ahora** → pulsa **«Entrar en Klever»** en la página de confirmación (protege el enlace de los antivirus que abren enlaces solos) → elige tu apodo, marca «Tengo 18 años o más» y acepta las condiciones. Ya eres administrador: en **tu cuenta** (círculo con tus iniciales, arriba a la derecha) aparece «Panel de administración».
 
 Para publicar cambios más adelante, repite solo el paso 7.
 

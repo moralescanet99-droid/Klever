@@ -107,3 +107,4 @@ Todas las fechas son 2026-11-03 salvo indicación (el repositorio se creó el 20
 - 2026-11-09 · Ronda 39 (C56): prototipo D «Tu fantasma»; «Cartera en equipo» y «Tu cartera en el mapa» en los cuatro prototipos.
 - 2026-11-09 · Ronda 40 (C57): informe de la app final con 3 secciones y sin supuestos prácticos.
 - 2026-11-09 · Ronda 42 (C58, C60): paquete de validación con evidencia (legal, EDGAR, votación, reseñas) y 3 prototipos de la app final en fotos.
+- 2026-11-09 · Ronda 43 (C63): app v1 (Nácar) construida y probada en local; demo publicada como artefacto; lista para publicar cuando Javier tenga la cuenta de Cloudflare.

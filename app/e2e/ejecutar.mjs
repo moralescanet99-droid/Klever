@@ -94,6 +94,7 @@ async function main() {
   comprobar('modo pruebas: el enlace sale en pantalla', /\/api\/verificar\?t=[0-9a-f]{64}$/.test(await entrarA.getAttribute('href')));
   await foto(A.p, '02-modo-pruebas');
   await entrarA.click();
+  await A.p.getByRole('button', { name: 'Entrar en Klever' }).click(); // página de confirmación (protege de los previsualizadores de correo)
   await A.p.waitForURL(/#\/alta$/, { timeout: 10000 });
   await A.p.getByLabel('Apodo').waitFor();
   comprobar('verificar redirige a #/alta (cuenta nueva)', true);
@@ -143,6 +144,7 @@ async function main() {
   await B.p.getByLabel('Tu correo').fill('bea@ejemplo.invalid');
   await B.p.getByRole('button', { name: 'Enviarme el enlace' }).click();
   await B.p.getByRole('link', { name: 'Entrar ahora' }).click();
+  await B.p.getByRole('button', { name: 'Entrar en Klever' }).click();
   await B.p.waitForURL(/#\/alta$/);
   await B.p.getByLabel('Apodo').fill('javi_ADMIN');
   await B.p.getByText('Tengo 18 años o más').click();

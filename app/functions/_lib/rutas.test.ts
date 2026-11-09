@@ -13,7 +13,7 @@ function cliente(env: Env, reloj: { t: number }) {
     const r = await manejar(new Request(O + ruta, { method: metodo, headers: h, body: cuerpo === undefined ? undefined : JSON.stringify(cuerpo), redirect: 'manual' }), env, () => new Date(reloj.t));
     const sc = r.headers.get('set-cookie'); if (sc) cookie = sc.split(';')[0].endsWith('=') ? '' : sc.split(';')[0];
     const texto = await r.text();
-    return { s: r.status, j: texto ? JSON.parse(texto) : null, r, sc };
+    return { s: r.status, j: texto && !texto.startsWith('<') ? JSON.parse(texto) : null, html: texto.startsWith('<') ? texto : '', r, sc };
   };
   return { pedir, get cookie() { return cookie; } };
 }
@@ -21,7 +21,10 @@ const entorno = (extra: Partial<Env> = {}): Env => ({ DB: crearD1().DB, ADMIN_EM
 async function entrarConEnlace(c: ReturnType<typeof cliente>, email: string, invitacion?: string) {
   const a = await c.pedir('POST', '/api/acceso', { email, invitacion });
   expect(a.s, JSON.stringify(a.j)).toBe(200);
-  const v = await c.pedir('GET', new URL(a.j.enlacePruebas).pathname + new URL(a.j.enlacePruebas).search);
+  const tk = new URL(a.j.enlacePruebas).searchParams.get('t')!;
+  const pag = await c.pedir('GET', '/api/verificar?t=' + tk); // la página de confirmación NO gasta el enlace
+  if (pag.s !== 200 || !pag.html.includes('method="post"')) throw new Error('sin página de confirmación');
+  const v = await c.pedir('POST', '/api/verificar', { t: tk });
   return { a, v };
 }
 
@@ -38,12 +41,12 @@ describe('Api · acceso y cuenta', () => {
     // la administración entra sin invitación (arranque)
     const { a, v } = await entrarConEnlace(adm, 'admin@ejemplo.invalid');
     expect(a.j.enviado).toBe(false); expect(a.j.enlacePruebas).toMatch(/^https:\/\/klever\.pages\.dev\/api\/verificar\?t=[0-9a-f]{64}$/);
-    expect(v.s).toBe(302); expect(v.r.headers.get('location')).toBe('/#/alta');
+    expect(v.s).toBe(303); expect(v.r.headers.get('location')).toBe('/#/alta');
     expect(v.sc).toMatch(/HttpOnly/); expect(v.sc).toMatch(/Secure/); expect(v.sc).toMatch(/SameSite=Lax/); expect(v.sc).toMatch(/Max-Age=2592000/);
     // el token se guarda solo como hash
     const token = new URL(a.j.enlacePruebas).searchParams.get('t')!;
     // el enlace es de un solo uso
-    const otra = cliente(env, reloj); const re = await otra.pedir('GET', '/api/verificar?t=' + token);
+    const otra = cliente(env, reloj); const re = await otra.pedir('POST', '/api/verificar', { t: token });
     expect(re.r.headers.get('location')).toBe('/#/entrar?error=enlace'); expect(re.sc).toBeNull();
     expect((await adm.pedir('GET', '/api/sesion')).j).toMatchObject({ usuario: null, necesitaAlta: true });
     expect((await adm.pedir('GET', '/api/carteras')).s).toBe(401);

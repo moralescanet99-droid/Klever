@@ -16,7 +16,7 @@ export function json(datos: unknown, estado = 200, cabeceras: Record<string, str
   return new Response(JSON.stringify(datos), { status: estado, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', ...cabeceras } });
 }
 export const sinContenido = (cabeceras: Record<string, string> = {}) => new Response(null, { status: 204, headers: { 'cache-control': 'no-store', ...cabeceras } });
-export const redirigir = (destino: string, cabeceras: Record<string, string> = {}) => new Response(null, { status: 302, headers: { location: destino, 'cache-control': 'no-store', 'referrer-policy': 'no-referrer', ...cabeceras } });
+export const redirigir = (destino: string, cabeceras: Record<string, string> = {}) => new Response(null, { status: 303, headers: { location: destino, 'cache-control': 'no-store', 'referrer-policy': 'no-referrer', ...cabeceras } });
 
 export async function sha256(texto: string): Promise<string> {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));

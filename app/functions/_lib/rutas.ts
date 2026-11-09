@@ -75,8 +75,23 @@ async function acceso(c: Ctx) {
   return { enviado: true };
 }
 
-async function verificar(c: Ctx): Promise<Response> {
+// GET /api/verificar?t=…: NO canjea el enlace (los antivirus y previsualizadores de correo abren los enlaces solos y lo gastarían).
+// Devuelve una página mínima con un botón que hace POST; el canje ocurre solo al pulsarlo.
+async function confirmarEnlace(c: Ctx): Promise<Response> {
   const t = c.url.searchParams.get('t') || '';
+  if (!/^[0-9a-f]{64}$/.test(t)) return redirigir('/#/entrar?error=enlace');
+  const html = `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Entrar en Klever</title>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f5efe7;color:#13203b;font:16px/1.5 system-ui,sans-serif}main{max-width:360px;padding:24px;text-align:center}h1{font:600 1.6rem Georgia,serif;margin:0 0 8px}p{color:#56607c;margin:0 0 20px}button{min-height:48px;width:100%;border:0;border-radius:999px;background:#13203b;color:#fffdfa;font:600 1rem system-ui,sans-serif;cursor:pointer}small{display:block;margin-top:16px;color:#56607c}</style></head>
+<body><main><h1>Entrar en Klever</h1><p>Pulsa el botón para terminar de entrar. El enlace solo sirve una vez.</p>
+<form method="post" action="/api/verificar"><input type="hidden" name="t" value="${t}"><button type="submit">Entrar en Klever</button></form>
+<small>Simulación · sin dinero real · no es consejo</small></main></body></html>`;
+  return new Response(html, { status: 200, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'referrer-policy': 'same-origin', 'x-robots-tag': 'noindex' } /* con no-referrer el navegador manda Origin: null en el POST */ });
+}
+
+// POST /api/verificar (formulario de la página anterior): canje atómico del enlace y creación de la sesión.
+async function verificar(c: Ctx): Promise<Response> {
+  const tipo = c.req.headers.get('content-type') || '';
+  const t = tipo.includes('application/x-www-form-urlencoded') ? String((await c.req.formData()).get('t') || '') : String((await c.cuerpo()).t || '');
   if (!/^[0-9a-f]{64}$/.test(t)) return redirigir('/#/entrar?error=enlace');
   const ahora = c.ahora(), iso = ahora.toISOString();
   // Canje atómico: solo la primera petición marca el enlace como usado.
@@ -114,7 +129,8 @@ const num = (x: unknown) => Number(x);
 const RUTAS: [string, RegExp, Manejador][] = [
   ['GET', /^sesion$/, sesion],
   ['POST', /^acceso$/, acceso],
-  ['GET', /^verificar$/, verificar],
+  ['GET', /^verificar$/, confirmarEnlace],
+  ['POST', /^verificar$/, verificar],
   ['POST', /^alta$/, alta],
   ['POST', /^salir$/, salir],
 

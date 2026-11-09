@@ -1,3 +1,4 @@
+<script lang="ts"></script>
 <!-- Sello legal SIEMPRE visible (regla de Klever). -->
 <p class="sello"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5l5.5 2v4.2c0 3.3-2.3 5.9-5.5 6.8-3.2-.9-5.5-3.5-5.5-6.8V3.5z"/></svg>Simulación · sin dinero real · no es consejo</p>
 <style>
