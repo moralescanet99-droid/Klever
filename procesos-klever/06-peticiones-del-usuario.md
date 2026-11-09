@@ -2332,3 +2332,12 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Quiero Nacar
 
 (Responde a la pregunta de la ronda 42: dirección visual de la app final. Fuentes de las fotos: `ronda42/fotos/2-nacar/`.)
+
+## C63 · (2026-11-09) — intentar tener la app lista, preguntando antes, literal
+> Quiero que intentes tener la app lista, antes de empezar con ello pregunta todo lo que encesites saber
+
+Respuestas de Javier a las preguntas (literal de las opciones elegidas):
+- ¿Qué es «lista»? → «Funcionando y publicada (Recomendado)».
+- ¿Dónde? → «Mismo repo, carpeta nueva (Recomendado)».
+- Datos → «De ejemplo, rotulados».
+- Validación → «Construir sin esos cambios» (construir lo del informe de la ronda 40 tal cual, sin esperar a la validación ni aplicar los 14 cambios de `ronda42/validacion/08-que-cambia.md`).
