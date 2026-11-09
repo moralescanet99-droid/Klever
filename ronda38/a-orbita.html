@@ -1092,7 +1092,7 @@ function Mundo(canvas){
   };
   M.region=function(rect){
     const W=window.innerWidth,H=window.innerHeight;
-    off.tx=W/2-(rect.left+rect.width/2);off.ty=H/2-(rect.top+rect.height/2);off.rw=Math.max(80,rect.width);off.rh=Math.max(80,rect.height);
+    off.der=rect.right;off.tx=W/2-(rect.left+rect.width/2);off.ty=H/2-(rect.top+rect.height/2);off.rw=Math.max(80,rect.width);off.rh=Math.max(80,rect.height);
   };
   M.intro=function(alTerminar){
     C.th=-1.5;C.ph=.42;C.r=560;C.obj.set(0,0,0);aplicarCam();
@@ -1233,7 +1233,7 @@ function Mundo(canvas){
       const detras=tmp.z>1;const x=(tmp.x*.5+.5)*W,y=(-tmp.y*.5+.5)*H;
       const ok=mostrarPl&&P.encendido&&!detras;
       const d0=cam.position.distanceTo(P.pos);const prr=P.radio/(d0*Math.tan(cam.fov*Math.PI/360))*H/2;
-      if(!P.etW||P.etW<10)P.etW=P.et.offsetWidth;let lx=x+prr*1.2+6;if(lx+P.etW>W-8)lx=x-prr*1.2-6-P.etW;
+      if(!P.etW||P.etW<10)P.etW=P.et.offsetWidth;let lx=x+prr*1.2+6;if(lx+P.etW>(off.der||W)-8)lx=x-prr*1.2-6-P.etW;
       P.et.style.transform=`translate3d(${lx.toFixed(1)}px,${(y-10).toFixed(1)}px,0)`;
       P.et.classList.toggle('apagada',!ok);P.et.classList.toggle('sel',App.foco===P.id);P.et.tabIndex=ok?0:-1;});
     naves.forEach(n=>{const et=n.userData.et;if(!et)return;const ver=App.pantalla==='liga'&&(n.userData.tu||n.userData.rk<=(off.rw<600?1:3));
