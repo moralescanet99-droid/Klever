@@ -2355,3 +2355,10 @@ Más respuestas de Javier (C63, rondas 2–4 de preguntas, literal de las opcion
 - Admin → «Otro correo».
 - Extras → «Modo oscuro, Resumen de temporada».
 Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
+
+## C64 · (2026-11-09) — redes sociales sin cara (Instagram, TikTok y X) y versión más profunda de la tarea, literal
+> He pensado en hacer cuenta en instagram, tiktok y en x. No quiero que salga mi cara ni nada, si no de la forma en que lo anunciaria una empresa. ¿Como lo harias tu? Que contenidos crees que podrian funcionar en cada una? Porque? Te de ocurren alguna para cada bloque? 
+>
+> Quiero una versión más profunda de esta tarea, no una más grande. Antes de reescribirla: (1) di qué haría aquí un profesional top en este campo que yo no estoy pidiendo; (2) nombra el material más crudo del que partiría, en lugar de lo que ya me dieron digerido; (3) nombra los métodos y herramientas específicos que usaría; (4) di qué, aparte de ti o de mí, demostraría que el resultado es correcto. Luego reescribe mi prompt para pedir exactamente eso.
+
+(Respuesta en el chat: las 4 respuestas y el prompt reescrito; no se ejecuta todavía. Decisión registrada: las redes sin cara, como marca.)
