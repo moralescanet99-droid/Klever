@@ -98,8 +98,8 @@ a{color:var(--senal-claro)}
 .ticker:hover .ticker-pista{animation-play-state:paused}
 
 /* Barra de pestañas (móvil) */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;grid-template-columns:repeat(4,1fr);background:rgba(10,11,14,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--linea);padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
-.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:var(--tab-h);text-decoration:none;color:var(--tenue);font-family:var(--f-dato);font-stretch:87.5%;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:45;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(10,11,14,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--linea);padding:0 env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.tab{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:var(--tab-h);text-decoration:none;color:var(--tenue);font-family:var(--f-dato);font-stretch:87.5%;font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;transition:color .2s;min-width:0;white-space:nowrap}
 .tab svg{width:22px;height:22px;transition:transform .35s var(--muelle)}
 .tab::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:2px;background:var(--senal);transform:scaleX(0);transition:transform .35s var(--salida)}
 .tab[aria-current=page]{color:var(--texto)}
@@ -277,6 +277,8 @@ main{position:relative;z-index:1;padding-bottom:calc(var(--tab-h) + env(safe-are
 .cr-dorsal-fondo{position:absolute;right:-6px;top:-14px;font-weight:900;font-stretch:62%;font-size:6.2rem;line-height:1;color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--c) 45%,transparent);pointer-events:none}
 .cr-top{display:flex;align-items:center;gap:6px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue)}
 .cr-top i{width:8px;height:8px;background:var(--c);flex:none}
+.cr-top{flex-wrap:wrap;row-gap:2px}
+.cr-geo{position:relative;margin-left:auto;color:var(--tenue);letter-spacing:.06em;background:var(--grafito);padding:1px 3px}
 .cr-nom{position:relative;margin:0;font-weight:900;font-stretch:66%;text-transform:uppercase;font-size:1.55rem;line-height:.9;min-height:1.8em;letter-spacing:.005em}
 .cr-huella{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:2px;background:none;border:0;padding:4px 0 0;color:inherit;border-radius:0}
 .cr-huella .radial{width:100%;max-width:132px;height:auto;overflow:visible}
@@ -568,6 +570,278 @@ dialog[open]{animation:dlg-in .45s var(--salida)}
 }
 @media (min-width:1200px){.cromos{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .apilado{display:grid;gap:12px}
+[hidden]{display:none!important}
+
+/* ───────── Controles compartidos (segmentos, campos) ───────── */
+.segmento{display:inline-grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--linea-2);background:var(--grafito);max-width:100%}
+.segmento button{position:relative;min-height:44px;padding:8px 16px;border:0;background:transparent;font-weight:800;font-stretch:75%;letter-spacing:.05em;text-transform:uppercase;font-size:.98rem;line-height:1.05;color:var(--tenue);transition:background .25s,color .25s}
+.segmento button+button{border-left:1px solid var(--linea-2)}
+.segmento button:hover{color:var(--texto)}
+.segmento button[aria-pressed=true]{background:var(--senal);color:var(--sobre-senal)}
+.segmento.mini button{font-size:.84rem;padding:8px 10px;min-height:42px}
+.vest-seg{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:16px}
+.vest-seg .segmento button{min-width:7.5em}
+.chip-ej{display:inline-flex;align-items:center;gap:6px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--medio);border:1px solid rgba(255,194,61,.45);padding:3px 6px;white-space:nowrap}
+.ent{width:100%;min-height:46px;padding:10px 12px;background:var(--tinta);border:1px solid var(--linea-2);border-radius:0;color:var(--texto);font:500 1rem/1.3 var(--f-disp);font-stretch:100%}
+.ent::placeholder{color:var(--apagado)}
+.ent:focus-visible{outline:2px solid var(--senal-claro);outline-offset:1px;border-color:var(--senal)}
+select.ent{-webkit-appearance:none;appearance:none;padding-right:38px;background:var(--tinta) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%23a3b0ff' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center/12px 12px}
+select.ent option{background:var(--grafito);color:var(--texto)}
+.campo{display:grid;gap:6px;min-width:0}
+.campo>.mono,.campo>label.mono{color:var(--tenue)}
+.campo-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+
+/* ───────── VESTUARIO · MAPA ───────── */
+.vest-mapa{display:grid;gap:12px}
+#vest-reparto{display:contents}
+.pantalla{position:relative;margin-top:12px;border:1px solid var(--linea-2);background:#05060a;padding:6px;overflow:hidden}
+.pantalla canvas{display:block;width:100%;height:auto;aspect-ratio:360/135}
+.pantalla::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
+.pantalla .esq{position:absolute;z-index:2;font-family:var(--f-dato);font-stretch:87.5%;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tenue);left:8px;bottom:6px;background:rgba(5,6,10,.8);padding:1px 4px}
+.mk-capa{position:absolute;inset:6px;pointer-events:none;z-index:1}
+.mk{position:absolute;left:var(--x);top:var(--y);width:0;height:0;transition:opacity .4s}
+.mk i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border:2px solid #fff;background:var(--senal);transform:rotate(45deg)}
+.mk span{position:absolute;top:-14px;white-space:nowrap;font-family:var(--f-dato);font-stretch:87.5%;font-size:.5rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 5px 2px;background:rgba(8,9,11,.88);border:1px solid var(--senal);color:var(--texto);line-height:1.25}
+.mk span b{display:block;font-family:var(--f-disp);font-stretch:62%;font-weight:900;font-size:1.05rem;letter-spacing:0;line-height:1}
+.mk[data-d=o] span{right:9px}
+.mk[data-d=e] span{left:9px}
+.mk.cero{opacity:.5}
+.mk.cero i{background:var(--grafito-3);border-color:var(--apagado)}
+.mk.max span{background:var(--senal);border-color:#fff}
+.mk.max i{background:#fff}
+.mk em{font-style:normal}.mk em.l{display:none}
+@media (min-width:700px){.mk em.l{display:inline}.mk em.c{display:none}.mk span{font-size:.58rem}.mk span b{font-size:1.5rem}.mk span{top:-20px}}
+.mapa-expl{margin-top:10px;font-size:.84rem;color:var(--tenue);border-left:2px solid var(--senal);padding-left:10px}
+.mapa-expl b{color:var(--texto)}
+.lista-bar{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:7px}
+.lista-bar li{display:grid;grid-template-columns:minmax(0,8.5em) minmax(0,1fr) 3.4em;align-items:center;gap:10px;font-size:.84rem}
+.lista-bar li>span:first-child{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lista-bar li>span:first-child i{width:8px;height:8px;flex:none;background:var(--c,var(--senal))}
+.lista-bar .bar{position:relative;height:8px;background:var(--grafito-3);overflow:hidden}
+.lista-bar .bar i{position:absolute;inset:0;background:var(--c,var(--senal));transform-origin:0 50%;transform:scaleX(var(--v,0));transition:transform .7s var(--salida)}
+.lista-bar .dato{text-align:right;font-size:.76rem}
+.lista-bar li.top .dato{color:var(--senal-claro)}
+.mon-barra{position:relative;height:30px;background:var(--grafito-3);overflow:hidden;margin-top:4px}
+.mon-barra i{position:absolute;inset:0;transform-origin:0 50%;transform:translateX(var(--x,0%)) scaleX(var(--w,0));background:var(--c);transition:transform .7s var(--salida)}
+.mon-barra i+i{box-shadow:inset 2px 0 0 var(--tinta)}
+.mon-ley{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--linea);border:1px solid var(--linea)}
+.mon-ley li{background:var(--grafito);padding:8px 6px;display:grid;gap:2px;text-align:center}
+.mon-ley li .mono{display:flex;align-items:center;justify-content:center;gap:5px;color:var(--tenue);font-size:.6rem}
+.mon-ley li .mono i{width:7px;height:7px;background:var(--c)}
+.mon-ley li b{font-weight:900;font-stretch:62%;font-size:1.6rem;line-height:1}
+.mon-ley li.cero b{color:var(--apagado)}
+.esc-mon{margin-top:14px;padding:14px;border:1px solid var(--linea-2);background:repeating-linear-gradient(135deg,rgba(255,194,61,.04) 0 10px,transparent 10px 20px),var(--grafito);display:grid;gap:12px}
+.esc-mon .h3{font-size:clamp(1.35rem,5.6vw,1.75rem);line-height:1}
+.esc-mon .h3 output{color:var(--senal-claro)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{min-height:40px;padding:6px 12px;border:1px solid var(--linea-2);background:var(--grafito-2);font-family:var(--f-dato);font-stretch:87.5%;font-size:.7rem;letter-spacing:.08em;color:var(--texto);transition:background .2s,border-color .2s}
+.chips button[aria-pressed=true]{background:var(--senal);border-color:var(--senal);color:#fff}
+.efecto{display:flex;align-items:flex-end;justify-content:space-between;gap:8px 14px;flex-wrap:wrap}
+.efecto b{display:block;font-weight:900;font-stretch:62%;font-size:clamp(60px,17vw,92px);line-height:.82;color:var(--texto)}
+.efecto b.neg{color:#ff8a80}
+.efecto .mono{color:var(--tenue)}
+.efecto .derecha{text-align:right;display:grid;gap:4px}
+@media (max-width:519px){.efecto .derecha{text-align:left}}
+.efecto .derecha .dato{font-size:.8rem}
+.casa{display:flex;align-items:flex-end;gap:6px 14px;flex-wrap:wrap}
+.casa b{font-weight:900;font-stretch:62%;font-size:clamp(76px,21vw,118px);line-height:.8}
+.casa p{margin:0;max-width:24ch;font-size:1rem;color:var(--texto)}
+.casa-barra{position:relative;height:14px;margin-top:12px;background:repeating-linear-gradient(90deg,var(--grafito-3) 0 6px,var(--linea) 6px 7px)}
+.casa-barra i{position:absolute;inset:0;background:var(--senal-claro);transform-origin:0 50%;transform:scaleX(var(--v,0));transition:transform .7s var(--salida)}
+.casa-eje{display:flex;justify-content:space-between;margin-top:6px}
+.senales{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:1px;background:var(--linea);border:1px solid var(--linea)}
+.senales li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:2px 10px;padding:10px 12px;background:var(--grafito)}
+.senales .lz{width:14px;height:14px;border-radius:50%;margin-top:3px;background:var(--fc);box-shadow:0 0 10px color-mix(in srgb,var(--fc) 60%,transparent);transition:background .3s,box-shadow .3s}
+.senales b{font-size:.9rem;font-weight:700}
+.senales p{grid-column:2;margin:0;font-size:.8rem;color:var(--tenue)}
+.senales p.sug{color:var(--senal-claro)}
+.fichas-geo{list-style:none;margin:0;padding:0;display:grid}
+.fichas-geo li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:9px 0;border-bottom:1px solid var(--linea)}
+.fichas-geo .nm{font-weight:700;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fichas-geo .mono{color:var(--tenue);font-size:.6rem;align-self:center}
+.fichas-geo .ventas{grid-column:1/-1;display:flex;height:7px;gap:1px}
+.fichas-geo .ventas i{flex:var(--w) 1 0;background:var(--c);min-width:0}
+.ley-reg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:10px}
+.ley-reg span{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.58rem;color:var(--tenue);letter-spacing:.04em}
+.ley-reg i{width:8px;height:8px;background:var(--c)}
+.barra-cambio .geo{display:block;font-family:var(--f-dato);font-stretch:87.5%;font-size:.66rem;color:var(--texto);margin-top:2px}
+
+/* ───────── CARTERA EN EQUIPO ───────── */
+.rejilla-eq{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:22px}
+.eq-col{display:contents}
+.eq-plantilla{order:1}.eq-votos{order:2}.eq-alin{order:3}.eq-hist{order:4}.eq-liga{order:5}.eq-club{order:6}
+.av{display:block;flex:none;shape-rendering:crispEdges;border:1px solid var(--linea-2)}
+.plantilla{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:1px;background:var(--linea);border:1px solid var(--linea)}
+.miembro{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr);gap:2px 10px;align-items:center;padding:10px;background:var(--grafito)}
+.miembro .av{grid-row:1/3;width:42px;height:42px}
+.miembro .ap{font-weight:700;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.miembro .rol{font-family:var(--f-dato);font-stretch:87.5%;font-size:.54rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tenue);line-height:1.35}
+.miembro.cap{background:linear-gradient(135deg,rgba(59,91,255,.32),rgba(59,91,255,.05) 70%),var(--grafito)}
+.miembro.cap .rol{color:var(--senal-claro)}
+.miembro.yo .ap::after{content:"TÚ";margin-left:6px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.52rem;letter-spacing:.1em;padding:1px 4px;background:var(--grafito-3);color:var(--texto);vertical-align:.15em}
+.brazalete{display:inline-grid;place-items:center;width:15px;height:15px;margin-right:5px;background:var(--senal);color:#fff;font-family:var(--f-disp);font-weight:900;font-stretch:62%;font-size:.72rem;letter-spacing:0;vertical-align:-.25em}
+.rota{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+.rota span{font-family:var(--f-dato);font-stretch:87.5%;font-size:.58rem;letter-spacing:.06em;color:var(--tenue);border:1px solid var(--linea-2);padding:4px 6px}
+.rota span.act{border-color:var(--senal);color:var(--texto);background:var(--senal-tinta)}
+.reto-cap{margin-top:12px;padding:12px;border-left:3px solid var(--senal);background:var(--grafito);display:grid;gap:4px}
+.reto-cap .h3{font-size:1.35rem}
+.reto-cap .estado-reto{justify-self:start;margin-top:4px}
+.props{display:grid;gap:12px}
+.prop{position:relative;display:grid;gap:12px;min-width:0;padding:14px;border:1px solid var(--linea-2);background:var(--grafito)}
+.prop.aprobada{border-color:var(--senal)}
+.prop.rechazada{border-color:rgba(255,93,80,.55)}
+.prop.nueva-p{animation:entra-f .6s var(--salida)}
+.prop-cab{display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.prop-cab .mono{color:var(--tenue)}
+.prop-cab .mono b{color:var(--texto);font-weight:600}
+.prop-reloj{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--medio)}
+.prop-reloj i{position:relative;width:34px;height:4px;background:var(--grafito-3)}
+.prop-reloj i::after{content:"";position:absolute;inset:0;background:var(--medio);transform-origin:0 50%;transform:scaleX(var(--v,.95))}
+.prop-reloj.fin{color:var(--tenue)}
+.prop-autor{display:flex;align-items:center;gap:8px;font-size:.86rem;color:var(--tenue);min-width:0}
+.prop-autor b{color:var(--texto);font-weight:700}
+.prop-autor .av{width:24px;height:24px}
+.prop-t{margin:0;font-weight:900;font-stretch:66%;text-transform:uppercase;font-size:clamp(28px,7.8vw,42px);line-height:.92;overflow-wrap:anywhere}
+.prop-por{margin:0;font-size:.98rem;color:var(--texto);border-left:2px solid var(--senal-claro);padding-left:10px}
+.prop-por .mono{display:block;color:var(--tenue);margin-bottom:2px}
+.tanteo{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto;align-items:stretch;border:1px solid var(--linea);background:var(--tinta)}
+.tn{display:grid;align-content:start;gap:4px;padding:8px 12px 6px;min-width:0}
+.tn .mono{color:var(--tenue);font-size:.58rem}
+.tn b{font-weight:900;font-stretch:62%;font-size:clamp(58px,17vw,88px);line-height:.85}
+.tn.fav b{color:var(--senal-claro)}
+.tn.con{text-align:right}
+.tn.con b{color:#ff8a80}
+.tn.con .odo{margin-left:auto}
+.tn-sep{display:grid;place-items:center;font-weight:900;font-stretch:62%;font-size:2.2rem;color:var(--apagado);padding-top:10px}
+.tn.abs{border-left:1px solid var(--linea);background:var(--grafito-2);text-align:center;padding-inline:10px}
+.tn.abs b{font-size:2.2rem;color:var(--tenue);line-height:1}
+.umbral{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;height:10px}
+.umbral i{background:var(--grafito-3);transition:background .4s}
+.umbral i.f{background:var(--senal)}
+.umbral i.c{background:var(--alto)}
+.umbral i.a{background:repeating-linear-gradient(135deg,var(--linea-2) 0 3px,transparent 3px 6px),var(--grafito-3)}
+.umbral::after{content:"";position:absolute;left:calc(75% - 2.5px);top:-5px;bottom:-5px;width:2px;background:var(--texto)}
+.umbral-eti{display:flex;justify-content:space-between;gap:10px;margin-top:-4px}
+.butacas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.butaca{display:grid;justify-items:center;gap:4px;min-width:0;padding:8px 3px 7px;border:1px solid var(--linea);background:var(--grafito-2);text-align:center;transition:border-color .3s,background .3s}
+.butaca .av{width:30px;height:30px}
+.butaca .ap{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--f-dato);font-stretch:87.5%;font-size:.56rem;color:var(--tenue)}
+.butaca .v{font-family:var(--f-dato);font-stretch:87.5%;font-size:.52rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 4px;border:1px dashed var(--linea-2);color:var(--tenue);white-space:nowrap}
+.butaca.favor{border-color:var(--senal);background:linear-gradient(180deg,rgba(59,91,255,.28),var(--grafito-2))}
+.butaca.favor .v{background:var(--senal);border:1px solid var(--senal);color:#fff}
+.butaca.contra{border-color:rgba(255,93,80,.6);background:linear-gradient(180deg,rgba(255,93,80,.16),var(--grafito-2))}
+.butaca.contra .v{background:#5a1d18;border:1px solid var(--alto);color:#fff}
+.butaca.abst .v{border-style:solid;color:var(--texto)}
+.butaca.llega{animation:llega .75s var(--muelle)}
+@keyframes llega{0%{transform:perspective(300px) rotateX(85deg);opacity:.2}60%{transform:perspective(300px) rotateX(-12deg);opacity:1}100%{transform:none}}
+.ad{width:100%;border-collapse:collapse;font-size:.82rem}
+.ad caption{text-align:left;padding-bottom:6px}
+.ad th,.ad td{padding:6px 4px;border-bottom:1px solid var(--linea);text-align:left;vertical-align:top}
+.ad thead th{font-family:var(--f-dato);font-stretch:87.5%;font-weight:500;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tenue)}
+.ad tbody th{font-weight:500;color:var(--tenue)}
+.ad td.dato{white-space:nowrap;font-size:.74rem}
+.ad td.mejor{color:var(--ok)}
+.ad td.peor{color:#ff8a80}
+.reac{display:flex;flex-wrap:wrap;gap:6px}
+.reac button{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:6px 10px;border:1px solid var(--linea-2);background:var(--grafito-2);font-size:.8rem;font-weight:600;color:var(--texto);transition:border-color .2s,background .2s,transform .18s var(--muelle)}
+.reac button:hover{border-color:var(--senal-claro)}
+.reac button:active{transform:scale(.95)}
+.reac button b{font-family:var(--f-dato);font-stretch:87.5%;font-size:.66rem;font-weight:500;color:var(--tenue)}
+.reac button[aria-pressed=true]{border-color:var(--senal);background:var(--senal-tinta)}
+.reac button[aria-pressed=true] b{color:var(--senal-claro)}
+.reac button.pop b{animation:pop .5s var(--muelle)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.7)}100%{transform:scale(1)}}
+.votar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.votar .btn{min-height:50px;padding:10px 6px;font-size:.95rem}
+.votar .btn.contra:hover{border-color:var(--alto)}
+.espera{display:flex;align-items:center;gap:10px;margin:0;font-family:var(--f-dato);font-stretch:87.5%;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--senal-claro)}
+.espera i{width:7px;height:7px;border-radius:50%;background:var(--alto);animation:latido 1.6s infinite}
+.sentencia{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:6px 12px;padding:12px 14px;background:var(--senal);color:#fff;overflow:hidden}
+.sentencia.no{background:#5a1d18}
+.sentencia .pal{grid-column:1/-1;margin:0;font-weight:900;font-stretch:62%;text-transform:uppercase;font-size:clamp(46px,14vw,84px);line-height:.82;white-space:nowrap}
+.sentencia .mono{color:#fff}
+.sentencia .marc{font-weight:900;font-stretch:62%;font-size:2.4rem;line-height:.9;text-align:right}
+.nueva{display:grid;gap:12px;margin-top:14px;padding:14px;border:1px dashed var(--senal)}
+.nueva[data-abierta=false]{padding:0;border:0}
+.seg-f{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;padding:0;border:1px solid var(--linea-2);background:var(--linea-2);min-inline-size:0}
+.seg-f label{position:relative;display:grid;place-items:center;min-height:46px;padding:6px 4px;background:var(--grafito-2);text-align:center;font-weight:800;font-stretch:75%;text-transform:uppercase;font-size:.84rem;line-height:1.05;cursor:pointer;transition:background .2s}
+.seg-f input{position:absolute;inset:0;margin:0;opacity:0;cursor:pointer}
+.seg-f label:has(input:checked){background:var(--senal);color:#fff}
+.seg-f label:has(input:focus-visible){outline:2px solid var(--senal-claro);outline-offset:-3px}
+.peso-f output{font-weight:900;font-stretch:62%;font-size:2rem;line-height:.9}
+.cuenta-c{font-family:var(--f-dato);font-stretch:87.5%;font-size:.62rem;color:var(--tenue)}
+.cuenta-c.ok{color:var(--ok)}
+.idea-k{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 12px;background:var(--senal-tinta);border-left:3px solid var(--senal)}
+.idea-k .mono{color:var(--senal-claro)}
+.idea-k button{min-height:40px;padding:6px 12px;border:1px solid var(--senal-claro);background:transparent;color:var(--texto);font-weight:700;font-size:.9rem}
+.err{margin:0;font-size:.84rem;color:#ff8a80;min-height:1.2em}
+.eq-sem{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:10px;background:var(--linea);border:1px solid var(--linea)}
+.eq-sem>div{display:grid;gap:6px;padding:10px;background:var(--grafito);min-width:0}
+.eq-sem .ind-estado{font-size:2.3rem}
+.eq-sem .focos{gap:4px}
+.eq-sem .lampara i{width:16px;height:16px}
+.eq-lista{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.eq-lista li{display:grid;grid-template-columns:minmax(0,1fr) 3em;gap:3px 10px;align-items:center;font-size:.86rem;transition:opacity .4s}
+.eq-lista li>span:first-child{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eq-lista li>span:first-child i{width:8px;height:8px;flex:none;background:var(--c)}
+.eq-lista li small{color:var(--tenue);font-size:.74rem}
+.eq-lista .dato{text-align:right;font-size:.78rem}
+.eq-lista .bar{grid-column:1/-1;height:4px;background:var(--grafito-3);position:relative;overflow:hidden}
+.eq-lista .bar i{position:absolute;inset:0;background:var(--c);transform-origin:0 50%;transform:scaleX(var(--v,0));transition:transform .8s var(--salida)}
+.tl{list-style:none;margin:0;padding:0;position:relative;display:grid}
+.tl::before{content:"";position:absolute;left:15px;top:14px;bottom:14px;width:2px;background:var(--linea-2)}
+.tl>li{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:12px;padding:10px 0}
+.tl .hito{position:relative;z-index:1;width:32px;height:32px;display:grid;place-items:center;background:var(--grafito-2);border:2px solid var(--linea-2);font-weight:900;font-stretch:62%;font-size:.92rem;line-height:1}
+.tl>li.si .hito{border-color:var(--senal);background:var(--senal-tinta)}
+.tl>li.no .hito{border-color:var(--alto)}
+.tl>li.nuevo{animation:entra-f .7s var(--salida)}
+.tl-cab{display:flex;justify-content:space-between;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.tl-cab .mono{color:var(--tenue)}
+.tl h4{margin:4px 0 0;font-weight:800;font-stretch:75%;text-transform:uppercase;font-size:1.08rem;line-height:1.05}
+.tl .por{margin:4px 0 0;font-size:.86rem;color:var(--texto)}
+.tl .res{font-family:var(--f-dato);font-stretch:87.5%;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border:1px solid var(--linea-2);white-space:nowrap}
+.tl .res.si{color:var(--senal-claro);border-color:var(--senal)}
+.tl .res.no{color:#ff8a80;border-color:rgba(255,93,80,.55)}
+.tras{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:6px;font-size:.76rem;color:var(--tenue)}
+.sem-chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-dato);font-stretch:87.5%;font-size:.6rem;letter-spacing:.04em;color:var(--texto);white-space:nowrap}
+.sem-chip+.sem-chip{padding-left:8px;border-left:1px solid var(--linea-2)}
+.sem-chip i{width:8px;height:8px;border-radius:50%;background:var(--fc)}
+.clasif.eq .fila-c.yo .apodo::after{content:"TU CLUB"}
+.codigo{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--linea-2);background:var(--tinta)}
+.codigo b{font-family:var(--f-dato);font-stretch:87.5%;font-weight:600;font-size:1.35rem;letter-spacing:.28em;color:var(--senal-claro)}
+.codigo .btn{min-height:40px;padding:8px 12px;font-size:.86rem}
+.club-zona{display:grid;gap:12px;margin-top:12px}
+.club-msg{margin:0;font-size:.86rem;color:var(--tenue);min-height:1.3em}
+.club-msg.ok{color:var(--ok)}
+.club-msg.mal{color:#ff8a80}
+@media (min-width:520px) and (max-width:699px){.plantilla{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:700px){.plantilla{grid-template-columns:repeat(4,minmax(0,1fr))}.miembro{grid-template-columns:minmax(0,1fr);justify-items:start}.miembro .av{grid-row:auto;width:48px;height:48px}}
+@media (min-width:960px){
+  .rejilla-eq{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:14px;align-items:start}
+  .eq-col{display:grid;gap:14px;min-width:0;align-content:start}
+  .plantilla{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .miembro{grid-template-columns:42px minmax(0,1fr);justify-items:stretch}
+  .miembro .av{grid-row:1/3;width:42px;height:42px}
+  .rejilla-vest.modo-mapa{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+  .rejilla-vest.modo-mapa .col-izq{position:static}
+  .rejilla-vest.modo-mapa .cromos{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (min-width:960px){.tabs-top a{white-space:nowrap}}
+@media (min-width:960px) and (max-width:1199px){.marca small{display:none}.m-puesto .solo-d,.m-puesto .sep.solo-d{display:none!important}.tabs-top{margin-left:4px}}
+@media (min-width:960px) and (max-width:1599px){
+  .m-fila{grid-template-columns:auto auto auto 1fr auto;grid-template-areas:"marca vivo nav . puesto" "sello sello sello sello sello"}
+  .sello{justify-self:start}
+  .tabs-top a{padding:8px 9px}
+  .tabs-top a::after{bottom:-1px}
+}
+
+/* Tarjeta en modo captura (el visor bloquea descargas) */
+#dlg-tarjeta.captura{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;border:0;background:#000;overflow:hidden}
+#dlg-tarjeta.captura .dlg-cab,#dlg-tarjeta.captura .fila-btn,#dlg-tarjeta.captura .nota{display:none}
+#dlg-tarjeta.captura .dlg-cuerpo{height:100%;padding:12px;display:grid;place-items:center;align-content:center;gap:10px}
+#dlg-tarjeta.captura canvas{width:auto!important;height:auto!important;max-width:100%;max-height:calc(100dvh - 80px);border:0!important}
+.captura-pie{display:none}
+#dlg-tarjeta.captura .captura-pie{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-family:var(--f-dato);font-stretch:87.5%;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tenue)}
 
 /* Pausa cuando la pestaña no se ve */
 html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:paused!important}
@@ -596,6 +870,7 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
       <a href="#vestuario" data-v="vestuario">Vestuario</a>
       <a href="#duelo" data-v="duelo">Duelo</a>
       <a href="#temporada" data-v="temporada">Temporada</a>
+      <a href="#equipo" data-v="equipo">Cartera en equipo</a>
     </nav>
     <p class="sello" style="margin:0"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x=".5" y=".5" width="11" height="11" fill="none" stroke="currentColor"/><path d="M3 6.2l2 2 4-4.4" stroke="currentColor" fill="none" stroke-width="1.4"/></svg>Simulación · sin dinero real · no es consejo</p>
     <div class="m-puesto" aria-live="polite"><span class="solo-d">S<span class="dato">07</span>/12</span><span class="sep solo-d"></span><span class="sr">Tu puesto:</span><span class="solo-m" aria-hidden="true">Puesto</span><b><span id="m-puesto">6</span>.º</b><span class="solo-d"><span id="m-total" class="dato">399</span> PTS</span></div>
@@ -690,9 +965,16 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
   <p class="kicker"><span class="reg" aria-hidden="true"></span><b>02 · Vestuario</b><span>Tu cartera simulada como alineación</span></p>
   <div class="titular-caja"><h1 class="giga" id="t-vest" data-k="ALINEACIÓN">ALINEACIÓN</h1></div>
   <p class="texto" style="margin-top:12px">Cada jugador es una <b>empresa inventada</b> para practicar. Mueve los pesos y mira qué cambia.</p>
+  <div class="vest-seg">
+    <div class="segmento" id="seg-vest" role="group" aria-label="Qué ver de tu cartera">
+      <button type="button" data-modo="reparto" aria-pressed="true">Reparto</button><button type="button" data-modo="mapa" aria-pressed="false">Mapa</button>
+    </div>
+    <span class="nota" id="seg-vest-nota">Reparto · Mapa: sectores o países y monedas</span>
+  </div>
 
-  <div class="rejilla-vest">
+  <div class="rejilla-vest" id="rejilla-vest">
     <div class="col-izq">
+     <div id="vest-reparto">
       <article class="pl foco" aria-labelledby="h-piz">
         <div class="pl-cab"><span><span class="num">A</span> · <b id="h-piz">Formación</b></span><span id="n-jug">7 jugadores</span></div>
         <svg class="pizarra" id="pizarra" viewBox="0 0 300 330" role="img" aria-label="Formación de tu cartera por sectores"></svg>
@@ -727,13 +1009,69 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
         <p class="texto" style="margin:8px 0 14px">Nunca te diremos qué empresa. Solo probamos repartos.</p>
         <button class="btn pri ancho" id="probar">Probar cambio <svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 6h12M11 3l3 3-3 3M16 12H4M7 9l-3 3 3 3" stroke="currentColor" stroke-width="1.8" fill="none"/></svg></button>
       </article>
+     </div>
+
+     <!-- Tu cartera en el mapa (subpestaña «Mapa») -->
+     <div id="vest-mapa" class="vest-mapa" hidden>
+      <article class="pl foco" aria-labelledby="h-mapa">
+        <div class="pl-cab"><span><span class="num">M1</span> · <b id="h-mapa">Tu cartera en el mapa</b></span><span class="chip-ej">Datos de ejemplo</span></div>
+        <div class="segmento mini" id="seg-geo" role="group" aria-label="Qué muestra el mapa">
+          <button type="button" data-geo="sede" aria-pressed="true">Dónde tienen la sede</button><button type="button" data-geo="ventas" aria-pressed="false">Dónde venden</button>
+        </div>
+        <p class="mapa-expl"><b>No es lo mismo:</b> la sede es dónde está la empresa; las ventas, dónde gana su dinero.</p>
+        <div class="pantalla">
+          <canvas id="mapa-cv" role="img" aria-label="Mapa de tu cartera"></canvas>
+          <div class="mk-capa" id="mk-capa" aria-hidden="true"></div>
+          <span class="esq" id="mapa-esq" aria-hidden="true">Sede · ponderado por peso</span>
+        </div>
+        <p class="mono" id="lista-geo-t" style="margin:14px 0 0;color:var(--tenue)">Por país de sede</p>
+        <ul class="lista-bar" id="lista-geo" aria-live="polite"></ul>
+        <p class="nota" style="margin-top:10px" id="mapa-formula">Cada empresa cuenta según su peso en tu cartera.</p>
+      </article>
+
+      <article class="pl" aria-labelledby="h-mon">
+        <div class="pl-cab"><span><span class="num">M2</span> · <b id="h-mon">Exposición a monedas</b></span><span>Moneda de cotización</span></div>
+        <div class="mon-barra" id="mon-barra" aria-hidden="true"></div>
+        <ul class="mon-ley" id="mon-ley" aria-live="polite"></ul>
+        <div class="esc-mon">
+          <span class="rotulo"><svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M6 1l5 9H1z" fill="none" stroke="currentColor"/><path d="M6 4.5v2.6M6 8.4v.3" stroke="currentColor"/></svg>Escenario ilustrativo · tipos de ejemplo</span>
+          <p class="h3" id="esc-mon-q">¿Y si el dólar baja un <output id="x-out" for="x-mon">10</output>&nbsp;% frente al euro?</p>
+          <div class="chips" id="mon-chips" role="group" aria-label="Moneda que baja"></div>
+          <div class="campo"><label class="mono" for="x-mon">Cuánto baja frente al euro</label>
+            <input class="rango" type="range" id="x-mon" min="0" max="30" step="1" value="10" style="--c:var(--senal)">
+            <div class="reglilla" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="efecto" aria-live="polite">
+            <div><span class="mono">Efecto aproximado en tu cartera en euros</span><b id="ef-num">−3,4&nbsp;%</b></div>
+            <div class="derecha"><span class="mono">Índice</span><span class="dato" id="ef-idx">100 → 96,6</span><span class="dato" id="ef-tipo">1 € = 1,08 $ → 1,20 $</span></div>
+          </div>
+          <p class="nota" id="ef-formula">−10 % × 34 % en dólares = −3,4 %</p>
+          <p class="nota">Tipos de ejemplo: 1 € = 1,08 $ · 0,85 £ · 0,95 CHF · 162 ¥. En la versión real, tipos del BCE.</p>
+        </div>
+      </article>
+
+      <article class="pl" aria-labelledby="h-casa">
+        <div class="pl-cab"><span><span class="num">M3</span> · <b id="h-casa">Sesgo de casa</b></span><span>Sede en España</span></div>
+        <div class="casa" aria-live="polite"><b><span class="odo" id="casa-num">52</span>&nbsp;%</b><p id="casa-frase">El 52 % de tu cartera tiene sede en España.</p></div>
+        <div class="casa-barra" aria-hidden="true"><i id="casa-barra"></i></div>
+        <div class="casa-eje"><span class="nota">España</span><span class="nota" id="casa-resto">Resto 48 %</span></div>
+        <p class="mono" style="margin:16px 0 0;color:var(--tenue)">Señales orientativas, no normas</p>
+        <ul class="senales" id="senales" aria-live="polite"></ul>
+      </article>
+
+      <article class="pl" aria-labelledby="h-fgeo">
+        <div class="pl-cab"><span><span class="num">M4</span> · <b id="h-fgeo">Ficha de cada empresa</b></span><span>Sede · moneda · ventas</span></div>
+        <ul class="fichas-geo" id="fichas-geo"></ul>
+        <div class="ley-reg" id="ley-reg" aria-hidden="true"></div>
+        <p class="nota" style="margin-top:10px">Empresas, sedes y ventas inventadas. Las ventas de cada empresa suman 100.</p>
+      </article>
+     </div>
     </div>
 
     <div>
       <div class="pl-cab" style="margin-bottom:12px"><span><span class="num">C</span> · <b>Cromos</b> · empresas inventadas</span><span class="dato" id="suma">Total 100 %</span></div>
       <div class="cromos" id="cromos"></div>
       <div class="barra-cambio" id="barra-cambio" hidden>
-        <div><span class="mono">Cambio sin fichar</span><br><span class="dato" id="bc-res">Equilibrio 37 → 50</span></div>
+        <div><span class="mono">Cambio sin fichar</span><br><span class="dato" id="bc-res">Equilibrio 37 → 50</span><span class="geo" id="bc-geo" hidden></span></div>
         <div class="fila-btn"><button class="btn fant" id="deshacer">Deshacer</button><button class="btn pri" id="probar-2">Probar cambio</button></div>
       </div>
     </div>
@@ -778,6 +1116,117 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
   </div>
 </section>
 
+<!-- ═════════ 5 · CARTERA EN EQUIPO ═════════ -->
+<section class="vista" id="v-equipo" data-v="equipo" aria-labelledby="t-equipo" hidden>
+  <p class="kicker"><span class="reg" aria-hidden="true"></span><b>05 · Cartera en equipo</b><span>Un club de 4 · una cartera común · cada cambio se vota</span></p>
+  <div class="titular-caja"><h1 class="giga" id="t-equipo" data-k="CLUB MAREA">CLUB MAREA</h1></div>
+  <div class="sub-giga">
+    <span class="vivo-g" aria-hidden="true"><i></i>Votación</span>
+    <span class="recompone" id="eq-recompone">2 propuestas abiertas · cierra en 23 h</span>
+  </div>
+  <p class="texto" style="margin-top:14px">Una cartera simulada entre amigos. Proponéis cambios, los argumentáis y se votan. Se aprueba con <b>3 de 4</b>.</p>
+
+  <div class="rejilla-eq">
+    <div class="eq-col">
+      <article class="pl eq-plantilla" aria-labelledby="h-plant">
+        <div class="pl-cab"><span><span class="num">01</span> · <b id="h-plant">Plantilla</b></span><span>Solo apodos</span></div>
+        <ul class="plantilla" id="plantilla"></ul>
+        <div class="rota" id="rota" aria-label="Rotación del capitán"></div>
+        <div class="reto-cap">
+          <span class="mono" style="color:var(--senal-claro)">Reto que eligió el capitán · +20 pts</span>
+          <p class="h3">Llegar a variedad amplia: 5 sectores o más</p>
+          <span class="estado-reto" id="eq-reto-est">Pendiente</span>
+        </div>
+      </article>
+
+      <article class="pl eq-alin" aria-labelledby="h-alin">
+        <div class="pl-cab"><span><span class="num">03</span> · <b id="h-alin">Alineación del club</b></span><span id="eq-n">5 titulares</span></div>
+        <svg class="pizarra" id="eq-pizarra" viewBox="0 0 300 330" role="img" aria-label="Alineación de la cartera del club por sectores"></svg>
+        <div class="formacion"><span class="nota">Defensa · Medio · Ataque<br>(por sector, orientativo)</span><b id="eq-formacion">0-2-2</b></div>
+        <div class="eq-sem">
+          <div><span class="mono">Concentración</span><div class="ind-estado" id="eq-conc" aria-live="polite">Media</div>
+            <div class="focos" id="eq-focos-conc"><span class="lampara" style="--fc:var(--ok)"><i></i>Baja</span><span class="lampara" style="--fc:var(--medio)"><i></i>Media</span><span class="lampara" style="--fc:var(--alto)"><i></i>Alta</span></div></div>
+          <div><span class="mono">Variedad</span><div class="ind-estado" id="eq-var" aria-live="polite">Media</div>
+            <div class="focos" id="eq-focos-var"><span class="lampara" style="--fc:var(--alto)"><i></i>Poca</span><span class="lampara" style="--fc:var(--medio)"><i></i>Media</span><span class="lampara" style="--fc:var(--ok)"><i></i>Amplia</span></div></div>
+        </div>
+        <ul class="eq-lista" id="eq-lista"></ul>
+        <p class="nota" style="margin-top:10px">Empresas inventadas. Referencias orientativas, no normas.</p>
+      </article>
+
+      <article class="pl eq-liga" aria-labelledby="h-eqliga">
+        <div class="pl-cab"><span><span class="num">05</span> · <b id="h-eqliga">El club en la Liga</b></span><span>máx. 100</span></div>
+        <div class="semana-total"><span class="odo" id="eq-total" data-aria="Puntos del club">30</span><small>/ 100 PTS</small></div>
+        <div class="barra-100" aria-hidden="true">
+          <span class="zona" style="--c:var(--senal)"><i id="eq-z-eq"></i></span>
+          <span class="zona" style="--c:var(--senal-claro)"><i id="eq-z-ap"></i></span>
+          <span class="zona" style="--c:#fff"><i id="eq-z-co"></i></span>
+        </div>
+        <div class="escala-100" aria-hidden="true"><span><span>0</span><span>50</span></span><span><span></span><span>80</span></span><span><span></span><span>100</span></span></div>
+        <ul class="desglose" id="eq-desglose" aria-live="polite"></ul>
+        <p class="mono" style="margin:18px 0 8px;color:var(--tenue)">Clasificación de clubes · esta semana</p>
+        <ol class="clasif eq" id="eq-clasif" aria-live="polite"></ol>
+        <div class="leyenda-c"><span class="nota">Solo nombres de club</span><span class="nota">Clubes de ejemplo</span></div>
+      </article>
+
+      <article class="pl eq-club" aria-labelledby="h-club">
+        <div class="pl-cab"><span><span class="num">06</span> · <b id="h-club">Tu propio club</b></span><span>Simulado</span></div>
+        <div class="segmento mini" id="seg-club" role="group" aria-label="Crear o unirse">
+          <button type="button" data-club="crear" aria-pressed="true">Crear equipo</button><button type="button" data-club="unir" aria-pressed="false">Unirse con código</button>
+        </div>
+        <div class="club-zona" id="club-crear">
+          <div class="campo"><label class="mono" for="club-nombre">Nombre del equipo</label><input class="ent" id="club-nombre" maxlength="24" autocomplete="off" placeholder="Los del lunes"></div>
+          <div class="codigo"><div><span class="mono" style="color:var(--tenue)">Código</span><br><b id="club-codigo">KMRTQA</b></div><button class="btn fant" type="button" id="club-otro">Otro código</button></div>
+          <button class="btn pri" type="button" id="club-invitar">Invitar</button>
+          <div id="club-inv" hidden>
+            <div class="enlace"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.2-1.2a2.6 2.6 0 013.6 3.6L10.5 8M9 11.5l-1.2 1.2a2.6 2.6 0 01-3.6-3.6L5.5 8" stroke="currentColor" fill="none" stroke-width="1.4"/></svg><span id="club-enlace">klever.app/club/KMRTQA</span></div>
+            <div class="fila-btn" style="margin-top:10px"><button class="btn" type="button" id="club-copiar">Copiar enlace</button></div>
+          </div>
+          <p class="club-msg" id="club-msg-c" aria-live="polite"></p>
+        </div>
+        <div class="club-zona" id="club-unir" hidden>
+          <div class="campo"><label class="mono" for="club-cod-in">Código de 6 letras</label><input class="ent" id="club-cod-in" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCDEF" style="text-transform:uppercase;letter-spacing:.2em"></div>
+          <button class="btn pri" type="button" id="club-unirme">Unirme</button>
+          <p class="club-msg" id="club-msg-u" aria-live="polite"></p>
+        </div>
+        <p class="nota" style="margin-top:8px">Demo: nadie recibe nada. Seguimos con el club de ejemplo. De 3 a 5 amigos, mayores de 18.</p>
+      </article>
+    </div>
+
+    <div class="eq-col">
+      <article class="pl foco eq-votos" aria-labelledby="h-votos">
+        <div class="pl-cab"><span><span class="num">02</span> · <b id="h-votos">Votaciones en directo</b></span><span>3 de 4</span></div>
+        <div class="props" id="eq-props"></div>
+        <div class="nueva" id="eq-nueva" data-abierta="false">
+          <button class="btn ancho" type="button" id="eq-abrir" aria-expanded="false" aria-controls="eq-form"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="2"/></svg>Proponer un cambio</button>
+          <form id="eq-form" class="apilado" hidden novalidate>
+            <p class="h3" style="font-size:1.5rem">Nueva propuesta</p>
+            <fieldset class="seg-f"><legend class="sr">Tipo de cambio</legend>
+              <label><input type="radio" name="eq-tipo" value="peso" checked>Cambiar peso</label>
+              <label><input type="radio" name="eq-tipo" value="alta">Añadir empresa</label>
+              <label><input type="radio" name="eq-tipo" value="baja">Quitar empresa</label>
+            </fieldset>
+            <div class="campo"><label class="mono" for="eq-emp">Empresa inventada</label><select class="ent" id="eq-emp"></select></div>
+            <div class="campo peso-f" id="eq-peso-w"><div class="campo-cab"><label class="mono" for="eq-peso">Peso nuevo</label><output id="eq-peso-o" for="eq-peso">25 %</output></div>
+              <input class="rango" type="range" id="eq-peso" min="5" max="50" step="1" value="25" style="--c:var(--senal)"></div>
+            <div class="campo"><div class="campo-cab"><label class="mono" for="eq-porque">Por qué (una línea, obligatorio)</label><span class="cuenta-c" id="eq-cnt" aria-live="polite">0 / 15 mín.</span></div>
+              <input class="ent" id="eq-porque" maxlength="90" autocomplete="off" placeholder="Así repartimos mejor el riesgo entre sectores" aria-describedby="eq-err"></div>
+            <div class="idea-k"><span class="mono">Klever propone pesos, nunca empresas</span><button type="button" id="eq-idea">¿Y si la mayor bajara al 25&nbsp;%?</button></div>
+            <div id="eq-prev" aria-live="polite"></div>
+            <p class="err" id="eq-err"></p>
+            <div class="fila-btn"><button class="btn pri" type="submit" id="eq-enviar">Proponer al club</button><button class="btn fant" type="button" id="eq-cancelar">Cancelar</button></div>
+          </form>
+        </div>
+        <p class="nota" style="margin-top:12px">Reacciones solo predefinidas: sin chat libre. Klever nunca propone empresas, solo pesos.</p>
+      </article>
+
+      <article class="pl eq-hist" aria-labelledby="h-hist">
+        <div class="pl-cab"><span><span class="num">04</span> · <b id="h-hist">Historial del club</b></span><span>Temporada 0</span></div>
+        <ol class="tl" id="eq-tl"></ol>
+      </article>
+    </div>
+  </div>
+</section>
+
 </div>
 </main>
 
@@ -786,6 +1235,7 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
   <a class="tab" href="#vestuario" data-v="vestuario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 3l-5 3 2 5 2-1v11h10V10l2 1 2-5-5-3c-.5 1.8-2 3-4 3S8.5 4.8 8 3z" stroke-linejoin="round"/></svg>Vestuario</a>
   <a class="tab" href="#duelo" data-v="duelo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 4l9 9M4 4h4M4 4v4M20 4l-9 9M20 4h-4M20 4v4M8 15l-3 3M16 15l3 3M3 20l3-1-2-2zM21 20l-3-1 2-2z"/></svg>Duelo</a>
   <a class="tab" href="#temporada" data-v="temporada"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 21h18M6 21V12M10.5 21V8M15 21v-6M19.5 21V4"/></svg>Temporada</a>
+  <a class="tab" href="#equipo" data-v="equipo" aria-label="Cartera en equipo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10v-6z" stroke-linejoin="round"/><circle cx="9.3" cy="10" r="1.9"/><circle cx="14.7" cy="10" r="1.9"/><path d="M6.4 16c.6-1.8 1.6-2.7 2.9-2.7s2.3.9 2.7 2.4M11.9 15.7c.4-1.5 1.4-2.4 2.8-2.4s2.3.9 2.9 2.7"/></svg>Equipo</a>
 </nav>
 
 <!-- Diálogo: probar cambio -->
@@ -799,8 +1249,9 @@ html.oculta *,html.oculta *::before,html.oculta *::after{animation-play-state:pa
   <div class="dlg-cab"><span class="mono" id="dt-t">Tarjeta para compartir</span><button class="cerrar" data-cerrar aria-label="Cerrar"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8"/></svg></button></div>
   <div class="dlg-cuerpo">
     <canvas id="lienzo-tarjeta" width="1080" height="1350" style="width:100%;height:auto;display:block;border:1px solid var(--linea)" role="img" aria-label="Vista previa de la tarjeta"></canvas>
-    <div class="fila-btn"><button class="btn pri" id="t-compartir">Compartir</button><a class="btn" id="t-descargar" download="klever-tarjeta.png" href="#">Descargar imagen</a></div>
+    <div class="fila-btn"><button class="btn pri" id="t-compartir">Compartir</button><button class="btn" id="t-captura" type="button">Mostrar para captura</button></div>
     <p class="nota">La tarjeta lleva el sello de simulación. Sin datos personales: solo tu apodo.</p>
+    <div class="captura-pie"><span>Haz una captura de pantalla</span><button class="btn" id="t-volver" type="button">Volver</button></div>
   </div>
 </dialog>
 
@@ -882,8 +1333,8 @@ try { const g = JSON.parse(localStorage.getItem('klever-arena') || 'null'); if (
 function guardar(){ try { localStorage.setItem('klever-arena', JSON.stringify({pesos:S.pesos, idea:S.idea})); } catch(e) {} }
 
 /* ─────────── Lógica real de Klever ─────────── */
-function analiza(pesos){
-  const act = JUGADORES.filter(j => (pesos[j.id]||0) > 0);
+function analiza(pesos, lista = JUGADORES){
+  const act = lista.filter(j => (pesos[j.id]||0) > 0);
   const n = act.length;
   const may = Math.max(0, ...act.map(j => pesos[j.id]));
   const porSec = {};
@@ -1204,7 +1655,7 @@ function montaCromos(){
     const si = j.h.filter(x=>x==='si').length, nd = j.h.filter(x=>x==='nd').length;
     return '<article class="cromo" data-id="'+j.id+'" style="--c:'+sc.c+'" aria-labelledby="cn-'+j.id+'">'+
       '<span class="cr-dorsal-fondo" aria-hidden="true">'+String(j.d).padStart(2,'0')+'</span>'+
-      '<div class="cr-top"><i></i><span>'+sc.n+'</span></div>'+
+      '<div class="cr-top"><i></i><span>'+sc.n+'</span><span class="cr-geo" title="Sede y moneda (datos de ejemplo)">'+GEO[j.id].cod+' · '+GEO[j.id].mon+'</span></div>'+
       '<h3 class="cr-nom" id="cn-'+j.id+'">'+esc(j.n)+'</h3>'+
       '<button class="cr-huella" aria-expanded="false" aria-controls="ck-'+j.id+'" aria-label="Huella de '+esc(j.n)+': cumple '+si+' de 5'+(nd?', '+nd+' sin datos':'')+'. Ver detalle">'+huellaSVG(j.h)+
         '<span class="cnt"><b>Huella</b>'+(nd?' · '+nd+' s/d':'')+'<svg viewBox="0 0 10 10"><path d="M2 3.5l3 3 3-3" stroke="currentColor" fill="none" stroke-width="1.4"/></svg></span></button>'+
@@ -1297,6 +1748,10 @@ function pintaVestuario(){
   const hay = !!S.borrador && JUGADORES.some(j => S.borrador[j.id] !== S.pesos[j.id]);
   bc.hidden = !hay;
   if (hay) { const p0 = puntos(S.pesos), p1 = puntos(S.borrador); $('#bc-res').textContent = 'Semana ' + p0.total + ' → ' + p1.total + ' pts'; }
+  const bg = $('#bc-geo');
+  bg.hidden = !(hay && MODO_VEST === 'mapa');
+  if (hay && MODO_VEST === 'mapa') { const g0 = geo(S.pesos), g1 = geo(S.borrador); bg.textContent = 'Dólar ' + g0.mon.USD + ' → ' + g1.mon.USD + ' % · sede en España ' + g0.es + ' → ' + g1.es + ' %'; }
+  pintaMapa();
 }
 function abrirCambio(){
   let prop = false;
@@ -1602,10 +2057,13 @@ function dibujaTarjeta(cv, t){
 function abrirTarjeta(t){
   tarjetaActual = t;
   const cv = $('#lienzo-tarjeta'); dibujaTarjeta(cv, t);
-  const a = $('#t-descargar');
-  try { a.href = cv.toDataURL('image/png'); a.download = t.nombre; } catch(e) { a.removeAttribute('href'); }
+  $('#dlg-tarjeta').classList.remove('captura');
   $('#dlg-tarjeta').showModal();
 }
+// El visor bloquea descargas: mostramos la tarjeta a pantalla completa para hacer una captura.
+$('#t-captura').addEventListener('click', () => { $('#dlg-tarjeta').classList.add('captura'); $('#t-volver').focus(); });
+$('#t-volver').addEventListener('click', () => { $('#dlg-tarjeta').classList.remove('captura'); $('#t-captura').focus(); });
+$('#dlg-tarjeta').addEventListener('close', () => $('#dlg-tarjeta').classList.remove('captura'));
 $('#t-compartir').addEventListener('click', async () => {
   const cv = $('#lienzo-tarjeta');
   try {
@@ -1613,9 +2071,8 @@ $('#t-compartir').addEventListener('click', async () => {
     const file = new File([blob], (tarjetaActual && tarjetaActual.nombre) || 'klever.png', {type:'image/png'});
     if (navigator.canShare && navigator.canShare({files:[file]})) { await navigator.share({files:[file], title:'Klever'}); return; }
   } catch(e) {}
-  aviso('Tu navegador no comparte imágenes. Usa «Descargar imagen».');
+  aviso('Tu navegador no comparte imágenes. Usa «Mostrar para captura».');
 });
-$('#t-descargar').addEventListener('click', e => { if (!e.currentTarget.getAttribute('href') || e.currentTarget.getAttribute('href') === '#') e.preventDefault(); });
 
 /* ─────────── TEMPORADA ─────────── */
 function pintaTemporada(){
@@ -1695,8 +2152,697 @@ $('#historias').addEventListener('keydown', e => {
   if (e.key === 'Tab') { const f = $$('#historias button').filter(b => b.offsetParent); const i = f.indexOf(document.activeElement); if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length-1].focus(); } else if (!e.shiftKey && i === f.length-1) { e.preventDefault(); f[0].focus(); } }
 });
 
+/* ─────────── Geografía y monedas · datos de ejemplo ─────────── */
+const EXTRA = [ // catálogo extra para el club (empresas inventadas)
+  {id:'tamesis', n:'Puerto Támesis', s:'ind', d:5, h:['si','nd','si','si','no']},
+  {id:'alpino',  n:'Relojes Alpino', s:'con', d:2, h:['si','si','si','si','nd']},
+  {id:'kaede',   n:'Kaede Farma',    s:'sal', d:7, h:['si','si','no','nd','si']},
+];
+const CATALOGO = JUGADORES.concat(EXTRA);
+const empresa = id => CATALOGO.find(j => j.id === id);
+// ventas por región: España, resto de Europa, Norteamérica, Latinoamérica, Asia-Pacífico, otros (suman 100)
+const GEO = {
+  halcon: {pais:'EE. UU.',     cod:'USA', mon:'USD', v:[5,15,55,5,15,5]},
+  aurora: {pais:'España',      cod:'ESP', mon:'EUR', v:[70,20,0,8,0,2]},
+  brisa:  {pais:'España',      cod:'ESP', mon:'EUR', v:[45,30,10,10,5,0]},
+  faro:   {pais:'España',      cod:'ESP', mon:'EUR', v:[85,10,0,5,0,0]},
+  pinar:  {pais:'España',      cod:'ESP', mon:'EUR', v:[60,10,0,30,0,0]},
+  ebano:  {pais:'Alemania',    cod:'DEU', mon:'EUR', v:[10,50,15,5,15,5]},
+  silicio:{pais:'Japón',       cod:'JPN', mon:'JPY', v:[0,10,25,0,60,5]},
+  tamesis:{pais:'Reino Unido', cod:'GBR', mon:'GBP', v:[3,22,15,5,30,25]},
+  alpino: {pais:'Suiza',       cod:'CHE', mon:'CHF', v:[6,34,20,5,30,5]},
+  kaede:  {pais:'Japón',       cod:'JPN', mon:'JPY', v:[0,10,15,0,70,5]},
+};
+const PAIS_REG = {'España':'es', 'Alemania':'eu', 'Reino Unido':'eu', 'Suiza':'eu', 'EE. UU.':'na', 'Japón':'ap'};
+const REGIONES = [
+  {k:'es', n:'España',          c:'#a3b0ff'},
+  {k:'eu', n:'Resto de Europa', c:'#5b76ff'},
+  {k:'na', n:'Norteamérica',    c:'#6cc6f2'},
+  {k:'la', n:'Latinoamérica',   c:'#e493d9'},
+  {k:'ap', n:'Asia-Pacífico',   c:'#52d4b7'},
+  {k:'ot', n:'Otros',           c:'#7b818d'},
+];
+const MONEDAS = [
+  {k:'EUR', art:'el euro',         pl:'euros',          c:'#bcc1cc', tipo:1,    sim:'€'},
+  {k:'USD', art:'el dólar',        pl:'dólares',        c:'#5b76ff', tipo:1.08, sim:'$'},
+  {k:'GBP', art:'la libra',        pl:'libras',         c:'#e493d9', tipo:.85,  sim:'£'},
+  {k:'CHF', art:'el franco suizo', pl:'francos suizos', c:'#e7bb5f', tipo:.95,  sim:'CHF'},
+  {k:'JPY', art:'el yen',          pl:'yenes',          c:'#52d4b7', tipo:162,  sim:'¥'},
+];
+function geo(pesos){
+  const pais = {}, sede = {}, vf = {}, mon = {};
+  REGIONES.forEach(r => { sede[r.k] = 0; vf[r.k] = 0; });
+  MONEDAS.forEach(m => mon[m.k] = 0);
+  let tot = 0;
+  CATALOGO.forEach(j => {
+    const p = pesos[j.id] || 0; if (!p) return;
+    const g = GEO[j.id]; tot += p;
+    pais[g.pais] = (pais[g.pais] || 0) + p;
+    sede[PAIS_REG[g.pais]] += p;
+    mon[g.mon] += p;
+    REGIONES.forEach((r,i) => vf[r.k] += p * g.v[i] / 100); // Σ peso_i × ventas_región_i
+  });
+  const ent = enteros(REGIONES.map(r => vf[r.k]), Math.round(tot));
+  const ventas = {}; REGIONES.forEach((r,i) => ventas[r.k] = ent[i]);
+  return {pais, sede, ventas, mon, es: pais['España'] || 0, tot};
+}
+
+/* Máscara de tierra de baja resolución: 72 columnas (5° de longitud) × 27 filas (5° de latitud, de 80° N a 55° S).
+   Cada fila lista tramos [desde, hasta] de columnas con tierra. Aproximada a propósito. */
+const MAPA_FILAS = [
+  [[13,20],[22,32],[39,39],[47,47],[55,57]],
+  [[11,21],[25,31],[47,47],[53,58],[60,65]],
+  [[3,19],[21,23],[26,30],[39,71]],
+  [[3,16],[21,23],[26,27],[31,32],[37,68]],
+  [[4,4],[9,17],[21,23],[35,35],[37,38],[40,63],[67,67]],
+  [[10,24],[34,64],[67,67]],
+  [[11,25],[35,64]],
+  [[11,21],[34,36],[38,41],[44,44],[47,61],[64,64]],
+  [[11,20],[34,35],[40,61],[63,64]],
+  [[12,19],[34,59],[62,62]],
+  [[13,16],[19,19],[33,45],[47,59]],
+  [[14,16],[19,20],[33,42],[44,47],[49,58],[60,60]],
+  [[16,18],[33,46],[50,52],[55,57],[60,60]],
+  [[18,18],[33,44],[51,51],[55,57],[60,60]],
+  [[20,24],[33,45],[52,52],[56,56],[60,60]],
+  [[20,26],[37,44],[55,59]],
+  [[20,27],[38,44],[56,60],[62,66]],
+  [[20,28],[38,43],[57,58],[64,65]],
+  [[20,28],[38,43],[45,45],[62,64]],
+  [[21,28],[38,43],[44,45],[60,65]],
+  [[22,27],[39,43],[45,45],[58,66]],
+  [[22,26],[39,42],[58,66]],
+  [[22,25],[39,41],[59,60],[63,66]],
+  [[22,24],[64,65],[71,71]],
+  [[21,23],[65,65],[70,70]],
+  [[21,22],[69,69]],
+  [[21,21]],
+];
+const ESP_CELDAS = new Set(['7,34','7,35','7,36','8,34','8,35']);
+function regionCelda(r, c){
+  if (ESP_CELDAS.has(r + ',' + c)) return 'es';
+  const lat = 77.5 - 5*r, lon = -177.5 + 5*c;
+  if (lat >= 67 && lon < -10) return 'na'; // Groenlandia
+  if (lon < -30) return (lat >= 30 || (r === 10 && c === 19)) ? 'na' : 'la';
+  if ((lon <= 30 && lat >= 35) || (lon <= 40 && lat >= 45)) return 'eu';
+  if ((lon >= 67 && lat <= 42.5) || (lon >= 95 && lat <= 52.5) || (lat < 0 && lon >= 95)) return 'ap';
+  return 'ot';
+}
+const MAPA = {celdas:[], vis:null, de:null, a:null, raf:0, modo:'sede', boot:true};
+MAPA_FILAS.forEach((segs, r) => segs.forEach(([a,b]) => { for (let c = a; c <= b; c++) MAPA.celdas.push({r, c, g:regionCelda(r, c)}); }));
+const MK = [{k:'na',lon:-100,lat:45,d:'o'},{k:'es',lon:-4,lat:40,d:'o'},{k:'eu',lon:15,lat:51,d:'e'},{k:'la',lon:-58,lat:-10,d:'o'},{k:'ot',lon:22,lat:6,d:'e'},{k:'ap',lon:110,lat:30,d:'e'}];
+const MK_CORTO = {es:'España', eu:'Europa', na:'Norteam.', la:'Latinoam.', ap:'Asia-Pac.', ot:'Otros'};
+const MK_MIN = {es:'ESP', eu:'EUR', na:'N. AM.', la:'LATAM', ap:'ASIA', ot:'OTROS'};
+$('#mk-capa').innerHTML = MK.map(m => '<div class="mk" data-k="'+m.k+'" data-d="'+m.d+'" style="--x:'+((m.lon+180)/360*100).toFixed(2)+'%;--y:'+((80-m.lat)/135*100).toFixed(2)+'%"><i></i><span><em class="l">'+MK_CORTO[m.k]+'</em><em class="c">'+MK_MIN[m.k]+'</em><b>0 %</b></span></div>').join('');
+const C_BASE = [58,64,80], C_MED = [59,91,255], C_ALTO = [232,236,255];
+function colorLed(t){
+  const [a, b, u] = t <= .6 ? [C_BASE, C_MED, t/.6] : [C_MED, C_ALTO, (t-.6)/.4];
+  return 'rgb(' + a.map((v,i) => Math.round(v + (b[i]-v)*u)).join(',') + ')';
+}
+const suave = u => 1 - Math.pow(1 - u, 3);
+function dibujaMapa(prog){ // prog = avance del barrido (0–1) o null para el estado actual
+  const cv = $('#mapa-cv'); const w = cv.clientWidth; if (!w || !MAPA.vis) return;
+  const h = w * 135 / 360, W = Math.round(w*DPR), H = Math.round(h*DPR);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const c = cv.getContext('2d'); c.setTransform(DPR,0,0,DPR,0,0); c.clearRect(0,0,w,h);
+  const cw = w/72, p = cw/2, rad = Math.max(.55, p*.36), s = rad*1.1;
+  c.fillStyle = 'rgba(255,255,255,.05)'; // ledes apagados (mar)
+  for (let y = 0; y < 54; y++) for (let x = 0; x < 144; x++) c.fillRect(x*p + p/2 - s/2, y*p + p/2 - s/2, s, s);
+  const valor = cel => {
+    if (prog == null || !MAPA.de) return MAPA.vis[cel.g];
+    const u = Math.min(1, Math.max(0, (prog - cel.c/72*.45) / .55));
+    return MAPA.de[cel.g] + (MAPA.a[cel.g] - MAPA.de[cel.g]) * suave(u);
+  };
+  const ts = MAPA.celdas.map(valor);
+  c.fillStyle = '#3b5bff';
+  MAPA.celdas.forEach((cel,i) => { const t = ts[i]; if (t <= .55) return; c.globalAlpha = Math.min(.32, (t-.55)*.7); c.beginPath(); c.arc(cel.c*cw + cw/2, cel.r*cw + cw/2, cw*.95, 0, 6.2832); c.fill(); });
+  c.globalAlpha = 1;
+  MAPA.celdas.forEach((cel,i) => {
+    c.fillStyle = colorLed(ts[i]);
+    const x0 = cel.c*cw, y0 = cel.r*cw;
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) { c.beginPath(); c.arc(x0 + dx*p + p/2, y0 + dy*p + p/2, rad, 0, 6.2832); c.fill(); }
+  });
+  if (prog != null && prog > 0 && prog < 1) { // línea de refresco de la pantalla
+    const x = Math.min(1, Math.max(0, (prog - .275) / .45)) * w;
+    c.fillStyle = 'rgba(163,176,255,.35)'; c.fillRect(x - 1, 0, 2, h);
+    c.fillStyle = 'rgba(163,176,255,.08)'; c.fillRect(x - 14, 0, 14, h);
+  }
+}
+function mapaA(vals, barrido){
+  cancelAnimationFrame(MAPA.raf);
+  if (!MAPA.vis || RM || document.hidden) { MAPA.vis = {...vals}; MAPA.de = null; dibujaMapa(null); return; }
+  MAPA.de = {...MAPA.vis}; MAPA.a = {...vals};
+  const t0 = performance.now(), dur = barrido ? 950 : 380;
+  const paso = now => {
+    const e = Math.min(1, (now - t0) / dur);
+    REGIONES.forEach(r => MAPA.vis[r.k] = MAPA.de[r.k] + (MAPA.a[r.k] - MAPA.de[r.k]) * suave(e));
+    dibujaMapa(barrido ? e : null);
+    if (e < 1) MAPA.raf = requestAnimationFrame(paso);
+    else { MAPA.vis = {...MAPA.a}; MAPA.de = null; dibujaMapa(null); }
+  };
+  MAPA.raf = requestAnimationFrame(paso);
+}
+let MODO_VEST = 'reparto', MON_SEL = 'USD';
+function listaBarras(ul, filas, max){
+  const clave = filas.map(f => f.k).join('|');
+  if (ul._k !== clave) {
+    ul._k = clave;
+    ul.innerHTML = filas.map(f => '<li data-k="'+f.k+'" style="--c:'+f.c+'"><span><i></i>'+esc(f.n)+'</span><span class="bar"><i></i></span><span class="dato"></span></li>').join('');
+  }
+  const top = Math.max(...filas.map(f => f.v));
+  filas.forEach(f => { const li = $('li[data-k="'+f.k+'"]', ul); $('.bar i', li).style.setProperty('--v', (f.v / max).toFixed(3)); $('.dato', li).textContent = f.v + ' %'; li.classList.toggle('top', f.v === top && f.v > 0); });
+}
+function pintaMapa({barrido = false} = {}){
+  if (MODO_VEST !== 'mapa' || S.vista !== 'vestuario') return;
+  const G = geo(S.borrador || S.pesos);
+  const sede = MAPA.modo === 'sede', src = sede ? G.sede : G.ventas;
+  const max = Math.max(1, ...REGIONES.map(r => src[r.k]));
+  const vals = {}; REGIONES.forEach(r => vals[r.k] = src[r.k] > 0 ? .22 + .78 * src[r.k] / max : 0);
+  if (MAPA.boot) { MAPA.boot = false; barrido = true; MAPA.vis = {es:0,eu:0,na:0,la:0,ap:0,ot:0}; }
+  mapaA(vals, barrido);
+  $$('#mk-capa .mk').forEach(m => { const v = Math.round(src[m.dataset.k]); $('b', m).textContent = v + ' %'; m.classList.toggle('cero', !v); m.classList.toggle('max', v > 0 && v === Math.round(max)); });
+  $('#mapa-esq').textContent = sede ? 'Sede · por peso' : 'Ventas · Σ peso × ventas';
+  $('#mapa-cv').setAttribute('aria-label', (sede ? 'Mapa de dónde tienen la sede tus empresas: ' : 'Mapa de dónde venden tus empresas: ') + REGIONES.map(r => r.n + ' ' + Math.round(src[r.k]) + ' %').join(', '));
+  $('#lista-geo-t').textContent = sede ? 'Por país de sede' : 'Por región de ventas';
+  $('#mapa-formula').textContent = sede ? 'Cada empresa cuenta entera en el país de su sede, según su peso.' : 'Ventas ponderadas: Σ peso de cada empresa × sus ventas en la región.';
+  const filas = sede
+    ? Object.keys(PAIS_REG).filter(n => n in G.pais || JUGADORES.some(j => GEO[j.id].pais === n)).map(n => ({k:n, n, v:G.pais[n] || 0, c:REGIONES.find(r => r.k === PAIS_REG[n]).c}))
+    : REGIONES.map(r => ({k:r.k, n:r.n, v:G.ventas[r.k], c:r.c}));
+  listaBarras($('#lista-geo'), filas, 100);
+  // monedas
+  const mb = $('#mon-barra');
+  if (!mb.children.length) mb.innerHTML = MONEDAS.map(m => '<i data-k="'+m.k+'" style="--c:'+m.c+'"></i>').join('');
+  let acc = 0;
+  MONEDAS.forEach(m => { const i = $('i[data-k="'+m.k+'"]', mb); i.style.setProperty('--x', acc + '%'); i.style.setProperty('--w', (G.mon[m.k]/100).toFixed(3)); acc += G.mon[m.k]; });
+  $('#mon-ley').innerHTML = MONEDAS.map(m => '<li class="'+(G.mon[m.k] ? '' : 'cero')+'" style="--c:'+m.c+'"><span class="mono"><i></i>'+m.k+'</span><b>'+G.mon[m.k]+'&nbsp;%</b></li>').join('');
+  pintaEscMon(G);
+  // sesgo de casa
+  odo($('#casa-num'), G.es);
+  $('#casa-frase').textContent = 'El ' + G.es + ' % de tu cartera tiene sede en España. Y el ' + G.ventas.es + ' % de lo que venden tus empresas se vende aquí.';
+  $('#casa-barra').style.setProperty('--v', (G.es/100).toFixed(3));
+  $('#casa-resto').textContent = 'Resto ' + (100 - G.es) + ' %';
+  // señales orientativas
+  const noEur = MONEDAS.filter(m => m.k !== 'EUR').map(m => [m, G.mon[m.k]]).sort((a,b) => b[1]-a[1])[0];
+  const paisTop = Object.entries(G.pais).sort((a,b) => b[1]-a[1])[0] || ['—', 0];
+  const regTop = REGIONES.map(r => [r, G.ventas[r.k]]).sort((a,b) => b[1]-a[1])[0];
+  const s1 = noEur[1] > 50, s2 = paisTop[1] > 60, s3 = regTop[1] > 70;
+  const sen = [
+    {fc: s1 ? 'var(--medio)' : 'var(--ok)', t: s1 ? 'Aviso medio: el ' + noEur[1] + ' % cotiza en ' + noEur[0].pl : 'Monedas: ninguna distinta del euro pasa del 50 %',
+      p: 'La que más pesa fuera del euro: ' + noEur[0].art + ', ' + noEur[1] + ' %.', sug: s1 ? '¿Y si lo que cotiza en ' + noEur[0].pl + ' bajara del 50 %?' : ''},
+    {fc: s2 ? 'var(--alto)' : 'var(--ok)', t: s2 ? 'Concentración geográfica: el ' + paisTop[1] + ' % tiene sede en ' + paisTop[0] : 'Sede: ningún país pasa del 60 %',
+      p: 'El país que más pesa: ' + paisTop[0] + ', ' + paisTop[1] + ' %.', sug: s2 ? '¿Y si lo que tiene sede en ' + paisTop[0] + ' bajara del 60 %?' : ''},
+    {fc: s3 ? 'var(--alto)' : 'var(--ok)', t: s3 ? 'Concentración geográfica: el ' + regTop[1] + ' % se vende en ' + regTop[0].n : 'Ventas: ninguna región pasa del 70 %',
+      p: 'La región que más vende: ' + regTop[0].n + ', ' + regTop[1] + ' %.', sug: s3 ? '¿Y si ninguna región pasara del 70 % de tus ventas?' : ''},
+  ];
+  $('#senales').innerHTML = sen.map(x => '<li><span class="lz" style="--fc:'+x.fc+'" aria-hidden="true"></span><b>'+x.t+'</b><p>'+x.p+'</p>'+(x.sug ? '<p class="sug">'+x.sug+' Solo pesos, nunca empresas.</p>' : '')+'</li>').join('');
+  // ficha por empresa
+  $('#fichas-geo').innerHTML = JUGADORES.map(j => { const g = GEO[j.id], p = (S.borrador || S.pesos)[j.id] || 0;
+    return '<li style="opacity:'+(p ? 1 : .45)+'"><span class="nm">'+esc(j.n)+'</span><span class="mono">'+g.pais+' · '+g.mon+' · '+p+' %</span><span class="ventas" role="img" aria-label="Ventas de '+esc(j.n)+': '+REGIONES.map((r,i) => r.n + ' ' + g.v[i] + ' %').join(', ')+'">'+REGIONES.map((r,i) => g.v[i] ? '<i style="--w:'+g.v[i]+';--c:'+r.c+'"></i>' : '').join('')+'</span></li>'; }).join('');
+  if (!$('#ley-reg').children.length) $('#ley-reg').innerHTML = REGIONES.map(r => '<span style="--c:'+r.c+'"><i></i>'+r.n+'</span>').join('');
+}
+const fmtTipo = (v, k) => v.toLocaleString('es-ES', {minimumFractionDigits: k === 'JPY' ? 0 : 2, maximumFractionDigits: k === 'JPY' ? 0 : 2});
+function pintaEscMon(G){
+  G = G || geo(S.borrador || S.pesos);
+  const m = MONEDAS.find(x => x.k === MON_SEL), r = $('#x-mon'), X = Number(r.value), w = G.mon[MON_SEL];
+  const ef = -X * w / 100;
+  r.style.setProperty('--p', (X/30*100) + '%'); r.setAttribute('aria-valuetext', X + ' %');
+  const q = $('#esc-mon-q'); q.firstChild.textContent = '¿Y si ' + m.art + ' baja un '; $('#x-out').textContent = X;
+  const chips = $('#mon-chips');
+  if (!chips.children.length) {
+    chips.innerHTML = MONEDAS.filter(x => x.k !== 'EUR').map(x => '<button type="button" data-mon="'+x.k+'" aria-pressed="false">'+x.k+'</button>').join('');
+    $$('button', chips).forEach(b => b.addEventListener('click', () => { MON_SEL = b.dataset.mon; pintaEscMon(); }));
+  }
+  $$('button', chips).forEach(b => { b.setAttribute('aria-pressed', String(b.dataset.mon === MON_SEL)); b.textContent = b.dataset.mon + ' · ' + G.mon[b.dataset.mon] + ' %'; });
+  const n = $('#ef-num'); n.textContent = (ef < 0 ? '−' : '') + fmt1(Math.abs(ef)) + ' %'; n.classList.toggle('neg', ef < 0);
+  $('#ef-idx').textContent = '100 → ' + fmt1(100 + ef);
+  $('#ef-tipo').textContent = '1 € = ' + fmtTipo(m.tipo, m.k) + ' ' + m.sim + ' → ' + fmtTipo(m.tipo / (1 - X/100), m.k) + ' ' + m.sim;
+  $('#ef-formula').textContent = w ? '−' + X + ' % × ' + w + ' % en ' + m.pl + ' = ' + (ef < 0 ? '−' : '') + fmt1(Math.abs(ef)) + ' % (aproximado)' : 'No tienes nada en ' + m.pl + ': sin efecto.';
+}
+function modoVest(m){
+  if (m === MODO_VEST) return;
+  const aplica = () => {
+    MODO_VEST = m;
+    $$('#seg-vest button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.modo === m)));
+    $('#vest-reparto').hidden = m !== 'reparto';
+    $('#vest-mapa').hidden = m !== 'mapa';
+    $('#rejilla-vest').classList.toggle('modo-mapa', m === 'mapa');
+    if (m === 'mapa') MAPA.boot = true;
+    pintaVestuario();
+  };
+  if (document.startViewTransition && !RM) document.startViewTransition(aplica);
+  else aplica();
+}
+$$('#seg-vest button').forEach(b => b.addEventListener('click', () => modoVest(b.dataset.modo)));
+$$('#seg-geo button').forEach(b => b.addEventListener('click', () => {
+  if (MAPA.modo === b.dataset.geo) return;
+  MAPA.modo = b.dataset.geo;
+  $$('#seg-geo button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  pintaMapa({barrido:true});
+}));
+$('#x-mon').addEventListener('input', () => pintaEscMon());
+
+/* ─────────── CARTERA EN EQUIPO ─────────── */
+const MIEMBROS = [
+  {id:'yo',    a:'@marea_baja', yo:true},
+  {id:'kiwi',  a:'@kiwi_contable'},
+  {id:'lince', a:'@lince_paciente'},
+  {id:'trigo', a:'@trigo_largo'},
+];
+const miembro = id => MIEMBROS.find(m => m.id === id);
+const CAPITAN = 'kiwi';
+const ROTA = [{s:6,m:'trigo'},{s:7,m:'kiwi'},{s:8,m:'yo'},{s:9,m:'lince'},{s:10,m:'trigo'}];
+const VOTO_TXT = {favor:'A favor', contra:'En contra', abst:'Abstención'};
+const VOTO_CORTO = {favor:'A favor', contra:'En contra', abst:'Abst.'};
+const TIPO_TXT = {peso:'Cambio de peso', alta:'Añadir empresa', baja:'Quitar empresa'};
+const REAC = [{k:'buen', t:'Buen argumento'}, {k:'riesgo', t:'Demasiado arriesgado'}, {k:'var', t:'¿Y la variedad?'}, {k:'ok', t:'De acuerdo'}];
+const ESC_TORMENTA = {tec:-.24, ene:-.18, fin:-.30, ind:-.20, sal:-.08, con:-.12}; // ilustrativo
+const ORD_SEM = {Alta:0, Media:1, Baja:2, Poca:0, Amplia:2};
+const EQUIPOS = [
+  {id:'pena', a:'Peña Dividendo',     t:74, m:5},
+  {id:'idx',  a:'Los Indexados',      t:69, m:4},
+  {id:'tort', a:'Tortugas FC',        t:61, m:3},
+  {id:'aula', a:'Aula 3B',            t:55, m:5},
+  {id:'nos',  a:'Club Marea',         t:0,  m:4, yo:true},
+  {id:'ard',  a:'Ardillas Prudentes', t:41, m:4},
+  {id:'cafe', a:'Café y Cartera',     t:36, m:3},
+];
+const T = {
+  pesos: {halcon:30, silicio:20, brisa:15, pinar:15, faro:20},
+  n: 6, racha: 3, visto: false, montado: false, orden: null,
+  props: [
+    {id:'p4', n:4, autor:'lince', tipo:'alta', emp:'kaede', valor:15, porque:'Nos falta salud y así llegamos a cinco sectores.', titulo:'Añadir Kaede Farma al 15 %',
+      estado:'abierta', cierra:'23 h', reloj:.96, votos:{yo:null, kiwi:null, lince:'favor', trigo:null}, plan:{kiwi:'favor', trigo:'favor'}, planReac:{trigo:'ok'}, reac:{buen:1, riesgo:0, var:0, ok:1}, miReac:null},
+    {id:'p5', n:5, autor:'trigo', tipo:'peso', emp:'halcon', valor:45, porque:'Es la que más ha crecido; quiero más de ella.', titulo:'Subir Halcón Cloud al 45 %',
+      estado:'abierta', cierra:'23 h', reloj:.96, votos:{yo:null, kiwi:null, lince:null, trigo:'favor'}, plan:{kiwi:'contra', lince:'contra'}, planReac:{kiwi:'riesgo', lince:'var'}, reac:{buen:0, riesgo:1, var:1, ok:0}, miReac:null},
+  ],
+  hist: [
+    {s:6, autor:'kiwi', titulo:'Añadir Mercado Faro al 20 %', porque:'El consumo suele aguantar mejor cuando todo cae.', ok:true, tanteo:'3–1',
+      antes:{conc:'Media', vari:'Media', eq:24}, despues:{conc:'Media', vari:'Media', eq:24}, nota:'Escenario «tormenta» (ilustrativo): 76,9 → 78,4.'},
+    {s:5, autor:'trigo', titulo:'Quitar Banca Pinar', porque:'Los bancos me ponen nervioso desde el último escenario.', ok:false, tanteo:'1–3',
+      antes:{conc:'Media', vari:'Media', eq:24}, despues:{conc:'Media', vari:'Media', eq:24}, nota:'Se habría quedado con 3 sectores, justo en el límite de variedad media.'},
+    {s:4, autor:'yo', titulo:'Bajar Halcón Cloud del 45 al 30 %', porque:'Una sola empresa no debería decidir por todo el club.', ok:true, tanteo:'4–0',
+      antes:{conc:'Alta', vari:'Media', eq:12}, despues:{conc:'Media', vari:'Media', eq:24}, nota:''},
+  ],
+};
+function avatarSVG(apodo){
+  let h = 2166136261;
+  for (let i = 0; i < apodo.length; i++) { h ^= apodo.charCodeAt(i); h = Math.imul(h, 16777619); }
+  h >>>= 0;
+  const cols = ['#3b5bff','#a3b0ff','#38d59b','#ffc23d','#e493d9','#6cc6f2'];
+  let bits = h >>> 3, r = '';
+  for (let y = 0; y < 5; y++) for (let x = 0; x < 3; x++) {
+    if (bits & 1) { r += '<rect x="'+(x+1)+'" y="'+(y+1)+'" width="1" height="1"/>'; if (x < 2) r += '<rect x="'+(5-x)+'" y="'+(y+1)+'" width="1" height="1"/>'; }
+    bits >>>= 1;
+  }
+  return '<svg class="av" viewBox="0 0 7 7" aria-hidden="true"><rect width="7" height="7" fill="#1e222a"/><g fill="'+cols[h % cols.length]+'">'+(r || '<rect x="3" y="3" width="1" height="1"/>')+'</g></svg>';
+}
+function reparte(pesos, id, valor){ // cambia un peso y reparte el resto en proporción (suma exacta 100)
+  const otros = Object.keys(pesos).filter(k => k !== id && pesos[k] > 0);
+  const sumaO = otros.reduce((s,k) => s + pesos[k], 0), libre = 100 - valor;
+  const ent = enteros(otros.map(k => sumaO ? pesos[k] / sumaO * libre : libre / otros.length), libre);
+  const r = {}; if (valor > 0) r[id] = valor;
+  otros.forEach((k,i) => { if (ent[i] > 0) r[k] = ent[i]; });
+  return r;
+}
+const aplicaProp = (pesos, p) => reparte(pesos, p.emp, p.tipo === 'baja' ? 0 : p.valor);
+function indiceTormenta(pesos){ let f = 0; for (const id in pesos) f += pesos[id] / 100 * ESC_TORMENTA[empresa(id).s]; return 100 * (1 + f); }
+function resumenEq(pesos){ const a = analiza(pesos, CATALOGO); return {a, eq: equilibrio(a), idx: indiceTormenta(pesos)}; }
+function tituloProp(f, pesos){
+  const n = empresa(f.emp).n;
+  if (f.tipo === 'baja') return 'Quitar ' + n;
+  if (f.tipo === 'alta') return 'Añadir ' + n + ' al ' + f.valor + ' %';
+  return ((pesos[f.emp] || 0) < f.valor ? 'Subir ' : 'Bajar ') + n + ' al ' + f.valor + ' %';
+}
+function tablaAD(r0, r1){
+  const cls = (a, b) => a === b ? '' : (b > a ? 'mejor' : 'peor');
+  const f = [
+    ['Concentración', r0.a.conc, r1.a.conc, cls(ORD_SEM[r0.a.conc], ORD_SEM[r1.a.conc])],
+    ['Variedad', r0.a.vari, r1.a.vari, cls(ORD_SEM[r0.a.vari], ORD_SEM[r1.a.vari])],
+    ['Equilibrio (Liga)', r0.eq.t + ' pts', r1.eq.t + ' pts', cls(r0.eq.t, r1.eq.t)],
+    ['Escenario «tormenta»', fmt1(r0.idx), fmt1(r1.idx), cls(Math.round(r0.idx*10), Math.round(r1.idx*10))],
+  ];
+  return '<table class="ad"><thead><tr><th scope="col">Antes → después</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody>' +
+    f.map(x => '<tr><th scope="row">'+x[0]+'</th><td class="dato">'+x[1]+'</td><td class="dato '+x[3]+'">'+x[2]+'</td></tr>').join('') +
+    '</tbody></table><p class="nota" style="margin-top:6px">Escenario ilustrativo: índice 100 × (1 + Σ peso × golpe del sector), con golpes de ejemplo.</p>';
+}
+function cuenta(p){ const k = {f:0, c:0, a:0, pend:0}; MIEMBROS.forEach(m => { const v = p.votos[m.id]; if (v === 'favor') k.f++; else if (v === 'contra') k.c++; else if (v === 'abst') k.a++; else k.pend++; }); return k; }
+function umbralHTML(p){
+  const k = cuenta(p), cel = [];
+  for (let i = 0; i < k.f; i++) cel.push('f');
+  for (let i = 0; i < k.a; i++) cel.push('a');
+  while (cel.length < 4 - k.c) cel.push('');
+  for (let i = 0; i < k.c; i++) cel.push('c');
+  return cel.map(c => '<i class="'+c+'"></i>').join('');
+}
+function faltaTxt(p){
+  const k = cuenta(p);
+  if (p.estado !== 'abierta') return 'Resultado final';
+  if (k.f >= 3) return 'Mayoría alcanzada · faltan votos';
+  return k.f + k.pend >= 3 ? 'Faltan ' + (3 - k.f) + ' a favor' : 'Ya no llega a 3 a favor';
+}
+function butacaHTML(p, m){
+  const v = p.votos[m.id];
+  const lbl = v ? VOTO_CORTO[v] : (m.yo && p.estado === 'abierta' ? 'Tu voto' : 'Pendiente');
+  return '<li class="butaca '+(v || '')+'" data-m="'+m.id+'" aria-label="'+esc(m.a)+(m.yo ? ' (tú)' : '')+': '+(v ? VOTO_TXT[v] : 'pendiente')+'">'+avatarSVG(m.a)+'<span class="ap" aria-hidden="true">'+(m.yo ? 'tú' : esc(m.a.slice(1)))+'</span><span class="v" aria-hidden="true">'+lbl+'</span></li>';
+}
+function accionHTML(p){
+  const k = cuenta(p);
+  if (p.estado !== 'abierta') {
+    const ok = p.estado === 'aprobada', pal = ok ? 'APROBADA' : 'RECHAZADA';
+    return '<div class="sentencia'+(ok ? '' : ' no')+'"><p class="pal" data-k="'+pal+'">'+pal+'</p><span class="mono">'+(ok ? 'Se ficha el cambio' : 'La cartera no cambia')+(k.a ? ' · ' + k.a + ' abstención' : '')+'</span><b class="marc" aria-label="'+k.f+' a favor, '+k.c+' en contra">'+k.f+'–'+k.c+'</b></div>';
+  }
+  if (!p.votos.yo) return '<p class="mono" style="margin:0 0 8px;color:var(--texto)">Tu voto</p><div class="votar" role="group" aria-label="Tu voto"><button type="button" class="btn pri" data-voto="favor">A favor</button><button type="button" class="btn contra" data-voto="contra">En contra</button><button type="button" class="btn fant" data-voto="abst">Abstención</button></div>';
+  return '<p class="espera"><i aria-hidden="true"></i>Votos en camino · llegan en directo</p>';
+}
+function htmlProp(p){
+  const abierta = p.estado === 'abierta';
+  const ab = abierta ? {antes:T.pesos, despues:aplicaProp(T.pesos, p)} : p.snap;
+  const k = cuenta(p), au = miembro(p.autor);
+  return '<article class="prop'+(abierta ? '' : ' ' + p.estado)+(p.nueva ? ' nueva-p' : '')+'" data-id="'+p.id+'" aria-labelledby="pt-'+p.id+'" style="scroll-margin-top:120px">'+
+    '<div class="prop-cab"><span class="mono">Propuesta '+String(p.n).padStart(2,'0')+' · <b>'+TIPO_TXT[p.tipo]+'</b></span>'+
+      (abierta ? '<span class="prop-reloj"><i style="--v:'+p.reloj+'" aria-hidden="true"></i>Cierra en '+p.cierra+'</span>' : '<span class="prop-reloj fin">Votación cerrada</span>')+'</div>'+
+    '<div class="prop-autor">'+avatarSVG(au.a)+'<span><b>'+esc(au.a)+'</b>'+(au.yo ? ' (tú)' : '')+' propone</span></div>'+
+    '<h3 class="prop-t" id="pt-'+p.id+'">'+esc(p.titulo)+'</h3>'+
+    '<p class="prop-por"><span class="mono">Por qué</span>«'+esc(p.porque)+'»</p>'+
+    '<div class="tanteo" role="group" aria-label="Marcador de la votación" aria-live="polite">'+
+      '<div class="tn fav"><span class="mono">A favor</span><b><span class="odo" data-t="f" data-aria="A favor">'+k.f+'</span></b></div>'+
+      '<div class="tn-sep" aria-hidden="true">–</div>'+
+      '<div class="tn con"><span class="mono">En contra</span><b><span class="odo" data-t="c" data-aria="En contra">'+k.c+'</span></b></div>'+
+      '<div class="tn abs"><span class="mono">Abst.</span><b><span class="odo" data-t="a" data-aria="Abstenciones">'+k.a+'</span></b></div></div>'+
+    '<div class="umbral" aria-hidden="true">'+umbralHTML(p)+'</div><div class="umbral-eti"><span class="nota" data-t="falta">'+faltaTxt(p)+'</span><span class="nota">Mayoría: 3 de 4</span></div>'+
+    '<ul class="butacas" aria-label="Votos de los miembros">'+MIEMBROS.map(m => butacaHTML(p, m)).join('')+'</ul>'+
+    '<div data-t="tabla">'+tablaAD(resumenEq(ab.antes), resumenEq(ab.despues))+'</div>'+
+    '<div class="reac" role="group" aria-label="Reacciones predefinidas">'+REAC.map(r => '<button type="button" data-reac="'+r.k+'" aria-pressed="'+(p.miReac === r.k)+'">'+r.t+' <b>'+p.reac[r.k]+'</b></button>').join('')+'</div>'+
+    '<div data-t="accion">'+accionHTML(p)+'</div>'+
+  '</article>';
+}
+const tarjetaProp = p => $('#eq-props .prop[data-id="'+p.id+'"]');
+function pintaProps(){
+  const c = $('#eq-props');
+  c.innerHTML = T.props.map(htmlProp).join('');
+  $$('.odo', c).forEach(el => odo(el, el.textContent));
+  T.props.forEach(p => p.nueva = false);
+}
+function refrescaTablas(){ T.props.filter(p => p.estado === 'abierta').forEach(p => { const c = tarjetaProp(p); if (c) $('[data-t=tabla]', c).innerHTML = tablaAD(resumenEq(T.pesos), resumenEq(aplicaProp(T.pesos, p))); }); }
+function refrescaMarcador(p, mid){
+  const card = tarjetaProp(p); if (!card) return;
+  const k = cuenta(p);
+  odo($('[data-t=f]', card), k.f); odo($('[data-t=c]', card), k.c); odo($('[data-t=a]', card), k.a);
+  $('.umbral', card).innerHTML = umbralHTML(p);
+  $('[data-t=falta]', card).textContent = faltaTxt(p);
+  const tmp = document.createElement('ul'); tmp.innerHTML = butacaHTML(p, miembro(mid));
+  const nueva = tmp.firstChild; $('.butaca[data-m="'+mid+'"]', card).replaceWith(nueva);
+  if (!RM) nueva.classList.add('llega');
+  if (mid === 'yo') $('[data-t=accion]', card).innerHTML = accionHTML(p);
+}
+function pintaReac(p, pop){
+  const card = tarjetaProp(p); if (!card) return;
+  $$('[data-reac]', card).forEach(b => {
+    const k = b.dataset.reac;
+    b.setAttribute('aria-pressed', String(p.miReac === k)); $('b', b).textContent = p.reac[k];
+    if (k === pop && !RM) { b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+  });
+}
+const espera = ms => new Promise(r => setTimeout(r, ms));
+async function llegadas(p){
+  if (p.enCurso) return; p.enCurso = true;
+  for (const m of ['kiwi', 'lince', 'trigo']) {
+    if (p.votos[m]) continue;
+    await espera(RM ? 450 : 1100);
+    p.votos[m] = p.plan[m] || 'abst';
+    refrescaMarcador(p, m);
+    const r = p.planReac && p.planReac[m];
+    if (r) { p.reac[r]++; pintaReac(p, r); }
+    pintaTicker('<em>' + miembro(m).a + '</em> vota ' + VOTO_TXT[p.votos[m]].toLowerCase() + ' · propuesta ' + String(p.n).padStart(2,'0'));
+  }
+  await espera(RM ? 300 : 700);
+  cierraProp(p);
+}
+function votar(p, v){
+  if (p.votos.yo || p.estado !== 'abierta') return;
+  p.votos.yo = v;
+  refrescaMarcador(p, 'yo');
+  aviso('Tu voto: ' + VOTO_TXT[v].toLowerCase() + '. Llegan los demás…');
+  llegadas(p);
+}
+function cierraProp(p){
+  const k = cuenta(p), ok = k.f >= 3;
+  p.snap = {antes:{...T.pesos}, despues:aplicaProp(T.pesos, p)};
+  p.estado = ok ? 'aprobada' : 'rechazada';
+  const r0 = resumenEq(p.snap.antes), r1 = resumenEq(p.snap.despues);
+  const puAntes = posEq();
+  if (ok) T.pesos = {...p.snap.despues};
+  const fin = ok ? r1 : r0;
+  T.hist.unshift({s:7, autor:p.autor, titulo:p.titulo, porque:p.porque, ok, tanteo:k.f + '–' + k.c + (k.a ? ' · ' + k.a + ' abst.' : ''),
+    antes:{conc:r0.a.conc, vari:r0.a.vari, eq:r0.eq.t}, despues:{conc:fin.a.conc, vari:fin.a.vari, eq:fin.eq.t},
+    nota: ok ? 'Escenario «tormenta» (ilustrativo): ' + fmt1(r0.idx) + ' → ' + fmt1(r1.idx) + '.' : 'No se aplicó: los semáforos siguen igual.', nuevo:true});
+  const card = tarjetaProp(p);
+  if (card) {
+    const tmp = document.createElement('div'); tmp.innerHTML = htmlProp(p);
+    const nueva = tmp.firstChild; card.replaceWith(nueva);
+    $$('.odo', nueva).forEach(el => odo(el, el.textContent));
+    golpe($('.pal', nueva));
+  }
+  refrescaTablas();
+  if (S.vista === 'equipo') { pintaAlinEq(); pintaHistEq(); pintaLigaEq({flip:true}); }
+  recomponeEq();
+  const pu = posEq();
+  pintaTicker('<em>Club Marea</em> · propuesta ' + String(p.n).padStart(2,'0') + (ok ? ' aprobada ' : ' rechazada ') + k.f + '–' + k.c);
+  aviso(ok ? 'Aprobada ' + k.f + '–' + k.c + ': el club ficha el cambio' + (pu < puAntes ? ' y sube al ' + ordinal(pu) : '') : 'Rechazada ' + k.f + '–' + k.c + ': la cartera no cambia');
+}
+function puntosEq(){
+  const a = analiza(T.pesos, CATALOGO), eq = equilibrio(a);
+  const reto = a.nSec >= 5;
+  const cerradas = T.props.filter(p => p.estado !== 'abierta');
+  const votada = cerradas.length > 0;
+  const todos = votada && cerradas.every(p => MIEMBROS.every(m => p.votos[m.id]));
+  const racha = Math.min(10, 2 * T.racha);
+  const ap = (reto ? 20 : 0) + (votada ? 10 : 0), co = (todos ? 10 : 0) + racha;
+  return {a, eq, reto, votada, todos, racha, ap, co, total: eq.t + ap + co};
+}
+function tablaEq(){ const P = puntosEq(); return EQUIPOS.map(e => e.yo ? {...e, t:P.total} : {...e}).sort((x,y) => y.t - x.t); }
+function posEq(){ return tablaEq().findIndex(e => e.yo) + 1; }
+function pintaPlantilla(){
+  $('#plantilla').innerHTML = MIEMBROS.map(m => {
+    const cap = m.id === CAPITAN, prox = ROTA.find(r => r.s > 7 && r.m === m.id);
+    return '<li class="miembro'+(cap ? ' cap' : '')+(m.yo ? ' yo' : '')+'">'+avatarSVG(m.a)+'<span class="ap">'+esc(m.a)+'</span><span class="rol">'+
+      (cap ? '<span class="brazalete" aria-hidden="true">C</span>Capitán de la semana' : 'Capitán en la semana ' + prox.s)+'</span></li>';
+  }).join('');
+  $('#rota').innerHTML = '<span style="border:0;padding-left:0">Rota cada semana:</span>' + ROTA.map(r => '<span class="'+(r.s === 7 ? 'act' : '')+'">S'+r.s+' · '+(miembro(r.m).yo ? 'tú' : esc(miembro(r.m).a))+'</span>').join('');
+}
+function pintaAlinEq(){
+  const svg = $('#eq-pizarra'), W = 300, pesos = T.pesos;
+  if (!svg._montada) {
+    svg._montada = true;
+    svg.innerHTML =
+      '<rect class="campo-f" x="10" y="10" width="280" height="310"/><rect class="campo" x="10" y="10" width="280" height="310"/>'+
+      '<line class="campo" x1="10" y1="165" x2="290" y2="165"/><circle class="campo" cx="150" cy="165" r="34"/>'+
+      '<rect class="campo" x="90" y="10" width="120" height="44"/><rect class="campo" x="90" y="276" width="120" height="44"/>'+
+      '<text class="eti-l" x="18" y="26">ATAQUE</text><text class="eti-l" x="18" y="160">MEDIO</text><text class="eti-l" x="18" y="312">DEFENSA</text><g class="jugs"></g>';
+    $('.jugs', svg).innerHTML = CATALOGO.map(j =>
+      '<g class="jug" data-id="'+j.id+'" style="color:'+SECT[j.s].hex+';opacity:0;transform:translate(150px,165px)"><g class="esc"><circle class="a" r="20"/><circle class="c" r="14" stroke="'+SECT[j.s].hex+'"/></g><text class="dn" y="5" font-size="15">'+j.d+'</text><text class="nm" y="30">'+esc(j.n.toUpperCase())+'</text></g>').join('');
+  }
+  const lineas = [[],[],[]];
+  CATALOGO.forEach(j => { if ((pesos[j.id] || 0) > 0) lineas[SECT[j.s].linea].push(j); });
+  const ys = [262, 165, 70];
+  $('#eq-formacion').textContent = lineas.map(l => l.length).join('-');
+  CATALOGO.forEach(j => {
+    const g = $('.jug[data-id="'+j.id+'"]', svg), L = SECT[j.s].linea, fila = lineas[L], k = fila.indexOf(j), p = pesos[j.id] || 0;
+    g.style.transition = 'transform .7s var(--muelle), opacity .5s';
+    if (k < 0) { g.style.opacity = 0; return; }
+    g.style.opacity = 1;
+    const x = W / (fila.length + 1) * (k + 1);
+    const y = ys[L] + (fila.length > 2 && k % 2 ? 20 : 0) - (L === 2 && fila.length > 2 && k % 2 ? 40 : 0);
+    g.style.transform = 'translate('+x+'px,'+y+'px)';
+    const e = $('.esc', g); e.style.transform = 'scale('+(.62 + p/40).toFixed(3)+')'; e.style.transition = 'transform .5s var(--muelle)';
+  });
+  const act = CATALOGO.filter(j => (pesos[j.id] || 0) > 0);
+  $('#eq-n').textContent = act.length + ' titulares';
+  const a = analiza(pesos, CATALOGO);
+  $('#eq-conc').textContent = a.conc; $('#eq-conc').style.setProperty('--c', COL[a.conc]);
+  $('#eq-var').textContent = a.vari; $('#eq-var').style.setProperty('--c', COL[a.vari]);
+  focos('#eq-focos-conc', a.conc); focos('#eq-focos-var', a.vari);
+  svg.setAttribute('aria-label', 'Alineación del club: ' + act.map(j => j.n + ' ' + pesos[j.id] + ' %').join(', '));
+  $('#eq-lista').innerHTML = act.sort((x,y) => pesos[y.id] - pesos[x.id]).map(j =>
+    '<li style="--c:'+SECT[j.s].c+'"><span><i></i>'+esc(j.n)+' <small>· '+SECT[j.s].n+' · '+GEO[j.id].pais+'</small></span><span class="dato">'+pesos[j.id]+'&nbsp;%</span><span class="bar" aria-hidden="true"><i style="--v:'+(pesos[j.id]/50).toFixed(3)+'"></i></span></li>').join('');
+  const er = $('#eq-reto-est');
+  er.className = 'estado-reto' + (a.nSec >= 5 ? ' ok' : '');
+  er.innerHTML = a.nSec >= 5 ? '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.5l2.5 2.5L10 3" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>Cumplido · +20' : 'Pendiente · ' + a.nSec + ' de 5 sectores';
+}
+function pintaHistEq(){
+  const chip = (l, v0, v1) => '<span class="sem-chip" style="--fc:'+COL[v1]+'"><i></i>'+l+' '+(v0 !== v1 ? v0.toLowerCase() + ' → ' : '')+v1.toLowerCase()+'</span>';
+  $('#eq-tl').innerHTML = T.hist.map(h => { const au = miembro(h.autor);
+    return '<li class="'+(h.ok ? 'si' : 'no')+(h.nuevo && !RM ? ' nuevo' : '')+'"><span class="hito" aria-hidden="true">S'+h.s+'</span><div>'+
+      '<div class="tl-cab"><span class="mono">Semana '+h.s+' · '+esc(au.a)+(au.yo ? ' (tú)' : '')+'</span><span class="res '+(h.ok ? 'si' : 'no')+'">'+(h.ok ? 'Aprobada ' : 'Rechazada ')+h.tanteo+'</span></div>'+
+      '<h4>'+esc(h.titulo)+'</h4><p class="por">«'+esc(h.porque)+'»</p>'+
+      '<div class="tras"><span>'+(h.ok ? 'Después:' : 'Sin cambios:')+'</span>'+chip('Conc.', h.antes.conc, h.despues.conc)+chip('Variedad', h.antes.vari, h.despues.vari)+
+        '<span class="sem-chip">Equilibrio '+(h.antes.eq !== h.despues.eq ? h.antes.eq + ' → ' : '')+h.despues.eq+'</span></div>'+
+      (h.nota ? '<p class="nota" style="margin-top:6px">'+h.nota+'</p>' : '')+'</div></li>'; }).join('');
+  T.hist.forEach(h => h.nuevo = false);
+}
+function pintaLigaEq({flip = false} = {}){
+  const P = puntosEq();
+  odo($('#eq-total'), P.total);
+  $('#eq-z-eq').style.setProperty('--v', P.eq.t / 50);
+  $('#eq-z-ap').style.setProperty('--v', P.ap / 30);
+  $('#eq-z-co').style.setProperty('--v', P.co / 20);
+  const fila = (txt, val, max, hecho) => '<li class="'+(hecho ? 'hecho' : '')+'"><span>'+txt+'</span><span class="dato'+(val === 0 ? ' cero' : '')+'">'+val+' / '+max+'</span></li>';
+  $('#eq-desglose').innerHTML =
+    '<li style="--c:var(--senal)"><div class="d-cab"><b>Equilibrio</b><span class="dato">'+P.eq.t+' <em>/ 50</em></span></div><ul class="reglas">'+
+      fila('Concentración ' + P.a.conc.toLowerCase(), P.eq.c, 25, P.eq.c === 25) + fila('Variedad ' + P.a.vari.toLowerCase(), P.eq.v, 25, P.eq.v === 25) + '</ul></li>'+
+    '<li style="--c:var(--senal-claro)"><div class="d-cab"><b>Aprendizaje</b><span class="dato">'+P.ap+' <em>/ 30</em></span></div><ul class="reglas">'+
+      fila('Reto del capitán', P.reto ? 20 : 0, 20, P.reto) + fila('Propuesta argumentada y votada', P.votada ? 10 : 0, 10, P.votada) + '</ul></li>'+
+    '<li style="--c:#fff"><div class="d-cab"><b>Constancia</b><span class="dato">'+P.co+' <em>/ 20</em></span></div><ul class="reglas">'+
+      fila('Votaron todos', P.todos ? 10 : 0, 10, P.todos) + fila('Racha de ' + T.racha + ' semanas seguidas', P.racha, 10, P.racha === 10) + '</ul></li>';
+  const filas = tablaEq(), ol = $('#eq-clasif');
+  const antes = new Map($$('.fila-c', ol).map(li => [li.dataset.id, li.getBoundingClientRect().top]));
+  filas.forEach((f,i) => {
+    let li = $('[data-id="'+f.id+'"]', ol);
+    if (!li) { li = document.createElement('li'); li.className = 'fila-c' + (f.yo ? ' yo' : ''); li.dataset.id = f.id;
+      li.innerHTML = '<span class="pos"><span class="odo" data-aria="Puesto"></span></span><span class="apodo">'+esc(f.a)+'</span><span class="scb">'+f.m+' MIEMB.</span><span class="pts"></span>'; }
+    ol.appendChild(li); li.classList.toggle('top', i < 3);
+    odo($('.odo', li), i + 1); $('.pts', li).textContent = f.t;
+  });
+  if (flip && !RM) $$('.fila-c', ol).forEach(li => {
+    const a = antes.get(li.dataset.id); if (a == null) return;
+    const dy = a - li.getBoundingClientRect().top;
+    if (Math.abs(dy) > 2) { li.animate([{transform:'translateY('+dy+'px)'},{transform:'none'}], {duration:1100, easing:'cubic-bezier(.25,.9,.2,1)'}); if (dy > 0) { li.classList.remove('flash'); void li.offsetWidth; li.classList.add('flash'); } }
+  });
+}
+function recomponeEq(){
+  const n = T.props.filter(p => p.estado === 'abierta').length;
+  const t = n ? n + (n === 1 ? ' propuesta abierta' : ' propuestas abiertas') + ' · cierra en 23 h' : 'Sin propuestas abiertas · propón un cambio';
+  const el = $('#eq-recompone');
+  if (el.textContent !== t) { if (S.vista === 'equipo') persiana(el, t); else el.textContent = t; }
+}
+function pintaEquipo(){
+  if (!T.montado) { T.montado = true; pintaPlantilla(); opcionesEmp(); }
+  pintaProps(); pintaAlinEq(); pintaHistEq(); pintaLigaEq(); recomponeEq();
+}
+function entraEquipo(){
+  pintaEquipo();
+  if (T.visto) return;
+  T.visto = true;
+  setTimeout(() => { // un voto llega en directo nada más entrar
+    const p = T.props.find(x => x.id === 'p4');
+    if (!p || p.estado !== 'abierta' || p.votos.kiwi) return;
+    p.votos.kiwi = 'favor'; refrescaMarcador(p, 'kiwi'); p.reac.buen++; pintaReac(p, 'buen');
+    pintaTicker('<em>@kiwi_contable</em> vota a favor · propuesta 04');
+    if (S.vista === 'equipo') aviso('Voto en directo: @kiwi_contable, a favor');
+  }, RM ? 900 : 1800);
+}
+$('#eq-props').addEventListener('click', e => {
+  const card = e.target.closest('.prop'); if (!card) return;
+  const p = T.props.find(x => x.id === card.dataset.id); if (!p) return;
+  const bv = e.target.closest('[data-voto]'), br = e.target.closest('[data-reac]');
+  if (bv) votar(p, bv.dataset.voto);
+  if (br) {
+    const k = br.dataset.reac;
+    if (p.miReac === k) { p.reac[k]--; p.miReac = null; }
+    else { if (p.miReac) p.reac[p.miReac]--; p.reac[k]++; p.miReac = k; }
+    pintaReac(p, p.miReac);
+  }
+});
+/* Nueva propuesta */
+const FORM = {tipo:'peso', intento:false};
+function opcionesEmp(){
+  const lista = FORM.tipo === 'alta' ? CATALOGO.filter(j => !(T.pesos[j.id] > 0)) : CATALOGO.filter(j => T.pesos[j.id] > 0);
+  const sel = $('#eq-emp'), prev = sel.value;
+  sel.innerHTML = lista.map(j => '<option value="'+j.id+'">'+esc(j.n)+' · '+SECT[j.s].n+(T.pesos[j.id] ? ' · ' + T.pesos[j.id] + ' %' : ' · ' + GEO[j.id].pais)+'</option>').join('');
+  if (lista.some(j => j.id === prev)) sel.value = prev;
+  $('#eq-peso-w').hidden = FORM.tipo === 'baja';
+  ponPesoBase();
+  $('#eq-idea').textContent = '¿Y si la mayor bajara al ' + metaIdea() + '\u00a0%?';
+}
+function ponPesoBase(){ const id = $('#eq-emp').value; $('#eq-peso').value = FORM.tipo === 'alta' ? 10 : Math.min(50, Math.max(5, T.pesos[id] || 10)); }
+function metaIdea(){ const may = Math.max(...Object.values(T.pesos)); return may > 25 ? 25 : Math.max(5, Math.min(20, may - 5)); }
+function leeForm(){ return {tipo:FORM.tipo, emp:$('#eq-emp').value, valor:Number($('#eq-peso').value), porque:$('#eq-porque').value.trim().replace(/\s+/g, ' ')}; }
+function validaForm(f){
+  if (!f.emp) return 'Elige una empresa.';
+  if (f.tipo === 'peso' && T.pesos[f.emp] === f.valor) return 'Ese ya es su peso: mueve el deslizador.';
+  if (f.tipo === 'baja' && Object.keys(T.pesos).length <= 2) return 'El club necesita al menos dos empresas.';
+  if (f.porque.length < 15) return 'Explica el porqué en una línea: mínimo 15 caracteres (llevas ' + f.porque.length + ').';
+  return '';
+}
+function previewForm(){
+  const f = leeForm(), r = $('#eq-peso');
+  $('#eq-peso-o').textContent = f.valor + ' %';
+  r.style.setProperty('--p', ((f.valor - 5) / 45 * 100) + '%'); r.setAttribute('aria-valuetext', f.valor + ' %');
+  const c = $('#eq-cnt'); c.textContent = f.porque.length + ' / 15 mín.'; c.classList.toggle('ok', f.porque.length >= 15);
+  $('#eq-prev').innerHTML = f.emp ? '<p class="mono" style="margin:0 0 6px;color:var(--tenue)">Así quedaría: ' + esc(tituloProp(f, T.pesos)) + '</p>' + tablaAD(resumenEq(T.pesos), resumenEq(aplicaProp(T.pesos, f))) : '';
+  if (FORM.intento) $('#eq-err').textContent = validaForm(f);
+}
+function abreForm(abrir){
+  const n = $('#eq-nueva'); n.dataset.abierta = String(abrir);
+  $('#eq-form').hidden = !abrir; $('#eq-abrir').hidden = abrir; $('#eq-abrir').setAttribute('aria-expanded', String(abrir));
+  if (abrir) { opcionesEmp(); previewForm(); $$('input[name=eq-tipo]')[0].focus(); }
+  else { FORM.intento = false; $('#eq-err').textContent = ''; $('#eq-abrir').focus(); }
+}
+$('#eq-abrir').addEventListener('click', () => abreForm(true));
+$('#eq-cancelar').addEventListener('click', () => abreForm(false));
+$$('input[name=eq-tipo]').forEach(r => r.addEventListener('change', () => { FORM.tipo = r.value; opcionesEmp(); previewForm(); }));
+$('#eq-emp').addEventListener('change', () => { ponPesoBase(); previewForm(); });
+$('#eq-peso').addEventListener('input', previewForm);
+$('#eq-porque').addEventListener('input', previewForm);
+$('#eq-idea').addEventListener('click', () => {
+  const mayor = Object.keys(T.pesos).sort((a,b) => T.pesos[b] - T.pesos[a])[0];
+  const meta = metaIdea();
+  FORM.tipo = 'peso'; $$('input[name=eq-tipo]').forEach(r => r.checked = r.value === 'peso');
+  opcionesEmp(); $('#eq-emp').value = mayor; $('#eq-peso').value = meta; previewForm();
+  $('#eq-porque').focus();
+  aviso('Klever solo sugiere pesos. El porqué lo pones tú.');
+});
+$('#eq-form').addEventListener('submit', e => {
+  e.preventDefault();
+  FORM.intento = true;
+  const f = leeForm(), err = validaForm(f);
+  $('#eq-err').textContent = err;
+  if (err) { (f.porque.length < 15 ? $('#eq-porque') : $('#eq-emp')).focus(); return; }
+  const r0 = resumenEq(T.pesos), r1 = resumenEq(aplicaProp(T.pesos, f));
+  const bueno = r1.eq.t >= r0.eq.t && r1.a.conc !== 'Alta' && ORD_SEM[r1.a.vari] >= ORD_SEM[r0.a.vari];
+  const p = {id:'p' + T.n, n:T.n++, autor:'yo', tipo:f.tipo, emp:f.emp, valor:f.tipo === 'baja' ? 0 : f.valor, porque:f.porque, titulo:tituloProp(f, T.pesos),
+    estado:'abierta', cierra:'24 h', reloj:1, votos:{yo:'favor', kiwi:null, lince:null, trigo:null},
+    plan: bueno ? {kiwi:'favor', lince:'favor', trigo: r1.eq.t > r0.eq.t ? 'favor' : 'abst'} : {kiwi:'contra', lince:'contra', trigo:'favor'},
+    planReac: bueno ? {kiwi:'buen', lince:'ok'} : {kiwi:'riesgo', lince: ORD_SEM[r1.a.vari] < ORD_SEM[r0.a.vari] ? 'var' : 'riesgo'},
+    reac:{buen:0, riesgo:0, var:0, ok:0}, miReac:null, nueva:!RM};
+  T.props.unshift(p);
+  $('#eq-porque').value = '';
+  abreForm(false);
+  pintaProps(); recomponeEq();
+  pintaTicker('<em>@marea_baja</em> propone: ' + esc(p.titulo));
+  aviso('Propuesta enviada. Los votos llegan en directo.');
+  const card = tarjetaProp(p);
+  card.scrollIntoView({behavior: RM ? 'auto' : 'smooth', block:'start'});
+  setTimeout(() => llegadas(p), RM ? 300 : 800);
+});
+/* Crear o unirse a un club (simulado) */
+const LETRAS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+const codigoNuevo = () => Array.from({length:6}, () => LETRAS[Math.floor(Math.random() * LETRAS.length)]).join('');
+let CLUB_COD = 'KMRTQA';
+$$('#seg-club button').forEach(b => b.addEventListener('click', () => {
+  $$('#seg-club button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  $('#club-crear').hidden = b.dataset.club !== 'crear'; $('#club-unir').hidden = b.dataset.club !== 'unir';
+}));
+$('#club-otro').addEventListener('click', () => { CLUB_COD = codigoNuevo(); persiana($('#club-codigo'), CLUB_COD); $('#club-enlace').textContent = 'klever.app/club/' + CLUB_COD; });
+$('#club-invitar').addEventListener('click', () => {
+  const nombre = $('#club-nombre').value.trim(), msg = $('#club-msg-c');
+  if (nombre.length < 3) { msg.className = 'club-msg mal'; msg.textContent = 'Ponle un nombre de 3 letras o más.'; $('#club-nombre').focus(); return; }
+  $('#club-enlace').textContent = 'klever.app/club/' + CLUB_COD; $('#club-inv').hidden = false;
+  msg.className = 'club-msg ok'; msg.textContent = 'Club «' + nombre + '» creado (simulado). Comparte el enlace: nadie recibe nada.';
+});
+$('#club-copiar').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText('https://klever.app/club/' + CLUB_COD); } catch(e) {}
+  aviso('Enlace copiado (simulado). Nadie recibe nada.');
+});
+$('#club-unirme').addEventListener('click', () => {
+  const v = $('#club-cod-in').value.trim().toUpperCase(), msg = $('#club-msg-u');
+  if (/^[A-Z]{6}$/.test(v)) { msg.className = 'club-msg ok'; msg.textContent = 'Código ' + v + ' válido. En la versión real entrarías en ese club; aquí seguimos con el de ejemplo.'; }
+  else { msg.className = 'club-msg mal'; msg.textContent = 'El código tiene 6 letras, sin números ni espacios.'; $('#club-cod-in').focus(); }
+});
+addEventListener('resize', () => { clearTimeout(MAPA._rz); MAPA._rz = setTimeout(() => { if (MODO_VEST === 'mapa' && S.vista === 'vestuario') dibujaMapa(null); }, 150); });
+
 /* ─────────── Navegación con View Transitions ─────────── */
-const VISTAS = ['directo','vestuario','duelo','temporada'];
+const VISTAS = ['directo','vestuario','duelo','temporada','equipo'];
 function cambia(v){
   S.vista = v;
   VISTAS.forEach(x => $('#v-'+x).hidden = x !== v);
@@ -1708,6 +2854,7 @@ function cambia(v){
   if (v === 'vestuario') pintaVestuario();
   if (v === 'temporada') pintaTemporada();
   if (v === 'duelo' && !D) duelLobby();
+  if (v === 'equipo') entraEquipo();
   return t;
 }
 function despues(v, t){
