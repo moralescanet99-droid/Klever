@@ -1115,7 +1115,7 @@ const lzHoy=new Lienzo($('#cv-hoy'),(ctx,w,h)=>{
   if(w>=300&&k>=HOY)rotulosSect(ctx,cx,cy,R,p,w>700?11:w<420?8.5:9.5);
   if(hoyA.flash>0){ctx.save();ctx.globalAlpha=hoyA.flash*0.9;ctx.strokeStyle='#fff9ee';ctx.lineWidth=2;ctx.shadowColor='#fff9ee';ctx.shadowBlur=24;ctx.beginPath();ctx.arc(cx,cy,R*(1.05+(1-hoyA.flash)*0.6),0,Math.PI*2);ctx.stroke();ctx.restore()}
   /* estela temporal bajo la figura */
-  const y=cy+R+R*0.16;if(y<h-40){const g=ctx.createLinearGradient(X(0),0,X(11),0);for(let i=0;i<=10;i++)g.addColorStop(i/11,colSem(i,.5));g.addColorStop(1,'rgba(255,249,238,.9)');
+  const y=cy+R+R*0.3;if(y<h-38){const g=ctx.createLinearGradient(X(0),0,X(11),0);for(let i=0;i<=10;i++)g.addColorStop(i/11,colSem(i,.5));g.addColorStop(1,'rgba(255,249,238,.9)');
     ctx.save();ctx.strokeStyle=g;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(X(0)-R*.6,y);ctx.lineTo(X(Math.min(k,11)),y);ctx.stroke();
     for(let i=0;i<=Math.floor(k);i++){ctx.fillStyle=i===gi?colSemSolido(i):i===HOY?'#fff9ee':colSem(i,.6);ctx.beginPath();ctx.arc(X(i),y,i===gi||i===HOY?3.2:1.6,0,Math.PI*2);ctx.fill()}ctx.restore()}
 });
@@ -1643,7 +1643,7 @@ function renderLigaEq(){
 function renderHist(){
   $('#eq-hist').innerHTML=EQ.hist.map(hh=>`<li style="--c:${hh.ok?'var(--ok)':'var(--alto)'}"><span class="lt-cab">${hh.sem} · ${nombreM(hh.autor)}</span><p class="lt-tit" style="margin:3px 0 2px">${esc(hh.tit)}</p><p class="lt-por" style="margin:0">«${esc(hh.por)}»</p><div class="lt-res"><span class="sello-res ${hh.ok?'ok':'no'}" style="margin:0;padding:3px 8px">${hh.res}</span>${hh.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></li>`).join('');
 }
-$('#eq-miembros').innerHTML=MIEMBROS.map(m=>`<li class="${m.id===CAPITAN?'capitan':''}">${avatar(m.id)}<span class="txt-m"><span class="apodo">${m.id==='tu'?'Tú · '+m.apodo:m.apodo}</span><span class="rol ${m.id===CAPITAN?'':'n'}">${m.id===CAPITAN?'Capitán de la semana':m.id===PROXIMO?'Capitán el lunes':'Miembro'}</span></span></li>`).join('');
+$('#eq-miembros').innerHTML=MIEMBROS.map(m=>`<li class="${m.id===CAPITAN?'capitan':''}">${avatar(m.id)}<span class="txt-m"><span class="apodo">${m.id==='tu'?'Tú':m.apodo}</span><span class="rol ${m.id===CAPITAN?'':'n'}">${m.id===CAPITAN?'Capitán de la semana':m.id===PROXIMO?'Capitán el lunes':'Miembro'}</span></span></li>`).join('');
 /* Formulario de propuesta */
 const FORM={tipo:'peso'};
 function renderForm(mantener){
