@@ -2302,3 +2302,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Hazme una de demo del punto 2.  Quiero que integres una seccion en todas las apps (las tres de arriba y la nueva que haras) que se llama cartera en equipo y quiero otro apartado dentro de (mi cartera) que arroje datos parecidos a los de (tu cartera en el mapa) a parte de los que ya arroja.
 
 (Interpretación: punto 2 de `ronda38/IDEAS-15-MAS.md` = «Tu fantasma» → prototipo D `ronda39/d-fantasma.html`; «Cartera en equipo» = idea 9; mapa = idea 7, añadido dentro de «Mi cartera» en A, B, C y D. Encargo en `ronda39/ENCARGO.md`.)
+
+## C57 · (2026-11-09) — app final con 3 secciones, sin supuestos prácticos; investigar e informar, literal
+> Todas las las apps estan bien. Quiero que en base a las que tenemos hagamos una app final. Creo que todas tienen puntos fuertes y puntos debiles. Quiero que elimines los usouestos practicos. Y la app tenga 3 secciones muy claras, mi cartera, la liga, construye. A partir de hay, quiero que investiges e informes de como tiene que seria la mejor app que puedes montar, que aspecto tendria, que se podria, etc hacer
+
+(Interpretación anotada en `ronda40/INFORME-APP-FINAL.md`: «supuestos prácticos» = escenarios hipotéticos y crisis simuladas (tormentas, lunes de crisis, duelos y carreras de crisis, «¿y si el dólar baja?») y el Temple, que depende de ellos. Se conserva «probar un cambio de pesos».)
