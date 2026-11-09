@@ -2312,3 +2312,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Quiero una versión más profunda de esta tarea, no una más grande. Antes de reescribirla: (1) di qué haría aquí un profesional top en este campo que yo no estoy pidiendo; (2) nombra el material más crudo del que partiría, en lugar de lo que ya me dieron digerido; (3) nombra los métodos y herramientas específicos que usaría; (4) di qué, aparte de ti o de mí, demostraría que el resultado es correcto. Luego reescribe mi prompt para pedir exactamente eso.
 
 (Respuesta en el chat: las 4 respuestas y el prompt reescrito. Sin cambios de código.)
+
+## C59 · (2026-11-09) — estudiar la app de la liga fantasy (juego y protección legal) y proponer ideas, literal
+> Antes de eso quiero que estudies un poco la app de la liga fantasy, su modo de juego y como se protege legalmente. Cuando lo tengas dime que ideas de amabas cosas te se ocurren para poderlas implementar en la app
+
+(Respuesta: `ronda41/LIGA-FANTASY.md`.)
