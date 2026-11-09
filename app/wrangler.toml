@@ -1,0 +1,14 @@
+# Klever v1 · configuración de Cloudflare Pages (+ Functions + D1). Guía: GUIA-PUBLICAR.md
+name = "klever"
+compatibility_date = "2025-01-15"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "klever"
+database_id = "REEMPLAZAR_CON_ID_DE_D1"   # sale de: npx wrangler d1 create klever
+
+# Secretos (NO van aquí; se ponen en el panel de Cloudflare o con `npx wrangler pages secret put`):
+#   ADMIN_EMAIL     correo de la administración
+#   BREVO_API_KEY   clave de Brevo (sin ella: MODO PRUEBAS, el enlace sale en pantalla)
+#   BREVO_SENDER    remitente verificado en Brevo

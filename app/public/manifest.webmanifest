@@ -1,3 +1,25 @@
-{ "name": "Klever", "short_name": "Klever", "lang": "es", "start_url": "/#/cartera", "display": "standalone", "background_color": "#f5efe7", "theme_color": "#f5efe7",
+{
+  "id": "/",
+  "name": "Klever · carteras simuladas",
+  "short_name": "Klever",
   "description": "Construye y cuida carteras simuladas. Sin dinero real, sin recomendaciones.",
-  "icons": [{ "src": "/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }] }
+  "lang": "es-ES",
+  "dir": "ltr",
+  "start_url": "/#/cartera",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5efe7",
+  "theme_color": "#f5efe7",
+  "categories": ["education", "finance"],
+  "icons": [
+    { "src": "/icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Mi cartera", "url": "/#/cartera", "icons": [{ "src": "/icono-192.png", "sizes": "192x192" }] },
+    { "name": "La Liga", "url": "/#/liga", "icons": [{ "src": "/icono-192.png", "sizes": "192x192" }] }
+  ]
+}

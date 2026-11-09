@@ -30,7 +30,7 @@ export function numeroSemana(inicio: string, lunes: string): number { const i = 
 // ── Foto del lunes ─────────────────────────────────────────────────────────
 /** Versión vigente en un instante: la última con desde ≤ instante. versiones ordenadas o no. */
 export function versionEn<T extends { desde: string }>(versiones: T[], instanteISO: string): T | null {
-  let mejor: T | null = null; for (const v of versiones) if (v.desde <= instanteISO && (!mejor || v.desde > mejor.desde)) mejor = v; return mejor;
+  let mejor: T | null = null; for (const v of versiones) if (v.desde <= instanteISO && (!mejor || v.desde >= mejor.desde)) mejor = v; return mejor;
 }
 export function foto(semana: string, posiciones: Posicion[]): Foto {
   const a = analizar(posiciones); return { semana, posiciones, concentracion: a.concentracion, variedad: a.variedad, n: a.n, completa: a.completa };

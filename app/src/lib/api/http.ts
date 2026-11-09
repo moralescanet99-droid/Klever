@@ -5,7 +5,7 @@ async function pedir<T>(metodo: string, ruta: string, cuerpo?: unknown): Promise
   let r: Response;
   try { r = await fetch(ruta, { method: metodo, credentials: 'same-origin', headers: cuerpo !== undefined ? { 'content-type': 'application/json' } : {}, body: cuerpo !== undefined ? JSON.stringify(cuerpo) : undefined }); }
   catch { throw new ErrorApi('red', 'No hay conexión. Revisa tu internet y vuelve a intentarlo.', 0); }
-  const datos = r.status === 204 ? null : await r.json().catch(() => null);
+  const datos = (r.status === 204 ? null : await r.json().catch(() => null)) as { codigo?: string; mensaje?: string } | null;
   if (!r.ok) throw new ErrorApi(datos?.codigo || 'error', datos?.mensaje || 'Algo ha fallado. Vuelve a intentarlo.', r.status);
   return datos as T;
 }

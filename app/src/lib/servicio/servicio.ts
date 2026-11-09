@@ -45,10 +45,21 @@ export class Servicio {
     if (!apodoValido(apodo)) throw err('apodo', 'El apodo debe tener de 3 a 20 caracteres (letras, números, espacio, punto o guion) y no puede ser un correo.');
     if (await this.repo.usuarioPorApodo(apodo.trim())) throw err('apodo_ocupado', 'Ese apodo ya está cogido.');
   }
+  /** Alta de una cuenta nueva (correo ya verificado). `invitacion` null = sin invitación (solo la administración). Consume un uso del código. */
+  async darDeAlta(email: string, apodo: string, invitacion: string | null): Promise<Usuario> {
+    const correo = String(email || '').trim().toLowerCase();
+    if (await this.repo.usuarioPorEmail(correo)) throw err('ya_existe', 'Ya hay una cuenta con ese correo.', 409);
+    await this.validarApodoLibre(apodo);
+    const cod = invitacion ? String(invitacion).trim().toUpperCase() : null;
+    if (cod !== null && !(await this.invitacionValida(cod))) throw err('invitacion', 'Ese código de invitación ya no es válido. Pide otro a quien te invitó.', 403);
+    if (cod) await this.repo.usarInvitacion(cod);
+    const u = await this.repo.crearUsuario({ email: correo, apodo: apodo.trim(), mayor18En: this.iso(), invitadoPor: cod, creado: this.iso() });
+    return this.usuario(u.id);
+  }
 
   // ── Carteras ──
   private async aCartera(f: FilaCartera): Promise<Cartera> {
-    const vs = await this.repo.versiones(f.id); const ult = vs.reduce<VersionCartera | null>((a, v) => (!a || v.desde > a.desde ? v : a), null);
+    const vs = await this.repo.versiones(f.id); const ult = vs.reduce<VersionCartera | null>((a, v) => (!a || v.desde >= a.desde ? v : a), null);
     return { id: f.id, nombre: f.nombre, principal: f.principal, posiciones: ult?.posiciones || [], actualizada: ult?.desde || f.creada, ligaId: f.ligaId };
   }
   private async propia(usuarioId: number, id: number): Promise<FilaCartera> {
@@ -258,8 +269,9 @@ export class Servicio {
   // ── Invitaciones ──
   private aInv(i: FilaInvitacion): Invitacion { return { codigo: i.codigo, usos: i.usos, usosMax: i.usosMax, creada: i.creada, nota: i.nota }; }
   async misInvitaciones(usuarioId: number) { return (await this.repo.invitacionesDe(usuarioId)).map(i => this.aInv(i)); }
-  async crearInvitacion(usuarioId: number | null, nota = '', usosMax = 1): Promise<Invitacion> {
-    if (usuarioId !== null && (await this.repo.invitacionesDe(usuarioId)).length >= MAX_INVITACIONES_USUARIO) throw err('max_invitaciones', `Puedes crear hasta ${MAX_INVITACIONES_USUARIO} invitaciones.`);
+  /** `sinLimite`: la administración puede crear más de MAX_INVITACIONES_USUARIO a su nombre. */
+  async crearInvitacion(usuarioId: number | null, nota = '', usosMax = 1, sinLimite = false): Promise<Invitacion> {
+    if (usuarioId !== null && !sinLimite && (await this.repo.invitacionesDe(usuarioId)).length >= MAX_INVITACIONES_USUARIO) throw err('max_invitaciones', `Puedes crear hasta ${MAX_INVITACIONES_USUARIO} invitaciones.`);
     let c = codigo(8); while (await this.repo.invitacion(c)) c = codigo(8);
     const i: FilaInvitacion = { codigo: c, creadaPor: usuarioId, usosMax: Math.max(1, Math.min(500, Math.floor(usosMax))), usos: 0, creada: this.iso(), nota: String(nota).slice(0, 60) };
     await this.repo.crearInvitacion(i); return this.aInv(i);
