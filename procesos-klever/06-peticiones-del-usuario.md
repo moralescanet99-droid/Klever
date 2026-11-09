@@ -2292,3 +2292,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Quiero que me des 3 prototipos mas, mucho mas cuidados, pero diferentes entre si. De ellos elegire uno para re hacer la empresa. Esfuerzate mucho mas en las siguentes!
 
 (Respuesta: ronda 38 — `ronda38/a-orbita.html`, `ronda38/b-organismo.html`, `ronda38/c-arena.html`, con el encargo común en `ronda38/ENCARGO-COMUN.md`.)
+
+## C55 · (2026-11-09) — 15 ideas más, sin demo, literal
+> No hagas ninguna demo pero dame 15 ideas mas
+
+(Respuesta: `ronda38/IDEAS-15-MAS.md`.)
