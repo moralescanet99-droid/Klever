@@ -2317,3 +2317,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Antes de eso quiero que estudies un poco la app de la liga fantasy, su modo de juego y como se protege legalmente. Cuando lo tengas dime que ideas de amabas cosas te se ocurren para poderlas implementar en la app
 
 (Respuesta: `ronda41/LIGA-FANTASY.md`.)
+
+## C60 · (2026-11-09) — sí a la validación (con las ideas de la fantasy) y 3 prototipos de la app final solo en imágenes, literal
+> Si. Tambien quiero que me hagas 3 prototipo de la app para ver como seria (solo fotos)
+
+(«Si» responde a: meter las ideas de juego y legales de LaLiga Fantasy (`ronda41/LIGA-FANTASY.md`) en el paquete de validación de C58 y lanzarlo. Respuesta: `ronda42/validacion/` y `ronda42/fotos/`.)
