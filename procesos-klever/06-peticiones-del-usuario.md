@@ -2327,3 +2327,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Esta este proyecto esta en publico o en privado?
 
 (Respuesta: el repositorio de GitHub `moralescanet99-droid/Klever` es **público** (comprobado con la API de GitHub el 2026-11-09). Los artefactos de claude.ai son privados. Recomendado de nuevo: hacerlo privado (decisión pendiente desde C43).)
+
+## C62 · (2026-11-09) — elige la dirección visual Nácar, literal
+> Quiero Nacar
+
+(Responde a la pregunta de la ronda 42: dirección visual de la app final. Fuentes de las fotos: `ronda42/fotos/2-nacar/`.)

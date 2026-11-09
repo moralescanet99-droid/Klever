@@ -12,7 +12,8 @@ Leyenda: ✅ implementado y probado · 🟡 implementado, comprobado solo de for
 
 ## Ronda 42 · validación y fotos (C58, C60)
 - ✅ Validación (`ronda42/validacion/` 01–08) y 3 direcciones en fotos (`ronda42/fotos/`). El informe de la ronda 40 queda corregido por `08-que-cambia.md`.
-- ⬜ Javier: elegir dirección visual, enviar la consulta a la CNMV, reclutar 20 personas y hacer la Liga a mano de 4 semanas. **No se construye hasta tener esos datos** (recomendación).
+- ✅ Dirección visual elegida: **Nácar** (C62).
+- ⬜ Javier: enviar la consulta a la CNMV, reclutar 20 personas y hacer la Liga a mano de 4 semanas. **No se construye hasta tener esos datos** (recomendación).
 
 ## Ronda 40 · informe de la app final (C57)
 - ✅ Informe escrito y publicado (`ronda40/INFORME-APP-FINAL.md` y su versión HTML). Sin supuestos prácticos; 3 secciones: Mi cartera · La Liga · Construye.
