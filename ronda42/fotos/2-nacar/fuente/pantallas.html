@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>Klever · Nácar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Commissioner:wght@400..800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --perla:#f5efe7; --perla-hi:#fbf8f3; --blanco:#fffdfa;
+  --noche:#13203b; --noche-2:#38435f; --noche-3:#56607c;
+  --linea:rgba(19,32,59,.11); --linea-2:rgba(19,32,59,.18);
+  --cobre:#c4705b; --cobre-t:#9a4a36; --cobre-f:#f6ddd3;
+  --lila:#7a66d3; --lila-t:#5b48b8; --lila-f:#e6e0fa;
+  --agua:#2c9886; --agua-t:#1c7465; --agua-f:#d5efe9;
+  --ok:#156c4b; --ok-f:#d8efe4; --medio:#87590a; --medio-f:#f8e8cb; --alto:#a8342a; --alto-f:#f8dcd6;
+  /* sectores */
+  --s-tec:#7a66d3; --s-sal:#2c9886; --s-ene:#d0953f; --s-fin:#4a72c2; --s-con:#cc735f; --s-ind:#9c5d86;
+  --f-disp:"Fraunces",Georgia,serif; --f-txt:"Commissioner",system-ui,sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#d9d2c8}
+body{font-family:var(--f-txt);color:var(--noche);-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1,"lnum" 1}
+.pantallas{display:flex;flex-wrap:wrap;gap:40px;padding:40px}
+.pant{position:relative;width:390px;height:844px;overflow:hidden;background:var(--perla);isolation:isolate}
+.pant::before{content:"";position:absolute;inset:0;z-index:-2;
+  background:
+   radial-gradient(70% 38% at 4% 2%, rgba(238,186,166,.62), transparent 70%),
+   radial-gradient(64% 34% at 100% 10%, rgba(200,188,246,.60), transparent 70%),
+   radial-gradient(80% 36% at 18% 58%, rgba(250,236,226,.9), transparent 70%),
+   radial-gradient(70% 34% at 96% 70%, rgba(176,226,213,.58), transparent 70%),
+   radial-gradient(70% 30% at 10% 100%, rgba(214,204,248,.5), transparent 70%),
+   var(--perla)}
+.pant::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.35;mix-blend-mode:soft-light;
+  background:conic-gradient(from 210deg at 70% 30%, #fff0, #ffffff 8%, #fff0 18%, #ffd9cc55 30%, #fff0 44%, #d9d0ff66 60%, #fff0 74%, #c8f0e555 86%, #fff0)}
+.grano{position:absolute;inset:0;z-index:-1;opacity:.10;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08  0 0 0 0 0.12  0 0 0 0 0.23  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* barra de estado */
+.i{width:1.15em;height:1.15em;flex:none;vertical-align:-.2em}
+.estado{height:47px;display:flex;align-items:center;justify-content:space-between;padding:4px 30px 0 34px;font:600 16px/1 var(--f-txt);letter-spacing:-.01em}
+.estado .ic{display:flex;gap:6px;align-items:center}
+
+/* cabecera */
+.cab{padding:2px 20px 0;display:flex;align-items:center;justify-content:space-between;height:48px}
+.cab h1{margin:0;font:420 30px/1 var(--f-disp);font-variation-settings:"opsz" 96,"SOFT" 100;letter-spacing:-.02em;display:flex;align-items:baseline;gap:10px}
+.selector{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px 0 12px;border-radius:15px;border:1px solid var(--linea-2);font:600 14px/1 var(--f-txt);color:var(--noche);background:rgba(255,253,250,.5);align-self:center}
+.selector svg{width:14px;height:14px}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font:700 14px/1 var(--f-txt);color:var(--noche);
+  background:conic-gradient(from 140deg,#f2c3b2,#ddd2fb,#bfe9de,#f6e2c6,#f2c3b2);box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 2px 8px -2px rgba(19,32,59,.25)}
+.ctx{gap:10px;white-space:nowrap;padding:2px 20px 0;height:28px;display:flex;align-items:center;justify-content:space-between;font:500 14px/1 var(--f-txt);color:var(--noche-2)}
+.ctx b{font-weight:700;color:var(--noche)}
+.ejemplo{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:5px;font:600 12px/1 var(--f-txt);letter-spacing:.02em;color:var(--lila-t);background:rgba(230,224,250,.75);padding:5px 9px 5px 7px;border-radius:999px}
+.ejemplo svg{width:13px;height:13px}
+
+/* segmentado */
+.seg{margin:8px 20px 0;height:36px;padding:3px;border-radius:14px;background:rgba(19,32,59,.065);display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.seg span{display:grid;place-items:center;border-radius:11px;font:600 14.5px/1 var(--f-txt);color:var(--noche-2)}
+.seg span.on{background:var(--blanco);color:var(--noche);box-shadow:0 1px 2px rgba(19,32,59,.10),0 3px 10px -4px rgba(19,32,59,.22)}
+
+.cuerpo{padding:12px 20px 0}
+
+/* vidrio */
+.vidrio{position:relative;border-radius:26px;background:linear-gradient(165deg,rgba(255,255,255,.80),rgba(255,255,255,.50));
+  -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 22px 44px -26px rgba(19,32,59,.42),0 6px 14px -8px rgba(19,32,59,.14)}
+.vidrio::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.2px;pointer-events:none;
+  background:linear-gradient(135deg,#ffffff 0%,#f0bfae 26%,#ffffff 42%,#d3c8fa 62%,#b6e6d9 84%,#ffffff 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+
+.et{font:700 11.5px/1 var(--f-txt);letter-spacing:.09em;text-transform:uppercase;color:var(--noche-3)}
+.tit{font:440 21px/1.18 var(--f-disp);font-variation-settings:"opsz" 40,"SOFT" 100;letter-spacing:-.01em;margin:0}
+.num{font-family:var(--f-disp);font-variation-settings:"opsz" 120,"SOFT" 100}
+.mono{font-family:var(--f-mono);font-weight:600;letter-spacing:.01em}
+.sub{font:500 13.5px/1.35 var(--f-txt);color:var(--noche-2)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:999px;font:600 13px/1 var(--f-txt);color:var(--noche);background:rgba(255,253,250,.7);border:1px solid var(--linea)}
+.chip svg{width:14px;height:14px}
+.chip.on{background:var(--noche);color:var(--perla-hi);border-color:var(--noche)}
+
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:24px;font:650 16px/1 var(--f-txt);letter-spacing:-.005em;border:0}
+.btn svg{width:18px;height:18px}
+.btn.pri{background:linear-gradient(180deg,#1d2c4d,#111c35);color:var(--perla-hi);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 10px 22px -12px rgba(19,32,59,.7)}
+.btn.sec{background:rgba(255,253,250,.55);color:var(--noche);box-shadow:inset 0 0 0 1.5px var(--linea-2)}
+
+.pildora{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:12px;font:700 13px/1 var(--f-txt)}
+.pildora i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.p-medio{background:var(--medio-f);color:var(--medio)} .p-ok{background:var(--ok-f);color:var(--ok)} .p-alto{background:var(--alto-f);color:var(--alto)}
+
+/* sello y dock */
+.sello{position:absolute;left:0;right:0;bottom:93px;display:flex;justify-content:center}
+.sello span{display:inline-flex;align-items:center;gap:6px;font:650 12.5px/1 var(--f-txt);color:var(--noche-2);letter-spacing:.005em}
+.sello svg{width:14px;height:14px;color:var(--cobre-t)}
+.dock{position:absolute;left:14px;right:14px;bottom:24px;height:64px;border-radius:32px;display:grid;grid-template-columns:repeat(3,1fr);align-items:center;padding:0 6px}
+.dock a{display:flex;flex-direction:column;align-items:center;gap:4px;font:650 12.5px/1 var(--f-txt);color:var(--noche-3);text-decoration:none;position:relative;height:52px;justify-content:center;border-radius:26px}
+.dock a svg{width:24px;height:24px}
+.dock a.on{color:var(--noche);background:linear-gradient(135deg,rgba(246,214,202,.75),rgba(225,217,251,.75) 55%,rgba(204,238,228,.75))}
+.home{position:absolute;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--noche);opacity:.85}
+
+/* —— 01 Mi cartera —— */
+.retrato{padding:14px 16px 13px}
+.retrato .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.figura{position:relative;height:236px;margin-top:6px}
+.anillo{position:absolute;border-radius:50%}
+.lbl{position:absolute;transform:translate(-50%,-50%);text-align:center;line-height:1}
+.lbl .t{display:block;font:600 11.5px/1 var(--f-mono);color:var(--noche-2);letter-spacing:.02em}
+.lbl .v{display:block;font:500 17px/1 var(--f-disp);font-variation-settings:"opsz" 30,"SOFT" 100;margin-top:3px}
+.l-izq{position:absolute;left:0;top:0}.l-izq .l{flex-direction:column;align-items:flex-start!important;gap:7px!important}
+.l-der{position:absolute;right:0;top:-2px}
+.leyenda{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.leyenda .l{display:flex;gap:14px;font:600 13px/1 var(--f-txt);color:var(--noche-2);align-items:center}
+.leyenda .l i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--lila);vertical-align:middle;margin-right:6px;border-radius:2px}
+.leyenda .l i.f{border-top:2px dashed var(--cobre)}
+.fant{display:flex;gap:4px}
+.fant span{height:26px;min-width:38px;padding:0 8px;border-radius:13px;display:grid;place-items:center;font:650 12.5px/1 var(--f-txt);color:var(--noche-2);border:1px solid var(--linea)}
+.fant span.on{background:var(--cobre-f);color:var(--cobre-t);border-color:transparent}
+.frase{margin:4px 0 0;font:400 15.5px/1.38 var(--f-disp);font-variation-settings:"opsz" 18,"SOFT" 100;font-style:italic;color:var(--noche)}
+.frase b{font-style:normal;font-weight:560}
+.semaforos{display:grid;grid-template-columns:1.22fr .88fr 1fr;margin-top:13px}
+.semaforos>div{padding:2px 0 0 12px;border-left:1px solid var(--linea-2)}
+.semaforos>div:first-child{padding-left:2px;border-left:0}
+.semaforos .pildora{margin:8px 0 6px}
+.probar{margin-top:14px;padding:11px 11px 11px 16px;display:flex;align-items:center;gap:12px}
+.probar .txt{flex:1;min-width:0}
+.probar .q{font:470 16.5px/1.2 var(--f-disp);font-variation-settings:"opsz" 30,"SOFT" 100;margin:5px 0 3px}
+.probar .btn{height:44px;padding:0 16px;white-space:nowrap}
+
+/* —— 02 Mapa —— */
+.mapa{padding:14px 14px 12px}
+.mapa svg{display:block}
+.barras{margin-top:13px}
+.barra-f{display:grid;grid-template-columns:58px 1fr;align-items:center;gap:10px;margin-top:9px}
+.barra{display:flex;height:22px;border-radius:8px;overflow:hidden;gap:2px}
+.barra i{display:flex;align-items:center;justify-content:center;height:100%;font:700 12.5px/1 var(--f-txt);font-style:normal;color:var(--noche)}
+.ley{display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;margin:11px 0 0 0}
+.ley span{display:flex;align-items:center;gap:6px;font:550 13px/1.1 var(--f-txt);color:var(--noche-2);white-space:nowrap}
+.ley span b{color:var(--noche);font-weight:700}
+.ley span small{font-size:12px;color:var(--noche-3)}
+.ley i{width:9px;height:9px;border-radius:3px;flex:none}
+.monedas{display:flex;align-items:center;gap:14px;margin-top:12px;padding-top:11px;border-top:1px solid var(--linea)}
+.senales{margin-top:12px;display:grid;gap:8px}
+.senal{display:flex;gap:10px;align-items:flex-start;font:500 14px/1.35 var(--f-txt);color:var(--noche)}
+.senal svg{flex:none;width:18px;height:18px;margin-top:1px;color:var(--lila-t)}
+
+/* —— 03 Liga —— */
+.marcador{padding:14px 16px 10px}
+.puesto{display:flex;align-items:flex-end;justify-content:space-between}
+.compart{display:grid;gap:3px;align-content:start}
+.compart .tr{height:12px;border-radius:6px;background:rgba(19,32,59,.08);overflow:hidden}
+.compart .tr i{display:block;height:100%;border-radius:6px}
+.clas{margin-top:10px}
+.fila{display:grid;grid-template-columns:18px 22px 1fr auto;align-items:center;gap:9px;height:21.5px;font:550 14px/1 var(--f-txt)}
+.fila .p{font:600 13px/1 var(--f-mono);color:var(--noche-3);text-align:right}
+.fila .a{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:750 8.5px/1 var(--f-txt);color:var(--noche)}
+.fila .pt{font:600 14px/1 var(--f-mono)}
+.fila.tu{margin:1px -10px;padding:0 10px;height:26px;border-radius:15px;background:linear-gradient(90deg,rgba(246,214,202,.85),rgba(226,218,251,.85) 60%,rgba(205,238,228,.85));font-weight:750}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tarj{border-radius:18px;padding:10px 12px;background:rgba(255,253,250,.48);box-shadow:inset 0 0 0 1px var(--linea)}
+
+/* —— 04 Draft —— */
+.tablero{padding:14px 12px 12px}
+.tab-g{display:grid;grid-template-columns:16px repeat(8,1fr);gap:3px;margin-top:8px}
+.tab-g .h{display:grid;place-items:center;height:27px}
+.tab-g .h b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:750 10px/1 var(--f-txt)}
+.tab-g .r{font:600 11px/1 var(--f-mono);color:var(--noche-3);display:grid;place-items:center}
+.cel{height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;gap:0;font:600 11.5px/1 var(--f-mono);letter-spacing:-.02em;color:var(--noche);background:rgba(255,253,250,.62);box-shadow:inset 0 0 0 1px rgba(19,32,59,.07);position:relative;overflow:hidden}
+.cel::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+.col-tu{background:linear-gradient(180deg,rgba(246,214,202,.9),rgba(226,218,251,.9) 55%,rgba(205,238,228,.9));border-radius:10px}
+.reglas{margin-top:12px}
+.regla{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;height:40px;border-top:1px solid var(--linea)}
+.regla:first-of-type{border-top:0}
+.regla .ico{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(255,253,250,.7);box-shadow:inset 0 0 0 1px var(--linea)}
+.regla .ico svg{width:17px;height:17px}
+.tesis{margin-top:12px;padding:13px 16px 12px}
+
+/* —— 05 Descubrir —— */
+.prog{display:flex;align-items:center;justify-content:space-between}
+.puntos10{display:flex;gap:3px}
+.puntos10 i{width:11px;height:5px;border-radius:3px;background:rgba(19,32,59,.13)}
+.puntos10 i.on{background:linear-gradient(90deg,var(--cobre),var(--lila))}
+.pila{position:relative;margin-top:14px}
+.pila .tras{position:absolute;left:12px;right:12px;top:-9px;height:60px;border-radius:24px;background:rgba(255,253,250,.72);box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 6px 16px -10px rgba(19,32,59,.3)}
+.pila .tras2{position:absolute;left:26px;right:26px;top:-17px;height:60px;border-radius:22px;background:rgba(255,253,250,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.9),0 6px 16px -10px rgba(19,32,59,.25)}
+.carta{padding:18px 18px 16px}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.meta span{height:26px;padding:0 10px;border-radius:13px;display:inline-flex;align-items:center;gap:5px;font:600 13px/1 var(--f-txt);color:var(--noche-2);background:rgba(19,32,59,.055)}
+.huella{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:4px}
+.comp{display:flex;align-items:center;gap:8px;font:600 14px/1 var(--f-txt);height:24px}
+.comp .m{width:20px;height:20px;border-radius:50%;display:grid;place-items:center}
+.comp .m svg{width:12px;height:12px}
+.comp.si .m{background:var(--ok-f);color:var(--ok)} .comp.no .m{background:var(--alto-f);color:var(--alto)}
+.comp.no{color:var(--noche-2)}
+.acc{display:grid;grid-template-columns:.92fr 1.5fr;gap:8px;margin-top:14px}
+.acc .btn{font-size:14.5px;gap:6px;padding:0 8px;white-space:nowrap}
+
+/* —— 06 Equipo —— */
+.equipo{display:flex;align-items:center;gap:12px}
+.miembros{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.miembro{display:flex;flex-direction:column;align-items:center;gap:13px;font:600 12.5px/1.1 var(--f-txt);color:var(--noche-2);text-align:center}
+.miembro .a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:750 12px/1 var(--f-txt);padding-bottom:0;color:var(--noche);position:relative}
+.miembro .a .tu-b{position:absolute;bottom:-11px;left:50%;transform:translateX(-50%);height:15px;padding:0 6px;border-radius:8px;box-shadow:0 0 0 2px var(--perla);background:var(--noche);color:var(--perla-hi);font:750 10px/15px var(--f-txt)}
+.miembro .a .cor{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:var(--noche);color:#f6d58e;display:grid;place-items:center}
+.miembro .a .cor svg{width:12px;height:12px}
+.prop{margin-top:12px;padding:14px 16px 13px}
+.antes{display:grid;grid-template-columns:1fr auto 1fr;gap:6px 10px;align-items:center;margin-top:10px;padding:10px 12px;border-radius:16px;background:rgba(19,32,59,.045)}
+.antes .k{grid-column:1/-1;font:700 11px/1 var(--f-txt);letter-spacing:.08em;text-transform:uppercase;color:var(--noche-3)}
+.votos{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.asientos{display:flex;gap:5px}
+.asientos i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center}
+.asientos i svg{width:15px;height:15px}
+.porque{margin-top:10px;height:40px;border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 13px;font:500 14.5px/1 var(--f-txt);color:var(--noche-3);background:rgba(255,253,250,.8);box-shadow:inset 0 0 0 1.5px rgba(122,102,211,.45)}
+.porque svg{width:17px;height:17px;color:var(--lila-t)}
+.reac{display:flex;gap:6px;margin-top:10px;flex-wrap:nowrap;align-items:center}
+.reac{justify-content:space-between}.reac .chip{height:30px;padding:0 10px;font-size:12.5px;white-space:nowrap}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-anillo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3.5a8.5 8.5 0 0 1 8.3 6.6"/><path d="M20.4 13.4A8.5 8.5 0 0 1 13.5 20.4"/><path d="M10.2 20.3A8.5 8.5 0 0 1 3.6 10.6"/><path d="M5 6.6A8.5 8.5 0 0 1 9 4"/><circle cx="12" cy="12" r="3.2"/></symbol>
+    <symbol id="i-corona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M4 17.5 3 8l5 4 4-6.5 4 6.5 5-4-1 9.5z"/><path d="M5 20.5h14"/></symbol>
+    <symbol id="i-hex" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 2.8 20 7.4v9.2L12 21.2 4 16.6V7.4z"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+    <symbol id="i-escudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l7.5 3v5.6c0 4.4-3.1 7.9-7.5 9.2-4.4-1.3-7.5-4.8-7.5-9.2V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-abajo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9.5l6 6 6-6"/></symbol>
+    <symbol id="i-muestra" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.6 18.2A2 2 0 0 0 6.3 21h11.4a2 2 0 0 0 1.7-2.8L14 9V3"/><path d="M7.5 15h9"/></symbol>
+    <symbol id="i-reloj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-peso" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+    <symbol id="i-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+    <symbol id="i-moneda" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M15 9.2a3.6 3.6 0 1 0 0 5.6M7.8 11h5.4M7.8 13.2h5.4"/></symbol>
+    <symbol id="i-casa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round"><path d="M4 11 12 4.5 20 11v8.5H4z"/><path d="M10 19.5v-5h4v5"/></symbol>
+    <symbol id="i-rutas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></symbol>
+    <symbol id="i-capa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"><path d="M12 3.5 21 8l-9 4.5L3 8z"/><path d="M3 12.5l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-cambio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/></symbol>
+    <symbol id="i-pluma" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4.5-1 10.3-10.3a2.3 2.3 0 0 0-3.3-3.3L5.2 15.7z"/><path d="M14 7l3 3"/></symbol>
+    <symbol id="i-calendario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><rect x="3.8" y="5.5" width="16.4" height="14.5" rx="3"/><path d="M3.8 10h16.4M8 3.5v4M16 3.5v4"/></symbol>
+    <symbol id="i-guardar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6.5 3.8h11v16.7L12 16.6l-5.5 3.9z"/></symbol>
+    <symbol id="i-mas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-filtro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M7 12h10M10 17h4"/></symbol>
+    <symbol id="i-mano" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11M10 10V4.8a1.5 1.5 0 0 1 3 0V10M13 10V5.8a1.5 1.5 0 0 1 3 0V12M16 11.5V8.8a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-.6a6 6 0 0 1-5-2.7L4 14.6a1.6 1.6 0 0 1 2.6-1.8L7 13.5"/></symbol>
+    <symbol id="i-lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></symbol>
+    <symbol id="i-hora" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h10M7 20.5h10M8 3.5c0 4.5 8 4.5 8 8.5s-8 4-8 8.5M16 3.5c0 4.5-8 4.5-8 8.5"/></symbol>
+    <symbol id="i-ojo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><path d="M2.8 12S6.2 5.5 12 5.5 21.2 12 21.2 12 17.8 18.5 12 18.5 2.8 12 2.8 12z"/><circle cx="12" cy="12" r="2.8"/></symbol>
+    <symbol id="i-espera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M8 12h.01M12 12h.01M16 12h.01" stroke-width="3"/></symbol>
+  </defs>
+</svg>
+
+<div class="pantallas" id="raiz"></div>
+
+<script src="mascara.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const SC={tec:'#7a66d3',sal:'#2c9886',ene:'#d0953f',fin:'#4a72c2',con:'#cc735f',ind:'#9c5d86'};
+const SC2={tec:'#b9acf4',sal:'#93dccd',ene:'#f2cf8f',fin:'#a3bdf0',con:'#f2b8a6',ind:'#dcaacb'};
+const SN={tec:'Tecnología',sal:'Salud',ene:'Energía',fin:'Finanzas',con:'Consumo',ind:'Industria'};
+const CART=[
+  {n:'Nimbus Cloud',t:'NUBE',s:'tec',p:28},{n:'Vitalis Farma',t:'VITA',s:'sal',p:18},{n:'Solara Energía',t:'SOLR',s:'ene',p:16},
+  {n:'Banco Faro',t:'FARO',s:'fin',p:14},{n:'Hogar & Co',t:'HOGR',s:'con',p:12},{n:'Ferrovía',t:'FERR',s:'ind',p:12}];
+const FANT={tec:46,sal:22,ene:18,fin:14,con:0,ind:0};
+const ico=(id,cls='')=>`<svg class="i ${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+
+function estado(){return `<div class="estado"><span>9:41</span><span class="ic">
+<svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#13203b"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#13203b"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#13203b"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#13203b"/></svg>
+<svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5 5.6 8.9a3.4 3.4 0 0 1 4.8 0zM3.4 6.7a6.5 6.5 0 0 1 9.2 0l-1.4 1.4a4.5 4.5 0 0 0-6.4 0zM1.2 4.5a9.6 9.6 0 0 1 13.6 0l-1.4 1.4a7.6 7.6 0 0 0-10.8 0z" fill="#13203b"/></svg>
+<svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="#13203b" opacity=".4"/><rect x="2.2" y="2.2" width="17" height="8.6" rx="2.3" fill="#13203b"/><path d="M25 4.4v4.2c.9-.3 1.5-1.2 1.5-2.1s-.6-1.8-1.5-2.1z" fill="#13203b" opacity=".45"/></svg>
+</span></div>`}
+
+function shell({titulo,selector,ctx,seg,segOn,tab,html}){
+  return `<section class="pant"><div class="grano"></div>${estado()}
+  <header class="cab"><h1>${titulo}${selector?`<span class="selector">${selector}${ico('i-abajo')}</span>`:''}</h1><div class="avatar" aria-label="Tu perfil">mb</div></header>
+  <div class="ctx"><span>${ctx}</span><span class="ejemplo">${ico('i-muestra')}Datos de ejemplo</span></div>
+  ${seg?`<div class="seg">${seg.map((s,i)=>`<span class="${i===segOn?'on':''}">${s}</span>`).join('')}</div>`:''}
+  <div class="cuerpo">${html}</div>
+  <div class="sello"><span>${ico('i-escudo')}Simulación · sin dinero real · no es consejo</span></div>
+  <nav class="dock vidrio">
+    <a class="${tab===0?'on':''}">${ico('i-anillo')}Mi cartera</a>
+    <a class="${tab===1?'on':''}">${ico('i-corona')}La Liga</a>
+    <a class="${tab===2?'on':''}">${ico('i-hex')}Construye</a>
+  </nav><div class="home"></div></section>`;
+}
+
+/* ——— anillo iridiscente (conic-gradient) ——— */
+function anilloCSS(items,{size,grosor,gap=0.55}){
+  let acc=0,stops=[];
+  items.forEach(it=>{const a=acc,b=acc+it.p;stops.push(`${it.c1} ${a+gap/2}%`,`${it.c2} ${b-gap/2}%`,`transparent ${b-gap/2}% ${b+gap/2}%`);acc=b});
+  const rin=size/2-grosor;
+  const mask=`radial-gradient(circle closest-side, transparent ${rin-0.5}px, #000 ${rin+0.5}px, #000 ${size/2-0.8}px, transparent ${size/2}px)`;
+  return `<div class="anillo" style="width:${size}px;height:${size}px;left:50%;top:50%;margin:-${size/2}px 0 0 -${size/2}px;background:conic-gradient(transparent 0 ${gap/2}%, ${stops.join(',')});-webkit-mask:${mask};mask:${mask}"></div>
+  <div class="anillo" style="width:${size}px;height:${size}px;left:50%;top:50%;margin:-${size/2}px 0 0 -${size/2}px;mix-blend-mode:soft-light;opacity:.95;background:conic-gradient(from 300deg,#fff0,#ffffff 9%,#fff0 20%,#fff0 45%,#ffffffcc 55%,#fff0 66%,#fff0);-webkit-mask:${mask};mask:${mask}"></div>
+  <div class="anillo" style="width:${size}px;height:${size}px;left:50%;top:50%;margin:-${size/2}px 0 0 -${size/2}px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.0);-webkit-mask:${mask};mask:${mask};background:radial-gradient(circle closest-side, transparent ${rin}px, rgba(255,255,255,.55) ${rin+1.5}px, transparent ${rin+4}px, transparent ${size/2-3}px, rgba(19,32,59,.12) ${size/2-.5}px)"></div>`;
+}
+
+/* ——— 01 Mi cartera › Reparto ——— */
+function p01(){
+  const W=318,H=236,cx=W/2,cy=120,size=164,gros=14,R=size/2;
+  const items=CART.map(c=>({p:c.p,c1:SC[c.s],c2:SC2[c.s]}));
+  // ángulos de cada eje = mitad de su segmento (0° arriba, horario)
+  let acc=0;const ejes=CART.map(c=>{const m=acc+c.p/2;acc+=c.p;return {...c,ang:m/100*360}});
+  const rMax=R-gros-5; // 50 % → rMax
+  const pt=(ang,r)=>[cx+r*Math.sin(ang*Math.PI/180),cy-r*Math.cos(ang*Math.PI/180)];
+  const poly=vals=>ejes.map(e=>pt(e.ang,Math.max(vals[e.s],0)/50*rMax).map(v=>v.toFixed(1)).join(',')).join(' ');
+  const hoy={};CART.forEach(c=>hoy[c.s]=c.p);
+  let svg=`<svg width="${W}" height="${H}" style="position:absolute;left:0;top:0" aria-hidden="true">
+   <defs><radialGradient id="rg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#f6d3c6"/><stop offset=".55" stop-color="#d9cff9"/><stop offset="1" stop-color="#bfe8dc"/></radialGradient>
+   <linearGradient id="rgs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c4705b"/><stop offset=".5" stop-color="#7a66d3"/><stop offset="1" stop-color="#2c9886"/></linearGradient></defs>`;
+  [12.5,25,37.5,50].forEach(v=>svg+=`<circle cx="${cx}" cy="${cy}" r="${v/50*rMax}" fill="none" stroke="#13203b" stroke-opacity="${v===50?.14:.08}" ${v===50?'':'stroke-dasharray="1.5 3"'}/>`);
+  ejes.forEach(e=>{const [x,y]=pt(e.ang,rMax);svg+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#13203b" stroke-opacity=".09"/>`});
+  svg+=`<polygon points="${poly(FANT)}" fill="#e9a893" fill-opacity=".16" stroke="#c4705b" stroke-width="1.6" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
+  svg+=`<polygon points="${poly(hoy)}" fill="url(#rg)" fill-opacity=".92" stroke="url(#rgs)" stroke-width="2.2" stroke-linejoin="round"/>`;
+  ejes.forEach(e=>{const [x,y]=pt(e.ang,e.p/50*rMax);svg+=`<circle cx="${x}" cy="${y}" r="3.2" fill="#fff" stroke="${SC[e.s]}" stroke-width="2"/>`});
+  const [gx,gy]=pt(ejes[0].ang,46/50*rMax);
+  svg+=`<circle cx="${gx}" cy="${gy}" r="3" fill="#fff" stroke="#c4705b" stroke-width="1.6"/>`;
+  svg+=`<text x="${cx+4}" y="${cy-rMax+11}" font-family="Commissioner" font-size="10" font-weight="650" fill="#56607c">50 %</text>`;
+  svg+=`</svg>`;
+  const lbls=ejes.map(e=>{const [x,y]=pt(e.ang,R+17+Math.abs(Math.sin(e.ang*Math.PI/180))*15);return `<div class="lbl" style="left:${x}px;top:${y}px"><span class="t">${e.t}</span><span class="v" style="color:${e.s==='ene'?'#8a5d16':e.s==='sal'?'#1c7465':e.s==='con'?'#9a4a36':e.s==='ind'?'#7b3f68':e.s==='fin'?'#335aa8':'#5b48b8'}">${e.p} %</span></div>`}).join('');
+  const html=`
+  <div class="vidrio retrato">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="et">Tu retrato</div><span style="display:flex;align-items:center;gap:5px;white-space:nowrap;font:650 12.5px/1 var(--f-txt);color:var(--cobre-t)">${ico('i-reloj')}Foto del lunes en 4 d 6 h</span></div>
+    <p class="tit" style="margin-top:6px;font-size:20px">Repartida, pero una parte pesa</p>
+    <div class="figura">${anilloCSS(items,{size,grosor:gros})}${svg}${lbls}
+      <div class="leyenda l-izq"><div class="l"><span><svg width="20" height="6" style="margin-right:6px"><line x1="1" y1="3" x2="19" y2="3" stroke="#7a66d3" stroke-width="2.6" stroke-linecap="round"/></svg>Hoy</span><span><svg width="20" height="6" style="margin-right:6px"><line x1="1" y1="3" x2="19" y2="3" stroke="#c4705b" stroke-width="2" stroke-dasharray="4 3"/></svg>Fantasma</span></div></div>
+      <div class="fant l-der"><span>1 s</span><span class="on">4 s</span><span>8 s</span></div></div>
+    <p class="frase">Hace 4 semanas tu mayor posición pesaba el <b>46 %</b>; hoy, el <b>28 %</b>.</p>
+  </div>
+  <div class="semaforos">
+    <div><div class="et">Concentración</div><span class="pildora p-medio"><i></i>Media</span><div class="sub">Mayor: <b class="mono" style="font-size:12.5px">NUBE</b> 28 %</div></div>
+    <div><div class="et">Variedad</div><span class="pildora p-ok"><i></i>Amplia</span><div class="sub">6 sectores</div></div>
+    <div><div class="et">Datos</div><span class="pildora p-ok"><i></i>Completos</span><div class="sub">6 de 6 empresas</div></div>
+  </div>
+  <div class="vidrio probar">
+    <div class="txt"><div class="et" style="color:var(--lila-t)">Pista de Klever</div><p class="q">¿Y si la mayor<br>bajara al 24 %?</p></div>
+    <span class="btn pri">${ico('i-peso')}Probar un peso</span>
+  </div>`;
+  return shell({titulo:'Mi cartera',selector:'Principal',ctx:'<b>Lunes 9 nov</b> · semana 3 de 12',seg:['Reparto','Mapa','Evolución'],segOn:0,tab:0,html});
+}
+
+/* ——— 02 Mapa ——— */
+const GEO={es:'#c4705b',eu:'#2c9886',na:'#7a66d3',la:'#d0953f',ap:'#9c5d86',ot:'#8a8fa3'};
+function regionDe(lat,lon){
+  if(lat>=36&&lat<=44.5&&lon>=-10&&lon<=3.5)return 'es';
+  if(lon>=-25&&lon<=45&&lat>=35&&lat<=72)return 'eu';
+  if(lon<-30)return lat>=24?'na':'la';
+  if((lon>=60&&lat<55&&lat>-50)||(lon>=95&&lat<55))return 'ap';
+  return 'ot';
+}
+function p02(){
+  const VENT={es:31,eu:27,na:29,la:6,ap:5,ot:2};
+  const filas=MASCARA.split('|');const C0=15,C1=112,R0=2,R1=43;const W=322,c=W/(C1-C0),H=Math.round((R1-R0)*c);
+  let dots='';
+  filas.slice(R0,R1).forEach((f,jj)=>{const j=jj+R0;let bits='';for(const ch of f)bits+=parseInt(ch,16).toString(2).padStart(4,'0');
+    for(let i=C0;i<C1;i++)if(bits[i]==='1'){const lat=80-136*(j+.5)/54,lon=-180+3*(i+.5);const r=regionDe(lat,lon);const v=VENT[r];
+      const op=r==='ot'?0.2:(0.22+0.78*v/31);
+      dots+=`<circle cx="${((i-C0+.5)*c).toFixed(1)}" cy="${((jj+.5)*c).toFixed(1)}" r="${(c*0.34).toFixed(2)}" fill="${GEO[r]}" fill-opacity="${op.toFixed(2)}"/>`}});
+  const X=lon=>((lon+180)/3-C0)*c, Y=lat=>((80-lat)/136*54-R0)*c;
+  const sedes=[{k:'España',lat:40.2,lon:-3.7,w:42,dx:16,dy:34,anc:'start'},{k:'Francia',lat:46.8,lon:2.4,w:12,dx:-6,dy:-24,anc:'end'},{k:'Alemania',lat:51,lon:10.4,w:18,dx:26,dy:-20,anc:'start'},{k:'EE. UU.',lat:39,lon:-98,w:28,dx:0,dy:38,anc:'middle'}];
+  let marks='',lines='';
+  sedes.forEach(s=>{const x=X(s.lon),y=Y(s.lat);const tx=x+s.dx,ty=y+s.dy;
+    const ex=s.anc==='end'?tx+3:s.anc==='start'?tx-2:tx, ey=s.dy>0?ty-12:ty+4;
+    lines+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} L${ex.toFixed(1)} ${ey.toFixed(1)}" stroke="#13203b" stroke-opacity=".55" stroke-width="1" fill="none"/>`;
+    marks+=`<circle cx="${x}" cy="${y}" r="4.2" fill="#fffdfa" stroke="#13203b" stroke-width="2"/><circle cx="${x}" cy="${y}" r="1.4" fill="#13203b"/>`;
+    marks+=`<text x="${tx}" y="${ty}" text-anchor="${s.anc}" font-family="Commissioner" font-size="12.5" font-weight="700" stroke="#fbf8f3" stroke-width="4.5" stroke-linejoin="round" paint-order="stroke" fill="#13203b">${s.k} <tspan font-family="Fraunces" font-weight="600">${s.w} %</tspan></text>`;
+  });
+  marks=lines+marks;
+  const map=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-label="Mapa: sede y ventas">${dots}${marks}</svg>`;
+  const bar=(arr)=>`<div class="barra">${arr.map(a=>`<i style="width:${a[0]}%;background:${a[1]}">${a[2]}</i>`).join('')}</div>`;
+  const html=`
+  <div class="vidrio mapa">
+    <div class="et">Sesgo de casa</div>
+    <p class="tit" style="margin:7px 0 10px;font-size:20px">El 42 % tiene sede en España</p>
+    ${map}
+    <div style="display:flex;gap:16px;margin-top:9px;font:600 12.5px/1.2 var(--f-txt);color:var(--noche-2)">
+      <span style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.6" fill="none" stroke="#13203b" stroke-opacity=".7" stroke-width="1.3"/><circle cx="8" cy="8" r="3.6" fill="#fffdfa" stroke="#13203b" stroke-width="1.6"/></svg>Sede</span>
+      <span style="display:flex;align-items:center;gap:6px"><svg width="22" height="10" viewBox="0 0 22 10"><circle cx="3" cy="5" r="2.2" fill="#7a66d3" fill-opacity=".35"/><circle cx="11" cy="5" r="2.2" fill="#7a66d3" fill-opacity=".65"/><circle cx="19" cy="5" r="2.2" fill="#7a66d3"/></svg>Ventas: más intenso, más peso</span>
+    </div>
+  </div>
+  <div class="barras">
+    <div class="et">Sede y ventas no son lo mismo</div>
+    <div class="barra-f"><span class="sub" style="font-weight:700;color:var(--noche)">Sede</span>${bar([[42,'#e9a896','42 %'],[28,'#b9adf2','28 %'],[18,'#8fd3c4','18 %'],[12,'#c4e9df','12 %']])}</div>
+    <div class="barra-f"><span class="sub" style="font-weight:700;color:var(--noche)">Ventas</span>${bar([[31,'#e9a896','31 %'],[27,'#8fd3c4','27 %'],[29,'#b9adf2','29 %'],[6,'#efc98a',''],[5,'#dcaacb',''],[2,'#c9ccd6','']])}</div>
+    <div class="ley">
+      <span><i style="background:${GEO.es}"></i>España</span>
+      <span><i style="background:${GEO.la}"></i>Latinoamérica <b>6 %</b></span>
+      <span><i style="background:${GEO.eu}"></i>Resto de Europa</span>
+      <span><i style="background:${GEO.ap}"></i>Asia-Pacífico <b>5 %</b></span>
+      <span><i style="background:${GEO.na}"></i>Norteamérica</span>
+      <span><i style="background:${GEO.ot}"></i>Otros <b>2 %</b></span>
+    </div>
+  </div>
+  <div class="monedas">
+    <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true"><circle cx="29" cy="29" r="23" fill="none" stroke="#2c9886" stroke-width="9" stroke-dasharray="${(2*Math.PI*23*0.72-2).toFixed(1)} 400" transform="rotate(-90 29 29)"/><circle cx="29" cy="29" r="23" fill="none" stroke="#7a66d3" stroke-width="9" stroke-dasharray="${(2*Math.PI*23*0.28-2).toFixed(1)} 400" transform="rotate(${-90+0.72*360+1} 29 29)"/></svg>
+    <div style="flex:1"><div class="et">Monedas</div>
+      <div style="display:flex;gap:16px;margin-top:7px;align-items:baseline"><span style="font:700 15px/1 var(--f-txt)">EUR <span class="num" style="font-size:20px;font-weight:500;color:var(--agua-t)">72 %</span></span><span style="font:700 15px/1 var(--f-txt)">USD <span class="num" style="font-size:20px;font-weight:500;color:var(--lila-t)">28 %</span></span></div>
+      <div class="sub" style="margin-top:5px">Moneda de informe, no de cotización.</div></div>
+  </div>
+  <div class="senales">
+    <div class="senal">${ico('i-rutas')}<span>Tienen sede en 4 países, pero venden en 6 zonas del mundo.</span></div>
+  </div>`;
+  return shell({titulo:'Mi cartera',selector:'Principal',ctx:'<b>Lunes 9 nov</b> · semana 3 de 12',seg:['Reparto','Mapa','Evolución'],segOn:1,tab:0,html});
+}
+
+/* ——— 03 Liga ——— */
+const GENTE=[['luna_indexada',231,'LI','#f2c9b9'],['ardilla.prudente',219,'AP','#cfe9df'],['marea_baja',208,'mb','conic'],['el_del_excel',197,'EX','#ddd5fa'],['NoSoyBroker',188,'NB','#f4e1c2'],['pixel_bull',160,'PB','#d3def6'],['cero_prisa',151,'CP','#efd3e3'],['bonos_y_bossa',140,'BB','#e1e5d0']];
+const avBg=c=>c==='conic'?'conic-gradient(from 140deg,#f2c3b2,#ddd2fb,#bfe9de,#f6e2c6,#f2c3b2)':c;
+function p03(){
+  const filas=GENTE.map((g,i)=>`<div class="fila ${i===2?'tu':''}"><span class="p">${i+1}</span><span class="a" style="background:${avBg(g[3])}">${g[2]}</span><span>@${g[0]}${i===2?' <span style="font-weight:600;color:var(--noche-2)">· tú</span>':''}</span><span class="pt">${g[1]}</span></div>`).join('');
+  const comp=(n,v,m,sub,grad,der)=>`<div class="compart" style="${der?'text-align:right':''}"><div class="tr"><i style="width:${v/m*100}%;background:${grad}"></i></div><span style="margin-top:5px;font:700 12.5px/1.1 var(--f-txt);white-space:nowrap;">${n}</span><span class="mono" style="font-size:12.5px">${v}/${m}</span>${sub?`<span class="sub" style="font-size:12px;line-height:1.15;white-space:nowrap">${sub}</span>`:''}</div>`;
+  const html=`
+  <div class="vidrio marcador">
+    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:600 13.5px/1 var(--f-txt);color:var(--noche)">Cierre: lunes 16 nov, 00:00</span><span style="display:flex;align-items:center;gap:5px;white-space:nowrap;font:650 12.5px/1 var(--f-txt);color:var(--cobre-t)">${ico('i-reloj')}faltan 4 d 6 h</span></div>
+    <div class="puesto" style="margin-top:8px">
+      <div style="display:flex;align-items:flex-end;gap:9px"><span class="num" style="font-size:60px;line-height:.86;font-weight:420;letter-spacing:-.03em">3.<span style="font-family:Commissioner;font-weight:650;font-size:.36em;letter-spacing:0;vertical-align:1.15em;margin-left:-4px">º</span></span><span style="font:600 14.5px/1.2 var(--f-txt);color:var(--noche-2)">puesto de 8<br><b style="color:var(--noche)">208</b> en total</span></div>
+      <div style="display:flex;align-items:flex-end;gap:9px;text-align:right"><span style="font:600 13px/1.2 var(--f-txt);color:var(--lila-t)">provisionales,<br><span style="color:var(--noche-2)">si cerrara ahora</span></span>
+        <span class="num" style="font-size:52px;line-height:.86;font-weight:440;background:linear-gradient(120deg,#9a4a36,#5b48b8 60%,#1c7465);-webkit-background-clip:text;color:transparent">71</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:50fr 30fr 20fr;gap:8px;margin-top:16px">
+      ${comp('Equilibrio',37,50,'media 12 + amplia 25','linear-gradient(90deg,#9e8ce6,#7a66d3)')}
+      ${comp('Aprendizaje',20,30,'falta la idea','linear-gradient(90deg,#e6a491,#c4705b)')}
+      ${comp('Constancia',14,20,'','linear-gradient(90deg,#78c8b8,#2c9886)',1)}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;padding-top:9px;border-top:1px solid var(--linea)">
+      <span style="flex:1;font:500 14px/1.25 var(--f-txt)">Con <b class="mono" style="font-size:13px">NUBE</b> al 24 %,<br>sumarías <b class="num" style="font-size:17px;font-weight:560">84</b></span>
+      <span class="btn pri" style="height:42px;padding:0 15px;font-size:15px">${ico('i-peso')}Probar un peso</span>
+    </div>
+  </div>
+  <div class="clas"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px"><span class="et">Clasificación · total</span><span class="sub" style="font-size:12.5px">solo apodos</span></div>${filas}</div>
+  <div class="dos">
+    <div class="tarj"><div class="et">Reto · hecho</div><div style="display:flex;gap:7px;align-items:flex-start;margin-top:6px"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--ok-f);color:var(--ok);display:grid;place-items:center;margin-top:1px;font-size:11px">${ico('i-ok')}</span><span style="font:600 13px/1.25 var(--f-txt)">Ningún sector por encima del 40 %</span></div></div>
+    <div class="tarj"><div style="display:flex;justify-content:space-between;align-items:baseline"><span class="et">Duelo</span><span class="sub" style="font-size:12px;font-style:italic">provisional</span></div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:6px 7px;align-items:center;margin-top:7px;font:600 12.5px/1 var(--f-txt)">
+        <span>Tú</span><span style="height:8px;border-radius:4px;background:linear-gradient(90deg,#c4705b,#7a66d3);width:100%"></span><span class="mono" style="font-size:12.5px">71</span>
+        <span style="color:var(--noche-2)">@ardilla</span><span style="height:8px;border-radius:4px;background:#9fb0c9;width:${66/71*100}%"></span><span class="mono" style="font-size:12.5px;color:var(--noche-2)">66</span>
+      </div></div>
+  </div>`;
+  return shell({titulo:'La Liga',selector:'Facultad Eco 25',ctx:'<b>Temporada 1</b> · semana 3 de 12',seg:['Semana','Draft','Wrapped'],segOn:0,tab:1,html});
+}
+
+/* ——— 04 Draft ——— */
+function p04(){
+  const cols=[
+    ['ORBE:tec','EOLA:ene','LUMI:sal','CAJX:fin','GRUA:ind','MESA:con'],
+    ['BIOM:sal','SILX:tec','PRIM:fin','HIDR:ene','CEST:con','RAIL:ind'],
+    ['NUBE:tec','VITA:sal','SOLR:ene','FARO:fin','HOGR:con','FERR:ind'],
+    ['DATU:tec','VOLT:ene','CURA:sal','TORN:ind','LIBR:fin','PANA:con'],
+    ['FARM:sal','QBIT:tec','ACER:ind','AHOR:fin','GASN:ene','MODA:con'],
+    ['KIPU:tec','PAGO:fin','GENX:sal','NAVE:ind','JUGA:con','ATMO:ene'],
+    ['AURA:tec','SANO:sal','RAYO:ene','CRED:fin','VINO:con','PUER:ind'],
+    ['PULS:sal','MARE:ene','CODX:tec','SEGU:fin','MOTR:ind','DULC:con']];
+  let g=`<div></div>`+GENTE.map((p,i)=>`<div class="h"><b style="background:${avBg(p[3])};${i===2?'box-shadow:0 0 0 2px #13203b':''}">${p[2]}</b></div>`).join('');
+  for(let r=0;r<6;r++){g+=`<div class="r">${r+1}</div>`;for(let k=0;k<8;k++){const [t,s]=cols[k][r].split(':');g+=`<div class="cel" style="--c:${SC[s]};${k===2?'background:rgba(255,253,250,.95);font-weight:700':''}">${t}</div>`}}
+  const html=`
+  <div class="vidrio tablero">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px">
+      <div class="et">Tablero del draft</div><span style="font:600 12.5px/1 var(--f-txt);color:var(--lila-t)">1 empresa = 1 sola cartera</span>
+    </div>
+    <div style="position:relative">
+      <div class="col-tu" style="position:absolute;top:0;bottom:-3px;left:calc(16px + 3px + 2*((100% - 16px - 24px)/8 + 3px) - 2px);width:calc((100% - 16px - 24px)/8 + 4px)"></div>
+      <div class="tab-g" style="position:relative">${g}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px 12px;margin:9px 4px 0;font:600 12px/1 var(--f-txt);color:var(--noche-2)">
+      ${Object.keys(SN).map(k=>`<span style="display:flex;align-items:center;gap:5px"><i style="width:9px;height:9px;border-radius:2px;background:${SC[k]}"></i>${SN[k]}</span>`).join('')}
+    </div>
+  </div>
+  <div class="reglas">
+    <div class="et" style="margin-bottom:4px">Reglas de la liga</div>
+    <div class="regla"><span class="ico">${ico('i-capa')}</span><span style="font:650 14.5px/1.2 var(--f-txt)">Máx. 25 % por empresa<br><span class="sub" style="font-size:13px;color:var(--medio);font-weight:650"><b class="mono" style="font-size:12px">NUBE</b> pesa hoy el 28 %</span></span><span class="btn pri" style="height:34px;padding:0 14px;font-size:14px">Ajustar</span></div>
+    <div class="regla"><span class="ico">${ico('i-hex')}</span><span style="font:650 14.5px/1.2 var(--f-txt)">Mín. 5 sectores<br><span class="sub" style="font-size:13px">Tienes 6</span></span><span class="pildora p-ok"><i></i>Cumples</span></div>
+    <div class="regla"><span class="ico">${ico('i-cambio')}</span><span style="font:650 14.5px/1.2 var(--f-txt)">Máx. 3 cambios por semana<br><span class="sub" style="font-size:13px">Se cuentan hasta el lunes</span></span><span class="pildora p-ok"><i></i>Cumples</span></div>
+  </div>
+  <div class="vidrio tesis">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="et">Tesis de la semana</div><span class="chip" style="height:26px;font-size:12.5px">${ico('i-calendario')}Revisar el 7 dic</span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px"><span style="width:6px;align-self:stretch;border-radius:3px;background:linear-gradient(180deg,#93dccd,#2c9886)"></span>
+      <div><div style="font:700 14px/1 var(--f-txt)"><span class="mono" style="font-size:13px">VITA</span> · Vitalis Farma</div>
+      <p style="margin:6px 0 0;font:400 17px/1.3 var(--f-disp);font-variation-settings:'opsz' 30,'SOFT' 100;font-style:italic">«Gana caja libre y no depende de un solo producto»</p></div></div>
+  </div>`;
+  return shell({titulo:'La Liga',selector:'Facultad Eco 25',ctx:'<b>Modo draft</b> · 48 empresas',seg:['Semana','Draft','Wrapped'],segOn:1,tab:1,html});
+}
+
+/* ——— 05 Descubrir ——— */
+function flor(){
+  const W=318,H=214,cx=W/2,cy=110,L=80;
+  const ps=[['Deuda',1],['ROIC',1],['Margen',1],['Caja',1],['Crecimiento',0]];
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-label="Huella de Kaede Robótica: cumple 4 de 5"><defs>
+   <linearGradient id="pet" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f3c3b2"/><stop offset=".55" stop-color="#cdbff7"/><stop offset="1" stop-color="#9fdccd"/></linearGradient>
+   <linearGradient id="petno" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f8dcd6"/><stop offset="1" stop-color="#f3c3b2"/></linearGradient></defs>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${L+4}" fill="none" stroke="#13203b" stroke-opacity=".10" stroke-dasharray="1.5 3.5"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${L*0.5}" fill="none" stroke="#13203b" stroke-opacity=".07"/>`;
+  let lab='';
+  ps.forEach((p,i)=>{const a=i*72;const len=p[1]?L:L*0.48,w=p[1]?25:15;
+    s+=`<g transform="rotate(${a} ${cx} ${cy})"><path d="M${cx} ${cy} C ${cx-w} ${cy-len*0.35}, ${cx-w*0.7} ${cy-len*0.9}, ${cx} ${cy-len} C ${cx+w*0.7} ${cy-len*0.9}, ${cx+w} ${cy-len*0.35}, ${cx} ${cy} Z" fill="${p[1]?'url(#pet)':'url(#petno)'}" stroke="${p[1]?'#7a66d3':'#a8342a'}" stroke-opacity="${p[1]?.5:.65}" stroke-width="1.3"/>
+    <path d="M${cx} ${cy} L${cx} ${cy-len*0.8}" stroke="#fff" stroke-opacity=".8" stroke-width="1.1"/></g>`;
+    const rr=(p[1]?L:L*0.48)+20, ang=a*Math.PI/180;let x=cx+rr*Math.sin(ang),y=cy-rr*Math.cos(ang);
+    const anc=Math.abs(Math.sin(ang))<.2?'middle':(Math.sin(ang)>0?'start':'end');
+    if(i===0)y-=2;
+    lab+=`<div style="position:absolute;left:${x}px;top:${y}px;transform:translate(${anc==='middle'?'-50%':anc==='start'?'-6px':'calc(-100% + 6px)'},-50%)" class="comp ${p[1]?'si':'no'}"><span class="m">${ico(p[1]?'i-ok':'i-no')}</span>${p[0]}</div>`;
+  });
+  s+=`<circle cx="${cx}" cy="${cy}" r="7" fill="#fffdfa" stroke="#13203b" stroke-opacity=".25"/></svg>`;
+  return `<div style="position:relative;width:${W}px;height:${H}px">${s}${lab}</div>`;
+}
+function p05(){
+  const html=`
+  <div class="prog"><div><span style="font:700 15px/1 var(--f-txt)">4 de 10</span> <span class="sub">empresas de hoy</span></div><div class="puntos10">${Array.from({length:10},(_,i)=>`<i class="${i<4?'on':''}"></i>`).join('')}</div></div>
+  <div style="display:flex;gap:6px;margin-top:11px"><span class="chip">${ico('i-filtro')}Sector</span><span class="chip">${ico('i-pin')}País</span><span class="chip">${ico('i-ojo')}Comparar dos</span></div>
+  <div class="pila" style="margin-top:26px"><div class="tras2"></div><div class="tras"></div>
+  <div class="vidrio carta">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <h2 class="tit" style="font-size:28px;font-weight:430">Kaede Robótica</h2>
+      <span class="mono" style="font-size:13px;padding:6px 8px;border-radius:9px;background:rgba(156,93,134,.13);color:#6e3a5d">KAED</span>
+    </div>
+    <div class="meta"><span>${ico('i-capa','')}Industria</span><span>${ico('i-pin')}Japón</span><span>${ico('i-moneda')}JPY</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:14px"><span class="et">Huella en flor</span><span style="font:450 18px/1 var(--f-disp);font-variation-settings:'opsz' 36,'SOFT' 100">Cumple <b style="font-weight:620">4 de 5</b></span></div>
+    <div style="margin:4px -18px 0">${flor()}</div>
+    <div class="sub" style="margin-top:2px;font-size:12.5px;text-align:center">Lleno: cumple · pequeño: no cumple · hueco: sin datos</div>
+    <div class="acc"><span class="btn sec">${ico('i-guardar')}Guardar idea</span><span class="btn pri">${ico('i-mas')}Probar en mi cartera</span></div>
+  </div></div>
+  <div class="sub" style="text-align:center;margin-top:12px;font-size:13px">Klever enseña datos, no recomienda empresas.</div>`;
+  return shell({titulo:'Construye',ctx:'<b>Descubrir</b> · el feed tiene final',seg:['Crear','Descubrir','Equipo','Ideas'],segOn:1,tab:2,html});
+}
+
+/* ——— 06 Equipo ——— */
+function p06(){
+  const M=[['marea_baja','mb','conic','tú'],['bruma','BR','#d3def6',''],['kiwi_9','K9','#cfe9df',''],['coral_3','C3','#f2c9b9','capitana']];
+  const emblema=`<svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="em" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2c3b2"/><stop offset=".5" stop-color="#d4c9fa"/><stop offset="1" stop-color="#a9e0d2"/></linearGradient></defs><rect x="1" y="1" width="46" height="46" rx="15" fill="url(#em)"/><path d="M12 25a12 12 0 0 1 24 0z" fill="#fffdfa" fill-opacity=".85" stroke="#13203b" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 25c0 5-2 7-2 10M21.5 25c0 5 1.5 6 0 11M26.5 25c0 5-1.5 6 0 11M32 25c0 5 2 7 2 10" fill="none" stroke="#13203b" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+  const html=`
+  <div class="equipo">${emblema}<div><h2 class="tit" style="font-size:24px">Las Medusas</h2><div class="sub" style="margin-top:3px">Capitana: coral_3 · se aprueba con 3 de 4</div></div></div>
+  <div class="miembros">${M.map(m=>`<div class="miembro"><span class="a" style="background:${avBg(m[2])};${m[3]==='tú'?'box-shadow:0 0 0 2px #13203b':''}">${m[1]}${m[3]==='capitana'?`<span class="cor">${ico('i-corona')}</span>`:''}${m[3]==='tú'?`<span class="tu-b">tú</span>`:''}</span><span style="color:var(--noche)">${m[0]}</span></div>`).join('')}</div>
+  <div class="vidrio prop">
+    <div style="display:flex;justify-content:space-between;align-items:center"><div class="et">Propuesta de kiwi_9</div><span class="chip" style="height:26px;font-size:12.5px;color:var(--cobre-t)">${ico('i-hora')}Cierra en 23 h</span></div>
+    <p class="tit" style="margin-top:9px;font-size:23px">Bajar <span class="mono" style="font-size:19px">NUBE</span> del 30 % al 24 %</p>
+    <p style="margin:7px 0 0;font:400 15.5px/1.35 var(--f-disp);font-variation-settings:'opsz' 18,'SOFT' 100;font-style:italic;color:var(--noche-2)">«Si NUBE cae, arrastra al equipo; mejor repartir.»</p>
+    <div class="antes">
+      <span style="font:600 14px/1 var(--f-txt)">Concentración</span><span></span><span style="display:flex;align-items:center;gap:6px;justify-content:flex-end"><span class="pildora p-medio"><i></i>Media</span>${ico('i-flecha')}<span class="pildora p-ok"><i></i>Baja</span></span>
+      <span style="font:600 14px/1 var(--f-txt)">Equilibrio</span><span></span><span style="display:flex;align-items:center;gap:6px;justify-content:flex-end;font:600 15px/1 var(--f-mono)"><span style="color:var(--noche-2)">37</span>${ico('i-flecha')}<span style="color:var(--ok)">50</span><span class="sub" style="font-size:12px">/50</span></span>
+    </div>
+    <div class="votos">
+      <div class="asientos">
+        <i style="background:var(--ok-f);color:var(--ok)">${ico('i-ok')}</i><i style="background:var(--ok-f);color:var(--ok)">${ico('i-ok')}</i><i style="background:var(--alto-f);color:var(--alto)">${ico('i-no')}</i><i style="box-shadow:inset 0 0 0 1.5px var(--noche);color:var(--noche)">${ico('i-espera')}</i>
+      </div>
+      <div style="text-align:right;font:600 13.5px/1.3 var(--f-txt)">2 a favor · 1 en contra<br><span style="color:var(--cobre-t)">falta el tuyo</span></div>
+    </div>
+    <div class="porque">${ico('i-pluma')}Tu porqué (obligatorio)</div>
+    <div class="acc" style="margin-top:9px;grid-template-columns:1fr 1.3fr"><span class="btn sec" style="height:44px">En contra</span><span class="btn pri" style="height:44px">${ico('i-ok')}Votar a favor</span></div>
+  </div>
+  <div class="reac"><span class="chip">Buen porqué</span><span class="chip">Lo veo</span><span class="chip">Faltan datos</span><span class="chip">Sin prisa</span></div>`;
+  return shell({titulo:'Construye',ctx:'<b>Cartera en equipo</b> · sin chat libre',seg:['Crear','Descubrir','Equipo','Ideas'],segOn:2,tab:2,html});
+}
+
+$('#raiz').innerHTML=[p01(),p02(),p03(),p04(),p05(),p06()].map((h,i)=>h.replace('<section class="pant"',`<section class="pant" id="s${i+1}"`)).join('');
+</script>
+</body>
+</html>
