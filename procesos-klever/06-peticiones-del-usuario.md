@@ -2341,3 +2341,17 @@ Respuestas de Javier a las preguntas (literal de las opciones elegidas):
 - ¿Dónde? → «Mismo repo, carpeta nueva (Recomendado)».
 - Datos → «De ejemplo, rotulados».
 - Validación → «Construir sin esos cambios» (construir lo del informe de la ronda 40 tal cual, sin esperar a la validación ni aplicar los 14 cambios de `ronda42/validacion/08-que-cambia.md`).
+Más respuestas de Javier (C63, rondas 2–4 de preguntas, literal de las opciones elegidas):
+- Perfil de 3 preguntas → «Dejarlo fuera por ahora (Recomendado)».
+- Titular → «Aún no: publicar como beta privada».
+- Acceso → «Solo enlace por correo».
+- Dirección web → «Gratis en Cloudflare (Recomendado)».
+- Fantasy en v1 → «Reglas de liga configurables, Modo draft».
+- Equipos → «Dejar para la proxima version, pero que aparezca en beta» (texto propio).
+- Beta → «Código de invitación (Recomendado)».
+- Pestañas → «Mi cartera · Construye · La Liga».
+- Publicar → «Aún no tengo cuenta».
+- Correo (Brevo) → «Aún no».
+- Admin → «Otro correo».
+- Extras → «Modo oscuro, Resumen de temporada».
+Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
