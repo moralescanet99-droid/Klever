@@ -2307,3 +2307,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > Todas las las apps estan bien. Quiero que en base a las que tenemos hagamos una app final. Creo que todas tienen puntos fuertes y puntos debiles. Quiero que elimines los usouestos practicos. Y la app tenga 3 secciones muy claras, mi cartera, la liga, construye. A partir de hay, quiero que investiges e informes de como tiene que seria la mejor app que puedes montar, que aspecto tendria, que se podria, etc hacer
 
 (Interpretación anotada en `ronda40/INFORME-APP-FINAL.md`: «supuestos prácticos» = escenarios hipotéticos y crisis simuladas (tormentas, lunes de crisis, duelos y carreras de crisis, «¿y si el dólar baja?») y el Temple, que depende de ellos. Se conserva «probar un cambio de pesos».)
+
+## C58 · (2026-11-09) — versión más profunda del informe: qué haría un profesional top, material crudo, métodos, prueba externa y prompt reescrito, literal
+> Quiero una versión más profunda de esta tarea, no una más grande. Antes de reescribirla: (1) di qué haría aquí un profesional top en este campo que yo no estoy pidiendo; (2) nombra el material más crudo del que partiría, en lugar de lo que ya me dieron digerido; (3) nombra los métodos y herramientas específicos que usaría; (4) di qué, aparte de ti o de mí, demostraría que el resultado es correcto. Luego reescribe mi prompt para pedir exactamente eso.
+
+(Respuesta en el chat: las 4 respuestas y el prompt reescrito. Sin cambios de código.)
