@@ -132,7 +132,7 @@ svg.ico{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-wi
 .sello svg{width:13px;height:13px;stroke:var(--plasma)}
 
 /* ---------- Pestañas ---------- */
-.pestanas{position:fixed;z-index:6;left:0;right:0;bottom:0;height:calc(var(--nav-h) + var(--sa-b));padding:0 var(--lado-d) var(--sa-b) var(--lado);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:rgba(5,8,14,.94);border-top:1px solid var(--linea);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:transform .8s var(--muelle)}
+.pestanas{position:fixed;z-index:6;left:0;right:0;bottom:0;height:calc(var(--nav-h) + var(--sa-b));padding:0 var(--lado-d) var(--sa-b) var(--lado);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:rgba(5,8,14,.94);border-top:1px solid var(--linea);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:transform .8s var(--muelle)}
 .tab{position:relative;background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--tenue);font-size:.72rem;font-weight:500;letter-spacing:.02em;padding:6px 2px;transition:color .25s}
 .tab svg{width:22px;height:22px;transition:transform .35s var(--muelle)}
 .tab::before{content:"";position:absolute;top:-1px;left:28%;right:28%;height:2px;background:var(--cobre);box-shadow:0 0 14px var(--cobre);transform:scaleX(0);transition:transform .4s var(--muelle);border-radius:2px}
@@ -406,6 +406,218 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
 .app.montaje .pieza{animation:montar .7s var(--suave) both;animation-delay:var(--d,0s)}
 @keyframes montar{from{opacity:.001;transform:translateY(-6px);clip-path:inset(0 100% 0 0)}}
 
+/* ---------- Segmentos (Reparto · Mapa, secciones del equipo) ---------- */
+.segmento{display:flex;gap:3px;padding:4px;border-radius:999px;background:rgba(4,7,12,.62);border:1px solid var(--linea);min-width:0}
+.segmento button{position:relative;flex:1 1 0;min-width:0;min-height:38px;border:0;background:none;border-radius:999px;color:var(--tenue);font-size:.84rem;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 8px;white-space:nowrap;transition:color .25s,background .25s,box-shadow .25s,transform .18s var(--muelle)}
+.segmento button:hover{color:var(--texto)}
+.segmento button:active{transform:scale(.96)}
+.segmento button[aria-pressed="true"]{color:var(--texto);background:linear-gradient(180deg,rgba(232,148,90,.26),rgba(232,148,90,.08));box-shadow:inset 0 0 0 1px var(--linea-cobre)}
+.segmento button svg{width:16px;height:16px}
+.segmento.plasma button[aria-pressed="true"]{background:linear-gradient(180deg,rgba(111,208,255,.22),rgba(111,208,255,.06));box-shadow:inset 0 0 0 1px rgba(111,208,255,.5);color:var(--plasma-2)}
+.segmento.peq button{font-size:.78rem;min-height:36px}
+.segmento .cuenta-b{position:absolute;top:2px;right:4px;min-width:16px;height:16px;border-radius:8px;background:var(--alto);color:#230806;font-family:var(--f-dato);font-size:.6rem;font-weight:600;display:grid;place-items:center;padding:0 4px;line-height:1}
+.segmento .cuenta-b[hidden]{display:none}
+.vista.modo-mapa .rep{display:none!important}
+.vista.modo-mapa #senal{display:none!important}
+.prop,.formu,.tarjeta-eq,.holo,.monedas,.esc-mon{grid-template-columns:minmax(0,1fr)}
+.vista:not(.modo-mapa) .solo-mapa{display:none!important}
+
+/* ---------- Tu cartera en el mapa ---------- */
+.holo{position:relative;border-radius:var(--r-l);border:1px solid rgba(111,208,255,.3);background:radial-gradient(ellipse 90% 70% at 50% 35%,rgba(14,42,64,.6),rgba(5,9,16,.94) 75%);padding:14px 12px 12px;display:grid;gap:10px;overflow:hidden}
+.holo::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(111,208,255,.035) 0 1px,transparent 1px 3px);pointer-events:none}
+.holo-cab{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;position:relative}
+.mapa-caja{position:relative;width:100%;aspect-ratio:90/34;margin-top:2px}
+.mapa-caja canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mapa-caja .esq{width:12px;height:12px;border-color:rgba(111,208,255,.45)}
+.mapa-caja .esq.a{left:-4px;top:-4px}.mapa-caja .esq.b{right:-4px;top:-4px}.mapa-caja .esq.c{left:-4px;bottom:-4px}.mapa-caja .esq.d{right:-4px;bottom:-4px}
+.barrido{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.barrido::after{content:"";position:absolute;top:0;bottom:0;left:0;width:14%;background:linear-gradient(90deg,transparent,rgba(111,208,255,.09));border-right:1px solid rgba(185,233,255,.3);transform:translateX(-110%);animation:barrido 5.5s linear infinite}
+.holo.vista-ventas .barrido::after{background:linear-gradient(90deg,transparent,rgba(232,148,90,.09));border-right-color:rgba(255,197,155,.4)}
+@keyframes barrido{to{transform:translateX(640%)}}
+.pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;left:0;top:0;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:4px;padding:1px 6px;border-radius:999px;background:rgba(4,8,14,.86);border:1px solid var(--pc,var(--plasma));font-family:var(--f-dato);font-size:.6rem;letter-spacing:.04em;color:var(--texto);white-space:nowrap;transition:left .6s var(--suave),top .6s var(--suave),opacity .4s,border-color .4s}
+.pin b{font-weight:600;color:var(--pc2,var(--plasma-2))}
+.pin.fuera{opacity:0}
+.barras{list-style:none;margin:0;padding:0;display:grid;gap:5px;position:relative}
+.barras li{display:grid;grid-template-columns:minmax(0,7.6em) minmax(0,1fr) 3.4em;gap:8px;align-items:center;font-size:.78rem;color:var(--tenue)}
+.barras li span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.barras .bb{height:5px;border-radius:5px;background:var(--linea);overflow:hidden}
+.barras .bb i{display:block;height:100%;width:var(--w,0%);background:var(--c,var(--plasma));border-radius:5px;transition:width .7s var(--suave);box-shadow:0 0 10px var(--c,var(--plasma))}
+.barras b{font-family:var(--f-dato);font-weight:500;color:var(--texto);text-align:right;font-size:.78rem}
+.casa{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding:14px;border-radius:var(--r);background:var(--cristal-2);border:1px solid var(--linea)}
+.casa-num{font-family:var(--f-disp);font-weight:600;font-size:2.4rem;line-height:1;color:var(--cobre-2);display:flex;align-items:baseline;gap:2px;min-width:3.2ch}
+.casa-num span{font-size:1rem;color:var(--tenue)}
+.casa p{margin:0}
+.casa .txt{font-size:.9rem;margin-top:4px}
+.dual{display:flex;height:6px;border-radius:6px;overflow:hidden;gap:2px;background:var(--linea);margin-top:8px}
+.dual i{display:block;height:100%;transition:flex-grow .7s var(--suave)}
+.dual-ley{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-dato);font-size:.64rem;color:var(--tenue);margin-top:5px;letter-spacing:.03em}
+.monedas{display:grid;gap:10px;padding:14px;border-radius:var(--r);background:var(--cristal-2);border:1px solid var(--linea)}
+.mon-barra{display:flex;height:12px;border-radius:7px;overflow:hidden;gap:2px;background:var(--linea)}
+.mon-barra i{display:block;height:100%;background:var(--c);transition:flex-grow .7s var(--suave);min-width:0}
+.mon-ley{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 12px;font-family:var(--f-dato);font-size:.7rem;color:var(--tenue)}
+.mon-ley li{display:inline-flex;align-items:center;gap:6px}
+.mon-ley i{width:8px;height:8px;border-radius:2px;background:var(--c)}
+.mon-ley b{color:var(--texto);font-weight:500}
+.esc-mon{display:grid;gap:8px;padding:12px;border-radius:12px;border:1px dashed rgba(111,208,255,.4);background:rgba(8,26,40,.4)}
+.esc-mon h3{margin:0;font-family:var(--f-disp);font-weight:500;font-size:1.08rem;line-height:1.25}
+.esc-mon h3 em{font-style:normal;color:var(--plasma-2)}
+.mon-res{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.mon-res b{font-family:var(--f-disp);font-weight:600;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums;color:#ffb4ab;transition:color .3s}
+.mon-res b.cero{color:var(--tenue)}
+.mon-res span{font-size:.8rem;color:var(--tenue);flex:1 1 140px}
+.esc-mon input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--plasma) var(--p,30%),var(--linea-2) var(--p,30%))}
+.esc-mon input[type=range]::-webkit-slider-thumb{background:radial-gradient(circle at 35% 30%,#fff,var(--plasma-2) 30%,var(--plasma) 70%);box-shadow:0 0 0 4px rgba(111,208,255,.22),0 0 16px rgba(111,208,255,.6)}
+.senales-geo{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.senales-geo li{display:grid;grid-template-columns:10px minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border-radius:12px;background:var(--cristal-2);border:1px solid var(--linea);font-size:.86rem}
+.senales-geo li .led{margin:6px 0 0}
+.senales-geo li b{display:block;font-weight:600}
+.senales-geo li small{display:block;color:var(--tenue);font-size:.78rem;margin-top:2px}
+.senales-geo li.medio{border-color:rgba(242,193,78,.4)}
+.senales-geo li.geo{border-color:rgba(255,107,94,.4)}
+.senales-geo li.calma{border-color:rgba(95,211,154,.32)}
+.vivo{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.vivo li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 8px 7px 12px;border-radius:12px;background:var(--cristal-2);border:1px solid var(--linea)}
+.vivo .orbe{width:22px;height:22px}
+.vivo .orbe.anillo::after{top:8px;left:-5px;right:-5px;height:5px}
+.vivo .vn{display:grid;min-width:0;line-height:1.2}
+.vivo .vn b{font-family:var(--f-disp);font-weight:600;letter-spacing:.04em;font-size:.9rem}
+.vivo .vn small{color:var(--tenue);font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.paso{display:flex;align-items:center;gap:4px}
+.paso button{width:36px;height:36px;border-radius:10px;border:1px solid var(--linea-2);background:rgba(4,7,12,.6);display:grid;place-items:center;transition:border-color .2s,transform .15s var(--muelle)}
+.paso button:hover{border-color:var(--cobre)}
+.paso button:active{transform:scale(.9)}
+.paso button[disabled]{opacity:.35;cursor:not-allowed}
+.paso button svg{width:16px;height:16px}
+.paso output{font-family:var(--f-dato);font-size:.88rem;min-width:3.6ch;text-align:center}
+.geo-ficha{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---------- Cartera en equipo ---------- */
+.ava{display:block;flex:none;border-radius:50%}
+.tripu-mini{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--r);background:var(--cristal-2);border:1px solid rgba(111,208,255,.25)}
+.pila{display:flex;flex:none}
+.pila .ava{margin-left:-8px;box-shadow:0 0 0 2px #0b111b}
+.pila .ava:first-child{margin-left:0}
+.tripu-mini p{margin:0;font-size:.82rem;color:var(--tenue);line-height:1.35;min-width:0}
+.tripu-mini b{color:var(--texto);font-weight:600}
+.capi{display:inline-flex;align-items:center;gap:5px;color:var(--oro);font-family:var(--f-dato);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase}
+.capi svg{width:13px;height:13px}
+.tarjeta-eq{border-radius:var(--r-l);border:1px solid rgba(111,208,255,.32);background:linear-gradient(150deg,rgba(14,44,66,.5),rgba(9,14,24,.88));padding:14px;display:grid;gap:10px;position:relative;overflow:hidden}
+.tarjeta-eq h3{margin:0;font-family:var(--f-disp);font-weight:500;font-size:1.18rem;line-height:1.2}
+.tarjeta-eq h3 em{font-style:normal;color:var(--plasma-2)}
+.tarjeta-eq p{margin:0;font-size:.86rem;color:var(--tenue)}
+.prop{border-radius:var(--r-l);border:1px solid var(--linea-2);background:linear-gradient(170deg,rgba(18,26,40,.92),rgba(8,12,20,.94));padding:14px;display:grid;gap:11px;position:relative;overflow:hidden;transition:border-color .5s}
+.prop.aprobada{border-color:rgba(95,211,154,.55)}
+.prop.rechazada{border-color:rgba(255,107,94,.5)}
+.prop.nueva{animation:entrar .6s var(--suave) both}
+.prop-cab{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center}
+.prop-cab div{display:grid;min-width:0;line-height:1.25}
+.prop-cab b{font-weight:600;font-size:.9rem}
+.prop-cab small{font-family:var(--f-dato);font-size:.64rem;color:var(--apagado);letter-spacing:.03em}
+.prop h4{margin:0;font-family:var(--f-disp);font-weight:500;font-size:1.16rem;line-height:1.2}
+.porque{margin:0;padding:8px 12px;border-left:2px solid var(--cobre);background:rgba(232,148,90,.07);border-radius:0 10px 10px 0;font-size:.88rem;color:var(--texto)}
+.porque small{display:block;font-family:var(--f-dato);font-size:.6rem;letter-spacing:.12em;color:var(--cobre);text-transform:uppercase;margin-bottom:2px}
+.ad{list-style:none;margin:0;padding:0;display:grid;border:1px solid var(--linea);border-radius:12px;overflow:hidden}
+.ad li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 10px;border-bottom:1px solid var(--linea);font-size:.8rem;background:rgba(4,7,12,.45)}
+.ad li:last-child{border-bottom:0}
+.ad li>span:first-child{color:var(--tenue)}
+.ad .flecha{display:inline-flex;align-items:center;gap:5px;font-family:var(--f-dato);font-size:.74rem;white-space:nowrap}
+.ad .flecha svg{width:12px;height:12px;color:var(--apagado)}
+.ad .mejor{color:var(--ok)} .ad .peor{color:#ffb4ab}
+.votos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.voto{display:grid;justify-items:center;gap:3px;padding:7px 2px 6px;border-radius:12px;border:1px solid var(--linea);background:rgba(4,7,12,.5);position:relative;min-width:0}
+.voto .ava{width:30px;height:30px}
+.voto small{font-family:var(--f-dato);font-size:.58rem;color:var(--tenue);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+.voto em{font-style:normal;font-size:.66rem;font-weight:600;color:var(--apagado)}
+.voto .marca-v{position:absolute;top:4px;right:calc(50% - 22px);width:16px;height:16px;border-radius:50%;display:grid;place-items:center;background:#0b111b;border:1px solid var(--linea-2)}
+.voto .marca-v svg{width:10px;height:10px;stroke-width:2.6}
+.voto.si{border-color:rgba(95,211,154,.5)} .voto.si em{color:var(--ok)} .voto.si .marca-v{background:var(--ok);border-color:var(--ok);color:#06210f}
+.voto.no{border-color:rgba(255,107,94,.5)} .voto.no em{color:#ffb4ab} .voto.no .marca-v{background:var(--alto);border-color:var(--alto);color:#260705}
+.voto.abs{border-color:var(--linea-2)} .voto.abs em{color:var(--tenue)} .voto.abs .marca-v{background:var(--apagado);color:#0b111b}
+.voto.pend .ava{opacity:.55}
+.voto.llega{animation:llega .7s var(--muelle)}
+@keyframes llega{0%{transform:scale(.82);box-shadow:0 0 0 0 rgba(111,208,255,.7)}60%{transform:scale(1.04);box-shadow:0 0 0 8px rgba(111,208,255,0)}100%{transform:scale(1)}}
+.mayoria{display:grid;gap:5px}
+.may-barra{position:relative;height:6px;border-radius:6px;background:var(--linea);overflow:visible;display:flex}
+.may-barra i{display:block;height:100%;border-radius:6px;background:var(--ok);width:var(--w,0%);transition:width .7s var(--muelle)}
+.may-barra .umbral{position:absolute;top:-4px;bottom:-4px;left:75%;width:2px;background:var(--texto);border-radius:2px;opacity:.7}
+.mayoria small{font-family:var(--f-dato);font-size:.66rem;color:var(--tenue);letter-spacing:.02em}
+.tu-voto{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.tu-voto button{min-height:42px;border-radius:12px;border:1px solid var(--linea-2);background:var(--cristal-2);font-size:.8rem;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:4px;transition:border-color .2s,background .2s,transform .15s var(--muelle)}
+.tu-voto button svg{width:15px;height:15px}
+.tu-voto button:active{transform:scale(.95)}
+.tu-voto button[data-v="si"]:hover,.tu-voto button[data-v="si"][aria-pressed="true"]{border-color:var(--ok)}
+.tu-voto button[data-v="no"]:hover,.tu-voto button[data-v="no"][aria-pressed="true"]{border-color:var(--alto)}
+.tu-voto button[data-v="abs"]:hover,.tu-voto button[data-v="abs"][aria-pressed="true"]{border-color:var(--tenue)}
+.tu-voto button[aria-pressed="true"]{background:rgba(40,52,70,.95)}
+.tu-voto button[disabled]{opacity:.5;cursor:not-allowed}
+.reacs{display:flex;flex-wrap:wrap;gap:6px}
+.reac{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 10px;border-radius:999px;border:1px solid var(--linea-2);background:rgba(4,7,12,.5);font-size:.74rem;color:var(--tenue);transition:border-color .2s,color .2s,transform .15s var(--muelle)}
+.reac b{font-family:var(--f-dato);font-weight:500;color:var(--texto);font-size:.7rem}
+.reac:hover{border-color:var(--plasma);color:var(--texto)}
+.reac[aria-pressed="true"]{border-color:var(--plasma);color:var(--plasma-2);background:rgba(10,34,52,.7)}
+.reac.salta{animation:llega .6s var(--muelle)}
+.veredicto{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-size:.88rem;font-weight:600}
+.veredicto svg{width:20px;height:20px;flex:none}
+.veredicto small{display:block;font-weight:400;color:var(--tenue);font-size:.78rem}
+.veredicto.ok{background:rgba(18,52,40,.6);border:1px solid rgba(95,211,154,.5);color:#b9f1d4}
+.veredicto.ko{background:rgba(60,16,14,.55);border:1px solid rgba(255,107,94,.5);color:#ffc2bb}
+.veredicto.cuenta{background:rgba(8,26,40,.6);border:1px solid rgba(111,208,255,.4);color:var(--plasma-2)}
+.prop.resuelve .veredicto{animation:entrar .6s var(--muelle) both}
+.formu{display:grid;gap:12px;padding:14px;border-radius:var(--r-l);border:1px solid var(--linea-cobre);background:linear-gradient(170deg,rgba(40,24,14,.45),rgba(10,14,22,.9) 50%)}
+.campo{display:grid;gap:6px}
+.campo>label,.campo>.lab{font-size:.84rem;color:var(--tenue)}
+.campo input[type=text],.campo select{width:100%;min-height:44px;border-radius:12px;border:1px solid var(--linea-2);background:rgba(4,7,12,.75);padding:10px 12px;color:var(--texto);font-size:16px}
+.campo select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--tenue) 50%),linear-gradient(135deg,var(--tenue) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+.campo select option{background:#0b111c;color:var(--texto)}
+.campo input[type=text]:focus-visible,.campo select:focus-visible{outline:2px solid var(--cobre-2);outline-offset:1px}
+.campo input[aria-invalid="true"]{border-color:var(--alto)}
+.contador{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-dato);font-size:.66rem;color:var(--apagado)}
+.contador .ok{color:var(--ok)}
+.error{margin:0;color:#ffb4ab;font-size:.8rem;min-height:0}
+.error:empty{display:none}
+.codigo{font-family:var(--f-dato);font-size:1.3rem;letter-spacing:.32em;color:var(--plasma-2);padding:8px 12px;border-radius:12px;border:1px dashed rgba(111,208,255,.45);background:rgba(8,26,40,.5);text-align:center}
+.tripu{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.tripu li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 12px;border-radius:12px;background:var(--cristal-2);border:1px solid var(--linea)}
+.tripu li.tu{border-color:var(--linea-cobre)}
+.tripu li.llega{animation:entrar .6s var(--muelle) both}
+.tripu li.esperando{border-style:dashed;opacity:.7}
+.tripu .ava{width:38px;height:38px}
+.tripu .n{display:grid;min-width:0;line-height:1.25}
+.tripu .n b{font-weight:600;font-size:.92rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tripu .n small{color:var(--tenue);font-size:.74rem}
+.tripu .r{font-family:var(--f-dato);font-size:.62rem;color:var(--apagado);text-align:right;letter-spacing:.04em}
+.rota{display:flex;gap:6px;flex-wrap:wrap;font-family:var(--f-dato);font-size:.66rem;color:var(--tenue)}
+.rota span{padding:3px 8px;border-radius:999px;border:1px solid var(--linea)}
+.rota span.ahora{border-color:var(--oro);color:var(--oro)}
+.retos{display:grid;gap:6px}
+.reto{display:flex;align-items:center;gap:10px;text-align:left;width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--linea-2);background:var(--cristal-2);font-size:.86rem;min-height:44px}
+.reto[aria-pressed="true"]{border-color:var(--oro);background:rgba(50,40,14,.55)}
+.reto svg{width:16px;height:16px;flex:none}
+.equipos{display:flex;flex-wrap:wrap;gap:6px}
+.equipos button{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:4px 12px 4px 4px;border-radius:999px;border:1px solid var(--linea-2);background:var(--cristal-2);font-size:.82rem}
+.equipos button[aria-pressed="true"]{border-color:var(--plasma);color:var(--plasma-2)}
+.equipos .ava{width:30px;height:30px}
+.linea-t{list-style:none;margin:0;padding:0 0 0 18px;display:grid;gap:12px;position:relative}
+.linea-t::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,var(--plasma),var(--linea))}
+.linea-t li{position:relative;display:grid;gap:5px;padding:11px 12px;border-radius:12px;background:var(--cristal-2);border:1px solid var(--linea)}
+.linea-t li::before{content:"";position:absolute;left:-18px;top:16px;width:11px;height:11px;border-radius:50%;background:var(--c,var(--plasma));box-shadow:0 0 10px var(--c,var(--plasma));border:2px solid #070b13}
+.linea-t li.ok{--c:var(--ok)} .linea-t li.ko{--c:var(--alto)} .linea-t li.info{--c:var(--plasma)}
+.linea-t li.nueva{animation:entrar .7s var(--muelle) both}
+.linea-t .cab{display:flex;justify-content:space-between;gap:8px;font-family:var(--f-dato);font-size:.64rem;color:var(--apagado);letter-spacing:.04em;text-transform:uppercase}
+.linea-t b{font-weight:600;font-size:.92rem}
+.linea-t p{margin:0;font-size:.82rem;color:var(--tenue)}
+.linea-t .res{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nav-fila .emb{width:30px;height:30px;justify-self:center}
+
+/* Visor de la tarjeta (sustituye a la descarga) */
+.visor{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:calc(var(--sa-t) + 16px) var(--lado-d) calc(var(--sa-b) + 16px) var(--lado);background:rgba(2,4,8,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.visor[hidden]{display:none}
+.visor-caja{display:grid;gap:12px;justify-items:center;max-width:100%;max-height:100%}
+.visor img{display:block;max-width:min(100%,420px);max-height:calc(100vh - 170px);height:auto;width:auto;aspect-ratio:9/16;border-radius:16px;border:1px solid var(--linea-2);box-shadow:0 30px 80px -20px #000}
+.visor p{margin:0;color:var(--tenue);font-size:.86rem;text-align:center}
+.tab .t-largo{display:none}
+
 /* ---------- Escritorio ---------- */
 @media (min-width:960px){
   :root{--cab-h:68px;--nav-h:0px;--panel-w:440px}
@@ -414,6 +626,8 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
   .cab-der{order:4}
   .pestanas{top:calc(var(--sa-t) + 12px);bottom:auto;left:50%;right:auto;transform:translateX(-50%);height:44px;padding:4px;width:auto;display:flex;gap:2px;background:rgba(10,14,22,.7);border:1px solid var(--linea);border-radius:999px}
   .app.intro .pestanas{transform:translate(-50%,-160%)}
+  .pestanas{left:212px;transform:none}
+  .app.intro .pestanas{transform:translateY(-160%)}
   .tab{flex-direction:row;gap:8px;padding:0 16px;border-radius:999px;font-size:.86rem;height:100%}
   .tab svg{width:18px;height:18px}
   .tab::before{display:none}
@@ -438,6 +652,10 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
 @media (max-width:959px){
   .cab-der .reloj{display:none}
 }
+@media (min-width:1440px){
+  .tab .t-largo{display:inline}
+  .tab .t-corto{display:none}
+}
 @media (min-width:960px) and (max-width:1239px){
   .pestanas{left:200px;transform:none}
   .app.intro .pestanas{transform:translateY(-160%)}
@@ -445,6 +663,8 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
   .cab-der{display:none}
   .sello{font-size:.6rem;letter-spacing:.04em;padding:0 10px}
 }
+@media (min-width:960px) and (max-width:1099px){.tab svg{display:none}.tab .badge{left:auto;right:3px;top:7px}}
+@media (min-width:1240px) and (max-width:1439px){.tab{padding:0 12px}}
 @media (max-width:370px){
   .sello{font-size:.58rem;letter-spacing:.04em}
   .catalogo{grid-template-columns:minmax(0,1fr)}
@@ -509,6 +729,9 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
     <button class="tab" type="button" data-ir="liga">
       <svg class="ico" viewBox="0 0 24 24"><path d="M3 12l7-2.5L12 4l2 5.5 7 2.5-7 2.5L12 20l-2-5.5z"/></svg>
       <span>Liga</span></button>
+    <button class="tab" type="button" data-ir="equipo">
+      <svg class="ico" viewBox="0 0 24 24"><circle cx="7" cy="8.5" r="2.6"/><circle cx="17" cy="8.5" r="2.6"/><circle cx="12" cy="16" r="2.6"/><path d="M9.3 9.6 10.8 13.8M14.7 9.6 13.2 13.8M9.6 8.5h4.8"/></svg>
+      <span><span class="t-corto">Equipo</span><span class="t-largo">Cartera en equipo</span></span><i class="badge" id="badge-eq" hidden></i></button>
   </nav>
 
   <aside class="hoja" id="hoja" aria-label="Panel de control">
@@ -545,16 +768,67 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
           <h2 class="tit" id="t-sistema">Tu sistema</h2>
           <p class="sub" id="sis-sub">Toca un planeta para verlo de cerca.</p>
         </header>
-        <div class="ficha" id="ficha" hidden style="--i:1" aria-live="polite"></div>
-        <div class="semaforos" id="semaforos" style="--i:1" aria-live="polite"></div>
-        <div class="senal" id="senal" style="--i:2" aria-live="polite"></div>
-        <h3 class="eti" style="--i:3">Planetas · toca para fijar objetivo</h3>
-        <ul class="posiciones" id="posiciones" style="--i:3"></ul>
-        <div class="fila-btn" style="--i:4">
+        <div class="segmento" id="sis-seg" role="group" aria-label="Qué ver de tu sistema" style="--i:1">
+          <button type="button" data-modo="reparto" aria-pressed="true"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5V12l6 6"/></svg>Reparto</button>
+          <button type="button" data-modo="mapa" aria-pressed="false"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.6 2.4 3.8 5.2 3.8 8.5s-1.2 6.1-3.8 8.5c-2.6-2.4-3.8-5.2-3.8-8.5s1.2-6.1 3.8-8.5z"/></svg>Mapa</button>
+        </div>
+        <div class="ficha rep" id="ficha" hidden style="--i:1" aria-live="polite"></div>
+        <div class="semaforos rep" id="semaforos" style="--i:1" aria-live="polite"></div>
+        <div class="senal rep" id="senal" style="--i:2" aria-live="polite"></div>
+        <h3 class="eti rep" style="--i:3">Planetas · toca para fijar objetivo</h3>
+        <ul class="posiciones rep" id="posiciones" style="--i:3"></ul>
+
+        <!-- Tu cartera en el mapa (datos de ejemplo) -->
+        <div class="holo solo-mapa vista-ventas" id="mapa-holo" style="--i:2">
+          <div class="holo-cab"><p class="eti plasma"><span class="pt"></span>Tu cartera en el mapa</p><span class="chip sim">Datos de ejemplo</span></div>
+          <div class="segmento plasma peq" id="mapa-seg" role="group" aria-label="Qué muestra el mapa">
+            <button type="button" data-mv="sede" aria-pressed="false">Dónde tienen la sede</button>
+            <button type="button" data-mv="ventas" aria-pressed="true">Dónde venden</button>
+          </div>
+          <div class="mapa-caja" id="mapa-caja">
+            <canvas id="mapa-cv" role="img" aria-label="Mapa del mundo de puntos"></canvas>
+            <div class="barrido" aria-hidden="true"></div>
+            <div class="pins" id="mapa-pins" aria-hidden="true"></div>
+            <span class="esq a" aria-hidden="true"></span><span class="esq b" aria-hidden="true"></span><span class="esq c" aria-hidden="true"></span><span class="esq d" aria-hidden="true"></span>
+          </div>
+          <p class="nota" id="mapa-explica"></p>
+          <ul class="barras" id="mapa-barras" aria-live="polite"></ul>
+        </div>
+        <div class="casa solo-mapa" style="--i:3" aria-live="polite">
+          <div class="casa-num"><b id="casa-n">0</b><span>%</span></div>
+          <div><p class="eti">Sesgo de casa</p><p class="txt" id="casa-txt"></p>
+            <div class="dual" aria-hidden="true"><i id="casa-es" style="background:var(--cobre)"></i><i id="casa-resto" style="background:var(--plasma)"></i></div>
+            <div class="dual-ley" aria-hidden="true"><span id="casa-l1"></span><span id="casa-l2"></span></div></div>
+        </div>
+        <div class="monedas solo-mapa" style="--i:4">
+          <p class="eti"><span class="pt"></span>Exposición a monedas · según dónde cotiza</p>
+          <div class="mon-barra" id="mon-barra" aria-hidden="true"></div>
+          <ul class="mon-ley" id="mon-ley" aria-label="Peso por moneda"></ul>
+          <div class="esc-mon">
+            <p class="eti plasma"><span class="pt"></span>Escenario ilustrativo</p>
+            <h3 id="mon-q"></h3>
+            <div class="segmento plasma peq" id="mon-elige" role="group" aria-label="Moneda que baja frente al euro"></div>
+            <input type="range" id="mon-x" min="0" max="30" step="1" value="10" aria-label="Cuánto baja la moneda frente al euro, en %">
+            <div class="mon-res" aria-live="polite"><b id="mon-ef">0 %</b><span>efecto aproximado en tu cartera medida en euros</span></div>
+            <p class="nota" id="mon-form"></p>
+            <p class="nota">Tipos de cambio de ejemplo · en la versión real, tipos del BCE. No es una previsión.</p>
+          </div>
+        </div>
+        <div class="solo-mapa" style="--i:5;display:grid;gap:8px">
+          <h3 class="eti">Señales geográficas · orientativas, no normas</h3>
+          <ul class="senales-geo" id="senales-geo" aria-live="polite"></ul>
+        </div>
+        <div class="solo-mapa" style="--i:6;display:grid;gap:8px">
+          <h3 class="eti">Ajusta pesos · el mapa reacciona</h3>
+          <ul class="vivo" id="mapa-vivo"></ul>
+          <p class="nota">Sede, moneda y ventas por región son datos de ejemplo de empresas inventadas.</p>
+        </div>
+
+        <div class="fila-btn rep" style="--i:4">
           <button class="btn" id="b-igual" type="button"><svg class="ico" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg>Pesos iguales</button>
           <button class="btn fant" id="b-cambiar" type="button"><svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Cambiar empresas</button>
         </div>
-        <p class="nota" style="--i:5">Referencias orientativas de Klever, no normas. Concentración media desde una posición del 25 % o un sector del 40 %; alta desde 40 % o 60 %.</p>
+        <p class="nota rep" style="--i:5">Referencias orientativas de Klever, no normas. Concentración media desde una posición del 25 % o un sector del 40 %; alta desde 40 % o 60 %.</p>
       </section>
 
       <!-- 3 · TORMENTA -->
@@ -573,6 +847,26 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
         <ol class="flota" id="flota" style="--i:3" aria-label="Clasificación de la Liga"></ol>
         <p class="nota" style="--i:4">Hasta 100 puntos por semana: Equilibrio 50, Aprendizaje 30, Constancia 20. Desempate: semanas con concentración baja. Apodos inventados. Solo mayores de 18.</p>
       </section>
+
+      <!-- 5 · CARTERA EN EQUIPO -->
+      <section class="vista" id="v-equipo" aria-labelledby="t-equipo" hidden>
+        <header class="vh" style="--i:0">
+          <p class="eti plasma"><span class="pt"></span>Cartera en equipo · simulada</p>
+          <h2 class="tit" id="t-equipo">Cartera <em>en equipo</em></h2>
+          <p class="sub" id="eq-sub"></p>
+        </header>
+        <div class="tripu-mini" id="eq-mini" style="--i:1"></div>
+        <div class="semaforos" id="eq-sem" style="--i:1" aria-live="polite"></div>
+        <div class="segmento peq" id="eq-seg" role="group" aria-label="Secciones del equipo" style="--i:2">
+          <button type="button" data-s="propuestas" aria-pressed="true">Propuestas<span class="cuenta-b" id="eq-cuenta" hidden></span></button>
+          <button type="button" data-s="tripulacion" aria-pressed="false">Tripulación</button>
+          <button type="button" data-s="historial" aria-pressed="false">Historial</button>
+          <button type="button" data-s="liga" aria-pressed="false">Liga</button>
+        </div>
+        <div id="eq-cuerpo" style="--i:3;display:grid;gap:14px;min-width:0"></div>
+        <p class="nota" style="--i:4">Klever nunca propone empresas, solo pesos. Votos y apodos simulados. Empresas inventadas.</p>
+        <p class="sr" id="eq-aviso" aria-live="polite"></p>
+      </section>
     </div>
   </aside>
 
@@ -585,6 +879,15 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
     </div>
     <button class="saltar" id="b-saltar" type="button">Saltar entrada <kbd>Esc</kbd></button>
     <div class="intro-barra" aria-hidden="true"></div>
+  </div>
+
+  <div class="visor" id="visor" role="dialog" aria-modal="true" aria-labelledby="visor-t" hidden>
+    <div class="visor-caja">
+      <p class="eti" id="visor-t"><span class="pt"></span>Tu tarjeta · haz una captura para compartirla</p>
+      <img id="visor-img" alt="">
+      <p>Simulación sin dinero real. Pulsa Esc o «Cerrar» para volver.</p>
+      <button class="btn" type="button" id="visor-cerrar">Cerrar</button>
+    </div>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -629,6 +932,78 @@ const CAT = [
   {id:'TECHO', n:'Techo Patrimonio',       s:'Inmobiliario', h:[0,null,1,1,0]}
 ];
 const CATI = Object.fromEntries(CAT.map(c=>[c.id,c]));
+/* Geografía y moneda (datos de ejemplo, inventados).
+   ventas por región: España, resto de Europa, Norteamérica, Latinoamérica, Asia-Pacífico, otros (suman 100) */
+const GEO = {
+  NUBE:['US','USD',[4,16,58,6,12,4]],  CHIPA:['JP','JPY',[2,14,22,4,54,4]],
+  VITA:['CH','CHF',[6,38,30,6,14,6]],  GENO:['GB','GBP',[3,52,24,4,12,5]],
+  SOLAR:['ES','EUR',[62,24,4,8,0,2]],  ATLAS:['ES','EUR',[48,18,8,20,2,4]],
+  FARO:['ES','EUR',[70,8,2,18,0,2]],   AGORA:['DE','EUR',[10,64,10,8,4,4]],
+  MERCA:['ES','EUR',[74,20,0,4,0,2]],  LUMA:['FR','EUR',[12,46,16,6,16,4]],
+  FORJA:['US','USD',[2,14,66,10,6,2]], TECHO:['ES','EUR',[88,12,0,0,0,0]]
+};
+CAT.forEach(c=>{const g=GEO[c.id];c.sede=g[0];c.mon=g[1];c.v=g[2];});
+// x,y = lon/lat del punto; lx,ly = dónde va la etiqueta
+const PAIS = {
+  ES:{n:'España',ch:'E',x:-3.7,y:40.3,lx:-30,ly:12}, US:{n:'EE. UU.',ch:'U',x:-98,y:39,lx:-148,ly:28},
+  GB:{n:'Reino Unido',ch:'K',x:-2,y:53.5,lx:-34,ly:64}, CH:{n:'Suiza',ch:'S',x:8.2,y:46.8,lx:46,ly:60},
+  DE:{n:'Alemania',ch:'D',x:10.4,y:51,lx:40,ly:72}, FR:{n:'Francia',ch:'F',x:2.4,y:46.6,lx:-36,ly:44},
+  JP:{n:'Japón',ch:'J',x:138.5,y:36.5,lx:150,ly:56}
+};
+const REG = [
+  {k:'ES',n:'España',chs:'E',x:-3.7,y:40.3,lx:-30,ly:12},
+  {k:'EU',n:'Resto de Europa',chs:'eKDFS',x:16,y:51,lx:44,ly:68},
+  {k:'NA',n:'Norteamérica',chs:'Un',x:-100,y:44,lx:-146,ly:30},
+  {k:'LA',n:'Latinoamérica',chs:'l',x:-60,y:-10,lx:-108,ly:-18},
+  {k:'AP',n:'Asia-Pacífico',chs:'aJ',x:100,y:32,lx:150,ly:12},
+  {k:'OT',n:'Otros',chs:'o',x:22,y:4,lx:-4,ly:-34}
+];
+const MON = {
+  EUR:{art:'el euro',s:'€',c:'#e8945a',tc:1},
+  USD:{art:'el dólar',s:'$',c:'#6fd0ff',tc:1.08},
+  GBP:{art:'la libra',s:'£',c:'#a98bff',tc:0.85},
+  CHF:{art:'el franco suizo',s:'CHF',c:'#4fd1a1',tc:0.94},
+  JPY:{art:'el yen',s:'¥',c:'#ff7aa2',tc:162}
+};
+// Máscara de tierra de baja resolución (90 × 34 celdas de 4°, de 78° N a 58° S).
+// Letra = zona: E España · U EE. UU. · K Reino Unido · S Suiza · D Alemania · F Francia · J Japón
+// e resto de Europa · n Canadá/Groenlandia · l Latinoamérica · a Asia-Pacífico · o otros · . mar
+const MASCARA=[
+'..............nnnn.nnnnnn...nnnnnnnnnnnn........e..........ooo.....oooooo......oo.........',
+'.....nn.......nnnnnnnnnnnnnn...nnnnnnnnn...........ee.....oo..ooooooooooooooooooooooo.....',
+'.ooonnnnnnnnnnnnnnnnnnnnnonnnooooooooooooooooooooooooo.o.o..o.oooooooooooooo...........o..',
+'o.onnnnnnnnnnnnnnnnnnnnnnonnnooonnoooooooooooooeeeoeeooooooooooooooooooooooooooooooooooooo',
+'...nnnnnnnnnnnnnnnnnnn...nnnn....n............eeeeeeoooooooooooooooooooooooooooooooo.ooo..',
+'.....nn.....nnnnnnnnnnnn.nnnnnn............KK..ee.eeoooooooooooooooooooooooooooo....oo....',
+'.............nnnnnnnnnnnnnnnnnn...........eKKKeDDeeeeeoooooooaaaaooooooooooaooooo...o.....',
+'.............nUUUUUUUUUnnnnnnnnn............FFFSeeeeeeeooooooaaaaaaaaaaaaaaaaaooo.........',
+'..............UUUUUUUUUUnnUUnn.............EFFFeeeee.oooo.oooaaaaaaaaaaaaaaaaao.J.........',
+'..............UUUUUUUUUUUUU...............eEEE..e.eooooooooooaaaaaaaaaaaaaaaa...J.........',
+'..............UUUUUUUUUUUU.................EEooo....oooooooooaaaaaaaaaaaaaaaaaJJJ.........',
+'...............UUUUUUUUUU.................oooooooooooooooooooaaaaaaaaaaaaaaa.J............',
+'................llllU...U................ooooooooooooooooooooaaaaaaaaaaaaaaa..............',
+'.................llll...l................oooooooooooooooooooooaaaaaaaaaaaaaa..............',
+'..................lll.l..l.l.............ooooooooooooooooooo..aaaaa.aaaaa.................',
+'....................llll.................oooooooooooooooooo....aaa..aaaa...a..............',
+'.......................l..ll.............ooooooooooooooooo.....aa....aaaa..a..............',
+'........................lllllll..........ooooooooooooooooo......aa........a.a.............',
+'.........................llllllll..........oo.ooooooooooo............aa..aa...............',
+'.........................lllllllll.............ooooooooo..............a.aaaa..a...........',
+'........................llllllllllll...........oooooooo...............aa.a.a..aaaaa.......',
+'.........................llllllllllll...........ooooooo................aaa.....aaa........',
+'.........................lllllllllll............ooooooo.......................a.a.........',
+'..........................llllllllll............ooooooo.oo..................aaaaaa........',
+'...........................llllllll.............oooooo..oo................aaaaaaaa........',
+'...........................llllllll.............oooooo..o................aaaaaaaaaa.......',
+'...........................llllll................oooo....................aaaaaaaaaaa......',
+'...........................lllll.................oooo.....................aaaaaaaaaa......',
+'..........................lllll...........................................a....aaaa.....a.',
+'..........................llll...................................................a......aa',
+'..........................lll....................................................a.....a..',
+'..........................lll.............................................................',
+'..........................ll..............................................................',
+'...........................ll.............................................................'
+];
 const cumple = c => c.h.filter(x=>x===1).length;
 const conAnillo = c => cumple(c) >= 4;
 
@@ -718,7 +1093,7 @@ const ICO = {
   aguantar:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 3v18M5 9l7-6 7 6"/><path d="M4 21h16"/></svg>',
   reeq:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 4v16M5 8h14"/><path d="M5 8l-2.5 6a3 3 0 0 0 5 0zM19 8l-2.5 6a3 3 0 0 0 5 0z"/></svg>',
   vender:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 3v14M6 11l6 6 6-6"/><path d="M4 21h16"/></svg>',
-  descarga:'<svg class="ico" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  descarga:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/><rect x="8" y="8" width="8" height="8" rx="1.5"/></svg>',
   enlace:'<svg class="ico" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
   rayo:'<svg class="ico" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
   otra:'<svg class="ico" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
@@ -988,7 +1363,7 @@ function Mundo(canvas){
   // etiquetas HTML
   const capaEt=$('#etiquetas');
   M.etiquetas=function(){
-    capaEt.querySelectorAll('.etq:not(.nave)').forEach(e=>e.remove());
+    capaEt.querySelectorAll('.etq:not(.nave):not(.eq)').forEach(e=>e.remove());
     planetas.forEach(P=>{const b=document.createElement('button');b.type='button';b.className='etq'+(P.encendido?'':' apagada');b.dataset.id=P.id;b.style.setProperty('--c',P.col);
       b.innerHTML=`<i></i>${P.id} <span></span>`;b.addEventListener('click',()=>App.enfocar(P.id));capaEt.appendChild(b);P.et=b;});
     M.textoEtiquetas(S.cartera);
@@ -1084,6 +1459,7 @@ function Mundo(canvas){
       const dir=ojo.sub(centro).normalize();
       volarA({th:Math.atan2(dir.x,dir.z),ph:Math.acos(dir.y),r:encaje(22,.42),obj:centro},dur==null?2.2:dur);
     }
+    else if(nombre==='equipo')volarA({th:.42,ph:1.06,r:encaje(eqR*1.1),obj:EQ_POS.clone()},dur==null?2.6:dur);
   };
   M.enfocar=function(id){
     const P=planetas.find(q=>q.id===id);if(!P)return;C.sigue=P;
@@ -1128,6 +1504,73 @@ function Mundo(canvas){
     v2.set(x/window.innerWidth*2-1,-(y/window.innerHeight)*2+1);ray.setFromCamera(v2,cam);
     const hits=ray.intersectObjects(planetas.map(P=>P.hit));
     if(hits.length)App.enfocar(hits[0].object.userData.id);
+  }
+
+
+  // ===== Sistema del equipo: segunda estrella (azul plasma), a la que vuela la cámara =====
+  const EQ_POS=new THREE.Vector3(250,34,-230);
+  const eqG=new THREE.Group();eqG.position.copy(EQ_POS);escena.add(eqG);
+  const texSolAzul=(()=>{const c=document.createElement('canvas');c.width=256;c.height=128;const x=c.getContext('2d');const img=x.createImageData(256,128);const d=img.data;
+    for(let j=0;j<128;j++){const lat=(j/128-.5)*Math.PI;for(let i=0;i<256;i++){const lon=i/256*Math.PI*2;const px=Math.cos(lat)*Math.cos(lon),py=Math.sin(lat),pz=Math.cos(lat)*Math.sin(lon);
+      const n=fbm(px*4,py*4,pz*4,9,4);const col=mezcla([70,160,255],[236,250,255],clamp(n*1.5-.2,0,1));const k=(j*256+i)*4;d[k]=col[0];d[k+1]=col[1];d[k+2]=col[2];d[k+3]=255;}}
+    x.putImageData(img,0,0);return c;})();
+  const eqNucleo=new THREE.Mesh(new THREE.SphereGeometry(2.5,40,28),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(texSolAzul)}));eqG.add(eqNucleo);
+  const texBrilloAzul=new THREE.CanvasTexture(texRadial([[0,'rgba(226,246,255,1)'],[.12,'rgba(150,215,255,.85)'],[.32,'rgba(111,208,255,.3)'],[.6,'rgba(111,208,255,.08)'],[1,'rgba(111,208,255,0)']],256));
+  const eqBrillos=[[12,.95],[32,.5],[95,.2]].map(b=>{const s=new THREE.Sprite(new THREE.SpriteMaterial({map:texBrilloAzul,transparent:true,opacity:b[1],depthWrite:false,blending:THREE.AdditiveBlending}));s.scale.set(b[0],b[0],1);s.userData.base=b;eqG.add(s);return s;});
+  const eqLuz=new THREE.PointLight(0xd6eeff,1.9,150,1);eqLuz.position.copy(EQ_POS);escena.add(eqLuz);
+  const ruta=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),EQ_POS.clone()]),new THREE.LineDashedMaterial({color:0x6fd0ff,dashSize:2.5,gapSize:4,transparent:true,opacity:0,depthWrite:false}));
+  ruta.computeLineDistances();ruta.visible=false;escena.add(ruta);
+  let eqP=[];let eqR=24;
+  function crearPlanetaEq(id,i){
+    const c=CATI[id];const sc=SECT[c.s];
+    if(!cacheTex[id])cacheTex[id]=new THREE.CanvasTexture(texturaPlaneta(sc.c,sc.tipo,(i+5)*89+id.charCodeAt(0)));
+    const g=new THREE.Group();
+    const mat=new THREE.MeshStandardMaterial({map:cacheTex[id],roughness:.82,metalness:.05,emissive:new THREE.Color(sc.c),emissiveIntensity:.08});
+    const m=new THREE.Mesh(new THREE.SphereGeometry(1,40,28),mat);g.add(m);
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(1.14,32,22),atmMat(sc.c)));
+    if(conAnillo(c)){const an=new THREE.Mesh(new THREE.RingGeometry(1.45,2.35,80),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(texAnillo(sc.c)),transparent:true,side:THREE.DoubleSide,depthWrite:false,opacity:.95}));an.rotation.x=-Math.PI/2+.42;an.rotation.y=.18;g.add(an);}
+    eqG.add(g);
+    const fant=new THREE.Mesh(new THREE.SphereGeometry(1,22,14),new THREE.MeshBasicMaterial({color:0x8fdcff,wireframe:true,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));eqG.add(fant);
+    const a=6.6+i*4;const pts=[];for(let k=0;k<=128;k++){const t=k/128*Math.PI*2;pts.push(new THREE.Vector3(Math.cos(t)*a,0,Math.sin(t)*a));}
+    const orb=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0x6fd0ff,transparent:true,opacity:.22,depthWrite:false}));eqG.add(orb);
+    const et=document.createElement('span');et.className='etq eq apagada';et.setAttribute('aria-hidden','true');et.style.setProperty('--c',sc.c);capaEt.appendChild(et);
+    const r=rng(i*29+11);
+    return {id,c,col:sc.c,g,m,mat,fant,orb,a,th:r()*Math.PI*2,radio:.001,rObj:.001,gr:.001,gObj:.001,w:0,wp:null,et,etW:0,txt:'',pos:new THREE.Vector3()};
+  }
+  function quitarPlanetaEq(P){eqG.remove(P.g);eqG.remove(P.fant);eqG.remove(P.orb);P.orb.geometry.dispose();P.m.geometry.dispose();P.mat.dispose();P.et.remove();}
+  M.equipo=function(cart,previa,reiniciar){
+    if(reiniciar){eqP.forEach(quitarPlanetaEq);eqP=[];}
+    const ids=[...new Set(cart.map(p=>p.id).concat(previa?previa.map(p=>p.id):[]))];
+    eqP.filter(P=>!ids.includes(P.id)).forEach(quitarPlanetaEq);
+    eqP=eqP.filter(P=>ids.includes(P.id));
+    ids.forEach(id=>{if(!eqP.some(P=>P.id===id)){const usados=eqP.map(P=>Math.round((P.a-6.6)/4));let k=0;while(usados.includes(k))k++;eqP.push(crearPlanetaEq(id,k));}});
+    eqP.forEach(P=>{const w=pesoDe(cart,P.id);const wp=previa?pesoDe(previa,P.id):null;P.w=w;P.wp=wp;
+      P.rObj=w>0?radioDe(w)*.92:.001;P.gObj=previa&&wp>0&&wp!==w?radioDe(wp)*.92:.001;
+      const t=wp!=null&&wp!==w?`${P.id} ${w} → ${wp} %`:`${P.id} ${w} %`;if(t!==P.txt){P.txt=t;P.et.innerHTML=`<i></i>${P.id} <span>${t.slice(P.id.length+1)}</span>`;P.etW=0;}
+      P.quita=previa&&wp===0&&w>0;P.entra=previa&&w===0&&wp>0;});
+    const rAnt=eqR;eqR=Math.max(14,...eqP.map(P=>P.a))+4;
+    if(eqR>rAnt+.5&&App.pantalla==='equipo'&&!reiniciar)M.toma('equipo',1.4);
+  };
+  M.eqEncaje=()=>encaje(eqR);
+  function bucleEquipo(t,dt,W,H){
+    const enEq=App.pantalla==='equipo';
+    ruta.material.opacity=lerp(ruta.material.opacity,enEq?.38:0,.05);ruta.visible=ruta.material.opacity>.01;
+    eqNucleo.rotation.y+=dt*.05;
+    eqBrillos.forEach((b,i)=>{const s=b.userData.base[0]*(1+.04*Math.sin(t*1.3+i));b.scale.set(s,s,1);});
+    eqP.forEach(P=>{
+      P.th+=dt*.12/Math.pow(P.a/6.6,1.5);P.pos.set(Math.cos(P.th)*P.a,0,Math.sin(P.th)*P.a);
+      P.g.position.copy(P.pos);P.radio=lerp(P.radio,P.rObj,.08);P.g.scale.setScalar(Math.max(.001,P.radio));P.g.visible=P.radio>.02;P.m.rotation.y+=dt*.25;
+      P.gr=lerp(P.gr,P.gObj,.08);P.fant.position.copy(P.pos);P.fant.scale.setScalar(Math.max(.001,P.gr*1.06));P.fant.visible=P.gObj>.01;
+      P.fant.material.opacity=P.gObj>.01?.32+.12*Math.sin(t*3):0;P.fant.rotation.y+=dt*.4;
+      if(P.quita){P.mat.emissive.setRGB(.9,.15,.08);P.mat.emissiveIntensity=.35+.25*Math.sin(t*4);}else{P.mat.emissive.set(P.col);P.mat.emissiveIntensity=.08;}
+      P.orb.material.opacity=P.w>0?(P.quita?.12:.22):(P.entra?.45:0);
+      // etiqueta
+      const ok=enEq&&(P.radio>.05||P.gr>.05);
+      if(ok){tmp.copy(P.pos).add(EQ_POS);tmp.y+=Math.max(P.radio,P.gr)*1.15;tmp.project(cam);
+        const x=(tmp.x*.5+.5)*W,y=(-tmp.y*.5+.5)*H;if(!P.etW)P.etW=P.et.offsetWidth;let lx=x+10;if(lx+P.etW>(off.der||W)-8)lx=x-10-P.etW;
+        P.et.style.transform=`translate3d(${lx.toFixed(1)}px,${(y-12).toFixed(1)}px,0)`;P.et.classList.toggle('apagada',tmp.z>1);}
+      else P.et.classList.add('apagada');
+    });
   }
 
   // tamaño
@@ -1228,7 +1671,7 @@ function Mundo(canvas){
     renderer.render(escena,cam);
 
     // etiquetas y retícula (DOM)
-    const mostrarPl=App.pantalla!=='liga';
+    const mostrarPl=App.pantalla!=='liga'&&App.pantalla!=='equipo';
     planetas.forEach(P=>{if(!P.et)return;tmp.copy(P.pos);tmp.y+=P.radio*1.1;tmp.project(cam);
       const detras=tmp.z>1;const x=(tmp.x*.5+.5)*W,y=(-tmp.y*.5+.5)*H;
       const ok=mostrarPl&&P.encendido&&!detras;
@@ -1239,6 +1682,7 @@ function Mundo(canvas){
     naves.forEach(n=>{const et=n.userData.et;if(!et)return;const ver=App.pantalla==='liga'&&(n.userData.tu||n.userData.rk<=(off.rw<600?1:3));
       n.getWorldPosition(tmp);tmp.y+=1.4;tmp.project(cam);const x=(tmp.x*.5+.5)*W,y=(-tmp.y*.5+.5)*H;
       et.style.transform=`translate3d(${(x+10).toFixed(1)}px,${(y-22).toFixed(1)}px,0)`;et.classList.toggle('apagada',!ver||tmp.z>1);});
+    bucleEquipo(t,dt,W,H);
     if(App.foco&&mostrarPl){const P=planetas.find(q=>q.id===App.foco);if(P){tmp.copy(P.pos).project(cam);const x=(tmp.x*.5+.5)*W,y=(-tmp.y*.5+.5)*H;
       const d=cam.position.distanceTo(P.pos);const pxr=P.radio/(d*Math.tan(cam.fov*Math.PI/360))*H/2;const tamR=clamp(pxr*2.6+26,40,260);
       ret.hidden=false;ret.style.width=ret.style.height=tamR+'px';ret.style.transform=`translate3d(${(x-tamR/2).toFixed(1)}px,${(y-tamR/2).toFixed(1)}px,0)`;}}
@@ -1278,6 +1722,7 @@ function Plano(){
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
     const A=analisis(S.cartera);const cx=W/2,cy=H/2+8;
     if(App.pantalla==='liga'){P.pintarFlota(W,H);return;}
+    if(App.pantalla==='equipo'){P.pintarEquipo(W,H);return;}
     const n=S.cartera.length;const maxR=Math.min(W*.4,(H*.5-30)/.42);
     const e=A.conc==='Alta'?.28:A.conc==='Media'?.12:.03;
     let g=`<defs><radialGradient id="pg-sol"><stop offset="0" stop-color="#fff6e8"/><stop offset=".25" stop-color="#ffd2a8"/><stop offset=".6" stop-color="#e8945a" stop-opacity=".35"/><stop offset="1" stop-color="#e8945a" stop-opacity="0"/></radialGradient>`;
@@ -1308,6 +1753,31 @@ function Plano(){
     svg.innerHTML=g;
     svg.querySelectorAll('.pl').forEach(el=>{const id=el.dataset.id;el.addEventListener('click',()=>App.enfocar(id));el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();App.enfocar(id);}});});
   };
+
+  P.pintarEquipo=function(W,H){
+    const eq=eqA();const cart=eq.cartera;const prev=S.eqPrevia;
+    const ids=[...new Set(cart.map(p=>p.id).concat(prev?prev.map(p=>p.id):[]))];
+    const n=ids.length;const cx=W/2,cy=H/2+8;const maxR=Math.min(W*.4,(H*.5-30)/.42);
+    let g=`<defs><radialGradient id="pg-eq"><stop offset="0" stop-color="#eefaff"/><stop offset=".25" stop-color="#b9e9ff"/><stop offset=".6" stop-color="#6fd0ff" stop-opacity=".32"/><stop offset="1" stop-color="#6fd0ff" stop-opacity="0"/></radialGradient>`;
+    ids.forEach(id=>{const c=SECT[CATI[id].s].c;g+=`<radialGradient id="pe-${id}" cx="35%" cy="32%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset=".22" stop-color="${c}"/><stop offset=".8" stop-color="${c}" stop-opacity=".55"/><stop offset="1" stop-color="#05070c"/></radialGradient>`;});
+    g+=`</defs>${estrellas}<circle cx="${cx}" cy="${cy}" r="${Math.min(W,H)*.22}" fill="url(#pg-eq)" opacity=".8"/>`;
+    const ang=[-.4,2.2,4.0,1.0,3.2,5.2,.3,2.9];
+    ids.forEach((id,i)=>{const a=maxR*(.3+.7*(n>1?i/(n-1):.5));const w=pesoDe(cart,id);
+      g+=`<ellipse cx="${cx}" cy="${cy}" rx="${a}" ry="${a*.42}" fill="none" stroke="#6fd0ff" stroke-opacity="${w>0?.3:.5}" ${w>0?'':'stroke-dasharray="3 4"'} transform="rotate(-6 ${cx} ${cy})"/>`;});
+    g+=`<circle cx="${cx}" cy="${cy}" r="${Math.min(W,H)*.045}" fill="#eaf7ff"/>`;
+    ids.forEach((id,i)=>{
+      const c=CATI[id];const col=SECT[c.s].c;const a=maxR*(.3+.7*(n>1?i/(n-1):.5));const b=a*.42;const rot=-6*Math.PI/180;const th=ang[i%8];
+      const x=a*Math.cos(th),y=b*Math.sin(th);const px=cx+x*Math.cos(rot)-y*Math.sin(rot),py=cy+x*Math.sin(rot)+y*Math.cos(rot);
+      const w=pesoDe(cart,id),wp=prev?pesoDe(prev,id):null;const esc2=Math.min(W,H)<300?.8:1;
+      const rad=w>0?clamp(4+Math.sqrt(w)*2.3,7,24)*esc2:0;
+      if(wp!=null&&wp!==w&&wp>0){const rg=clamp(4+Math.sqrt(wp)*2.3,7,24)*esc2;g+=`<circle cx="${px}" cy="${py}" r="${rg}" fill="none" stroke="#b9e9ff" stroke-width="1.4" stroke-dasharray="3 3"/>`;}
+      if(rad){g+=`<circle cx="${px}" cy="${py}" r="${rad}" fill="url(#pe-${id})"${wp===0?' opacity=".45"':''}/>`;
+        if(conAnillo(c))g+=`<ellipse cx="${px}" cy="${py}" rx="${rad*1.9}" ry="${rad*.5}" fill="none" stroke="${col}" stroke-opacity=".8" stroke-width="1.6" transform="rotate(-16 ${px} ${py})"/>`;}
+      const r0=Math.max(rad,8);const izq=px+r0+110>W;const txt=wp!=null&&wp!==w?`${w} → ${wp} %`:`${w} %`;
+      g+=`<text x="${izq?px-r0-8:px+r0+8}" text-anchor="${izq?'end':'start'}" y="${py-r0+2}" font-family="IBM Plex Mono, monospace" font-size="11" fill="#eef2f7" letter-spacing=".06em">${id} <tspan fill="#b9e9ff">${txt}</tspan></text>`;
+    });
+    svg.innerHTML=g;
+  };
   P.pintarFlota=function(W,H){
     const rk=App.ranking();let g=estrellas;const cx=W/2,cy=H*.16;const estrecho=W<600;
     g+=`<defs><radialGradient id="pg-fl"><stop offset="0" stop-color="#ffd2a8" stop-opacity=".55"/><stop offset=".25" stop-color="#e8945a" stop-opacity=".18"/><stop offset="1" stop-color="#e8945a" stop-opacity="0"/></radialGradient></defs><circle cx="${W*.5}" cy="${H*.04}" r="${Math.min(W,H)*.42}" fill="url(#pg-fl)"/><circle cx="${W*.5}" cy="${H*.04}" r="6" fill="#fff3e0"/>`;
@@ -1337,7 +1807,7 @@ function regionRect(){return $('#region').getBoundingClientRect();}
 function actualizarRegion(){if(W3)W3.region(regionRect());}
 
 /* ---------- Navegación ---------- */
-const FASE={despegue:'despegue',sistema:'órbita',tormenta:'tormenta',liga:'flota'};
+const FASE={despegue:'despegue',sistema:'órbita',tormenta:'tormenta',liga:'flota',equipo:'equipo'};
 App.ir=function(p,opc){
   opc=opc||{};
   if(S.tor.fase==='jugando'&&p!=='tormenta'){toast('Termina la tormenta antes de salir: decide en el panel.');return;}
@@ -1351,8 +1821,11 @@ App.ir=function(p,opc){
   if(p==='sistema')pintarSistema();
   if(p==='tormenta')pintarTormenta();
   if(p==='liga')pintarLiga();
+  if(p!=='equipo'&&antes==='equipo'){S.eqForm=null;S.eqVer=null;S.eqPrevia=null;if(W3&&W3.equipo)W3.equipo(eqA().cartera,null);$('#t-sis').textContent='K-01';$('#t-obj').innerHTML='OBJ <b>'+(App.foco||'SISTEMA')+'</b>';sincronizar(true);}
+  if(p==='equipo')pintarEquipo();
+  {const A=analisis(S.cartera);$('#alarma').hidden=A.conc!=='Alta'||p==='liga'||p==='equipo';}
   if(W3){if(p==='liga')W3.flota(App.ranking());W3.toma(p,opc.dur);if(W3.pintar)W3.pintar();}
-  $('#pista-txt').textContent=!W3?(p==='liga'?'Vista plana · tu flota':'Vista plana · toca un planeta'):p==='liga'?'Tu flota en formación · arrastra para girar':'Arrastra para girar · pellizca para acercar';
+  $('#pista-txt').textContent=!W3?(p==='liga'?'Vista plana · tu flota':p==='equipo'?'Vista plana · sistema del equipo':'Vista plana · toca un planeta'):p==='liga'?'Tu flota en formación · arrastra para girar':p==='equipo'?'Sistema del equipo · arrastra para girar':'Arrastra para girar · pellizca para acercar';
   if(!opc.sinFoco){const h=$('#v-'+p+' .tit');if(h&&antes!==p&&opc.foco){h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}}
 };
 $$('.tab').forEach(t=>t.addEventListener('click',()=>App.ir(t.dataset.ir,{foco:true})));
@@ -1462,6 +1935,8 @@ function pintarSistema(){
   $('#posiciones').innerHTML=S.cartera.map(filaPos).join('');
   $$('#posiciones .pos').forEach(b=>b.addEventListener('click',()=>App.enfocar(b.dataset.id)));
   pintarFicha();
+  aplicarModoSistema();
+  if(S.mapa.modo==='mapa')requestAnimationFrame(()=>actualizarMapa(true));
 }
 function actualizarSistemaEnSitio(final){
   const A=analisis(S.cartera);
@@ -1479,6 +1954,7 @@ function pintarFicha(){
   f.hidden=false;f.style.setProperty('--c',col);
   f.innerHTML=`<div class="ficha-cab"><button class="volver" type="button" id="b-volver">${ICO.atras}Todo el sistema</button><span class="eti"><span class="pt"></span>Objetivo fijado</span></div>
     <div class="ficha-tit"><span class="orbe${conAnillo(c)?' anillo':''}" style="--c:${col}"></span><div><h3>${c.id}</h3><p>${c.n} · ${c.s}</p></div></div>
+    <div class="geo-ficha" aria-label="Datos geográficos de ejemplo"><span class="chip">Sede: ${PAIS[c.sede].n}</span><span class="chip">Cotiza en ${c.mon}</span><span class="chip">Vende más en ${REG[c.v.indexOf(Math.max(...c.v))].n} (${Math.max(...c.v)} %)</span><span class="chip sim">Ejemplo</span></div>
     <div class="peso"><div class="peso-cab"><label for="peso">Peso en tu sistema</label><output id="peso-out" for="peso">${p.w} %</output></div>
       <input type="range" id="peso" min="1" max="${max}" step="1" value="${p.w}" style="--p:${(p.w-1)/(max-1)*100}%" aria-describedby="peso-nota">
       <p class="nota" id="peso-nota">El resto se reajusta solo para sumar 100 %. Sin datos no es lo mismo que no cumple.</p></div>
@@ -1492,6 +1968,7 @@ function pintarFicha(){
 }
 App.enfocar=function(id){
   if(id&&App.pantalla!=='sistema'){if(S.tor.fase==='jugando')return;App.ir('sistema');}
+  if(id)S.mapa.modo='reparto';
   App.foco=id;S.foco=id;
   if(W3){if(id)W3.enfocar(id);else W3.toma('sistema',1.3);}
   pintarSistema();
@@ -1501,6 +1978,161 @@ App.enfocar=function(id){
 $('#b-igual').addEventListener('click',()=>{S.deshacer=null;animarCartera(repartoIgual(S.cartera.map(p=>p.id)));toast('Repartido a partes iguales.');});
 $('#b-cambiar').addEventListener('click',()=>{S.eleccion=S.cartera.map(p=>p.id);pintarCatalogo();App.ir('despegue',{foco:true});});
 
+/* ---------- 2b · Tu cartera en el mapa (datos de ejemplo) ---------- */
+S.mapa={modo:'reparto',vista:'ventas',mon:'USD',x:10};
+const ORD_MON=['EUR','USD','GBP','CHF','JPY'];
+const REG_CORTO={ES:'España',EU:'Europa',NA:'N. América',LA:'Latam',AP:'Asia-Pac.',OT:'Otros'};
+const esc=t=>String(t).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function geoDe(c){
+  const sede={},mon={},ven=[0,0,0,0,0,0];
+  c.forEach(p=>{const k=CATI[p.id];sede[k.sede]=(sede[k.sede]||0)+p.w;mon[k.mon]=(mon[k.mon]||0)+p.w;k.v.forEach((v,i)=>{ven[i]+=p.w*v/100;});});
+  return {sede,mon,ven};
+}
+const proy=(lon,lat)=>[(lon+180)/360*100,(78-lat)/136*100];
+const MAPA={celdas:null,ini:null,obj:null,cur:null,t0:0,anim:false,ripple:false,vista:'ventas',w:0,h:0,pins:[],bucle:false};
+const CH_PAIS={};Object.keys(PAIS).forEach(k=>{CH_PAIS[PAIS[k].ch]=k;});
+const CH_REG={};REG.forEach((r,i)=>r.chs.split('').forEach(ch=>{CH_REG[ch]=i;}));
+function prepararCeldas(){
+  if(MAPA.celdas)return;
+  const L=[];MASCARA.forEach((f,j)=>{for(let i=0;i<f.length;i++)L.push({i,j,ch:f[i]});});
+  MAPA.celdas=L;MAPA.ini=new Float32Array(L.length);MAPA.obj=new Float32Array(L.length);MAPA.cur=new Float32Array(L.length);
+}
+function valorCelda(ch,G,vista){
+  if(ch==='.')return 0;
+  if(vista==='sede'){const k=CH_PAIS[ch];return k?(G.sede[k]||0):0;}
+  const r=CH_REG[ch];return r!=null?G.ven[r]:0;
+}
+function dibujarMapa(){
+  const cv=$('#mapa-cv'),caja=$('#mapa-caja');if(!cv||!caja||!MAPA.celdas){MAPA.bucle=false;return;}
+  const w=caja.clientWidth,h=caja.clientHeight;if(!w||!h){MAPA.bucle=false;return;}
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  if(MAPA.w!==w||MAPA.h!==h){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);MAPA.w=w;MAPA.h=h;}
+  const x=cv.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,w,h);
+  const pw=w/90,ph=h/34,base=Math.min(pw,ph);
+  const acc=MAPA.vista==='sede'?[[111,208,255],[225,247,255]]:[[232,148,90],[255,222,190]];
+  const ahora=performance.now();let activo=false;
+  MAPA.celdas.forEach((c,k)=>{
+    const cx=(c.i+.5)*pw,cy=(c.j+.5)*ph;
+    if(c.ch==='.'){if(!((c.i+c.j)&1)){x.fillStyle='rgba(111,208,255,.07)';x.fillRect(cx-.5,cy-.5,1,1);}return;}
+    let v=MAPA.obj[k];
+    if(MAPA.anim){const dl=MAPA.ripple?c.i*9:0;const tk=clamp((ahora-MAPA.t0-dl)/(MAPA.ripple?520:420),0,1);if(tk<1)activo=true;v=lerp(MAPA.ini[k],MAPA.obj[k],eio(tk));}
+    MAPA.cur[k]=v;
+    const r=base*(.3+.16*v);
+    if(v>.02){
+      const col=mezcla(acc[0],acc[1],v*v);const rgb=`${col[0]|0},${col[1]|0},${col[2]|0}`;
+      if(v>.4){x.fillStyle=`rgba(${rgb},${(.16*v).toFixed(3)})`;x.beginPath();x.arc(cx,cy,r*2.5,0,6.284);x.fill();}
+      x.fillStyle=`rgba(${rgb},${(.4+.6*v).toFixed(3)})`;
+    }else x.fillStyle='rgba(169,181,198,.4)';
+    x.beginPath();x.arc(cx,cy,r,0,6.284);x.fill();
+  });
+  // líneas guía de las etiquetas
+  MAPA.pins.forEach(p=>{const ax=p.x/100*w,ay=p.y/100*h,lx=p.lx/100*w,ly=p.ly/100*h;
+    x.strokeStyle=MAPA.vista==='sede'?'rgba(185,233,255,.75)':'rgba(255,197,155,.75)';x.lineWidth=1;
+    x.beginPath();x.arc(ax,ay,base*1.25,0,6.284);x.stroke();
+    if(Math.hypot(lx-ax,ly-ay)>base*2){x.globalAlpha=.55;x.beginPath();x.moveTo(ax,ay);x.lineTo(lx,ly);x.stroke();x.globalAlpha=1;}});
+  if(MAPA.anim&&activo)requestAnimationFrame(dibujarMapa);else{MAPA.anim=false;MAPA.bucle=false;}
+}
+function lanzarMapa(){if(MAPA.bucle)return;MAPA.bucle=true;requestAnimationFrame(dibujarMapa);}
+function mapaVisible(){return App.pantalla==='sistema'&&S.mapa.modo==='mapa';}
+function actualizarMapa(ripple){
+  if(!mapaVisible())return;
+  prepararCeldas();
+  const c=S.cartera;const G=geoDe(c);const vista=S.mapa.vista;
+  // 1 · puntos del mapa
+  const vals=MAPA.celdas.map(cl=>valorCelda(cl.ch,G,vista));const max=Math.max(1,...vals);
+  MAPA.ini.set(MAPA.cur);
+  MAPA.celdas.forEach((cl,k)=>{const v=vals[k];MAPA.obj[k]=v>.05?.3+.7*Math.sqrt(v/max):0;});
+  MAPA.vista=vista;MAPA.t0=performance.now();MAPA.ripple=!!ripple;MAPA.anim=!RM;
+  // etiquetas
+  let items;
+  if(vista==='sede')items=Object.keys(G.sede).filter(k=>G.sede[k]>0).sort((a,b)=>G.sede[b]-G.sede[a]).slice(0,3).map(k=>({k,t:k,v:G.sede[k],...PAIS[k]}));
+  else items=REG.map((r,i)=>({k:r.k,t:REG_CORTO[r.k],v:G.ven[i],x:r.x,y:r.y,lx:r.lx,ly:r.ly})).filter(r=>r.v>=1);
+  MAPA.pins=items.map(it=>{const a=proy(it.x,it.y),l=proy(it.lx,it.ly);return {k:it.k,t:it.t,v:it.v,x:a[0],y:a[1],lx:l[0],ly:l[1]};});
+  const capa=$('#mapa-pins');const vivos=new Set();
+  MAPA.pins.forEach(p=>{let el=capa.querySelector(`[data-k="${vista}-${p.k}"]`);
+    if(!el){capa.querySelectorAll(`.pin:not([data-k^="${vista}-"])`).forEach(e=>e.remove());el=document.createElement('span');el.className='pin';el.dataset.k=vista+'-'+p.k;capa.appendChild(el);}
+    el.style.left=clamp(p.lx,9,91)+'%';el.style.top=clamp(p.ly,8,92)+'%';
+    el.style.setProperty('--pc',vista==='sede'?'rgba(111,208,255,.6)':'rgba(232,148,90,.6)');el.style.setProperty('--pc2',vista==='sede'?'var(--plasma-2)':'var(--cobre-2)');
+    el.innerHTML=`${p.t} <b>${Math.round(p.v)} %</b>`;el.classList.remove('fuera');vivos.add(el.dataset.k);
+    const cw=capa.clientWidth,chh=capa.clientHeight;if(cw&&chh){const ew=el.offsetWidth,eh=el.offsetHeight;
+      p.lx=clamp(p.lx/100*cw,ew/2+1,cw-ew/2-1)/cw*100;p.ly=clamp(p.ly/100*chh,eh/2+1,chh-eh/2-1)/chh*100;el.style.left=p.lx+'%';el.style.top=p.ly+'%';}});
+  capa.querySelectorAll('.pin').forEach(e=>{if(!vivos.has(e.dataset.k))e.remove();});
+  // leyenda accesible con barras
+  const holo=$('#mapa-holo');holo.classList.toggle('vista-ventas',vista==='ventas');
+  $$('#mapa-seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mv===vista)));
+  $('#mapa-explica').innerHTML=vista==='sede'
+    ?'<b>Sede:</b> el país donde está cada empresa. No es lo mismo que dónde vende.'
+    :'<b>Ventas:</b> Σ peso × ventas por región. No es lo mismo que dónde tiene la sede.';
+  const filas=vista==='sede'
+    ?Object.keys(G.sede).filter(k=>G.sede[k]>0).sort((a,b)=>G.sede[b]-G.sede[a]).map(k=>({n:PAIS[k].n,v:G.sede[k]}))
+    :REG.map((r,i)=>({n:r.n,v:G.ven[i]}));
+  const colB=vista==='sede'?'var(--plasma)':'var(--cobre)';
+  const ul=$('#mapa-barras');ul.setAttribute('aria-label',vista==='sede'?'Peso según el país de la sede':'Ventas ponderadas por región');
+  const clave=filas.map(f=>f.n).join('|');
+  if(ul.dataset.clave!==clave){ul.dataset.clave=clave;ul.innerHTML=filas.map(f=>`<li><span>${f.n}</span><span class="bb"><i style="--c:${colB};--w:0%"></i></span><b>0 %</b></li>`).join('');}
+  requestAnimationFrame(()=>{ul.querySelectorAll('li').forEach((li,i)=>{const f=filas[i];li.querySelector('i').style.setProperty('--w',Math.min(100,f.v)+'%');li.querySelector('i').style.setProperty('--c',colB);li.querySelector('b').textContent=Math.round(f.v)+' %';});});
+  $('#mapa-cv').setAttribute('aria-label',(vista==='sede'?'Mapa: dónde tienen la sede tus empresas. ':'Mapa: dónde venden tus empresas, ponderado por peso. ')+filas.map(f=>f.n+' '+Math.round(f.v)+' %').join(', ')+'. Datos de ejemplo.');
+  // 2 · sesgo de casa
+  const es=Math.round(G.sede.ES||0);const casaN=$('#casa-n');const previo=+casaN.textContent||0;
+  if(previo!==es)contar(casaN,previo,es,500);
+  $('#casa-txt').textContent=es>0?`El ${es} % de tu cartera tiene sede en España.`:'Ninguna empresa de tu cartera tiene sede en España.';
+  $('#casa-es').style.flexGrow=String(Math.max(es,.0001));$('#casa-resto').style.flexGrow=String(Math.max(100-es,.0001));
+  $('#casa-l1').textContent=`España ${es} %`;$('#casa-l2').textContent=`Resto ${100-es} %`;
+  // 3 · monedas
+  const barra=$('#mon-barra');
+  if(!barra.children.length)barra.innerHTML=ORD_MON.map(m=>`<i data-m="${m}" style="--c:${MON[m].c};flex-grow:0"></i>`).join('');
+  ORD_MON.forEach(m=>{barra.querySelector(`[data-m="${m}"]`).style.flexGrow=String(G.mon[m]||0);});
+  $('#mon-ley').innerHTML=ORD_MON.filter(m=>G.mon[m]>0).map(m=>`<li style="--c:${MON[m].c}"><i></i>${m} <b>${Math.round(G.mon[m])} %</b></li>`).join('');
+  const elige=$('#mon-elige');
+  if(!elige.children.length)elige.innerHTML=ORD_MON.slice(1).map(m=>`<button type="button" data-m="${m}" aria-pressed="false">${m}</button>`).join('');
+  actualizarEscMoneda(G);
+  // 4 · señales orientativas
+  const sen=[];
+  ORD_MON.slice(1).forEach(m=>{const w=G.mon[m]||0;if(w>50)sen.push({cl:'medio',c:'var(--medio)',t:`El ${Math.round(w)} % cotiza en ${m} · aviso medio`,p:`¿Y si lo que cotiza en ${m} bajara al 50 %?`});});
+  Object.keys(G.sede).forEach(k=>{const w=G.sede[k];if(w>60)sen.push({cl:'geo',c:'var(--alto)',t:`Concentración geográfica: el ${Math.round(w)} % tiene sede en ${PAIS[k].n}`,p:`¿Y si las empresas con sede allí bajaran hasta sumar el 60 %?`});});
+  REG.forEach((r,i)=>{const w=G.ven[i];if(w>70)sen.push({cl:'geo',c:'var(--alto)',t:`Concentración geográfica: el ${Math.round(w)} % de las ventas sale de ${r.n}`,p:'¿Y si pesaran menos las empresas que más venden allí?'});});
+  $('#senales-geo').innerHTML=sen.length?sen.map(s=>`<li class="${s.cl}"><span class="led" style="--c:${s.c}"></span><span><b>${s.t}</b><small>${s.p} Klever solo propone pesos.</small></span></li>`).join('')
+    :`<li class="calma"><span class="led" style="--c:var(--ok)"></span><span><b>Sin señales geográficas</b><small>Ninguna moneda distinta del euro pasa del 50 %, ningún país del 60 % ni ninguna región de ventas del 70 %.</small></span></li>`;
+  // 5 · pesos en vivo
+  const vivo=$('#mapa-vivo');const ids=c.map(p=>p.id).join();
+  if(vivo.dataset.ids!==ids){vivo.dataset.ids=ids;vivo.innerHTML=c.map(p=>{const k=CATI[p.id];const col=SECT[k.s].c;
+    return `<li data-id="${p.id}"><span class="orbe${conAnillo(k)?' anillo':''}" style="--c:${col}"></span><span class="vn"><b>${p.id}</b><small>${PAIS[k.sede].n} · ${k.mon} · ${k.s}</small></span>
+      <span class="paso"><button type="button" data-d="-5" aria-label="Bajar ${p.id} 5 puntos"><svg class="ico" viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button><output aria-live="polite">${p.w} %</output><button type="button" data-d="5" aria-label="Subir ${p.id} 5 puntos"><svg class="ico" viewBox="0 0 24 24"><path d="M6 12h12M12 6v12"/></svg></button></span></li>`;}).join('');}
+  const maxW=100-(c.length-1);
+  c.forEach(p=>{const li=vivo.querySelector(`li[data-id="${p.id}"]`);if(!li)return;li.querySelector('output').textContent=p.w+' %';
+    li.querySelector('[data-d="-5"]').disabled=p.w<=1||c.length<2;li.querySelector('[data-d="5"]').disabled=p.w>=maxW||c.length<2;});
+  if(RM)dibujarMapa();else lanzarMapa();
+}
+function actualizarEscMoneda(G){
+  G=G||geoDe(S.cartera);const m=S.mapa.mon,X=S.mapa.x,M=MON[m];const w=G.mon[m]||0;
+  $$('#mon-elige button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===m)));
+  const r=$('#mon-x');r.value=X;r.style.setProperty('--p',(X/30*100)+'%');
+  r.setAttribute('aria-valuetext',`${X} % de bajada de ${m} frente al euro`);
+  $('#mon-q').innerHTML=`¿Y si ${M.art} baja un <em>${X} %</em> frente al euro?`;
+  const ef=-X*w/100;const b=$('#mon-ef');
+  b.textContent=Math.abs(ef)<.05?'0 %':'−'+fmt1(Math.abs(ef))+' %';b.classList.toggle('cero',Math.abs(ef)<.05);
+  const dec=m==='JPY'?0:2;const f=v=>v.toFixed(dec).replace('.',',');
+  $('#mon-form').textContent=w>0
+    ?`−${X} % × ${Math.round(w)} % en ${m} ≈ ${b.textContent}. Tipo de ejemplo: 1 € = ${f(M.tc)} ${M.s} → ${f(M.tc/(1-X/100))} ${M.s}.`
+    :`No tienes nada que cotice en ${m}: el efecto sería nulo. Prueba otra moneda.`;
+}
+$('#sis-seg').addEventListener('click',e=>{const b=e.target.closest('button[data-modo]');if(!b)return;
+  const modo=b.dataset.modo;if(modo===S.mapa.modo)return;
+  if(modo==='mapa'&&App.foco)App.enfocar(null);
+  S.mapa.modo=modo;aplicarModoSistema();if(modo==='mapa'){MAPA.cur&&MAPA.cur.fill(0);requestAnimationFrame(()=>actualizarMapa(true));}
+  $('#hoja-scroll').scrollTop=0;});
+function aplicarModoSistema(){
+  const v=$('#v-sistema');v.classList.toggle('modo-mapa',S.mapa.modo==='mapa');
+  $$('#sis-seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.modo===S.mapa.modo)));
+}
+$('#mapa-seg').addEventListener('click',e=>{const b=e.target.closest('button[data-mv]');if(!b||b.dataset.mv===S.mapa.vista)return;S.mapa.vista=b.dataset.mv;actualizarMapa(true);});
+$('#mon-elige').addEventListener('click',e=>{const b=e.target.closest('button[data-m]');if(!b)return;S.mapa.mon=b.dataset.m;actualizarEscMoneda();});
+$('#mon-x').addEventListener('input',e=>{S.mapa.x=+e.target.value;actualizarEscMoneda();});
+$('#mapa-vivo').addEventListener('click',e=>{const b=e.target.closest('button[data-d]');if(!b||b.disabled)return;
+  const id=b.closest('li').dataset.id;const p=S.cartera.find(q=>q.id===id);if(!p)return;
+  S.deshacer=null;S.cartera=conPeso(S.cartera,id,p.w+(+b.dataset.d));sincronizar(true);});
+
+
 /* ---------- sincronizar todo ---------- */
 let ultimaConc=null;
 function sincronizar(final){
@@ -1509,12 +2141,13 @@ function sincronizar(final){
   if(W3){W3.pesos(S.cartera);W3.estado(A);}
   const alta=A.conc==='Alta';
   $('#app').classList.toggle('inestable',alta);
-  $('#alarma').hidden=!alta||App.pantalla==='liga';
+  $('#alarma').hidden=!alta||App.pantalla==='liga'||App.pantalla==='equipo';
   $('#badge-sis').hidden=!alta;
   $('#t-estab').textContent=A.estab+' %';
   const b=$('#t-estab-b');b.style.setProperty('--v',A.estab+'%');b.style.setProperty('--c',A.estab>=70?'var(--ok)':A.estab>=45?'var(--medio)':'var(--alto)');
   $('#t-n').textContent=A.n;$('#t-s').textContent=A.secs.length;
   if(App.pantalla==='sistema')actualizarSistemaEnSitio(final);
+  if(mapaVisible())actualizarMapa(false);
   if(ultimaConc&&ultimaConc!==A.conc&&final&&alta)toast('Concentración alta: tu sistema se desestabiliza.');
   if(final)ultimaConc=A.conc;
   $('#cielo').setAttribute('aria-label',`Sistema planetario en 3D de tu cartera simulada: ${S.cartera.map(p=>p.id+' '+p.w+' %').join(', ')}. Concentración ${A.conc.toLowerCase()}. Arrastra para girar.`);
@@ -1650,12 +2283,13 @@ function pintarResultado(){
     <div class="grafico" style="--i:3">${graficoSVG(series,{total,corte:R.serie.length-1,aria:`Índice: de 100 a ${fmt1(R.fin)} en la caída y ${fmt1(R.despues[R.d])} después`,fin:'semana 12'})}
       <div class="leyenda-g"><span><i style="--c:#ff8a7a"></i>Caída</span><span><i style="--c:#ffc59b"></i>Tu decisión · ${fmt1(R.despues[R.d])}</span>${R.d!=='aguantar'?`<span><i class="dash" style="--c:#6fd0ff"></i>Si aguantabas · ${fmt1(R.despues.aguantar)}</span>`:''}${R.d!=='vender'?`<span><i class="dash" style="--c:#8391a6"></i>Si vendías · ${fmt1(R.despues.vender)}</span>`:''}</div></div>
     <div class="revela" style="--i:4"><p class="eti plasma"><span class="pt"></span>Revelación</p><h3>Era <em>${R.e.nombre}</em></h3><p class="nota" style="color:var(--plasma-2)">Escenario inspirado en ${R.e.anio} · cifras aproximadas de ejemplo, no datos históricos.</p><p class="nota">El pasado no garantiza el futuro. No es un consejo: en la vida real cada situación es distinta.</p></div>
-    <div class="compartir" style="--i:5"><img id="tarjeta-img" alt="Tarjeta para compartir: Temple ${R.temple}, ${R.rot}, tormenta inspirada en ${R.e.anio}. Simulación sin dinero real."><div class="acciones"><p class="eti">Tarjeta para compartir</p><a class="btn" id="b-descargar" download="klever-temple.png" href="#">${ICO.descarga}Guardar imagen</a><button class="btn plasma" type="button" id="b-retar">${ICO.duelo}Retar a un amigo</button><button class="btn fant" type="button" id="b-otra">${ICO.otra}Otra tormenta</button></div></div>`;
+    <div class="compartir" style="--i:5"><img id="tarjeta-img" alt="Tarjeta para compartir: Temple ${R.temple}, ${R.rot}, tormenta inspirada en ${R.e.anio}. Simulación sin dinero real."><div class="acciones"><p class="eti">Tarjeta para compartir</p><button class="btn" type="button" id="b-ver-tarjeta">${ICO.descarga}Ver tarjeta</button><button class="btn plasma" type="button" id="b-retar">${ICO.duelo}Retar a un amigo</button><button class="btn fant" type="button" id="b-otra">${ICO.otra}Otra tormenta</button></div></div>`;
   const arco=$('#temple-arco');
   requestAnimationFrame(()=>{arco.style.transition=RM?'none':'stroke-dashoffset 1.4s cubic-bezier(.2,.7,.2,1)';arco.style.strokeDashoffset=String(314.16*(1-R.temple/100));});
   contar($('#temple-n'),0,R.temple,1400);
   const l2=$('#l2');if(l2){if(RM){l2.style.strokeDashoffset='0';$('#l2-p').setAttribute('opacity','1');}else{l2.style.transition='stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1) .3s';requestAnimationFrame(()=>requestAnimationFrame(()=>{l2.style.strokeDashoffset='0';}));setTimeout(()=>{const p=$('#l2-p');if(p)p.setAttribute('opacity','1');},1900);}}
-  tarjeta(R).then(url=>{const im=$('#tarjeta-img');if(im){im.src=url;$('#b-descargar').href=url;}});
+  tarjeta(R).then(url=>{const im=$('#tarjeta-img');if(im){im.src=url;}});
+  $('#b-ver-tarjeta').addEventListener('click',e=>{const im=$('#tarjeta-img');if(!im||!im.src){toast('Preparando la tarjeta…');return;}abrirVisor(im.src,im.alt,e.currentTarget);});
   $('#b-retar').addEventListener('click',()=>{App.ir('liga',{foco:true});setTimeout(crearDuelo,400);});
   $('#b-otra').addEventListener('click',()=>{S.tor.esc++;S.tor.fase='intro';ultimoRes&&(ultimoRes.viejo=true);pintarTormenta();if(W3)W3.toma('tormenta',1.2);});
 }
@@ -1761,6 +2395,411 @@ function crearDuelo(){
   setTimeout(()=>{if(S.duelo.cod!==cod)return;S.duelo.estado='hecho';pintarDuelo();toast('cometa_7 ha aceptado tu duelo (simulado).');},RM?600:2600);
 }
 
+
+/* ---------- 5 · Cartera en equipo (todo simulado) ---------- */
+const REACC=['Buen argumento','Demasiado arriesgado','¿Y la variedad?','De acuerdo'];
+const RETOS=[
+  {t:'Que ninguna posición pase del 30 %',ok:A=>A.may<=30},
+  {t:'Llegar a 5 sectores o más',ok:A=>A.secs.length>=5},
+  {t:'Dejar la concentración en «Baja»',ok:A=>A.conc==='Baja'}
+];
+const EQ_LIGA=[{n:'Club del 25 %',tot:268,sem:94,s:51},{n:'Órbita Baja',tot:251,sem:88,s:52},{n:'Cuatro Lunas',tot:236,sem:81,s:53},{n:'Marea Lenta',tot:214,sem:73,s:54},{n:'Los Prudentes',tot:197,sem:64,s:55},{n:'Ahorro Sideral',tot:171,sem:58,s:56},{n:'Polo Norte',tot:150,sem:47,s:57}];
+const APODOS_LIBRES=['vela.roja','kuiper_8','selene.r','ioh_42','perihelio','nadir.m','astrolabio','halo_7'];
+const reac0=()=>Object.fromEntries(REACC.map(r=>[r,0]));
+let idProp=10;
+function nuevoEquipo(o){return Object.assign({racha:0,previas:0,capitan:0,reto:0,props:[],hist:[],visto:true,esperando:0},o);}
+S.equipos=[nuevoEquipo({id:'e1',nombre:'Nebulosa Norte',cod:'NEBULA',s:9,racha:4,previas:182,capitan:2,reto:0,visto:false,
+  miembros:[{ap:'zeta_k',tu:true,s:3},{ap:'boreal_9',s:4},{ap:'marea.k',s:5},{ap:'lince_azul',s:7}],
+  cartera:[{id:'NUBE',w:36},{id:'FARO',w:18},{id:'MERCA',w:16},{id:'VITA',w:16},{id:'ATLAS',w:14}],
+  props:[
+    {id:'p1',autor:1,op:{tipo:'peso',id:'NUBE',w:24},porque:'Si NUBE cae, arrastra a todo el equipo. Mejor repartir.',votos:[null,'si',null,null],
+     plan:{2:['si','Buen argumento',1600],3:['no',null,3400]},reac:Object.assign(reac0(),{'De acuerdo':1}),cierra:'Cierra en 23 h',estado:'abierta'},
+    {id:'p2',autor:3,op:{tipo:'anadir',id:'CHIPA',w:25},porque:'Quiero más tecnología: los chips están en todas partes.',votos:[null,null,null,'si'],
+     plan:{1:['no','¿Y la variedad?',2500],2:['no','Demasiado arriesgado',4400]},reac:reac0(),cierra:'Cierra en 9 h',estado:'abierta'}
+  ],
+  hist:[
+    {sem:'Semana 2',autor:'marea.k',txt:'Añadir ATLAS con un 14 %',porque:'Teníamos 4 sectores; con energía llegamos a 5.',res:'Aprobada · 4 a favor',ok:true,efecto:[['Variedad','Media','Amplia']]},
+    {sem:'Semana 1',autor:'zeta_k',txt:'Bajar FARO del 30 % al 18 %',porque:'Un solo banco pesaba casi un tercio del equipo.',res:'Aprobada · 3 a favor, 1 abstención',ok:true,efecto:[['Concentración','Alta','Media']]},
+    {sem:'Semana 1',autor:'lince_azul',txt:'Quitar MERCA',porque:'No se mueve nada y me aburre tenerla.',res:'Rechazada · 1 a favor, 3 en contra',ok:false,efecto:[]},
+    {sem:'Semana 0',autor:'boreal_9',txt:'Equipo creado',porque:'Aprender juntos a repartir sin dinero real.',res:'4 tripulantes',info:true,efecto:[]}
+  ]})];
+S.eqAct=0;S.eqSeg='propuestas';S.eqForm=null;S.eqPrevia=null;S.eqVer=null;S.eqAlta=null;S.eqNuevoCod=null;
+const eqA=()=>S.equipos[S.eqAct];
+
+function equilibrio(c){const A=analisis(c);const ok=A.n>=4;const conc=ok?(A.conc==='Baja'?25:A.conc==='Media'?12:0):0;const vari=ok?(A.vari==='Amplia'?25:A.vari==='Media'?12:0):0;return {A,ok,conc,vari,tot:conc+vari};}
+const pesoDe=(c,id)=>{const p=c.find(q=>q.id===id);return p?p.w:0;};
+function opValida(op,c){const est=c.some(p=>p.id===op.id);
+  if(op.tipo==='peso')return est&&op.w!==pesoDe(c,op.id)&&c.length>1;
+  if(op.tipo==='anadir')return !est&&c.length<8;
+  return est&&c.length>1;}
+function aplicarOp(c,op){
+  if(!opValida(op,c))return c.map(p=>({...p}));
+  if(op.tipo==='peso')return conPeso(c,op.id,op.w);
+  if(op.tipo==='anadir')return conPeso(c.concat([{id:op.id,w:0}]),op.id,op.w);
+  const r=c.filter(p=>p.id!==op.id);const s=r.reduce((a,p)=>a+p.w,0);const e=enteros(r.map(p=>p.w/s*100),100);return r.map((p,i)=>({id:p.id,w:e[i]}));
+}
+function descOp(op,c){const cur=pesoDe(c,op.id);
+  if(op.tipo==='peso')return `${op.w<cur?'Bajar':'Subir'} ${op.id} del ${cur} % al ${op.w} %`;
+  if(op.tipo==='anadir')return `Añadir ${op.id} con un ${op.w} %`;
+  return `Quitar ${op.id} (ahora pesa ${cur} %)`;}
+const FLECHA='<svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+function adHTML(c,d){
+  const a=equilibrio(c),b=equilibrio(d);const e=ESC[0];const ia=indiceFinal(c,e.golpe),ib=indiceFinal(d,e.golpe);
+  const rk={Baja:0,Media:1,Alta:2},rv={Amplia:0,Media:1,Poca:2};
+  const cl=(x,y)=>x===y?'':y<x?'mejor':'peor';
+  return `<li><span>Concentración</span><span class="flecha">${a.A.conc}${FLECHA}<b class="${cl(rk[a.A.conc],rk[b.A.conc])}">${b.A.conc}</b></span></li>
+    <li><span>Variedad</span><span class="flecha">${a.A.vari}${FLECHA}<b class="${cl(rv[a.A.vari],rv[b.A.vari])}">${b.A.vari}</b></span></li>
+    <li><span>Equilibrio de la Liga</span><span class="flecha">${a.tot}${FLECHA}<b class="${cl(-a.tot,-b.tot)}">${b.tot} / 50</b></span></li>
+    <li><span>Tormenta ${e.cod} · ilustrativo</span><span class="flecha">${fmt1(ia)}${FLECHA}<b class="${cl(-Math.round(ia*10),-Math.round(ib*10))}">${fmt1(ib)}</b></span></li>`;
+}
+function puntosEquipo(eq){
+  const E=equilibrio(eq.cartera);const reto=RETOS[eq.reto].ok(E.A)?20:0;
+  const cerradas=eq.props.filter(p=>p.estado!=='abierta');
+  const arg=cerradas.some(p=>p.porque.trim().length>=15)?10:0;
+  const todos=cerradas.some(p=>p.votos.every(v=>v))?10:0;
+  const racha=Math.min(10,2*eq.racha);
+  return {E,reto,arg,todos,racha,equi:E.tot,apr:reto+arg,cons:todos+racha,sem:E.tot+reto+arg+todos+racha};
+}
+let avaN=0;
+function avaSVG(seed,tam){
+  const r=rng(seed*7919+13);const h1=Math.round(seed*137.508)%360,h2=(h1+90+Math.floor(r()*120))%360;const tilt=Math.round(r()*70-35);const id='av'+(avaN++);
+  let bandas='';for(let i=0;i<3;i++){const y=12+r()*16;bandas+=`<path d="M8 ${y.toFixed(1)}q12 ${(r()*6-3).toFixed(1)} 24 0" stroke="hsl(${h2},70%,85%)" stroke-width="${(1+r()*1.6).toFixed(1)}" fill="none"/>`;}
+  const ma=r()*Math.PI*2;const mx=20+Math.cos(ma)*15,my=20+Math.sin(ma)*15;
+  return `<svg class="ava" viewBox="0 0 40 40" width="${tam||36}" height="${tam||36}" aria-hidden="true"><defs><radialGradient id="${id}" cx="35%" cy="30%"><stop offset="0" stop-color="hsl(${h1},90%,88%)"/><stop offset=".45" stop-color="hsl(${h1},68%,58%)"/><stop offset="1" stop-color="hsl(${h2},55%,16%)"/></radialGradient><clipPath id="${id}c"><circle cx="20" cy="20" r="11"/></clipPath></defs><circle cx="20" cy="20" r="19.5" fill="#0a0f19" stroke="rgba(168,186,214,.28)"/><circle cx="20" cy="20" r="11" fill="url(#${id})"/><g clip-path="url(#${id}c)" opacity=".38">${bandas}</g><ellipse cx="20" cy="20" rx="16.5" ry="4.6" fill="none" stroke="hsl(${h2},85%,72%)" stroke-width="1.3" opacity=".85" transform="rotate(${tilt} 20 20)"/><circle cx="${mx.toFixed(1)}" cy="${my.toFixed(1)}" r="2" fill="hsl(${h2},80%,80%)"/></svg>`;
+}
+const nombreM=m=>m.tu?'tú · '+m.ap:m.ap;
+const ICO_V={si:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  no:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M7 7l10 10M17 7 7 17"/></svg>',
+  abs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M6 12h12"/></svg>'};
+const TXT_V={si:'A favor',no:'En contra',abs:'Abstención'};
+const CORONA='<svg class="ico" viewBox="0 0 24 24"><path d="M4 18h16M5 18 3.5 8l5 3.5L12 5l3.5 6.5 5-3.5L19 18"/></svg>';
+const MAS='<svg class="ico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
+const CRUZ='<svg class="ico" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+const OJO='<svg class="ico" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+function recuento(p){const c={si:0,no:0,abs:0};p.votos.forEach(v=>{if(v)c[v]++;});
+  const t=[];if(c.si)t.push(c.si+' a favor');if(c.no)t.push(c.no+' en contra');if(c.abs)t.push(c.abs+(c.abs===1?' abstención':' abstenciones'));return t.join(', ')||'sin votos';}
+const necesarios=eq=>Math.floor(eq.miembros.length/2)+1;
+function anunciar(t){const a=$('#eq-aviso');if(a)a.textContent=t;}
+
+function propHTML(eq,p){
+  const au=eq.miembros[p.autor];const n=eq.miembros.length;const nec=necesarios(eq);
+  const si=p.votos.filter(v=>v==='si').length;const abierta=p.estado==='abierta';
+  const tit=abierta?descOp(p.op,eq.cartera):p.titulo;
+  const ad=abierta?adHTML(eq.cartera,aplicarOp(eq.cartera,p.op)):p.adFoto;
+  const votos=eq.miembros.map((m,i)=>{const v=p.votos[i];return `<div class="voto ${v||'pend'}${p.llega===i?' llega':''}">${avaSVG(m.s,30)}<span class="marca-v">${v?ICO_V[v]:''}</span><small>${m.tu?'tú':esc(m.ap)}</small><em>${v?TXT_V[v]:'Pendiente'}</em></div>`;}).join('');
+  let ver='';
+  if(abierta){
+    if(p.contando)ver=`<div class="veredicto cuenta" role="status">${ICO.otra}<span>Contando votos…</span></div>`;
+    else if(!p.votos[0])ver=`<div class="veredicto cuenta">${CORONA}<span>${si>=nec?`Ya tiene mayoría (${si} de ${n})`:`Lleva ${si} a favor · necesita ${nec} de ${n}`}<small>Falta tu voto. Se cierra cuando votáis todos.</small></span></div>`;
+    else ver=`<div class="veredicto cuenta"><span class="espera"><i></i></span><span>Esperando al resto del equipo<small>Los votos llegan simulados.</small></span></div>`;
+  }else{
+    const ok=p.estado==='aprobada';
+    ver=`<div class="veredicto ${ok?'ok':'ko'}" role="status">${ok?ICO.si:ICO.no}<span>${ok?'Aprobada':'Rechazada'} · ${recuento(p)}<small>${ok?(p.efectoTxt||'Se aplica a la cartera del equipo.'):'No hubo mayoría: los semáforos no cambian.'}</small></span></div>`;
+  }
+  const yo=p.votos[0];
+  return `<article class="prop ${abierta?'':p.estado}${p.nueva?' nueva':''}${p.recien?' resuelve':''}" data-p="${p.id}" aria-labelledby="pt-${p.id}">
+    <div class="prop-cab">${avaSVG(au.s,34)}<div><b>${au.tu?'Tú propones':esc(au.ap)+' propone'}</b><small>${abierta?p.cierra+' · simulado':'Semana 3 · votación cerrada'}</small></div><span class="chip ${abierta?'sim':p.estado==='aprobada'?'c-baja':'c-alta'}">${abierta?'Abierta':p.estado==='aprobada'?'Aprobada':'Rechazada'}</span></div>
+    <h4 id="pt-${p.id}">${tit}</h4>
+    <p class="porque"><small>Por qué</small>«${esc(p.porque)}»</p>
+    <ul class="ad" aria-label="Antes y después">${ad}</ul>
+    <div class="votos" role="group" aria-label="Votos del equipo: ${recuento(p)}">${votos}</div>
+    <div class="mayoria"><div class="may-barra" aria-hidden="true"><i style="--w:${si/n*100}%"></i><span class="umbral" style="left:${nec/n*100}%"></span></div><small>${si} de ${n} a favor · se aprueba con mayoría (${nec} de ${n})</small></div>
+    ${abierta?`<div class="tu-voto" role="group" aria-label="Tu voto">${['si','no','abs'].map(v=>`<button type="button" data-acc="votar" data-p="${p.id}" data-v="${v}" aria-pressed="${yo===v}" ${p.contando?'disabled':''}>${ICO_V[v].replace('<svg ','<svg class="ico" ')}${TXT_V[v]}</button>`).join('')}</div>`:''}
+    <div class="reacs" role="group" aria-label="Reacciones predefinidas">${REACC.map(r=>`<button type="button" class="reac${p.reacSalta===r?' salta':''}" data-acc="reac" data-p="${p.id}" data-r="${r}" aria-pressed="${p.miReac===r}">${r} <b>${p.reac[r]}</b></button>`).join('')}</div>
+    ${abierta?`<button type="button" class="btn fant" data-acc="ver" data-p="${p.id}" aria-pressed="${S.eqVer===p.id}">${OJO}${S.eqVer===p.id?'Ocultar el después':'Ver el después en el sistema'}</button>`:''}
+    ${ver}
+  </article>`;
+}
+function senalEq(eq){
+  const c=eq.cartera;const A=analisis(c);
+  if(A.n>=2&&A.may>=25){const nueva=conPeso(c,A.mayId,24);return {tipo:'peso',id:A.mayId,objetivo:24,A,B:analisis(nueva)};}
+  const s=senalDe(c);if(s&&s.tipo==='sector')return s;
+  return null;
+}
+function senalEqHTML(eq){
+  const s=senalEq(eq);
+  if(!s)return `<p class="eti" style="color:var(--ok)"><span class="pt" style="background:var(--ok);box-shadow:0 0 10px var(--ok)"></span>Señal de Klever · sin avisos</p><h3>La cartera del equipo está en <em>calma</em>.</h3><p>Ninguna posición llega al 25 % ni ningún sector al 40 %.</p>`;
+  const q=s.tipo==='peso'?`¿Y si <em>${s.id}</em> bajara al ${s.objetivo}&nbsp;%?`:`¿Y si <em>${s.sector}</em> bajara al 40&nbsp;%?`;
+  const yaHay=s.tipo==='peso'&&eq.props.some(p=>p.estado==='abierta'&&p.op.tipo==='peso'&&p.op.id===s.id);
+  return `<p class="eti plasma"><span class="pt"></span>Señal de Klever · solo pesos · simulado</p><h3>${q}</h3>
+    <div class="antes-despues"><span class="chip ${CLS[s.A.conc]}">Hoy ${s.A.conc}</span>${FLECHA.replace('class="ico"','class="ico" style="width:16px;height:16px"')}<span class="chip ${CLS[s.B.conc]}">Pasaría a ${s.B.conc}</span></div>
+    ${s.tipo==='peso'?(yaHay?`<p>Ya hay una propuesta abierta sobre ${s.id}: votadla abajo.</p>`:`<button class="btn plasma" type="button" data-acc="usar-senal">${MAS}Convertirla en propuesta</button>`):'<p>Repartid el peso de ese sector entre los demás.</p>'}
+    <p class="nota">Klever propone pesos, nunca empresas. Orientativo, no una norma.</p>`;
+}
+function formDefecto(eq,tipo){
+  const c=eq.cartera;const A=analisis(c);
+  if(tipo==='anadir'){const libre=CAT.find(k=>!c.some(p=>p.id===k.id));return {tipo,id:libre?libre.id:'',w:15};}
+  if(tipo==='quitar'){const menor=c.slice().sort((a,b)=>a.w-b.w)[0];return {tipo,id:menor.id,w:0};}
+  return {tipo:'peso',id:A.mayId,w:Math.max(1,A.may>=25?24:A.may-5)};
+}
+function opDeForm(){const F=S.eqForm;return {tipo:F.tipo,id:F.id,w:F.w};}
+function formHTML(eq){
+  const F=S.eqForm;const c=eq.cartera;const n=eq.miembros.length;
+  const opc=F.tipo==='anadir'?CAT.filter(k=>!c.some(p=>p.id===k.id)):c.map(p=>CATI[p.id]);
+  const max=F.tipo==='anadir'?40:100-(c.length-1);const min=F.tipo==='anadir'?5:1;
+  const len=F.porque.trim().length;
+  return `<form class="formu" id="f-prop" novalidate aria-labelledby="f-tit">
+    <div class="ficha-cab"><p class="eti" id="f-tit"><span class="pt"></span>Nueva propuesta para ${esc(eq.nombre)}</p><button type="button" class="volver" data-acc="cerrar-form">${CRUZ}Cancelar</button></div>
+    <div class="segmento peq" role="group" aria-label="Tipo de cambio">${[['peso','Cambiar peso'],['anadir','Añadir'],['quitar','Quitar']].map(t=>`<button type="button" data-acc="tipo" data-t="${t[0]}" aria-pressed="${F.tipo===t[0]}">${t[1]}</button>`).join('')}</div>
+    <div class="campo"><label for="f-emp">${F.tipo==='anadir'?'Empresa del catálogo inventado (la eliges tú)':'Empresa de la cartera del equipo'}</label>
+      <select id="f-emp">${opc.map(k=>`<option value="${k.id}"${k.id===F.id?' selected':''}>${k.id} · ${k.n}${F.tipo!=='anadir'?' · '+pesoDe(c,k.id)+' %':' · '+k.s}</option>`).join('')}</select></div>
+    ${F.tipo!=='quitar'?`<div class="peso"><div class="peso-cab"><label for="f-w">${F.tipo==='anadir'?'Peso con el que entra':'Nuevo peso'}</label><output id="f-w-out" for="f-w">${F.w} %</output></div>
+      <input type="range" id="f-w" min="${min}" max="${max}" step="1" value="${F.w}" style="--p:${(F.w-min)/(max-min)*100}%"></div>`:''}
+    <div class="campo"><label for="f-porque">¿Por qué? Una línea, mínimo 15 caracteres</label>
+      <input type="text" id="f-porque" maxlength="90" autocomplete="off" spellcheck="true" value="${esc(F.porque)}" aria-describedby="f-cont f-err" aria-invalid="${F.error?'true':'false'}" placeholder="Ej.: la mayor pesa demasiado si cae">
+      <div class="contador" id="f-cont"><span>Obligatorio · sin chat libre</span><span class="${len>=15?'ok':''}" id="f-len">${len} / 15</span></div>
+      <p class="error" id="f-err" aria-live="assertive">${F.error||''}</p></div>
+    <div><p class="eti" style="margin-bottom:8px">Antes → después · simulado</p><ul class="ad" id="f-prev">${adHTML(c,aplicarOp(c,opDeForm()))}</ul></div>
+    <button class="btn pri ancho" type="submit">${MAS}Proponer al equipo</button>
+    <p class="nota">Tu voto cuenta a favor. Se aprueba con mayoría de los miembros: ${necesarios(eq)} de ${n}.</p>
+  </form>`;
+}
+function cuerpoPropuestas(eq){
+  const listo=eq.miembros.length>=3&&!eq.esperando;
+  const abiertas=eq.props.filter(p=>p.estado==='abierta'),cerradas=eq.props.filter(p=>p.estado!=='abierta');
+  return `<div class="tarjeta-eq" id="eq-senal">${senalEqHTML(eq)}</div>
+    ${S.eqForm?formHTML(eq):`<button class="btn pri ancho" type="button" data-acc="nueva" ${listo?'':'disabled'}>${MAS}Nueva propuesta</button>${listo?'':'<p class="nota">Podréis votar cuando se una la tripulación.</p>'}`}
+    <h3 class="eti">Votaciones abiertas · mayoría ${necesarios(eq)} de ${eq.miembros.length}</h3>
+    <div id="eq-lista" style="display:grid;gap:12px">${abiertas.length?abiertas.map(p=>propHTML(eq,p)).join(''):'<p class="nota">No hay votaciones abiertas. Propón un cambio de pesos y argumenta el porqué.</p>'}</div>
+    ${cerradas.length?`<h3 class="eti">Cerradas esta semana</h3><div id="eq-cerradas" style="display:grid;gap:12px">${cerradas.map(p=>propHTML(eq,p)).join('')}</div>`:''}`;
+}
+function cuerpoTripulacion(eq){
+  const n=eq.miembros.length;const capi=eq.miembros[eq.capitan];const A=analisis(eq.cartera);const R=RETOS[eq.reto];
+  const yoCapi=capi&&capi.tu;
+  const filas=eq.miembros.map((m,i)=>{const k=(i-eq.capitan+n)%n;return `<li class="${m.tu?'tu':''}${m.llega?' llega':''}">${avaSVG(m.s,38)}<span class="n"><b>${esc(nombreM(m))}</b><small>${i===eq.capitan?'<span class="capi">'+CORONA+'Capitán de la semana</span>':'Tripulante'}</small></span><span class="r">${k===0?'elige el reto':'capitán en sem. '+(3+k)}</span></li>`;}).join('')
+    +Array.from({length:eq.esperando},()=>`<li class="esperando"><span class="ava" style="width:38px;height:38px;border:1px dashed var(--linea-2)"></span><span class="n"><b>Esperando…</b><small>invitación enviada</small></span><span class="espera"><i></i></span></li>`).join('');
+  const rota=eq.miembros.map((m,k)=>{const i=(eq.capitan+k)%n;return `<span class="${k===0?'ahora':''}">S${3+k} · ${esc(eq.miembros[i].tu?'tú':eq.miembros[i].ap)}</span>`;}).join('');
+  const alta=S.eqAlta;
+  return `<ul class="tripu" aria-label="Tripulación de ${esc(eq.nombre)}">${filas}</ul>
+    <div class="tarjeta-eq"><p class="eti" style="color:var(--oro)"><span class="pt" style="background:var(--oro);box-shadow:0 0 10px var(--oro)"></span>Reto de la semana · ${capi&&capi.tu?'lo eliges tú':'lo elige '+esc(capi?capi.ap:'el capitán')}</p>
+      ${yoCapi?`<h3>Eres <em>capitán</em> esta semana: elige el reto.</h3><div class="retos" role="group" aria-label="Retos">${RETOS.map((r,i)=>`<button type="button" class="reto" data-acc="reto" data-r="${i}" aria-pressed="${eq.reto===i}">${eq.reto===i?ICO.si:ICO.nd}${r.t}</button>`).join('')}</div>`
+        :`<h3>${R.t}</h3>`}
+      <p>${R.ok(A)?'<b style="color:var(--ok)">Cumplido</b> con la cartera actual del equipo: +20 de Aprendizaje.':'Aún no se cumple. Una propuesta aprobada puede lograrlo.'}</p>
+      <div class="rota" aria-label="Rotación de capitanes">${rota}</div></div>
+    <h3 class="eti">Tus equipos</h3>
+    <div class="equipos" role="group" aria-label="Cambiar de equipo">${S.equipos.map((e,i)=>`<button type="button" data-acc="equipo" data-e="${i}" aria-pressed="${i===S.eqAct}">${avaSVG(e.s,30)}${esc(e.nombre)}</button>`).join('')}</div>
+    <div class="fila-btn"><button class="btn" type="button" data-acc="alta" data-m="crear" aria-pressed="${alta==='crear'}">${MAS}Crear equipo</button><button class="btn" type="button" data-acc="alta" data-m="unir" aria-pressed="${alta==='unir'}">${ICO.enlace}Unirme con código</button></div>
+    ${alta==='crear'?`<form class="formu" id="f-crear" novalidate><div class="campo"><label for="f-nombre">Nombre del equipo</label><input type="text" id="f-nombre" maxlength="24" autocomplete="off" placeholder="Ej.: Los del 25 %" aria-describedby="f-crear-err"></div>
+        <div class="campo"><span class="lab">Código del equipo (6 letras)</span><div class="codigo" id="f-cod">${S.eqNuevoCod}</div><button type="button" class="volver" data-acc="otro-cod" style="justify-self:start">${ICO.otra}Otro código</button></div>
+        <p class="error" id="f-crear-err" aria-live="assertive"></p>
+        <button class="btn pri ancho" type="submit">${ICO.enlace}Crear e invitar</button>
+        <p class="nota">Entre 3 y 5 amigos. Partís de una copia de tu cartera. Enlace simulado.</p></form>`:''}
+    ${alta==='unir'?`<form class="formu" id="f-unir" novalidate><div class="campo"><label for="f-codigo">Código de 6 letras</label><input type="text" id="f-codigo" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="LUNARE" aria-describedby="f-unir-err" style="text-transform:uppercase;letter-spacing:.3em;font-family:var(--f-dato)"></div>
+        <p class="error" id="f-unir-err" aria-live="assertive"></p>
+        <button class="btn pri ancho" type="submit">${ICO.enlace}Unirme</button>
+        <p class="nota">Prueba con el código de ejemplo <b>LUNARE</b>. Todo es simulado.</p></form>`:''}
+    ${eq.invitar?`<div class="duelo"><p class="eti plasma"><span class="pt"></span>Invitación · simulada</p><h3>Envía este enlace</h3><div class="enlace">${ICO.enlace}<span>klever.app/equipo/${eq.cod}</span></div><div class="fila-btn"><button class="btn" type="button" data-acc="copiar">${ICO.enlace}Copiar enlace</button></div><p class="nota">Enlace de ejemplo: en este prototipo los amigos se unen solos.</p></div>`:''}`;
+}
+function cuerpoHistorial(eq){
+  return `<ol class="linea-t" aria-label="Historial de decisiones de ${esc(eq.nombre)}">${eq.hist.map(h=>`<li class="${h.info?'info':h.ok?'ok':'ko'}${h.nuevo?' nueva':''}"><div class="cab"><span>${h.sem}</span><span>${esc(h.autor)}</span></div><b>${esc(h.txt)}</b><p>«${esc(h.porque)}»</p>
+    <div class="res"><span class="chip ${h.info?'sim':h.ok?'c-baja':'c-alta'}">${h.res}</span>${h.efecto.length?h.efecto.map(e=>`<span class="chip">${e[0]} ${e[1]} → ${e[2]}</span>`).join(''):(!h.info?`<span class="chip">${h.ok?'Semáforos sin cambios':'Sin cambios en los semáforos'}</span>`:'')}</div></li>`).join('')}</ol>
+    <p class="nota">Cada decisión guarda quién la propuso, su porqué, el voto y qué pasó después en los semáforos.</p>`;
+}
+function rankingEquipos(){
+  const mios=S.equipos.map((e,i)=>{const L=puntosEquipo(e);return {n:e.nombre,tot:e.previas+L.sem,sem:L.sem,s:e.s,mio:true,act:i===S.eqAct};});
+  const otros=EQ_LIGA.filter(t=>!S.equipos.some(e=>e.nombre===t.n));
+  const todos=otros.concat(mios).sort((a,b)=>b.tot-a.tot);todos.forEach((t,i)=>t.rk=i+1);return todos;
+}
+function cuerpoLiga(eq){
+  const L=puntosEquipo(eq);const tarea=(ok,t)=>`<div class="tarea${ok?' hecha':''}">${ok?ICO.si:ICO.nd}<span>${t}</span></div>`;
+  const rk=rankingEquipos();
+  return `<div class="tu-liga"><div class="tu-cab"><div class="puesto"><small>#</small>${rk.find(t=>t.act).rk}</div><div><p class="eti">${esc(eq.nombre)} · equipos</p><p class="nota">Puntos sobre la cartera del equipo, con las reglas reales de la Liga.</p></div><div class="pts"><b id="eq-pts">${L.sem}</b><small>esta semana</small></div></div>
+    <div class="bloques">
+      <div class="bloque"><div class="bloque-cab"><span>Equilibrio</span><b>${L.equi} / 50</b></div><div class="bloque-bar"><i style="--w:${L.equi/50*100}%;--c:var(--cobre)"></i></div>
+        <small>${L.E.ok?`Concentración ${L.E.A.conc.toLowerCase()} (${L.E.conc}) · variedad ${L.E.A.vari.toLowerCase()} (${L.E.vari})`:'El equipo necesita al menos 4 posiciones para puntuar aquí.'}</small></div>
+      <div class="bloque"><div class="bloque-cab"><span>Aprendizaje</span><b>${L.apr} / 30</b></div><div class="bloque-bar"><i style="--w:${L.apr/30*100}%;--c:var(--plasma)"></i></div>
+        ${tarea(L.reto,`Reto de la semana: ${RETOS[eq.reto].t.toLowerCase()} (20)`)}${tarea(L.arg,'Al menos una propuesta argumentada y votada (10)')}</div>
+      <div class="bloque"><div class="bloque-cab"><span>Constancia</span><b>${L.cons} / 20</b></div><div class="bloque-bar"><i style="--w:${L.cons/20*100}%;--c:var(--ok)"></i></div>
+        ${tarea(L.todos,'Votasteis todos en una propuesta (10)')}<small>Racha de ${eq.racha} semana${eq.racha===1?'':'s'} seguida${eq.racha===1?'':'s'} (+${L.racha}, hasta 10)</small></div>
+    </div></div>
+    <h3 class="eti">Clasificación de equipos · solo nombres de equipo</h3>
+    <ol class="flota" aria-label="Clasificación de equipos">${rk.map(t=>`<li class="nav-fila${t.act?' tu':''}${t.rk<=3?' top'+t.rk:''}"><span class="rk">${t.rk}</span>${avaSVG(t.s,30).replace('class="ava"','class="ava emb"')}<span class="ap"><b>${esc(t.n)}</b><small>${t.mio?(t.act?'tu equipo activo':'tu equipo'):'equipo de ejemplo'}</small></span><span class="tp">${t.tot}<small>+${t.sem} sem.</small></span></li>`).join('')}</ol>
+    <p class="nota">Equilibrio 50 · Aprendizaje 30 · Constancia 20. Nombres de equipo inventados.</p>`;
+}
+function pintarEquipoCabecera(){
+  const eq=eqA();const n=eq.miembros.length;const capi=eq.miembros[eq.capitan];const L=puntosEquipo(eq);
+  $('#eq-sub').innerHTML=`<b style="color:var(--texto)">${esc(eq.nombre)}</b> · código <span class="dato">${eq.cod}</span> · cada cambio se vota`;
+  $('#eq-mini').innerHTML=`<span class="pila">${eq.miembros.map(m=>avaSVG(m.s,32)).join('')}</span><p><b>${n} tripulante${n===1?'':'s'}</b>${eq.esperando?` · ${eq.esperando} en camino`:''}<br><span class="capi">${CORONA}Capitán: ${capi?esc(capi.tu?'tú':capi.ap):'—'}</span></p>`;
+  const A=L.E.A;
+  $('#eq-sem').innerHTML=`<div class="sem" style="--c:${COL_CONC[A.conc]}"><span class="k">Concentración</span><b>${A.conc}</b><small>Mayor ${A.may} % · sector ${A.top} %</small></div>
+    <div class="sem" style="--c:${COL_VAR[A.vari]}"><span class="k">Variedad</span><b>${A.vari}</b><small>${A.secs.length} sector${A.secs.length===1?'':'es'}</small></div>
+    <div class="sem" style="--c:var(--plasma)"><span class="k">Liga</span><b class="dato">${L.sem}</b><small>puntos esta semana</small></div>`;
+  $$('#eq-seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===S.eqSeg)));
+  actualizarBadgeEq();
+  teleEquipo();
+}
+function actualizarBadgeEq(){
+  const pend=eqA().props.filter(p=>p.estado==='abierta'&&!p.votos[0]).length;
+  const c=$('#eq-cuenta');c.hidden=!pend;c.textContent=pend;
+  $('#badge-eq').hidden=!S.equipos.some(e=>e.props.some(p=>p.estado==='abierta'&&!p.votos[0]));
+}
+function pintarEquipo(){
+  const eq=eqA();
+  pintarEquipoCabecera();
+  const cu=$('#eq-cuerpo');
+  cu.innerHTML=S.eqSeg==='propuestas'?cuerpoPropuestas(eq):S.eqSeg==='tripulacion'?cuerpoTripulacion(eq):S.eqSeg==='historial'?cuerpoHistorial(eq):cuerpoLiga(eq);
+  eq.props.forEach(p=>{p.llega=null;p.reacSalta=null;p.nueva=false;p.recien=false;});
+  eq.hist.forEach(h=>h.nuevo=false);eq.miembros.forEach(m=>m.llega=false);
+  if(S.eqSeg==='liga'){const b=$('#eq-pts');if(b)contar(b,0,puntosEquipo(eq).sem,800);}
+  if(!eq.visto&&App.pantalla==='equipo'){eq.visto=true;eq.props.forEach(p=>{if(p.estado==='abierta'&&p.plan)programar(eq,p);});}
+  refrescarEquipo3D();teleEquipo();
+}
+// repinta sin perder el formulario abierto (votos que llegan, reacciones)
+function repintarListas(eq){
+  if(eq!==eqA())return;
+  pintarEquipoCabecera();
+  if(App.pantalla!=='equipo')return;
+  if(S.eqSeg==='propuestas'){
+    const l=$('#eq-lista');
+    if(l&&!$('#eq-cerradas')===!eq.props.some(p=>p.estado!=='abierta')){
+      const abiertas=eq.props.filter(p=>p.estado==='abierta');
+      l.innerHTML=abiertas.length?abiertas.map(p=>propHTML(eq,p)).join(''):'<p class="nota">No hay votaciones abiertas. Propón un cambio de pesos y argumenta el porqué.</p>';
+      const sn=$('#eq-senal');if(sn)sn.innerHTML=senalEqHTML(eq);
+      eq.props.forEach(p=>{p.llega=null;p.reacSalta=null;});
+      refrescarPrevForm();
+    }else{const foco=document.activeElement&&document.activeElement.id;pintarEquipo();if(foco&&$('#'+foco))$('#'+foco).focus({preventScroll:true});}
+  }else pintarEquipo();
+}
+function refrescarEquipo3D(){
+  const eq=eqA();let prev=null;
+  if(App.pantalla==='equipo'){
+    if(S.eqForm){const op=opDeForm();if(opValida(op,eq.cartera))prev=aplicarOp(eq.cartera,op);}
+    else if(S.eqVer){const p=eq.props.find(x=>x.id===S.eqVer&&x.estado==='abierta');if(p)prev=aplicarOp(eq.cartera,p.op);else S.eqVer=null;}
+  }
+  S.eqPrevia=prev;
+  if(W3&&W3.equipo)W3.equipo(eq.cartera,prev);
+  else if(window.__plano&&App.pantalla==='equipo')window.__plano.pintar();
+}
+function teleEquipo(){
+  if(App.pantalla!=='equipo')return;const eq=eqA();const A=analisis(eq.cartera);
+  $('#t-sis').textContent=eq.cod;$('#t-n').textContent=A.n;$('#t-s').textContent=A.secs.length;$('#t-obj').innerHTML='OBJ <b>EQUIPO</b>';
+  $('#t-estab').textContent=A.estab+' %';const b=$('#t-estab-b');b.style.setProperty('--v',A.estab+'%');b.style.setProperty('--c',A.estab>=70?'var(--ok)':A.estab>=45?'var(--medio)':'var(--alto)');
+}
+function programar(eq,p){
+  if(!p.plan)return;const plan=p.plan;p.plan=null;
+  Object.keys(plan).forEach(k=>{const i=+k;const [v,reac,ms]=plan[k];
+    setTimeout(()=>{if(p.estado!=='abierta'||p.votos[i])return;p.votos[i]=v;if(reac)p.reac[reac]++;p.llega=i;p.reacSalta=reac;
+      anunciar(`${eq.miembros[i].ap} vota ${TXT_V[v].toLowerCase()}${reac?' y reacciona: '+reac:''}.`);
+      if(App.pantalla==='equipo'&&eq===eqA())toast(`${eq.miembros[i].ap}: ${TXT_V[v].toLowerCase()}${reac?' · «'+reac+'»':''}`);
+      repintarListas(eq);comprobar(eq,p);},RM?Math.round(ms*.35):ms);});
+}
+function comprobar(eq,p){if(p.estado==='abierta'&&p.votos.every(v=>v)&&!p.contando){p.contando=true;repintarListas(eq);setTimeout(()=>resolver(eq,p),RM?350:1200);}}
+function resolver(eq,p){
+  const si=p.votos.filter(v=>v==='si').length;const ok=si>=necesarios(eq);
+  const c=eq.cartera;const d=aplicarOp(c,p.op);const A=analisis(c),B=analisis(d);
+  p.titulo=descOp(p.op,c);p.adFoto=adHTML(c,d);p.estado=ok?'aprobada':'rechazada';p.contando=false;p.recien=true;
+  const efecto=ok?[['Concentración',A.conc,B.conc],['Variedad',A.vari,B.vari]].filter(x=>x[1]!==x[2]):[];
+  p.efectoTxt=efecto.length?efecto.map(e=>`${e[0]}: ${e[1]} → ${e[2]}`).join(' · '):'Se aplica; los semáforos no cambian.';
+  eq.hist.unshift({sem:'Semana 3 · hoy',autor:eq.miembros[p.autor].tu?'zeta_k':eq.miembros[p.autor].ap,txt:p.titulo,porque:p.porque,res:(ok?'Aprobada · ':'Rechazada · ')+recuento(p),ok,efecto,nuevo:true});
+  if(S.eqVer===p.id)S.eqVer=null;
+  anunciar(`${ok?'Aprobada':'Rechazada'}: ${p.titulo}. ${recuento(p)}.`);
+  if(eq===eqA()&&App.pantalla==='equipo')toast(`${ok?'Aprobada':'Rechazada'} · ${recuento(p)}.`);
+  if(ok)animarEquipo(eq,d);
+  if(eq===eqA()&&App.pantalla==='equipo'&&S.eqSeg==='propuestas'){const foco=document.activeElement&&document.activeElement.id;pintarEquipo();if(foco&&$('#'+foco))$('#'+foco).focus({preventScroll:true});}
+  else repintarListas(eq);
+}
+function animarEquipo(eq,dest){
+  const ini=eq.cartera.map(p=>({...p}));const ids=[...new Set(ini.map(p=>p.id).concat(dest.map(p=>p.id)))];
+  const t0=performance.now();const dur=RM?0:1100;
+  (function paso(t){const k=dur?Math.min(1,(t-t0)/dur):1;const e=eio(k);
+    if(k<1){const tmp=ids.map(id=>({id,w:Math.round(lerp(pesoDe(ini,id),pesoDe(dest,id),e))})).filter(p=>p.w>0);if(W3&&W3.equipo&&eq===eqA())W3.equipo(tmp,null);requestAnimationFrame(paso);}
+    else{eq.cartera=dest.map(p=>({...p}));if(eq===eqA()){refrescarEquipo3D();repintarListas(eq);}}
+  })(t0);
+}
+function refrescarPrevForm(){
+  const eq=eqA();const F=S.eqForm;if(!F)return;const ul=$('#f-prev');if(ul)ul.innerHTML=adHTML(eq.cartera,aplicarOp(eq.cartera,opDeForm()));refrescarEquipo3D();
+}
+function codigoNuevo(){const abc='ABCDEFGHJKLMNPQRSTUVWXYZ';let c='';for(let i=0;i<6;i++)c+=abc[Math.floor(Math.random()*abc.length)];return c;}
+function planPara(eq,op){
+  const c=eq.cartera,d=aplicarOp(c,op);const a=equilibrio(c),b=equilibrio(d);const rk={Baja:0,Media:1,Alta:2},rv={Amplia:0,Media:1,Poca:2};
+  let votos,reacs;
+  if(b.tot>a.tot||rk[b.A.conc]<rk[a.A.conc]){votos=['si','si','si'];reacs=['Buen argumento','De acuerdo',null];}
+  else if(b.tot===a.tot&&rk[b.A.conc]===rk[a.A.conc]){votos=['si','abs','si'];reacs=['De acuerdo',null,'Buen argumento'];}
+  else{votos=['no','si','no'];reacs=[rv[b.A.vari]>rv[a.A.vari]?'¿Y la variedad?':'Demasiado arriesgado',null,'Demasiado arriesgado'];}
+  const plan={};for(let i=1;i<eq.miembros.length;i++){plan[i]=[votos[(i-1)%3],reacs[(i-1)%3],1500+(i-1)*1400];}
+  return plan;
+}
+function crearEquipo(nombre){
+  const cod=S.eqNuevoCod;const libres=APODOS_LIBRES.slice().sort(()=>Math.random()-.5).slice(0,3);
+  const eq=nuevoEquipo({id:'e'+(S.equipos.length+1),nombre,cod,s:60+S.equipos.length,capitan:0,reto:1,
+    miembros:[{ap:'zeta_k',tu:true,s:3}],cartera:S.cartera.map(p=>({...p})),esperando:3,invitar:true,
+    hist:[{sem:'Semana 3 · hoy',autor:'zeta_k',txt:'Equipo creado',porque:'Practicar juntos a repartir pesos y a ceder.',res:'Esperando tripulantes',info:true,efecto:[],nuevo:true}]});
+  S.equipos.push(eq);S.eqAct=S.equipos.length-1;S.eqAlta=null;S.eqSeg='tripulacion';S.eqForm=null;S.eqVer=null;
+  libres.forEach((ap,i)=>setTimeout(()=>{eq.miembros.push({ap,s:70+i*7+S.equipos.length,llega:true});eq.esperando--;
+    if(!eq.esperando){eq.hist[eq.hist.length-1].res=eq.miembros.length+' tripulantes';eq.invitar=false;}
+    anunciar(`${ap} se ha unido a ${eq.nombre}.`);if(eq===eqA()&&App.pantalla==='equipo'){toast(`${ap} se ha unido al equipo (simulado).`);pintarEquipo();}},(RM?500:1800)+i*(RM?400:1500)));
+  pintarEquipo();toast(`Equipo «${nombre}» creado. Invitación simulada.`);
+}
+function unirseEjemplo(){
+  const eq=nuevoEquipo({id:'e'+(S.equipos.length+1),nombre:'Cuatro Lunas',cod:'LUNARE',s:53,racha:2,previas:155,capitan:1,reto:2,
+    miembros:[{ap:'zeta_k',tu:true,s:3},{ap:'selene.r',s:41},{ap:'kuiper_8',s:47},{ap:'ioh_42',s:59}],
+    cartera:[{id:'VITA',w:30},{id:'MERCA',w:22},{id:'ATLAS',w:18},{id:'AGORA',w:16},{id:'TECHO',w:14}],
+    props:[{id:'p'+(++idProp),autor:2,op:{tipo:'peso',id:'VITA',w:24},porque:'VITA pesa casi un tercio; con 24 % repartimos mejor.',votos:[null,null,'si',null],
+      plan:{1:['si','Buen argumento',1500],3:['si','De acuerdo',2900]},reac:reac0(),cierra:'Cierra en 20 h',estado:'abierta'}],
+    hist:[{sem:'Semana 2',autor:'selene.r',txt:'Añadir TECHO con un 14 %',porque:'Nos faltaba inmobiliario para tener 5 sectores.',res:'Aprobada · 3 a favor, 1 en contra',ok:true,efecto:[['Variedad','Media','Amplia']]},
+      {sem:'Semana 3 · hoy',autor:'zeta_k',txt:'Te unes al equipo',porque:'Entraste con el código LUNARE.',res:'4 tripulantes',info:true,efecto:[],nuevo:true}]});
+  eq.hist.reverse();
+  S.equipos.push(eq);S.eqAct=S.equipos.length-1;S.eqAlta=null;S.eqSeg='propuestas';S.eqForm=null;S.eqVer=null;
+  pintarEquipo();programar(eq,eq.props[0]);toast('Te has unido a «Cuatro Lunas» (simulado).');
+}
+function cambiarEquipo(i){
+  S.eqAct=i;S.eqForm=null;S.eqVer=null;S.eqAlta=null;const eq=eqA();
+  if(W3&&W3.equipo)W3.equipo(eq.cartera,null,true);
+  pintarEquipo();if(W3)W3.toma('equipo',1.4);
+  eq.props.forEach(p=>{if(p.estado==='abierta'&&p.plan)programar(eq,p);});
+}
+// eventos (delegados; el cuerpo se repinta)
+$('#eq-seg').addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;S.eqSeg=b.dataset.s;if(S.eqSeg!=='propuestas'){S.eqForm=null;S.eqVer=null;}pintarEquipo();});
+const cuerpoEq=$('#eq-cuerpo');
+cuerpoEq.addEventListener('click',e=>{
+  const b=e.target.closest('[data-acc]');if(!b||b.disabled)return;const acc=b.dataset.acc;const eq=eqA();
+  if(acc==='nueva'){S.eqForm=Object.assign(formDefecto(eq,'peso'),{porque:'',error:''});S.eqVer=null;pintarEquipo();const s=$('#f-emp');if(s)s.focus({preventScroll:true});$('#f-prop').scrollIntoView({block:'start',behavior:RM?'auto':'smooth'});}
+  else if(acc==='usar-senal'){const s=senalEq(eq);if(!s||s.tipo!=='peso')return;S.eqForm={tipo:'peso',id:s.id,w:s.objetivo,porque:'',error:''};S.eqVer=null;pintarEquipo();const i=$('#f-porque');if(i){i.focus({preventScroll:true});$('#f-prop').scrollIntoView({block:'start',behavior:RM?'auto':'smooth'});}}
+  else if(acc==='cerrar-form'){S.eqForm=null;pintarEquipo();}
+  else if(acc==='tipo'){const F=S.eqForm;const nuevo=Object.assign(formDefecto(eq,b.dataset.t),{porque:F.porque,error:''});S.eqForm=nuevo;pintarEquipo();const bt=$(`#f-prop [data-t="${nuevo.tipo}"]`);if(bt)bt.focus({preventScroll:true});}
+  else if(acc==='votar'){const p=eq.props.find(x=>x.id===b.dataset.p);if(!p||p.estado!=='abierta'||p.contando)return;p.votos[0]=b.dataset.v;p.llega=0;anunciar(`Has votado ${TXT_V[b.dataset.v].toLowerCase()}.`);repintarListas(eq);comprobar(eq,p);const nb=$(`[data-acc="votar"][data-p="${p.id}"][data-v="${b.dataset.v}"]`);if(nb)nb.focus({preventScroll:true});}
+  else if(acc==='reac'){const p=eq.props.find(x=>x.id===b.dataset.p);if(!p)return;const r=b.dataset.r;if(p.miReac===r){p.reac[r]--;p.miReac=null;}else{if(p.miReac)p.reac[p.miReac]--;p.reac[r]++;p.miReac=r;p.reacSalta=r;}
+    if(p.estado==='abierta')repintarListas(eq);else pintarEquipo();const nb=$(`[data-acc="reac"][data-p="${p.id}"][data-r="${r}"]`);if(nb)nb.focus({preventScroll:true});}
+  else if(acc==='ver'){S.eqVer=S.eqVer===b.dataset.p?null:b.dataset.p;repintarListas(eq);refrescarEquipo3D();const nb=$(`[data-acc="ver"][data-p="${b.dataset.p}"]`);if(nb)nb.focus({preventScroll:true});if(S.eqVer)toast('Mira el sistema del equipo: el contorno azul es el después.');}
+  else if(acc==='reto'){eq.reto=+b.dataset.r;pintarEquipo();toast('Reto de la semana elegido.');}
+  else if(acc==='equipo'){cambiarEquipo(+b.dataset.e);}
+  else if(acc==='alta'){S.eqAlta=S.eqAlta===b.dataset.m?null:b.dataset.m;if(S.eqAlta==='crear')S.eqNuevoCod=codigoNuevo();pintarEquipo();const i=$(S.eqAlta==='crear'?'#f-nombre':'#f-codigo');if(i)i.focus({preventScroll:true});}
+  else if(acc==='otro-cod'){S.eqNuevoCod=codigoNuevo();$('#f-cod').textContent=S.eqNuevoCod;}
+  else if(acc==='copiar'){const url='https://klever.app/equipo/'+eq.cod;(navigator.clipboard?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast('Enlace copiado (de ejemplo).'),()=>toast('Enlace de ejemplo: klever.app/equipo/'+eq.cod));}
+});
+cuerpoEq.addEventListener('input',e=>{
+  const F=S.eqForm;const t=e.target;
+  if(F&&t.id==='f-w'){F.w=+t.value;$('#f-w-out').textContent=F.w+' %';t.style.setProperty('--p',((F.w-t.min)/(t.max-t.min)*100)+'%');refrescarPrevForm();}
+  else if(F&&t.id==='f-porque'){F.porque=t.value;const len=F.porque.trim().length;const l=$('#f-len');l.textContent=len+' / 15';l.classList.toggle('ok',len>=15);if(F.error&&len>=15){F.error='';$('#f-err').textContent='';t.setAttribute('aria-invalid','false');}}
+  else if(t.id==='f-codigo'){t.value=t.value.toUpperCase().replace(/[^A-ZÑ]/g,'');}
+});
+cuerpoEq.addEventListener('change',e=>{const F=S.eqForm;if(F&&e.target.id==='f-emp'){const eq=eqA();F.id=e.target.value;if(F.tipo==='peso'){const cur=pesoDe(eq.cartera,F.id);F.w=Math.max(1,cur>=25?24:cur-5);const r=$('#f-w');if(r){r.value=F.w;r.style.setProperty('--p',((F.w-r.min)/(r.max-r.min)*100)+'%');$('#f-w-out').textContent=F.w+' %';}}refrescarPrevForm();}});
+cuerpoEq.addEventListener('submit',e=>{
+  e.preventDefault();const f=e.target;const eq=eqA();
+  if(f.id==='f-prop'){
+    const F=S.eqForm;const op=opDeForm();const len=F.porque.trim().length;const inp=$('#f-porque');
+    let err='';
+    if(!opValida(op,eq.cartera))err=op.tipo==='peso'?'Elige un peso distinto del actual.':'Esa propuesta no cambia nada en la cartera.';
+    else if(len<15)err=`Explica el porqué en una línea: mínimo 15 caracteres (llevas ${len}).`;
+    if(err){F.error=err;$('#f-err').textContent=err;if(len<15){inp.setAttribute('aria-invalid','true');inp.focus();}return;}
+    const n=eq.miembros.length;const p={id:'p'+(++idProp),autor:0,op,porque:F.porque.trim(),votos:Array.from({length:n},(_,i)=>i===0?'si':null),plan:planPara(eq,op),reac:reac0(),cierra:'Cierra en 24 h',estado:'abierta',nueva:true};
+    eq.props.unshift(p);S.eqForm=null;pintarEquipo();programar(eq,p);
+    const card=$(`.prop[data-p="${p.id}"]`);if(card){card.scrollIntoView({block:'start',behavior:RM?'auto':'smooth'});const h=card.querySelector('h4');h.setAttribute('tabindex','-1');h.focus({preventScroll:true});}
+    toast('Propuesta enviada. Tu equipo vota…');
+  }else if(f.id==='f-crear'){
+    const v=$('#f-nombre').value.trim();
+    if(v.length<3){$('#f-crear-err').textContent='Ponle un nombre de 3 a 24 caracteres.';$('#f-nombre').setAttribute('aria-invalid','true');$('#f-nombre').focus();return;}
+    crearEquipo(v);
+  }else if(f.id==='f-unir'){
+    const v=$('#f-codigo').value.trim().toUpperCase();const er=$('#f-unir-err');
+    if(!/^[A-ZÑ]{6}$/.test(v)){er.textContent='El código tiene 6 letras.';$('#f-codigo').setAttribute('aria-invalid','true');$('#f-codigo').focus();return;}
+    const ya=S.equipos.findIndex(x=>x.cod===v);
+    if(ya>=0){S.eqAlta=null;cambiarEquipo(ya);toast('Ya estás en ese equipo.');return;}
+    if(v==='LUNARE'){unirseEjemplo();return;}
+    er.textContent='No encontramos ese equipo (simulado). Prueba con LUNARE.';$('#f-codigo').setAttribute('aria-invalid','true');
+  }
+});
+
 /* ---------- Hoja móvil: ampliar/reducir ---------- */
 $('#asa').addEventListener('click',()=>{const a=$('#app').classList.toggle('ampliada');$('#asa').setAttribute('aria-expanded',String(a));setTimeout(actualizarRegion,720);setTimeout(actualizarRegion,60);});
 
@@ -1774,7 +2813,13 @@ function terminarIntro(){
   if(W3){W3.saltarIntro();W3.toma('despegue',1.4);}
 }
 $('#b-saltar').addEventListener('click',terminarIntro);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#app').classList.contains('intro'))terminarIntro();else if(App.foco)App.enfocar(null);}});
+let visorOrigen=null;
+function abrirVisor(src,alt,origen){const v=$('#visor');$('#visor-img').src=src;$('#visor-img').alt=alt||'Tarjeta para compartir';v.hidden=false;visorOrigen=origen||null;$('#visor-cerrar').focus();}
+function cerrarVisor(){const v=$('#visor');if(v.hidden)return;v.hidden=true;if(visorOrigen)visorOrigen.focus();}
+$('#visor-cerrar').addEventListener('click',cerrarVisor);
+$('#visor').addEventListener('click',e=>{if(e.target.id==='visor')cerrarVisor();});
+$('#visor').addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();$('#visor-cerrar').focus();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#visor').hidden){cerrarVisor();return;}if(e.key==='Escape'){if($('#app').classList.contains('intro'))terminarIntro();else if(App.foco)App.enfocar(null);}});
 $('#b-marca').addEventListener('click',()=>{if(!W3){toast('La entrada animada necesita WebGL y movimiento activado.');return;}if(S.tor.fase==='jugando')return;arrancarIntro();});
 
 function arrancarIntro(){
@@ -1805,12 +2850,14 @@ function iniciar(){
   if(W3){
     W3.estado(analisis(S.cartera));
     W3.flota(App.ranking());
+    W3.equipo(eqA().cartera,null);
     arrancarIntro();
   }else{
     $('#app').classList.remove('intro','montaje');
     window.__plano.pintar();
   }
-  window.addEventListener('resize',()=>{if(W3)W3.tam();actualizarRegion();if(window.__plano&&!W3)window.__plano.pintar();});
+  window.addEventListener('resize',()=>{if(W3)W3.tam();actualizarRegion();if(window.__plano&&!W3)window.__plano.pintar();if(mapaVisible()){MAPA.w=0;dibujarMapa();}});
+  actualizarBadgeEq();
   App.ir('despegue');
 }
 function W3proxy(pl){

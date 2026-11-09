@@ -245,7 +245,7 @@ p{margin:0}
 .feed-ctrl button:active{transform:scale(.9)}
 .feed-ctrl svg{width:18px;height:18px}
 .feed-ctrl span{min-width:34px;text-align:center}
-.slot-mini{width:52px;height:52px;flex:none;cursor:pointer;touch-action:manipulation;background:radial-gradient(circle,rgba(255,255,255,.75) 40%,rgba(255,255,255,0) 72%)}
+.slot-mini{width:52px;height:52px;flex:none;cursor:pointer;touch-action:manipulation;border:1.5px solid rgba(21,33,58,.14);background:radial-gradient(circle,rgba(255,255,255,.75) 40%,rgba(255,255,255,0) 72%)}
 .feed{position:absolute;left:0;right:0;top:calc(var(--cab-h) + 72px);bottom:calc(var(--tab-h) + 2px);overflow-y:auto;overflow-x:hidden;scroll-snap-type:y mandatory;overscroll-behavior:contain;scrollbar-width:none}
 .feed::-webkit-scrollbar{display:none}
 .carta{height:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:4px var(--gr) 8px var(--gl)}
@@ -328,10 +328,10 @@ p{margin:0}
 .res-sello{font-size:11px;font-weight:800;color:var(--tinta-2);letter-spacing:.02em;text-align:center;padding-top:4px;border-top:1px solid rgba(255,255,255,.7)}
 
 /* ───── Barra de pestañas ───── */
-.pestanas{position:absolute;z-index:6;left:12px;right:12px;bottom:calc(var(--bot) + 10px);height:68px;border-radius:28px;display:grid;grid-template-columns:repeat(4,1fr);padding:6px;background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 44px -20px rgba(40,30,90,.42),inset 0 1px 0 #fff}
-.indicador{position:absolute;z-index:0;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 4);border-radius:22px;background:linear-gradient(180deg,#fff,#f6f2fb);box-shadow:0 6px 16px -8px rgba(40,30,90,.45),inset 0 -2px 0 rgba(122,99,224,.18);will-change:transform}
+.pestanas{position:absolute;z-index:6;left:12px;right:12px;bottom:calc(var(--bot) + 10px);height:68px;border-radius:28px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:6px;background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(22px) saturate(1.7);backdrop-filter:blur(22px) saturate(1.7);border:1px solid rgba(255,255,255,.95);box-shadow:0 22px 44px -20px rgba(40,30,90,.42),inset 0 1px 0 #fff}
+.indicador{position:absolute;z-index:0;top:6px;bottom:6px;left:6px;width:calc((100% - 12px) / 5);border-radius:22px;background:linear-gradient(180deg,#fff,#f6f2fb);box-shadow:0 6px 16px -8px rgba(40,30,90,.45),inset 0 -2px 0 rgba(122,99,224,.18);will-change:transform}
 .indicador::after{content:"";position:absolute;left:30%;right:30%;bottom:5px;height:3px;border-radius:2px;background:var(--irid)}
-.pest{position:relative;z-index:1;border:0;background:none;display:grid;place-items:center;align-content:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--tinta-3);border-radius:22px;padding:0;min-height:44px;transition:color .25s,transform .45s var(--muelle)}
+.pest{position:relative;z-index:1;border:0;background:none;display:grid;place-items:center;align-content:center;gap:2px;font-size:11.5px;font-weight:700;color:var(--tinta-3);border-radius:22px;padding:0;min-height:44px;min-width:0;white-space:nowrap;letter-spacing:-.01em;transition:color .25s,transform .45s var(--muelle)}
 .pest:active{transform:scale(.9)}
 .pest[aria-current="page"]{color:var(--tinta)}
 .pest svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .5s var(--muelle)}
@@ -367,6 +367,180 @@ p{margin:0}
 .lista-reglas li{padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.75);border:1px solid #fff;font-size:14px;color:var(--tinta-2);line-height:1.45}
 .lista-reglas b{color:var(--tinta)}
 
+/* ───── Segmentos (Reparto · Mapa, secciones del equipo) ───── */
+.vista{display:flex;flex-direction:column;gap:16px}
+.vista[hidden]{display:none}
+.segm{position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:2px;padding:4px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid var(--borde-luz);box-shadow:inset 0 1px 3px rgba(21,33,58,.07)}
+.segm button{position:relative;z-index:1;border:0;background:none;min-height:40px;border-radius:999px;font-weight:700;font-size:14px;color:var(--tinta-3);padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .25s,transform .45s var(--muelle);touch-action:manipulation}
+.segm button:active{transform:scale(.94)}
+.segm button[aria-selected="true"],.segm button[aria-pressed="true"]{color:var(--tinta)}
+.segm-ind{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:linear-gradient(180deg,#fff,#f6f2fb);box-shadow:0 6px 14px -8px rgba(40,30,90,.45),inset 0 -2px 0 rgba(122,99,224,.2);transition:transform .6s var(--muelle),width .6s var(--muelle)}
+.segm-peq button{font-size:13px;min-height:38px}
+
+/* ───── MAPA (Mi cartera) ───── */
+.mapa-cab{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:10px;align-items:center}
+.mapa-cab .mini{margin-top:3px}
+.mapa-caja{position:relative;border-radius:22px;overflow:hidden;padding:8px 6px;background:radial-gradient(90% 120% at 15% 0%,rgba(243,195,177,.32),transparent 60%),radial-gradient(80% 120% at 100% 100%,rgba(191,238,227,.4),transparent 60%),linear-gradient(170deg,#fffdfb,#f6f1fb);border:1px solid var(--borde-luz);box-shadow:inset 0 1px 0 #fff,inset 0 -10px 24px -18px rgba(122,99,224,.35)}
+#mapa-cv{display:block;width:100%;height:auto;cursor:default}
+.mapa-expl{font-size:13px;color:var(--tinta-2);line-height:1.4;display:flex;gap:8px;align-items:flex-start}
+.mapa-expl svg{flex:none;width:16px;height:16px;margin-top:2px;color:var(--lila)}
+.geo-lista{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.geo-fila{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) 46px;gap:10px;align-items:center;font-size:13px;font-weight:700;color:var(--tinta-2);padding:3px 6px;margin:0 -6px;border-radius:12px;transition:background .25s}
+.geo-fila.foco{background:rgba(255,255,255,.75)}
+.geo-fila .nom{display:flex;align-items:center;gap:7px;min-width:0}
+.geo-fila .nom span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.geo-fila .nom small{font-weight:600;color:var(--tinta-3)}
+.geo-fila i{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 22%,transparent)}
+.geo-fila .pista-b{height:8px;border-radius:5px;background:rgba(21,33,58,.08);overflow:hidden}
+.geo-fila .pista-b b{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,color-mix(in srgb,var(--c) 45%,#fff),var(--c));transform-origin:left;transition:transform .9s var(--muelle)}
+.geo-fila .v{text-align:right;color:var(--tinta);font-variant-numeric:tabular-nums}
+.prueba{display:grid;gap:4px;padding:12px 14px 6px;border-radius:20px;background:rgba(255,255,255,.6);border:1px dashed var(--linea-2)}
+.prueba-fila{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.selector{font:inherit;font-weight:700;font-size:14px;color:var(--tinta);min-height:42px;max-width:100%;min-width:0;flex:1;padding:0 34px 0 12px;border-radius:14px;border:1px solid var(--linea-2);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2345506b' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/16px;-webkit-appearance:none;appearance:none;cursor:pointer}
+.prueba output{font-family:var(--f-disp);font-size:26px;font-weight:600;font-variation-settings:"SOFT" 100;min-width:2.8em;text-align:right}
+.prueba .mini{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.casa-frase{font-family:var(--f-disp);font-size:24px;line-height:1.15;font-weight:500;letter-spacing:-.02em;font-variation-settings:"SOFT" 100,"opsz" 72}
+.casa-frase b{font-weight:650;background:linear-gradient(100deg,#c26a50,#8a6be8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.casa-barra{display:flex;height:14px;border-radius:8px;overflow:hidden;background:rgba(21,33,58,.08)}
+.casa-barra b{display:block;height:100%;background:linear-gradient(90deg,#f3c3b1,#e8876f);transition:width .9s var(--muelle)}
+.casa-ley{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--tinta-2)}
+.mon-barra{display:flex;height:18px;border-radius:10px;overflow:hidden;gap:2px;background:rgba(21,33,58,.05)}
+.mon-barra b{display:block;height:100%;min-width:0;background:var(--c);transition:width .9s var(--muelle);box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.mon-ley{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;font-weight:700;color:var(--tinta-2)}
+.mon-ley li{display:inline-flex;align-items:center;gap:6px}
+.mon-ley li.cero{opacity:.55}
+.mon-ley i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.mon-ley b{color:var(--tinta);font-variant-numeric:tabular-nums}
+.mon-esc{display:grid;gap:8px;padding:14px;border-radius:20px;background:rgba(255,255,255,.6);border:1px solid var(--linea)}
+.mon-preg{font-family:var(--f-disp);font-size:20px;line-height:1.2;font-weight:540;font-variation-settings:"SOFT" 100,"opsz" 48}
+.mon-preg output{font-style:italic;color:var(--lila)}
+.mon-res{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+.mon-res .gran-num{font-size:44px}
+.mon-res p{font-size:13px;color:var(--tinta-2);line-height:1.4}
+.mon-res p b{color:var(--tinta)}
+.senales{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.senal{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:12px 14px;border-radius:18px;background:linear-gradient(170deg,rgba(255,255,255,.92),var(--cf,#fff));border:1px solid var(--borde-luz);font-size:13.5px;color:var(--tinta-2);line-height:1.4}
+.senal .punto{margin-top:5px}
+.senal b{color:var(--tinta)}
+.senal .chip-ysi{grid-column:1/-1;margin-top:4px;min-height:44px;font-size:13.5px}
+
+/* ───── CARTERA EN EQUIPO ───── */
+.eq-sub{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13.5px;color:var(--tinta-2);font-weight:600;margin-top:-6px}
+.eq-sub b{color:var(--tinta);font-weight:800}
+.codigo{font-weight:800;letter-spacing:.14em;color:var(--tinta);padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.8);border:1px solid var(--borde-luz)}
+.colonia{position:relative;width:min(100%,360px);aspect-ratio:1/.9;margin:-2px auto -6px}
+.slot-eq{position:absolute;left:50%;top:47%;width:48%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%}
+.celula{position:absolute;width:27%;display:grid;justify-items:center;gap:0;left:var(--x);top:var(--y);pointer-events:none}
+.celula>*{pointer-events:auto}
+.slot-cel{width:100%;aspect-ratio:1;border-radius:50%}
+.cel-nom{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;color:var(--tinta);white-space:nowrap;margin-top:-6px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.72)}
+.cel-nom small{font-weight:600;color:var(--tinta-3)}
+.cel-nom svg{width:14px;height:14px;flex:none}
+.cel-voto{min-height:20px;margin-top:3px;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap;opacity:0;transform:scale(.6);transition:opacity .25s,transform .5s var(--muelle)}
+.cel-voto.on{opacity:1;transform:none}
+.cel-voto[data-v="favor"]{background:var(--ok-f);color:var(--ok)}
+.cel-voto[data-v="contra"]{background:var(--alto-f);color:var(--alto)}
+.cel-voto[data-v="abst"]{background:rgba(21,33,58,.08);color:var(--tinta-2)}
+.ava{display:block;flex:none;overflow:visible;filter:drop-shadow(0 3px 5px rgba(40,30,90,.18))}
+.reto{grid-template-columns:auto 1fr;align-items:center;gap:6px 14px}
+.reto .ava-capi{position:relative}
+.reto .ava-capi svg.corona{position:absolute;left:50%;top:-11px;width:20px;height:20px;margin-left:-10px}
+.reto h2{font-size:19px}
+.reto .estado{grid-column:1/-1}
+.estado-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 12px 6px 10px;border-radius:999px;font-size:13px;font-weight:700;color:var(--tinta-2);background:linear-gradient(170deg,#fff,var(--cf,#fff));border:1px solid var(--borde-luz)}
+.estado-chip b{color:var(--c)}
+.pista-k{display:grid;gap:10px;padding:14px;border-radius:22px;background:linear-gradient(120deg,rgba(220,211,253,.5),rgba(191,238,227,.45));border:1px solid #fff}
+.pista-k p{font-size:13.5px;color:var(--tinta-2)}
+.pista-k p b{color:var(--tinta)}
+.prop{gap:12px}
+.prop-cab{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.prop-autor{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--tinta-2);font-weight:600;min-width:0}
+.prop-autor b{color:var(--tinta);font-weight:800}
+.prop-estado{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800;white-space:nowrap;background:rgba(255,255,255,.85);border:1px solid var(--linea);color:var(--tinta-2);font-variant-numeric:tabular-nums}
+.prop-estado i{width:8px;height:8px;border-radius:50%;background:var(--lila);animation:latido 2.4s ease-in-out infinite}
+.prop-estado[data-e="aprobada"]{background:var(--ok-f);color:var(--ok);border-color:transparent}
+.prop-estado[data-e="rechazada"]{background:var(--alto-f);color:var(--alto);border-color:transparent}
+.prop-estado[data-e="aprobada"] i{background:var(--ok);animation:none}
+.prop-estado[data-e="rechazada"] i{background:var(--alto);animation:none}
+.prop h3{font-family:var(--f-disp);font-size:21px;line-height:1.12;font-weight:560;letter-spacing:-.02em;font-variation-settings:"SOFT" 100,"opsz" 72}
+.porque{font-size:14.5px;color:var(--tinta-2);font-style:italic;line-height:1.4;padding-left:12px;border-left:3px solid;border-image:var(--irid) 1}
+.recuento{display:grid;gap:6px}
+.rec-barra{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;position:relative}
+.rec-barra i{height:10px;border-radius:6px;background:rgba(21,33,58,.08);position:relative;overflow:hidden}
+.rec-barra i b{position:absolute;inset:0;border-radius:6px;transform:scaleX(0);transform-origin:left;transition:transform .7s var(--muelle)}
+.rec-barra i.on b{transform:none}
+.rec-barra i[data-v="favor"] b{background:linear-gradient(90deg,#8fdcc8,var(--ok))}
+.rec-barra i[data-v="contra"] b{background:linear-gradient(90deg,#f3b7ad,var(--alto))}
+.rec-barra i[data-v="abst"] b{background:rgba(21,33,58,.28)}
+.rec-barra::after{content:"";position:absolute;left:calc(75% - 3px);top:-4px;bottom:-4px;width:2px;border-radius:1px;background:var(--tinta-3)}
+.asientos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.asiento{display:grid;justify-items:center;gap:3px;font-size:11.5px;font-weight:700;color:var(--tinta-2);text-align:center;min-width:0}
+.asiento span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asiento .av-c{position:relative}
+.asiento .marca-v{position:absolute;right:-5px;bottom:-3px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1.5px solid #fff;box-shadow:0 2px 5px rgba(21,33,58,.25)}
+.asiento .marca-v svg{width:12px;height:12px}
+.asiento[data-v="favor"] .marca-v{background:var(--ok);color:#fff}
+.asiento[data-v="contra"] .marca-v{background:var(--alto);color:#fff}
+.asiento[data-v="abst"] .marca-v{background:var(--tinta-3);color:#fff}
+.asiento[data-v="pend"] .marca-v{background:#fff;color:var(--tinta-3)}
+.asiento.llega .av-c{animation:pulso .7s var(--muelle)}
+.asiento small{font-weight:600;color:var(--tinta-3);font-size:11px}
+.votar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.voto{display:grid;justify-items:center;align-content:center;gap:2px;min-height:58px;padding:6px 4px;border-radius:18px;border:1px solid var(--linea-2);background:rgba(255,255,255,.8);font-weight:800;font-size:13px;transition:transform .45s var(--muelle),background .2s,box-shadow .2s,opacity .2s;touch-action:manipulation}
+.voto svg{width:20px;height:20px}
+.voto:active{transform:scale(.93)}
+.voto[data-v="favor"]{color:var(--ok)}
+.voto[data-v="contra"]{color:var(--alto)}
+.voto[data-v="abst"]{color:var(--tinta-2)}
+.voto[aria-pressed="true"]{color:#fff;border-color:transparent;box-shadow:0 10px 20px -12px rgba(21,33,58,.6)}
+.voto[data-v="favor"][aria-pressed="true"]{background:linear-gradient(180deg,#2b9d73,var(--ok))}
+.voto[data-v="contra"][aria-pressed="true"]{background:linear-gradient(180deg,#c94b40,var(--alto))}
+.voto[data-v="abst"][aria-pressed="true"]{background:linear-gradient(180deg,#5c6582,var(--tinta-2))}
+.voto[disabled]{cursor:default}
+.voto[disabled]:not([aria-pressed="true"]){opacity:.4}
+.voto[disabled]:active{transform:none}
+.reacc{display:flex;flex-wrap:wrap;gap:6px}
+.reac{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--linea);background:rgba(255,255,255,.7);font-size:12.5px;font-weight:700;color:var(--tinta-2);transition:transform .4s var(--muelle),background .2s}
+.reac:active{transform:scale(.93)}
+.reac span{font-variant-numeric:tabular-nums;color:var(--tinta-3);font-weight:800}
+.reac[aria-pressed="true"]{background:var(--lila-claro);border-color:#fff;color:var(--tinta)}
+.reac[aria-pressed="true"] span{color:var(--lila)}
+.reac.salta span{display:inline-block;animation:pulso .6s var(--muelle)}
+.prop-fin:empty{display:none}
+.prop-fin{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:18px;font-size:14px;font-weight:700;line-height:1.4;background:linear-gradient(170deg,rgba(255,255,255,.9),var(--cf));border:1px solid var(--borde-luz)}
+.prop-fin svg{flex:none;width:22px;height:22px;color:var(--c)}
+.prop-fin small{display:block;font-weight:600;color:var(--tinta-2);font-size:12.5px}
+.prop.cerrada .votar,.prop.cerrada .reacc{display:none}
+.prop.nueva{animation:entra .7s var(--muelle)}
+@keyframes entra{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.hitos{list-style:none;margin:0;padding:0 0 0 24px;display:grid;gap:12px;position:relative}
+.hitos::before{content:"";position:absolute;left:8px;top:8px;bottom:8px;width:3px;border-radius:2px;background:var(--irid)}
+.hito{position:relative;padding:12px 14px;border-radius:20px;background:linear-gradient(170deg,rgba(255,255,255,.92),rgba(255,255,255,.66));border:1px solid var(--borde-luz);box-shadow:0 10px 20px -16px rgba(40,30,90,.45);display:grid;gap:5px;font-size:13.5px;color:var(--tinta-2)}
+.hito::before{content:"";position:absolute;left:-22px;top:16px;width:13px;height:13px;border-radius:50%;background:var(--c,var(--lila));border:3px solid #fff;box-shadow:0 2px 6px rgba(21,33,58,.3)}
+.hito .h-cab{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--tinta-3)}
+.hito .h-res{color:var(--c)}
+.hito h3{font-family:var(--f-txt);font-size:15px;font-weight:800;letter-spacing:0;color:var(--tinta)}
+.hito .h-ef{display:flex;align-items:flex-start;gap:6px;font-weight:700;color:var(--tinta);font-size:13px}
+.hito .h-ef svg{width:16px;height:16px;flex:none;margin-top:1px;color:var(--c)}
+.hito.nuevo{animation:entra .7s var(--muelle)}
+.miembros{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.miembro{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;align-items:center;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid #fff}
+.miembro b{display:block;font-weight:800;font-size:15px}
+.miembro small{display:block;font-size:12.5px;color:var(--tinta-3);font-weight:600}
+.rol{justify-self:start;width:max-content;margin:3px 0 2px;font-size:11.5px;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--irid);color:var(--tinta);white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.rol svg{width:13px;height:13px}
+.campo{display:grid;gap:6px;font-size:13.5px;font-weight:700;color:var(--tinta-2)}
+.campo>span{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.campo small{font-weight:700;color:var(--tinta-3);font-variant-numeric:tabular-nums}
+.campo small.ok{color:var(--ok)}
+.campo input[type="text"]{font:inherit;font-weight:600;font-size:16px;color:var(--tinta);min-height:48px;padding:0 14px;border-radius:16px;border:1px solid var(--linea-2);background:#fff;width:100%}
+.campo input[type="text"]::placeholder{color:#7a8299;font-weight:500}
+.campo input.mayus{text-transform:uppercase;letter-spacing:.2em;font-weight:800}
+.campo output{font-family:var(--f-disp);font-size:22px;font-weight:600;color:var(--tinta);font-variation-settings:"SOFT" 100}
+.acc-fila.compacta .btn{padding:0 10px;font-size:14px}
+.nota-ok{padding:12px 14px;border-radius:16px;background:var(--ok-f);color:var(--ok);font-weight:700;font-size:14px}
+.nota-ok:empty{display:none}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
   .btn.primario::after{display:none}
@@ -382,8 +556,9 @@ p{margin:0}
     <p class="lead">Una cartera simulada que respira. Si una parte pesa demasiado, se inclina y se agita. Con variedad, florece.</p>
     <ol class="pasos">
       <li><span><b>Empújalo</b> con el ratón o el dedo: rebota.</span></li>
-      <li><span>En <b>Mi cartera</b>, arrastra el tirador del anillo.</span></li>
+      <li><span>En <b>Mi cartera</b>, arrastra el tirador del anillo. En <b>Mapa</b>, mira dónde vive tu dinero.</span></li>
       <li><span>En <b>Descubrir</b>, prueba una empresa inventada.</span></li>
+      <li><span>En <b>Equipo</b>, vota: arrastra tu organismo hasta el del equipo.</span></li>
       <li><span>En <b>Liga</b>, lanza un escenario contra Lince_27.</span></li>
     </ol>
     <button class="btn peq" id="renacer" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v4h4"/></svg>Verlo nacer otra vez</button>
@@ -454,6 +629,12 @@ p{margin:0}
         <section class="pantalla" id="p-cartera" data-tab="cartera" aria-labelledby="t-cartera" inert>
           <div class="scroll" id="scroll-cartera">
             <div class="cab-pant"><h1 id="t-cartera">Mi cartera</h1><p id="mc-res" class="num">4 órganos · 3 sectores</p></div>
+            <div class="segm" role="tablist" aria-label="Vistas de Mi cartera" id="seg-mc">
+              <span class="segm-ind" aria-hidden="true"></span>
+              <button type="button" role="tab" id="tab-reparto" aria-controls="mc-reparto" aria-selected="true" data-vista="reparto">Reparto</button>
+              <button type="button" role="tab" id="tab-mapa" aria-controls="mc-mapa" aria-selected="false" tabindex="-1" data-vista="mapa">Mapa</button>
+            </div>
+            <div class="vista" id="mc-reparto" role="tabpanel" aria-labelledby="tab-reparto">
             <div class="anillo-caja">
               <svg id="anillo" viewBox="0 0 320 320" aria-label="Anillo de pesos">
                 <circle class="pista-anillo" cx="160" cy="160" r="140"/>
@@ -478,6 +659,56 @@ p{margin:0}
             </article>
             <div class="cab-pant"><h2 style="font-size:22px">Órganos</h2><p class="desliza-nota">Desliza a la izquierda para quitar</p></div>
             <ul class="lista-pos" id="lista-pos"></ul>
+            </div>
+
+            <!-- ── Tu cartera en el mapa ── -->
+            <div class="vista" id="mc-mapa" role="tabpanel" aria-labelledby="tab-mapa" hidden>
+              <article class="tarjeta" aria-labelledby="mapa-t">
+                <div class="mapa-cab">
+                  <div><h2 id="mapa-t">Tu cartera en el mapa</h2><p class="mini">Datos de ejemplo · empresas inventadas</p></div>
+                  <button class="slot slot-mini" type="button" data-slot="mapa" aria-label="Tu organismo: volver a Reparto"></button>
+                </div>
+                <div class="segm segm-peq" role="group" aria-label="Qué muestra el mapa" id="seg-geo">
+                  <span class="segm-ind" aria-hidden="true"></span>
+                  <button type="button" aria-pressed="true" data-geo="sede">Dónde tienen la sede</button>
+                  <button type="button" aria-pressed="false" data-geo="ventas">Dónde venden</button>
+                </div>
+                <div class="mapa-caja"><canvas id="mapa-cv" role="img" aria-label="Mapa de puntos de tu cartera"></canvas></div>
+                <p class="mapa-expl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg><span id="mapa-expl">No es lo mismo: la sede dice dónde está la empresa; las ventas, de dónde sale su dinero.</span></p>
+                <ul class="geo-lista" id="geo-lista" aria-live="polite"></ul>
+                <div class="prueba">
+                  <div class="prueba-fila"><label class="sr" for="pr-emp">Empresa para probar un peso</label><select class="selector" id="pr-emp"></select><output id="pr-out" class="num" for="pr-peso">46 %</output></div>
+                  <input class="rango" type="range" id="pr-peso" min="1" max="90" step="1" value="46" aria-label="Peso de la empresa elegida, en porcentaje">
+                  <p class="mini"><span>Prueba un peso: el mapa y las monedas cambian contigo.</span><button class="btn-texto" type="button" id="pr-desh">Deshacer</button></p>
+                </div>
+              </article>
+              <article class="tarjeta" aria-labelledby="casa-t">
+                <div class="tarjeta-cab"><h2 id="casa-t">Sesgo de casa</h2><span class="eti">España frente al resto</span></div>
+                <p class="casa-frase" id="casa-frase" aria-live="polite">El <b>14 %</b> de tu cartera tiene sede en España.</p>
+                <div class="casa-barra" aria-hidden="true"><b id="casa-b" style="width:14%"></b></div>
+                <div class="casa-ley" aria-hidden="true"><span id="casa-es">España 14 %</span><span id="casa-resto">Resto 86 %</span></div>
+                <p class="mini" id="casa-ventas">Y el 4 % de lo que venden tus empresas se vende en España.</p>
+              </article>
+              <article class="tarjeta" aria-labelledby="mon-t">
+                <div class="tarjeta-cab"><h2 id="mon-t">Exposición a monedas</h2><span class="eti">Ejemplo</span></div>
+                <div class="mon-barra" id="mon-barra" role="img" aria-label="Reparto por moneda"></div>
+                <ul class="mon-ley" id="mon-ley"></ul>
+                <div class="mon-esc">
+                  <p class="mon-preg" id="mon-preg">¿Y si el dólar baja un <output id="mon-x" for="mon-r">10 %</output> frente al euro?</p>
+                  <div class="esc-chips" id="mon-chips" role="group" aria-label="Moneda del escenario"></div>
+                  <input class="rango" type="range" id="mon-r" min="0" max="30" step="1" value="10" aria-label="Cuánto baja la moneda frente al euro, en porcentaje">
+                  <div class="regla-esc" aria-hidden="true"><span>0 %</span><span>−15 %</span><span>−30 %</span></div>
+                  <div class="mon-res" id="mon-res" aria-live="polite"></div>
+                  <p class="mini" id="mon-tipos"></p>
+                </div>
+              </article>
+              <article class="tarjeta" aria-labelledby="sen-t">
+                <div class="tarjeta-cab"><h2 id="sen-t">Señales</h2><span class="eti">Orientativas, no normas</span></div>
+                <ul class="senales" id="senales" aria-live="polite"></ul>
+                <p class="mini">Klever avisa si una moneda distinta del euro pasa del 50&nbsp;%, un país de sede del 60&nbsp;% o una región de ventas del 70&nbsp;%. Solo propone pesos.</p>
+              </article>
+              <p class="pie-legal">Sedes, monedas, ventas y tipos de cambio son datos de ejemplo. Escenario ilustrativo: no predice nada.</p>
+            </div>
           </div>
         </section>
 
@@ -493,6 +724,70 @@ p{margin:0}
             <button class="slot slot-mini" type="button" data-slot="mini" aria-label="Tu organismo: ir a Mi cartera"></button>
           </div>
           <div class="feed" id="feed" aria-label="Tarjetas de empresas inventadas"></div>
+        </section>
+
+        <!-- ═════ CARTERA EN EQUIPO ═════ -->
+        <section class="pantalla" id="p-equipo" data-tab="equipo" aria-labelledby="t-equipo" inert>
+          <div class="scroll" id="scroll-equipo">
+            <div class="cab-pant"><h1 id="t-equipo">Cartera en equipo</h1></div>
+            <p class="eq-sub" id="eq-sub"></p>
+            <div class="colonia" id="colonia">
+              <div class="slot slot-eq" data-slot="equipo" tabindex="0" role="img" id="slot-equipo" aria-label="Organismo del equipo"></div>
+              <div class="celula" style="--x:0%;--y:0%"><div class="slot slot-cel" data-slot="eqyo" tabindex="0" role="img" id="slot-eqyo" aria-label="Tu organismo. Arrástralo hasta el del equipo para votar a favor."></div><span class="cel-nom">Nácar <small>(tú)</small></span><span class="cel-voto" data-m="yo"></span></div>
+              <div class="celula" style="--x:73%;--y:0%"><div class="slot-cel" data-cel="bruma" aria-hidden="true"></div><span class="cel-nom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 3.5L12 5l4.5 6.5L21 8l-2 10H5z" fill="#efab45" stroke="#8f5806" stroke-width="1.4" stroke-linejoin="round"/></svg>Bruma</span><span class="cel-voto" data-m="bruma"></span></div>
+              <div class="celula" style="--x:0%;--y:58%"><div class="slot-cel" data-cel="kiwi" aria-hidden="true"></div><span class="cel-nom">Kiwi_9</span><span class="cel-voto" data-m="kiwi"></span></div>
+              <div class="celula" style="--x:73%;--y:58%"><div class="slot-cel" data-cel="coral" aria-hidden="true"></div><span class="cel-nom">Coral_3</span><span class="cel-voto" data-m="coral"></span></div>
+            </div>
+            <p class="pista" id="pista-eq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5c0 3.6-2.4 6.5-6 6.5-2.4 0-3.8-1-5.2-3L5 14.6a1.6 1.6 0 0 1 2.5-2L9 14"/></svg><span id="pista-eq-t">Arrastra tu organismo hasta el del equipo para votar a favor</span></p>
+            <div class="semaforos" id="semaforos-eq" aria-live="polite"></div>
+            <div class="segm" role="tablist" aria-label="Secciones del equipo" id="seg-eq">
+              <span class="segm-ind" aria-hidden="true"></span>
+              <button type="button" role="tab" id="tab-eq-prop" aria-controls="eq-prop" aria-selected="true" data-eq="prop">Propuestas</button>
+              <button type="button" role="tab" id="tab-eq-hist" aria-controls="eq-hist" aria-selected="false" tabindex="-1" data-eq="hist">Historial</button>
+              <button type="button" role="tab" id="tab-eq-liga" aria-controls="eq-liga" aria-selected="false" tabindex="-1" data-eq="liga">Liga</button>
+              <button type="button" role="tab" id="tab-eq-miem" aria-controls="eq-miem" aria-selected="false" tabindex="-1" data-eq="miem">Miembros</button>
+            </div>
+
+            <div class="vista" id="eq-prop" role="tabpanel" aria-labelledby="tab-eq-prop">
+              <article class="tarjeta reto" id="reto-eq" aria-labelledby="reto-t"></article>
+              <div class="pista-k" id="pista-k"></div>
+              <button class="btn primario ancho" type="button" id="nueva-prop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nueva propuesta</button>
+              <div class="vista" id="lista-prop"></div>
+            </div>
+            <div class="vista" id="eq-hist" role="tabpanel" aria-labelledby="tab-eq-hist" hidden>
+              <article class="tarjeta" aria-labelledby="hist-t">
+                <div class="tarjeta-cab"><h2 id="hist-t">Historial del equipo</h2><span class="eti">Temporada 0</span></div>
+                <p class="mini">Cada decisión, quién la propuso, su porqué y qué pasó después en los semáforos.</p>
+                <ol class="hitos" id="hitos" aria-live="polite"></ol>
+              </article>
+            </div>
+            <div class="vista" id="eq-liga" role="tabpanel" aria-labelledby="tab-eq-liga" hidden>
+              <article class="tarjeta semana-pts" aria-labelledby="eqp-t">
+                <div><span class="eti" id="eqp-t">Semana del equipo</span><div class="gran-num num"><span id="eq-total">41</span><small>/100</small></div></div>
+                <div class="barras" id="eq-barras"></div>
+                <ul class="lista-reglas" id="eq-desglose" style="grid-column:1/-1"></ul>
+              </article>
+              <article class="tarjeta clasif" aria-labelledby="clasif-eq-t">
+                <div class="tarjeta-cab"><h2 id="clasif-eq-t">Liga de equipos</h2><span class="eti">Esta semana</span></div>
+                <ol id="clasif-eq"></ol>
+                <p class="mini">Solo nombres de equipo. Mismas reglas que la Liga individual, sobre la cartera común.</p>
+              </article>
+            </div>
+            <div class="vista" id="eq-miem" role="tabpanel" aria-labelledby="tab-eq-miem" hidden>
+              <article class="tarjeta" aria-labelledby="miem-t">
+                <div class="tarjeta-cab"><h2 id="miem-t">Miembros</h2><span class="eti">4 de 5</span></div>
+                <ul class="miembros" id="miembros"></ul>
+                <p class="mini" id="rotacion"></p>
+              </article>
+              <article class="tarjeta" aria-labelledby="otro-t">
+                <div class="tarjeta-cab"><h2 id="otro-t">Otro equipo</h2><span class="eti">De 3 a 5 amigos</span></div>
+                <p class="mini">Una cartera común. Cada cambio se vota: se aprende a argumentar y a ceder.</p>
+                <div class="acc-fila compacta"><button class="btn" type="button" id="unirse-eq">Unirme con código</button><button class="btn primario" type="button" id="crear-eq">Crear equipo</button></div>
+                <button class="btn ancho" type="button" id="invitar-eq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Invitar a Las Medusas</button>
+              </article>
+            </div>
+            <p class="pie-legal">Apodos, equipos, votos y cifras de ejemplo. Klever propone pesos, nunca empresas. Sin chat: solo reacciones.</p>
+          </div>
         </section>
 
         <!-- ═════ LIGA ═════ -->
@@ -538,6 +833,7 @@ p{margin:0}
         <button class="pest" type="button" data-tab="hoy" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rel" d="M12 3c3.6 4.1 6.4 7.3 6.4 10.6a6.4 6.4 0 0 1-12.8 0C5.6 10.3 8.4 7.1 12 3z"/></svg>Hoy</button>
         <button class="pest" type="button" data-tab="cartera"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.2"/><path d="M12 3.8a8.2 8.2 0 0 1 8.2 8.2" stroke-width="3.4"/><circle class="rel" cx="12" cy="12" r="3.4"/></svg>Mi cartera</button>
         <button class="pest" type="button" data-tab="descubrir"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rel" d="M12 11c-2-1.6-2.4-4.4-.1-7.4 2.3 3 2 5.8.1 7.4zM13 12.2c1.1-2.3 3.8-3.4 7.3-2.1-1.8 3.3-4.6 4.1-7.3 2.1zM11 12.2c-1.1-2.3-3.8-3.4-7.3-2.1 1.8 3.3 4.6 4.1 7.3 2.1zM12.6 13.3c2.3 1 3.5 3.6 2.3 7.1-3.3-1.7-4.3-4.5-2.3-7.1zM11.4 13.3c-2.3 1-3.5 3.6-2.3 7.1 3.3-1.7 4.3-4.5 2.3-7.1z"/></svg>Descubrir</button>
+        <button class="pest" type="button" data-tab="equipo" aria-label="Cartera en equipo"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="rel" cx="12" cy="12.5" r="4.4"/><circle cx="5" cy="6" r="2.4"/><circle cx="19" cy="6" r="2.4"/><circle cx="12" cy="20.6" r="1.9"/><path d="M6.7 7.7l2.4 2.2M17.3 7.7l-2.4 2.2M12 17v1.7"/></svg>Equipo</button>
         <button class="pest" type="button" data-tab="liga"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="rel" cx="8.6" cy="12" r="5.4"/><circle cx="15.4" cy="12" r="5.4"/></svg>Liga</button>
       </nav>
 
@@ -604,11 +900,120 @@ const ESC = {
 const RIVAL = [{ t: 'VITA', w: 20 }, { t: 'FERR', w: 18 }, { t: 'IBER', w: 16 }, { t: 'HOGR', w: 16 }, { t: 'AQUA', w: 15 }, { t: 'PIXL', w: 15 }];
 const LIGA = [{ a: 'Lince_27', p: 82, av: 'linear-gradient(135deg,#bfeee3,#33b59f)' }, { a: 'Bruma', p: 74, av: 'linear-gradient(135deg,#dcd3fd,#8f7cf0)' }, { a: 'Kiwi_9', p: 41, av: 'linear-gradient(135deg,#fde6b8,#efab45)' }, { a: 'Orca', p: 33, av: 'linear-gradient(135deg,#cfe0ff,#5b86e5)' }, { a: 'Sauce', p: 28, av: 'linear-gradient(135deg,#f6d2c8,#e8876f)' }];
 
+/* Geografía y moneda de ejemplo (todo inventado). Ventas por región, en este orden: España, resto de Europa, Norteamérica, Latinoamérica, Asia-Pacífico, otros. Suman 100. */
+const REG = [
+  { k: 'es', n: 'España', c: '#e8876f', lon: -4, lat: 40 },
+  { k: 'eu', n: 'Resto de Europa', c: '#8f7cf0', lon: 18, lat: 50 },
+  { k: 'na', n: 'Norteamérica', c: '#5b86e5', lon: -98, lat: 42 },
+  { k: 'la', n: 'Latinoamérica', c: '#e0962a', lon: -62, lat: -12 },
+  { k: 'ap', n: 'Asia-Pacífico', c: '#23a58c', lon: 112, lat: 28 },
+  { k: 'ot', n: 'Otros', c: '#a98a5e', lon: 20, lat: 6 }
+];
+const PAIS = { 'España': { r: 0, lon: -3.7, lat: 40.2 }, 'EE. UU.': { r: 2, lon: -97, lat: 39 }, 'Japón': { r: 4, lon: 138.5, lat: 36.5 }, 'Suiza': { r: 1, lon: 8.2, lat: 46.8 }, 'Reino Unido': { r: 1, lon: -1.8, lat: 52.8 }, 'Alemania': { r: 1, lon: 10.4, lat: 51.2 }, 'Francia': { r: 1, lon: 2.4, lat: 46.8 } };
+const MON = {
+  EUR: { n: 'euro', c: '#7a63e0' },
+  USD: { n: 'dólar', pl: 'dólares', art: 'el dólar', c: '#23927f', tipo: 1.08, s: '$' },
+  GBP: { n: 'libra', pl: 'libras', art: 'la libra', c: '#c06a4f', tipo: .85, s: '£' },
+  CHF: { n: 'franco suizo', pl: 'francos suizos', art: 'el franco suizo', c: '#5b86e5', tipo: .94, s: 'CHF' },
+  JPY: { n: 'yen', pl: 'yenes', art: 'el yen', c: '#c25aa0', tipo: 162, s: '¥' }
+};
+const GEO = {
+  NUBE: { p: 'EE. UU.', m: 'USD', v: [4, 18, 58, 6, 12, 2] },
+  SILI: { p: 'Japón', m: 'JPY', v: [2, 14, 22, 2, 56, 4] },
+  VITA: { p: 'Suiza', m: 'CHF', v: [8, 44, 26, 6, 12, 4] },
+  HOGR: { p: 'España', m: 'EUR', v: [62, 24, 0, 10, 0, 4] },
+  SOLR: { p: 'España', m: 'EUR', v: [48, 22, 6, 20, 2, 2] },
+  IBER: { p: 'España', m: 'EUR', v: [78, 6, 0, 14, 0, 2] },
+  FERR: { p: 'Alemania', m: 'EUR', v: [10, 58, 8, 4, 14, 6] },
+  AQUA: { p: 'Francia', m: 'EUR', v: [6, 70, 4, 12, 4, 4] },
+  PIXL: { p: 'Reino Unido', m: 'GBP', v: [6, 30, 34, 6, 20, 4] },
+  TERM: { p: 'España', m: 'EUR', v: [70, 26, 0, 0, 0, 4] },
+  ORBE: { p: 'EE. UU.', m: 'USD', v: [4, 20, 46, 10, 14, 6] }
+};
+/* Máscara de tierra de baja resolución (2,5° por punto; e España, u resto de Europa, n Norteamérica, l Latinoamérica, a Asia-Pacífico, o otros) */
+const MASCARA = [
+  '...nnnnnnn..nnnnnn.nnnnnn......nnnnnnnnnnnnnn.................u...........ooo...o.oooooooooooaaaaaaaaaaaaaaaaaaaaaa.',
+  'nnnnnnnnnnnnnnnnnnnnnnnnnnn....nnnnnnnnnnnn................uuuuuuuu...oooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaa',
+  'nnnnnnnnnnnnnnnnnnnnnnnnnnnn...nnnnnnnn.....uuu...........uuuuuuuuuuuooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaa',
+  'nnnnnnnnnnnnnnnnnnnnn..nnnnn....nnnnn.......uuu.........uuuuuuuuuuuuuooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaa',
+  'nnnnnnnnnnnnnnnn.......nnnn......nnn...................uuuuu..uuuuuuuooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaa',
+  'nnnnnnnnnnnnnnnn......nnnnnn.......................u...uuuuu...uuuuuuooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaa',
+  'nnnnnnnnnnnnnnnnnnn..nnnnnnnn.....................uuu...uuu..uuuuuuuuooooooooooooooooooooooooaaaaaaaaaaaaaaaa......a',
+  '.nnnnnnnnnnnnnnnnnnnnnnnnnnnnn...................uuuu..uuuuuuuuuuuuuuooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa......a',
+  '..nnnnnnnnnnnnnnnnnnnnnnnnnnnnn..................u.uuuuuuuuuuuuuuuuuuooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.....',
+  '...nnnnnnnnnnnnnnnnnnnnnnnnnnn.....................uuuuuuuuuuuuuuuuuuooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.....',
+  '...nnnnnnnnnnnnnnnnnnnnnnnnnn.......................uuuuuuuuuuuuuuuuuooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.......',
+  '...nnnnnnnnnnnnnnnnnnnnnnn........................eeeeuuuuuuuuuuu....ooo.ooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..aa.....',
+  '...nnnnnnnnnnnnnnnnnnnnnn........................ueeee....uuuuuuuuuuuoooo.oooaaaaaaaaaaaaaaaaaaaaaaaaaaaa....a......',
+  '...nnnnnnnnnnnnnnnnnnnn..........................ueee......u.u.uuuuuuoooo.oooaaaaaaaaaaaaaaaaaaaaaaaa..aa...aa......',
+  '....nnnnnnnnnnnnnnnnnnn...........................ee.oooo.......uuuuuooooooooaaaaaaaaaaaaaaaaaaaaaaaaa.aa..aa.......',
+  '.....nnnnnnnnnnnnnnnnn............................oooooooo.........ooooooooooaaaaaaaaaaaaaaaaaaaaaaaa....aaa........',
+  '......lllllnnnnnnnnnn............................ooooooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaaaa...a..........',
+  '.......llllnnnn.....n...........................oooooooooooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaaaa..............',
+  '.......llllnnn......n..........................oooooooooooooooooooooooooo.oooaaaaaaaaaaaaaaaaaaaaaaaa...............',
+  '........l.llll................................ooooooooooooooooooooo.oooooooo....aaaaaaaaaaaaaaaaaaaa.a..............',
+  '...........lll...l..lll.......................oooooooooooooooooooooo.oooooooo.....aaaaaa..aaaaaaaa..................',
+  '............llllll.....ll.....................oooooooooooooooooooooo.ooooooo......aaaaa...aaaaaa.....a..............',
+  '..............llll............................oooooooooooooooooooooooooooo........aaaa.....aaaaa.....a..............',
+  '................llll..........................oooooooooooooooooooooooooo...........aa.......aaaaa....a..............',
+  '..................ll....lll....................oooooooooooooooooooooooooo..........aa.......a.aaa...................',
+  '....................lllllllll..................oooooooooooooooooooooooooo...........aa......aa........aa............',
+  '......................lllllllll.................ooooooooooooooooooooooooo............a.......a.....a..a.............',
+  '......................lllllllllll.................o....ooooooooooooooooo....................aaa...aa................',
+  '.....................llllllllllll.......................ooooooooooooooo.....................aa...aaaaaa.............',
+  '.....................llllllllllllll......................ooooooooooooo.......................aa..aaa.a......a.......',
+  '.....................lllllllllllllllll...................oooooooooooo.........................a...a..a....aaaaa.....',
+  '.....................llllllllllllllllll...................ooooooooooo..........................aaa..........aaaa....',
+  '.....................llllllllllllllllll...................ooooooooooo........................................aaaa...',
+  '......................lllllllllllllllll...................ooooooooooo.....................................a.........',
+  '......................llllllllllllllll....................oooooooooooo..o..............................a.aaa.aa.....',
+  '.......................lllllllllllllll....................ooooooooooo..oo.............................aaaaaa.aaa....',
+  '........................lllllllllllll.....................oooooooooo..ooo............................aaaaaaaaaaa....',
+  '........................lllllllllllll.....................ooooooooo...ooo..........................aaaaaaaaaaaaaa...',
+  '........................llllllllllll.......................oooooooo....o..........................aaaaaaaaaaaaaaaa..',
+  '........................llllllllll.........................ooooooo................................aaaaaaaaaaaaaaaaa.',
+  '........................llllllllll.........................ooooooo.................................aaaaaaaaaaaaaaaa.',
+  '........................lllllllll...........................ooooo..................................aaaaaaaaaaaaaaa..',
+  '........................llllllll............................oooo...................................aaaa....aaaaaaa..',
+  '.......................lllllll...............................................................................aaaa...',
+  '.......................lllllll................................................................................aa....',
+  '.......................lllll...................................................................................a....',
+  '.......................llll.........................................................................................',
+  '.......................llll.........................................................................................',
+  '.......................llll.........................................................................................'
+];
+
+/* Cartera en equipo: apodos, carteras y votos de ejemplo */
+const MIEMBROS = [
+  { id: 'yo', a: 'Nácar' },
+  { id: 'bruma', a: 'Bruma', cart: [{ t: 'VITA', w: 30 }, { t: 'AQUA', w: 25 }, { t: 'FERR', w: 25 }, { t: 'HOGR', w: 20 }] },
+  { id: 'kiwi', a: 'Kiwi_9', cart: [{ t: 'NUBE', w: 40 }, { t: 'PIXL', w: 30 }, { t: 'SOLR', w: 30 }] },
+  { id: 'coral', a: 'Coral_3', cart: [{ t: 'ORBE', w: 35 }, { t: 'IBER', w: 25 }, { t: 'TERM', w: 20 }, { t: 'SILI', w: 20 }] }
+];
+const MPOR = Object.fromEntries(MIEMBROS.map(m => [m.id, m]));
+const CAPI = { 1: 'coral', 2: 'yo', 3: 'bruma', 4: 'kiwi', 5: 'coral', 6: 'yo' };
+const REACC = ['Buen argumento', 'Demasiado arriesgado', '¿Y la variedad?', 'De acuerdo'];
+const EQUIPOS = [{ n: 'Fondo Sur', p: 86 }, { n: 'Club Bisonte', p: 71 }, { n: 'Los del Ático', p: 62 }, { n: 'Pecera 21', p: 54 }, { n: 'Tortugas FC', p: 45 }];
+const reac0 = o => Object.fromEntries(REACC.map(r => [r, o[r] || 0]));
+const EQ = {
+  nombre: 'Las Medusas', codigo: 'MEDUSA', sem: 3, racha: 3, seg: 'prop', tween: null, n: 0,
+  cart: [{ t: 'NUBE', w: 30 }, { t: 'SILI', w: 20 }, { t: 'VITA', w: 15 }, { t: 'IBER', w: 13 }, { t: 'SOLR', w: 12 }, { t: 'HOGR', w: 10 }],
+  props: [
+    { id: 'p1', autor: 'kiwi', tipo: 'peso', t: 'NUBE', w: 15, desde: 30, porque: 'Si la nube cae, nos arrastra a todos. Mejor repartir.', votos: { kiwi: 'favor', bruma: 'favor' }, plan: { coral: 'favor' }, rbot: { coral: 'Buen argumento' }, reac: reac0({ 'Buen argumento': 1, 'De acuerdo': 1 }), mia: null, estado: 'abierta', cierra: 23 * 3600 + 50 * 60 },
+    { id: 'p2', autor: 'coral', tipo: 'peso', t: 'SILI', w: 40, desde: 20, porque: 'Los chips para coches harán falta en todas partes.', votos: { coral: 'favor' }, plan: { bruma: 'contra', kiwi: 'contra' }, rbot: { bruma: 'Demasiado arriesgado', kiwi: '¿Y la variedad?' }, reac: reac0({ 'Buen argumento': 1 }), mia: null, estado: 'abierta', cierra: 19 * 3600 + 32 * 60 }
+  ],
+  hist: [
+    { sem: 2, autor: 'kiwi', tit: 'Añadir Solara Energía con un 12 %', porque: 'Nos faltaba algo que no fuera tecnología ni consumo.', ok: true, v: [4, 0, 0], ef: 'Variedad: Media → Amplia' },
+    { sem: 2, autor: 'yo', tit: 'Quitar Hogar & Co (pesaba un 12 %)', porque: 'Prefiero algo con más emoción que los muebles.', ok: false, v: [1, 3, 0], ef: 'Sin cambios · Variedad sigue Amplia' },
+    { sem: 1, autor: 'bruma', tit: 'Añadir Vitalis Farma con un 15 %', porque: 'Todo era tecnología; la salud suele caer menos.', ok: true, v: [3, 1, 0], ef: 'Concentración: Alta → Media' }
+  ]
+};
+
 const copia = c => c.map(p => ({ ...p }));
 const S = {
   cart: [{ t: 'NUBE', w: 46 }, { t: 'SILI', w: 22 }, { t: 'VITA', w: 18 }, { t: 'HOGR', w: 14 }],
   base: null, retoHechas: 2, retoHoy: false, ideas: new Set(), racha: 3, semBajasPrev: 1, previas: [58, 61],
-  tab: 'hoy', esc: 'c2008', sel: 'NUBE', duelos: 0
+  tab: 'hoy', esc: 'c2008', sel: 'NUBE', duelos: 0, vistaMC: 'reparto', vistaGeo: 'sede', mon: 'USD', monX: 10
 };
 S.base = copia(S.cart);
 
@@ -936,9 +1341,12 @@ let org = new Organismo({ nacer: true });
 const rival = new Organismo({});
 const fantasma = new Organismo({ calma: true });
 const miniatura = new Organismo({ calma: true });
-let alfaRival = M(0, 120, 20), alfaFantasma = M(0, 120, 20);
+const orgEq = new Organismo({});
+MIEMBROS.forEach(m => { if (m.cart) { m.org = new Organismo({}); m.an = analisis(m.cart); m.el = $(`[data-cel="${m.id}"]`); } });
+let alfaRival = M(0, 120, 20), alfaFantasma = M(0, 120, 20), alfaEq = M(0, 120, 20);
 const slotEl = {}; $$('[data-slot]').forEach(e => { slotEl[e.dataset.slot] = e; });
-const SLOT_TAB = { hoy: 'hoy', cartera: 'cartera', descubrir: 'mini', liga: 'yo' };
+const SLOT_TAB = { hoy: 'hoy', cartera: 'cartera', descubrir: 'mini', equipo: 'eqyo', liga: 'yo' };
+const slotPrincipal = () => (S.tab === 'cartera' && S.vistaMC === 'mapa') ? 'mapa' : SLOT_TAB[S.tab];
 let vuelo = null, posOrg = null;
 function rectSlot(nombre, ar) {
   const r = slotEl[nombre].getBoundingClientRect();
@@ -1065,7 +1473,7 @@ function animarPesos(obj) {
 }
 
 /* ═════════ Pestañas y transiciones ═════════ */
-const TABS = ['hoy', 'cartera', 'descubrir', 'liga'];
+const TABS = ['hoy', 'cartera', 'descubrir', 'equipo', 'liga'];
 const ind = { x: M(0, 260, 24) };
 function irA(tab, foco = false) {
   if (!TABS.includes(tab)) return;
@@ -1078,18 +1486,28 @@ function irA(tab, foco = false) {
   ocultarBurbuja();
   if (tab === 'cartera') { anillo.sucio = true; }
   if (tab === 'liga') pintarResumen();
+  if (tab === 'cartera') { colocarSegm($('#seg-mc')); colocarSegm($('#seg-geo')); if (S.vistaMC === 'mapa') mapa.ondear(); }
+  if (tab === 'equipo') { colocarSegm($('#seg-eq')); pintarCuentas(); }
   vibrar(4);
   if (foco) { const h = $(`#p-${tab} h1`); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }
 }
 $('#pestanas').addEventListener('click', e => { const b = e.target.closest('.pest'); if (b) irA(b.dataset.tab, e.detail === 0); });
-document.addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if (b) { irA(b.dataset.ir); } });
+document.addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if (b) { if (b.dataset.ir === 'cartera') ponerVistaMC('reparto', false); irA(b.dataset.ir); } });
 
 /* ═════════ Interacción con el organismo ═════════ */
 let toque = null;
-function orgDeSlot(n) { return n === 'rival' ? rival : org; }
+function orgDeSlot(n) { return n === 'rival' ? rival : n === 'equipo' ? orgEq : org; }
+const modoDe = n => n === 'rival' ? 'rival' : n === 'equipo' ? 'equipo' : 'yo';
 function localDe(o, e) { const ar = app.getBoundingClientRect(); return { x: e.clientX - ar.left, y: e.clientY - ar.top }; }
+let gestoEq = 0;
+function proyEq(dx, dy) {
+  const a = slotEl.eqyo.getBoundingClientRect(), b = slotEl.equipo.getBoundingClientRect();
+  const vx = (b.left + b.width / 2) - (a.left + a.width / 2), vy = (b.top + b.height / 2) - (a.top + a.height / 2), l = Math.hypot(vx, vy) || 1;
+  return (dx * vx + dy * vy) / l;
+}
 Object.entries(slotEl).forEach(([nombre, el]) => {
-  if (nombre === 'mini') { el.addEventListener('click', () => { org.impulso(1.5); irA('cartera'); }); return; }
+  if (nombre === 'mini') { el.addEventListener('click', () => { org.impulso(1.5); ponerVistaMC('reparto', false); irA('cartera'); }); return; }
+  if (nombre === 'mapa') { el.addEventListener('click', () => { org.impulso(1.5); ponerVistaMC('reparto', true); }); return; }
   el.addEventListener('pointerdown', e => {
     const o = orgDeSlot(nombre); const p = localDe(o, e);
     toque = { o, nombre, x0: p.x, y0: p.y, t0: performance.now(), id: e.pointerId, movido: 0 };
@@ -1100,6 +1518,14 @@ Object.entries(slotEl).forEach(([nombre, el]) => {
     if (!toque || toque.id !== e.pointerId) return;
     const o = toque.o, p = localDe(o, e), R = o.pos.R || 50;
     const dx = p.x - toque.x0, dy = p.y - toque.y0; toque.movido = Math.max(toque.movido, Math.hypot(dx, dy));
+    if (nombre === 'eqyo') {
+      const k = .85 / (1 + Math.hypot(dx, dy) / (R * 6));
+      o.ox.t = dx * k / R; o.oy.t = dy * k / R;
+      const pr = proyEq(dx, dy), antes = gestoEq; gestoEq = propParaGesto() ? clamp(pr / 70, 0, 1) : 0;
+      if (antes < 1 && gestoEq >= 1) { vibrar(10); $('#pista-eq-t').textContent = 'Suelta: votas a favor'; }
+      if (antes >= 1 && gestoEq < 1) pintarCelVotos();
+      return;
+    }
     const k = .45 / (1 + Math.hypot(dx, dy) / (R * 1.6));
     o.ox.t = dx * k / R; o.oy.t = dy * k / R;
     const h = o.loboEn(p.x, p.y); if (h) o.dedo = { ang: h.ang, d: h.d };
@@ -1108,7 +1534,10 @@ Object.entries(slotEl).forEach(([nombre, el]) => {
     if (!toque || toque.id !== e.pointerId) return;
     const o = toque.o; o.dedo = null; o.ox.t = 0; o.oy.t = 0;
     const p = localDe(o, e);
-    if (toque.movido < 8 && performance.now() - toque.t0 < 450) tocarOrgano(toque.nombre, o, p.x, p.y);
+    const listo = nombre === 'eqyo' && gestoEq >= 1; gestoEq = 0;
+    if (nombre === 'eqyo' && !listo) pintarCelVotos();
+    if (listo) { const pr = propParaGesto(); if (pr) votar(pr.id, 'favor', true); }
+    else if (toque.movido < 8 && performance.now() - toque.t0 < 450) tocarOrgano(toque.nombre, o, p.x, p.y);
     else { vibrar(10); o.impulso(.6); if (toque.nombre === 'hoy') $('#pista-hoy span').textContent = 'Rebota. Está vivo.'; }
     toque = null;
   };
@@ -1117,7 +1546,7 @@ Object.entries(slotEl).forEach(([nombre, el]) => {
     if (e.key !== 'Enter' && e.key !== ' ') return; e.preventDefault();
     const o = orgDeSlot(nombre); const ls = [...o.lobos.values()].filter(l => !l.muere); if (!ls.length) return;
     el._i = ((el._i ?? -1) + 1) % ls.length; const L = ls[el._i];
-    const { x, y, R } = o.pos; mostrarBurbuja(L, x + Math.cos(L.ang.x) * L.dist.x * R, y + Math.sin(L.ang.x) * L.dist.x * R - R * .3, nombre === 'rival');
+    const { x, y, R } = o.pos; mostrarBurbuja(L, x + Math.cos(L.ang.x) * L.dist.x * R, y + Math.sin(L.ang.x) * L.dist.x * R - R * .3, modoDe(nombre));
     L.puls.vv += 3;
   });
 });
@@ -1126,17 +1555,17 @@ function tocarOrgano(nombre, o, x, y) {
   const L = h.L; L.puls.vv += 3.2; vibrar(8);
   if (nombre === 'cartera') { seleccionar(L.t); return; }
   const { x: ox, y: oy, R } = o.pos;
-  mostrarBurbuja(L, ox + Math.cos(L.ang.x) * L.dist.x * R, oy + Math.sin(L.ang.x) * L.dist.x * R - R * .25, nombre === 'rival');
+  mostrarBurbuja(L, ox + Math.cos(L.ang.x) * L.dist.x * R, oy + Math.sin(L.ang.x) * L.dist.x * R - R * .25, modoDe(nombre));
 }
 let burbuja = null, burbujaT = 0;
-function mostrarBurbuja(L, x, y, esRival) {
+function mostrarBurbuja(L, x, y, modo = 'yo') {
   ocultarBurbuja();
-  const c = porT[L.t], cart = esRival ? RIVAL : S.cart, tot = cart.reduce((a, p) => a + p.w, 0);
+  const c = porT[L.t], cart = modo === 'rival' ? RIVAL : modo === 'equipo' ? EQ.cart : S.cart, tot = cart.reduce((a, p) => a + p.w, 0);
   const p = cart.find(q => q.t === L.t); if (!p) return;
   const b = document.createElement('button'); b.type = 'button'; b.className = 'burbuja'; b.style.setProperty('--c', SECT[c.s]);
-  b.innerHTML = `<i></i><span>${c.n} · <span class="num">${Math.round(p.w / tot * 100)} %</span> <small>${esRival ? 'de Lince_27' : 'Ver huella'}</small></span>`;
+  b.innerHTML = `<i></i><span>${c.n} · <span class="num">${Math.round(p.w / tot * 100)} %</span> <small>${modo === 'rival' ? 'de Lince_27' : modo === 'equipo' ? 'del equipo' : 'Ver huella'}</small></span>`;
   b.style.left = clamp(x, 110, W - 110) + 'px'; b.style.top = clamp(y, 140, H) + 'px';
-  if (!esRival) b.addEventListener('click', () => abrirHoja('organo', L.t));
+  if (modo === 'yo') b.addEventListener('click', () => abrirHoja('organo', L.t));
   $('#capa').appendChild(b); burbuja = b;
   requestAnimationFrame(() => b.classList.add('on'));
   clearTimeout(burbujaT); burbujaT = setTimeout(ocultarBurbuja, 3200);
@@ -1327,6 +1756,557 @@ function quitar(t) {
   anillo.rot.t = rotObjetivo(S.sel); vibrar(12); pedirActualizar(); pintarLista();
   toast(`${porT[t].n} sale de tu cartera`, 'Deshacer', () => { S.cart = antes; anillo.rot.t = rotObjetivo(S.sel); pedirActualizar(); pintarLista(); });
 }
+
+/* ═════════ Segmentos ═════════ */
+function colocarSegm(seg) {
+  if (!seg) return;
+  const ind = seg.querySelector('.segm-ind'), b = seg.querySelector('button[aria-selected="true"],button[aria-pressed="true"]');
+  if (!ind || !b || !b.offsetWidth) return;
+  ind.style.width = b.offsetWidth + 'px'; ind.style.transform = `translateX(${b.offsetLeft}px)`;
+}
+function teclasTabs(seg, fn) {
+  seg.addEventListener('keydown', e => {
+    const bs = $$('[role="tab"]', seg), i = bs.indexOf(document.activeElement); if (i < 0) return;
+    const d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; let j = null;
+    if (d) j = (i + d + bs.length) % bs.length; else if (e.key === 'Home') j = 0; else if (e.key === 'End') j = bs.length - 1;
+    if (j === null) return; e.preventDefault(); fn(bs[j]); bs[j].focus();
+  });
+}
+const fmtP = (v, d = 0) => (Math.round(v * 10 ** d) / 10 ** d).toLocaleString('es-ES', { minimumFractionDigits: d, maximumFractionDigits: d });
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ═════════ MI CARTERA · Reparto · Mapa ═════════ */
+function ponerVistaMC(v, anim = true) {
+  if (S.vistaMC === v) return;
+  if (posOrg && S.tab === 'cartera') vuelo = { de: { ...posOrg }, t: 0 };
+  S.vistaMC = v;
+  $$('#seg-mc [role="tab"]').forEach(b => { const on = b.dataset.vista === v; b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; });
+  $('#mc-reparto').hidden = v !== 'reparto'; $('#mc-mapa').hidden = v !== 'mapa';
+  colocarSegm($('#seg-mc')); ocultarBurbuja();
+  if (v === 'mapa') { colocarSegm($('#seg-geo')); mapa.medir(); pintarGeo(); mapa.ondear(); }
+  else anillo.sucio = true;
+  if (anim && !RM) $(v === 'mapa' ? '#mc-mapa' : '#mc-reparto').animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.22,1,.36,1)' });
+  vibrar(4);
+}
+$('#seg-mc').addEventListener('click', e => { const b = e.target.closest('[data-vista]'); if (b) ponerVistaMC(b.dataset.vista); });
+teclasTabs($('#seg-mc'), b => ponerVistaMC(b.dataset.vista));
+
+function geo(cart) {
+  const tot = cart.reduce((a, p) => a + p.w, 0) || 1;
+  const pais = {}, pmon = {}, mon = { EUR: 0, USD: 0, GBP: 0, CHF: 0, JPY: 0 }, ventas = REG.map(() => 0);
+  cart.forEach(p => { const g = GEO[p.t], f = p.w / tot; pais[g.p] = (pais[g.p] || 0) + f * 100; pmon[g.p] = g.m; mon[g.m] += f * 100; g.v.forEach((v, i) => { ventas[i] += f * v; }); });
+  const paises = Object.entries(pais).sort((a, b) => b[1] - a[1]);
+  return { paises, pmon, mon, ventas, casa: pais['España'] || 0 };
+}
+
+const mapa = (() => {
+  const cv = $('#mapa-cv'), ctx = cv.getContext('2d');
+  const COLS = MASCARA[0].length, ROWS = MASCARA.length, L0 = -132.5, T0 = 72.5, P = 2.5, COD = { e: 0, u: 1, n: 2, l: 3, a: 4, o: 5 };
+  const pts = [];
+  MASCARA.forEach((fila, j) => { for (let i = 0; i < fila.length; i++) { const ch = fila[i]; if (ch !== '.') pts.push({ i, j, r: COD[ch], lon: L0 + (i + .5) * P, lat: T0 - (j + .5) * P, ph: Math.random() }); } });
+  const N = pts.length, de = new Float32Array(N), ob = new Float32Array(N), cur = new Float32Array(N), ret = new Float32Array(N);
+  const RGB = REG.map(r => hexRgb(r.c)), BASE = [150, 146, 178];
+  const flores = Object.fromEntries(Object.keys(PAIS).map(k => [k, M(0, 120, 13)]));
+  const brillo = REG.map(() => M(0, 70, 12));
+  let w = 0, h = 0, cel = 1, tc = 9, sucio = true, foco = null;
+  const X = lon => (lon - L0) / P * cel, Y = lat => (T0 - lat) / P * cel;
+  function medir() {
+    const ancho = cv.clientWidth; if (!ancho) return;
+    if (Math.abs(ancho - w) < .5 && cv.width) return;
+    w = ancho; cel = w / COLS; h = cel * ROWS;
+    const d = Math.min(2, devicePixelRatio || 1); cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px';
+    ctx.setTransform(d, 0, 0, d, 0, 0); sucio = true;
+  }
+  let firma = '';
+  function objetivos(g, onda) {
+    const f = S.vistaGeo + JSON.stringify(g.paises.map(([p, v]) => [p, v.toFixed(2)])) + g.ventas.map(v => v.toFixed(2)).join();
+    if (!onda && f === firma) return;
+    firma = f;
+    if (S.vistaGeo === 'ventas') {
+      const mx = Math.max(...g.ventas, 1);
+      for (let k = 0; k < N; k++) ob[k] = Math.pow(g.ventas[pts[k].r] / mx, .8);
+    } else {
+      const ls = g.paises.map(([p, v]) => ({ ...PAIS[p], v, s: 4.5 + 9 * Math.sqrt(v / 100) })), mx = Math.max(1, ...ls.map(q => q.v));
+      for (let k = 0; k < N; k++) {
+        let s = 0; const p = pts[k];
+        for (const q of ls) { const dl = (p.lon - q.lon) * Math.cos(q.lat * Math.PI / 180), dt = p.lat - q.lat; s += (q.v / mx) * Math.exp(-(dl * dl + dt * dt) / (2 * q.s * q.s)); }
+        ob[k] = Math.min(1, s);
+      }
+    }
+    const pa = Object.fromEntries(g.paises);
+    for (const k in flores) flores[k].t = S.vistaGeo === 'sede' && pa[k] ? Math.sqrt(pa[k] / 100) : 0;
+    brillo.forEach((b, i) => { b.t = S.vistaGeo === 'ventas' ? Math.sqrt(g.ventas[i] / 100) : 0; });
+    de.set(cur);
+    if (onda && !RM) {
+      let fi = 0; for (let k = 1; k < N; k++) if (ob[k] > ob[fi]) fi = k;
+      const f = pts[fi];
+      for (let k = 0; k < N; k++) ret[k] = Math.hypot(pts[k].i - f.i, (pts[k].j - f.j) * 1.4) / COLS * 1.1 + pts[k].ph * .1;
+      for (const k in flores) { flores[k].x = 0; flores[k].vv = 0; }
+    } else ret.fill(0);
+    tc = 0; sucio = true;
+  }
+  const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a.toFixed(3)})`;
+  function flor(x, y, s, c, al) {
+    ctx.save(); ctx.translate(x, y); ctx.globalAlpha = al;
+    const g0 = ctx.createRadialGradient(0, 0, 0, 0, 0, s * 2.1); g0.addColorStop(0, rgba(c, .3)); g0.addColorStop(1, rgba(c, 0));
+    ctx.fillStyle = g0; ctx.beginPath(); ctx.arc(0, 0, s * 2.1, 0, TAU); ctx.fill();
+    for (let k = 0; k < 5; k++) {
+      ctx.rotate(TAU / 5);
+      const g = ctx.createLinearGradient(0, 0, 0, -s); g.addColorStop(0, '#fff'); g.addColorStop(1, rgba(c, .9));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, -s * .55, s * .3, s * .55, 0, 0, TAU); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = .8; ctx.stroke();
+    }
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, 0, s * .26, 0, TAU); ctx.fill();
+    ctx.strokeStyle = rgba(c, 1); ctx.lineWidth = 1.2; ctx.stroke(); ctx.restore();
+  }
+  function frame(dt) {
+    if (!w) medir(); if (!w) return;
+    let mov = false;
+    if (tc < 2.2) { tc += dt; mov = true; }
+    for (const k in flores) { paso(flores[k], dt); if (!quieto(flores[k])) mov = true; }
+    brillo.forEach(b => { paso(b, dt); if (!quieto(b)) mov = true; });
+    if (!mov && !sucio) return;
+    sucio = false;
+    ctx.clearRect(0, 0, w, h);
+    REG.forEach((r, i) => {
+      const v = brillo[i].x; if (v < .01) return;
+      const x = X(r.lon), y = Y(r.lat), rad = cel * (5 + 16 * v), al = foco !== null && foco !== r.k ? .35 : 1;
+      const g = ctx.createRadialGradient(x, y, 0, x, y, rad); g.addColorStop(0, rgba(RGB[i], .34 * v * al)); g.addColorStop(1, rgba(RGB[i], 0));
+      ctx.fillStyle = g; ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+    });
+    for (let k = 0; k < N; k++) {
+      const p = pts[k], pr = clamp((tc - ret[k]) / .7, 0, 1), e = RM ? 1 : easeMuelle(pr);
+      const v = RM ? ob[k] : de[k] + (ob[k] - de[k]) * e; cur[k] = v;
+      const bump = RM ? 0 : Math.sin(Math.PI * pr) * Math.abs(ob[k] - de[k]);
+      let al = .45 + .55 * Math.min(1, v * 1.3);
+      if (foco !== null && S.vistaGeo === 'ventas' && REG[p.r].k !== foco) al *= .3;
+      const m = Math.min(1, v * 1.5), c = RGB[p.r];
+      ctx.fillStyle = `rgba(${Math.round(lerp(BASE[0], c[0], m))},${Math.round(lerp(BASE[1], c[1], m))},${Math.round(lerp(BASE[2], c[2], m))},${al.toFixed(3)})`;
+      ctx.beginPath(); ctx.arc((p.i + .5) * cel, (p.j + .5) * cel, cel * (.24 + .19 * v + .3 * bump), 0, TAU); ctx.fill();
+    }
+    for (const k in flores) {
+      const v = flores[k].x; if (v < .02) continue;
+      const q = PAIS[k], al = foco !== null && foco !== k ? .3 : 1;
+      flor(X(q.lon), Y(q.lat), cel * (1.7 + 4.6 * v), RGB[q.r], al);
+    }
+  }
+  try { new ResizeObserver(() => { medir(); }).observe(cv.parentElement); } catch (e) {}
+  return { medir, frame, objetivos, ondear() { objetivos(geo(S.cart), true); }, enfocar(k) { foco = k; sucio = true; } };
+})();
+
+let geoFilas = '';
+function pintarGeo() {
+  const g = geo(S.cart), ventas = S.vistaGeo === 'ventas';
+  mapa.objetivos(g, false);
+  const filas = ventas ? REG.map((r, i) => ({ k: r.k, n: r.n, v: g.ventas[i], c: r.c }))
+    : g.paises.map(([p, v]) => ({ k: p, n: p, v, c: REG[PAIS[p].r].c, sub: g.pmon[p] }));
+  const ul = $('#geo-lista'), clave = (ventas ? 'v' : 's') + filas.map(f => f.k).sort().join();
+  if (geoFilas !== clave) {
+    geoFilas = clave;
+    ul.innerHTML = filas.map(f => `<li class="geo-fila" tabindex="0" data-k="${f.k}" style="--c:${f.c}"><span class="nom"><i></i><span>${f.n}${f.sub ? ` <small>${f.sub}</small>` : ''}</span></span><span class="pista-b"><b style="transform:scaleX(0)"></b></span><span class="v"></span></li>`).join('');
+    requestAnimationFrame(() => pintarGeoValores());
+  }
+  pintarGeoValores(filas);
+  $('#mapa-expl').textContent = ventas ? 'No es lo mismo: aquí ves de dónde sale su dinero (tu peso × sus ventas por región), no dónde tienen la sede.'
+    : 'No es lo mismo: aquí ves dónde tienen la sede. En «Dónde venden», de dónde sale su dinero.';
+  $('#mapa-cv').setAttribute('aria-label', (ventas ? 'Mapa de puntos: dónde venden tus empresas. ' : 'Mapa de puntos: dónde tienen la sede tus empresas. ') + filas.map(f => `${f.n} ${fmtP(f.v)} %`).join(', ') + '. Datos de ejemplo.');
+  // Sesgo de casa
+  const casa = g.casa;
+  $('#casa-frase').innerHTML = `El <b>${fmtP(casa)} %</b> de tu cartera tiene sede en España.`;
+  $('#casa-b').style.width = `${casa}%`; $('#casa-es').textContent = `España ${fmtP(casa)} %`; $('#casa-resto').textContent = `Resto ${fmtP(100 - casa)} %`;
+  $('#casa-ventas').textContent = `Por ventas, el ${fmtP(g.ventas[0])} % de lo que venden tus empresas (según tu peso) se vende en España.`;
+  // Monedas
+  const mb = $('#mon-barra');
+  if (!mb.children.length) {
+    mb.innerHTML = Object.entries(MON).map(([k, m]) => `<b data-m="${k}" style="--c:${m.c};width:0"></b>`).join('');
+    $('#mon-ley').innerHTML = Object.entries(MON).map(([k, m]) => `<li data-m="${k}" style="--c:${m.c}"><i></i>${k} <b></b></li>`).join('');
+    $('#mon-chips').innerHTML = Object.entries(MON).filter(([k]) => k !== 'EUR').map(([k, m]) => `<button class="esc-chip" type="button" data-m="${k}" aria-pressed="${k === S.mon}">${k} · ${m.n}</button>`).join('');
+  }
+  Object.keys(MON).forEach(k => {
+    const v = g.mon[k]; mb.querySelector(`[data-m="${k}"]`).style.width = `${v}%`;
+    const li = $(`#mon-ley [data-m="${k}"]`); li.querySelector('b').textContent = `${fmtP(v)} %`; li.classList.toggle('cero', v < .5);
+  });
+  mb.setAttribute('aria-label', 'Reparto por moneda: ' + Object.keys(MON).map(k => `${k} ${fmtP(g.mon[k])} %`).join(', '));
+  pintarEscMon(g);
+  // Señales
+  pintarSenales(g);
+  pintarPrueba();
+}
+function pintarGeoValores(filas) {
+  const g = geo(S.cart), ventas = S.vistaGeo === 'ventas';
+  const ls = filas || (ventas ? REG.map((r, i) => ({ k: r.k, n: r.n, v: g.ventas[i] })) : g.paises.map(([p, v]) => ({ k: p, n: p, v })));
+  ls.forEach(f => {
+    const li = $(`#geo-lista [data-k="${f.k}"]`); if (!li) return;
+    li.querySelector('b').style.transform = `scaleX(${clamp(f.v / 100, 0, 1)})`;
+    li.querySelector('.v').textContent = `${fmtP(f.v)} %`;
+    li.setAttribute('aria-label', `${f.n}: ${fmtP(f.v)} %`);
+  });
+}
+function pintarEscMon(g = geo(S.cart)) {
+  const m = MON[S.mon], peso = g.mon[S.mon], x = S.monX, ef = -x * peso / 100;
+  $('#mon-preg').innerHTML = `¿Y si ${m.art} baja un <output id="mon-x" for="mon-r">${x} %</output> frente al euro?`;
+  $$('#mon-chips .esc-chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === S.mon ? 'true' : 'false'));
+  const r = $('#mon-r'); if (+r.value !== x) r.value = x;
+  r.setAttribute('aria-valuetext', `${m.n} baja un ${x} %`);
+  $('#mon-res').innerHTML = peso < .5
+    ? `<div class="gran-num num">0 %</div><p>No tienes nada en ${m.pl}: tu cartera medida en euros no cambiaría.</p>`
+    : `<div class="gran-num num">${ef < 0 ? '−' : ''}${fmtP(Math.abs(ef), 1)} %</div><p>Efecto aproximado en tu cartera medida en euros: <b>100 → ${fmtP(100 + ef, 1)}</b>.<br>Cálculo: −${x} % × ${fmtP(peso)} % en ${m.pl}.</p>`;
+  const nuevo = m.tipo / (1 - x / 100), dec = m.tipo > 20 ? 0 : 2;
+  $('#mon-tipos').textContent = `Tipo de ejemplo: 1 € = ${fmtP(m.tipo, dec)} ${m.s}${x ? ` → pasaría a ${fmtP(nuevo, dec)} ${m.s}` : ''}. En la versión real, tipos del BCE.`;
+}
+$('#mon-chips').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; S.mon = b.dataset.m; pintarEscMon(); vibrar(5); });
+$('#mon-r').addEventListener('input', e => { S.monX = +e.target.value; pintarEscMon(); });
+function sugerenciaGrupo(pertenece) {
+  const tot = S.cart.reduce((a, p) => a + p.w, 0) || 1, G = S.cart.filter(p => pertenece(p.t)).reduce((a, p) => a + p.w, 0) / tot * 100;
+  if (G >= 99.5 || G <= 50) return null;
+  return Object.fromEntries(S.cart.map(p => [p.t, p.w / tot * 100 * (pertenece(p.t) ? 50 / G : 50 / (100 - G))]));
+}
+let SUG = [];
+function pintarSenales(g) {
+  const s = [];
+  Object.entries(g.mon).forEach(([k, v]) => { if (k !== 'EUR' && v > 50) s.push({ t: `<b>Aviso medio:</b> el ${fmtP(v)} % de tu cartera cotiza en ${MON[k].pl}.`, sug: { txt: `¿Y si lo que cotiza en ${MON[k].pl} bajara al 50 %?`, f: t => GEO[t].m === k } }); });
+  g.paises.forEach(([p, v]) => { if (v > 60) s.push({ t: `<b>Concentración geográfica:</b> el ${fmtP(v)} % tiene sede en ${p}${p.endsWith('.') ? '' : '.'}`, sug: { txt: `¿Y si lo que tiene sede en ${p} bajara al 50 %?`, f: t => GEO[t].p === p } }); });
+  g.ventas.forEach((v, i) => { if (v > 70) s.push({ t: `<b>Concentración geográfica:</b> el ${fmtP(v)} % de lo que venden es en ${REG[i].n}.`, sug: null, extra: '¿Y si las posiciones que más venden ahí pesaran menos?' }); });
+  SUG = s.map(x => x.sug && sugerenciaGrupo(x.sug.f));
+  const html = s.length ? s.map((x, i) => `<li class="senal" data-n="medio"><i class="punto"></i><span>${x.t}${x.extra ? ` ${x.extra}` : ''}</span>${SUG[i] ? `<button class="chip-ysi" type="button" data-sug="${i}"><svg viewBox="0 0 24 24" fill="none" stroke="url(#lg-logo)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>${x.sug.txt}<small>Solo pesos · orientativo</small></span></button>` : ''}</li>`).join('')
+    : `<li class="senal" data-n="ok"><i class="punto"></i><span><b>Sin señales geográficas.</b> Ninguna moneda, país de sede o región de ventas pasa de su referencia.</span></li>`;
+  const ul = $('#senales'); if (ul.dataset.h !== html) { ul.dataset.h = html; ul.innerHTML = html; }
+}
+$('#senales').addEventListener('click', e => {
+  const b = e.target.closest('[data-sug]'); if (!b) return; const obj = SUG[+b.dataset.sug]; if (!obj) return;
+  animarPesos(obj); vibrar(10); toast('Pesos ajustados. Mira cómo cambia el mapa.', 'Deshacer', () => $('#deshacer').click());
+});
+function pintarPrueba() {
+  const sel = $('#pr-emp'), ts = S.cart.map(p => p.t).join();
+  if (sel.dataset.ts !== ts) { sel.dataset.ts = ts; sel.innerHTML = S.cart.map(p => `<option value="${p.t}">${porT[p.t].n} · ${GEO[p.t].p}</option>`).join(''); }
+  sel.value = S.sel;
+  const ps = S.cart.find(p => p.t === S.sel), tot = S.cart.reduce((a, p) => a + p.w, 0) || 1, v = ps ? Math.round(ps.w / tot * 100) : 0;
+  $('#pr-out').textContent = `${v} %`;
+  const r = $('#pr-peso'); if (document.activeElement !== r) r.value = v; r.disabled = S.cart.length < 2;
+  r.setAttribute('aria-valuetext', `${porT[S.sel] ? porT[S.sel].n : ''}: ${v} %`);
+  $('#pr-desh').disabled = igualBase(); $('#pr-desh').style.opacity = igualBase() ? .4 : 1;
+}
+$('#pr-emp').addEventListener('change', e => { seleccionar(e.target.value); pintarPrueba(); });
+$('#pr-peso').addEventListener('input', e => { setPeso(S.sel, +e.target.value); anillo.rot.t = rotObjetivo(S.sel); detectarUmbral(); pedirActualizar(); });
+$('#pr-desh').addEventListener('click', () => { if (!igualBase()) $('#deshacer').click(); });
+$('#seg-geo').addEventListener('click', e => {
+  const b = e.target.closest('[data-geo]'); if (!b || b.dataset.geo === S.vistaGeo) return;
+  S.vistaGeo = b.dataset.geo; mapa.enfocar(null);
+  $$('#seg-geo [data-geo]').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+  colocarSegm($('#seg-geo')); pintarGeo(); mapa.ondear(); vibrar(6);
+});
+['mouseover', 'focusin'].forEach(ev => $('#geo-lista').addEventListener(ev, e => { const li = e.target.closest('.geo-fila'); if (!li) return; $$('#geo-lista .geo-fila').forEach(x => x.classList.toggle('foco', x === li)); mapa.enfocar(li.dataset.k); }));
+['mouseleave', 'focusout'].forEach(ev => $('#geo-lista').addEventListener(ev, () => { $$('#geo-lista .geo-fila').forEach(x => x.classList.remove('foco')); mapa.enfocar(null); }));
+
+/* ═════════ CARTERA EN EQUIPO ═════════ */
+const hashStr = s => { let h = 2166136261; for (const ch of s) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+const azar = sem => () => { sem = (sem + 0x6D2B79F5) >>> 0; let t = sem; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const PAL_AV = [['#f8d3c4', '#e8876f'], ['#e3dafc', '#8f7cf0'], ['#cdf1e7', '#33b59f'], ['#fde6b8', '#efab45'], ['#d6e3ff', '#5b86e5'], ['#f6d2e8', '#d672b5']];
+let avN = 0;
+function avatarSVG(nombre, tam = 36) {
+  const r = azar(hashStr(nombre)), [c1, c2] = PAL_AV[Math.floor(r() * PAL_AV.length)], c3 = PAL_AV[Math.floor(r() * PAL_AV.length)][1], id = 'av-g' + (++avN);
+  const n = 7, P = [];
+  for (let i = 0; i < n; i++) { const a = i / n * TAU - Math.PI / 2, rr = 13 + r() * 4; P.push([20 + Math.cos(a) * rr, 20 + Math.sin(a) * rr]); }
+  const mid = (p, q) => [((p[0] + q[0]) / 2).toFixed(1), ((p[1] + q[1]) / 2).toFixed(1)];
+  let d = `M${mid(P[n - 1], P[0]).join(' ')}`;
+  for (let i = 0; i < n; i++) d += `Q${P[i][0].toFixed(1)} ${P[i][1].toFixed(1)} ${mid(P[i], P[(i + 1) % n]).join(' ')}`;
+  const nx = 20 + (r() - .5) * 9, ny = 21 + (r() - .5) * 8, nr = 3.5 + r() * 3;
+  return `<svg class="ava" width="${tam}" height="${tam}" viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="${id}" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></radialGradient></defs><path d="${d}Z" fill="url(#${id})" stroke="#fff" stroke-width="1.6"/><circle cx="${nx.toFixed(1)}" cy="${ny.toFixed(1)}" r="${nr.toFixed(1)}" fill="${c3}" opacity=".5"/><ellipse cx="14" cy="13" rx="4.5" ry="2.8" fill="#fff" opacity=".7" transform="rotate(-25 14 13)"/></svg>`;
+}
+const colorAv = nombre => { const r = azar(hashStr(nombre)); return PAL_AV[Math.floor(r() * PAL_AV.length)][1]; };
+const corto = id => id === 'yo' ? 'Tú' : MPOR[id].a;
+const CORONA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4.5 3.5L12 5l4.5 6.5L21 8l-2 10H5z" fill="#efab45" stroke="#8f5806" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+const IC = {
+  favor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  contra: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>',
+  abst: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>',
+  pend: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="6" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18" cy="12" r="1.8"/></svg>'
+};
+const TXT_VOTO = { favor: 'A favor', contra: 'En contra', abst: 'Abstención', pend: 'Pendiente' };
+const COL_VOTO = { favor: [31, 154, 110], contra: [208, 73, 61], abst: [138, 146, 168] };
+const FLECHA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const pesoEn = (cart, t) => { const tot = cart.reduce((a, p) => a + p.w, 0) || 1, p = cart.find(q => q.t === t); return p ? p.w / tot * 100 : 0; };
+const cuenta = (p, v) => MIEMBROS.filter(m => p.votos[m.id] === v).length;
+function tituloProp(p) {
+  const n = porT[p.t].n;
+  if (p.tipo === 'peso') return `${p.w < p.desde ? 'Bajar' : 'Subir'} ${n} del ${Math.round(p.desde)} % al ${p.w} %`;
+  if (p.tipo === 'anadir') return `Añadir ${n} con un ${p.w} %`;
+  return `Quitar ${n} (hoy pesa un ${Math.round(p.desde)} %)`;
+}
+function aplicable(p, cart = EQ.cart) {
+  const dentro = cart.some(q => q.t === p.t);
+  return p.tipo === 'anadir' ? !dentro : p.tipo === 'quitar' ? dentro && cart.length > 1 : dentro;
+}
+function aplicarProp(cart, p) {
+  const tot = cart.reduce((a, q) => a + q.w, 0) || 1;
+  let c = cart.map(q => ({ t: q.t, w: q.w / tot * 100 }));
+  if (!aplicable(p, cart)) return c;
+  if (p.tipo === 'peso') { const otros = c.filter(q => q.t !== p.t), so = otros.reduce((a, q) => a + q.w, 0) || 1; otros.forEach(q => { q.w *= (100 - p.w) / so; }); c.find(q => q.t === p.t).w = p.w; }
+  else if (p.tipo === 'anadir') { c.forEach(q => { q.w *= (100 - p.w) / 100; }); c.push({ t: p.t, w: p.w }); }
+  else { c = c.filter(q => q.t !== p.t); const s = c.reduce((a, q) => a + q.w, 0) || 1; c.forEach(q => { q.w = q.w / s * 100; }); }
+  return c;
+}
+function filasCompara(c1, c2) {
+  const a = analisis(c1), b = analisis(c2);
+  const fila = (et, x, y) => `<div class="compara-fila"><span>${et}</span><span class="a">${x}</span>${FLECHA}<span class="b">${y}</span></div>`;
+  return fila('Concentración', TXT_C[a.conc], TXT_C[b.conc]) + fila('Variedad', TXT_V[a.vari], TXT_V[b.vari]) + fila('Equilibrio (Liga)', `${a.eq} pts`, `${b.eq} pts`)
+    + fila('Escenario 2008 · ilustrativo', fmt(escenario(c1, 'c2008')), fmt(escenario(c2, 'c2008')));
+}
+function efectoTxt(a, b) {
+  const ps = [];
+  if (a.conc !== b.conc) ps.push(`Concentración: ${TXT_C[a.conc]} → ${TXT_C[b.conc]}`);
+  if (a.vari !== b.vari) ps.push(`Variedad: ${TXT_V[a.vari]} → ${TXT_V[b.vari]}`);
+  return ps.length ? ps.join(' · ') : `Semáforos iguales · Concentración ${TXT_C[b.conc]}, Variedad ${TXT_V[b.vari]}`;
+}
+const resTxt = v => `${v[0]}–${v[1]}${v[2] ? `–${v[2]}` : ''}`;
+function cuentaTxt(s) { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return m ? `Cierra en ${h} h ${m} min` : `Cierra en ${h} h`; }
+function htmlProp(p) {
+  const autor = MPOR[p.autor];
+  return `<article class="tarjeta prop" id="prop-${p.id}" data-id="${p.id}" aria-labelledby="prop-${p.id}-t">
+    <div class="prop-cab"><span class="prop-autor">${avatarSVG(autor.a, 30)}<span><b>${p.autor === 'yo' ? 'Tú' : autor.a}</b> ${p.autor === 'yo' ? 'propones' : 'propone'}</span></span><span class="prop-estado"><i aria-hidden="true"></i><span class="cuenta"></span></span></div>
+    <h3 id="prop-${p.id}-t">${tituloProp(p)}</h3>
+    <p class="porque"><span class="sr">Por qué: </span>«${esc(p.porque)}»</p>
+    <div class="compara"></div>
+    <div class="recuento"><div class="rec-barra" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div><p class="mini rec-txt" aria-live="polite"></p></div>
+    <ul class="asientos" aria-label="Votos del equipo">${MIEMBROS.map(m => `<li class="asiento" data-m="${m.id}"><span class="av-c">${avatarSVG(m.a, 34)}<span class="marca-v"></span></span><span>${corto(m.id)}</span><span class="sr"></span></li>`).join('')}</ul>
+    <div class="votar" role="group" aria-label="Tu voto">${['favor', 'contra', 'abst'].map(v => `<button class="voto" type="button" data-v="${v}" aria-pressed="false">${IC[v]}${TXT_VOTO[v]}</button>`).join('')}</div>
+    <div class="reacc" role="group" aria-label="Reacciones predefinidas">${REACC.map(r => `<button class="reac" type="button" data-r="${r}" aria-pressed="false">${r} <span>0</span></button>`).join('')}</div>
+    <div class="prop-fin" aria-live="polite"></div>
+  </article>`;
+}
+function actualizarProp(p, llega) {
+  const el = $(`#prop-${p.id}`); if (!el) return;
+  const cerrada = p.estado !== 'abierta';
+  el.classList.toggle('cerrada', cerrada);
+  const est = el.querySelector('.prop-estado'); est.dataset.e = p.estado;
+  est.querySelector('.cuenta').textContent = cerrada ? `${p.estado === 'aprobada' ? 'Aprobada' : 'Rechazada'} ${p.res}` : cuentaTxt(p.cierra);
+  const c1 = cerrada ? p.cartAntes : EQ.cart, c2 = cerrada ? p.cartHip : aplicarProp(EQ.cart, p);
+  el.querySelector('.compara').innerHTML = `<span class="eti">${p.estado === 'aprobada' ? 'Antes → después' : p.estado === 'rechazada' ? 'Lo que habría pasado' : 'Antes → después, si se aprueba'}</span>` + filasCompara(c1, c2);
+  const orden = ['favor', 'contra', 'abst'], vs = MIEMBROS.map(m => p.votos[m.id]).filter(Boolean).sort((a, b) => orden.indexOf(a) - orden.indexOf(b));
+  $$('.rec-barra i', el).forEach((i, k) => { if (vs[k]) i.dataset.v = vs[k]; i.classList.toggle('on', !!vs[k]); });
+  const f = cuenta(p, 'favor'), c = cuenta(p, 'contra'), a = cuenta(p, 'abst'), faltan = MIEMBROS.length - f - c - a;
+  el.querySelector('.rec-txt').textContent = `${f} a favor · ${c} en contra${a ? ` · ${a} abstención` : ''}${faltan ? ` · faltan ${faltan}` : ''}. Se aprueba con 3\u00a0de\u00a04.`;
+  if (!cerrada && p.tipo !== 'anadir' && EQ.cart.some(q => q.t === p.t)) { p.desde = pesoEn(EQ.cart, p.t); el.querySelector('h3').textContent = tituloProp(p); }
+  $$('.asiento', el).forEach(li => {
+    const v = p.votos[li.dataset.m] || 'pend';
+    if (li.dataset.v !== v) {
+      li.dataset.v = v; li.querySelector('.marca-v').innerHTML = IC[v]; li.querySelector('.sr').textContent = `: ${TXT_VOTO[v].toLowerCase()}`;
+      if (llega === li.dataset.m && !RM) { li.classList.remove('llega'); void li.offsetWidth; li.classList.add('llega'); }
+    }
+  });
+  $$('.voto', el).forEach(b => { b.setAttribute('aria-pressed', p.votos.yo === b.dataset.v ? 'true' : 'false'); b.disabled = !!p.votos.yo || cerrada; });
+  $$('.reac', el).forEach(b => { const r = b.dataset.r; b.setAttribute('aria-pressed', p.mia === r ? 'true' : 'false'); b.querySelector('span').textContent = p.reac[r] + (p.mia === r ? 1 : 0); });
+  const fin = el.querySelector('.prop-fin');
+  if (cerrada && !fin.childElementCount) {
+    const ok = p.estado === 'aprobada';
+    fin.dataset.n = ok ? 'ok' : 'alto';
+    fin.innerHTML = ok ? `${IC.favor}<span>Aprobada: ${f} de 4 a favor.<small>${p.ef}. El organismo del equipo ya ha cambiado.</small></span>`
+      : `${IC.contra}<span>Rechazada: ${f} a favor, ${c} en contra${a ? `, ${a} abstención` : ''}.<small>La cartera se queda como estaba. Ceder también es aprender.</small></span>`;
+  }
+}
+function renderProps() {
+  const cont = $('#lista-prop');
+  EQ.props.forEach(p => {
+    let el = $(`#prop-${p.id}`);
+    if (!el) { const t = document.createElement('div'); t.innerHTML = htmlProp(p); el = t.firstElementChild; if (p.nueva && !RM) el.classList.add('nueva'); p.nueva = false; }
+    cont.appendChild(el); actualizarProp(p);
+  });
+}
+const propParaGesto = () => EQ.props.find(p => p.estado === 'abierta' && !p.votos.yo);
+function pintarCelVotos() {
+  const p = EQ.props.find(q => q.id === EQ.foco);
+  $$('.cel-voto').forEach(s => {
+    const v = p && p.votos[s.dataset.m];
+    s.classList.toggle('on', !!v); s.dataset.v = v || ''; s.textContent = v ? TXT_VOTO[v] : '';
+  });
+  const pg = propParaGesto();
+  $('#pista-eq-t').textContent = pg ? 'Arrastra tu organismo al del equipo: votas a favor' : 'Toca el organismo del equipo para ver sus órganos';
+}
+/* Gotas de voto: viajan por la «mano» de cada miembro hasta el organismo del equipo */
+const gotas = [];
+let colonia = null;
+function gota(m, v, fin) {
+  if (RM || S.tab !== 'equipo' || document.hidden || !colonia) { fin && fin(); return; }
+  gotas.push({ m, v, t: 0, fin });
+  const mm = MPOR[m]; if (mm.org) mm.org.impulso(.9); else org.impulso(.9);
+}
+function votar(id, v, gesto) {
+  const p = EQ.props.find(q => q.id === id); if (!p || p.estado !== 'abierta' || p.votos.yo) return;
+  p.votos.yo = v; EQ.foco = p.id; vibrar(gesto ? [12, 30, 18] : 10);
+  gota('yo', v, () => { orgEq.impulso(v === 'favor' ? 1 : -.6); });
+  actualizarProp(p, 'yo'); pintarCelVotos(); programarBots(p); pintarEquipo();
+  toast(gesto ? 'Voto a favor: tu organismo se ha fundido con el del equipo' : `Has votado: ${TXT_VOTO[v].toLowerCase()}. Llegan los demás votos…`);
+}
+function programarBots(p) {
+  let k = 0;
+  Object.entries(p.plan || {}).forEach(([m, v]) => {
+    if (p.votos[m]) return;
+    setTimeout(() => gota(m, v, () => {
+      if (p.estado !== 'abierta') return;
+      p.votos[m] = v; if (p.rbot && p.rbot[m]) p.reac[p.rbot[m]]++;
+      EQ.foco = p.id; actualizarProp(p, m); pintarCelVotos(); comprobarCierre(p); pintarEquipo();
+      for (const L of orgEq.lobos.values()) L.puls.vv += v === 'favor' ? 1.6 : -1.2;
+      orgEq.impulso(v === 'favor' ? .8 : -.7); vibrar(6);
+    }), 1000 + k++ * 1500);
+  });
+  comprobarCierre(p);
+}
+function comprobarCierre(p) {
+  if (p.estado !== 'abierta' || p.cerrando || MIEMBROS.some(m => !p.votos[m.id])) return;
+  p.cerrando = true; setTimeout(() => cerrarProp(p), RM ? 250 : 800);
+}
+function cerrarProp(p) {
+  const v = [cuenta(p, 'favor'), cuenta(p, 'contra'), cuenta(p, 'abst')], ok = v[0] >= 3 && aplicable(p);
+  if (p.tipo !== 'anadir' && EQ.cart.some(q => q.t === p.t)) p.desde = pesoEn(EQ.cart, p.t);
+  p.cartAntes = copia(EQ.cart); p.cartHip = aplicarProp(EQ.cart, p); p.cartDesp = ok ? p.cartHip : copia(EQ.cart);
+  p.estado = ok ? 'aprobada' : 'rechazada'; p.res = resTxt(v);
+  const a1 = analisis(p.cartAntes), a2 = analisis(p.cartDesp);
+  p.ef = ok ? efectoTxt(a1, a2) : `Sin cambios · Concentración sigue ${TXT_C[a1.conc]}`;
+  EQ.hist.unshift({ sem: EQ.sem, autor: p.autor, tit: tituloProp(p), porque: p.porque, ok, v, ef: p.ef, nuevo: true });
+  if (ok) { animarEquipo(p.cartDesp); orgEq.impulso(2.2); vibrar([10, 40, 18]); } else { orgEq.impulso(-1.4); orgEq.agit.vv += 4; vibrar(20); }
+  EQ.props.forEach(q => actualizarProp(q)); pintarEquipo(); pintarHitos();
+  toast(ok ? `Aprobada ${p.res}: el organismo del equipo cambia` : `Rechazada ${p.res}: la cartera se queda igual`);
+}
+function animarEquipo(nuevo) {
+  if (RM) { EQ.cart = copia(nuevo); return; }
+  const desde = Object.fromEntries(EQ.cart.map(p => [p.t, p.w])), obj = Object.fromEntries(nuevo.map(p => [p.t, p.w]));
+  const lista = nuevo.map(p => ({ t: p.t, w: desde[p.t] ?? .6 }));
+  EQ.cart.forEach(p => { if (obj[p.t] === undefined) { lista.push({ t: p.t, w: p.w }); obj[p.t] = 0; } });
+  EQ.cart = lista; EQ.tween = { desde: Object.fromEntries(lista.map(p => [p.t, p.w])), obj, t: 0 };
+}
+function pasoEquipo(dt) {
+  const tw = EQ.tween; if (!tw) return;
+  tw.t = Math.min(1, tw.t + dt / .95); const e = easeMuelle(tw.t);
+  EQ.cart.forEach(p => { p.w = Math.max(.6, lerp(tw.desde[p.t], tw.obj[p.t], e)); });
+  if (tw.t >= 1) { EQ.cart = EQ.cart.filter(p => tw.obj[p.t] > 0).map(p => ({ t: p.t, w: tw.obj[p.t] })); EQ.tween = null; pintarEquipo(); }
+  else pintarSemaforosEq(analisis(EQ.cart));
+}
+function puntosEquipo() {
+  const an = analisis(EQ.cart), retoOk = an.top <= 40;
+  const arg = EQ.props.some(p => p.estado !== 'abierta');
+  const todos = EQ.props.length > 0 && EQ.props.every(p => MIEMBROS.every(m => p.votos[m.id]));
+  const apr = (retoOk ? 20 : 0) + (arg ? 10 : 0), con = (todos ? 10 : 0) + Math.min(10, 2 * (EQ.racha - 1));
+  return { an, retoOk, arg, todos, eq: an.eq, apr, con, total: an.eq + apr + con };
+}
+function pintarSemaforosEq(an) {
+  const el = $('#semaforos-eq');
+  if (!el.children.length) el.innerHTML = `<div class="semaf" id="semaf-ec"><span class="eti">Concentración</span><b></b><span></span></div><div class="semaf" id="semaf-ev"><span class="eti">Variedad</span><b></b><span></span></div><div class="semaf" id="semaf-ee"><span class="eti">Equilibrio</span><b class="num"></b><span>de 50 en Liga</span></div>`;
+  const c = $('#semaf-ec'), v = $('#semaf-ev'), e = $('#semaf-ee');
+  if (c.dataset.n && c.dataset.n !== an.conc && !RM) { c.classList.remove('pulso'); void c.offsetWidth; c.classList.add('pulso'); }
+  c.dataset.n = an.conc; c.querySelector('b').textContent = TXT_C[an.conc]; c.querySelector('span:last-child').textContent = `La mayor: ${an.may} %`;
+  v.dataset.n = an.vari; v.querySelector('b').textContent = TXT_V[an.vari]; v.querySelector('span:last-child').textContent = `${an.ns} sector${an.ns === 1 ? '' : 'es'}`;
+  e.dataset.n = an.eq >= 37 ? 'ok' : an.eq >= 12 ? 'medio' : 'alto'; e.querySelector('b').textContent = `${an.eq} pts`;
+}
+function pintarEquipo() {
+  const pt = puntosEquipo(), an = pt.an, capi = MPOR[CAPI[EQ.sem]];
+  $('#eq-sub').innerHTML = `${avatarSVG(EQ.nombre, 26)}<b>${EQ.nombre}</b> · ${MIEMBROS.length} miembros · código <span class="codigo">${EQ.codigo}</span>`;
+  pintarSemaforosEq(an);
+  $('#slot-equipo').setAttribute('aria-label', `Organismo del equipo ${EQ.nombre}: ${an.n} órganos. Concentración ${TXT_C[an.conc].toLowerCase()}, variedad ${TXT_V[an.vari].toLowerCase()}. Pulsa Intro para recorrer sus órganos.`);
+  const [sn, sp] = an.sects[0] || ['—', 0];
+  $('#reto-eq').innerHTML = `<div class="ava-capi">${avatarSVG(capi.a, 46)}${CORONA.replace('<svg', '<svg class="corona"')}</div>
+    <div><span class="eti">Reto de la semana</span><h2 id="reto-t">Que ningún sector pase del 40 %</h2><p class="mini">Lo eligió ${capi.a}, «Capitán de la semana».</p></div>
+    <div class="estado"><span class="estado-chip" data-n="${pt.retoOk ? 'ok' : 'medio'}"><i class="punto"></i>${pt.retoOk ? `<b>Cumplido</b> · ${sn} ${Math.round(sp)} % · +20 de Aprendizaje` : `Ahora ${sn} suma un <b>${Math.round(sp)} %</b>`}</span></div>`;
+  $('#pista-k').innerHTML = (an.may > 25 ? `<p><b>Pista de Klever · orientativa.</b> ¿Y si la mayor bajara al 25 %? Hoy pesa un ${an.may} %.</p><button class="btn peq" type="button" id="pista-k-b">Convertirlo en propuesta</button>`
+    : an.top > 40 ? `<p><b>Pista de Klever · orientativa.</b> ¿Y si ningún sector pasara del 40 %? ${sn} suma un ${Math.round(sp)} %.</p>`
+      : `<p><b>Pista de Klever · orientativa.</b> Ninguna posición pasa del 25 % ni ningún sector del 40 %. Buen equilibrio.</p>`) + '<p class="mini">Klever propone pesos, nunca empresas.</p>';
+  // Liga del equipo
+  contar($('#eq-total'), pt.total);
+  const bar = (et, v, max, c) => `<div class="barra-pt"><span style="text-align:left;color:var(--tinta-2)">${et}</span><div class="pista-b"><b style="transform:scaleX(${v / max});--bc:${c}"></b></div><span class="num">${v}/${max}</span></div>`;
+  const hb = $('#eq-barras');
+  if (!hb.children.length) hb.innerHTML = bar('Equilibrio', pt.eq, 50, 'linear-gradient(90deg,#a48cf5,#8f7cf0)') + bar('Aprendizaje', pt.apr, 30, 'linear-gradient(90deg,#5fcab6,#23927f)') + bar('Constancia', pt.con, 20, 'linear-gradient(90deg,#f3c3b1,#e8876f)');
+  else [[pt.eq, 50], [pt.apr, 30], [pt.con, 20]].forEach(([v, m], i) => { const f = hb.children[i]; f.querySelector('b').style.transform = `scaleX(${v / m})`; f.querySelector('span.num').textContent = `${v}/${m}`; });
+  $('#eq-desglose').innerHTML = `<li><b>Equilibrio ${pt.eq}/50.</b> Concentración ${TXT_C[an.conc].toLowerCase()} y variedad ${TXT_V[an.vari].toLowerCase()} de la cartera común, con las reglas de siempre.</li>
+    <li><b>Aprendizaje ${pt.apr}/30.</b> Reto de la semana: ${pt.retoOk ? 'cumplido, 20' : 'pendiente, 0'}. Propuesta argumentada y votada: ${pt.arg ? 'sí, 10' : 'aún no, 0'}.</li>
+    <li><b>Constancia ${pt.con}/20.</b> ${pt.todos ? 'Votaron todos, 10' : 'Falta algún voto, 0'}. ${EQ.racha} semanas seguidas, +${Math.min(10, 2 * (EQ.racha - 1))}.</li>`;
+  const ol = $('#clasif-eq'), filas = [...EQUIPOS.map(e => ({ ...e })), { n: EQ.nombre, p: pt.total, yo: true }].sort((a, b) => b.p - a.p || (a.yo ? -1 : 1));
+  const antes = new Map($$('.fila-l', ol).map(li => [li.dataset.a, li.getBoundingClientRect().top]));
+  ol.innerHTML = filas.map((f, i) => `<li class="fila-l${f.yo ? ' yo' : ''}" data-a="${f.n}"><span class="pos-n num">${i + 1}</span>${avatarSVG(f.n, 30)}<span>${f.n}${f.yo ? ' <small style="color:var(--tinta-3);font-weight:600">(tu equipo)</small>' : ''}</span><span class="pts num">${f.p}</span></li>`).join('');
+  if (!RM && antes.size) $$('.fila-l', ol).forEach(li => { const a = antes.get(li.dataset.a); if (a === undefined) return; const d = a - li.getBoundingClientRect().top; if (Math.abs(d) > 1 && Math.abs(d) < 400) li.animate([{ transform: `translateY(${d}px)` }, { transform: 'none' }], { duration: 650, easing: 'cubic-bezier(.34,1.4,.64,1)' }); });
+  // Miembros
+  const prox = id => { for (let s = EQ.sem + 1; s <= 6; s++) if (CAPI[s] === id) return s; return null; };
+  $('#miembros').innerHTML = MIEMBROS.map(m => { const es = CAPI[EQ.sem] === m.id; return `<li class="miembro">${avatarSVG(m.a, 40)}<span style="display:grid"><b>${m.a}${m.id === 'yo' ? ' <small style="display:inline">(tú)</small>' : ''}</b>${es ? `<span class="rol">${CORONA}Capitán de la semana</span>` : ''}<small>${es ? 'Elige el reto de esta semana' : `Capitán en la semana ${prox(m.id)}`}</small></span></li>`; }).join('');
+  $('#rotacion').textContent = `El rol rota cada lunes: semana 4, Kiwi_9 · semana 5, Coral_3 · semana 6, tú. Avatares generados, sin fotos.`;
+  pintarCelVotos();
+}
+function pintarHitos() {
+  $('#hitos').innerHTML = EQ.hist.map(h => `<li class="hito${h.nuevo && !RM ? ' nuevo' : ''}" style="--c:var(${h.ok ? '--ok' : '--alto'})"><div class="h-cab"><span>Semana ${h.sem}</span><span class="h-res">${h.ok ? 'Aprobada' : 'Rechazada'} ${resTxt(h.v)}</span></div><h3>${esc(h.tit)}</h3><p>Propuso <b>${h.autor === 'yo' ? 'Nácar (tú)' : MPOR[h.autor].a}</b>: «${esc(h.porque)}»</p><p class="h-ef">${FLECHA}${h.ef}</p></li>`).join('');
+  EQ.hist.forEach(h => { h.nuevo = false; });
+}
+function pintarCuentas() { EQ.props.forEach(p => { if (p.estado === 'abierta') { const el = $(`#prop-${p.id} .cuenta`); if (el) el.textContent = cuentaTxt(p.cierra); } }); }
+setInterval(() => { EQ.props.forEach(p => { if (p.estado === 'abierta') p.cierra = Math.max(60, p.cierra - 1); }); if (S.tab === 'equipo' && !document.hidden) pintarCuentas(); }, 1000);
+function ponerVistaEq(v) {
+  if (EQ.seg === v) return; EQ.seg = v;
+  $$('#seg-eq [role="tab"]').forEach(b => { const on = b.dataset.eq === v; b.setAttribute('aria-selected', on ? 'true' : 'false'); b.tabIndex = on ? 0 : -1; });
+  ['prop', 'hist', 'liga', 'miem'].forEach(k => { $(`#eq-${k}`).hidden = k !== v; });
+  colocarSegm($('#seg-eq')); vibrar(4);
+  if (!RM) $(`#eq-${v}`).animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: 'cubic-bezier(.22,1,.36,1)' });
+}
+$('#seg-eq').addEventListener('click', e => { const b = e.target.closest('[data-eq]'); if (b) ponerVistaEq(b.dataset.eq); });
+teclasTabs($('#seg-eq'), b => ponerVistaEq(b.dataset.eq));
+$('#lista-prop').addEventListener('click', e => {
+  const card = e.target.closest('.prop'); if (!card) return; const p = EQ.props.find(q => q.id === card.dataset.id); if (!p) return;
+  const vb = e.target.closest('.voto'); if (vb && !vb.disabled) { votar(p.id, vb.dataset.v); return; }
+  const rb = e.target.closest('.reac');
+  if (rb) { p.mia = p.mia === rb.dataset.r ? null : rb.dataset.r; actualizarProp(p); if (!RM) { rb.classList.remove('salta'); void rb.offsetWidth; rb.classList.add('salta'); } vibrar(5); }
+});
+$('#eq-prop').addEventListener('click', e => { if (e.target.closest('#pista-k-b')) { const an = analisis(EQ.cart); abrirPropuesta({ tipo: 'peso', t: an.mayor.t, w: 25 }); } });
+$('#nueva-prop').addEventListener('click', () => abrirPropuesta());
+$('#crear-eq').addEventListener('click', () => abrirHoja('crear'));
+$('#unirse-eq').addEventListener('click', () => abrirHoja('unirse'));
+$('#invitar-eq').addEventListener('click', () => abrirHoja('invitar'));
+
+/* Formulario de propuesta */
+const NP = { tipo: 'peso', t: 'NUBE', w: 25, porque: '' };
+function abrirPropuesta(pre) {
+  const an = analisis(EQ.cart);
+  Object.assign(NP, { tipo: 'peso', t: an.mayor ? an.mayor.t : EQ.cart[0].t, w: 25, porque: '' }, pre || {});
+  abrirHoja('propuesta');
+}
+const opcionesNP = () => NP.tipo === 'anadir' ? CAT.filter(c => !EQ.cart.some(p => p.t === c.t)) : EQ.cart.map(p => porT[p.t]);
+function decidirBots(p) {
+  const a = analisis(EQ.cart), b = analisis(aplicarProp(EQ.cart, p)), R = { ok: 0, medio: 1, alto: 2, na: 3 };
+  const plan = {}, rbot = {};
+  plan.bruma = (R[b.vari] > R[a.vari] || b.ns < a.ns) ? 'contra' : b.eq >= a.eq ? 'favor' : 'abst';
+  plan.kiwi = (R[b.conc] > R[a.conc] || b.may > a.may + 5) ? 'contra' : 'favor';
+  plan.coral = b.eq > a.eq ? 'favor' : b.eq === a.eq ? (p.tipo === 'anadir' ? 'favor' : 'abst') : 'contra';
+  rbot.bruma = plan.bruma === 'contra' ? '¿Y la variedad?' : plan.bruma === 'favor' ? 'Buen argumento' : null;
+  rbot.kiwi = plan.kiwi === 'contra' ? 'Demasiado arriesgado' : 'De acuerdo';
+  rbot.coral = plan.coral === 'contra' ? 'Demasiado arriesgado' : plan.coral === 'favor' ? 'De acuerdo' : null;
+  return { plan, rbot };
+}
+function pintarNP(rehacer) {
+  const sel = $('#np-emp'); if (!sel) return;
+  const ops = opcionesNP();
+  if (!ops.some(c => c.t === NP.t)) NP.t = ops[0] ? ops[0].t : null;
+  if (rehacer) sel.innerHTML = ops.map(c => `<option value="${c.t}">${c.n} · ${c.s}${NP.tipo !== 'anadir' ? ` · ${Math.round(pesoEn(EQ.cart, c.t))} %` : ''}</option>`).join('');
+  sel.value = NP.t || '';
+  $$('#np-tipo [data-tipo]').forEach(b => b.setAttribute('aria-pressed', b.dataset.tipo === NP.tipo ? 'true' : 'false'));
+  colocarSegm($('#np-tipo'));
+  $('#np-peso-c').hidden = NP.tipo === 'quitar';
+  const r = $('#np-peso'); r.min = NP.tipo === 'anadir' ? 5 : 1; r.max = NP.tipo === 'anadir' ? 40 : 60;
+  NP.w = clamp(Math.round(NP.w), +r.min, +r.max); r.value = NP.w; $('#np-peso-o').textContent = `${NP.w} %`;
+  $('#np-peso-l').textContent = NP.tipo === 'anadir' ? 'Peso con el que entra' : 'Nuevo peso';
+  const len = NP.porque.trim().length, cont = $('#np-cont');
+  cont.textContent = len >= 15 ? `${len} · listo` : `${len}/15 mínimo`; cont.className = len >= 15 ? 'ok' : '';
+  const p = { ...NP, desde: pesoEn(EQ.cart, NP.t) };
+  const valido = !!NP.t && aplicable(p) && (NP.tipo !== 'peso' || Math.abs(NP.w - p.desde) >= 1);
+  $('#np-compara').innerHTML = valido ? `<span class="eti">${tituloProp(p)}</span>` + filasCompara(EQ.cart, aplicarProp(EQ.cart, p))
+    : `<p class="compara-vacio">${NP.tipo === 'peso' ? 'Mueve el peso para ver el antes y el después.' : 'Elige una empresa del catálogo.'}</p>`;
+  const b = $('#np-enviar'); b.disabled = !(valido && len >= 15);
+  b.textContent = valido && len < 15 ? `Falta el porqué: ${15 - len} letra${15 - len === 1 ? '' : 's'} más` : 'Proponer al equipo';
+}
+function enviarNP() {
+  const p = { id: 'u' + (++EQ.n), autor: 'yo', tipo: NP.tipo, t: NP.t, w: NP.w, desde: pesoEn(EQ.cart, NP.t), porque: NP.porque.trim(), votos: { yo: 'favor' }, reac: reac0({}), mia: null, estado: 'abierta', cierra: 24 * 3600 - 60, nueva: true };
+  if (p.porque.length < 15 || !aplicable(p)) return;
+  Object.assign(p, decidirBots(p));
+  EQ.props.unshift(p); EQ.foco = p.id;
+  cerrarHoja(); ponerVistaEq('prop'); renderProps(); pintarEquipo();
+  const el = $(`#prop-${p.id}`); if (el) el.scrollIntoView({ block: 'start', behavior: RM ? 'auto' : 'smooth' });
+  gota('yo', 'favor'); programarBots(p); vibrar([10, 30, 14]);
+  toast('Propuesta enviada con tu voto a favor. Llegan los demás…');
+}
+const codigoDe = nom => { const r = azar(hashStr(nom + Date.now())), base = nom.normalize('NFD').replace(/[^A-Za-z]/g, '').toUpperCase().slice(0, 3); let c = base; while (c.length < 6) c += 'ABCDEFGHJKLMNPQRSTUVWXYZ'[Math.floor(r() * 24)]; return c; };
+let CE = { codigo: '' };
 
 /* ═════════ DESCUBRIR ═════════ */
 function florSVG(c, tam = 'grande') {
@@ -1546,6 +2526,36 @@ function abrirHoja(tipo, arg) {
     hojaC.innerHTML = cabHoja('Tu resumen de temporada', 'Listo para compartir en historias')
       + `<div class="resumen">${htmlResumen('res-cv2')}</div><div class="acc-fila"><button class="btn" type="button" id="copiar-res">Copiar texto</button><button class="btn primario" type="button" id="compartir-res2">Compartir</button></div><p class="mini">Solo se comparte tu apodo y tus puntos. Nada de dinero.</p>`;
     pintarMiniatura($('#res-cv2'));
+  } else if (tipo === 'propuesta') {
+    hojaC.innerHTML = cabHoja('Nueva propuesta', `${EQ.nombre} · se aprueba con 3 de 4 votos`)
+      + `<div class="segm" role="group" aria-label="Tipo de cambio" id="np-tipo"><span class="segm-ind" aria-hidden="true"></span><button type="button" data-tipo="peso" aria-pressed="true">Cambiar peso</button><button type="button" data-tipo="anadir" aria-pressed="false">Añadir</button><button type="button" data-tipo="quitar" aria-pressed="false">Quitar</button></div>
+        <label class="campo"><span>Empresa del catálogo inventado</span><select class="selector" id="np-emp"></select></label>
+        <div class="campo" id="np-peso-c"><span><label for="np-peso" id="np-peso-l">Nuevo peso</label><output id="np-peso-o" for="np-peso">25 %</output></span><input class="rango" type="range" id="np-peso" min="1" max="60" step="1" value="25"></div>
+        <label class="campo"><span>¿Por qué? En una línea<small id="np-cont">0/15 mínimo</small></span><input type="text" id="np-porque" maxlength="90" autocomplete="off" placeholder="Qué gana el equipo con el cambio"></label>
+        <div class="compara" id="np-compara" aria-live="polite"></div>
+        <button class="btn primario ancho" type="button" id="np-enviar" disabled>Proponer al equipo</button>
+        <p class="mini">Klever nunca propone empresas, solo pesos. Sin chat: el equipo responde con votos y reacciones.</p>`;
+    pintarNP(true);
+  } else if (tipo === 'crear') {
+    CE = { codigo: '' };
+    hojaC.innerHTML = cabHoja('Crear equipo', 'De 3 a 5 amigos · una cartera común')
+      + `<label class="campo"><span>Nombre del equipo<small id="ce-cont">0/24</small></span><input type="text" id="ce-nombre" maxlength="24" autocomplete="off" placeholder="Por ejemplo, Los del Patio"></label>
+        <div class="campo"><span>Código de 6 letras</span><div class="enlace" style="justify-content:space-between;word-break:normal"><span class="codigo" id="ce-codigo">······</span><button class="btn-texto" type="button" id="ce-otro" disabled>Otro código</button></div></div>
+        <button class="btn primario ancho" type="button" id="ce-invitar" disabled>Invitar</button>
+        <div class="vista" id="ce-ok" hidden><p class="nota-ok" id="ce-msg" aria-live="polite"></p><div class="enlace"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span id="ce-enlace"></span></div><div class="acc-fila"><button class="btn" type="button" id="copiar-inv">Copiar enlace</button><button class="btn primario" type="button" id="compartir-inv">Compartir</button></div></div>
+        <p class="mini">Enlace simulado: en este prototipo no se crea ni se envía nada. Solo apodos, solo mayores de 18.</p>`;
+  } else if (tipo === 'unirse') {
+    hojaC.innerHTML = cabHoja('Unirme con código', 'Pide el código de 6 letras a tu equipo')
+      + `<label class="campo"><span>Código<small id="un-cont">0/6</small></span><input type="text" id="un-codigo" class="mayus" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="MEDUSA"></label>
+        <button class="btn primario ancho" type="button" id="un-ok" disabled>Unirme</button>
+        <p class="nota-ok" id="un-res" aria-live="polite"></p>
+        <p class="mini">Simulado: cualquier código de 6 letras vale para probar.</p>`;
+  } else if (tipo === 'invitar') {
+    hojaC.innerHTML = cabHoja(`Invitar a ${EQ.nombre}`, `Código ${EQ.codigo} · caben 5 miembros`)
+      + `<p style="color:var(--tinta-2);font-size:15px">Tu amigo entra sin cuenta, elige un apodo y vota desde la próxima propuesta.</p>
+        <div class="enlace"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span id="ce-enlace">klever.app/e/${EQ.codigo}</span></div>
+        <div class="acc-fila"><button class="btn" type="button" id="copiar-inv">Copiar enlace</button><button class="btn primario" type="button" id="compartir-inv">Compartir</button></div>
+        <p class="mini">Enlace simulado: en este prototipo no se envía nada.</p>`;
   }
   hoja.classList.add('abierta'); sh.abierta = true; sh.y.t = 0; velo.classList.add('on');
   requestAnimationFrame(() => { sh.alto = hoja.offsetHeight || 500; const b = hojaC.querySelector('[data-cerrar]'); b && b.focus({ preventScroll: true }); });
@@ -1563,7 +2573,42 @@ hoja.addEventListener('click', e => {
   if (e.target.closest('#copiar-enl')) copiarTexto('klever.app/d/NACAR-7Q2K', 'Enlace copiado (simulado)');
   if (e.target.closest('#copiar-res')) copiarTexto(texto, 'Texto copiado');
   if (e.target.closest('#compartir-enl') || e.target.closest('#compartir-res2')) compartir(texto);
+  // Equipo
+  const tb = e.target.closest('#np-tipo [data-tipo]'); if (tb) { NP.tipo = tb.dataset.tipo; if (NP.tipo === 'anadir') NP.w = Math.min(NP.w, 15); pintarNP(true); vibrar(4); }
+  if (e.target.closest('#np-enviar')) enviarNP();
+  const enl = () => ($('#ce-enlace') || {}).textContent || '';
+  if (e.target.closest('#copiar-inv')) copiarTexto(enl(), 'Enlace copiado (simulado)');
+  if (e.target.closest('#compartir-inv')) compartir(`Únete a mi equipo de Klever: ${enl()} (Simulación · sin dinero real · no es consejo)`);
+  if (e.target.closest('#ce-otro')) { CE.codigo = codigoDe($('#ce-nombre').value || 'K'); $('#ce-codigo').textContent = CE.codigo; }
+  if (e.target.closest('#ce-invitar')) {
+    const nom = $('#ce-nombre').value.trim(); if (!nom) return;
+    $('#ce-ok').hidden = false; $('#ce-enlace').textContent = `klever.app/e/${CE.codigo}`;
+    $('#ce-msg').textContent = `Equipo «${nom}» creado (simulado). Mientras llegan tus amigos, sigues viendo ${EQ.nombre} de ejemplo.`;
+    vibrar([8, 30, 12]); org.impulso(1);
+  }
+  if (e.target.closest('#un-ok')) {
+    const c = $('#un-codigo').value;
+    $('#un-res').textContent = c === EQ.codigo ? `Ya estás en ${EQ.nombre}.` : `Solicitud enviada al equipo ${c} (simulada). Mientras, sigues en ${EQ.nombre} de ejemplo.`;
+    vibrar(8);
+  }
 });
+hojaC.addEventListener('input', e => {
+  const t = e.target;
+  if (t.id === 'np-peso') { NP.w = +t.value; pintarNP(false); }
+  if (t.id === 'np-porque') { NP.porque = t.value; pintarNP(false); }
+  if (t.id === 'ce-nombre') {
+    const v = t.value.trim(); $('#ce-cont').textContent = `${t.value.length}/24`;
+    if (v && (!CE.codigo || CE.base !== v.slice(0, 3))) { CE.codigo = codigoDe(v); CE.base = v.slice(0, 3); }
+    if (!v) CE.codigo = '';
+    $('#ce-codigo').textContent = CE.codigo || '······'; $('#ce-invitar').disabled = !v; $('#ce-otro').disabled = !v;
+  }
+  if (t.id === 'un-codigo') {
+    const v = t.value.normalize('NFD').replace(/[^A-Za-z]/g, '').toUpperCase().slice(0, 6); if (t.value !== v) t.value = v;
+    $('#un-cont').textContent = `${v.length}/6`; $('#un-ok').disabled = v.length !== 6; $('#un-res').textContent = '';
+  }
+});
+hojaC.addEventListener('change', e => { if (e.target.id === 'np-emp') { NP.t = e.target.value; if (NP.tipo === 'peso') NP.w = Math.round(pesoEn(EQ.cart, NP.t)); pintarNP(false); } });
+hojaC.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'np-porque' && !$('#np-enviar').disabled) { e.preventDefault(); enviarNP(); } });
 function copiarTexto(t, msg) {
   try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(() => toast(msg), () => toast('Listo para compartir (simulado)')); else toast('Listo para compartir (simulado)'); }
   catch (e) { toast('Listo para compartir (simulado)'); }
@@ -1613,7 +2658,71 @@ function actualizar() {
   $('#mc-res').textContent = `${an.n} órgano${an.n === 1 ? '' : 's'} · ${an.ns} sector${an.ns === 1 ? '' : 'es'}`;
   $('#slot-cartera').setAttribute('aria-label', `Organismo: concentración ${TXT_C[an.conc].toLowerCase()}, variedad ${TXT_V[an.vari].toLowerCase()}`);
   if (S.tab === 'liga') pintarResumen();
+  pintarGeo();
   anillo.sucio = true; primeraVez = false;
+}
+
+/* Colonia: «manos» de membrana entre cada miembro y el organismo del equipo */
+function puente(ax, ay, ra, bx, by, rb, col, fase, brillo, clave) {
+  const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+  const T = performance.now() / 1000, wob = RM ? 0 : Math.sin(T * 1.25 + fase * 1.9) * 4.5;
+  const sx = ax + ux * ra * .5, sy = ay + uy * ra * .5, ex = bx - ux * rb * .6, ey = by - uy * rb * .6;
+  const mx = (sx + ex) / 2 + nx * wob, my = (sy + ey) / 2 + ny * wob;
+  const cx = 2 * mx - (sx + ex) / 2, cy = 2 * my - (sy + ey) / 2;
+  const wa = ra * .58, wb = rb * .4, wm = Math.min(wa, wb) * (.3 + .32 * brillo);
+  const c = hexRgb(col);
+  const ctrl = s => [2 * (mx + nx * wm * s) - (sx + nx * wa * s + ex + nx * wb * s) / 2, 2 * (my + ny * wm * s) - (sy + ny * wa * s + ey + ny * wb * s) / 2];
+  const [c1x, c1y] = ctrl(1), [c2x, c2y] = ctrl(-1);
+  const p = new Path2D();
+  p.moveTo(sx + nx * wa, sy + ny * wa); p.quadraticCurveTo(c1x, c1y, ex + nx * wb, ey + ny * wb);
+  p.lineTo(ex - nx * wb, ey - ny * wb); p.quadraticCurveTo(c2x, c2y, sx - nx * wa, sy - ny * wa); p.closePath();
+  const g = vctx.createLinearGradient(sx, sy, ex, ey);
+  g.addColorStop(0, `rgba(${c.join(',')},${.42 + .3 * brillo})`); g.addColorStop(.55, 'rgba(255,255,255,.8)'); g.addColorStop(1, `rgba(196,176,255,${.5 + .3 * brillo})`);
+  vctx.fillStyle = g; vctx.fill(p);
+  vctx.lineWidth = 1.2; vctx.strokeStyle = 'rgba(255,255,255,.95)'; vctx.stroke(p);
+  vctx.beginPath(); vctx.moveTo(sx, sy); vctx.quadraticCurveTo(cx, cy, ex, ey);
+  vctx.setLineDash([2, 5]); vctx.lineCap = 'round'; vctx.lineWidth = 1.6; vctx.strokeStyle = `rgba(${c.join(',')},.55)`; vctx.stroke(); vctx.setLineDash([]);
+  if (colonia) colonia.camino[clave] = { sx, sy, cx, cy, ex, ey };
+}
+function dibujarColonia(dt, ar, posYo, Ryo) {
+  const al = alfaEq.x;
+  const te = rectSlot('equipo', ar), Rt = R_DE(te.s);
+  orgEq.set(EQ.cart, 0, analisis(EQ.cart)); orgEq.step(dt);
+  const cels = MIEMBROS.filter(m => m.org).map(m => { const r = m.el.getBoundingClientRect(); return { m, x: r.left - ar.left + r.width / 2, y: r.top - ar.top + r.height / 2, R: R_DE(r.width) }; });
+  colonia = colonia || { camino: {} };
+  const tx = te.x + orgEq.ox.x * Rt, ty = te.y + orgEq.oy.x * Rt;
+  vctx.save(); vctx.globalAlpha = al;
+  if (gestoEq > .02) {
+    vctx.save(); vctx.translate(tx, ty);
+    const g = vctx.createRadialGradient(0, 0, Rt * .8, 0, 0, Rt * 1.7); g.addColorStop(0, `rgba(35,160,120,${.22 * gestoEq})`); g.addColorStop(1, 'rgba(35,160,120,0)');
+    vctx.fillStyle = g; vctx.beginPath(); vctx.arc(0, 0, Rt * 1.7, 0, TAU); vctx.fill();
+    vctx.setLineDash([6, 7]); vctx.lineDashOffset = -performance.now() / 40; vctx.lineWidth = 2 + 2 * gestoEq; vctx.strokeStyle = `rgba(21,117,82,${.25 + .6 * gestoEq})`;
+    vctx.beginPath(); vctx.arc(0, 0, Rt * (1.42 - .1 * gestoEq), 0, TAU); vctx.stroke(); vctx.restore();
+  }
+  puente(posYo.x + org.ox.x * Ryo, posYo.y + org.oy.x * Ryo, Ryo, tx, ty, Rt, '#8f7cf0', 0, gestoEq, 'yo');
+  cels.forEach((c, i) => puente(c.x + c.m.org.ox.x * c.R, c.y + c.m.org.oy.x * c.R, c.R, tx, ty, Rt, colorAv(c.m.a), i + 1, 0, c.m.id));
+  vctx.restore();
+  orgEq.dibujar(vctx, te.x, te.y, Rt, { alfa: al, halo: '196,176,255' });
+  cels.forEach(c => { c.m.org.set(c.m.cart, 0, c.m.an); c.m.org.step(dt); c.m.org.dibujar(vctx, c.x, c.y, c.R, { alfa: al, sinSombra: true }); });
+}
+function dibujarGotas(dt) {
+  for (let i = gotas.length - 1; i >= 0; i--) {
+    const g = gotas[i]; g.t += dt / .95;
+    const k = colonia && colonia.camino[g.m];
+    if (g.t >= 1 || !k) { gotas.splice(i, 1); g.fin && g.fin(); for (const L of orgEq.lobos.values()) L.puls.vv += 1.2; continue; }
+    if (S.tab !== 'equipo') continue;
+    const c = COL_VOTO[g.v].join(',');
+    for (let s = 3; s >= 0; s--) {
+      const t = clamp(g.t - s * .045, 0, 1), e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2, u = 1 - e;
+      const x = u * u * k.sx + 2 * u * e * k.cx + e * e * k.ex, y = u * u * k.sy + 2 * u * e * k.cy + e * e * k.ey;
+      const r = (s ? 5 - s : 7.5) * (1 + .25 * Math.sin(g.t * Math.PI));
+      if (s) { vctx.fillStyle = `rgba(${c},${.32 - s * .08})`; vctx.beginPath(); vctx.arc(x, y, r, 0, TAU); vctx.fill(); continue; }
+      const gg = vctx.createRadialGradient(x - r * .35, y - r * .4, 0, x, y, r);
+      gg.addColorStop(0, '#fff'); gg.addColorStop(.45, `rgba(${c},.9)`); gg.addColorStop(1, `rgba(${c},1)`);
+      vctx.fillStyle = gg; vctx.beginPath(); vctx.arc(x, y, r, 0, TAU); vctx.fill();
+      vctx.lineWidth = 1.5; vctx.strokeStyle = '#fff'; vctx.stroke();
+    }
+  }
 }
 
 /* ═════════ Bucle principal ═════════ */
@@ -1647,7 +2756,7 @@ function bucle(now) {
   org.set(S.cart, anillo.rot.x, an); org.step(dt);
   const ar = app.getBoundingClientRect();
   vctx.setTransform(DPR, 0, 0, DPR, 0, 0); vctx.clearRect(0, 0, W, H);
-  const tgt = rectSlot(SLOT_TAB[S.tab], ar);
+  const slotP = slotPrincipal(), tgt = rectSlot(slotP, ar);
   let pos = tgt;
   if (vuelo) {
     vuelo.t += dt / .8; const e = RM ? 1 : easeMuelle(Math.min(1, vuelo.t));
@@ -1657,12 +2766,17 @@ function bucle(now) {
   }
   posOrg = pos;
   // fantasma (antes) en Mi cartera
-  const hayFantasma = S.tab === 'cartera' && !igualBase();
+  const hayFantasma = S.tab === 'cartera' && S.vistaMC === 'reparto' && !igualBase();
   alfaFantasma.t = hayFantasma ? 1 : 0; paso(alfaFantasma, dt);
   if (alfaFantasma.x > .02) { fantasma.set(S.base, anillo.rot.x, analisis(S.base)); fantasma.step(dt); }
   const R = R_DE(pos.s);
   const halo = an.conc === 'alto' ? '236,120,100' : an.conc === 'medio' ? '240,180,90' : '90,200,180';
-  org.dibujar(vctx, pos.x, pos.y, R, { halo: S.tab === 'hoy' ? halo : null, sinSombra: S.tab === 'descubrir' && !vuelo });
+  pasoEquipo(dt);
+  alfaEq.t = S.tab === 'equipo' ? 1 : 0; paso(alfaEq, dt);
+  if (alfaEq.x > .02) dibujarColonia(dt, ar, pos, R);
+  org.dibujar(vctx, pos.x, pos.y, R, { halo: S.tab === 'hoy' ? halo : null, sinSombra: (S.tab === 'descubrir' || S.tab === 'equipo' || slotP === 'mapa') && !vuelo });
+  dibujarGotas(dt);
+  if (S.tab === 'cartera' && S.vistaMC === 'mapa') mapa.frame(dt);
   if (alfaFantasma.x > .02) {
     fantasma.dibujarFantasma(vctx, pos.x, pos.y, R, alfaFantasma.x);
     vctx.save(); vctx.globalAlpha = alfaFantasma.x * .9; vctx.font = '700 11px Figtree, system-ui, sans-serif'; vctx.fillStyle = '#45506b'; vctx.textAlign = 'center';
@@ -1685,6 +2799,9 @@ $('#renacer').addEventListener('click', () => {
   irA('hoy'); org = new Organismo({ nacer: true }); fraseActual = ''; primeraVez = true; actualizar();
 });
 pintarRango(); pintarSemillas(); pintarEscChips(); pintarFeed();
+renderProps(); pintarEquipo(); pintarHitos();
+try { new ResizeObserver(() => { ['#seg-mc', '#seg-geo', '#seg-eq', '#np-tipo'].forEach(s => colocarSegm($(s))); }).observe(app); } catch (e) {}
+requestAnimationFrame(() => colocarSegm($('#seg-mc')));
 anillo.rot.t = anillo.rot.x = 0;
 concPrev = analisis(S.cart).conc;
 actualizar();
