@@ -2297,3 +2297,8 @@ Adjuntó `11-traspaso-supervisor.md`. Resultado: `ronda26/LEEME.md`.
 > No hagas ninguna demo pero dame 15 ideas mas
 
 (Respuesta: `ronda38/IDEAS-15-MAS.md`.)
+
+## C56 · (2026-11-09) — demo de «Tu fantasma», «Cartera en equipo» en todas y mapa en «Mi cartera», literal
+> Hazme una de demo del punto 2.  Quiero que integres una seccion en todas las apps (las tres de arriba y la nueva que haras) que se llama cartera en equipo y quiero otro apartado dentro de (mi cartera) que arroje datos parecidos a los de (tu cartera en el mapa) a parte de los que ya arroja.
+
+(Interpretación: punto 2 de `ronda38/IDEAS-15-MAS.md` = «Tu fantasma» → prototipo D `ronda39/d-fantasma.html`; «Cartera en equipo» = idea 9; mapa = idea 7, añadido dentro de «Mi cartera» en A, B, C y D. Encargo en `ronda39/ENCARGO.md`.)
