@@ -560,9 +560,10 @@ input[type=range]:focus-visible{outline:2px solid var(--cobre-2);outline-offset:
 .veredicto{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;font-size:.88rem;font-weight:600}
 .veredicto svg{width:20px;height:20px;flex:none}
 .veredicto small{display:block;font-weight:400;color:var(--tenue);font-size:.78rem}
+.prop .veredicto>span{min-width:0;white-space:normal;overflow-wrap:anywhere;font-family:var(--f-texto);letter-spacing:0;font-size:.88rem}
 .veredicto.ok{background:rgba(18,52,40,.6);border:1px solid rgba(95,211,154,.5);color:#b9f1d4}
 .veredicto.ko{background:rgba(60,16,14,.55);border:1px solid rgba(255,107,94,.5);color:#ffc2bb}
-.veredicto.cuenta{background:rgba(8,26,40,.6);border:1px solid rgba(111,208,255,.4);color:var(--plasma-2)}
+.veredicto.info{background:rgba(8,26,40,.6);border:1px solid rgba(111,208,255,.4);color:var(--plasma-2)}
 .prop.resuelve .veredicto{animation:entrar .6s var(--muelle) both}
 .formu{display:grid;gap:12px;padding:14px;border-radius:var(--r-l);border:1px solid var(--linea-cobre);background:linear-gradient(170deg,rgba(40,24,14,.45),rgba(10,14,22,.9) 50%)}
 .campo{display:grid;gap:6px}
@@ -2489,9 +2490,9 @@ function propHTML(eq,p){
   const votos=eq.miembros.map((m,i)=>{const v=p.votos[i];return `<div class="voto ${v||'pend'}${p.llega===i?' llega':''}">${avaSVG(m.s,30)}<span class="marca-v">${v?ICO_V[v]:''}</span><small>${m.tu?'tú':esc(m.ap)}</small><em>${v?TXT_V[v]:'Pendiente'}</em></div>`;}).join('');
   let ver='';
   if(abierta){
-    if(p.contando)ver=`<div class="veredicto cuenta" role="status">${ICO.otra}<span>Contando votos…</span></div>`;
-    else if(!p.votos[0])ver=`<div class="veredicto cuenta">${CORONA}<span>${si>=nec?`Ya tiene mayoría (${si} de ${n})`:`Lleva ${si} a favor · necesita ${nec} de ${n}`}<small>Falta tu voto. Se cierra cuando votáis todos.</small></span></div>`;
-    else ver=`<div class="veredicto cuenta"><span class="espera"><i></i></span><span>Esperando al resto del equipo<small>Los votos llegan simulados.</small></span></div>`;
+    if(p.contando)ver=`<div class="veredicto info" role="status">${ICO.otra}<span>Contando votos…</span></div>`;
+    else if(!p.votos[0])ver=`<div class="veredicto info">${CORONA}<span>${si>=nec?`Ya tiene mayoría (${si} de ${n})`:`Lleva ${si} a favor · necesita ${nec} de ${n}`}<small>Falta tu voto. Se cierra cuando votáis todos.</small></span></div>`;
+    else ver=`<div class="veredicto info"><span class="espera"><i></i></span><span>Esperando al resto del equipo<small>Los votos llegan simulados.</small></span></div>`;
   }else{
     const ok=p.estado==='aprobada';
     ver=`<div class="veredicto ${ok?'ok':'ko'}" role="status">${ok?ICO.si:ICO.no}<span>${ok?'Aprobada':'Rechazada'} · ${recuento(p)}<small>${ok?(p.efectoTxt||'Se aplica a la cartera del equipo.'):'No hubo mayoría: los semáforos no cambian.'}</small></span></div>`;
