@@ -2383,3 +2383,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Hasta que no cobre por nada, no hace falta hacerme autonomo o crear una sociedad o si?
 
 (Respuesta en el chat: en general no, mientras no haya actividad económica; pero el RGPD obliga a identificar al responsable del tratamiento aunque sea gratis. Confirmar con un gestor; no es asesoramiento.)
+
+## C69 · (2026-11-10) — ¿hay apps o webs parecidas?, literal
+> Hay alguna app o pagina web que hace algo parecido?
+
+(Respuesta: `ronda44/COMPETENCIA.md`, con búsqueda web del 2026-11-10.)
