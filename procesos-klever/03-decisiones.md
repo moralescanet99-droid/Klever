@@ -282,3 +282,4 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
     3. Lo de los brókeres va a la consulta CNMV/abogado antes de firmar: patrocinio de marca, sí; cobro por cliente captado, solo con visto bueno legal.
     4. Todo se rotula #publi o «patrocinado».
   - Hace falta un titular legal (autónomo o SL) para cobrar.
+- **2026-11-10 · C67: Javier está dispuesto a aportar unos 100 € al mes.** Cambia la regla «coste 0 €», que pasa a ser «hasta unos 100 € al mes, cada gasto lo decide Javier». El reparto se propone en `ronda44/PRESUPUESTO-100.md` y está **pendiente de aprobar**.

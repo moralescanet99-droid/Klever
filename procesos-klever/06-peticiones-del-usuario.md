@@ -2373,3 +2373,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Pagar para tener ventajas tambien.
 > Cruzar o vender datos no.
 > Socios y patrocinio si. Posiblemente con brokeres.
+
+## C67 · (2026-11-10) — presupuesto de 100 € al mes, literal
+> Estoy pensado... Que al proyecto estoy dispuesto a aportar unos 100€ al mes, que cambios y mejoras podriamos hacer con ello?
+
+(Respuesta: `ronda44/PRESUPUESTO-100.md`. Propuesta pendiente de decisión; nada contratado.)
