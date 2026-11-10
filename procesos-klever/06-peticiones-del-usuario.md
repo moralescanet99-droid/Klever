@@ -2388,3 +2388,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Hay alguna app o pagina web que hace algo parecido?
 
 (Respuesta: `ronda44/COMPETENCIA.md`, con búsqueda web del 2026-11-10.)
+
+## C70 · (2026-11-10) — ¿hay hueco en el mercado? Números en un escenario bajo-medio, literal
+> Crees que tendriamos hueco en el mercado? Que numeros podriamos barajar en un escenario bajo-medio?
+
+(Respuesta: `ronda44/MERCADO-ESCENARIOS.md`. Son supuestos de trabajo, no previsiones.)
