@@ -2393,3 +2393,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Crees que tendriamos hueco en el mercado? Que numeros podriamos barajar en un escenario bajo-medio?
 
 (Respuesta: `ronda44/MERCADO-ESCENARIOS.md`. Son supuestos de trabajo, no previsiones.)
+
+## C71 · (2026-11-10) — ¿y si premiáramos a la cartera con más rentabilidad?, literal
+> Y si premiaramos a la caretra con mas rentabilidad?
+
+(Respuesta en el chat: ventajas, requisitos (datos reales de precios), riesgos legales y de producto, y opciones. Enlaza con la excepción ya aprobada (CONTEXTO §2.3) y la fase 5 de la hoja de ruta: índice que empieza en 100 con rendimiento ajustado al riesgo. Pendiente de decisión.)
