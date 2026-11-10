@@ -2362,3 +2362,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Quiero una versión más profunda de esta tarea, no una más grande. Antes de reescribirla: (1) di qué haría aquí un profesional top en este campo que yo no estoy pidiendo; (2) nombra el material más crudo del que partiría, en lugar de lo que ya me dieron digerido; (3) nombra los métodos y herramientas específicos que usaría; (4) di qué, aparte de ti o de mí, demostraría que el resultado es correcto. Luego reescribe mi prompt para pedir exactamente eso.
 
 (Respuesta en el chat: las 4 respuestas y el prompt reescrito; no se ejecuta todavía. Decisión registrada: las redes sin cara, como marca.)
+
+## C65 · (2026-11-10) — cómo se financia la liga fantasy, literal
+> Como se financia "la liga fantasy"?
+
+(Respuesta en el chat, a partir de `ronda41/LIGA-FANTASY.md` (fuentes oficiales: App Store, condiciones y privacidad de LaLiga Fantasy, notas de LaLiga). Sin cifras de ingresos públicas verificadas.)
