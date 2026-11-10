@@ -2378,3 +2378,8 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Estoy pensado... Que al proyecto estoy dispuesto a aportar unos 100€ al mes, que cambios y mejoras podriamos hacer con ello?
 
 (Respuesta: `ronda44/PRESUPUESTO-100.md`. Propuesta pendiente de decisión; nada contratado.)
+
+## C68 · (2026-11-10) — ¿hace falta ser autónomo o sociedad sin cobrar?, literal
+> Hasta que no cobre por nada, no hace falta hacerme autonomo o crear una sociedad o si?
+
+(Respuesta en el chat: en general no, mientras no haya actividad económica; pero el RGPD obliga a identificar al responsable del tratamiento aunque sea gratis. Confirmar con un gestor; no es asesoramiento.)
