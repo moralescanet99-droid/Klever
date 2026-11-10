@@ -283,3 +283,4 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
     4. Todo se rotula #publi o «patrocinado».
   - Hace falta un titular legal (autónomo o SL) para cobrar.
 - **2026-11-10 · C67: Javier está dispuesto a aportar unos 100 € al mes.** Cambia la regla «coste 0 €», que pasa a ser «hasta unos 100 € al mes, cada gasto lo decide Javier». El reparto se propone en `ronda44/PRESUPUESTO-100.md` y está **pendiente de aprobar**.
+- **2026-11-10 · C71: Liga «mixta».** Se mantiene el modo **Cuidado** (sin precios) y se añade un modo **Rendimiento** (índice que empieza en 100, rentabilidad simulada ajustada al riesgo, reglas de diversificación obligatorias, carteras ocultas hasta el final y premios sin valor en dinero o sin ventajas de pago). Especificación: `ronda45/MODO-RENDIMIENTO.md`. Requiere empresas reales y una fuente de precios con licencia para mostrar el índice; **pendiente de que Javier elija proveedor**.
