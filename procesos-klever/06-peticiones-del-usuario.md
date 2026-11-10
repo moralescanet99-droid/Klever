@@ -2367,3 +2367,9 @@ Especificación resultante: `ronda43/ESPECIFICACION-V1.md`.
 > Como se financia "la liga fantasy"?
 
 (Respuesta en el chat, a partir de `ronda41/LIGA-FANTASY.md` (fuentes oficiales: App Store, condiciones y privacidad de LaLiga Fantasy, notas de LaLiga). Sin cifras de ingresos públicas verificadas.)
+
+## C66 · (2026-11-10) — decisiones de financiación, literal
+> Anuncios al principio no, pero si que tengo pensado ponerlos al cabo de 3-6meses.
+> Pagar para tener ventajas tambien.
+> Cruzar o vender datos no.
+> Socios y patrocinio si. Posiblemente con brokeres.

@@ -281,3 +281,14 @@ Leyenda de celdas: **No** · **Sí** · **?** (depende del diseño) · **—** (
 - Que el usuario de un simulador sea «posible inversor»: **interpretación**, sin respaldo de una fuente con autoridad.
 
 *Archivos descargados para esta matriz (no están en el repositorio, solo en el scratchpad de la sesión):* DOUE 2014/173 y 2017/087 (BOE), BOE-A-2023-7053, BOE-A-2011-9280, BOE-A-2018-16673, ESMA35-43-3861, ESMA35-43-3682 y la guía de *finfluencers* de la CNMV.
+
+---
+
+## Anexo C66 (2026-11-10) · Preguntas añadidas por las decisiones de financiación de Javier
+Añadir a la consulta para el Portal FinTech de la CNMV o para el abogado:
+1. **Patrocinio de brókeres:**
+   - ¿Puede un simulador sin dinero real mostrar la marca de una empresa de servicios de inversión (patrocinio de una liga o temporada) sin que la plataforma sea un «agente vinculado» ni haga captación de clientes?
+   - ¿Y si cobra por cada cliente captado (afiliación con pago por alta)?
+   - ¿Qué rotulado exige la Circular 2/2020 a esa publicidad y quién responde de ella?
+2. **Pago con ventaja:** si un usuario paga por ventajas dentro de la Liga (más cambios, herramientas, ligas más grandes) y existen premios en especie, ¿puede considerarse «juego» o «concurso» según la Ley 13/2011 (art. 3 a y e)? ¿Basta con que los premios no requieran pago y que las clasificaciones con premio no admitan ventajas de pago?
+3. **Anuncios:** ¿hay restricciones a mostrar anuncios de productos financieros o de criptoactivos en una app educativa dirigida a mayores de 18 (Circular 2/2020, Reglamento MiCA, normas de publicidad de criptoactivos de la CNMV)?

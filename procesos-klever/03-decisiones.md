@@ -271,3 +271,14 @@ Formato: **decisión** · motivo · dónde está. Las más recientes al final de
 - **2026-11-09 · C63: alcance de la v1** (`ronda43/ESPECIFICACION-V1.md`). App nueva en `app/`, en el mismo repositorio, con el diseño Nácar y datos de ejemplo. Beta privada con código de invitación. Acceso solo por enlace de correo, con modo pruebas mientras no haya Brevo. Sin perfil. Draft y reglas de liga configurables. Equipo «Próximamente». Modo oscuro y resumen de temporada. Orden de pestañas: Mi cartera · Construye · La Liga. No se aplican los cambios de la validación de la ronda 42. Derivadas (Claude): Pages + D1 sin Durable Objects; foto del lunes reconstruida a partir de las versiones de la cartera; los 10 puntos de Aprendizaje que no son del reto se ganan revisando una empresa; si se incumple una regla de liga, esa semana el Equilibrio vale 0.
 - **2026-11-09 · Ronda 43: el enlace de acceso se confirma con un botón** (GET muestra la página, POST canjea). Motivo: los antivirus de correo abren los enlaces y gastaban el de un solo uso. **ADMIN_EMAIL entra siempre sin invitación**, no solo con la base vacía; es más robusto para Javier. La **aceptación de las condiciones** no se guarda aparte: se guarda la fecha de la declaración de mayor de 18.
 - **2026-11-09 · C64: redes sociales de Klever sin la cara de Javier** (Instagram, TikTok y X), con la voz de la marca. Sustituye a la pregunta pendiente «quién sale en los vídeos» (C51): no sale nadie; se usan grabaciones de la app, tipografía y voz sintética o texto.
+- **2026-11-10 · C66: modelo de financiación decidido por Javier.** Sustituye a las recomendaciones de `ronda37/REFUNDACION.md` §6, `ronda40/INFORME-APP-FINAL.md` y `ronda42/validacion/08` (sin anuncios, sin pago con ventaja, sin brókeres).
+  - **Anuncios:** no al principio; **sí a los 3–6 meses** del lanzamiento.
+  - **Pagar para tener ventajas:** sí.
+  - **Cruzar o vender datos:** no.
+  - **Socios y patrocinio:** sí, **posiblemente con brókeres**.
+  - Condiciones que Claude aplicará al diseñarlo, salvo que Javier diga otra cosa:
+    1. Los premios con valor económico no deben estar al alcance de quien paga por ventaja (Ley 13/2011, art. 3).
+    2. Anuncios sin perfilado, o con consentimiento (RGPD/LSSI).
+    3. Lo de los brókeres va a la consulta CNMV/abogado antes de firmar: patrocinio de marca, sí; cobro por cliente captado, solo con visto bueno legal.
+    4. Todo se rotula #publi o «patrocinado».
+  - Hace falta un titular legal (autónomo o SL) para cobrar.
